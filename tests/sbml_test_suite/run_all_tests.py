@@ -1,6 +1,6 @@
 import os, time, numpy, subprocess, zipfile
 cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
-import pyscescbm as cbm
+import cbmpy as cbm
 
 
 testDir = os.path.join(cDir, 'tests')
@@ -21,7 +21,7 @@ tests = os.listdir(testDir)
 print tests
 
 for T in tests:
-    retcode = subprocess.call([os.sys.executable, 'run_fbc_test.py', testDir, T, outDir])
+    retcode = subprocess.call([os.sys.executable, 'run_single_fbc_test.py', testDir, T, outDir])
 
 testResults = []
 for T in tests:

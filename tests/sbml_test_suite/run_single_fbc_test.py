@@ -1,6 +1,6 @@
 import os, time, numpy
 cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
-import pyscescbm as cbm
+import cbmpy as cbm
 
 print os.sys.argv
 
