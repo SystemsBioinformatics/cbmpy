@@ -59,7 +59,7 @@ class TestRunFBA(object):
                                            delete_intermediate=True)
             elif m.startswith('L2FBA_'):
                 cmod = cbmpy.readSBML2FBA(os.path.join(MDIR, m))
-            else:
+            elif m.startswith('L3FBCV1_') or m.startswith('L3FBCV2_'):
                 cmod = cbmpy.readSBML3FBC(os.path.join(MDIR, m))
             klass.m[m] = cmod
 
@@ -103,38 +103,37 @@ class TestRunFBA(object):
         assert_almost_equal(DATA[m]['FBA'], res)
 
 
+class TestBiGG2(object):
+    @classmethod
+    def setup_class(klass):
+        """This method is run once for each class before any tests are run"""
+        klass.m = {}
+        for m in DATA:
+            if m.startswith('BIGG2_'):
+                cmod = cbmpy.readSBML3FBC(os.path.join(MDIR, m))
+                klass.m[m] = cmod
 
-#class TestReadSBML(object):
-    #@classmethod
-    #def setup_class(klass):
-        #"""This method is run once for each class before any tests are run"""
+    @classmethod
+    def teardown_class(klass):
+        """This method is run once for each class _after_ all tests are run"""
+        del klass.m
 
-    #@classmethod
-    #def teardown_class(klass):
-        #"""This method is run once for each class _after_ all tests are run"""
+    def test_load(self):
+        for m in self.m:
+            assert_not_equal(self.m[m], None)
+            
+    def test_run_BIGG2_iIT341(self):
+        m = 'BIGG2_iIT341.xml'
+        cmod = self.m[m].clone()
+        res = cbmpy.doFBA(cmod)
+        del cmod
+        assert_almost_equal(DATA[m]['FBA'], res)
+        
+    def test_run_BIGG2_iAF1260(self):
+        m = 'BIGG2_iAF1260.xml'
+        cmod = self.m[m].clone()
+        res = cbmpy.doFBA(cmod)
+        del cmod
+        assert_almost_equal(DATA[m]['FBA'], res)
 
-    #def setUp(self):
-        #"""This method is run once before _each_ test method is executed"""
-
-    #def teardown(self):
-        #"""This method is run once after _each_ test method is executed"""
-
-    #def test_init(self):
-        #a = A()
-        #assert_equal(a.value, "Some Value")
-        #assert_not_equal(a.value, "Incorrect Value")
-
-    #def test_return_true(self):
-        #a = A()
-        #assert_equal(a.return_true(), True)
-        #assert_not_equal(a.return_true(), False)
-
-    #def test_raise_exc(self):
-        #a = A()
-        #assert_raises(KeyError, a.raise_exc, "A value")
-
-    #@raises(KeyError)
-    #def test_raise_exc_with_decorator(self):
-        #a = A()
-        #a.raise_exc("A message")
         
