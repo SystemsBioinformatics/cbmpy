@@ -1,6 +1,7 @@
 import os, sys, time, zipfile, json
 cDir = os.path.dirname(os.path.abspath(__file__))
 MDIR = os.path.join(os.path.split(cDir)[0], 'models')
+MDIR = cDir
 
 import nose
 from nose.tools import assert_equal
