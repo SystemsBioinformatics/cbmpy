@@ -6,6 +6,7 @@ include tests/*
 include tests/sbml_test_suite/*
 include src/*.py
 include src/models/*
+include src/nosetests/*
 include src/cglpk/*
 include src/cglpk/w447/*
 include src/cglpk/w452/*

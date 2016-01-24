@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 395 2015-11-12 16:41:27Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 407 2016-01-21 13:47:59Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -37,7 +37,6 @@ from __future__ import absolute_import
 
 import os, time, numpy, cgi, re, json
 import ast, shutil
-import numpy
 # this is a hack that needs to be streamlined a bit
 try:
     import cStringIO as csio
@@ -68,11 +67,7 @@ try:
     _HAVE_SBML_ = True
     SBMLreader  = libsbml.SBMLReader()
     SBMLwriter  = libsbml.SBMLWriter()
-    GROUP_KINDS = {libsbml.GROUP_KIND_CLASSIFICATION : 'classification',
-                   libsbml.GROUP_KIND_PARTONOMY : 'partonomy',
-                   libsbml.GROUP_KIND_COLLECTION : 'collection',
-                   libsbml.GROUP_KIND_UNKNOWN : 'collection'
-                   }
+
     SBML_TYPES = {libsbml.SBML_SPECIES : 'species',
                   libsbml.SBML_REACTION : 'reaction',
                   libsbml.SBML_COMPARTMENT : 'compartment',
@@ -80,7 +75,6 @@ try:
                   libsbml.SBML_INITIAL_ASSIGNMENT : 'initialassignment',
                   libsbml.SBML_SPECIES_REFERENCE : 'speciesreference',
                   libsbml.SBML_UNKNOWN : 'unknown',
-                  libsbml.SBML_GROUPS_GROUP : 'group',
                   libsbml.SBML_FBC_FLUXBOUND : 'fluxbound',
                   libsbml.SBML_FBC_OBJECTIVE : 'objective',
                   libsbml.SBML_FBC_FLUXOBJECTIVE : 'fluxobjective',
@@ -91,8 +85,18 @@ try:
                   libsbml.SBML_FBC_V1ASSOCIATION : 'geneassociation1'
                   }
 except ImportError:
-    print('SBML support not available, install libSMBL with the Python bindings (sbml.org)')
+    print('WARNING: SBML support not available, please install libSBML, Python bindings with FBC (sbml.org)')
     _HAVE_SBML_ = False
+try:
+    GROUP_KINDS = {libsbml.GROUP_KIND_CLASSIFICATION : 'classification',
+                   libsbml.GROUP_KIND_PARTONOMY : 'partonomy',
+                   libsbml.GROUP_KIND_COLLECTION : 'collection',
+                   libsbml.GROUP_KIND_UNKNOWN : 'collection'
+                   }
+    SBML_TYPES['group'] = libsbml.SBML_GROUPS_GROUP
+except AttributeError:
+    print('INFO: SBML+GROUPS support not available, update to latest version of libSBML if required')
+    _HAVE_GROUPS_ = False
 
 _TEMP_XML_FILE_ = '_tmpxml.tmp'
 FBA_NS = 'http://www.sbml.org/sbml/level3/version1/fba/version1'
@@ -166,7 +170,7 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
     model_description = libsbml.XMLNode_convertXMLNodeToString(M.getNotes())
     model_description = xml_stripTags(model_description).strip()
 
-    print(model_description)
+    #print(model_description)
 
     __HAVE_FBA_ANOT__ = False
     __HAVE_FBA_ANOT_OBJ__ = False
@@ -495,8 +499,10 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
     fm._SBML_LEVEL_ = 2
     try:
         fm.buildStoichMatrix()
-    except:
+    except Exception as ex:
+        print(ex)
         print('INFO: unable to construct stoichiometric matrix')
+    del M, D
     if not return_sbml_model:
         return fm
     else:
@@ -680,8 +686,8 @@ def sbml_createModelL2(fba, level=2, version=1):
      - *model* an SBML model
 
     """
-    SBML_LEVEL = 2
-    SBML_VERSION = 1
+    SBML_LEVEL = level = 2
+    SBML_VERSION = version = 1
 
     if fba.getPid() == '' or fba.getPid() == None:
         mid0 = 'FBAModel'
@@ -1441,11 +1447,10 @@ class CBMtoSBML3(FBCconnect):
             self.model.setModelHistory(sbmh)
         del sbmh
 
-    def addBoundsV2(self, autofix=True, compress_bounds=False):
+    def addBoundsV2(self, compress_bounds=False):
         """
         Add FBC V2 style fluxbounds to model
 
-         - *autofix* [default=True] convert <> to <=>=
          - *compress_bounds* [default=False] enable parameter compression
 
         """
@@ -1685,7 +1690,7 @@ class CBMtoSBML3(FBCconnect):
             annores = par.appendAnnotation(annoSTRnew)
             if annores == -3:
                 print('Invalid annotation in bound:', bnd.getId())
-                print(lb.annotation, '\n')
+                print(bnd.annotation, '\n')
         if bnd.miriam != None:
             miriam = bnd.miriam.getAllMIRIAMUris()
             if len(miriam) > 0:
@@ -1807,8 +1812,7 @@ def sbml_readKeyValueDataAnnotation(annotations):
                 if pvalue.startswith('[') and pvalue.endswith(']'):
                     try:
                         pvalue = eval(pvalue)
-                        #print('INFO: annotation \"{}\" is a list.'.format(pvalue))
-                    except Exception as ex:
+                    except SyntaxError:
                         pass
                         #print('INFO: annotation \"{}\" is not a list.'.format(pvalue))
                 #if ptype == 'boolean':
@@ -1987,7 +1991,8 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
         r.setId(reactions[rxn]['id'])
         #METAID
         r.setMetaId(METAPREFIX+reactions[rxn]['id'])
-        r.setName(reactions[rxn]['name'])
+        if reactions[rxn]['name'] is not None and reactions[rxn]['name'] != '':
+            r.setName(reactions[rxn]['name'])
         r.setFast(False)
         for s in range(len(reactions[rxn]['reactants'])):
             sref = r.createReactant()
@@ -2135,11 +2140,6 @@ def sbml_setGroupsL3(cs, fba):
     return True
 
 
-
-
-
-
-
 def sbml_writeCOBRASBML(fba, fname, directory=None):
     """
     Takes an FBA model object and writes it to file as a COBRA compatible :
@@ -2257,7 +2257,7 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     if fbc_version == 1:
         cs3.addBoundsV1(autofix=autofix)
     elif fbc_version == 2:
-        cs3.addBoundsV2(autofix=autofix, compress_bounds=compress_bounds)
+        cs3.addBoundsV2(compress_bounds=compress_bounds)
 
     cs3.addObjectives()
 
@@ -2304,12 +2304,8 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
             shutil.move(fname, fname+'.invalid')
 
     print('Model exported as: {}'.format(fname))
-
-    if return_fbc:
-        return cs3
-    else:
-        cs3._cleanUP_()
-        del cs3
+    cs3._cleanUP_()
+    del cs3
 
 def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False, output_dir=None, speciesAnnotationFix=True):
     """
@@ -2447,6 +2443,7 @@ def sbml_convertCOBRASBMLtoFBC(fname, outname=None, work_dir=None, output_dir=No
     SBMLwriter.writeSBML(sbmldoc, str(newfname))
     print("\nINFO: successfully converted file {} to {}\n".format(fname, newfname))
     props = None
+    del sbmldoc
     sbmldoc = None
     return newfname
 
@@ -2501,7 +2498,7 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
     print('fname: {}'.format(fname))
     print('newfname: {}'.format(newfname))
 
-    SBMLreader  = libsbml.SBMLReader()
+    #SBMLreader  = libsbml.SBMLReader()
 
     print('\nRead ...')
     sbmldoc = SBMLreader.readSBML(fname)
@@ -2539,6 +2536,7 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
         return None
     SBMLwriter.writeSBML(sbmldoc, str(newfname))
     print("\nINFO: successfully converted file {} to {}\n".format(fname, newfname))
+    del sbmldoc
     return newfname
 
 def sbml_validateDocument(D):
@@ -2630,6 +2628,16 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         D = libsbml.readSBMLFromFile(str(os.path.join(work_dir, fname)))
     else:
         D = libsbml.readSBMLFromFile(str(fname))
+
+    # set consistency checking level for document
+
+    D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, True)
+    D.setConsistencyChecks(libsbml.LIBSBML_CAT_IDENTIFIER_CONSISTENCY, True)
+    D.setConsistencyChecks(libsbml.LIBSBML_CAT_UNITS_CONSISTENCY, False)
+    D.setConsistencyChecks(libsbml.LIBSBML_CAT_MATHML_CONSISTENCY, False)
+    D.setConsistencyChecks(libsbml.LIBSBML_CAT_SBO_CONSISTENCY, False)
+    D.setConsistencyChecks(libsbml.LIBSBML_CAT_OVERDETERMINED_MODEL, False)
+    D.setConsistencyChecks(libsbml.LIBSBML_CAT_MODELING_PRACTICE, False)
 
     if 'validate' in xoptions and xoptions['validate']:
         print('\nPerforming validation on input SBML ...\n')
@@ -3245,11 +3253,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         f_ids = fm.getFluxBoundIds()
         o_ids = fm.getObjectiveIds()
         g_ids = fm.getGeneIds()
+        grp_ids = [GRPplg.getGroup(g).getId() for g in range(GRPplg.getNumGroups())]
 
+        #print(grp_ids)
+        sub_group_assoc = {}
 
         for g in range(GRPplg.getNumGroups()):
             GR = GRPplg.getGroup(g)
-            grp = CBModel.Group(GR.getId())
+            grp_id = GR.getId()
+            grp = CBModel.Group(grp_id)
             grp.setName(GR.getName())
             grp.setKind(GROUP_KINDS[GR.getKind()])
             if GR.getSBOTerm() != -1:
@@ -3265,7 +3277,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             if annostr != '' and annostr != None:
                 grp.annotation = sbml_readKeyValueDataAnnotation(annostr)
             if DEBUG:
-                print('\nid:', GR.getId())
+                print('\nid:', grp_id)
                 print('name:', GR.getName())
                 print('kind:', GROUP_KINDS[GR.getKind()])
                 print('sboterm:', 'SBO:{}'.format(str(GR.getSBOTerm()).zfill(7)))
@@ -3312,11 +3324,28 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     grp.addMember(fm.compartments[c_ids.index(idr)])
                 elif idr in o_ids:
                     grp.addMember(fm.objectives[o_ids.index(idr)])
+                elif idr in grp_ids:
+                    #print(idr)
+                    #print(grp_id)
+                    # scanning for subgroup members to assign later
+                    if grp_id not in sub_group_assoc:
+                        sub_group_assoc[grp_id] = [idr]
+                    else:
+                        sub_group_assoc[grp_id].append(idr)
                 else:
                     print('Skipping group \"{}\" member \"{}\", it is an incompatible type.'.format(GR.getId(), idr))
 
             fm.addGroup(grp)
         del s_ids, r_ids, c_ids, f_ids, o_ids, g_ids
+
+        # adding subgroups
+        for grp_ in sub_group_assoc:
+            GRP = fm.getGroup(grp_)
+            for sg_ in sub_group_assoc[grp_]:
+                GRP.addMember(fm.getGroup(sg_))
+                #print('Adding: {} to {}'.format(sg_, grp_))
+        #print(sub_group_assoc)
+        del sub_group_assoc
 
     if len(CONSTR) < 1:
         print('\nWARNING: No FBC flux bounds were defined!\n')
@@ -3332,6 +3361,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('Nmatrix build: {}'.format(round(time.time() - time0, 3)))
 
     print('\nSBML3 load time: {}\n'.format(round(time.time() - time00, 3)))
+
+    del M, D
 
     if not return_sbml_model:
         return fm

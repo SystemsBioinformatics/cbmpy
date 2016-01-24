@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 378 2015-09-14 16:32:38Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 407 2016-01-21 13:47:59Z bgoli $)
 
 """
 ##
@@ -50,7 +50,7 @@ try:
 except ImportError:
     print('No solver present, unable to create shortcuts')
 except AttributeError:
-    print('No solver present, unable to create shortcuts')    
+    print('No solver present, unable to create shortcuts')
 
 from .CBRead import readSBML3FBC, readSBML2FBA, readCOBRASBML
 from .CBWrite import writeSBML3FBC, writeFVAtoCSV, writeModelToExcel97, writeModelToCOMBINEarchive, writeCOBRASBML, writeSBML3FBCV2
@@ -86,6 +86,14 @@ NINF = -float('inf')
 NAN = float('nan')
 
 from . import CBModel, CBDataStruct, CBModelTools, CBRead, CBReadtxt, CBTools, CBVersion, CBWrite, CBXML, CBNetDB, CBPlot
+
+try:
+    from . import nosetests
+    test = nosetests.run
+    del nosetests
+except ImportError:
+    def test():
+        print("ERROR: Tests not installed")
 
 if not __SILENT_START__:
     print('\nCBMPy environment\n******************')
