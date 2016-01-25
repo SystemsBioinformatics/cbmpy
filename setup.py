@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 383 2015-09-15 20:15:20Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 404 2016-01-05 15:24:35Z bgoli $)
 
 """
 
@@ -41,17 +41,20 @@ else:
         scheme['data'] = scheme['purelib']
 
 
-
 # I suspect this is an evil hack to get the data into the install directory
 from distutils.command.install import INSTALL_SCHEMES
 for scheme in INSTALL_SCHEMES.values():
     scheme['data'] = scheme['purelib']
 
-
 mydata_files = []
 mydata_files.append((os.path.join('cbmpy', 'models'),\
 [os.path.join(local_path,'src','models',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','models'))\
 if examplefile.endswith('.xml')]))
+
+mydata_files.append((os.path.join('cbmpy', 'nosetests'),\
+[os.path.join(local_path,'src','nosetests',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','nosetests'))\
+if examplefile.endswith('.xml') or examplefile.endswith('.json')]))
+
 mydata_files.append((os.path.join('pyscescbm', 'models'),\
 [os.path.join(local_path,'src','models',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','models'))\
 if examplefile.endswith('.xml')]))
@@ -59,7 +62,7 @@ if examplefile.endswith('.xml')]))
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 383 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 404 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -67,8 +70,8 @@ mypackages= ['cbmpy', 'pyscescbm', 'cbmpy.fluxmodules', 'pyscescbm.fluxmodules',
 
 setup(
  name = "cbmpy",
- version = "0.7.4.{}".format(STATUS),
- #version = "0.7.4",
+ #version = "0.7.4.{}".format(STATUS),
+ version = "0.7.4",
  description = "CBMPy: PySCeS Constraint Based Modelling",
  maintainer = 'Brett G. Olivier',
  maintainer_email = 'bgoli@users.sourceforge.net',

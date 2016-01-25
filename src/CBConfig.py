@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBConfig.py 397 2015-11-18 14:41:08Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBConfig.py 404 2016-01-05 15:24:35Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -35,10 +35,10 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-# rc
+# release
 
 try:
-    STATUS = '$Rev: 397 $'.replace('Rev: ', '').replace('$', '').strip()
+    STATUS = '$Rev: 404 $'.replace('Rev: ', '').replace('$', '').strip()
 except Exception:
     STATUS = ''
 
@@ -73,7 +73,7 @@ def current_version():
 
 def current_version_tuple():
     """
-    Return the current CBMPy version as a tuple (x, y , z)
+    Return the current CBMPy version as a tuple (x, y, z)
 
     """
     return (__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'])
