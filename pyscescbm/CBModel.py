@@ -22,17 +22,17 @@ Contact email: bgoli@users.sourceforge.net
 Last edit: $Author: bgoli $ ($Id: CBModel.py 388 2015-10-03 15:43:40Z bgoli $)
 
 """
-## gets rid of "invalid variable name" info
+# gets rid of "invalid variable name" info
 # pylint: disable=C0103
-## gets rid of "line to long" info
+# gets rid of "line to long" info
 # pylint: disable=C0301
-## use with caution: gets rid of module xxx has no member errors (run once enabled)
+# use with caution: gets rid of module xxx has no member errors (run once enabled)
 # pylint: disable=E1101
 
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+# from __future__ import unicode_literals
 
 import numpy, re, time, weakref, copy, json
 
@@ -62,7 +62,7 @@ except ImportError:
     HAVE_SCIPY = False
 
 
-#from .CBDataStruct import (StructMatrixLP, MIRIAMannotation, MIRIAMModelAnnotation)
+# from .CBDataStruct import (StructMatrixLP, MIRIAMannotation, MIRIAMModelAnnotation)
 from .CBDataStruct import (StructMatrixLP, MIRIAMannotation)
 from .CBCommon import (checkChemFormula, extractGeneIdsFromString, binHash, fixId, checkId)
 
@@ -218,7 +218,7 @@ class Fbase(object):
 
         """
         assert self.annotation != None, '\nThis class has no annotation field'
-        self.annotation.update({key : value})
+        self.annotation.update({key: value})
         #if type(value) != list:
             #self.annotation.update({key : value})
         #elif type(value) == list:
@@ -456,7 +456,7 @@ class Model(Fbase):
     _SBML_LEVEL_ = None
     __FBC_VERSION__ = 1
     __FBC_STRICT__ = True
-    #__objref__ = None
+    # __objref__ = None
 
     def __init__(self, pid):
         """
@@ -778,7 +778,7 @@ class Model(Fbase):
 
         bnds = self.getReactionBounds(reaction)
         assert bnds[1] == None and bnds[3] == None, '\nLower or equality bound exists for reaction: %s' % reaction
-        newId = '%s_%s_bnd'% (reaction, 'lower')
+        newId = '%s_%s_bnd' % (reaction, 'lower')
         self.addFluxBound(FluxBound(newId, reaction, 'greaterEqual', value))
 
 
@@ -793,7 +793,7 @@ class Model(Fbase):
 
         bnds = self.getReactionBounds(reaction)
         assert bnds[2] == None and bnds[3] == None, '\nUpper or equality bound exists for reaction: %s' % reaction
-        newId = '%s_%s_bnd'% (reaction, 'upper')
+        newId = '%s_%s_bnd' % (reaction, 'upper')
         self.addFluxBound(FluxBound(newId, reaction, 'lessEqual', value))
 
     def addFluxBound(self, fluxbound, fbexists=None):
@@ -1285,7 +1285,7 @@ class Model(Fbase):
         cntr = 0
         if new in ['inf', 'INF', 'INFINITY', '-inf', '-INF', '-INFINITY']:
             new = float(new)
-        for b in range(len(self.flux_bounds)-1,-1,-1):
+        for b in range(len(self.flux_bounds)-1, -1, -1):
             if self.flux_bounds[b].value == old:
                 ##  db = fba.flux_bounds.pop(b)
                 self.flux_bounds[b].value = new
@@ -1300,7 +1300,7 @@ class Model(Fbase):
 
         """
         cntr = 0
-        for b in range(len(self.flux_bounds)-1,-1,-1):
+        for b in range(len(self.flux_bounds)-1, -1, -1):
             if self.flux_bounds[b].value == value:
                 db = self.flux_bounds.pop(b)
                 cntr += 1
@@ -1333,7 +1333,7 @@ class Model(Fbase):
         if not simulate:
             print('Deleting non-reactive species', end=" ")
         deleted_species = []
-        for S in range(len(self.species)-1,-1,-1):
+        for S in range(len(self.species)-1, -1, -1):
             if self.species[S].getPid() not in active_reagents:
                 deleted_species.append(self.species[S].getPid())
                 if simulate:
@@ -1845,7 +1845,7 @@ class Model(Fbase):
             self.suffix = suffix
             SUFFIX = True
 
-        ##  self.id = self.id+suffix
+        # self.id = self.id+suffix
         if target == 'species' or target == 'all':
             for s in self.species:
                 if s.id not in ignore:
@@ -2922,6 +2922,7 @@ class Parameter(Fbase):
         if assoc in self._association_:
             self._association_.pop(self._association_.index(assoc))
 
+
 class Reaction(Fbase):
     """Holds reaction information"""
     reagents = None
@@ -3590,9 +3591,9 @@ class GeneProteinAssociation(Fbase):
     TODO: I will change the whole Gene/GPR structure to a dictionary data structure on the model which should simplify this all significantly.
 
     """
-    #_MODIFIED_ASSOCIATION_ = False
+    # _MODIFIED_ASSOCIATION_ = False
     assoc = None
-    #assoc0 = None
+    # assoc0 = None
     protein = None
     __evalass__ = 'None'
     __evalass_ids__ = 'None'
@@ -3668,18 +3669,18 @@ class GeneProteinAssociation(Fbase):
             altlabels = {}
         genelist = self.__objref__().genes
         mod_genes = [g.getPid() for g in genelist]
-        #self.assoc = self.assoc0 = assoc
+        # self.assoc = self.assoc0 = assoc
         self.assoc = assoc
         react_gene = {}
-        #gene_re = re.compile(gene_pattern)
-        ##  print 'assoc\n', assoc
+        # gene_re = re.compile(gene_pattern)
+        # print 'assoc\n', assoc
         self.generefs = []
         if assoc != None and assoc != '':
             genes = extractGeneIdsFromString(assoc)
-            #print(genes)
-            #geneLabels = []
-            #for g_ in genes:
-                #if not checkId(s)
+            # print(genes)
+            # geneLabels = []
+            # for g_ in genes:
+                # if not checkId(s)
             if len(genes) == 0:
                 self.generefs = []
             else:
