@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 407 2016-01-21 13:47:59Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 409 2016-01-26 11:54:15Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -488,7 +488,7 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
         del F
     except Exception as ex:
         print(ex)
-        print('File deletion failure')
+        print('INFO: File deletion failure')
     if not __HAVE_FBA_ANOT__:
         print('\nWARNING: Missing FBA annotations found')
         if not __HAVE_FBA_ANOT_BNDS__:
@@ -2323,8 +2323,8 @@ def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_int
     """
     try:
         new_file = sbml_convertCOBRASBMLtoFBC(fname, outname=None, work_dir=work_dir, output_dir=output_dir)
-    except Exception as ex:
-        print('\nCOBRA file conversion failed:\n\"{}\"'.format(ex))
+    except Exception as why:
+        print('\nCOBRA file conversion failed:\n\"{}\"'.format(why))
         return None
     res = sbml_readSBML3FBC(new_file, work_dir=work_dir, return_sbml_model=return_sbml_model, xoptions={'nogenes':True})
     if fake_boundary_species_search:
@@ -2621,6 +2621,20 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     time00 = time.time()
     assert _HAVE_SBML_, "\nSBML not available ... install libSBML with Python bindings for SBML support"
 
+    # load options
+    LOADGENES = True
+    LOADANNOT = True
+    DEBUG = False
+    if 'nogenes' in xoptions and xoptions['nogenes']:
+        LOADGENES = False
+        print('\nGPR loading disabled!\n')
+    if 'noannot' in xoptions and xoptions['noannot']:
+        LOADANNOT = False
+        print('\nAnnotation loading disabled!\n')
+    if 'debug' in xoptions and xoptions['debug']:
+        DEBUG = True
+        print('\nDebug enabled!\n')
+
     # DEBUFG
     #global D, M, FBCplg, SBRe, PARAM_D, RFBCplg, GENE_D, GPR_D, FB_data, GPRASSOC
 
@@ -2650,59 +2664,47 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     M = D.getModel()
     assert M != None, "\n\nInvalid SBML file"
     assert M.getLevel() >=3 and M.getVersion() >= 1, "\nAn SBML L3V1 or greater model is required"
-    assert hasattr(libsbml, 'Objective'), "\n\nSBML FBC package required, see http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/Flux_Balance_Constraints_%28flux%29 for more details."
-
-    FBCplg = M.getPlugin(str("fbc"))
-
-    # assert FBCplg != None, "\n\nSBML FBC package required, see http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/Flux_Balance_Constraints_%28flux%29 for more details"
-    #TODO: refactor to allow non FBC L3V1
-    if FBCplg == None:
+    
+    ##we are now going to allow loading non-FBC models (just to be friendly)
+    HAVE_FBC = True
+    if not hasattr(libsbml, 'Objective'):
+        print("\n\nSBML FBC package required, see http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/Flux_Balance_Constraints_%28flux%29 for more details.")
+        HAVE_FBC = False
+    if HAVE_FBC:
+        FBCplg = M.getPlugin(str("fbc"))
+        if FBCplg is None:
+            HAVE_FBC = False   
+    if not HAVE_FBC:
         print('\nModel is not an SBML3 FBC model. Please try cbmpy.readCOBRASBML(\'{}\') for models encoded in the COBRA dialect or cbmpy.readSBML2FBA(\'{}\') for models in FAME format.'.format(fname, fname))
         return None
-
-    FBCver = FBCplg.getPackageVersion()
-
+    
+    FBCver = 0
     FBCstrict = True
-    if FBCver == 2:
-        FBCstrict = FBCplg.getStrict()
-
-    if FBCver == 2 and not FBCstrict:
-        print("\nWARNING!!!!\n")
-        print("This model has fbc:strict=\"false\" this means that is not necessarily a linear program and may contain a number of unsupported features containing aribtrary mathematical expressions such as, InitialAssignments, Rules, Events etc.")
-        print("\nCBMPy can continue to load this model but will treat it as a convex linear problem and only load what it can interpret.")
-        print("\nWARNING!!!!\n")
-        try:
+    if HAVE_FBC:
+        FBCver = FBCplg.getPackageVersion()
+        if FBCver == 2:
+            FBCstrict = FBCplg.getStrict()
+    
+        if FBCver == 2 and not FBCstrict:
+            print("\nWARNING!!!!\n")
+            print("This model has fbc:strict=\"false\" this means that is not necessarily a linear program and may contain a number of unsupported features containing aribtrary mathematical expressions such as, InitialAssignments, Rules, Events etc.")
+            print("\nCBMPy can continue to load this model but will treat it as a convex linear problem and only load what it can interpret.")
+            print("\nWARNING!!!!\n")
             if not raw_input('\nDo you wish to continue (Y/N): ') == 'Y':
                 os.sys.exit(-1)
-        except:
-            if not input('\nDo you wish to continue (Y/N): ') == 'Y':
-                os.sys.exit(-1)
-
-    # load options
-    LOADGENES = True
-    LOADANNOT = True
-    DEBUG = False
-    if 'nogenes' in xoptions and xoptions['nogenes']:
-        LOADGENES = False
-        print('\nGPR loading disabled!\n')
-    if 'noannot' in xoptions and xoptions['noannot']:
-        LOADANNOT = False
-        print('\nAnnotation loading disabled!\n')
-    if 'debug' in xoptions and xoptions['debug']:
-        DEBUG = True
-        print('\nDebug enabled!\n')
-
+        
     # print some model information
     print('FBC version: {}'.format(FBCver))
     print('M.getNumReactions: {}'.format(M.getNumReactions()))
     print('M.getNumSpecies: {}'.format(M.getNumSpecies()))
-    print('FBC.getNumObjectives: {}'.format(FBCplg.getNumObjectives()))
-    if FBCver == 1:
-        print('FBC.getNumGeneAssociations: {}'.format(FBCplg.getNumGeneAssociations()))
-        print('FBC.getNumFluxBounds: {}'.format(FBCplg.getNumFluxBounds()))
-    elif FBCver == 2:
-        print('FBC.getNumParameters: {}'.format(M.getNumParameters()))
-        print('FBC.getNumGeneProducts: {}'.format(FBCplg.getNumGeneProducts()))
+    if HAVE_FBC:
+        print('FBC.getNumObjectives: {}'.format(FBCplg.getNumObjectives()))
+        if FBCver == 1:
+            print('FBC.getNumGeneAssociations: {}'.format(FBCplg.getNumGeneAssociations()))
+            print('FBC.getNumFluxBounds: {}'.format(FBCplg.getNumFluxBounds()))
+        elif FBCver == 2:
+            print('FBC.getNumParameters: {}'.format(M.getNumParameters()))
+            print('FBC.getNumGeneProducts: {}'.format(FBCplg.getNumGeneProducts()))
 
     model_id = M.getId()
     model_name = M.getName()
@@ -2712,12 +2714,17 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     __HAVE_FBA_ANOT_OBJ__ = True
     __HAVE_FBA_ANOT_BNDS__ = True
     __HAVE_FBA_ANOT_GENEASS__ = True
-    if FBCplg.getNumFluxBounds() < 1:
-        __HAVE_FBA_ANOT_BNDS__ = False
-    if FBCplg.getNumObjectives() < 1:
+    if HAVE_FBC:
+        if FBCplg.getNumFluxBounds() < 1:
+            __HAVE_FBA_ANOT_BNDS__ = False
+        if FBCplg.getNumObjectives() < 1:
+            __HAVE_FBA_ANOT_OBJ__ = False
+        if FBCplg.getNumGeneAssociations() < 1:
+            __HAVE_FBA_ANOT_GENEASS__ = False
+    else:
         __HAVE_FBA_ANOT_OBJ__ = False
-    if FBCplg.getNumGeneAssociations() < 1:
-        __HAVE_FBA_ANOT_GENEASS__ = False
+        __HAVE_FBA_ANOT_BNDS__ = False
+        __HAVE_FBA_ANOT_GENEASS__ = False        
 
     time0 = time.time()
 
@@ -2730,11 +2737,12 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             boundCon = True
         CF = None # chemical formula
         CH = None
-        SBSpF = SBSp.getPlugin("fbc")
-        if SBSpF != None:
-            CF = SBSpF.getChemicalFormula()
-            CH = int(SBSpF.getCharge())
-        #print CF, CH
+        if HAVE_FBC:
+            SBSpF = SBSp.getPlugin("fbc")
+            if SBSpF != None:
+                CF = SBSpF.getChemicalFormula()
+                CH = int(SBSpF.getCharge())
+            #print CF, CH
 
         NM = SBSp.getName() # get name
         # to strip a BiGG file see CBTools
@@ -2756,30 +2764,30 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('Species load: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
 
+    # we'll now deal with global parameters even if they are not used
     PARAM_D = {}
-    if FBCver == 2:
-        for p_ in range(M.getNumParameters()):
-            P = M.getParameter(p_)
-            pid = P.getId()
-            pdict = {'id' : pid,
-                     'value' : P.getValue(),
-                     'constant' : P.getConstant(),
-                     'sbo' : P.getSBOTermID(),
-                     'name' : P.getName(),
-                     'annotation': None,
-                     'miriam' : None,
-                     'association' : []
-                     }
-            if LOADANNOT:
-                pdict['annotation'] = sbml_readKeyValueDataAnnotation(P.getAnnotationString())
-                manot = sbml_getCVterms(P, model=False)
-                if manot != None:
-                    pdict['miriam'] = manot
-                del manot
-            PARAM_D[pid] = pdict
+    for p_ in range(M.getNumParameters()):
+        P = M.getParameter(p_)
+        pid = P.getId()
+        pdict = {'id' : pid,
+                 'value' : P.getValue(),
+                 'constant' : P.getConstant(),
+                 'sbo' : P.getSBOTermID(),
+                 'name' : P.getName(),
+                 'annotation': None,
+                 'miriam' : None,
+                 'association' : []
+                 }
+        if LOADANNOT:
+            pdict['annotation'] = sbml_readKeyValueDataAnnotation(P.getAnnotationString())
+            manot = sbml_getCVterms(P, model=False)
+            if manot != None:
+                pdict['miriam'] = manot
+            del manot
+        PARAM_D[pid] = pdict
 
     GENE_D = {}
-    if FBCver == 2:
+    if HAVE_FBC and FBCver == 2:
         for g_ in range(FBCplg.getNumGeneProducts()):
             G = FBCplg.getGeneProduct(g_)
             gid = G.getId()
@@ -2810,7 +2818,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     for r in range(M.getNumReactions()):
         SBRe = M.getReaction(r)
         R_id = SBRe.getId()
-        if FBCver == 2:
+        if HAVE_FBC and FBCver == 2:
             # deal with new style fluxbounds
             RFBCplg = SBRe.getPlugin('fbc')
             lfbid = RFBCplg.getLowerFluxBound()
@@ -2915,7 +2923,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         R.annotation = {}
         if LOADANNOT:
             R.annotation = sbml_readKeyValueDataAnnotation(SBRe.getAnnotationString())
-            if R.annotation == {}:
+            # only dig for ancient annotation if not using V2
+            if FBCver < 2 and R.annotation == {}:
                 R.annotation = sbml_readCOBRANote(libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes()))
             manot = sbml_getCVterms(SBRe, model=False)
             if manot != None:
@@ -2958,7 +2967,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     time0 = time.time()
 
     # extract fluxbounds
-    if FBCver == 1:
+    if HAVE_FBC and FBCver == 1:
         FB_data = []
         for fb_ in range(FBCplg.getNumFluxBounds()):
             SBFb = FBCplg.getFluxBound(fb_)
@@ -2981,7 +2990,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     UboundReactionIDs = []
     AboundReactionIDs = []
     DefinedReactionIDs = []
-    if FBCver == 1:
+    if HAVE_FBC and FBCver == 1:
         cntr = 0
         for c in FB_data:
             if 'id' in c:
@@ -3053,7 +3062,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 CONSTR.append(CBModel.FluxBound(newId, reactionIDs[J], 'lessEqual', numpy.inf))
                 ubcntr += 1
                 # print 'Added new upper bound', newId
-    elif FBCver == 2:
+    elif HAVE_FBC and FBCver == 2:
         #CONSTR = []
         for bnd in FB_data:
             FB = CBModel.FluxBound(bnd['id'], bnd['reaction'], bnd['operation'], bnd['value'])
@@ -3069,7 +3078,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('FluxBounds process: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
 
-
     #Create parameters
     PARAM = []
     for p_ in PARAM_D:
@@ -3083,34 +3091,36 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('Parameter process: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
 
-    # extract objectivefunctions
+    # try extract objective functions
     OBJFUNCout = []
-    try:
-        ACTIVE_OBJ = FBCplg.getActiveObjective().getId()
-        print('Active objective:', ACTIVE_OBJ)
-    except:
-        print('No active objective defined')
-
-    for of_ in range(FBCplg.getNumObjectives()):
-        SBOf = FBCplg.getObjective(of_)
-        OF = CBModel.Objective(SBOf.getId(), SBOf.getType())
-        OF.setName(SBOf.getName())
-        for ofl_ in range(SBOf.getNumFluxObjectives()):
-            SBOfl = SBOf.getFluxObjective(ofl_)
-            if SBOfl.getId() in [None, '']:
-                id = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
-            else:
-                id = SBOf.getId()
-            Oflx = CBModel.FluxObjective(id, SBOfl.getReaction(), float(SBOfl.getCoefficient()))
-            Oflx.setName(SBOfl.getName())
-            OF.addFluxObjective(Oflx)
-        OBJFUNCout.append(OF)
-
-    if DEBUG: print('ObjectiveFunction load: {}'.format(round(time.time() - time0, 3)))
-    time0 = time.time()
+    if HAVE_FBC:
+        try:
+            ACTIVE_OBJ = FBCplg.getActiveObjective().getId()
+            print('INFO: Active objective:', ACTIVE_OBJ)
+        except Exception as why:
+            print(type(why))
+            print('\nINFO: No active objective defined')
+    
+        for of_ in range(FBCplg.getNumObjectives()):
+            SBOf = FBCplg.getObjective(of_)
+            OF = CBModel.Objective(SBOf.getId(), SBOf.getType())
+            OF.setName(SBOf.getName())
+            for ofl_ in range(SBOf.getNumFluxObjectives()):
+                SBOfl = SBOf.getFluxObjective(ofl_)
+                if SBOfl.getId() in [None, '']:
+                    id = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
+                else:
+                    id = SBOf.getId()
+                Oflx = CBModel.FluxObjective(id, SBOfl.getReaction(), float(SBOfl.getCoefficient()))
+                Oflx.setName(SBOfl.getName())
+                OF.addFluxObjective(Oflx)
+            OBJFUNCout.append(OF)
+    
+        if DEBUG: print('ObjectiveFunction load: {}'.format(round(time.time() - time0, 3)))
+        time0 = time.time()
 
     GPRASSOC = {}
-    if LOADGENES:
+    if HAVE_FBC and LOADGENES:
         if FBCver == 1 and __HAVE_FBA_ANOT_GENEASS__:
             SBGPR = FBCplg.getListOfGeneAssociations()
             for g_ in SBGPR:
@@ -3231,14 +3241,14 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('GPR build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
 
-
     # Groups support
     HAVE_GROUPS = False
     try:
         GRPplg = M.getPlugin(str("groups"))
         if GRPplg != None:
             HAVE_GROUPS = True
-    except:
+    except Exception as why:
+        print(type(why))
         GRPplg = None
         HAVE_GROUPS = False
 
@@ -3356,8 +3366,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     fm._SBML_LEVEL_ = 3
     try:
         fm.buildStoichMatrix()
-    except:
-        print('INFO: unable to construct stoichiometric matrix')
+    except Exception as why:
+        print(type(why))
+        print('\nINFO: unable to construct stoichiometric matrix')
     if DEBUG: print('Nmatrix build: {}'.format(round(time.time() - time0, 3)))
 
     print('\nSBML3 load time: {}\n'.format(round(time.time() - time00, 3)))
