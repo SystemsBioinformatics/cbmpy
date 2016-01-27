@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 391 2015-10-11 16:15:15Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 411 2016-01-27 12:32:01Z bgoli $)
 
 """
 
@@ -111,12 +111,12 @@ def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups
      - *compress_bounds* [default=True] try compress output flux bound parameters
 
     """
-    
+
     print('\nExperimental support for new FBC V2 standard (2015)')
-    
-    xoptions = {'fbc_version': 2, 'validate' : validate, 'compress_bounds' : compress_bounds}    
+
+    xoptions = {'fbc_version': 2, 'validate' : validate, 'compress_bounds' : compress_bounds}
     sbml_level_version=(3,1)
-    autofix=True, 
+    autofix=True,
     return_fbc=False
     #if fbc_version == 2:
         #add_cobra_annot = False
@@ -2414,6 +2414,47 @@ def generateBGID(num, prefix):
         num += 1
         yield '{}{:0>6}'.format(prefix, num)
 
+def convertFloatToExcel(num, roundoff):
+    """
+    Converts a float to Excel compatible "number"
+
+     - *num* a number
+     - *roundoff* the number of roundoff digits for round()
+
+    """
+    ## keep this in sync with convertExcelToFloat
+    if num is None:
+        rval = ''
+    elif numpy.isnan(num):
+        rval = 'nan'
+    elif numpy.isposinf(num):
+        rval = 'inf'
+    elif numpy.isneginf(num):
+        rval = '-inf'
+    else:
+        rval = round(num, roundoff)
+    return rval
+
+def convertExcelToFloat(num):
+    """
+    Converts an Excel "number" to a float
+
+     - *num* a number
+
+    """
+    ## keep this in sync with convertFloatToExcel
+    if num == '':
+        rval = None
+    elif num is 'nan':
+        rval = numpy.nan
+    elif num == 'inf':
+        rval = numpy.inf
+    elif num == '-inf':
+        rval = -numpy.inf
+    else:
+        rval = float(num)
+    return rval
+
 def writeModelToExcel97(fba, filename, roundoff=6):
     """
     Exports the model as an Excel 97 spreadsheet
@@ -2469,6 +2510,7 @@ def writeModelToExcel97(fba, filename, roundoff=6):
     wsStR = wb.add_sheet('network_metab')
     wsMiriam = wb.add_sheet('miriam')
     wsComp = wb.add_sheet('compartments')
+    wsGrp = wb.add_sheet('groups')
 
     ridx = 0
     wsInf.write(ridx, 0, 'id', styleBold)
@@ -2641,30 +2683,26 @@ def writeModelToExcel97(fba, filename, roundoff=6):
             wsSol.write(r_+1, cstart,  Rdi['id'])
         else:
             wsSol.write(r_+1, cstart,  Rdi['id'], styleBold)
-        rval0 = REAC.getValue()
-        if rval0 == None:
-            rval = 'None'
-        else:
-            rval = round(rval0, roundoff)
+        rval = REAC.getValue()
+        rval = convertFloatToExcel(rval, roundoff)
         wsSol.write(r_+1, cstart+1, rval)
-        del rval, rval0
+        del rval
 
-        wsSol.write(r_+1, cstart+2, round(bnds[1], roundoff))
-        wsSol.write(r_+1, cstart+3, round(bnds[2], roundoff))
-        wsSol.write(r_+1, cstart+4, REAC.reduced_cost)
+        wsSol.write(r_+1, cstart+2, convertFloatToExcel(bnds[1], roundoff))
+        wsSol.write(r_+1, cstart+3, convertFloatToExcel(bnds[2], roundoff))
+        wsSol.write(r_+1, cstart+4, convertFloatToExcel(REAC.reduced_cost, roundoff))
         if REAC.fva_min != None:
-            wsSol.write(r_+1, cstart+5,  round(REAC.fva_min, roundoff))
+            wsSol.write(r_+1, cstart+5, convertFloatToExcel(REAC.fva_min, roundoff))
         if REAC.fva_max != None:
-            wsSol.write(r_+1, cstart+6,  round(REAC.fva_max, roundoff))
+            wsSol.write(r_+1, cstart+6, convertFloatToExcel(REAC.fva_max, roundoff))
         if REAC.fva_min != None and REAC.fva_max != None:
-            wsSol.write(r_+1, cstart+7,  round(REAC.fva_max-REAC.fva_min, roundoff))
+            wsSol.write(r_+1, cstart+7, convertFloatToExcel(REAC.fva_max-REAC.fva_min, roundoff))
         if REAC.is_exchange:
             wsSol.write(r_+1, cstart+8, 'yes')
         #else:
             #wsSol.write(r_+1, cstart+8, 'no')
         wsSol.write(r_+1, cstart+9, xlwt.Formula('HYPERLINK("#reactions!A{}";"{}")'.format(r_+1, 'info')), styleHyper)
         wsSol.write(r_+1, cstart+10, xlwt.Formula('HYPERLINK("#network_react!A{}";"{}")'.format(((r_+1)*3)-2, 'stoich')), styleHyper)
-
 
         annot = REAC.getMIRIAMannotations()
         if annot != None:
@@ -2688,11 +2726,7 @@ def writeModelToExcel97(fba, filename, roundoff=6):
     for c_ in fba.compartments:
         wsComp.write(ridx, 0, c_.getPid())
         wsComp.write(ridx, 1, c_.getName())
-        size = c_.getSize()
-        if size == None or size == '' or numpy.isnan(size):
-            pass
-        else:
-            wsComp.write(ridx, 2, size)
+        wsComp.write(ridx, 2, convertFloatToExcel(c_.getSize(), roundoff))
 
         wsComp.write(ridx, 3, c_.getDimensions())
         wsComp.write(ridx, 4, len(c_.containsSpecies()))
@@ -2712,12 +2746,6 @@ def writeModelToExcel97(fba, filename, roundoff=6):
             for k_ in annot:
                 for m_ in annot[k_]:
                     wsMiriam.write(mcntr, 0, c_.getPid())
-                    #if 'identifiers.org' in m_:
-                        ##wsMiriam.write(mcntr, MiriQual.index(k_)+1, xlwt.Formula('HYPERLINK("{}";"{}")'.format(m_, m_.rsplit('/',1)[1])), styleHyper)
-                        #wsMiriam.write(mcntr, MiriQual.index(k_)+1, xlwt.Formula('HYPERLINK("{}";"{}")'.format(m_.replace('identifiers.org', 'info.identifiers.org'),\
-                                                                                                    #m_.rsplit('/',1)[1])), styleHyper)
-                    #else:
-                        #wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
                     wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
                     mcntr += 1
         ridx += 1
@@ -2747,7 +2775,7 @@ def writeModelToExcel97(fba, filename, roundoff=6):
             if len(Mlist[s_]['data'][ud_]) < 30000:
                 wsMet.write(s, len(Mcols)+MUcols.index(ud_), Mlist[s_]['data'][ud_])
             else:
-                wsMet.write(s, len(Mcols)+MUcols.index(ud_),'Data tool long (more than 30000 characters)', styleBold)
+                wsMet.write(s, len(Mcols)+MUcols.index(ud_),'Data too long (more than 30000 characters)', styleBold)
 
         wsStR.write(stridx, 0, Mlist[s_]['id'], styleBold)
         cidx = 0
@@ -2766,23 +2794,24 @@ def writeModelToExcel97(fba, filename, roundoff=6):
     for r_ in range(len(RUcols)):
         try:
             wsRe.write(0, len(Rcols)+r_, RUcols[r_], styleItalic)
-        except:
-            print('Exceeded Excel columns')
+        except Exception as why:
+            print(why)
+            print('\nERROR: Exceeded Excel columns')
     ridx = 0
     for r_ in range(len(Rlist)):
         r = r_+1
         wsRe.write(r, Rcols.index('id'), Rlist[r_]['id'])
         wsRe.write(r, Rcols.index('name'), Rlist[r_]['name'])
         wsRe.write(r, Rcols.index('reversible'), Rlist[r_]['reversible'])
-        wsRe.write(r, Rcols.index('lowerbound'), Rlist[r_]['lowerbound'])
-        wsRe.write(r, Rcols.index('upperbound'), Rlist[r_]['upperbound'])
+        wsRe.write(r, Rcols.index('lowerbound'), convertFloatToExcel(Rlist[r_]['lowerbound'], roundoff))
+        wsRe.write(r, Rcols.index('upperbound'), convertFloatToExcel(Rlist[r_]['upperbound'], roundoff))
         wsRe.write(r, Rcols.index('compartment'), Rlist[r_]['compartment'])
         #wsRe.write(r, Rcols.index('bgid'), Rlist[r_]['bgid'])
         for ud_ in Rlist[r_]['data']:
             if Rlist[r_]['data'][ud_] == None:
                 wsRe.write(r, len(Rcols)+RUcols.index(ud_), '')
             elif type(Rlist[r_]['data'][ud_]) == str and len(Rlist[r_]['data'][ud_]) >= 30000:
-                wsRe.write(r, len(Rcols)+RUcols.index(ud_), 'Data tool long (more than 30000 characters)', styleBold)
+                wsRe.write(r, len(Rcols)+RUcols.index(ud_), 'Data too long (more than 30000 characters)', styleBold)
             else:
                 try:
                     wsRe.write(r, len(Rcols)+RUcols.index(ud_), Rlist[r_]['data'][ud_])
@@ -2805,6 +2834,13 @@ def writeModelToExcel97(fba, filename, roundoff=6):
             wsSt.write(ridx, cidx+pr_+1, Rlist[r_]['products'][pr_][1])
             cidx += 1
         ridx += 1
+
+    gids = fba.getGroupIds()
+    for g_ in range(len(gids)):
+        mbrs = fba.getGroup(gids[g_]).getMemberIDs()
+        wsGrp.write(0, g_, '{} ({})'.format(gids[g_], fba.getGroup(gids[g_]).getName()), styleBold)
+        for m_ in range(len(mbrs)):
+            wsGrp.write(m_+1, g_, str(mbrs[m_]))
 
     wb.save('{}.xls'.format(filename))
 

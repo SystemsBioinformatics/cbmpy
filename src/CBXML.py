@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 409 2016-01-26 11:54:15Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 411 2016-01-27 12:32:01Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1812,7 +1812,7 @@ def sbml_readKeyValueDataAnnotation(annotations):
                 if pvalue.startswith('[') and pvalue.endswith(']'):
                     try:
                         pvalue = eval(pvalue)
-                    except SyntaxError:
+                    except (SyntaxError, NameError):
                         pass
                         #print('INFO: annotation \"{}\" is not a list.'.format(pvalue))
                 #if ptype == 'boolean':
@@ -2664,8 +2664,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     M = D.getModel()
     assert M != None, "\n\nInvalid SBML file"
     assert M.getLevel() >=3 and M.getVersion() >= 1, "\nAn SBML L3V1 or greater model is required"
-    
-    ##we are now going to allow loading non-FBC models (just to be friendly)
+
+    ## we are now going to allow loading non-FBC models (just to be friendly)
     HAVE_FBC = True
     if not hasattr(libsbml, 'Objective'):
         print("\n\nSBML FBC package required, see http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/Flux_Balance_Constraints_%28flux%29 for more details.")
@@ -2673,18 +2673,18 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if HAVE_FBC:
         FBCplg = M.getPlugin(str("fbc"))
         if FBCplg is None:
-            HAVE_FBC = False   
+            HAVE_FBC = False
     if not HAVE_FBC:
-        print('\nModel is not an SBML3 FBC model. Please try cbmpy.readCOBRASBML(\'{}\') for models encoded in the COBRA dialect or cbmpy.readSBML2FBA(\'{}\') for models in FAME format.'.format(fname, fname))
-        return None
-    
+        print('\nModel is not an SBML3 FBC model.\nPlease try cbmpy.readCOBRASBML(\'{}\') for models encoded in the COBRA dialect\nor cbmpy.readSBML2FBA(\'{}\') for models in FAME format.\n'.format(fname, fname))
+        #return None
+
     FBCver = 0
     FBCstrict = True
     if HAVE_FBC:
         FBCver = FBCplg.getPackageVersion()
         if FBCver == 2:
             FBCstrict = FBCplg.getStrict()
-    
+
         if FBCver == 2 and not FBCstrict:
             print("\nWARNING!!!!\n")
             print("This model has fbc:strict=\"false\" this means that is not necessarily a linear program and may contain a number of unsupported features containing aribtrary mathematical expressions such as, InitialAssignments, Rules, Events etc.")
@@ -2692,7 +2692,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             print("\nWARNING!!!!\n")
             if not raw_input('\nDo you wish to continue (Y/N): ') == 'Y':
                 os.sys.exit(-1)
-        
+
     # print some model information
     print('FBC version: {}'.format(FBCver))
     print('M.getNumReactions: {}'.format(M.getNumReactions()))
@@ -2724,7 +2724,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     else:
         __HAVE_FBA_ANOT_OBJ__ = False
         __HAVE_FBA_ANOT_BNDS__ = False
-        __HAVE_FBA_ANOT_GENEASS__ = False        
+        __HAVE_FBA_ANOT_GENEASS__ = False
 
     time0 = time.time()
 
@@ -3100,7 +3100,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         except Exception as why:
             print(type(why))
             print('\nINFO: No active objective defined')
-    
+
         for of_ in range(FBCplg.getNumObjectives()):
             SBOf = FBCplg.getObjective(of_)
             OF = CBModel.Objective(SBOf.getId(), SBOf.getType())
@@ -3115,7 +3115,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 Oflx.setName(SBOfl.getName())
                 OF.addFluxObjective(Oflx)
             OBJFUNCout.append(OF)
-    
+
         if DEBUG: print('ObjectiveFunction load: {}'.format(round(time.time() - time0, 3)))
         time0 = time.time()
 
@@ -3357,12 +3357,13 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         #print(sub_group_assoc)
         del sub_group_assoc
 
+    print('')
     if len(CONSTR) < 1:
-        print('\nWARNING: No FBC flux bounds were defined!\n')
-        time.sleep(1)
-    elif len(OBJFUNCout) < 1:
-        print('\nWARNING: No FBC objective functions were defined!\n')
-        time.sleep(1)
+        print('INFO: No FBC flux bounds were defined.')
+        #time.sleep(1)
+    if len(OBJFUNCout) < 1:
+        print('INFO: No FBC objective functions were defined.')
+        #time.sleep(1)
     fm._SBML_LEVEL_ = 3
     try:
         fm.buildStoichMatrix()
@@ -3371,7 +3372,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         print('\nINFO: unable to construct stoichiometric matrix')
     if DEBUG: print('Nmatrix build: {}'.format(round(time.time() - time0, 3)))
 
-    print('\nSBML3 load time: {}\n'.format(round(time.time() - time00, 3)))
+    print('SBML3 load time: {}\n'.format(round(time.time() - time00, 3)))
 
     del M, D
 
