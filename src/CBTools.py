@@ -1614,3 +1614,50 @@ def checkProducibility(mod, metabolites=None, reactions=None, retOnlyZeroEntr=Fa
     res.update(reacs)
 
     return res
+
+
+def checkSuffixes(aList, suf1, suf2):
+
+    # check whether there are strings in aList with the suffixes suf1 and suf2, respectively
+    # used in the function getReaByMetSuf
+
+    boolSuf1 = any([x.endswith(suf1) for x in aList])
+    boolSuf2 = any([x.endswith(suf2) for x in aList])
+
+    return all([boolSuf1, boolSuf2])
+
+
+def getReaByMetSuf(fba_mod, suf1, suf2, retSpec=False):
+
+    """
+    - can be used to determine all reactions in which at least two species with different suffixes are involved
+    - e.g. getReaByMetSuf(fba_mod, '_e', '_c') returns all reactions IDs between the extracellular compartment (suffix
+    '_e') and the cytosol (suffix '_c)'.
+
+    INPUT:
+    fba_mod: a model instance
+    suf1: suffix one (string)
+    suf2: suffix two (string)
+
+    OUTPUT:
+    if retSpec=True, a dictionary of reaction IDs and their associated species are returned
+    if retSpec=False, a list with reaction IDs is returned
+    """
+
+    # check whether suf1 and suf2 are strings
+    if not all(isinstance(s, str) for s in [suf1, suf2]):
+        raise TypeError('Please provide suffixes as strings')
+
+    # create a dictionary where keys are reactions IDs and values are species IDs
+    reaSpecDict = {reai.getPid(): fba_mod.getReaction(reai.getPid()).getSpeciesIds() for reai in fba_mod.reactions}
+
+    # dictionary where keys are reactions IDs and values are Boolean depending on whether there are species IDs ending
+    # with suf1 and suf2
+    reaBoolDict = {k: checkSuffixes(v, suf1, suf2) for k, v in reaSpecDict.items()}
+
+    # return either only the reactions IDs or a dictionary with reactions IDs as keys and their associated species
+    # as values
+    if retSpec:
+        return filter(lambda x: reaBoolDict[x[0]], reaSpecDict.items())
+
+    return filter(lambda x: reaBoolDict[x], reaBoolDict.keys())
