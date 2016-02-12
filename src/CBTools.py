@@ -259,7 +259,7 @@ def splitReversibleReactions(fba, selected_reactions=None):
      - *selected_reactions* if a reversible reaction id is in here split it
 
     """
-    if selected_reactions == None:
+    if selected_reactions is Nonee:
         selected_reactions = []
     M = fba.clone()
     if len(selected_reactions) == 0:
@@ -305,10 +305,10 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
     if RB[3] != None:
         EB = fba.getFluxBoundByReactionID(rid, 'equality')
     fba.deleteReactionAndBounds(rid)
-    if fwd_id == None:
+    if fwd_id is None:
         fwd_id = Rf.getPid()+'_fwd'
     Rf.setPid(fwd_id)
-    if rev_id == None:
+    if rev_id is None:
         rev_id = Rb.getPid()+'_rev'
     Rb.setPid(rev_id)
     Rf.reversible = False
@@ -342,7 +342,7 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
             fba.createReactionUpperBound(Rf.getPid(), 0.0)
             fba.createReactionLowerBound(Rb.getPid(), abs(UB.getValue()))
             fba.createReactionUpperBound(Rb.getPid(), abs(LB.getValue()))
-    elif LB != None and UB == None:
+    elif LB != None and UB is None:
         if LB.getValue() > 0:
             fba.createReactionLowerBound(Rf.getPid(), LB.getValue())
             fba.createReactionUpperBound(Rf.getPid(), float('inf'))
@@ -353,7 +353,7 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
             fba.createReactionUpperBound(Rf.getPid(), float('inf'))
             fba.createReactionLowerBound(Rb.getPid(), 0.0)
             fba.createReactionUpperBound(Rb.getPid(), abs(LB.getValue()))
-    elif LB == None and UB != None:
+    elif LB is None and UB != None:
         if UB.getValue() >= 0:
             fba.createReactionLowerBound(Rf.getPid(), 0.0)
             fba.createReactionUpperBound(Rf.getPid(), UB.getValue())
@@ -782,16 +782,16 @@ def processSBMLAnnotationNotes(fba, annotation_key='note'):
                             new_ann.update({ps[0].strip() : ps[1].strip()})
             s.annotation.update(new_ann)
 
-        if 'chemFormula' in s.annotation and (s.chemFormula == None or s.chemFormula == ''):
+        if 'chemFormula' in s.annotation and (s.chemFormula is None or s.chemFormula == ''):
             s.chemFormula = s.annotation.pop('chemFormula')
             if __DEBUG__: print(s.annotation)
-        elif 'FORMULA' in s.annotation and (s.chemFormula == None or s.chemFormula == ''):
+        elif 'FORMULA' in s.annotation and (s.chemFormula is None or s.chemFormula == ''):
             s.chemFormula = s.annotation.pop('FORMULA')
 
         if not checkChemFormula(s.chemFormula):
             s.chemFormula = ''
 
-        if (s.charge == None or s.charge == '') and 'charge' in s.annotation:
+        if (s.charge is None or s.charge == '') and 'charge' in s.annotation:
             chrg = s.annotation.pop('charge')
             try:
                 s.charge = int(chrg)
@@ -799,7 +799,7 @@ def processSBMLAnnotationNotes(fba, annotation_key='note'):
                 s.charge = None
                 print('Invalid charge: {} defined for species {}'.format(chrg, s.getPid()))
             if __DEBUG__: print(s.annotation)
-        elif (s.charge == None or s.charge == '') and 'CHARGE' in s.annotation:
+        elif (s.charge is None or s.charge == '') and 'CHARGE' in s.annotation:
             chrg = s.annotation.pop('CHARGE')
             try:
                 s.charge = int(chrg)
@@ -817,7 +817,7 @@ def processExchangeReactions(fba, key):
 
     """
     # extract all exchange bounds
-    if key == None:
+    if key is None:
         fexDic = getExchBoundsDict(fba)
     else:
         fexDic = getBoundsDict(fba, substring=key)
@@ -1006,7 +1006,7 @@ def getReactionsPerGene(react_gene):
     gene_react = {}
     no_gene = []
     for R in react_gene:
-        if react_gene[R] == None:
+        if react_gene[R] is None:
             print('Reaction {} has no gene associated with it'.format(R))
             no_gene.append(R)
         else:
@@ -1071,7 +1071,7 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
 
     """
     assert HAVE_PYPARSING, '\nPyParsing needs to be installed for this method'
-    if Rid == None:
+    if Rid is None:
         Rid = f.getReactionIds()
     elif isinstance(Rid, list):
         pass
@@ -1101,7 +1101,7 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
                 # note this uses a net stoichiometry approach with signed coefficients
                 reagents.append([rr.species_ref, rr.coefficient, CF, None])
             if chrg not in [None, '']:
-                if netcharge == None:
+                if netcharge is None:
                     netcharge = float(chrg)*rr.coefficient
                 else:
                     netcharge += float(chrg)*rr.coefficient
@@ -1131,7 +1131,7 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
         for e in Ed:
             if abs(Ed[e]) >= zero_tol:
                 EBAL = False
-            if RCHARGE[R] == None or abs(RCHARGE[R]) >= zero_tol:
+            if RCHARGE[R] is None or abs(RCHARGE[R]) >= zero_tol:
                 CBAL = False
         Rres.update({ R : {'id' : R,
                             'charge_balanced' : CBAL,
@@ -1189,7 +1189,7 @@ def createZipArchive(zipname, files, move=False, compression='normal'):
 
     """
 
-    if compression == None:
+    if compression is None:
         compression = zipfile.ZIP_STORED
     else:
         compression = zipfile.ZIP_DEFLATED
@@ -1275,7 +1275,7 @@ def checkIds(fba, items='all'):
             else:
                 iddump.append(Id)
             if i_ == 'reactions':
-                if not 'reagents' in output:
+                if 'reagents' not in output:
                     output['reagents'] = []
                 for rr_ in I_.reagents:
                     rrid = rr_.getPid()
@@ -1286,7 +1286,7 @@ def checkIds(fba, items='all'):
                     else:
                         iddump.append(rrid)
             if i_ == 'objectives':
-                if not 'fluxObjectives' in output:
+                if 'fluxObjectives' not in output:
                     output['fluxObjectives'] = []
                 for fo_ in I_.fluxObjectives:
                     foid = fo_.getPid()
@@ -1353,7 +1353,7 @@ def checkFluxBoundConsistency(fba):
                 eMB['equality'][RID] = [fb]
 
             EB[RID] = fb
-        if fba.getReaction(RID) == None:
+        if fba.getReaction(RID) is None:
             noreaction.append(fb)
 
     for mb_ in list(eMB['lower']):
@@ -1462,7 +1462,7 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
     In development: merging genes and gpr's.
 
     """
-    if ignore == None:
+    if ignore is None:
         ignore = []
 
     out = CBModel.Model(m1.getPid() + m2.getPid())
@@ -1541,7 +1541,7 @@ def checkProducibilityMetabolites(mod, metabolites=None, retOnlyZeroEntr=False, 
     This function was contributed by Willi Gottstein, Amsterdam, 2015.
 
     """
-    if metabolites == None:
+    if metabolites is None:
         metabolites = []
     res = {}
     tempMod = mod.clone()
@@ -1578,7 +1578,7 @@ def checkProducibilityReactions(mod, reactions=None, retOnlyZeroEntr=False, zero
     This function was contributed by Willi Gottstein, Amsterdam, 2015.
 
     """
-    if reactions == None:
+    if reactions is None:
         reactions = []
     res = {}
     if reactions:
@@ -1605,9 +1605,9 @@ def checkProducibility(mod, metabolites=None, reactions=None, retOnlyZeroEntr=Fa
     This function was contributed by Willi Gottstein, Amsterdam, 2015.
 
     """
-    if metabolites == None:
+    if metabolites is None:
         metabolites = []
-    if reactions == None:
+    if reactions is None:
         reactions = []
     res = checkProducibilityMetabolites(mod, metabolites, retOnlyZeroEntr, zeroLimit)
     reacs = checkProducibilityReactions(mod, reactions, retOnlyZeroEntr, zeroLimit)
@@ -1617,16 +1617,18 @@ def checkProducibility(mod, metabolites=None, reactions=None, retOnlyZeroEntr=Fa
 
 
 def checkSuffixes(aList, suf1, suf2):
+    """
+    Check whether there are strings in aList with the suffixes suf1 and suf2, respectively
+    used in the function getReaByMetSuf
 
-    # check whether there are strings in aList with the suffixes suf1 and suf2, respectively
-    # used in the function getReaByMetSuf
+    """
 
     boolSuf1 = any([x.endswith(suf1) for x in aList])
     boolSuf2 = any([x.endswith(suf2) for x in aList])
 
     return all([boolSuf1, boolSuf2])
 
-
+## WILLI: can't you also do this using the compartment attribute? I would also call the function: getTransportReactionsBysuffix
 def getReaByMetSuf(fba_mod, suf1, suf2, retSpec=False):
 
     """
