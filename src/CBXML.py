@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 411 2016-01-27 12:32:01Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 415 2016-02-17 15:22:13Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -101,6 +101,33 @@ except AttributeError:
 _TEMP_XML_FILE_ = '_tmpxml.tmp'
 FBA_NS = 'http://www.sbml.org/sbml/level3/version1/fba/version1'
 METAPREFIX = 'meta_'
+
+
+UNIT_DICTIONARY_L2 = {'area': {0 : {'exponent': 2, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
+                   'length': {0 : {'exponent': 1, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
+                   'substance': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': 0}},
+                   'time': {0 : {'exponent': 1, 'kind': 'second', 'multiplier': 1.0, 'scale': 0}},
+                   'volume': {0 : {'exponent': 1, 'kind': 'litre', 'multiplier': 1.0, 'scale': 0}},
+                   'mmol_per_gDW_per_hr': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': -3},
+                                           1 : {'exponent': -1, 'kind': 'gram', 'multiplier': 1.0, 'scale': 0},
+                                           2 : {'exponent': -1, 'kind': 'second', 'multiplier': 3600, 'scale': 0}
+                                           }
+                   }
+
+UNIT_DICTIONARY = {'hour': {0 : {'exponent': 1, 'kind': 'second', 'multiplier': 3600, 'scale': 0}\
+                            },
+                   'mmol_per_gdw': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': -3},
+                                    1 : {'exponent': -1, 'kind': 'gram', 'multiplier': 1.0, 'scale': 0}
+                                    },
+                   'mmol_per_hour': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': -3},
+                                     1 : {'exponent': -1, 'kind': 'second', 'multiplier': 3600, 'scale': 0}
+                                     },
+                   'per_hour': {0 : {'exponent': -1, 'kind': 'second', 'multiplier': 3600, 'scale': 0}
+                                   }
+                   }
+MODEL_UNITS = {'extent' : 'mmol_per_gdw',
+               'substance' : 'mmol_per_gdw',
+               'time' : 'hour'}
 
 class MLStripper(HTMLParser):
     """
@@ -760,16 +787,14 @@ def sbml_setCompartmentsL3(model, fba):
         comp_def = model.createCompartment()
         comp_def.setId(cs.getPid())
         comp_def.setName(cs.getName())
+        comp_def.setUnits('dimensionless')
 
         size = cs.getSize()
         if size == None or size == '' or numpy.isnan(size):
             # TODO need to decide what to do here
-            # comp_def.setSize(numpy.nan)
-            pass
+            comp_def.setSize(1)
         else:
             comp_def.setSize(cs.getSize())
-
-
 
         comp_def.setSpatialDimensions(cs.getDimensions())
         comp_def.setConstant(True)
@@ -834,29 +859,22 @@ def sbml_setNotes3(obj, s):
         return True
 
 
-def sbml_setUnits(model, units=None, give_default=False):
+def sbml_setUnits(model, units=None, give_default=False, L3=True):
     """
     Adds units to the model:
 
     - *model* a libSBML model instance
     - *units* [default=None] a dictionary of units, if None default units are used
     - *give_default* [default=False] if true method returns the default unit dictionary
+    - *L3* [default=True] use the L3 defaults
 
     """
 
-    ud = {'area': {0 : {'exponent': 2, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
-          'length': {0 : {'exponent': 1, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
-          'substance': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': 0}},
-          'time': {0 : {'exponent': 1, 'kind': 'second', 'multiplier': 1.0, 'scale': 0}},
-          'volume': {0 : {'exponent': 1, 'kind': 'litre', 'multiplier': 1.0, 'scale': 0}},
-          'mmol_per_gDW_per_hr': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': -3},
-                                  1 : {'exponent': -1, 'kind': 'gram', 'multiplier': 1.0, 'scale': 0},
-                                  2 : {'exponent': -1, 'kind': 'second', 'multiplier': 0.00027777, 'scale': 0}
-                                  }
-          }
-
-    if units == None:
-        units = ud
+    if units is None:
+        if L3:
+            units = UNIT_DICTIONARY
+        else:
+            units = UNIT_DICTIONARY_L2
 
     if give_default:
         return units
@@ -865,6 +883,13 @@ def sbml_setUnits(model, units=None, give_default=False):
         vdef = model.createUnitDefinition()
         vdef.setId(un)
         vdef.setName(un)
+        if L3 and un in MODEL_UNITS.values():
+            if MODEL_UNITS['time'] == un:
+                model.setTimeUnits(un)
+            if MODEL_UNITS['extent'] == un:
+                model.setExtentUnits(un)
+            if MODEL_UNITS['substance'] == un:
+                model.setSubstanceUnits(un)
         for u in range(len(units[un])):
             vu = model.createUnit()
             vu.setKind(libsbml.UnitKind_forName(units[un][u]['kind']))
@@ -872,6 +897,7 @@ def sbml_setUnits(model, units=None, give_default=False):
             vu.setScale(int(units[un][u]['scale']))
             vu.setExponent(int(units[un][u]['exponent']))
             vu.setOffset(0)
+
 
 def sbml_writeAnnotationsAsCOBRANote(annotations):
     """
@@ -968,7 +994,7 @@ def sbml_setSpeciesL2(model, fba, return_dicts=False):
         if species[spe]['value'] not in ['',  None]:
             s.setInitialConcentration(float(species[spe]['value']))
             ##  s.setInitialAmount(float(species[spe]['value']))
-        s.setHasOnlySubstanceUnits(False)
+        s.setHasOnlySubstanceUnits(True)
 
         annoSTR = None
         #if species[spe]['chemFormula'] != None and species[spe]['chemFormula'] != '':
@@ -1134,7 +1160,7 @@ def sbml_writeSBML2FBA(fba, fname, directory=None, sbml_level_version=None):
     # create a model
     SMOD, document = sbml_createModelL2(fba, level=SBML_LEVEL, version=SBML_VERSION)
     sbml_setDescription(SMOD, fba)
-    sbml_setUnits(SMOD, units=None)
+    sbml_setUnits(SMOD, units=None, L3=False)
     C = sbml_setSpeciesL2(SMOD, fba)
     sbml_setCompartmentsL2(SMOD, C)
     sbml_setReactionsL2(SMOD, fba, return_dict=False)
@@ -1826,7 +1852,7 @@ def sbml_readKeyValueDataAnnotation(annotations):
             kvout[pid] = pvalue
     return kvout
 
-def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_cbmpy_anno=True):
+def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_cbmpy_anno=True, substance_units=True):
     """
     Add the species definitions to the SBML object:
 
@@ -1835,6 +1861,7 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
      - *return_dicts* [default=False] only returns the compartment and species dictionaries without updating the SBML
      - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_anno* [default=False] add COBRA <notes> annotation
+     - *substance_units* [default=True] defines the species in amounts rather than concentrations (necessary for default mmol/gdw.h)
 
     returns:
 
@@ -1916,9 +1943,12 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
             s.setBoundaryCondition(False)
         #print species[spe]['value'], type(species[spe]['value'])
         if not numpy.isnan(species[spe]['value']) and species[spe]['value'] not in ['',  None]:
-            s.setInitialConcentration(float(species[spe]['value']))
-            ##  s.setInitialAmount(float(species[spe]['value']))
-        s.setHasOnlySubstanceUnits(False)
+            if substance_units:
+                # set the species to be in amounts or concentrations default is amounts for mmol/gdw.h
+                s.setInitialAmount(float(species[spe]['value']))
+                s.setHasOnlySubstanceUnits(substance_units)
+            else:
+                s.setInitialConcentration(float(species[spe]['value']))
 
         if len(species[spe]['annotation']) > 0:
             if add_cbmpy_anno:
@@ -2270,8 +2300,8 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
 
     # create a model
     sbml_setDescription(cs3.model, fba)
-    sbml_setUnits(cs3.model, units=None)
-    sbml_setSpeciesL3(cs3.model, fba, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot)
+    sbml_setUnits(cs3.model, units=None, L3=True)
+    sbml_setSpeciesL3(cs3.model, fba, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, substance_units=True)
     sbml_setCompartmentsL3(cs3.model, fba)
     sbml_setReactionsL3Fbc(cs3, fba, return_dict=False, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, fbc_version=fbc_version)
     if USE_GROUPS:
