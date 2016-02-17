@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 369 2015-08-25 12:52:08Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 414 2016-02-17 08:21:03Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
