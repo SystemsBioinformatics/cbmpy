@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 411 2016-01-27 12:32:01Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 416 2016-02-23 16:12:23Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -101,6 +101,33 @@ except AttributeError:
 _TEMP_XML_FILE_ = '_tmpxml.tmp'
 FBA_NS = 'http://www.sbml.org/sbml/level3/version1/fba/version1'
 METAPREFIX = 'meta_'
+
+
+UNIT_DICTIONARY_L2 = {'area': {0 : {'exponent': 2, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
+                   'length': {0 : {'exponent': 1, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
+                   'substance': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': 0}},
+                   'time': {0 : {'exponent': 1, 'kind': 'second', 'multiplier': 1.0, 'scale': 0}},
+                   'volume': {0 : {'exponent': 1, 'kind': 'litre', 'multiplier': 1.0, 'scale': 0}},
+                   'mmol_per_gDW_per_hr': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': -3},
+                                           1 : {'exponent': -1, 'kind': 'gram', 'multiplier': 1.0, 'scale': 0},
+                                           2 : {'exponent': -1, 'kind': 'second', 'multiplier': 3600, 'scale': 0}
+                                           }
+                   }
+
+UNIT_DICTIONARY = {'hour': {0 : {'exponent': 1, 'kind': 'second', 'multiplier': 3600, 'scale': 0}\
+                            },
+                   'mmol_per_gdw': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': -3},
+                                    1 : {'exponent': -1, 'kind': 'gram', 'multiplier': 1.0, 'scale': 0}
+                                    },
+                   'mmol_per_hour': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': -3},
+                                     1 : {'exponent': -1, 'kind': 'second', 'multiplier': 3600, 'scale': 0}
+                                     },
+                   'per_hour': {0 : {'exponent': -1, 'kind': 'second', 'multiplier': 3600, 'scale': 0}
+                                   }
+                   }
+MODEL_UNITS = {'extent' : 'mmol_per_gdw',
+               'substance' : 'mmol_per_gdw',
+               'time' : 'hour'}
 
 class MLStripper(HTMLParser):
     """
@@ -755,21 +782,19 @@ def sbml_setCompartmentsL3(model, fba):
      - *fba* a PySCeSCBM model instance
 
     '''
-    compartments = fba.compartments
-    for cs in compartments:
+    for cs in fba.compartments:
         comp_def = model.createCompartment()
         comp_def.setId(cs.getPid())
         comp_def.setName(cs.getName())
+        # TODO: look into this for user selectable units
+        comp_def.setUnits('dimensionless')
 
         size = cs.getSize()
         if size == None or size == '' or numpy.isnan(size):
-            # TODO need to decide what to do here
-            # comp_def.setSize(numpy.nan)
-            pass
+            # TODO: need to decide what to do here
+            comp_def.setSize(1)
         else:
             comp_def.setSize(cs.getSize())
-
-
 
         comp_def.setSpatialDimensions(cs.getDimensions())
         comp_def.setConstant(True)
@@ -785,6 +810,9 @@ def sbml_setCompartmentsL3(model, fba):
             miriam = cs.miriam.getAllMIRIAMUris()
             if len(miriam) > 0:
                 sbml_setCVterms(comp_def, miriam, model=False)
+        sboterm = cs.getSBOterm()
+        if sboterm is not None and sboterm != '':
+            comp_def.setSBOTerm(str(sboterm))
 
 
 def sbml_setDescription(model, fba):
@@ -834,29 +862,22 @@ def sbml_setNotes3(obj, s):
         return True
 
 
-def sbml_setUnits(model, units=None, give_default=False):
+def sbml_setUnits(model, units=None, give_default=False, L3=True):
     """
     Adds units to the model:
 
     - *model* a libSBML model instance
     - *units* [default=None] a dictionary of units, if None default units are used
     - *give_default* [default=False] if true method returns the default unit dictionary
+    - *L3* [default=True] use the L3 defaults
 
     """
 
-    ud = {'area': {0 : {'exponent': 2, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
-          'length': {0 : {'exponent': 1, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
-          'substance': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': 0}},
-          'time': {0 : {'exponent': 1, 'kind': 'second', 'multiplier': 1.0, 'scale': 0}},
-          'volume': {0 : {'exponent': 1, 'kind': 'litre', 'multiplier': 1.0, 'scale': 0}},
-          'mmol_per_gDW_per_hr': {0 : {'exponent': 1, 'kind': 'mole', 'multiplier': 1.0, 'scale': -3},
-                                  1 : {'exponent': -1, 'kind': 'gram', 'multiplier': 1.0, 'scale': 0},
-                                  2 : {'exponent': -1, 'kind': 'second', 'multiplier': 0.00027777, 'scale': 0}
-                                  }
-          }
-
-    if units == None:
-        units = ud
+    if units is None:
+        if L3:
+            units = UNIT_DICTIONARY
+        else:
+            units = UNIT_DICTIONARY_L2
 
     if give_default:
         return units
@@ -865,6 +886,13 @@ def sbml_setUnits(model, units=None, give_default=False):
         vdef = model.createUnitDefinition()
         vdef.setId(un)
         vdef.setName(un)
+        if L3 and un in MODEL_UNITS.values():
+            if MODEL_UNITS['time'] == un:
+                model.setTimeUnits(un)
+            if MODEL_UNITS['extent'] == un:
+                model.setExtentUnits(un)
+            if MODEL_UNITS['substance'] == un:
+                model.setSubstanceUnits(un)
         for u in range(len(units[un])):
             vu = model.createUnit()
             vu.setKind(libsbml.UnitKind_forName(units[un][u]['kind']))
@@ -872,6 +900,7 @@ def sbml_setUnits(model, units=None, give_default=False):
             vu.setScale(int(units[un][u]['scale']))
             vu.setExponent(int(units[un][u]['exponent']))
             vu.setOffset(0)
+
 
 def sbml_writeAnnotationsAsCOBRANote(annotations):
     """
@@ -968,7 +997,7 @@ def sbml_setSpeciesL2(model, fba, return_dicts=False):
         if species[spe]['value'] not in ['',  None]:
             s.setInitialConcentration(float(species[spe]['value']))
             ##  s.setInitialAmount(float(species[spe]['value']))
-        s.setHasOnlySubstanceUnits(False)
+        s.setHasOnlySubstanceUnits(True)
 
         annoSTR = None
         #if species[spe]['chemFormula'] != None and species[spe]['chemFormula'] != '':
@@ -1134,7 +1163,7 @@ def sbml_writeSBML2FBA(fba, fname, directory=None, sbml_level_version=None):
     # create a model
     SMOD, document = sbml_createModelL2(fba, level=SBML_LEVEL, version=SBML_VERSION)
     sbml_setDescription(SMOD, fba)
-    sbml_setUnits(SMOD, units=None)
+    sbml_setUnits(SMOD, units=None, L3=False)
     C = sbml_setSpeciesL2(SMOD, fba)
     sbml_setCompartmentsL2(SMOD, C)
     sbml_setReactionsL2(SMOD, fba, return_dict=False)
@@ -1628,6 +1657,9 @@ class CBMtoSBML3(FBCconnect):
                 G.setName(name)
             G.setMetaId(g.getMetaId())
             G.setLabel(g.getLabel())
+            sboterm = g.getSBOterm()
+            if sboterm is not None and sboterm != '':
+                G.setSBOTerm(str(sboterm))
 
             if len(g.annotation) > 0:
                 if add_cbmpy_anno:
@@ -1826,7 +1858,7 @@ def sbml_readKeyValueDataAnnotation(annotations):
             kvout[pid] = pvalue
     return kvout
 
-def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_cbmpy_anno=True):
+def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_cbmpy_anno=True, substance_units=True):
     """
     Add the species definitions to the SBML object:
 
@@ -1835,6 +1867,7 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
      - *return_dicts* [default=False] only returns the compartment and species dictionaries without updating the SBML
      - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_anno* [default=False] add COBRA <notes> annotation
+     - *substance_units* [default=True] defines the species in amounts rather than concentrations (necessary for default mmol/gdw.h)
 
     returns:
 
@@ -1852,7 +1885,7 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
             USE_DEFAULT_COMPARTMENT = True
             s.compartment = DEFAULT_COMPARTMENT
             if DEFAULT_COMPARTMENT not in compartments:
-                print('INFO: Species "{}" has not compartment, creating default "{}".'.format(s.getPid(), DEFAULT_COMPARTMENT))
+                print('INFO: Species "{}" has no compartment, creating default "{}".'.format(s.getPid(), DEFAULT_COMPARTMENT))
                 C = CBModel.Compartment(DEFAULT_COMPARTMENT, DEFAULT_COMPARTMENT, 1.0, 3)
                 C.setAnnotation('CBMPy_info', 'created by SBML writer')
                 s.setAnnotation('CBMPy_info', 'compartment added by SBML writer')
@@ -1877,7 +1910,8 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
                                       'annotation' : s.getAnnotations().copy(),
                                       'boundary' : s.is_boundary,
                                       'chemFormula' : s.chemFormula,
-                                      'miriam' : miriam
+                                      'miriam' : miriam,
+                                      'sboterm' : s.getSBOterm()
                                       }
                         })
 
@@ -1916,9 +1950,12 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
             s.setBoundaryCondition(False)
         #print species[spe]['value'], type(species[spe]['value'])
         if not numpy.isnan(species[spe]['value']) and species[spe]['value'] not in ['',  None]:
-            s.setInitialConcentration(float(species[spe]['value']))
-            ##  s.setInitialAmount(float(species[spe]['value']))
-        s.setHasOnlySubstanceUnits(False)
+            if substance_units:
+                # set the species to be in amounts or concentrations default is amounts for mmol/gdw.h
+                s.setInitialAmount(float(species[spe]['value']))
+                s.setHasOnlySubstanceUnits(substance_units)
+            else:
+                s.setInitialConcentration(float(species[spe]['value']))
 
         if len(species[spe]['annotation']) > 0:
             if add_cbmpy_anno:
@@ -1935,6 +1972,8 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
                 sbml_setNotes3(s, species[spe]['annotation'])
         if len(species[spe]['miriam']) > 0:
             sbml_setCVterms(s, species[spe]['miriam'], model=False)
+        if  species[spe]['sboterm'] is not None and species[spe]['sboterm'] != '':
+            s.setSBOTerm(str(species[spe]['sboterm']))
 
 def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=1):
     """
@@ -1977,7 +2016,8 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
                                         'annotation' : r.getAnnotations().copy(),
                                         'compartment' : r.compartment,
                                         'miriam' : miriam,
-                                        'notes' : r.getNotes()
+                                        'notes' : r.getNotes(),
+                                        'sboterm' : r.getSBOterm()
                                         }
                           })
     if return_dict:
@@ -2024,6 +2064,10 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
             r.setReversible(True)
         else:
             r.setReversible(False)
+
+        if reactions[rxn]['sboterm'] is not None and reactions[rxn]['sboterm'] != '':
+            #print(reactions[rxn]['sboterm'])
+            r.setSBOTerm(str(reactions[rxn]['sboterm']))
 
         if fbc_version == 2:
             FB.setLowerFluxBound(fbcmod.parameter_map[reactions[rxn]['id']]['lb'])
@@ -2231,12 +2275,12 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
 
     # load options
     fbc_version = 1
-    validate = False
+    VALIDATE = False
     compress_bounds = False
     if 'fbc_version' in xoptions:
         fbc_version = xoptions['fbc_version']
     if 'validate' in xoptions:
-        validate = xoptions['validate']
+        VALIDATE = xoptions['validate']
     if 'compress_bounds' in xoptions and fbc_version == 2:
         compress_bounds = xoptions['compress_bounds']
     if fbc_version == 2:
@@ -2270,8 +2314,8 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
 
     # create a model
     sbml_setDescription(cs3.model, fba)
-    sbml_setUnits(cs3.model, units=None)
-    sbml_setSpeciesL3(cs3.model, fba, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot)
+    sbml_setUnits(cs3.model, units=None, L3=True)
+    sbml_setSpeciesL3(cs3.model, fba, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, substance_units=True)
     sbml_setCompartmentsL3(cs3.model, fba)
     sbml_setReactionsL3Fbc(cs3, fba, return_dict=False, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, fbc_version=fbc_version)
     if USE_GROUPS:
@@ -2296,16 +2340,49 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     F.flush()
     F.close()
 
-    if validate:
+    if VALIDATE:
+        sbml_setValidationOptions(cs3.doc, level='full')
         print('\nPerforming validation on output SBML ...\n')
-        errors, warnings, others, DOCUMENT_VALID = sbml_validateDocument(cs3.doc)
+        errors, warnings, others, DOCUMENT_VALID = sbml_validateDocument(cs3.doc, fullmsg=False)
         if not DOCUMENT_VALID:
             print('\nSBML document is invalid: filename will be {}.invalid'.format(fname))
             shutil.move(fname, fname+'.invalid')
+    else:
+        sbml_setValidationOptions(cs3.doc, level='normal')
 
     print('Model exported as: {}'.format(fname))
     cs3._cleanUP_()
     del cs3
+
+def sbml_setValidationOptions(D, level):
+    """
+    set the validation level of an SBML document
+
+     - *D* an SBML document
+     - *level* the level of consistency check can be either one of:
+
+      - 'normal' basic id checking only
+      - 'full' all checks enabled
+
+    """
+
+    if level == 'normal':
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_IDENTIFIER_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_UNITS_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_MATHML_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_SBO_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_OVERDETERMINED_MODEL, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_MODELING_PRACTICE, False)
+    elif level == 'full':
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_IDENTIFIER_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_UNITS_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_MATHML_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_SBO_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_OVERDETERMINED_MODEL, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_MODELING_PRACTICE, True)
+
 
 def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False, output_dir=None, speciesAnnotationFix=True):
     """
@@ -2539,11 +2616,12 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
     del sbmldoc
     return newfname
 
-def sbml_validateDocument(D):
+def sbml_validateDocument(D, fullmsg=False):
     """
     Validates and SBML document returns three dictionaries, errors, warnings, other and a boolean indicating an invalid document:
 
      - *D* and SBML document
+     - *fullmsg* [default=False] optionally display the full error message
 
     """
 
@@ -2557,28 +2635,47 @@ def sbml_validateDocument(D):
         eid = e.getErrorId()
         msg = {'line': [e.getLine()],
                'msg' : e.getShortMessage(),
+               'fullmsg' : e.getMessage(),
+               'severity_int' : e.getSeverity(),
+               'package' : e.getPackage(),
                'severity' : e.getSeverityAsString(),
-               'valid' : e.isValid()
+               'isfatal' : e.isFatal(),
+               'isxml' : e.isXML()
                }
-        if not msg['valid']:
+        if msg['isfatal'] or msg['isfatal']:
             DOCUMENT_VALID = False
 
-        if e.isWarning():
-            if eid not in warnings:
-                warnings[eid] = msg
-            else:
-                warnings[eid]['line'].append(msg['line'][0])
-        elif e.isError():
+        if e.isError():
             if eid not in errors:
                 errors[eid] = msg
             else:
-                errors[eid]['line'].append(msg['line'][0])
+                if msg['line'][0] not in errors[eid]['line']:
+                    errors[eid]['line'].append(msg['line'][0])
+        elif e.isWarning():
+            if eid not in warnings:
+                warnings[eid] = msg
+            else:
+                if msg['line'][0] not in warnings[eid]['line']:
+                    warnings[eid]['line'].append(msg['line'][0])
+
         else:
             if eid not in others:
                 others[eid] = msg
             else:
-                others[eid]['line'].append(msg['line'][0])
+                if msg['line'][0] not in others[eid]['line']:
+                    others[eid]['line'].append(msg['line'][0])
     del e
+
+    not_relevant = [20221, 20616, 80601, 99130, 99508]
+    for er in warnings:
+        if er in not_relevant:
+            warnings[er]['line'] = []
+            warnings[er]['severity'] = 'NAtoFBC'
+        elif warnings[er]['line'] == [1]:
+            warnings[er]['line'] = []
+        if fullmsg:
+            warnings[er]['msg'] = warnings[er]['fullmsg']
+            warnings[er]['fullmsg'] = ''
 
     print('Validation report:\n==================\n')
     if len(errors) > 0:
@@ -2586,22 +2683,37 @@ def sbml_validateDocument(D):
         eidx = list(errors.keys())
         eidx.sort()
         for e_ in eidx:
-            print('Error {} (valid={}):\n\n - {}\n - lines: {}\n'.format(e_, errors[e_]['valid'], errors[e_]['msg'], errors[e_]['line']))
+            print('Error {} (severity={}):\n\n - {}\n - lines: {}\n'.format(e_, errors[e_]['severity'], errors[e_]['msg'], errors[e_]['line']))
     if len(warnings) > 0:
         print('\nWarnings\n--------\n')
         eidx = list(warnings.keys())
         eidx.sort()
         for e_ in eidx:
-            print('Warning {} (valid={}):\n\n - {}\n - lines: {}\n'.format(e_, warnings[e_]['valid'], warnings[e_]['msg'], warnings[e_]['line']))
+            print('Warning {} (severity={}):\n\n - {}\n - lines: {}\n'.format(e_, warnings[e_]['severity'], warnings[e_]['msg'], warnings[e_]['line']))
     if len(others) > 0:
         print('\nOther\n-----\n')
         eidx = list(others.keys())
         eidx.sort()
         for e_ in eidx:
-            print('Info {} (valid={}):\n\n - {}\n - lines: {}\n'.format(e_, others[e_]['valid'], others[e_]['msg'], others[e_]['line']))
+            print('Info {} (severity={}):\n\n - {}\n - lines: {}\n'.format(e_, others[e_]['severity'], others[e_]['msg'], others[e_]['line']))
     print('End.\n')
 
     return errors, warnings, others, DOCUMENT_VALID
+
+
+def setCBSBOterm(sbo, obj):
+    """
+    Given an SBOterm from libSBML, add it to a CBMPy object
+
+     - *sbo* the sbo term string
+     - *obj* the CBMPy Fbase derived object
+
+    """
+    if sbo is not None and sbo != '':
+        try:
+            obj.setSBOterm(sbo)
+        except AssertionError:
+            print('WARNING: {} is not a valid SBO term and is being ignored.'.format(sbo))
 
 def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}):
     """
@@ -2625,6 +2737,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     LOADGENES = True
     LOADANNOT = True
     DEBUG = False
+    VALIDATE = False
     if 'nogenes' in xoptions and xoptions['nogenes']:
         LOADGENES = False
         print('\nGPR loading disabled!\n')
@@ -2634,6 +2747,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if 'debug' in xoptions and xoptions['debug']:
         DEBUG = True
         print('\nDebug enabled!\n')
+    if 'validate' in xoptions and xoptions['validate']:
+        VALIDATE = True
 
     # DEBUFG
     #global D, M, FBCplg, SBRe, PARAM_D, RFBCplg, GENE_D, GPR_D, FB_data, GPRASSOC
@@ -2645,21 +2760,16 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     # set consistency checking level for document
 
-    D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, True)
-    D.setConsistencyChecks(libsbml.LIBSBML_CAT_IDENTIFIER_CONSISTENCY, True)
-    D.setConsistencyChecks(libsbml.LIBSBML_CAT_UNITS_CONSISTENCY, False)
-    D.setConsistencyChecks(libsbml.LIBSBML_CAT_MATHML_CONSISTENCY, False)
-    D.setConsistencyChecks(libsbml.LIBSBML_CAT_SBO_CONSISTENCY, False)
-    D.setConsistencyChecks(libsbml.LIBSBML_CAT_OVERDETERMINED_MODEL, False)
-    D.setConsistencyChecks(libsbml.LIBSBML_CAT_MODELING_PRACTICE, False)
-
-    if 'validate' in xoptions and xoptions['validate']:
+    if VALIDATE:
+        sbml_setValidationOptions(D, level='full')
         print('\nPerforming validation on input SBML ...\n')
         errors, warnings, others, DOCUMENT_VALID = sbml_validateDocument(D)
         if not DOCUMENT_VALID:
             raise RuntimeError("\nValidation has detected an invalid SBML document")
         else:
             time.sleep(1)
+    else:
+        sbml_setValidationOptions(D, level='normal')
 
     M = D.getModel()
     assert M != None, "\n\nInvalid SBML file"
@@ -2737,6 +2847,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             boundCon = True
         CF = None # chemical formula
         CH = None
+
         if HAVE_FBC:
             SBSpF = SBSp.getPlugin("fbc")
             if SBSpF != None:
@@ -2756,6 +2867,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             if manot != None:
                 S.miriam = manot
             del manot
+        setCBSBOterm(SBSp.getSBOTermID(), S)
         SPEC.append(S)
 
     boundary_species = [s.getPid() for s in SPEC if s.is_boundary]
@@ -2930,6 +3042,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             if manot != None:
                 R.miriam = manot
             del manot
+        setCBSBOterm(SBRe.getSBOTermID(), R)
         REAC.append(R)
 
     if DEBUG: print('Reactions load: {}'.format(round(time.time() - time0, 3)))
@@ -2938,16 +3051,16 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     # define compartments
     COMP = []
     for c_ in range(M.getNumCompartments()):
-        cc = M.getCompartment(c_)
-        cid = cc.getId()
-        name = cc.getName()
-        size = cc.getSize()
+        SBcmp = M.getCompartment(c_)
+        cid = SBcmp.getId()
+        name = SBcmp.getName()
+        size = SBcmp.getSize()
         if numpy.isnan(size) or size == None or size == '':
             #printl('WARNING: SBML IMPORT Compartment {} has no size, setting to 1.0'.format(cid))
             #size = 1.0
             size = None
-        volume = cc.getVolume()
-        dimensions = cc.getSpatialDimensions()
+        volume = SBcmp.getVolume()
+        dimensions = SBcmp.getSpatialDimensions()
         if dimensions == 0:
             print('Zero dimension compartment detected: {}'.format(cid))
             # zero dimension compartments make no sense and are assumed to be L2 artifacts
@@ -2955,11 +3068,12 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         C = CBModel.Compartment(cid, name=name, size=size, dimensions=dimensions)
 
         if LOADANNOT:
-            C.annotation = sbml_readKeyValueDataAnnotation(cc.getAnnotationString())
-            manot = sbml_getCVterms(cc, model=False)
+            C.annotation = sbml_readKeyValueDataAnnotation(SBcmp.getAnnotationString())
+            manot = sbml_getCVterms(SBcmp, model=False)
             if manot != None:
                 C.miriam = manot
             del manot
+        setCBSBOterm(SBcmp.getSBOTermID(), C)
         COMP.append(C)
         del cid, name, size, dimensions, C
 

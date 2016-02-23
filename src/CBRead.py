@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 398 2015-12-03 17:35:40Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 416 2016-02-23 16:12:23Z bgoli $)
 
 """
 
@@ -83,21 +83,21 @@ __test_models__ = {'cbmpy_test_core' : 'core_memesa_model.xml',
                    'cbmpy_test_ecoli' : 'Ecoli_iJR904.glc.xml',
                    }
 
-def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}):
+def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}):
     """
-    Read in an SBML Level 2 file with FBA annotation where and return either a CBM model object
+    Read in an SBML Level 3 file with FBC annotation where and return either a CBM model object
     or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
 
-     - *fname* is the filename. However, "special" test models can be loaded using the names
-       - *cbmpy_test_core* a small test model
-       - *cbmpy_test_ecoli* the iJR904 model from the BiGG database
-     - *work_dir* is the working directory if None then only fname is used
+     - *fname* is the filename
+     - *work_dir* is the working directory
      - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
-     - *xoptions* special load options enable with {'option':True}
+     - *xoptions* special load options enable with option = True
        - *nogenes* do not load/process genes
        - *noannot* do not load/process any annotations
+       - *validate* validate model and display errors and warnings before loading
 
     """
+
     if fname in __test_models__:
         fname = __test_models__[fname].replace('.xml','.l3.xml')
         print(fname)

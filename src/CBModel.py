@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 392 2015-11-11 14:46:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 416 2016-02-23 16:12:23Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -401,13 +401,11 @@ class Fbase(object):
         """
         Set the SBO term for this object.
 
-         - *sbo* the SBOterm with format: "SBO:<7 digit integer>"
+         - *sbo* the SBOterm with format: SBO:nnnnnnn"
 
         """
-        if not sbo.startswith('SBO:'):
-            print('SBOterm must have the form: SBO:<7 digit integer>')
-        else:
-            self.__sbo_term__ = sbo
+        assert sbo.startswith('SBO:') and len(sbo.split(':')[1]) == 7, 'SBOterm must have the form: SBO:nnnnnnn'
+        self.__sbo_term__ = sbo
 
 
 class Model(Fbase):
