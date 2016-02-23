@@ -23,7 +23,7 @@ class TestSBO(object):
     def setup_class(klass):
         """This method is run once for each class before any tests are run"""
         klass.mcore = cbmpy.readSBML3FBC('cbmpy_test_core')
-        klass.sboterm1 = 'SBO:123456'
+        klass.sboterm1 = 'SBO:1234567'
 
     @classmethod
     def teardown_class(klass):
