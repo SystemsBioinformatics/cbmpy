@@ -122,6 +122,12 @@ if "%1" == "latex" (
 	if errorlevel 1 exit /b 1
 	echo.
 	echo.Build finished; the LaTeX files are in %BUILDDIR%\latex.
+    echo.
+    cd %BUILDDIR%\latex
+    pdflatex.exe cbmpy.tex
+    makeindex.exe cbmpy.idx
+    pdflatex.exe cbmpy.tex
+    cd ..\..
 	goto end
 )
 

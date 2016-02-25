@@ -196,7 +196,7 @@ latex_logo = '_static\\pysces_cbm1_head.pdf'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
-latex_use_parts = True
+latex_use_parts = False
 
 # If true, show page references after internal links.
 #latex_show_pagerefs = False

@@ -1,0 +1,58 @@
+\select@language {english}
+\contentsline {chapter}{\numberline {1}CBMPy: Installation Guide}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Support}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}Python standard library modules}{3}{section.1.2}
+\contentsline {section}{\numberline {1.3}Required libraries (Python bindings)}{3}{section.1.3}
+\contentsline {section}{\numberline {1.4}Installation types: quick reference}{3}{section.1.4}
+\contentsline {subsection}{\numberline {1.4.1}Minimal}{3}{subsection.1.4.1}
+\contentsline {subsection}{\numberline {1.4.2}Full (highly recommended)}{4}{subsection.1.4.2}
+\contentsline {subsection}{\numberline {1.4.3}Complete}{4}{subsection.1.4.3}
+\contentsline {section}{\numberline {1.5}Generic installation Windows (XP, 7, 8.1)}{4}{section.1.5}
+\contentsline {subsection}{\numberline {1.5.1}Installing CBMPy}{5}{subsection.1.5.1}
+\contentsline {subsection}{\numberline {1.5.2}Installing libSBML with Python bindings}{5}{subsection.1.5.2}
+\contentsline {subsection}{\numberline {1.5.3}Optmization (1): IBM cplex optimization studio (Academic)}{5}{subsection.1.5.3}
+\contentsline {subsection}{\numberline {1.5.4}Optmization (2): GLPK}{6}{subsection.1.5.4}
+\contentsline {subsection}{\numberline {1.5.5}Testing your new installation}{6}{subsection.1.5.5}
+\contentsline {subsection}{\numberline {1.5.6}Install CBMPy (http://cbmpy.sourceforge.net)}{7}{subsection.1.5.6}
+\contentsline {section}{\numberline {1.6}Linux: Ubuntu}{8}{section.1.6}
+\contentsline {section}{\numberline {1.7}Linux: Ubuntu 14.04}{9}{section.1.7}
+\contentsline {subsection}{\numberline {1.7.1}Python2}{9}{subsection.1.7.1}
+\contentsline {subsection}{\numberline {1.7.2}libSBML}{9}{subsection.1.7.2}
+\contentsline {subsection}{\numberline {1.7.3}glpk/python-glpk}{10}{subsection.1.7.3}
+\contentsline {subsection}{\numberline {1.7.4}CBMPy}{10}{subsection.1.7.4}
+\contentsline {subsection}{\numberline {1.7.5}Installing PyscesMarinerCBM}{10}{subsection.1.7.5}
+\contentsline {subsection}{\numberline {1.7.6}Install soaplib}{10}{subsection.1.7.6}
+\contentsline {subsection}{\numberline {1.7.7}Install Mariner}{10}{subsection.1.7.7}
+\contentsline {subsection}{\numberline {1.7.8}Test installation}{11}{subsection.1.7.8}
+\contentsline {subsection}{\numberline {1.7.9}Python3}{11}{subsection.1.7.9}
+\contentsline {section}{\numberline {1.8}Apple Macintosh: OS X}{11}{section.1.8}
+\contentsline {section}{\numberline {1.9}Installing PySCeS-CBM Mariner (Microsoft Windows and Linux)}{12}{section.1.9}
+\contentsline {subsection}{\numberline {1.9.1}Dependencies: CherryPy, libXML and SOAPlib}{12}{subsection.1.9.1}
+\contentsline {subsection}{\numberline {1.9.2}PySCeS-CBM Mariner (http://cbmpy.sourceforge.net)}{13}{subsection.1.9.2}
+\contentsline {chapter}{\numberline {2}Introduction}{15}{chapter.2}
+\contentsline {chapter}{\numberline {3}CBMPy Module Reference}{17}{chapter.3}
+\contentsline {section}{\numberline {3.1}CBMPy: CBCommon module}{17}{section.3.1}
+\contentsline {section}{\numberline {3.2}CBMPy: CBConfig module}{18}{section.3.2}
+\contentsline {section}{\numberline {3.3}CBMPy: CBCPLEX module}{18}{section.3.3}
+\contentsline {section}{\numberline {3.4}CBMPy: CBDataStruct module}{28}{section.3.4}
+\contentsline {section}{\numberline {3.5}CBMPy: CBGUI module}{30}{section.3.5}
+\contentsline {section}{\numberline {3.6}CBMPy: CBModel module}{31}{section.3.6}
+\contentsline {section}{\numberline {3.7}CBMPy: CBModelTools module}{53}{section.3.7}
+\contentsline {section}{\numberline {3.8}CBMPy: CBMultiCore module}{53}{section.3.8}
+\contentsline {section}{\numberline {3.9}CBMPy: CBMultiEnv module}{54}{section.3.9}
+\contentsline {section}{\numberline {3.10}CBMPy: CBNetDB module}{54}{section.3.10}
+\contentsline {section}{\numberline {3.11}CBMPy: CBPlot module}{57}{section.3.11}
+\contentsline {section}{\numberline {3.12}CBMPy: CBQt4 module}{58}{section.3.12}
+\contentsline {section}{\numberline {3.13}CBMPy: CBRead module}{58}{section.3.13}
+\contentsline {section}{\numberline {3.14}CBMPy: CBReadtxt module}{60}{section.3.14}
+\contentsline {section}{\numberline {3.15}CBMPy: CBSolver module}{61}{section.3.15}
+\contentsline {section}{\numberline {3.16}CBMPy: CBTools module}{61}{section.3.16}
+\contentsline {section}{\numberline {3.17}CBMPy: CBWrite module}{69}{section.3.17}
+\contentsline {section}{\numberline {3.18}CBMPy: CBWx module}{76}{section.3.18}
+\contentsline {section}{\numberline {3.19}CBMPy: CBXML module}{77}{section.3.19}
+\contentsline {section}{\numberline {3.20}PyscesStoich}{84}{section.3.20}
+\contentsline {section}{\numberline {3.21}CBMPy: MultiCoreFVA module}{88}{section.3.21}
+\contentsline {section}{\numberline {3.22}CBMPy: MultiCoreEnvFVA module}{89}{section.3.22}
+\contentsline {chapter}{\numberline {4}Indices and tables}{91}{chapter.4}
+\contentsline {chapter}{Python Module Index}{93}{section*.552}
+\contentsline {chapter}{Index}{95}{section*.553}

@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cbmpy.CBMultiCore</title>
+    
+    <link rel="stylesheet" href="../../_static/epub.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> 
+  </head>
+  <body role="document">
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../cbmpy.html">PySCeS CBMPy</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for cbmpy.CBMultiCore</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">CBMPy: CBMultiCore module</span>
+<span class="sd">=========================</span>
+<span class="sd">PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)</span>
+<span class="sd">Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+<span class="sd">Author: Brett G. Olivier</span>
+<span class="sd">Contact email: bgoli@users.sourceforge.net</span>
+<span class="sd">Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 305 2015-04-23 15:18:31Z bgoli $)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c"># preparing for Python 3 port</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="c">#from __future__ import unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">subprocess</span><span class="o">,</span> <span class="nn">itertools</span><span class="o">,</span> <span class="nn">shutil</span><span class="o">,</span> <span class="nn">numpy</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pickle</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">CBSolver</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_multicorefva</span>
+<span class="n">MULTIFVAFILE</span> <span class="o">=</span> <span class="n">__file__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;CBMultiCore&#39;</span><span class="p">,</span> <span class="s">&#39;_multicorefva&#39;</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">_multicorefva</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_multicoreenvfva</span>
+    <span class="n">MULTIENVFVAFILE</span> <span class="o">=</span> <span class="n">__file__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;CBMultiCore&#39;</span><span class="p">,</span><span class="s">&#39;_multicoreenvfva&#39;</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">_multicoreenvfva</span>
+    <span class="n">HAVE_MULTIENV</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+    <span class="n">HAVE_MULTIENV</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="kn">from</span> <span class="nn">.CBConfig</span> <span class="kn">import</span> <span class="n">__CBCONFIG__</span> <span class="k">as</span> <span class="n">__CBCONFIG__</span>
+
+<div class="viewcode-block" id="grouper"><a class="viewcode-back" href="../../modules_doc.html#cbmpy.CBMultiCore.grouper">[docs]</a><span class="k">def</span> <span class="nf">grouper</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">iterable</span><span class="p">,</span> <span class="n">padvalue</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">&quot;grouper(3, &#39;abcdefg&#39;, &#39;x&#39;) --&gt; (&#39;a&#39;,&#39;b&#39;,&#39;c&#39;), (&#39;d&#39;,&#39;e&#39;,&#39;f&#39;), (&#39;g&#39;,&#39;x&#39;,&#39;x&#39;)&quot;</span>
+    <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">izip_longest</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)]</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">fillvalue</span><span class="o">=</span><span class="n">padvalue</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="runMultiCoreFVA"><a class="viewcode-back" href="../../modules_doc.html#cbmpy.CBMultiCore.runMultiCoreFVA">[docs]</a><span class="k">def</span> <span class="nf">runMultiCoreFVA</span><span class="p">(</span><span class="n">fba</span><span class="p">,</span> <span class="n">selected_reactions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">pre_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">objF2constr</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">rhs_sense</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span>\
+                    <span class="n">optPercentage</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">work_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">oldlpgen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">markupmodel</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">procs</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run a multicore FVA where:</span>
+
+<span class="sd">     - *fba* is an fba model instance</span>
+<span class="sd">     - *procs* [default=2] number of processing threads (optimum seems to be about the number of physical cores)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c">#CBSolver.analyzeModel(fba, oldlpgen=False)</span>
+    <span class="c">#cplx_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense=&#39;lower&#39;, optPercentage=100.0, work_dir=None, quiet=True, debug=False, oldlpgen=False, markupmodel=True)</span>
+    <span class="n">fba</span><span class="o">.</span><span class="n">FVAARGS</span> <span class="o">=</span> <span class="p">[</span><span class="n">selected_reactions</span><span class="p">,</span> <span class="n">pre_opt</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">objF2constr</span><span class="p">,</span> <span class="n">rhs_sense</span><span class="p">,</span> <span class="n">optPercentage</span><span class="p">,</span> <span class="n">work_dir</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">]</span>
+    <span class="n">fN</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">fba</span><span class="o">.</span><span class="n">serializeToDisk</span><span class="p">(</span><span class="n">fN</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fN</span><span class="p">)</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="n">MULTIFVAFILE</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">procs</span><span class="p">),</span> <span class="n">fN</span><span class="p">])</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="n">fN</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fN</span><span class="p">)</span>
+
+    <span class="n">fva</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">fvan</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fva</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">fva</span> <span class="o">=</span> <span class="n">fva</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">fvan</span> <span class="o">=</span> <span class="n">fvan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">fva</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">fva</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">fva</span><span class="p">)</span>
+        <span class="n">fvan2</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">n_</span> <span class="ow">in</span> <span class="n">fvan</span><span class="p">:</span>
+            <span class="n">fvan2</span> <span class="o">+=</span> <span class="n">n_</span>
+        <span class="n">fvan</span> <span class="o">=</span> <span class="n">fvan2</span>
+
+    <span class="c"># print &#39;Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus&#39;</span>
+    <span class="k">if</span> <span class="n">markupmodel</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">R</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fvan</span><span class="p">)):</span>
+            <span class="n">REAC</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">getReaction</span><span class="p">(</span><span class="n">fvan</span><span class="p">[</span><span class="n">R</span><span class="p">])</span>
+            <span class="n">REAC</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">fva</span><span class="p">[</span><span class="n">R</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">REAC</span><span class="o">.</span><span class="n">fva_max</span> <span class="o">=</span> <span class="n">fva</span><span class="p">[</span><span class="n">R</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">REAC</span><span class="o">.</span><span class="n">fva_min</span> <span class="o">=</span> <span class="n">fva</span><span class="p">[</span><span class="n">R</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">REAC</span><span class="o">.</span><span class="n">reduced_costs</span> <span class="o">=</span> <span class="n">fva</span><span class="p">[</span><span class="n">R</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">fva</span><span class="p">,</span> <span class="n">fvan</span>
+</div>
+<span class="k">if</span> <span class="n">HAVE_MULTIENV</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">runMultiCoreMultiEnvFVA</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">selected_reactions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rhs_sense</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span> <span class="n">optPercentage</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">work_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">procs</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a multicore FVA where:</span>
+
+<span class="sd">         - *lp* is a multienvironment lp model instance</span>
+<span class="sd">         - *procs* [default=2] number of processing threads (optimum seems to be about the number of physical cores)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">work_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">lp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fN</span><span class="o">+</span><span class="s">&#39;.lp&#39;</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s">&#39;lp&#39;</span><span class="p">)</span>
+        <span class="n">MEargs</span> <span class="o">=</span> <span class="p">[</span><span class="n">fN</span><span class="o">+</span><span class="s">&#39;.lp&#39;</span><span class="p">,</span> <span class="n">selected_reactions</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">rhs_sense</span><span class="p">,</span> <span class="n">optPercentage</span><span class="p">,</span> <span class="n">work_dir</span><span class="p">,</span> <span class="n">debug</span><span class="p">]</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">MEargs</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">fN</span><span class="p">)</span>
+        <span class="n">F</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="n">fN</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">MEargs</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">F</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="n">MULTIENVFVAFILE</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">procs</span><span class="p">),</span> <span class="n">fN</span><span class="p">])</span>
+        <span class="n">F</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="n">fN</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+        <span class="n">F</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fN</span><span class="p">)</span>
+
+        <span class="n">fva</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">fvan</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fva</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">fva</span> <span class="o">=</span> <span class="n">fva</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">fvan</span> <span class="o">=</span> <span class="n">fvan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">fva</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">fva</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">fva</span><span class="p">)</span>
+            <span class="n">fvan2</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">n_</span> <span class="ow">in</span> <span class="n">fvan</span><span class="p">:</span>
+                <span class="n">fvan2</span> <span class="o">+=</span> <span class="n">n_</span>
+            <span class="n">fvan</span> <span class="o">=</span> <span class="n">fvan2</span>
+
+        <span class="k">return</span> <span class="n">fva</span><span class="p">,</span> <span class="n">fvan</span>
+<span class="k">else</span><span class="p">:</span>
+<div class="viewcode-block" id="runMultiCoreMultiEnvFVA"><a class="viewcode-back" href="../../modules_doc.html#cbmpy.CBMultiCore.runMultiCoreMultiEnvFVA">[docs]</a>    <span class="k">def</span> <span class="nf">runMultiCoreMultiEnvFVA</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">selected_reactions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rhs_sense</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span> <span class="n">optPercentage</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">work_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">procs</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">MultiCore module not present&#39;</span><span class="p">)</span>
+
+
+
+
+<span class="c"># look at using if __name__ != &#39;__main__&#39;</span>
+</div>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">import os, time, math, pickle</span>
+<span class="sd">import multiprocessing</span>
+<span class="sd">import CBSolver, CBMultiCore</span>
+
+<span class="sd">def funcFVA(x,r):</span>
+<span class="sd">    try:</span>
+<span class="sd">        fva, fvan = CBSolver.FluxVariabilityAnalysis(x, selected_reactions=r, pre_opt=True, quiet=True, oldlpgen=False)</span>
+<span class="sd">    except Exception as ex:</span>
+<span class="sd">        print ex</span>
+<span class="sd">        fva = fvan = None</span>
+<span class="sd">        raise RuntimeError(ex)</span>
+<span class="sd">    return fva, fvan</span>
+
+<span class="sd">def multiCoreFVA(fvamod, procs=2, timeout=None):</span>
+<span class="sd">    #assert procs &gt;= 2, &#39;\nMinimum 2 processes required&#39;</span>
+<span class="sd">    rid = fvamod.getReactionIds()</span>
+<span class="sd">    PRs = [d_[0] for d_ in list(CBMultiCore.grouper(int(math.ceil(len(rid)/float(procs))), range(len(rid))))]</span>
+<span class="sd">    print procs, len(PRs), PRs</span>
+
+<span class="sd">    s2time = time.time()</span>
+<span class="sd">    TP = multiprocessing.Pool(processes=procs)</span>
+<span class="sd">    results = []</span>
+<span class="sd">    if procs == 1:</span>
+<span class="sd">        results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid)))</span>
+<span class="sd">    else:</span>
+<span class="sd">        for p_ in range(len(PRs)-1):</span>
+<span class="sd">            print &#39;%s -&gt; %s&#39; % (PRs[p_], PRs[p_+1])</span>
+<span class="sd">            results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[p_]:PRs[p_+1]])))</span>
+<span class="sd">        results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[-1]:])))</span>
+<span class="sd">    fva = []</span>
+<span class="sd">    fvan = []</span>
+<span class="sd">    for r_ in results:</span>
+<span class="sd">        out = r_.get(timeout)</span>
+<span class="sd">        fva.append(out[0])</span>
+<span class="sd">        fvan.append(out[1])</span>
+<span class="sd">    e2time = time.time()</span>
+<span class="sd">    del results</span>
+
+<span class="sd">    print &#39;\nMulticore FVA took: %.2f min (%s processes)&#39; % ((e2time-s2time)/60., procs)</span>
+<span class="sd">    return fva, fvan</span>
+
+
+<span class="sd">if __name__ == &#39;__main__&#39;:</span>
+<span class="sd">    print os.sys.argv</span>
+
+<span class="sd">    cores = int(os.sys.argv[1])</span>
+<span class="sd">    F = file(os.sys.argv[2],&#39;rb&#39;)</span>
+<span class="sd">    cmod = pickle.load(F)</span>
+<span class="sd">    F.close()</span>
+
+
+<span class="sd">    CBSolver.analyzeModel(cmod, oldlpgen=False)</span>
+<span class="sd">    res = multiCoreFVA(cmod, procs=cores)</span>
+
+<span class="sd">    F = file(os.sys.argv[2], &#39;wb&#39;)</span>
+<span class="sd">    pickle.dump(res, F, protocol=-1)</span>
+<span class="sd">    F.flush()</span>
+<span class="sd">    F.close()</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2010-2016, Brett G. Olivier.
+      Last updated on Feb 25, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
