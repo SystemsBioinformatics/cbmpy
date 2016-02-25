@@ -1,24 +1,18 @@
 CBMPy: Installation Guide
 =========================
 
-Introduction
-------------
-
 Support
-~~~~~~~
+-------
 
-PySCeS CBMPy is Open Source software released under the GNU GPL 3 licence (included with the source code)
+CBMPy is Open Source software released under the GNU GPL 3 licence (included with the source code)
 and is in constant development. All the latest downloads, documentation and development information
-is available on **SourceForge**: http://cbmpy.sourceforge.net
-
-CBMPy is developed in the Department of Systems Bioinformatiocs at the Vrije Universiteit Amsterdam, as part
-of the BeBasic Metatoolkit project, by Brett Olivier (bgoli@users.sourceforge.net)
+is available at **CBMPy on SourceForge**: http://cbmpy.sourceforge.net.
 
 Python standard library modules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
-CBMPy is developed and tested on Python 2.7.x. but should also work on Python 3. 
-The following Python Standard Library modules are used in CBMPy and should be available as part of any CPython 
+CBMPy is developed and tested against Python 2.7.x. The following Python Standard
+Library modules are used in CBMPy and should be available as part of any CPython 
 distribution and not require additional installation::
 
  'cPickle', 'cStringIO', 'cgi', 'copy', 'gc', 'itertools', 'locale', 'math',
@@ -26,7 +20,7 @@ distribution and not require additional installation::
  'time', 'urllib2', 'webbrowser', 'xml'
 
 Required libraries (Python bindings)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------
 
 Besides those mentioned above, the following packages are required for CBMPy's
 core functionality. Note that it is possible to install CBMPy using only
@@ -35,204 +29,86 @@ CBMPy is primarily developed on Microsoft Windows and Ubuntu Linux and where pos
 name is provided such that can be used with the software center or package manager
 ``sudo apt-get install <package>`` (please see the man pages for sudo and apt-get
 if you don't know what this). A comprehensive list of modules are listed at the end of this
-document. In the case of external C/C++ libraries the Python bindings should be installed (e.g. libSBML). Many
-of these are available in *batteries included* Python distributions and via the pip installer.
+document however I consider these to be the minimum requirements. In the case of
+external C/C++ libraries the Python bindings should be installed as well (e.g. libSBML). Many
+of these are available in *batteries included* Python distributions.
 
-Overview
---------
-
-CBMPy has been designed to be used as a framework and can be used in different contexts. Here are the
-minimal requirements for each role. The fastest way to install the latest official version of CBMPy is
-using PyPI: https://pypi.python.org/pypi/cbmpy while development source, binaries, tools and utilities are available from 
-SourceForge: https://sourceforge.net/projects/cbmpy/files
-
-PyPI
-~~~~
-
-Try one of::
-
- pip install cbmpy
- easy_install cbmpy
-
+Installation types: quick reference
+-----------------------------------
 
 Minimal
 ~~~~~~~
 
-Read, write and convert model files as well as view, create and edit model components and annotation.
-
- - *numpy*
- - *libSBML* (Python bindings)
- - *biopython*
-
-Normal
-~~~~~~
-
-In addition to the minimal requirements a linear optimizer is required
-
- - Optimization libraries (one or more of):
-  
+- **numpy** http://numpy.scipy.org
+- **libsbml** (+ Python bindings) http://sbml.org/download
+- **PyQT4** http://www.riverbankcomputing.com/software/pyqt/download
+- Optimization libraries (one or more of):
   - CPLEX (LP, MILP): http:://www.ibm.com
   - GLPK  (LP): http://tfinley.net/software/pyglpk/ 
 
- - *matplotlib*
- - *sympy*
- - *xlwt*
- - *xlrd*
- 
-Full
-~~~~
+Full (highly recommended)
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This includes graphical interface support
+- **xlwt** http://pypi.python.org/pypi/xlwt
+- **xlrd** http://pypi.python.org/pypi/xlrd
+- wxPython
+- Matplotlib
+- Sympy
 
-- *pyqt4*
-- *wxPython*
-- *suds*
-- *scipy*
-- *h5py*
-- *networkx*
+Complete 
+~~~~~~~~
 
-User tools
-~~~~~~~~~~
+Web services and database:
 
-These are highly recommended user tools but are not required for using CBMPy.
+- pysqlite2
+- suds
+
+Advanced functionality:
+
+- SciPy
+- H5Py
+- NetworkX
+
+User tools:
 
 - iPython
 - iPython-notebook
 - SCiTE
  
  
-Installing on Ubuntu Linux
---------------------------
-
-Python 2.7 (full install)
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-First we create a scientific Python workbench using the Ubuntu package manager::
-
- sudo apt-get install python-dev python-numpy python-scipy python-matplotlib  python-pip
- sudo apt-get install python-sympy python-suds python-xlrd python-xlwt python-h5py
- sudo apt-get install python-biopython python-wxgtk2.8 python-qt4
- sudo apt-get install ipython ipython-notebook
-
-libSBML
-~~~~~~
-
-Installing libSBML is now easy using PiP and PyPI, first we need some dependencies::
-
- sudo apt-get install libxml2 libxml2-dev
- sudo apt-get install zlib1g zlib1g-dev
- sudo apt-get install bzip2 libbz2-dev
-
-Then we can install the latest and greatest with::
-
- sudo pip install python-libsbml
-
-glpk/python-glpk
-~~~~~~~~~~~~~~~~
-
-Currently, CBMPy still requires GLPK version 4.47 to work with glpk-0.3 so it is important *not* to install the latest
-using the ubuntu package manager but rather use these instructions. First download the GLPK source and bindings::
-
- https://sourceforge.net/projects/cbmpy/files/tools/glpk/glpk-4.47.tar.gz
- https://sourceforge.net/projects/cbmpy/files/tools/glpk/glpk-0.3.tar.bz2
-
-and then install the the following dependency::
-
- sudo apt-get install libgmp-dev
-
-Unpack the glpk-4.47 source and make it your current directory::
-
- cd GLPK source (e.g. glpk-4.47)
-
-Build and install GLPK::
-
- ./configure --with-gmp
- make
- make check
- sudo make install
- sudo ldconfig
-
-Change to the python-glpk source (glpk-0.3) and make it the current directory::
-
- cd to python-glpk source (glpk-0.3):
-
-Then build and install it with the following commands::
-
- make
- sudo make install
-
-Finally, install CBMPy either using PyPI::
-
- pip install cbmpy
-      or
- easy_install cbmpy
- 
-Or download a source file from either::
-
- https://pypi.python.org/pypi/cbmpy 
- https://sourceforge.net/projects/cbmpy/files
-
-and install manually::
-
- python setup.py build sdist
- sudo python setup.py install
-
-Installing on Microsoft Windows
--------------------------------
+Generic installation Windows (XP, 7, 8.1)
+-----------------------------------------
 
 For the modeller that does not want to customize his installation and install
-all of the individual packages by hand there are some *batteries included* Python
-distributions which have many (if not all) of the required packages required. 
+all of the above packages by hand there are some *batteries included* Python
+distributions which have many (if not most) of the packages listed above. An 
+Open Source distributions is *Python(x,y)* available from http://code.google.com/p/pythonxy
+Alternatives include commercial distribution such as Anaconda http://continuum.io and the
+Enthought Python Distribution (EPD) http://www.enthought.com
 
-CBMPy is developed using a 64 bit version of *Anaconda Python 2.7* (http://continuum.io) has also been installed on
-32 bit *Python(x,y)* and Enthought Python Distribution (EPD) http://www.enthought.com
+Python(x,y) has a huge number of additional packages in addition to the base
+Python distribution, best of all it is Open Source and free for use. First of
+all download Python(x,y), I would recommend the
+latest *Python 2.7.x* distribution. In addition to the default packages
+automatically selected by the installer it is highly recommended to install
+either all the additional packages. If not at least select the following
+packages from the *Python* branch of the Python(x,y) installation directory:
 
-Anaconda
-~~~~~~~~
-Most of the required packages can be installed using the *conda* package manager for example::
+- WxPython
+- Sympy
+- NetworkX
+- xlrd
+- xlwt
+- h5py
+- wxPython
+- PyQT4
 
- conda install sympy pyqt4
-
-or using pip (libSBML) or setuptools 
-
-Python(x,y)
-~~~~~~~~~~
-
-Select the following packages from the *Python* branch of the Python(x,y) installation directory:
-
- - WxPython
- - Sympy
- - NetworkX
- - xlrd
- - xlwt
- - h5py
- - wxPython
- - PyQT4
-
+You should now have a working Python 2.7.x distribution. Try firing up an
+advanced shell like *iPython* and play around and get to grips with the
+fantastic, free text editor *SciTE*.
 
 Installing CBMPy
 ~~~~~~~~~~~~~~~~
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 There are two ways to install CBMPy either download the latest release as
 source bundle or binary from http://cbmpy.sourceforge.net and unzip or execute from a
