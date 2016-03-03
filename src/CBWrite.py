@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 411 2016-01-27 12:32:01Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 418 2016-03-03 14:37:00Z bgoli $)
 
 """
 
@@ -65,7 +65,7 @@ try:
 except ImportError:
     print('\nINFO: No xlwt module available, Excel spreadsheet creation disabled')
 
-def writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), autofix=True, gpr_from_annot=False,\
+def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
                        add_groups=False, add_cbmpy_annot=True, add_cobra_annot=False,\
                        xoptions={'fbc_version': 1, 'validate' : False, 'compress_bounds' : True}):
     """
@@ -74,23 +74,19 @@ def writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), autofix=
      - *fba* an fba model object
      - *fname* the model will be written as XML to *fname*
      - *directory* [default=None] if defined it is prepended to fname
-     - *sbml_level_version* [default=(3,1)] a tuple containing the SBML level and version e.g. (3,1)
-     - *autofix* convert <> to <=>=
      - *gpr_from_annot* [default=True] if enabled will attempt to add the gene protein associations from the annotations
        if no gene protein association objects exist
      - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_annot* [default=True] add COBRA <notes> annotation
      - *xoptions* extended options
 
-       - *fbc_version* [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)
        - *validate* [default=False] validate the output SBML file
        - *compress_bounds* [default=False] try compress output flux bound parameters
 
     """
     sbml_level_version = (3,1)
+    autofix=True
     return_fbc=False
-    #if fbc_version == 2:
-        #add_cobra_annot = False
     return CBXML.sbml_writeSBML3FBC(fba, fname, directory, sbml_level_version, autofix, return_fbc,\
                                     gpr_from_annot, add_groups, add_cbmpy_annot, add_cobra_annot, xoptions)
 
@@ -98,7 +94,7 @@ def writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), autofix=
 def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups=False, add_cbmpy_annot=True, add_cobra_annot=False,\
                     validate=False, compress_bounds=True):
     """
-    Takes an FBA model object and writes it to file as SBML L3 FBC:
+    Takes an FBA model object and writes it to file as SBML L3 FBCv2 :
 
      - *fba* an fba model object
      - *fname* the model will be written as XML to *fname*
@@ -111,8 +107,6 @@ def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups
      - *compress_bounds* [default=True] try compress output flux bound parameters
 
     """
-
-    print('\nExperimental support for new FBC V2 standard (2015)')
 
     xoptions = {'fbc_version': 2, 'validate' : validate, 'compress_bounds' : compress_bounds}
     sbml_level_version=(3,1)

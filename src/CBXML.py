@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 416 2016-02-23 16:12:23Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 418 2016-03-03 14:37:00Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2579,7 +2579,7 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
 
     print('\nRead ...')
     sbmldoc = SBMLreader.readSBML(fname)
-    print('Read reports {} errors'.format(sbmldoc.getNumErrors()))
+    print('Converter reports {} errors, this is probably normal.'.format(sbmldoc.getNumErrors()))
     # debug stuff
     #M = sbmldoc.getModel()
     #for s_ in range(M.getNumSpecies()):
@@ -2591,17 +2591,17 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
         #r.unsetAnnotation()
         #r.unsetNotes()
 
-    if sbmldoc.getNumErrors() > 0:
-        if sbmldoc.getError(0).getErrorId() == libsbml.XMLFileUnreadable:
-            # Handle case of unreadable file here.
-            sbmldoc.printErrors()
-        elif sbmldoc.getError(0).getErrorId() == libsbml.XMLFileOperationError:
-            # Handle case of other file error here.
-            sbmldoc.printErrors()
-        else:
-            # Handle other error cases here.
-            sbmldoc.printErrors()
-        return None
+    #if sbmldoc.getNumErrors() > 0:
+        #if sbmldoc.getError(0).getErrorId() == libsbml.XMLFileUnreadable:
+            ## Handle case of unreadable file here.
+            #sbmldoc.printErrors()
+        #elif sbmldoc.getError(0).getErrorId() == libsbml.XMLFileOperationError:
+            ## Handle case of other file error here.
+            #sbmldoc.printErrors()
+        #else:
+            ## Handle other error cases here.
+            #sbmldoc.printErrors()
+        #return None
 
     props = libsbml.ConversionProperties()
     props.addOption("convert fbc to cobra", True, "Convert FBC model to Cobra model")

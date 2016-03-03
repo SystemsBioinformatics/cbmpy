@@ -1,0 +1,167 @@
+CBMPy & PySCeS-CBM/Mariner installation instructions (Windows 32/64)
+====================================================================
+
+ - Author: Brett G. Olivier (b.g.olivier@vu.nl)
+ - Date: 20121128
+ - Version: 1.0
+
+Python and base dependencies
+----------------------------
+
+Install Open Source scientific Python distribution available from 
+**http://www.pythonxy.com**:
+
+ - Run *Python(x,y)-2.7.3.0.exe*
+ - Agree to licence
+ - Select the type of install: *Full*
+ - Use default directories and start menu options
+
+Test installation:
+ 
+ - Open a terminal
+ - Execute "ipython"
+ - In ipython shell, execute "import numpy, h5py, xlrd, xlwt"
+
+No errors/warnings indicate successful installation exit with CTRL-D
+  
+Install IBM cplex optimization studio (Academic)
+------------------------------------------------
+
+ - Run *cplex_studio124.win-x86-32.exe*
+ - Select English language and accept licence
+ - Set "Program" install directory to C:\ILOG\CPLEX_Studio124
+ - Set "Samples" install directory to C:\ILOG\CPLEX_Studio124_samples
+ - Allow default associations to be set and PATH update
+ 
+Once installation is complete we need to install the Python bindings
+
+ - Open a terminal
+ - Execute "cd c:\ILOG\CPLEX_Studio124\cplex\python\x86_win32"
+ - Execute "python setup.py install"
+ 
+Test installation, in the terminal:
+
+ - Execute "cd \"
+ - Execute "ipython"
+ - Execute "import cplex"
+ - Execute "lp = cplex.Cplex()"
+ - Execute "lp.solve()"
+
+A succesful test should return::
+
+ In : lp.solve()
+ Tried aggregator 1 time.
+ No LP presolve or aggregator reductions.
+ Presolve time =    0.00 sec.
+
+Exit ipython with CTRL-D
+
+Install libSBML (sbml.org)
+--------------------------
+
+ - Run *libSBML-5.6.0-win-py2.7-packages-x86.exe*
+
+Test installation
+
+ - Open a terminal
+ - Execute "ipython"
+ - Execute "import libsbml"
+ - Execute "libsbml.LIBSBML_VERSION_STRING"
+
+A successful test should return::
+
+ In : libsbml.LIBSBML_VERSION_STRING
+ Out: '50600'
+
+Exit ipython with CTRL-D
+
+Install CBMPy (pysces.sf.net/cbm)
+---------------------------------
+
+ - Run *pyscescbm-0.6.2.win32.exe*
+ 
+Test installation:
+
+ - Open a terminal
+ - Execute "ipython"
+ - Execute "import pyscescbm as cbm"
+
+This should return::
+
+ In [1]: import pyscescbm as cbm
+
+ **********
+ Welcome to the PySCeS Constraint Based Modelling Toolkit (0.6.2 [r1147])
+ **********
+
+ GLPK not available
+
+ *****
+ Using CPLEX
+ *****
+
+ No module named CBGUI
+
+ GUI module not available
+ 
+ ***
+ Multiple Environment Module (0.6.2 [r1147])
+ ***
+
+Exit ipython with CTRL-D
+
+CherryPy, libXML and SOAPlib (www.cherrypy.org, lxml.de)
+--------------------------------------------------------
+ - Run *lxml-2.3.win32-py2.7.exe*
+ - Run *CherryPy-3.2.2.win32.exe*
+ - Run *soaplib-0.8.1.win32.exe* 
+ 
+Test installation:
+
+ - Open a terminal
+ - Execute "ipython"
+ - Execute "import cherrypy, lxml, soaplib" no errors or warnings should be generated
+ - Exit ipython with CTRL-D
+ - change directory to supplied soaplib tests e.g. "cd e:\gsk\tests\soaplib"
+ - Execute "python binary_test.py"
+ - Execute "python primitive_test.py"
+ 
+All tests should pass.
+
+PySCeS-CBM/Mariner (pysces.sf.net/cbm)
+--------------------------------------
+
+ - Run *pyscesmariner-0.7.3.win32.exe*
+
+To test installation:
+
+ - Open two terminals and in both
+ - Change directory to supplied pyscesmariner tests e.g. "cd e:\gsk\tests\pyscesmariner"
+ - In terminal one run "run_server.bat" which should nowdisplay
+ 
+ E:\gsk\tests\pyscesmariner>python cbm_server_demo.py
+ Mariner using E:\gsk\tests\pyscesmariner as a working directory
+ Mariner server name: 10.0.2.15
+ Mariner using port: 31313
+
+ **********
+ Welcome to the PySCeS Constraint Based Modelling Toolkit (0.6.2 [r1147])
+ **********
+
+ <snipped>
+
+ ***
+ Multiple Environment Module (0.6.2 [r1147])
+ ***
+
+ PySCeSCBM/Mariner initialising ... this console is now blocked
+ 
+ 
+In terminal two:
+ 
+ - Execute "python cbm_client_demo.py"
+
+This should end without errors and display ``done.`` Congratulations
+you have successfully installed CBMPy and PySCeS-CBM Mariner!
+
+
