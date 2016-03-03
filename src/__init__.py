@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 407 2016-01-21 13:47:59Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 418 2016-03-03 14:37:00Z bgoli $)
 
 """
 ##
@@ -106,12 +106,12 @@ if not __SILENT_START__:
     print('\n\n***********************************************************************')
     print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling        *'.format(__version__.replace('.{}'.format(rev),'')))
     print('*                http://cbmpy.sourceforge.net                         *')
-    #print('*                     Somewhere In Time                               *')
-    print('* Copyright(C) Brett G. Olivier 2010 - 2015                           *')
+    print('* Copyright(C) Brett G. Olivier 2014 - 2016                           *')
     print('* Dept. of Systems Bioinformatics                                     *')
     print('* Vrije Universiteit Amsterdam, Amsterdam, The Netherlands            *')
+    print('* CBMPy is developed as part of the BeBasic MetaToolKit Project       *')
     #print('* PySCeS is distributed under the PySCeS (BSD style) licence, see     *')
-    print('* CBMPy is distributed under the GNU GPL v 3.0 licence, see           *')
+    print('* Distributed under the GNU GPL v 3.0 licence, see                    *')
     print('* LICENCE (supplied with this release) for details                    *')
     ##  print('*                 ** Read about PySCeS **                             *')
     ##  print('* http://bioinformatics.oupjournals.org/cgi/content/short/21/4/560    *')
