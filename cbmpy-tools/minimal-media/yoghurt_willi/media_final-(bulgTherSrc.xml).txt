@@ -1,0 +1,1 @@
+{'bulgTherSrc.xml': {'minset.csv': {'consets.csv': {}}}}
