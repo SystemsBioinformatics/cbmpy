@@ -1,0 +1,4 @@
+(bulgTherSrc.xml)-(consets.csv)
+1, no testable
+No results returned from search algorithm, media results unreliable and generated for debugging purpose only!
+For example, check that biomass constraints are not set too tight :->
