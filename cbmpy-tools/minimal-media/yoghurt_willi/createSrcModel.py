@@ -1,5 +1,28 @@
 import cbmpy as cbm
 import pandas as pd
+import sys
+
+def printReactions(modID, onlyExch=False, suff=None):
+
+    """
+    Prints reaction bounds, reactions' stoichiometry and their values
+    """
+
+    for ri in modID.reactions:
+
+        if onlyExch:
+            if ri.getPid().startswith('R_EX_'):
+                print modID.getReactionBounds(ri.getPid()), modID.getReaction(ri.getPid()).getStoichiometry(), \
+                    modID.getReactionValues()[ri.getPid()]
+
+        elif suff is not None:
+            if ri.getPid().endswith(suff):
+                print modID.getReactionBounds(ri.getPid()), modID.getReaction(ri.getPid()).getStoichiometry(), \
+                    modID.getReactionValues()[ri.getPid()]
+
+        else:
+            print modID.getReactionBounds(ri.getPid()), modID.getReaction(ri.getPid()).getStoichiometry(), \
+                modID.getReactionValues()[ri.getPid()]
 
 
 def checkEndings(aList, suf1, suf2):
@@ -83,13 +106,38 @@ for aai in aaAdd:
     #if '_bulg' in aai:
     cbm.CBTools.addSourceReaction(bulgTherOrgFix, aai, lb=0., ub=cbm.INF)
 
+bulgTherOrgFix.changeAllFluxBoundsWithValue(999999.0, cbm.INF)
+bulgTherOrgFix.changeAllFluxBoundsWithValue(-999999.0, cbm.NINF)
+
+bulgTherOrgFix.setReactionBounds('R_EX_cit_e_', 0, cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_fol_e_', 0., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_ac_e_', 0., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_ura_e_', 0., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_urea_e_', 0., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_pydam_e_', -1000, cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_thm_e_', -1000, cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_ribflv_e_', -1000, cbm.INF)
+
+bulgTherOrgFix.setReactionBounds('R_EX_xan_e_', -1000., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_gua_e_', -1000., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_hxan_e_', -1000., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_pnto_R_e_', -1000., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_nac_e_', -1000., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_btn_e_', -1000., cbm.INF)
+
 cbm.writeSBML3FBC(bulgTherOrgFix, 'bulgTherSrc.xml', directory='models')
 
 # get all reactions between cytosol and external compartment
 bulgReaEx = getReaBySuffixesMod(bulgTherOrgFix, '_e', '_c' + '_bulg')
 therReaEx = getReaBySuffixesMod(bulgTherOrgFix, '_e', '_c' + '_ther')
 
-minSet = pd.DataFrame({'minRea': bulgReaEx + therReaEx})
+# filter all reactions between _c and _e in which an amino acid participates
+aaReaMinSet = [reai for reai in bulgReaEx + therReaEx if
+         any([si in aaAdd for si in bulgTherOrgFix.getReaction(reai).getSpeciesIds()])]
+
+minSet = pd.DataFrame({'minRea': aaReaMinSet})
+
+# sys.exit(0)
 
 minSet.to_csv('minimizationsets/minset.csv', index=False, header=False)
 
@@ -135,10 +183,17 @@ dfCons = dfCons.T
 dfCons.rename(columns={dfCons.columns[0]: 'actualCons'}, inplace=True)
 
 
-dfCons = dfCons.merge(dfCons.actualCons.apply(lambda s: pd.Series({'lb':get_lb(s), 'ub':get_ub(s)})),
+dfCons = dfCons.merge(dfCons.actualCons.apply(lambda s: pd.Series({'lb': get_lb(s), 'ub': get_ub(s)})),
     left_index=True, right_index=True)
 
 dfCons.drop('actualCons', 1, inplace=True)
+
+# avoid numerical issues caused by too narrow bounds
+dfCons = dfCons*1000
+
+dfCons.to_csv('constraints/consets.csv', index=True, header=False)
+
+sys.exit(0)
 
 rea_and_bounds = [list(bulgTherOrgFix.getReactionBounds(reai)[0:-1]) for reai in bulgReaEx + therReaEx]
 
