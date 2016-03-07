@@ -56,7 +56,7 @@
                                           'R_SERt6_bulg': {'R_SERt6_ther': {}},
                                           'R_TRPt6_ther': {'R_TRPt6_bulg': {}},
                                           'R_VALt6_bulg': {'R_VALt6_ther': {}}},
-                                'model': <cbmpy.CBModel.Model object at 0x0000000010B20358>,
+                                'model': <cbmpy.CBModel.Model object at 0x0000000010A62358>,
                                 'objreact': ['R_ASPt6_bulg',
                                              'R_CYSt6_bulg',
                                              'R_TYRt6_bulg',
