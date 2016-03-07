@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 375 2015-09-04 15:44:42Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 419 2016-03-07 16:31:04Z bgoli $)
 
 """
 
@@ -92,7 +92,7 @@ class DBTools:
         Create a database table if it does not exist:
 
          - *table* the table name
-         - *sqlcols* a list containing the SQL definitions of the table columns: <id> <type> for examepl `['gene TEXT PRIMARY KEY', 'aa_seq TEXT', 'nuc_seq TEXT', 'aa_len INT', 'nuc_len INT']`
+         - *sqlcols* a list containing the SQL definitions of the table columns: <id> <type> for example `['gene TEXT PRIMARY KEY', 'aa_seq TEXT', 'nuc_seq TEXT', 'aa_len INT', 'nuc_len INT']`
 
         Effectively writes CREATE TABLE "table" (<id> <type>, gene TEXT PRIMARY KEY, aa_seq TEXT, nuc_seq TEXT, aa_len INT, nuc_len INT) % table
         """
@@ -102,7 +102,7 @@ class DBTools:
             SQL += ' %s,' % c
         SQL = SQL[:-1]
         SQL += ' )'
-        prin(SQL)
+        print(SQL)
         try:
             self.db_cursor.execute('SELECT * FROM %s' % table)
             print('Table {} exists'.format(table))
@@ -154,16 +154,23 @@ class DBTools:
         """
         raise NotImplementedError
 
-    def checkEntry(self, table, id):
+    def checkEntry(self, table, col, rid):
         """
         Check if an entry exists in a table
 
         - *table* the table name
-        - *id* the table row to search for
+        - *col* the column name
+        - *rid* the row to search for
 
         """
-        raise NotImplementedError
-
+        self.db_cursor.execute("SELECT count(*) FROM {} WHERE {}={}".format(table, rid, col))
+        data = self.db_cursor.fetchone()[0]
+        if data == 0:
+            print('There is no component named {}'.format(name))
+            return False
+        else:
+            print('Component {} found in {} row(s)'.format(name, data))
+            return True
 
     def executeSQL(self, sql):
         """
@@ -198,8 +205,8 @@ class DBTools:
             if colOut:
                 col = self.db_cursor.execute(sql2).fetchall()
                 col = [str(a[1]) for a in col]
-        except Exception as ex:
-            print(ex)
+        except AttributeError as ex:
+            return None
         if colOut:
             return r, col
         else:
@@ -216,7 +223,7 @@ class DBTools:
 
         data, head = self.getTable(table, colOut=True)
         data.insert(0, head)
-        from CBTools import exportLabelledLinkedList
+        from .CBTools import exportLabelledLinkedList
         exportLabelledLinkedList(data, fname=filename, names=None, sep='\t')
 
 
