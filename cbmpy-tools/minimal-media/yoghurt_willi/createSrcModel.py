@@ -103,8 +103,8 @@ aaAdd.append('M_gly_c_ther')
 
 # add a source reaction for each amino acid
 for aai in aaAdd:
-    #if '_bulg' in aai:
-    cbm.CBTools.addSourceReaction(bulgTherOrgFix, aai, lb=0., ub=cbm.INF)
+    if '_bulg' in aai:
+        cbm.CBTools.addSourceReaction(bulgTherOrgFix, aai, lb=0., ub=cbm.INF)
 
 bulgTherOrgFix.changeAllFluxBoundsWithValue(999999.0, cbm.INF)
 bulgTherOrgFix.changeAllFluxBoundsWithValue(-999999.0, cbm.NINF)
@@ -124,8 +124,11 @@ bulgTherOrgFix.setReactionBounds('R_EX_hxan_e_', -1000., cbm.INF)
 bulgTherOrgFix.setReactionBounds('R_EX_pnto_R_e_', -1000., cbm.INF)
 bulgTherOrgFix.setReactionBounds('R_EX_nac_e_', -1000., cbm.INF)
 bulgTherOrgFix.setReactionBounds('R_EX_btn_e_', -1000., cbm.INF)
+bulgTherOrgFix.setReactionBounds('R_EX_cas', 0, 0)
 
-cbm.writeSBML3FBC(bulgTherOrgFix, 'bulgTherSrc.xml', directory='models')
+cbm.writeSBML3FBC(bulgTherOrgFix, 'bulgTherSrcOnlyBulg.xml', directory='models')
+
+sys.exit(0)
 
 # get all reactions between cytosol and external compartment
 bulgReaEx = getReaBySuffixesMod(bulgTherOrgFix, '_e', '_c' + '_bulg')
