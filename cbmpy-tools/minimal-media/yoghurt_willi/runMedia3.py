@@ -12,7 +12,7 @@ modelFile = [f for f in os.listdir(modelDir) if f.endswith('.xml')][0]
 # bgoli-130813 for present purposes we hardcode 2 input files
 #modelFile = '130726BP_NoTCA_split.xml'
 #modelFile = '130726BP_TCA_split.xml'
-modelFile = 'bulgTherSrc.xml'
+modelFile = 'bulgTherSrcOnlyBulg.xml'
 
 # set the SBML level of the input file  (True=3)
 USE_SBML3 = True

@@ -16,7 +16,7 @@ minimizationDir = os.path.join(cDir, 'minimizationsets')
 
 # bgoli-130813 for present purposes we hardcode 2 input files
 #modelFile = '130726BP_NoTCA_split.xml'
-modelFile = 'bulgTherSrc.xml'
+modelFile = 'bulgTherSrcOnlyBulg.xml'
 
 # just what it says whether to load an L3 file
 USE_SBML3 = True
