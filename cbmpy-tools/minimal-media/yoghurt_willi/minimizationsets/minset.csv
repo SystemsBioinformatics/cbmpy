@@ -28,7 +28,6 @@ R_METabc_ther
 R_GLNabc_ther
 R_PROt6_ther
 R_ALA_Lt6_ther
-R_ILEt6_ther
 R_TRPt6_ther
 R_GLYt6_ther
 R_GLUt6_ther
@@ -41,6 +40,7 @@ R_HISt6_ther
 R_LEUabc_ther
 R_TYRt6_ther
 R_ARGabc_ther
+R_ILEt6_ther
 R_THRt6_ther
 R_ARGt_ther
 R_ILEabc_ther

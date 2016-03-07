@@ -32,7 +32,7 @@ FVA_RoundOff = 8
 ENABLE_FVA_RANK = True
 
 # magic perturbation constant
-MINVAL = 1.0e-3
+MINVAL = 1.0e-2
 
 # get rid of pseudo alternatives
 ENABLE_MAGIC_RESULT_FILTER = True

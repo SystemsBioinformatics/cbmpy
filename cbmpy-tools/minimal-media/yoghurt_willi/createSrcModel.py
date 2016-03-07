@@ -28,7 +28,7 @@ def printReactions(modID, onlyExch=False, suff=None):
 def checkEndings(aList, suf1, suf2):
 
     # check whether there are strings in the list with the ending suf1 and suf2, respectively
-	# at least one string of each type is required to return TRUE
+    # at least one string of each type is required to return TRUE
 
     boolSuf1 = any([x.endswith(suf1) for x in aList])
     boolSuf2 = any([x.endswith(suf2) for x in aList])
@@ -73,6 +73,12 @@ bulgTherOrgFix.createReactionReagent('R_gln_export_bulg', 'M_h_c_bulg', 1)
 bulgTherOrgFix.createReactionReagent('R_gln_export_bulg', 'M_gln_L_e', -1)
 bulgTherOrgFix.createReactionReagent('R_gln_export_bulg', 'M_h_e', -1)
 bulgTherOrgFix.setReactionBounds('R_gln_export_bulg', cbm.NINF, 0)
+## # bgoli:20160307 turned reaction around so that it is a positive export (re-signed coiefficients and swapped bounds)
+## bulgTherOrgFix.createReactionReagent('R_gln_export_bulg', 'M_gln_L_c_bulg', -1)
+## bulgTherOrgFix.createReactionReagent('R_gln_export_bulg', 'M_h_c_bulg', -1)
+## bulgTherOrgFix.createReactionReagent('R_gln_export_bulg', 'M_gln_L_e', 1)
+## bulgTherOrgFix.createReactionReagent('R_gln_export_bulg', 'M_h_e', 1)
+## bulgTherOrgFix.setReactionBounds('R_gln_export_bulg', 0, cbm.INF)
 
 # get all metabolites with an L in their name (should be mainly amino acids)
 allL = [idi for idi in bulgTherOrgFix.getSpeciesIds() if '_L_c_' in idi]

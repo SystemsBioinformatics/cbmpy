@@ -1,6 +1,6 @@
 import os, numpy, time
 cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
-import pyscescbm as cbm
+import cbmpy as cbm
 
 # I assume that the models live in a subdirectory of the directory where this script is run from called 'models'
 modelDir = os.path.join(cDir, 'models')

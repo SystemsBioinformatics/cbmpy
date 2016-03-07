@@ -12,11 +12,11 @@ Minimize
        + bin_R_METt6_bulg + bin_R_VALabc_ther + bin_R_LEUt6_ther
        + bin_R_SERt6_ther + bin_R_VALt6_ther + bin_R_METabc_ther
        + bin_R_GLNabc_ther + bin_R_PROt6_ther + bin_R_ALA_Lt6_ther
-       + bin_R_ILEt6_ther + bin_R_TRPt6_ther + bin_R_GLYt6_ther
-       + bin_R_GLUt6_ther + bin_R_ASPabc_ther + bin_R_GLUabc_ther
-       + bin_R_LYSt6_ther + bin_R_PHEt6_ther + bin_R_CYSt6_ther
-       + bin_R_HISt6_ther + bin_R_LEUabc_ther + bin_R_TYRt6_ther
-       + bin_R_ARGabc_ther + bin_R_THRt6_ther + bin_R_ARGt_ther
+       + bin_R_TRPt6_ther + bin_R_GLYt6_ther + bin_R_GLUt6_ther
+       + bin_R_ASPabc_ther + bin_R_GLUabc_ther + bin_R_LYSt6_ther
+       + bin_R_PHEt6_ther + bin_R_CYSt6_ther + bin_R_HISt6_ther
+       + bin_R_LEUabc_ther + bin_R_TYRt6_ther + bin_R_ARGabc_ther
+       + bin_R_ILEt6_ther + bin_R_THRt6_ther + bin_R_ARGt_ther
        + bin_R_ILEabc_ther + bin_R_METt6_ther
 Subject To
  M_10fthf_c_bulg:        - R_GARFT_bulg - R_AICART_bulg + R_MTHFC_bulg
@@ -225,7 +225,7 @@ Subject To
  M_ac_c_bulg:            R_ACt6_bulg - R_ACKr_bulg + R_CYSS_bulg + R_AGDC_bulg
                           = 0
  M_ac_c_ther:            - R_ACKr_ther + R_ACTPASE_ther + R_AHSERL3_ther
-                         + R_METACH_ther + R_SLCYSS_ther + R_AGDC_ther
+                         + R_METACH_ther + R_AGDC_ther + R_SLCYSS_ther
                          + R_ACt6_ther + R_CYSS_ther + R_AHSERL4_ther
                          + R_ADPDS_ther + R_SHSL5_ther  = 0
  M_ac_e:                 - R_ACt6_bulg - R_EX_ac_e_ - R_ACt6_ther  = 0
@@ -341,8 +341,8 @@ Subject To
                          + R_PFK_ther + R_HEX1_ther - R_PYK_ther
                          + R_MALTTRabc_ther + R_TMDK1_ther + R_URIDK1_ther
                          + R_UDCPK_ther + R_ATPM_ther + R_PROLBabc_ther
-                         + R_LEUabc_ther + R_ARGabc_ther + 0.111 R_CASabc_ther
-                         + R_DPCOAK_ther + R_ASPK_ther + R_PRASCS_ther
+                         + R_LEUabc_ther + R_ARGabc_ther + R_ASPK_ther
+                         + 0.111 R_CASabc_ther + R_DPCOAK_ther + R_PRASCS_ther
                          + 2 R_CBPS_ther + R_GALK2_ther + R_METDabc_2_ther
                          + R_UAMAS_ther + R_FTHFCL_ther + R_ACGK_ther
                          + R_DTMPK_ther + R_MALTabc_ther + R_NDPK5_ther
@@ -365,8 +365,8 @@ Subject To
  M_akg_c_bulg:           - R_VALTA_bulg - R_AKGTA3_bulg - R_PHETA1_bulg
                          - R_LEUTA_bulg - R_TYRTA_bulg - R_ILETA_bulg  = 0
  M_akg_c_ther:           R_ICDHx_ther - R_ADPTA_ther - R_SDPTA_ther
-                         - R_ASPTA5_ther + R_PSERT_ther + R_GLUDy_ther
-                         - R_ASPTA6_ther - R_VALTA_ther - R_ILETA_ther
+                         - R_ASPTA5_ther + R_PSERT_ther - R_ASPTA6_ther
+                         - R_VALTA_ther - R_ILETA_ther + R_GLUDy_ther
                          - R_ASPTA1_ther - R_ASPTA4_ther - R_AKGTA3_ther
                          + R_ICDHy_ther - R_ALATA_L_ther - R_ACOTA_ther
                          - R_LEUTA_ther - R_ASPTA2_ther  = 0
@@ -392,19 +392,19 @@ Subject To
  M_amet_c_bulg:          R_METAT_bulg - R_CFAS180_bulg - R_HCYSMT_bulg  = 0
  M_amet_c_ther:          R_METAT_ther - R_CFAS180_ther - R_HCYSMT_ther  = 0
  M_amp_c_bulg:           R_ALATRS_bulg + R_CYSTRS_bulg + R_ASNTRS_bulg
-                         + R_ARGTRS_bulg + R_LEUTRS_bulg + R_SERTRS_bulg
-                         + R_ADPRDP_bulg + R_ASPTRS_bulg + R_VALTRS_bulg
-                         + R_METTRS_bulg + R_ASNS2_bulg + R_PROTRS_bulg
-                         + R_PRPPS_bulg + R_HISTRS_bulg + R_MOADCST_bulg
-                         + R_PHETRS_bulg + R_GLYTRS_bulg - R_ADK2_bulg
-                         + R_GTPDPK_bulg + R_GMPS2_bulg - R_ADK1_bulg
-                         + R_THRTRS_bulg + R_NADS1_bulg + R_GLUTRS_bulg
-                         + R_ADPT_bulg + R_LYSTRS_bulg + R_TYRTRS_bulg
-                         + R_TMDPK_bulg + R_ILETRS_bulg + R_ASNS1_bulg
+                         + R_ARGTRS_bulg + R_ASNS1_bulg + R_LEUTRS_bulg
+                         + R_SERTRS_bulg + R_METTRS_bulg + R_ADPRDP_bulg
+                         + R_ASPTRS_bulg + R_VALTRS_bulg + R_ASNS2_bulg
+                         + R_PROTRS_bulg + R_PRPPS_bulg + R_HISTRS_bulg
+                         + R_MOADCST_bulg + R_PHETRS_bulg + R_GLYTRS_bulg
+                         - R_ADK2_bulg + R_GTPDPK_bulg + R_GMPS2_bulg
+                         - R_ADK1_bulg + R_THRTRS_bulg + R_NADS1_bulg
+                         + R_GLUTRS_bulg + R_ADPT_bulg + R_LYSTRS_bulg
+                         + R_TYRTRS_bulg + R_TMDPK_bulg + R_ILETRS_bulg
                          + R_TRPTRS_bulg + R_ADSL1_bulg  = 0
  M_amp_c_ther:           R_GLUTRS_ther + R_HISTRS_ther + R_NADS1_ther
-                         - R_NTD7_ther + R_ASNS2_ther + R_GTPDPK_ther
-                         + R_ARGSS_ther + R_TMDPK_ther - R_ADK2_ther
+                         - R_NTD7_ther + R_GTPDPK_ther + R_ARGSS_ther
+                         + R_TMDPK_ther - R_ADK2_ther + R_ASNS2_ther
                          - R_ADK1_ther + R_VALTRS_ther + R_CYSTRS_ther
                          + R_THRTRS_ther + R_ADPRDP_ther + R_ADSL1r_ther
                          + R_PHETRS_ther + R_ALATRS_ther + R_GMPS2_ther
@@ -428,21 +428,20 @@ Subject To
  M_argsuc_c_ther:        R_ARGSS_ther - R_ARGSL_ther  = 0
  M_argtrna_c_bulg:       R_ARGTRS_bulg - 0.04 R_PROTS_LPL_v60_bulg  = 0
  M_argtrna_c_ther:       - 0.023 R_PROTS_STR_ther + R_ARGTRS_ther  = 0
- M_asn_L_c_bulg:         - R_ASNTRS_bulg + R_ASNt6_bulg + R_ASNS2_bulg
-                         + M_asn_L_c_bulg_src - R_ASNN_bulg + R_ASNS1_bulg  = 0
- M_asn_L_c_ther:         R_ASNS2_ther + M_asn_L_c_ther_src - R_ASNN_ther
+ M_asn_L_c_bulg:         - R_ASNTRS_bulg + R_ASNS1_bulg + R_ASNt6_bulg
+                         + R_ASNS2_bulg + M_asn_L_c_bulg_src - R_ASNN_bulg  = 0
+ M_asn_L_c_ther:         M_asn_L_c_ther_src + R_ASNS2_ther - R_ASNN_ther
                          - R_ASNTRS_ther  = 0
  M_asn_L_e:              - R_EX_asn_L_e_ - R_ASNt6_bulg  = 0
  M_asntrna_c_bulg:       R_ASNTRS_bulg - 0.06 R_PROTS_LPL_v60_bulg  = 0
  M_asntrna_c_ther:       - 0.08 R_PROTS_STR_ther + R_ASNTRS_ther  = 0
  M_asp_D_c_bulg:         - R_ASPR_bulg  = 0
- M_asp_L_c_bulg:         R_ASPt6_bulg + M_asp_L_c_bulg_src - R_PRASCS_bulg
-                         - R_ASPT_bulg - R_ASPTRS_bulg - R_ASNS2_bulg
-                         - R_ADSS_bulg - R_ASPK_bulg
+ M_asp_L_c_bulg:         R_ASPt6_bulg - R_ASNS1_bulg + M_asp_L_c_bulg_src
+                         - R_PRASCS_bulg - R_ASPT_bulg - R_ASPTRS_bulg
+                         - R_ASNS2_bulg - R_ADSS_bulg - R_ASPK_bulg
                          + 0.137523384267553 R_CASL_bulg + 0.076 R_PEPTL_bulg
-                         - R_ASPCT_bulg + R_ASNN_bulg - R_ASNS1_bulg
-                         + R_ASPR_bulg  = 0
- M_asp_L_c_ther:         M_asp_L_c_ther_src - R_ASNS2_ther - R_ARGSS_ther
+                         - R_ASPCT_bulg + R_ASNN_bulg + R_ASPR_bulg  = 0
+ M_asp_L_c_ther:         M_asp_L_c_ther_src - R_ARGSS_ther - R_ASNS2_ther
                          - R_ASPCT_ther + R_ASPabc_ther - R_ASPTA1_ther
                          + R_ASNN_ther + 0.137523384267553 R_CASL_ther
                          - R_ADSS_ther + 0.076 R_PEPTL_ther - R_ASPK_ther
@@ -458,19 +457,19 @@ Subject To
                          - R_ALATRS_bulg - R_CYSTRS_bulg - R_PRFGS_bulg
                          - R_ACCOAC_bulg - R_ASNTRS_bulg - R_UAAGLS1_bulg
                          - R_RBK_bulg - 2 R_PEPTabc_bulg - R_ARGTRS_bulg
-                         - R_ALALAC_bulg - R_GLYBabc_bulg - R_THFGLUS_bulg
-                         - R_HSK_bulg - R_NNAT_bulg - R_GLNS_bulg
-                         - R_NDPK1_bulg - R_AEPabc_bulg - R_LEUTRS_bulg
-                         - R_DGNSK_bulg - R_CTPS1_1_bulg - R_UGMDDS2_bulg
-                         - R_CYTK1_bulg - R_MEVK_bulg - R_GLYK_bulg
-                         - R_CHLabc_bulg - R_PRASCS_bulg - R_NADK_bulg
-                         - R_NDPK3_bulg - R_DHFS_bulg - R_SERTRS_bulg
-                         - R_HEX1_bulg - R_PFK_bulg - R_THMabc_bulg
-                         - R_UDCPK_bulg - R_GLNabc_bulg - R_PRAGS_bulg
-                         - R_GK1_bulg - R_FMNAT_bulg + R_PYK_bulg
-                         - R_PIabc_bulg - R_ASPTRS_bulg - R_VALTRS_bulg
-                         - R_NDPK6_bulg - R_METTRS_bulg + R_ATPS3r_bulg
-                         - R_ASNS2_bulg - R_PROTRS_bulg
+                         - R_ALALAC_bulg - R_ASNS1_bulg - R_GLYBabc_bulg
+                         - R_THFGLUS_bulg - R_HSK_bulg - R_NNAT_bulg
+                         - R_GLNS_bulg - R_NDPK1_bulg - R_AEPabc_bulg
+                         - R_LEUTRS_bulg - R_DGNSK_bulg - R_CTPS1_1_bulg
+                         - R_UGMDDS2_bulg - R_CYTK1_bulg - R_MEVK_bulg
+                         - R_GLYK_bulg - R_CHLabc_bulg - R_PRASCS_bulg
+                         - R_NADK_bulg - R_NDPK3_bulg - R_DHFS_bulg
+                         - R_SERTRS_bulg - R_HEX1_bulg - R_PFK_bulg
+                         - R_THMabc_bulg - R_UDCPK_bulg - R_METTRS_bulg
+                         - R_GLNabc_bulg - R_PRAGS_bulg - R_GK1_bulg
+                         - R_FMNAT_bulg + R_PYK_bulg - R_PIabc_bulg
+                         - R_ASPTRS_bulg - R_VALTRS_bulg - R_NDPK6_bulg
+                         + R_ATPS3r_bulg - R_ASNS2_bulg - R_PROTRS_bulg
                          - 27.2 R_biomass_LBUL10_bulg - R_NDPK8_bulg
                          - R_ZN2abc2_bulg - R_UAMAS_bulg - R_PRPPS_bulg
                          - R_UAMAGS_bulg - R_HISTRS_bulg - R_CYTDK1_bulg
@@ -490,20 +489,19 @@ Subject To
                          - R_ARGabc_bulg - R_TMDPK_bulg - R_ATPM_bulg
                          - R_URIK1_bulg - 0.306 R_PROTS_LPL_v60_bulg
                          - R_NAabcO_bulg - R_PYDXK_bulg - R_ILETRS_bulg
-                         - 25 R_DARTAL_bulg - R_ASNS1_bulg - R_TRPTRS_bulg
-                         - R_PPIK_bulg - R_URIDK1_bulg - R_CYTK2_bulg
-                         - R_FRUK_bulg - R_FTHFL_bulg - 2 R_CBPS_bulg
-                         - R_F1PK_bulg - R_RNTR1_bulg - R_NDPK4_bulg
-                         - R_RBFK_bulg  = 0
+                         - 25 R_DARTAL_bulg - R_TRPTRS_bulg - R_PPIK_bulg
+                         - R_URIDK1_bulg - R_CYTK2_bulg - R_FRUK_bulg
+                         - R_FTHFL_bulg - 2 R_CBPS_bulg - R_F1PK_bulg
+                         - R_RNTR1_bulg - R_NDPK4_bulg - R_RBFK_bulg  = 0
  M_atp_c_ther:           - R_MALTTTRabc_ther - R_GLUTRS_ther - R_HISTRS_ther
                          - R_VALabc_ther - R_METAT_ther - R_PIabc_ther
                          - R_ACCOAC_ther - R_URIDK2_ther - R_NADS1_ther
                          - R_PTPAT_ther - R_GLYCK_ther - R_PRAGS_ther
-                         - R_ACKr_ther - R_ASNS2_ther - R_RBK_ther
-                         - R_GTPDPK_ther - R_F1PK_ther - R_ARGSS_ther
-                         - R_NAMNPP_ther - R_DPMVD_ther - R_TMDPK_ther
-                         - R_PYDAMK_ther - R_CTPS2_ther - R_CYTK1_ther
-                         - R_SPMDabc_ther - R_PYDXK_ther - 1.37 R_DNAS_STU_ther
+                         - R_ACKr_ther - R_RBK_ther - R_GTPDPK_ther
+                         - R_F1PK_ther - R_ARGSS_ther - R_NAMNPP_ther
+                         - R_DPMVD_ther - R_TMDPK_ther - R_PYDAMK_ther
+                         - R_CTPS2_ther - R_CYTK1_ther - R_SPMDabc_ther
+                         - R_ASNS2_ther - R_PYDXK_ther - 1.37 R_DNAS_STU_ther
                          - R_ADK1_ther - R_MEVK_ther - R_PMPK_ther
                          - R_URIK1_ther - R_VALTRS_ther
                          - 0.306 R_PROTS_STR_ther + R_ATPS3r_ther
@@ -532,8 +530,8 @@ Subject To
                          - R_URIDK1_ther - R_UDCPK_ther - R_ATPM_ther
                          - R_ASNTRS_ther - R_ILETRS_ther - R_PROLBabc_ther
                          - R_LEUabc_ther - R_SERTRS_ther - R_ARGabc_ther
-                         - R_TYRTRS_ther - R_HPPK_ther - 0.111 R_CASabc_ther
-                         - R_LEUTRS_ther - R_DPCOAK_ther - R_ASPK_ther
+                         - R_ASPK_ther - R_TYRTRS_ther - R_HPPK_ther
+                         - 0.111 R_CASabc_ther - R_LEUTRS_ther - R_DPCOAK_ther
                          - R_PRASCS_ther - 2 R_CBPS_ther - R_LYSTRS_ther
                          - R_METTRS_ther - R_GALK2_ther - R_METDabc_2_ther
                          - R_UAMAS_ther - R_FTHFCL_ther - R_NNAT_ther
@@ -576,8 +574,8 @@ Subject To
                           = 0
  M_clpn_LPL_c_bulg:      0.01 R_CLPNS_LPL_bulg - 0.000018 R_biomass_LBUL10_bulg
                           = 0
- M_cmp_c_bulg:           - R_CYTK1_bulg + 25 R_GTAglcS_bulg + R_CYTDK3_bulg
-                         + R_CYTDK1_bulg + R_CYTDK2_bulg + R_CGPT_bulg
+ M_cmp_c_bulg:           - R_CYTK1_bulg + 25 R_GTAglcS_bulg + R_CYTDK1_bulg
+                         + R_CYTDK3_bulg + R_CYTDK2_bulg + R_CGPT_bulg
                          + R_PGSA_LPL_bulg  = 0
  M_cmp_c_ther:           - R_CYTK1_ther - R_NTD4_ther + R_CYTDK3_ther
                          + R_CYTDK1_ther + R_CYTDK2_ther + R_PGSA_LLA_ther  = 0
@@ -647,7 +645,7 @@ Subject To
  M_cysth_L_c_ther:       - R_CYSTL_ther - R_CYSTGL_ther + R_SHSL5_ther  = 0
  M_cystrna_c_bulg:       R_CYSTRS_bulg - 0.011 R_PROTS_LPL_v60_bulg  = 0
  M_cystrna_c_ther:       - 0.006 R_PROTS_STR_ther + R_CYSTRS_ther  = 0
- M_cytd_c_bulg:          - R_CYTD_bulg - R_CYTDK3_bulg - R_CYTDK1_bulg
+ M_cytd_c_bulg:          - R_CYTD_bulg - R_CYTDK1_bulg - R_CYTDK3_bulg
                          - R_CYTDK2_bulg  = 0
  M_cytd_c_ther:          R_NTD4_ther - R_CYTDK3_ther - R_CYTDK1_ther
                          - R_CYTDK2_ther - R_CYTD_ther  = 0
@@ -734,7 +732,7 @@ Subject To
  M_dtdpglc_c_ther:       R_G1PTMT_ther - R_TDPGDH_ther  = 0
  M_dtmp_c_bulg:          R_TMDS_bulg + R_TMDK1_bulg - R_DTMPK_bulg
                          + R_TMDK2_bulg  = 0
- M_dtmp_c_ther:          R_TMDS_ther + R_TMDK2_ther + R_TMDK1_ther
+ M_dtmp_c_ther:          R_TMDK2_ther + R_TMDS_ther + R_TMDK1_ther
                          - R_NTD5_ther - R_DTMPK_ther  = 0
  M_dttp_c_bulg:          - 0.28 R_DNAS_LPL_bulg - R_G1PTMT_bulg + R_NDPK4_bulg
                           = 0
@@ -851,8 +849,8 @@ Subject To
  M_gdp_c_bulg:           R_GK2_bulg - R_NDPK1_bulg + R_GK1_bulg + R_ADSS_bulg
                          + R_CYTDK2_bulg + R_URIK2_bulg
                          + 2 R_PROTS_LPL_v60_bulg + R_TMDK2_bulg  = 0
- M_gdp_c_ther:           2 R_PROTS_STR_ther + R_GK2_ther + R_TMDK2_ther
-                         + R_CYTDK2_ther + R_URIK2_ther - R_RNDR2_ther
+ M_gdp_c_ther:           R_URIK2_ther + 2 R_PROTS_STR_ther + R_GK2_ther
+                         + R_TMDK2_ther + R_CYTDK2_ther - R_RNDR2_ther
                          - R_NDPK1_ther + R_ADSS_ther + R_GK1_ther  = 0
  M_gdptp_c_bulg:         R_GTPDPK_bulg  = 0
  M_gdptp_c_ther:         R_GTPDPK_ther  = 0
@@ -862,9 +860,9 @@ Subject To
                          + R_AMALT2_ther + R_AMALT3_ther + R_LACZ_ther
                          - R_HEX1_ther + R_AMALT1_ther  = 0
  M_glc_D_e:              - R_GLCpts_bulg - R_EX_glc_e_ - R_GLCpts_ther  = 0
- M_gln_L_c_bulg:         - R_PRFGS_bulg - R_GF6PTA_bulg + R_GLNS_bulg
-                         + R_GLNabc_bulg - R_GLNTAL_bulg - R_GMPS2_bulg
-                         - R_CTPS2_bulg - R_ASNS1_bulg + M_gln_L_c_bulg_src
+ M_gln_L_c_bulg:         - R_PRFGS_bulg - R_GF6PTA_bulg - R_ASNS1_bulg
+                         + R_GLNS_bulg + R_GLNabc_bulg - R_GLNTAL_bulg
+                         - R_GMPS2_bulg - R_CTPS2_bulg + M_gln_L_c_bulg_src
                          - R_CBPS_bulg - R_GLUPRT_bulg + R_gln_export_bulg  = 0
  M_gln_L_c_ther:         - R_ANS1_ther - R_CTPS2_ther - R_PRFGS_ther
                          - R_GF6PTA_ther + R_GLNabc_ther + R_GLNS_ther
@@ -878,20 +876,21 @@ Subject To
  M_glu5sa_c_ther:        R_G5SD_ther - R_G5SADs_ther  = 0
  M_glu_D_c_bulg:         - R_GLUR_bulg - R_UAMAGS_bulg  = 0
  M_glu_D_c_ther:         - R_UAMAGS_ther - R_GLUR_ther  = 0
- M_glu_L_c_bulg:         R_PRFGS_bulg + R_GF6PTA_bulg + R_GLUR_bulg
-                         - R_THFGLUS_bulg - R_GLNS_bulg - R_DHFS_bulg
-                         + R_GLUt6_bulg + M_glu_L_c_bulg_src + R_VALTA_bulg
-                         + R_AKGTA3_bulg + R_GLNTAL_bulg + R_PHETA1_bulg
-                         + R_LEUTA_bulg + R_GMPS2_bulg + R_TYRTA_bulg
-                         + R_CTPS2_bulg + 0.132294586048683 R_CASL_bulg
-                         - R_GLUTRS_bulg + 0.224 R_PEPTL_bulg + R_ILETA_bulg
-                         + R_ASNS1_bulg + R_CBPS_bulg + R_GLUPRT_bulg  = 0
+ M_glu_L_c_bulg:         R_PRFGS_bulg + R_GF6PTA_bulg + R_ASNS1_bulg
+                         + R_GLUR_bulg - R_THFGLUS_bulg - R_GLNS_bulg
+                         - R_DHFS_bulg + R_GLUt6_bulg + M_glu_L_c_bulg_src
+                         + R_VALTA_bulg + R_AKGTA3_bulg + R_GLNTAL_bulg
+                         + R_PHETA1_bulg + R_LEUTA_bulg + R_GMPS2_bulg
+                         + R_TYRTA_bulg + R_CTPS2_bulg
+                         + 0.132294586048683 R_CASL_bulg - R_GLUTRS_bulg
+                         + 0.224 R_PEPTL_bulg + R_ILETA_bulg + R_CBPS_bulg
+                         + R_GLUPRT_bulg  = 0
  M_glu_L_c_ther:         - R_GLUTRS_ther + R_ADPTA_ther + R_SDPTA_ther
                          + R_ANS1_ther + R_ASPTA5_ther - R_ORNTAC_ther
-                         - R_PSERT_ther + R_CTPS2_ther - R_GLUDy_ther
-                         + R_ASPTA6_ther + R_PRFGS_ther + R_VALTA_ther
-                         + R_GF6PTA_ther - R_GLNS_ther - R_GLU5K_ther
-                         + R_ILETA_ther - R_DHFS_ther + R_ASPTA1_ther
+                         - R_PSERT_ther + R_CTPS2_ther + R_ASPTA6_ther
+                         + R_PRFGS_ther + R_VALTA_ther + R_GF6PTA_ther
+                         - R_GLNS_ther - R_GLU5K_ther + R_ILETA_ther
+                         - R_GLUDy_ther - R_DHFS_ther + R_ASPTA1_ther
                          - R_THFGLUS_ther + R_GMPS2_ther + R_ASPTA4_ther
                          + R_GLUt6_ther + R_ADCS_ther
                          + 0.132294586048683 R_CASL_ther + R_GLUR_ther
@@ -949,13 +948,13 @@ Subject To
                          - R_RNTR2_bulg - R_ADSS_bulg - R_GTPDPK_bulg
                          - R_CYTDK2_bulg - R_URIK2_bulg
                          - 2 R_PROTS_LPL_v60_bulg - R_TMDK2_bulg  = 0
- M_gtp_c_ther:           - R_GTPDPK_ther - 2 R_PROTS_STR_ther - R_TMDK2_ther
-                         - R_PZS_ther - R_CYTDK2_ther - 0.32 R_RNAS_LLA_ther
-                         - R_URIK2_ther + R_NDPK1_ther - R_ADSS_ther
+ M_gtp_c_ther:           - R_GTPDPK_ther - R_URIK2_ther - 2 R_PROTS_STR_ther
+                         - R_TMDK2_ther - R_PZS_ther - R_CYTDK2_ther
+                         - 0.32 R_RNAS_LLA_ther + R_NDPK1_ther - R_ADSS_ther
                          - R_GTPCI_ther - R_RNTR2_ther  = 0
  M_gua_c_bulg:           R_GUAt2_bulg + R_PUNP3_bulg + R_PNS2_bulg
                          - R_GUAPRT_bulg + R_PUNP4_bulg  = 0
- M_gua_c_ther:           - R_GUAPRT_ther + R_PUNP3_ther + R_PUNP4_ther  = 0
+ M_gua_c_ther:           R_PUNP3_ther - R_GUAPRT_ther + R_PUNP4_ther  = 0
  M_gua_e:                - R_GUAt2_bulg - R_EX_gua_e_  = 0
  M_h2o2_c_bulg:          R_PYROX_bulg + R_LOXD_bulg  = 0
  M_h2o2_c_ther:          R_SOD_ther + R_DHORD1_ther + R_NOX1_ther
@@ -965,41 +964,41 @@ Subject To
                          + 5 R_KAS5_bulg - R_G6PDA_bulg + R_ENO_bulg
                          - R_PGGH_bulg - R_PRFGS_bulg - R_GTPCI_bulg
                          + R_H2Ot5_bulg - 2 R_PEPTabc_bulg - R_UDCPDP_bulg
-                         - R_GLYBabc_bulg - R_GPDDA1_bulg - R_RHC_bulg
-                         - R_AEPabc_bulg - R_PPA_bulg - R_CHLabc_bulg
-                         - R_CYSTGL_bulg + R_HHDHL7_bulg - R_CYSTL_bulg
-                         - R_THMabc_bulg - R_LACZ_bulg - R_PNS4_bulg
-                         + 2 R_THZPSN2_bulg + R_RNTR2_bulg - R_THRS_bulg
-                         + 5 R_KAS2_bulg - R_PNS2_bulg - R_ADPRDP_bulg
-                         - R_GLNabc_bulg - R_FMETDF_bulg + 4 R_KAS1_bulg
-                         + R_YUMPS_bulg - R_PIabc_bulg - R_CSND_bulg
-                         - R_DNTPPA_bulg - R_CYTD_bulg - R_ADA_bulg
-                         - R_DNMPPA_bulg + R_ATPS3r_bulg - R_GPDDA2_bulg
-                         + R_HHYHL2_bulg - 27.2 R_biomass_LBUL10_bulg
-                         - R_ZN2abc2_bulg - R_DADA_bulg - R_HCO3E_bulg
-                         + R_TDPGDH_bulg + 4 R_KAS3_bulg - R_GPDDA3_bulg
-                         - R_MOADCST_bulg - R_PYRNS1_bulg - R_MTAN_bulg
-                         - R_GLNTAL_bulg - R_PGL_bulg + 5 R_KAS9_bulg
-                         - R_PGLYCP_bulg - R_EPPP_bulg - R_GMPS2_bulg
-                         + 4 R_KAS4_bulg + 5 R_KAS10_bulg + R_HDDHL5_bulg
-                         - R_CTPS2_bulg - 5 R_CPSS_LPL_bulg - R_MALT_bulg
-                         + 6 R_KAS7_bulg + R_RNTR3_bulg - R_DUTPDP_bulg
-                         - R_PTRCabc_bulg - R_NNAMr_bulg + 7 R_KAS13_bulg
-                         - R_CASL_bulg - R_SPMDabc_bulg + R_HODHL8_bulg
-                         + 6 R_KAS8_bulg - 0.111 R_CASabc_bulg - R_MALTabc_bulg
-                         - R_MTHFC_bulg + R_PKL_bulg - R_PEPTL_bulg
-                         - R_DHORTS_bulg - R_ARGabc_bulg - R_IMPD_bulg
-                         + R_HTDHL6_bulg + R_RNTR4_bulg - R_PNS3_bulg
-                         - R_ATPM_bulg - R_PGPP_LPL_bulg
+                         - R_ASNS1_bulg - R_GLYBabc_bulg - R_GPDDA1_bulg
+                         - R_RHC_bulg - R_AEPabc_bulg - R_PPA_bulg
+                         - R_CHLabc_bulg - R_CYSTGL_bulg + R_HHDHL7_bulg
+                         - R_CYSTL_bulg - R_THMabc_bulg - R_LACZ_bulg
+                         - R_PNS4_bulg + 2 R_THZPSN2_bulg + R_RNTR2_bulg
+                         - R_THRS_bulg + 5 R_KAS2_bulg - R_PNS2_bulg
+                         - R_ADPRDP_bulg - R_GLNabc_bulg - R_FMETDF_bulg
+                         + 4 R_KAS1_bulg + R_YUMPS_bulg - R_PIabc_bulg
+                         - R_CSND_bulg - R_DNTPPA_bulg - R_CYTD_bulg
+                         - R_ADA_bulg + R_HODHL8_bulg - R_DNMPPA_bulg
+                         + R_ATPS3r_bulg - R_GPDDA2_bulg + R_HHYHL2_bulg
+                         - 27.2 R_biomass_LBUL10_bulg - R_ZN2abc2_bulg
+                         - R_DADA_bulg - R_HCO3E_bulg + R_TDPGDH_bulg
+                         + 4 R_KAS3_bulg - R_GPDDA3_bulg - R_MOADCST_bulg
+                         - R_PYRNS1_bulg - R_MTAN_bulg - R_GLNTAL_bulg
+                         - R_PGL_bulg + 5 R_KAS9_bulg - R_PGLYCP_bulg
+                         - R_EPPP_bulg - R_GMPS2_bulg + 4 R_KAS4_bulg
+                         + 5 R_KAS10_bulg + R_HDDHL5_bulg - R_CTPS2_bulg
+                         - 5 R_CPSS_LPL_bulg - R_MALT_bulg + 6 R_KAS7_bulg
+                         + R_RNTR3_bulg - R_DUTPDP_bulg - R_PTRCabc_bulg
+                         - R_NNAMr_bulg + 7 R_KAS13_bulg - R_CASL_bulg
+                         - R_SPMDabc_bulg + 6 R_KAS8_bulg - 0.111 R_CASabc_bulg
+                         - R_MALTabc_bulg - R_MTHFC_bulg + R_PKL_bulg
+                         - R_PEPTL_bulg - R_DHORTS_bulg - R_ARGabc_bulg
+                         - R_IMPD_bulg + R_HTDHL6_bulg + R_RNTR4_bulg
+                         - R_PNS3_bulg - R_ATPM_bulg - R_PGPP_LPL_bulg
                          - 2.306 R_PROTS_LPL_v60_bulg - R_NAabcO_bulg
                          - R_AHCYSNS_bulg - R_PPC_bulg - R_GPDDA5_bulg
                          - R_AGDC_bulg + 5 R_KAS12_bulg - R_ASNN_bulg
-                         + R_HMGCOAS_bulg - R_ASNS1_bulg + 5 R_KAS11_bulg
-                         + R_HBUHL1_bulg - R_SSALy_bulg - R_CBPS_bulg
-                         - R_PNS1_bulg + R_SUCBZS_bulg - R_GPDDA4_bulg
-                         - R_DCYTD_bulg + R_HDEHL4_bulg - R_GLUPRT_bulg
-                         + 5 R_KAS6_bulg - R_FUM_bulg + R_RNTR1_bulg
-                         + 7 R_KAS17_bulg - R_IMPC_bulg + R_HOCHL3_bulg  = 0
+                         + R_HMGCOAS_bulg + 5 R_KAS11_bulg + R_HBUHL1_bulg
+                         - R_SSALy_bulg - R_CBPS_bulg - R_PNS1_bulg
+                         + R_SUCBZS_bulg - R_GPDDA4_bulg - R_DCYTD_bulg
+                         + R_HDEHL4_bulg - R_GLUPRT_bulg + 5 R_KAS6_bulg
+                         - R_FUM_bulg + R_RNTR1_bulg + 7 R_KAS17_bulg
+                         - R_IMPC_bulg + R_HOCHL3_bulg  = 0
  M_h2o_c_ther:           - R_NTD11_ther + R_RNDR3_ther - R_MALTTTRabc_ther
                          - R_PSP_L_ther - R_CYSTL_ther - R_PGGH_ther
                          - R_VALabc_ther - R_G6PDA_ther - R_METAT_ther
@@ -1008,28 +1007,28 @@ Subject To
                          - R_THDPS_ther + 2 R_DHDPS_ther - R_NTD7_ther
                          - R_NTD9_ther - R_AGMT_ther - R_PAP_LLA_ther
                          - R_NAMNPP_ther - R_CTPS2_ther + R_HBUHL1_ther
-                         - R_SPMDabc_ther - R_ACTPASE_ther - R_GLUDy_ther
-                         + R_HDEHL4_ther - 1.37 R_DNAS_STU_ther - R_NTD10_ther
-                         - R_NTD4_ther - R_NNAMr_ther + R_RNDR4_ther
-                         + R_HDDHL5_ther - 2.306 R_PROTS_STR_ther
-                         + R_ATPS3r_ther + R_HMGCOAS_ther - R_DNTPPA_ther
-                         - R_ASPabc_ther + R_ENO_ther - R_MALTHXabc_ther
-                         - R_MALTPTabc_ther - R_PRFGS_ther - 2 R_PEPTabc_ther
-                         - R_ZN2abc2_ther - R_METabc_ther + R_RNTR3_ther
-                         - R_GLNabc_ther - R_UDCPDP_ther + R_TRPS1_ther
-                         - R_PTRCabc_ther - R_NTD8_ther - R_USHD_ther
-                         - R_THMabc_ther - R_METSRabc_ther - R_DHORTS_ther
-                         + R_DHAD3_ther - R_CSND_ther - R_ADPRDP_ther
-                         + R_RNTR1_ther - R_NTD2_ther - R_SUC6PH_ther
-                         - R_MNabc_ther - R_DNMPPA_ther - R_NTD1_ther
+                         - R_SPMDabc_ther - R_ACTPASE_ther + R_HDEHL4_ther
+                         - 1.37 R_DNAS_STU_ther - R_NTD4_ther - R_NNAMr_ther
+                         + R_RNDR4_ther + R_HDDHL5_ther
+                         - 2.306 R_PROTS_STR_ther + R_ATPS3r_ther
+                         + R_HMGCOAS_ther - R_DNTPPA_ther - R_ASPabc_ther
+                         + R_ENO_ther - R_MALTHXabc_ther - R_MALTPTabc_ther
+                         - R_PRFGS_ther - 2 R_PEPTabc_ther - R_ZN2abc2_ther
+                         - R_METabc_ther + R_RNTR3_ther - R_GLNabc_ther
+                         - R_UDCPDP_ther + R_TRPS1_ther - R_PTRCabc_ther
+                         - R_NTD8_ther - R_USHD_ther - R_THMabc_ther
+                         - R_METSRabc_ther - R_DHORTS_ther + R_DHAD3_ther
+                         - R_CSND_ther - R_ADPRDP_ther + R_RNTR1_ther
+                         - R_NTD2_ther - R_SUC6PH_ther - R_MNabc_ther
+                         - R_GLUDy_ther - R_DNMPPA_ther - R_NTD1_ther
                          + 2 R_NOX2_ther - R_GLYBabc_ther - R_PPA_ther
                          + R_RNTR4_ther - R_AHCYSNS_ther - R_CYTD_ther
                          - R_TRE6PH_ther + R_HHYHL2_ther - R_SSALx_ther
                          - R_GMPS2_ther - R_ALAD_Lr_ther - R_FERRICHabc_ther
                          - R_DUTPDP_ther - R_METSabc_ther
                          - 18.15 R_biomass_STR_ther + R_HODHL8_ther
-                         + R_G5SADs_ther - 0.4 R_RNAS_LLA_ther + R_PPNDH_ther
-                         - R_AGDC_ther + R_DHQD_ther - R_ASNN_ther
+                         + R_G5SADs_ther - 0.4 R_RNAS_LLA_ther - R_AGDC_ther
+                         + R_PPNDH_ther + R_DHQD_ther - R_ASNN_ther
                          - R_CASL_ther - R_MOADCST_ther - R_THRS_ther
                          + R_RNDR2_ther - R_GLUabc_ther + R_RNDR1_ther
                          - R_ECOAH2c_ther - R_LACZ_ther - R_MALTTRabc_ther
@@ -1040,15 +1039,16 @@ Subject To
                          - R_APAT_ther + R_TDPGDH_ther - R_DCYTD_ther
                          - 0.111 R_CASabc_ther - R_UREA2_ther + R_DHAD1_ther
                          - R_DAHPS_ther - R_RHC_ther - R_IMPD_ther
-                         - R_CBPS_ther - R_GLUPRT_ther - R_MTAN_ther
-                         - R_ADPDS_ther - R_NTD5_ther - R_METDabc_2_ther
-                         - R_IPPS_ther - R_IMPC_ther - R_HCO3E_ther
-                         - R_FMETDF_ther - R_ADA_ther - R_IPPMIb_ther
-                         + R_DHAD2_ther - R_MALTabc_ther + R_H2Ot5_ther
-                         - R_URCN_ther + R_GHMT_ther - R_NTD3_ther
-                         - R_SSALy_ther + R_IPPMIa_ther - 4 R_CPSS_LLA_ther
-                         - R_GLNTAL_ther - R_DADA_ther + R_RNTR2_ther
-                         + R_HOCHL3_ther + 2 R_CPPPGO_ther - R_ILEabc_ther  = 0
+                         - R_NTD10_ther - R_CBPS_ther - R_GLUPRT_ther
+                         - R_MTAN_ther - R_ADPDS_ther - R_NTD5_ther
+                         - R_METDabc_2_ther - R_IPPS_ther - R_IMPC_ther
+                         - R_HCO3E_ther - R_FMETDF_ther - R_ADA_ther
+                         - R_IPPMIb_ther + R_DHAD2_ther - R_MALTabc_ther
+                         + R_H2Ot5_ther - R_URCN_ther + R_GHMT_ther
+                         - R_NTD3_ther - R_SSALy_ther + R_IPPMIa_ther
+                         - 4 R_CPSS_LLA_ther - R_GLNTAL_ther - R_DADA_ther
+                         + R_RNTR2_ther + R_HOCHL3_ther + 2 R_CPPPGO_ther
+                         - R_ILEabc_ther  = 0
  M_h2o_e:                - R_H2Ot5_bulg - R_EX_h2o_e_ - R_H2Ot5_ther  = 0
  M_h2s_c_bulg:           - R_CYSS_bulg  = 0
  M_h2s_c_ther:           - R_METACH_ther - R_CYSS_ther  = 0
@@ -1062,33 +1062,33 @@ Subject To
                          + 2 R_UAAGLS1_bulg + R_RBK_bulg + 2 R_PEPTabc_bulg
                          - R_G1PTMT_bulg + R_UDCPDP_bulg + R_PGCD_bulg
                          + R_ARGTRS_bulg + R_GARFT_bulg - R_HOCR3_bulg
-                         + R_URAt2_bulg + R_ACPS2_bulg - R_MCMAT2_bulg
-                         + R_GLYBabc_bulg + R_THFGLUS_bulg + R_HSK_bulg
-                         + R_UAGPT5_bulg + R_GPDDA1_bulg - R_NNAT_bulg
-                         + R_GLNS_bulg - R_MCMAT5_bulg + R_AEPabc_bulg
-                         + R_LEUTRS_bulg - R_HDMAT7_bulg - R_OMPDC_bulg
-                         + R_DGNSK_bulg - R_FRDx_bulg + 2 R_HMGCOAR_bulg
-                         + R_TYRt6_bulg + 2 R_CTPS1_1_bulg + R_CFAS180_bulg
-                         + R_ACALD_bulg - R_G3PCT_bulg - R_DAPDC_bulg
-                         + R_PPA_bulg + R_LYSt6_bulg + R_UGMDDS2_bulg
-                         - R_ALCD19_D_bulg + R_MEVK_bulg + R_GAPD_bulg
-                         + R_LCTSt6_bulg + R_GLYK_bulg + R_CHLabc_bulg
-                         + 50 R_GTAglcS_bulg + R_PRASCS_bulg + R_NADK_bulg
-                         + R_DHFS_bulg + R_SERTRS_bulg + R_HEX1_bulg
-                         - R_UAPGR_bulg - R_HHYR2_bulg + R_PFK_bulg
-                         + R_THMabc_bulg - R_ALCD19_L_bulg + 2 R_THZPSN2_bulg
-                         + R_UDCPK_bulg + R_BTNt2i_bulg - 17 R_KAS2_bulg
-                         + R_HSDy_bulg + 2 R_ADPRDP_bulg - R_OCDMAT8_bulg
-                         + R_GLUt6_bulg - R_2HXICDH_bulg + R_GLNabc_bulg
-                         - R_HEMAT2_bulg + R_MALt6_bulg + R_PRAGS_bulg
-                         - 14 R_KAS1_bulg - R_FMNAT_bulg - R_MCMAT8_bulg
-                         + R_ARGt_bulg - R_PYK_bulg + R_HXANt2_bulg
-                         + R_HISt6_bulg + R_ASAD_bulg + R_PIabc_bulg
-                         + R_ASNt6_bulg + R_TDPDRR_bulg + R_FOLt_bulg
-                         - R_CSND_bulg + R_ASPTRS_bulg + R_NH4DIS_bulg
-                         - R_CYTD_bulg + R_ACt6_bulg + R_VALTRS_bulg
-                         - R_ADA_bulg + R_CYTDK3_bulg - R_DEMAT4_bulg
-                         + 25 R_GRTAL_bulg + R_METTRS_bulg + R_DNMPPA_bulg
+                         + R_URAt2_bulg + R_ACPS2_bulg + R_ASNS1_bulg
+                         - R_MCMAT2_bulg + R_GLYBabc_bulg + R_THFGLUS_bulg
+                         + R_HSK_bulg + R_UAGPT5_bulg + R_GPDDA1_bulg
+                         - R_NNAT_bulg + R_GLNS_bulg - R_MCMAT5_bulg
+                         + R_AEPabc_bulg + R_LEUTRS_bulg - R_HDMAT7_bulg
+                         - R_OMPDC_bulg + R_DGNSK_bulg - R_FRDx_bulg
+                         + 2 R_HMGCOAR_bulg + R_TYRt6_bulg + 2 R_CTPS1_1_bulg
+                         + R_CFAS180_bulg + R_ACALD_bulg - R_G3PCT_bulg
+                         - R_DAPDC_bulg + R_PPA_bulg + R_LYSt6_bulg
+                         + R_UGMDDS2_bulg - R_ALCD19_D_bulg + R_MEVK_bulg
+                         + R_GAPD_bulg + R_LCTSt6_bulg + R_GLYK_bulg
+                         + R_CHLabc_bulg + 50 R_GTAglcS_bulg + R_PRASCS_bulg
+                         + R_NADK_bulg + R_DHFS_bulg + R_SERTRS_bulg
+                         + R_HEX1_bulg - R_UAPGR_bulg - R_HHYR2_bulg
+                         + R_PFK_bulg + R_THMabc_bulg - R_ALCD19_L_bulg
+                         + 2 R_THZPSN2_bulg + R_UDCPK_bulg + R_METTRS_bulg
+                         - 17 R_KAS2_bulg + R_HSDy_bulg + 2 R_ADPRDP_bulg
+                         - R_OCDMAT8_bulg + R_GLUt6_bulg - R_2HXICDH_bulg
+                         + R_GLNabc_bulg - R_HEMAT2_bulg + R_MALt6_bulg
+                         + R_PRAGS_bulg - 14 R_KAS1_bulg - R_FMNAT_bulg
+                         - R_MCMAT8_bulg + R_ARGt_bulg - R_PYK_bulg
+                         + R_HXANt2_bulg + R_HISt6_bulg + R_ASAD_bulg
+                         + R_PIabc_bulg + R_ASNt6_bulg + R_TDPDRR_bulg
+                         + R_FOLt_bulg - R_CSND_bulg + R_ASPTRS_bulg
+                         + R_NH4DIS_bulg - R_CYTD_bulg + R_ACt6_bulg
+                         + R_VALTRS_bulg - R_ADA_bulg - R_DEMAT4_bulg
+                         + 25 R_GRTAL_bulg + R_BTNt2i_bulg + R_DNMPPA_bulg
                          + R_GALt6_bulg + 2 R_ATPS3r_bulg + R_CYSt6_bulg
                          + R_GPDDA2_bulg + R_ASNS2_bulg + R_PROTRS_bulg
                          + 27.2 R_biomass_LBUL10_bulg + R_ZN2abc2_bulg
@@ -1109,26 +1109,26 @@ Subject To
                          - R_LYSDC_bulg + 2 R_CTPS2_bulg + 6 R_CPSS_LPL_bulg
                          - R_PPCDC_bulg + R_METS_bulg - R_PTPAT_bulg
                          + R_THRTRS_bulg - 19 R_KAS7_bulg + R_DUTPDP_bulg
-                         - R_DASYN_LPL_bulg + R_DHORD6_bulg + R_PTRCabc_bulg
-                         - 23 R_KAS13_bulg + R_NADS1_bulg + R_RIBFLVt2_bulg
-                         + R_G6PDHy_bulg + R_GLUTRS_bulg + R_SPMDabc_bulg
-                         - R_HTDR6_bulg + R_PPNCL_bulg - 20 R_KAS8_bulg
-                         - R_kaasIII_bulg + 0.111 R_CASabc_bulg
-                         + R_MALTabc_bulg + R_LDH_D_bulg - R_HODR8_bulg
-                         + R_CYTDK2_bulg + R_MTHFC_bulg + R_THRt6_bulg
-                         - R_DDMAT5_bulg + R_HCYSMT_bulg + R_LYSTRS_bulg
-                         + R_TYRTRS_bulg + R_CYSS_bulg + R_TMDK1_bulg
-                         + R_DHORTS_bulg + R_CGPT_bulg + R_ALA_Lt6_bulg
-                         + R_ASPCT_bulg + R_UAAGDS_bulg - R_HHDR7_bulg
-                         - R_MCMAT3_bulg - R_MCMAT4_bulg + R_ARGabc_bulg
-                         + R_URIK2_bulg + R_IMPD_bulg - R_GALU_bulg
-                         + R_TMDPK_bulg + R_TRPt6_bulg + R_ATPM_bulg
-                         - 2 R_GMPR_bulg + R_URIK1_bulg + R_AIRC_bulg
-                         + 2.306 R_PROTS_LPL_v60_bulg + R_NAabcO_bulg
-                         + R_PPC_bulg - R_HDER4_bulg - R_MCMAT6_bulg
-                         + 2 R_PYDXK_bulg + R_GPDDA5_bulg - 17 R_KAS12_bulg
-                         + R_ILETRS_bulg - R_HMGCOAS_bulg + R_LEUt6_bulg
-                         + R_UNAGAMAMT_bulg + R_ASNS1_bulg - 17 R_KAS11_bulg
+                         + R_CYTDK3_bulg - R_DASYN_LPL_bulg + R_DHORD6_bulg
+                         + R_PTRCabc_bulg - 23 R_KAS13_bulg + R_NADS1_bulg
+                         + R_RIBFLVt2_bulg + R_G6PDHy_bulg + R_GLUTRS_bulg
+                         + R_SPMDabc_bulg - R_HTDR6_bulg + R_PPNCL_bulg
+                         - 20 R_KAS8_bulg - R_kaasIII_bulg
+                         + 0.111 R_CASabc_bulg + R_MALTabc_bulg + R_LDH_D_bulg
+                         - R_HODR8_bulg + R_CYTDK2_bulg + R_MTHFC_bulg
+                         + R_THRt6_bulg - R_DDMAT5_bulg + R_HCYSMT_bulg
+                         + R_LYSTRS_bulg + R_TYRTRS_bulg + R_CYSS_bulg
+                         + R_TMDK1_bulg + R_DHORTS_bulg + R_CGPT_bulg
+                         + R_ALA_Lt6_bulg + R_ASPCT_bulg + R_UAAGDS_bulg
+                         - R_HHDR7_bulg - R_MCMAT3_bulg - R_MCMAT4_bulg
+                         + R_ARGabc_bulg + R_URIK2_bulg + R_IMPD_bulg
+                         - R_GALU_bulg + R_TMDPK_bulg + R_TRPt6_bulg
+                         + R_ATPM_bulg - 2 R_GMPR_bulg + R_URIK1_bulg
+                         + R_AIRC_bulg + 2.306 R_PROTS_LPL_v60_bulg
+                         + R_NAabcO_bulg + R_PPC_bulg - R_HDER4_bulg
+                         - R_MCMAT6_bulg + 2 R_PYDXK_bulg + R_GPDDA5_bulg
+                         - 17 R_KAS12_bulg + R_ILETRS_bulg - R_HMGCOAS_bulg
+                         + R_LEUt6_bulg + R_UNAGAMAMT_bulg - 17 R_KAS11_bulg
                          + R_TRPTRS_bulg - R_OCMAT3_bulg + R_PGSA_LPL_bulg
                          + R_URIK3_bulg - R_ARGDC_bulg + R_LDH_L_bulg
                          - R_PYROX_bulg + R_ALCD2x_bulg - R_HDDR5_bulg
@@ -1144,107 +1144,107 @@ Subject To
                          + R_VALabc_ther + R_PIabc_ther + R_ACCOAC_ther
                          - R_GALT_ther - R_IGPS_ther + R_MTHFC_ther
                          + R_NADS1_ther - R_PTPAT_ther + R_GLYCK_ther
-                         + R_PRAGS_ther + R_DHDPS_ther + R_ASNS2_ther
-                         + R_RBK_ther + R_GTPDPK_ther + R_UAGPT1_ther
-                         - R_ACLDC_ther - R_HHDR7_ther - R_HDER4_ther
-                         + R_TDPDRR_ther + R_F1PK_ther + R_ARGSS_ther
-                         - R_SHK3D_ther + R_TMDPK_ther + R_PYDAMK_ther
-                         + 2 R_CTPS2_ther + R_VALt6_ther - R_OMCDC_ther
-                         - R_UAPGR_ther + R_SPMDabc_ther + R_ACTPASE_ther
-                         + R_SERt6_ther - 2 R_GMPR_ther + R_GLUDy_ther
-                         + R_LCTSt6_ther - R_NMNS_ther + 2 R_PYDXK_ther
-                         - R_FRDx_ther + R_ASPCT_ther + 1.37 R_DNAS_STU_ther
-                         + R_MEVK_ther + R_URIK1_ther + R_HSDy_ther
-                         + R_ILEt6_ther + R_VALTRS_ther
-                         + 2.306 R_PROTS_STR_ther + 2 R_ATPS3r_ther
-                         - R_HMGCOAS_ther - R_FMNAT_ther + R_CYTDK3_ther
-                         - R_ACLS_ther - R_HOCR3_ther + 2 R_METFR_ther
-                         + R_HSK_ther + R_URIK3_ther + R_DHORD6_ther
-                         + R_ASPabc_ther - R_DDMAT5_ther + R_LDH_L_ther
-                         + R_MALTHXabc_ther + R_MALTPTabc_ther - R_MCMAT6_ther
-                         + 2 R_PRFGS_ther + R_PPNCL_ther + 2 R_PEPTabc_ther
-                         + R_ZN2abc2_ther + R_CYSTRS_ther - R_DEMAT4_ther
-                         + R_METabc_ther + R_PRAIS_ther + R_PNTK_ther
-                         + R_GLNabc_ther + R_UDCPDP_ther + R_MALt6_ther
-                         + R_GLNS_ther - R_HDDR5_ther + R_PTRCabc_ther
-                         + R_G1PACT_ther + R_THRTRS_ther - R_MCMAT8_ther
-                         - R_DPR_ther + R_G3PD1_ther + R_ADCL_ther
-                         + 2 R_USHD_ther + R_CFAS180_ther + R_THMabc_ther
-                         + R_METSRabc_ther + R_DHORTS_ther - R_OMPDC_ther
-                         + R_CYSt6_ther - R_CSND_ther + 2 R_ADPRDP_ther
-                         + R_MNabc_ther + R_TMDK2_ther - R_HHYR2_ther
-                         + R_TRPt6_ther + R_AGPR_ther - R_TDMAT6_ther
-                         + R_DNMPPA_ther - R_MCMAT3_ther + R_GAPD_ther
-                         - R_KARA2_ther - 2 R_NOX2_ther + R_PHETRS_ther
-                         - R_G1PTMT_ther + R_ALATRS_ther + R_THRt6_ther
-                         + R_NADK_ther + R_CYTDK1_ther + R_GLYBabc_ther
-                         + R_PPA_ther - R_GALU_ther + R_METACH_ther
-                         + R_METS_ther + R_CYTDK2_ther + R_FRUK_ther
-                         - R_G5SD_ther + R_CITt6_ther - R_CYTD_ther
-                         - R_DASYN_LLA_ther + 2 R_DAGGT_LLA_ther + R_HISt6_ther
-                         + R_DAGK_LLA_ther + 25 R_GRTAL_ther + R_DHFS_ther
-                         + R_UAMAGS_ther - R_2HXICDH_ther - R_OCMAT3_ther
-                         + 2 R_SSALx_ther + R_THFGLUS_ther + 2 R_GMPS2_ther
-                         + R_ALAD_Lr_ther + R_FERRICHabc_ther + R_DUTPDP_ther
-                         + R_METSabc_ther - R_TRDR_ther + R_GLYTRS_ther
-                         - R_ALCD19_ther + R_ALA_Lt6_ther + R_PRPPS_ther
-                         + R_DURIK1_ther + 18.15 R_biomass_STR_ther
-                         + R_ACPS2_ther - R_HEMAT2_ther - R_ASPTA4_ther
-                         - R_DHFR_ther + R_ALCD2x_ther + R_G5SADs_ther
-                         - R_DHDPRy_ther + R_SUCCt6_ther - R_OCDMAT8_ther
-                         + R_GLUt6_ther + 0.4 R_RNAS_LLA_ther - R_HTDR6_ther
-                         - R_PPNDH_ther + R_FOLt_ther + R_SHKK_ther
+                         + R_PRAGS_ther + R_DHDPS_ther + R_RBK_ther
+                         + R_GTPDPK_ther + R_UAGPT1_ther - R_ACLDC_ther
+                         - R_HHDR7_ther - R_HDER4_ther + R_TDPDRR_ther
+                         + R_F1PK_ther + R_ARGSS_ther - R_SHK3D_ther
+                         + R_TMDPK_ther + R_PYDAMK_ther + 2 R_CTPS2_ther
+                         + R_VALt6_ther - R_OMCDC_ther - R_UAPGR_ther
+                         + R_SPMDabc_ther + R_ACTPASE_ther + R_SERt6_ther
+                         - 2 R_GMPR_ther + R_ASNS2_ther + R_LCTSt6_ther
+                         - R_NMNS_ther + 2 R_PYDXK_ther - R_FRDx_ther
+                         + R_ASPCT_ther + 1.37 R_DNAS_STU_ther + R_MEVK_ther
+                         + R_URIK2_ther + R_URIK1_ther + R_HSDy_ther
+                         + R_VALTRS_ther + 2.306 R_PROTS_STR_ther
+                         + 2 R_ATPS3r_ther - R_HMGCOAS_ther - R_FMNAT_ther
+                         + R_CYTDK3_ther - R_ACLS_ther - R_HOCR3_ther
+                         + 2 R_METFR_ther + R_HSK_ther + R_URIK3_ther
+                         + R_DHORD6_ther + R_ASPabc_ther - R_DDMAT5_ther
+                         + R_LDH_L_ther + R_MALTHXabc_ther + R_MALTPTabc_ther
+                         - R_MCMAT6_ther + 2 R_PRFGS_ther + R_PPNCL_ther
+                         + 2 R_PEPTabc_ther + R_ZN2abc2_ther + R_CYSTRS_ther
+                         - R_DEMAT4_ther + R_METabc_ther + R_PRAIS_ther
+                         + R_PNTK_ther + R_GLNabc_ther + R_UDCPDP_ther
+                         + R_MALt6_ther + R_GLNS_ther - R_HDDR5_ther
+                         + R_PTRCabc_ther + R_G1PACT_ther + R_THRTRS_ther
+                         - R_MCMAT8_ther - R_DPR_ther + R_G3PD1_ther
+                         + R_ADCL_ther + 2 R_USHD_ther + R_CFAS180_ther
+                         + R_THMabc_ther + R_METSRabc_ther + R_DHORTS_ther
+                         - R_OMPDC_ther + R_TMDK2_ther + R_CYSt6_ther
+                         - R_CSND_ther + 2 R_ADPRDP_ther + R_MNabc_ther
+                         - R_HHYR2_ther + R_GLUDy_ther + R_TRPt6_ther
+                         + R_AGPR_ther - R_TDMAT6_ther + R_DNMPPA_ther
+                         - R_MCMAT3_ther + R_GAPD_ther - R_KARA2_ther
+                         - 2 R_NOX2_ther + R_PHETRS_ther - R_G1PTMT_ther
+                         + R_ALATRS_ther + R_THRt6_ther + R_NADK_ther
+                         + R_CYTDK1_ther + R_GLYBabc_ther + R_PPA_ther
+                         - R_GALU_ther + R_METACH_ther + R_METS_ther
+                         + R_CYTDK2_ther + R_FRUK_ther - R_G5SD_ther
+                         + R_CITt6_ther - R_CYTD_ther - R_DASYN_LLA_ther
+                         + 2 R_DAGGT_LLA_ther + R_HISt6_ther + R_DAGK_LLA_ther
+                         + 25 R_GRTAL_ther + R_DHFS_ther + R_UAMAGS_ther
+                         - R_2HXICDH_ther - R_OCMAT3_ther + 2 R_SSALx_ther
+                         + R_THFGLUS_ther + 2 R_GMPS2_ther + R_ALAD_Lr_ther
+                         + R_FERRICHabc_ther + R_DUTPDP_ther + R_METSabc_ther
+                         - R_TRDR_ther + R_GLYTRS_ther - R_ALCD19_ther
+                         + R_ALA_Lt6_ther + R_PRPPS_ther + R_DURIK1_ther
+                         + 18.15 R_biomass_STR_ther + R_ACPS2_ther
+                         - R_HEMAT2_ther - R_ASPTA4_ther - R_DHFR_ther
+                         + R_ALCD2x_ther + R_G5SADs_ther - R_DHDPRy_ther
+                         + R_SUCCt6_ther - R_OCDMAT8_ther + R_GLUt6_ther
+                         + 0.4 R_RNAS_LLA_ther - R_HTDR6_ther - R_PPNDH_ther
+                         + R_ILEt6_ther + R_FOLt_ther + R_SHKK_ther
                          - R_PPCDC_ther - R_HDMAT7_ther + R_GTHRD_ther
-                         + R_UAAGDS_ther + R_URIK2_ther - R_MCMAT4_ther
-                         + R_RBFK_ther + 2 R_NPPDO_ther + R_GLUabc_ther
-                         + 2 R_UAAGLS1_ther + R_LYSt6_ther - R_NAPRT_ther
-                         + R_KARA1_ther + 9.8 R_GALTAL_ther + R_ALAALA_ther
-                         + R_GARFT_ther + R_PHEt6_ther - R_ECOAH2c_ther
-                         + R_IPMD_ther + R_PFK_ther + R_HEX1_ther + R_ACt6_ther
-                         - R_PYK_ther + R_MALTTRabc_ther + R_CYSS_ther
-                         - R_FLVR_ther + 2 R_ADSS_ther + R_PGSA_LLA_ther
-                         + R_HCYSMT_ther + R_TMDK1_ther + R_ARGTRS_ther
-                         + R_AHSERL4_ther + R_URAt2_ther - R_UAGDP_ther
-                         + R_PPC_ther + R_UDCPK_ther + R_ATPM_ther
-                         + R_FORt2_ther + R_ASNTRS_ther + R_CS_ther
-                         + R_ILETRS_ther + R_L_LACt2_ther + R_GTPCI_ther
-                         + R_PROLBabc_ther + R_LEUabc_ther + R_SERTRS_ther
-                         + R_ARGabc_ther + R_AIRC_ther + 2 R_HMGCOAR_ther
-                         + R_TYRt6_ther + R_TYRTRS_ther + R_HPPK_ther
-                         - R_BTMAT1_ther + R_PNTOt2_ther - R_ACHBS_ther
-                         + R_LEUt6_ther - R_DCYTD_ther + R_PYDAMt_ther
-                         + 0.111 R_CASabc_ther - 2 R_UREA2_ther - R_HBUR1_ther
-                         + R_LEUTRS_ther - R_PUNP8_ther - R_MCMAT5_ther
-                         + R_IMPD_ther + R_DPCOAK_ther - 2 R_P5CRr_ther
-                         + R_PRASCS_ther + 2 R_CBPS_ther + R_LYSTRS_ther
-                         + R_METTRS_ther - R_ADPDS_ther - R_NOX1_ther
-                         + R_GALK2_ther + R_ASAD_ther + R_UGT1_LLA_ther
-                         + R_PROt6_ther + R_METDabc_2_ther + R_UAMAS_ther
-                         + R_Kt2_ther + R_IPPS_ther + 25 R_GLTAL_ther
-                         + R_HCO3E_ther - R_NNAT_ther - R_ADA_ther
-                         + R_GLYt6_ther + R_TRPTRS_ther - R_kaasIII_ther
-                         + R_SHSL5_ther + R_MALTabc_ther + R_RIBFLVt2_ther
-                         + R_ASPTRS_ther + R_PROTRS_ther + 2 R_SSALy_ther
-                         + R_ARGt_ther + 5 R_CPSS_LLA_ther + R_GLNTAL_ther
-                         - R_DADA_ther - R_MCMAT7_ther + R_UGT2_LLA_ther
-                         - R_PYROX_ther + R_HMPK1_ther - R_HODR8_ther
-                         + 2 R_CTPS1_1_ther - 2 R_CPPPGO_ther + R_PGCD_ther
-                         + R_ILEabc_ther + R_METt6_ther  = 0
+                         + R_UAAGDS_ther - R_MCMAT4_ther + R_RBFK_ther
+                         + 2 R_NPPDO_ther + R_GLUabc_ther + 2 R_UAAGLS1_ther
+                         + R_LYSt6_ther - R_NAPRT_ther + R_KARA1_ther
+                         + 9.8 R_GALTAL_ther + R_ALAALA_ther + R_GARFT_ther
+                         + R_PHEt6_ther - R_ECOAH2c_ther + R_IPMD_ther
+                         + R_PFK_ther + R_HEX1_ther + R_ACt6_ther - R_PYK_ther
+                         + R_MALTTRabc_ther + R_CYSS_ther - R_FLVR_ther
+                         + 2 R_ADSS_ther + R_PGSA_LLA_ther + R_HCYSMT_ther
+                         + R_TMDK1_ther + R_ARGTRS_ther + R_AHSERL4_ther
+                         + R_URAt2_ther - R_UAGDP_ther + R_PPC_ther
+                         + R_UDCPK_ther + R_ATPM_ther + R_FORt2_ther
+                         + R_ASNTRS_ther + R_CS_ther + R_ILETRS_ther
+                         + R_L_LACt2_ther + R_GTPCI_ther + R_PROLBabc_ther
+                         + R_LEUabc_ther + R_SERTRS_ther + R_ARGabc_ther
+                         + R_AIRC_ther + 2 R_HMGCOAR_ther + R_TYRt6_ther
+                         + R_TYRTRS_ther + R_HPPK_ther - R_BTMAT1_ther
+                         + R_PNTOt2_ther - R_ACHBS_ther + R_LEUt6_ther
+                         - R_DCYTD_ther + R_PYDAMt_ther + 0.111 R_CASabc_ther
+                         - 2 R_UREA2_ther - R_HBUR1_ther + R_LEUTRS_ther
+                         - R_PUNP8_ther - R_MCMAT5_ther + R_IMPD_ther
+                         + R_DPCOAK_ther - 2 R_P5CRr_ther + R_PRASCS_ther
+                         + 2 R_CBPS_ther + R_LYSTRS_ther + R_METTRS_ther
+                         - R_ADPDS_ther - R_NOX1_ther + R_GALK2_ther
+                         + R_ASAD_ther + R_UGT1_LLA_ther + R_PROt6_ther
+                         + R_METDabc_2_ther + R_UAMAS_ther + R_Kt2_ther
+                         + R_IPPS_ther + 25 R_GLTAL_ther + R_HCO3E_ther
+                         - R_NNAT_ther - R_ADA_ther + R_GLYt6_ther
+                         + R_TRPTRS_ther - R_kaasIII_ther + R_SHSL5_ther
+                         + R_MALTabc_ther + R_RIBFLVt2_ther + R_ASPTRS_ther
+                         + R_PROTRS_ther + 2 R_SSALy_ther + R_ARGt_ther
+                         + 5 R_CPSS_LLA_ther + R_GLNTAL_ther - R_DADA_ther
+                         - R_MCMAT7_ther + R_UGT2_LLA_ther - R_PYROX_ther
+                         + R_HMPK1_ther - R_HODR8_ther + 2 R_CTPS1_1_ther
+                         - 2 R_CPPPGO_ther + R_PGCD_ther + R_ILEabc_ther
+                         + R_METt6_ther  = 0
  M_h_e:                  - R_GUAt2_bulg - R_ASPt6_bulg - R_MELIBt2_bulg
                          - R_L_LACt2_bulg - R_URAt2_bulg - R_TYRt6_bulg
                          - R_VALt6_ther - R_LYSt6_bulg - R_LCTSt6_bulg
-                         - R_SERt6_ther - R_LCTSt6_ther - R_ILEt6_ther
-                         - 3 R_ATPS3r_ther - R_BTNt2i_bulg - R_GLUt6_bulg
-                         - R_MALt6_bulg - R_ARGt_bulg - R_HXANt2_bulg
-                         - R_MALt6_ther - R_HISt6_bulg - R_ASNt6_bulg
-                         - R_FOLt_bulg - R_ACt6_bulg - R_GALt6_bulg
-                         - 3 R_ATPS3r_bulg - R_CYSt6_ther - R_CYSt6_bulg
-                         - R_TRPt6_ther - R_PROt6_bulg - R_PHEt6_bulg
-                         + R_NH4DISex_bulg - R_THRt6_ther - R_GLYt6_bulg
-                         - R_CITt6_ther - R_HISt6_ther - R_SERt6_bulg
-                         - R_VALt6_bulg - R_XANt2_bulg - R_PYDAMt_bulg
-                         - R_ALA_Lt6_ther - R_SUCCt6_bulg - R_SUCCt6_ther
-                         - R_GLUt6_ther - R_FOLt_ther - R_RIBFLVt2_bulg
+                         - R_SERt6_ther - R_LCTSt6_ther - 3 R_ATPS3r_ther
+                         - R_GLUt6_bulg - R_MALt6_bulg - R_ARGt_bulg
+                         - R_HXANt2_bulg - R_MALt6_ther - R_HISt6_bulg
+                         - R_ASNt6_bulg - R_FOLt_bulg - R_ACt6_bulg
+                         - R_BTNt2i_bulg - R_GALt6_bulg - 3 R_ATPS3r_bulg
+                         - R_CYSt6_ther - R_CYSt6_bulg - R_TRPt6_ther
+                         - R_PROt6_bulg - R_PHEt6_bulg + R_NH4DISex_bulg
+                         - R_THRt6_ther - R_GLYt6_bulg - R_CITt6_ther
+                         - R_HISt6_ther - R_SERt6_bulg - R_VALt6_bulg
+                         - R_XANt2_bulg - R_PYDAMt_bulg - R_ALA_Lt6_ther
+                         - R_SUCCt6_bulg - R_SUCCt6_ther - R_GLUt6_ther
+                         - R_ILEt6_ther - R_FOLt_ther - R_RIBFLVt2_bulg
                          - R_LYSt6_ther - R_PHEt6_ther - R_THRt6_bulg
                          - R_ACt6_ther - R_ALA_Lt6_bulg - R_EX_h_e_
                          - R_URAt2_ther - R_FORt2_ther - R_L_LACt2_ther
@@ -1288,12 +1288,12 @@ Subject To
  M_hxan_e:               - R_EX_hxan_e_ - R_HXANt2_bulg  = 0
  M_ibcoa_c_bulg:         - R_KAS5_bulg - R_KAS1_bulg - R_KAS6_bulg  = 0
  M_icit_c_ther:          - R_ICDHx_ther + R_ACONT_ther - R_ICDHy_ther  = 0
- M_idp_c_bulg:           R_CYTDK3_bulg - R_NDPK9_bulg + R_URIK3_bulg  = 0
+ M_idp_c_bulg:           - R_NDPK9_bulg + R_CYTDK3_bulg + R_URIK3_bulg  = 0
  M_idp_c_ther:           R_CYTDK3_ther + R_URIK3_ther - R_NDPK9_ther  = 0
  M_ile_L_c_bulg:         M_ile_L_c_bulg_src + 0.0206098522514103 R_CASL_bulg
                          + 0.041 R_PEPTL_bulg - R_ILETA_bulg - R_ILETRS_bulg
                          + R_ILEt6_bulg  = 0
- M_ile_L_c_ther:         R_ILEt6_ther - R_ILETA_ther
+ M_ile_L_c_ther:         - R_ILETA_ther + R_ILEt6_ther
                          + 0.0206098522514103 R_CASL_ther - R_ILETRS_ther
                          + M_ile_L_c_ther_src + 0.041 R_PEPTL_ther
                          + R_ILEabc_ther  = 0
@@ -1315,7 +1315,7 @@ Subject To
                          + R_DPMVD_bulg - R_GRTT_bulg  = 0
  M_ipdp_c_ther:          R_DPMVD_ther - 8 R_UDCPDPS_ther - R_IPDDI_ther
                          - R_GRTT_ther - R_DMATT_ther  = 0
- M_itp_c_bulg:           - R_CYTDK3_bulg + R_NDPK9_bulg - R_URIK3_bulg  = 0
+ M_itp_c_bulg:           R_NDPK9_bulg - R_CYTDK3_bulg - R_URIK3_bulg  = 0
  M_itp_c_ther:           - R_CYTDK3_ther - R_URIK3_ther + R_NDPK9_ther  = 0
  M_ivcoa_c_bulg:         - R_KAS3_bulg - R_KAS9_bulg - R_KAS11_bulg  = 0
  M_k_c_ther:             R_Kt2_ther  = 0
@@ -1399,8 +1399,8 @@ Subject To
  M_mercppyr_c_ther:      R_ASPTA4_ther  = 0
  M_met_D_2_c_ther:       R_METDabc_2_ther  = 0
  M_met_D_2_e:            - R_METDabc_2_ther  = 0
- M_met_L_c_bulg:         - R_METAT_bulg + R_FMETDF_bulg + M_met_L_c_bulg_src
-                         - R_METTRS_bulg + R_METS_bulg + R_MTHPTGHM_bulg
+ M_met_L_c_bulg:         - R_METAT_bulg - R_METTRS_bulg + R_FMETDF_bulg
+                         + M_met_L_c_bulg_src + R_METS_bulg + R_MTHPTGHM_bulg
                          + 0.0737678055718706 R_CASL_bulg + R_HCYSMT_bulg
                          + 0.023 R_PEPTL_bulg + R_METt6_bulg  = 0
  M_met_L_c_ther:         - R_METAT_ther + R_METabc_ther + R_METS_ther
@@ -1499,9 +1499,9 @@ Subject To
                          + 15 R_KAS17_bulg  = 0
  M_nadp_c_ther:          R_HHDR7_ther + R_HDER4_ther - R_TDPDRR_ther
                          + R_SHK3D_ther + R_UAPGR_ther + R_GMPR_ther
-                         - R_GLUDy_ther - R_HSDy_ther + R_HOCR3_ther
-                         - R_METFR_ther + R_HDDR5_ther + R_DPR_ther
-                         - R_DHFOR2_ther + R_HHYR2_ther - R_AGPR_ther
+                         - R_HSDy_ther + R_HOCR3_ther - R_METFR_ther
+                         + R_HDDR5_ther + R_DPR_ther - R_DHFOR2_ther
+                         + R_HHYR2_ther - R_GLUDy_ther - R_AGPR_ther
                          + R_KARA2_ther + R_NADK_ther + R_G5SD_ther
                          + R_TRDR_ther + R_DHFR_ther + R_DHDPRy_ther
                          + R_HTDR6_ther - R_GTHRD_ther - R_KARA1_ther
@@ -1523,9 +1523,9 @@ Subject To
                          + R_SSALy_bulg - 12 R_KAS6_bulg - 15 R_KAS17_bulg  = 0
  M_nadph_c_ther:         - R_HHDR7_ther - R_HDER4_ther + R_TDPDRR_ther
                          - R_SHK3D_ther - R_UAPGR_ther - R_GMPR_ther
-                         + R_GLUDy_ther + R_HSDy_ther - R_HOCR3_ther
-                         + R_METFR_ther - R_HDDR5_ther - R_DPR_ther
-                         + R_DHFOR2_ther - R_HHYR2_ther + R_AGPR_ther
+                         + R_HSDy_ther - R_HOCR3_ther + R_METFR_ther
+                         - R_HDDR5_ther - R_DPR_ther + R_DHFOR2_ther
+                         - R_HHYR2_ther + R_GLUDy_ther + R_AGPR_ther
                          - R_KARA2_ther - R_G5SD_ther - R_TRDR_ther
                          - R_DHFR_ther - R_DHDPRy_ther - R_HTDR6_ther
                          + R_GTHRD_ther + R_KARA1_ther - R_FLVR_ther
@@ -1544,9 +1544,9 @@ Subject To
                          + R_NNAMr_bulg - R_NADS1_bulg + R_GMPR_bulg
                          + R_ASNN_bulg + R_DCYTD_bulg  = 0
  M_nh4_c_ther:           R_CYSTL_ther + R_G6PDA_ther - R_NADS1_ther
-                         + R_NH4t_ther - R_ASNS2_ther + R_GMPR_ther
-                         + R_GLUDy_ther + R_NNAMr_ther + R_THRD_L_ther
-                         - R_GLNS_ther + R_SERD_L_ther + R_CSND_ther
+                         + R_NH4t_ther + R_GMPR_ther - R_ASNS2_ther
+                         + R_NNAMr_ther + R_THRD_L_ther - R_GLNS_ther
+                         + R_SERD_L_ther + R_CSND_ther + R_GLUDy_ther
                          + R_CYTD_ther + R_ALAD_Lr_ther + R_ASNN_ther
                          + R_SERD_D_ther + R_CYSTGL_ther + R_DCYTD_ther
                          + 2 R_UREA2_ther + R_ADA_ther + R_HISD1_ther
@@ -1561,7 +1561,7 @@ Subject To
  M_o2_c_ther:            R_SOD_ther - R_NOX2_ther - R_DHORD1_ther + R_O2t_ther
                          - R_NPPDO_ther + 0.5 R_AHMMPS_ther - R_NOX1_ther
                          - R_PYROX_ther - R_CPPPGO_ther  = 0
- M_o2_e:                 - R_O2t_ther - R_EX_o2_e_  = 0
+ M_o2_e:                 - R_EX_o2_e_ - R_O2t_ther  = 0
  M_oaa_c_bulg:           R_PPC_bulg  = 0
  M_oaa_c_ther:           R_ASPTA1_ther + R_PPC_ther - R_CS_ther  = 0
  M_ocdacp_c_bulg:        - 0.02 R_AGAT_LPL_bulg + R_OCDMAT8_bulg
@@ -1637,14 +1637,13 @@ Subject To
                          + R_PGLYCP_bulg + R_EPPP_bulg + R_PRAIS_bulg
                          + R_CTPS2_bulg - R_PUNP2_bulg + R_FTHFCL_bulg
                          + R_DPMVD_bulg + R_PTRCabc_bulg + R_SPMDabc_bulg
-                         + R_PPNCL_bulg + R_UAGCVT_bulg + 0.111 R_CASabc_bulg
-                         + R_MALTabc_bulg - R_PKL_bulg + R_ASPCT_bulg
-                         + R_UAAGDS_bulg + R_ARGabc_bulg - R_PUNP6_bulg
-                         + R_ATPM_bulg + R_PGPP_LPL_bulg
+                         - R_PUNP7_bulg + R_PPNCL_bulg + R_UAGCVT_bulg
+                         + 0.111 R_CASabc_bulg + R_MALTabc_bulg - R_PKL_bulg
+                         + R_ASPCT_bulg + R_UAAGDS_bulg + R_ARGabc_bulg
+                         - R_PUNP6_bulg + R_ATPM_bulg + R_PGPP_LPL_bulg
                          + 2.306 R_PROTS_LPL_v60_bulg + R_NAabcO_bulg
-                         + R_PPC_bulg - R_PUNP7_bulg + 25 R_DARTAL_bulg
-                         - R_PYROX_bulg - R_DURIPP_bulg + R_FTHFL_bulg
-                         + R_CBPS_bulg  = 0
+                         + R_PPC_bulg + 25 R_DARTAL_bulg - R_PYROX_bulg
+                         - R_DURIPP_bulg + R_FTHFL_bulg + R_CBPS_bulg  = 0
  M_pi_c_ther:            R_NTD11_ther + R_MALTTTRabc_ther + R_OCBT_ther
                          + R_PSP_L_ther - R_PUNP2_ther + R_VALabc_ther
                          + R_METAT_ther + 2 R_PIabc_ther + R_CHORS_ther
@@ -1652,8 +1651,8 @@ Subject To
                          + R_PGPP_LLA_ther - R_GLCP_ther + R_PRAGS_ther
                          + R_NTD7_ther + R_NTD9_ther + R_PAP_LLA_ther
                          + R_NAMNPP_ther + R_DPMVD_ther + R_CTPS2_ther
-                         + R_SPMDabc_ther + R_ACTPASE_ther + R_ASPCT_ther
-                         + 1.37 R_DNAS_STU_ther + R_NTD10_ther + R_NTD4_ther
+                         + R_SPMDabc_ther + R_ACTPASE_ther - R_PUNP3_ther
+                         + R_ASPCT_ther + 1.37 R_DNAS_STU_ther + R_NTD4_ther
                          - R_PUNP7_ther + 2.306 R_PROTS_STR_ther
                          - R_ATPS3r_ther + R_ASPabc_ther + R_MALTHXabc_ther
                          + R_MALTPTabc_ther + R_PRFGS_ther + R_PPNCL_ther
@@ -1661,13 +1660,13 @@ Subject To
                          + R_PRAIS_ther + R_GLNabc_ther + R_UDCPDP_ther
                          + R_UAGCVT_ther + R_GLNS_ther + R_PTRCabc_ther
                          + R_NTD8_ther - R_PUNP5_ther + R_THMabc_ther
-                         + R_METSRabc_ther - R_PUNP3_ther + R_NTD2_ther
-                         + R_SUC6PH_ther + R_MNabc_ther - R_AGPR_ther
-                         + R_DNMPPA_ther + R_NTD1_ther - R_PTAr_ther
-                         - R_GAPD_ther + R_PSCVT_ther + R_GLYBabc_ther
-                         + 2 R_PPA_ther + R_G5SD_ther + R_DHFS_ther
-                         + R_UAMAGS_ther - R_PUNP4_ther + R_THFGLUS_ther
-                         + R_FERRICHabc_ther - R_DURIPP_ther + R_METSabc_ther
+                         + R_METSRabc_ther + R_NTD2_ther + R_SUC6PH_ther
+                         + R_MNabc_ther - R_AGPR_ther + R_DNMPPA_ther
+                         + R_NTD1_ther - R_PTAr_ther - R_GAPD_ther
+                         + R_PSCVT_ther + R_GLYBabc_ther + 2 R_PPA_ther
+                         + R_G5SD_ther + R_DHFS_ther + R_UAMAGS_ther
+                         - R_PUNP4_ther + R_THFGLUS_ther + R_FERRICHabc_ther
+                         - R_DURIPP_ther + R_METSabc_ther
                          + 18.15 R_biomass_STR_ther + 0.4 R_RNAS_LLA_ther
                          + 6 R_DALTAL_LLA_ther + R_THRS_ther + R_UAAGDS_ther
                          + R_GLUabc_ther + R_UAAGLS1_ther + R_UGLDDS1_ther
@@ -1675,12 +1674,12 @@ Subject To
                          + R_ADSS_ther + R_AHMMPS_ther + R_PPC_ther
                          + R_ATPM_ther + R_PROLBabc_ther + R_NTD6_ther
                          + R_LEUabc_ther + R_ARGabc_ther + 0.111 R_CASabc_ther
-                         + R_DAHPS_ther - R_PUNP8_ther + R_PRASCS_ther
-                         + R_CBPS_ther + R_NTD5_ther - R_ASAD_ther
-                         + R_METDabc_2_ther + R_UAMAS_ther + R_FTHFCL_ther
-                         + R_MALTabc_ther - R_PUNP1_ther + R_NTD3_ther
-                         + R_GLNTAL_ther - R_PYROX_ther + R_CTPS1_1_ther
-                         + R_FTHFL_ther + R_ILEabc_ther  = 0
+                         + R_DAHPS_ther - R_PUNP8_ther + R_NTD10_ther
+                         + R_PRASCS_ther + R_CBPS_ther + R_NTD5_ther
+                         - R_ASAD_ther + R_METDabc_2_ther + R_UAMAS_ther
+                         + R_FTHFCL_ther + R_MALTabc_ther - R_PUNP1_ther
+                         + R_NTD3_ther + R_GLNTAL_ther - R_PYROX_ther
+                         + R_CTPS1_1_ther + R_FTHFL_ther + R_ILEabc_ther  = 0
  M_pi_e:                 - R_PIabc_ther - R_PIabc_bulg - R_EX_pi_e_  = 0
  M_pnto_R_c_bulg:        - R_PNTK_bulg + R_PNTOt2_bulg  = 0
  M_pnto_R_c_ther:        - R_PNTK_ther + R_PNTOt2_ther  = 0
@@ -1690,27 +1689,27 @@ Subject To
  M_pphn_c_ther:          R_CHORM_ther - R_PPNDH_ther - R_PPND_ther  = 0
  M_ppi_c_bulg:           R_RNAS_LPL_bulg + R_METAT_bulg + R_DNAS_LPL_bulg
                          + R_ALATRS_bulg + R_CYSTRS_bulg + R_ASNTRS_bulg
-                         + R_G1PTMT_bulg + R_ARGTRS_bulg + 8 R_UDCPDPS_bulg
-                         + R_UPPRT_bulg + R_NNAT_bulg + R_LEUTRS_bulg
-                         + R_G3PCT_bulg - R_PPA_bulg + R_SERTRS_bulg
-                         + R_DHPS3_bulg + R_GUAPRT_bulg + R_FMNAT_bulg
-                         + R_HXPRT_bulg + R_ASPTRS_bulg + R_DNTPPA_bulg
-                         + R_VALTRS_bulg + R_METTRS_bulg + R_ASNS2_bulg
-                         + R_PROTRS_bulg + R_HISTRS_bulg + R_MOADCST_bulg
-                         + R_PHETRS_bulg + R_GLYTRS_bulg + R_UAGDP_bulg
-                         + R_ADK2_bulg + R_DMATT_bulg - R_ORPT_bulg
-                         + R_GMPS2_bulg + R_PTPAT_bulg + R_THRTRS_bulg
-                         + R_DUTPDP_bulg + R_DASYN_LPL_bulg + R_NADS1_bulg
-                         + R_GLUTRS_bulg + R_ADPT_bulg + R_XPPT_bulg
-                         + R_LYSTRS_bulg + R_TYRTRS_bulg + R_GRTT_bulg
-                         + R_GALU_bulg + R_ILETRS_bulg + R_ASNS1_bulg
+                         + R_G1PTMT_bulg + R_ARGTRS_bulg + R_ASNS1_bulg
+                         + 8 R_UDCPDPS_bulg + R_UPPRT_bulg + R_NNAT_bulg
+                         + R_LEUTRS_bulg + R_G3PCT_bulg - R_PPA_bulg
+                         + R_SERTRS_bulg + R_DHPS3_bulg + R_METTRS_bulg
+                         + R_GUAPRT_bulg + R_FMNAT_bulg + R_HXPRT_bulg
+                         + R_ASPTRS_bulg + R_DNTPPA_bulg + R_VALTRS_bulg
+                         + R_ASNS2_bulg + R_PROTRS_bulg + R_HISTRS_bulg
+                         + R_MOADCST_bulg + R_PHETRS_bulg + R_GLYTRS_bulg
+                         + R_UAGDP_bulg + R_ADK2_bulg + R_DMATT_bulg
+                         - R_ORPT_bulg + R_GMPS2_bulg + R_PTPAT_bulg
+                         + R_THRTRS_bulg + R_DUTPDP_bulg + R_DASYN_LPL_bulg
+                         + R_NADS1_bulg + R_GLUTRS_bulg + R_ADPT_bulg
+                         + R_XPPT_bulg + R_LYSTRS_bulg + R_TYRTRS_bulg
+                         + R_GRTT_bulg + R_GALU_bulg + R_ILETRS_bulg
                          + R_TRPTRS_bulg - R_PPIK_bulg + R_NAPRT_bulg
                          + R_GLUPRT_bulg  = 0
  M_ppi_c_ther:           R_GLUTRS_ther - R_ORPT_ther + R_HISTRS_ther
                          + R_METAT_ther + R_GALT_ther + R_NADS1_ther
-                         + R_PTPAT_ther + R_ASNS2_ther + R_HXPRT_ther
-                         + R_ARGSS_ther + R_NAMNPP_ther + R_ADK2_ther
-                         + 8 R_UDCPDPS_ther + R_NMNS_ther + R_DNAS_STU_ther
+                         + R_PTPAT_ther + R_HXPRT_ther + R_ARGSS_ther
+                         + R_NAMNPP_ther + R_ADK2_ther + 8 R_UDCPDPS_ther
+                         + R_ASNS2_ther + R_NMNS_ther + R_DNAS_STU_ther
                          + R_VALTRS_ther + R_FMNAT_ther + R_DNTPPA_ther
                          + R_CYSTRS_ther + R_GUAPRT_ther + R_THRTRS_ther
                          + R_PZS_ther + R_PHETRS_ther + R_G1PTMT_ther
@@ -1784,8 +1783,8 @@ Subject To
                          + R_ALATA_L_ther - R_PYROX_ther  = 0
  M_r1p_c_bulg:           R_PUNP3_bulg + R_PUNP5_bulg + R_PUNP1_bulg
                          + R_PUNP7_bulg  = 0
- M_r1p_c_ther:           - R_PPM_ther + R_PUNP7_ther + R_PUNP5_ther
-                         + R_PUNP3_ther + R_PUNP8_ther + R_PUNP1_ther  = 0
+ M_r1p_c_ther:           - R_PPM_ther + R_PUNP3_ther + R_PUNP7_ther
+                         + R_PUNP5_ther + R_PUNP8_ther + R_PUNP1_ther  = 0
  M_r5p_c_bulg:           R_RBK_bulg + R_ADPRDP_bulg - R_YUMPS_bulg
                          - R_PRPPS_bulg - R_RPI_bulg  = 0
  M_r5p_c_ther:           R_PPM_ther + R_RBK_ther - R_TKT1_ther + R_ADPRDP_ther
@@ -2006,9 +2005,9 @@ Subject To
  M_ump_c_bulg:           R_UPPRT_bulg + R_OMPDC_bulg + R_PAPPT5_bulg
                          + R_ACGAMT_bulg + R_CPSS_LPL_bulg + R_URIK2_bulg
                          + R_URIK1_bulg + R_URIK3_bulg - R_URIDK1_bulg  = 0
- M_ump_c_ther:           R_URIK1_ther + R_URIK3_ther + R_USHD_ther
-                         + R_OMPDC_ther + R_PAPPT1_ther + R_ACGAMT_ther
-                         - R_NTD2_ther + R_URIK2_ther - R_URIDK1_ther
+ M_ump_c_ther:           R_URIK2_ther + R_URIK1_ther + R_URIK3_ther
+                         + R_USHD_ther + R_OMPDC_ther + R_PAPPT1_ther
+                         + R_ACGAMT_ther - R_NTD2_ther - R_URIDK1_ther
                          + R_CPSS_LLA_ther + R_UPPRT_ther  = 0
  M_unGTAglc_c_bulg:      R_GTAglcS_bulg - R_GTAPGL_bulg  = 0
  M_unaga_c_bulg:         R_ACGAMT_bulg - R_UNAGAMAMT_bulg  = 0
@@ -2021,12 +2020,12 @@ Subject To
                          - R_YUMPS_ther - R_UPPRT_ther  = 0
  M_ura_e:                - R_URAt2_bulg - R_EX_ura_e_ - R_URAt2_ther  = 0
  M_urcan_c_ther:         R_HISD1_ther - R_URCN_ther  = 0
- M_urea_c_ther:          R_AGMT_ther + R_UREAt_ther - R_UREA2_ther  = 0
+ M_urea_c_ther:          R_AGMT_ther - R_UREA2_ther + R_UREAt_ther  = 0
  M_urea_e:               - R_EX_urea_e_ - R_UREAt_ther  = 0
  M_uri_c_bulg:           R_CYTD_bulg - R_PYRNS1_bulg - R_URIK2_bulg
                          - R_URIK1_bulg - R_URIK3_bulg  = 0
- M_uri_c_ther:           - R_URIK1_ther - R_URIK3_ther + R_NTD2_ther
-                         + R_CYTD_ther - R_URIK2_ther  = 0
+ M_uri_c_ther:           - R_URIK2_ther - R_URIK1_ther - R_URIK3_ther
+                         + R_NTD2_ther + R_CYTD_ther  = 0
  M_utp_c_bulg:           - 0.22 R_RNAS_LPL_bulg - R_CTPS1_1_bulg - R_UAGDP_bulg
                          - R_CTPS2_bulg + R_NDPK2_bulg - R_RNTR4_bulg
                          - R_GALU_bulg  = 0
@@ -2044,15 +2043,15 @@ Subject To
                          - R_EX_val_L_e_  = 0
  M_valtrna_c_bulg:       R_VALTRS_bulg - 0.06 R_PROTS_LPL_v60_bulg  = 0
  M_valtrna_c_ther:       R_VALTRS_ther - 0.052 R_PROTS_STR_ther  = 0
- M_xan_c_bulg:           R_PNS4_bulg + R_XANt2_bulg - R_XPPT_bulg
-                         + R_PUNP7_bulg  = 0
+ M_xan_c_bulg:           R_PNS4_bulg + R_XANt2_bulg + R_PUNP7_bulg
+                         - R_XPPT_bulg  = 0
  M_xan_c_ther:           R_PUNP7_ther - R_XPPT_ther  = 0
  M_xan_e:                - R_EX_xan_e_ - R_XANt2_bulg  = 0
  M_xmp_c_bulg:           - R_GMPS2_bulg + R_XPPT_bulg + R_IMPD_bulg  = 0
- M_xmp_c_ther:           - R_NTD10_ther + R_XPPT_ther - R_GMPS2_ther
-                         + R_IMPD_ther  = 0
+ M_xmp_c_ther:           R_XPPT_ther - R_GMPS2_ther + R_IMPD_ther
+                         - R_NTD10_ther  = 0
  M_xtsn_c_bulg:          - R_PNS4_bulg - R_PUNP7_bulg  = 0
- M_xtsn_c_ther:          R_NTD10_ther - R_PUNP7_ther  = 0
+ M_xtsn_c_ther:          - R_PUNP7_ther + R_NTD10_ther  = 0
  M_xu5p_D_c_bulg:        - R_PKL_bulg + R_RPE_bulg  = 0
  M_xu5p_D_c_ther:        - R_TKT2_ther - R_TKT1_ther + R_RPE_ther  = 0
  M_zn2_c_bulg:           R_ZN2abc2_bulg  = 0
@@ -2088,7 +2087,6 @@ Subject To
  ind_R_GLNabc_ther:     bin_R_GLNabc_ther = 0 -> R_GLNabc_ther  = 0
  ind_R_PROt6_ther:      bin_R_PROt6_ther = 0 -> R_PROt6_ther  = 0
  ind_R_ALA_Lt6_ther:    bin_R_ALA_Lt6_ther = 0 -> R_ALA_Lt6_ther  = 0
- ind_R_ILEt6_ther:      bin_R_ILEt6_ther = 0 -> R_ILEt6_ther  = 0
  ind_R_TRPt6_ther:      bin_R_TRPt6_ther = 0 -> R_TRPt6_ther  = 0
  ind_R_GLYt6_ther:      bin_R_GLYt6_ther = 0 -> R_GLYt6_ther  = 0
  ind_R_GLUt6_ther:      bin_R_GLUt6_ther = 0 -> R_GLUt6_ther  = 0
@@ -2101,6 +2099,7 @@ Subject To
  ind_R_LEUabc_ther:     bin_R_LEUabc_ther = 0 -> R_LEUabc_ther  = 0
  ind_R_TYRt6_ther:      bin_R_TYRt6_ther = 0 -> R_TYRt6_ther  = 0
  ind_R_ARGabc_ther:     bin_R_ARGabc_ther = 0 -> R_ARGabc_ther  = 0
+ ind_R_ILEt6_ther:      bin_R_ILEt6_ther = 0 -> R_ILEt6_ther  = 0
  ind_R_THRt6_ther:      bin_R_THRt6_ther = 0 -> R_THRt6_ther  = 0
  ind_R_ARGt_ther:       bin_R_ARGt_ther = 0 -> R_ARGt_ther  = 0
  ind_R_ILEabc_ther:     bin_R_ILEabc_ther = 0 -> R_ILEabc_ther  = 0
@@ -2165,7 +2164,7 @@ Bounds
       R_ACACT1r_bulg Free
       R_SERt6_ther Free
       R_PUNP3_bulg Free
-      R_GLUDy_ther Free
+      R_PUNP3_ther Free
       R_AHSERL3_ther Free
       R_ASPTA6_ther Free
       R_LCTSt6_ther = 0
@@ -2178,7 +2177,6 @@ Bounds
       R_NNAMr_ther Free
       R_HSDy_ther Free
       R_PMANM_bulg Free
-      R_ILEt6_ther Free
       R_PUNP7_ther Free
  -Inf <= R_EX_cas <= 0
       R_ALCD19_L_bulg Free
@@ -2190,6 +2188,7 @@ Bounds
       R_DHORD6_ther Free
       R_GLUt6_bulg Free
       R_2HXICDH_bulg Free
+      R_IPDDI_bulg Free
       R_LDH_L_ther Free
       R_ENO_ther Free
       R_MALt6_bulg Free
@@ -2221,8 +2220,7 @@ Bounds
  4.41093922626 <= R_EX_phe_L_e_ <= 8.19174427734
       R_DHORTS_ther Free
       R_TKT1_ther Free
-      R_PUNP3_ther Free
-      R_IPDDI_bulg Free
+      R_EX_h2o_e_ Free
       R_NDPK6_bulg Free
       R_GALt6_bulg Free
       R_ATPS3r_bulg Free
@@ -2239,7 +2237,7 @@ Bounds
       R_HCO3E_bulg Free
       R_ILETA_ther Free
       R_EX_pnto_R_e_ >= -1000
-      R_LCTSGALex_ther Free
+      R_GLUDy_ther Free
  647.615305142 <= R_EX_for_e_ <= 1202.71413812
       R_ALAR_ther Free
       R_NDPK8_ther Free
@@ -2279,7 +2277,6 @@ Bounds
       R_ORPT_bulg Free
       R_PHETA1_bulg Free
       R_EX_btn_e_ >= -1000
-      R_EX_h2o_e_ Free
  5.24737908822 <= R_EX_met_L_e_ <= 9.7451325924
       R_NDPK2_ther Free
       R_ASPTA1_ther Free
@@ -2305,7 +2302,7 @@ Bounds
       R_ALA_Lt6_ther Free
       R_SUCCt6_bulg Free
       R_PRPPS_ther Free
-      R_UREAt_ther Free
+      R_EX_o2_e_ = 0
       R_O2t_ther Free
  576.164470461 <= R_biomass_STR_ther <= 1070.01973086
       R_ASPTA4_ther Free
@@ -2327,7 +2324,9 @@ Bounds
       R_PUNP2_bulg Free
       R_EX_glc_e_ = 0
       R_OXFOt4_ther Free
+      R_LCTSGALex_ther Free
       R_NDPK9_ther Free
+      R_ILEt6_ther Free
       R_DHQD_ther Free
       R_FOLt_ther Free
       R_NDPK5_bulg Free
@@ -2343,6 +2342,7 @@ Bounds
       R_LYSt6_ther Free
       R_KARA1_ther Free
       R_SUCD3BC_bulg Free
+      R_PUNP7_bulg Free
       R_NDPK1_ther Free
       R_FBA_ther Free
       R_ALAALA_ther Free
@@ -2394,7 +2394,7 @@ Bounds
       R_HMGCOAR_ther Free
       R_APAT_ther Free
       R_TYRt6_ther Free
-      R_EX_o2_e_ = 0
+      R_ASPK_ther Free
       R_PNTOt2_ther Free
       R_MTHFD_ther Free
       R_PPM2_ther Free
@@ -2402,10 +2402,9 @@ Bounds
       R_ILETA_bulg Free
       R_PYDAMt_ther Free
       R_PUNP8_ther Free
-      R_ASPK_ther Free
       R_P5CRr_ther Free
       R_PRASCS_ther Free
-      R_PUNP7_bulg Free
+      R_UREAt_ther Free
       R_HMGCOAS_bulg Free
       R_LEUt6_bulg Free
       R_MAN6PI_bulg Free
@@ -2496,7 +2495,6 @@ Bounds
  0 <= bin_R_GLNabc_ther <= 1
  0 <= bin_R_PROt6_ther <= 1
  0 <= bin_R_ALA_Lt6_ther <= 1
- 0 <= bin_R_ILEt6_ther <= 1
  0 <= bin_R_TRPt6_ther <= 1
  0 <= bin_R_GLYt6_ther <= 1
  0 <= bin_R_GLUt6_ther <= 1
@@ -2509,6 +2507,7 @@ Bounds
  0 <= bin_R_LEUabc_ther <= 1
  0 <= bin_R_TYRt6_ther <= 1
  0 <= bin_R_ARGabc_ther <= 1
+ 0 <= bin_R_ILEt6_ther <= 1
  0 <= bin_R_THRt6_ther <= 1
  0 <= bin_R_ARGt_ther <= 1
  0 <= bin_R_ILEabc_ther <= 1
@@ -2521,9 +2520,9 @@ Binaries
  bin_R_TRPt6_bulg  bin_R_ASNt6_bulg  bin_R_PROt6_bulg  bin_R_LEUt6_bulg 
  bin_R_gln_export_bulg  bin_R_METt6_bulg  bin_R_VALabc_ther  bin_R_LEUt6_ther 
  bin_R_SERt6_ther  bin_R_VALt6_ther  bin_R_METabc_ther  bin_R_GLNabc_ther 
- bin_R_PROt6_ther  bin_R_ALA_Lt6_ther  bin_R_ILEt6_ther  bin_R_TRPt6_ther 
- bin_R_GLYt6_ther  bin_R_GLUt6_ther  bin_R_ASPabc_ther  bin_R_GLUabc_ther 
- bin_R_LYSt6_ther  bin_R_PHEt6_ther  bin_R_CYSt6_ther  bin_R_HISt6_ther 
- bin_R_LEUabc_ther  bin_R_TYRt6_ther  bin_R_ARGabc_ther  bin_R_THRt6_ther 
+ bin_R_PROt6_ther  bin_R_ALA_Lt6_ther  bin_R_TRPt6_ther  bin_R_GLYt6_ther 
+ bin_R_GLUt6_ther  bin_R_ASPabc_ther  bin_R_GLUabc_ther  bin_R_LYSt6_ther 
+ bin_R_PHEt6_ther  bin_R_CYSt6_ther  bin_R_HISt6_ther  bin_R_LEUabc_ther 
+ bin_R_TYRt6_ther  bin_R_ARGabc_ther  bin_R_ILEt6_ther  bin_R_THRt6_ther 
  bin_R_ARGt_ther  bin_R_ILEabc_ther  bin_R_METt6_ther 
 End
