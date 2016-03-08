@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 421 2016-03-08 12:55:24Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 422 2016-03-08 16:44:14Z bgoli $)
 
 """
 
@@ -263,6 +263,25 @@ class DBTools(object):
             return None
         else:
             return dout
+
+    def getCell(self, table, col, rid, cell):
+        """
+        Get the table cell which correspond to rid in column. Returns the value or None
+
+         - *table* the database table
+         - *col* the column id
+         - *rid* the row index id
+         - *cell* the column of the cell you want tp extract
+
+        """
+        sql = "SELECT {} FROM {} WHERE {}=\"{}\"".format(cell, table, col, rid)
+        #print(sql)
+        data = None
+        try:
+            data = str(self.db_cursor.execute(sql).fetchone()[0])
+        except AttributeError:
+            return None
+        return data
 
     def getTable(self, table, colOut=False):
         """
