@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 420 2016-03-08 11:56:08Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 421 2016-03-08 12:55:24Z bgoli $)
 
 """
 
@@ -191,10 +191,10 @@ class DBTools(object):
         self.db_cursor.execute("SELECT count(*) FROM {} WHERE {}=\"{}\"".format(table, col, rid))
         data = self.db_cursor.fetchone()[0]
         if data == 0:
-            print('There is no component named {}'.format(rid))
+            #print('There is no component named {}'.format(rid))
             return False
         else:
-            print('Component {} found in {} row(s)'.format(rid, data))
+            #print('Component {} found in {} row(s)'.format(rid, data))
             return True
 
     def executeSQL(self, sql):
