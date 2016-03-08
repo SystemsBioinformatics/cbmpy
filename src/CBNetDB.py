@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 419 2016-03-07 16:31:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 420 2016-03-08 11:56:08Z bgoli $)
 
 """
 
@@ -28,7 +28,7 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, numpy, re, webbrowser
+import os, time, re, webbrowser
 
 HAVE_SQLITE2 = False
 HAVE_SQLITE3 = False
@@ -48,9 +48,10 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
-class DBTools:
+class DBTools(object):
     """
-    Some user friendly tools to work with SQLite2 DB's
+    Tools to work with SQLite DB's (optimized, no SQL required).
+
     """
 
     sqlite = None
@@ -96,7 +97,6 @@ class DBTools:
 
         Effectively writes CREATE TABLE "table" (<id> <type>, gene TEXT PRIMARY KEY, aa_seq TEXT, nuc_seq TEXT, aa_len INT, nuc_len INT) % table
         """
-
         SQL = 'CREATE TABLE %s (' % table
         for c in sqlcols:
             SQL += ' %s,' % c
@@ -117,18 +117,27 @@ class DBTools:
                                     (str(ecg), str(prot2), str(gene2), int(len(prot2)), int(len(gene2))) )
 
          - *table* the DB table name
-         - *data* a list of (column_id, value) pairs
+         - *data* a dictionary of {id:value} pairs
          - *commit* whether to commit the data insertions
 
         """
-
         colstr = "("
         valstr = "VALUES ("
         vals = []
-        for d in data:
-            colstr += '%s, ' % d[0]
-            valstr += '?, '
-            vals.append(d[1])
+        # I want to use dictionaries but this just keeps things backwards compatible for a while
+        try:
+            data.keys()
+            for d in data:
+                colstr += '%s, ' % d
+                valstr += '?, '
+                vals.append(data[d])
+        except AttributeError:
+            print('\n\nWARNING: data now uses a dictionary as input please update your code - see docstring for details\n')
+            time.sleep(3)
+            for d in data:
+                colstr += '%s, ' % d[0]
+                valstr += '?, '
+                vals.append(d[1])
         colstr = colstr[:-2] + ')'
         valstr = valstr[:-2] + ')'
         sql = "INSERT INTO %s %s %s" % (table, colstr, valstr)
@@ -139,22 +148,38 @@ class DBTools:
             if commit:
                 self.db_cursor.connection.commit()
             return True
-        except Exception as ex:
-            print(ex)
+        except AttributeError:
             return False
 
-
-    def updateData(self, table, id):
+    def updateData(self, table, col, rid, data, commit=True):
         """
-        Update already defined data (primary key)
+        Update already defined data
 
          - *table* the table name
-         - *id* the table row to search for
+         - *col* the column name
+         - *rid* the row id to update
+         - *data* a dictionary of {id:value} pairs
+         - *commit* whether to commit the data updates
+
+         UPDATE COMPANY SET ADDRESS = 'Texas' WHERE ID = 6;
 
         """
-        raise NotImplementedError
 
-    def checkEntry(self, table, col, rid):
+        sql = 'UPDATE {} SET '.format(table)
+        for d in data:
+            sql += '{}=\"{}\", '.format(d, str(data[d]))
+        sql = sql[:-2] + ' WHERE {}=\"{}\"'.format(col, rid)
+
+        #print(sql)
+        try:
+            self.db_cursor.execute(sql)
+            if commit:
+                self.db_cursor.connection.commit()
+            return True
+        except AttributeError:
+            return False
+
+    def checkEntryInColumn(self, table, col, rid):
         """
         Check if an entry exists in a table
 
@@ -163,13 +188,13 @@ class DBTools:
         - *rid* the row to search for
 
         """
-        self.db_cursor.execute("SELECT count(*) FROM {} WHERE {}={}".format(table, rid, col))
+        self.db_cursor.execute("SELECT count(*) FROM {} WHERE {}=\"{}\"".format(table, col, rid))
         data = self.db_cursor.fetchone()[0]
         if data == 0:
-            print('There is no component named {}'.format(name))
+            print('There is no component named {}'.format(rid))
             return False
         else:
-            print('Component {} found in {} row(s)'.format(name, data))
+            print('Component {} found in {} row(s)'.format(rid, data))
             return True
 
     def executeSQL(self, sql):
@@ -182,10 +207,62 @@ class DBTools:
         try:
             self.db_cursor.execute(sql)
             return True
-        except Exception as ex:
+        except AttributeError as ex:
             print('Error executing command')
             print(ex)
             return False
+
+    def getColumns(self, table, cols):
+        """
+        Fetch the contents of one or more columns of data in a table
+
+         - *table* the database table
+         - *cols* a list of one or more column id's
+
+        """
+        sql = "SELECT "
+        for c in cols:
+            sql += '{}, '.format(str(c))
+        sql = sql[:-2]
+        sql += ' FROM {}'.format(table)
+        dout = [[] for i in range(len(cols))]
+        #print(sql)
+        #print(dout)
+        try:
+            data = self.db_cursor.execute(sql).fetchall()
+            for r_ in data:
+                for c_ in range(len(r_)):
+                    dout[c_].append(str(r_[c_]))
+            del data
+        except AttributeError:
+            return None
+        else:
+            return dout
+
+    def getRow(self, table, col, rid):
+        """
+        Get the table row(s) which correspond to rid in column. Returns the row(s) as a list, if the column is the primary key
+        this is always a single entry.
+
+         - *table* the database table
+         - *col* the column id
+         - *rid* the row index id
+
+        """
+        sql = "SELECT * FROM {} WHERE {}=\"{}\"".format(table, col, rid)
+        #print(sql)
+        dout = []
+        try:
+            data = self.db_cursor.execute(sql).fetchall()
+            if len(data) > 1:
+                print('INFO: getRow is returning multiple rows for query id: {}'.format(rid))
+            for r_ in data:
+                dout.append([str(d) for d in r_])
+            del data
+        except AttributeError:
+            return None
+        else:
+            return dout
 
     def getTable(self, table, colOut=False):
         """
@@ -205,7 +282,7 @@ class DBTools:
             if colOut:
                 col = self.db_cursor.execute(sql2).fetchall()
                 col = [str(a[1]) for a in col]
-        except AttributeError as ex:
+        except AttributeError:
             return None
         if colOut:
             return r, col
@@ -220,24 +297,22 @@ class DBTools:
          - *filename* the filename of the table dump
 
         """
-
         data, head = self.getTable(table, colOut=True)
         data.insert(0, head)
         from .CBTools import exportLabelledLinkedList
         exportLabelledLinkedList(data, fname=filename, names=None, sep='\t')
 
-
     def fetchAll(self, sql):
-        """E.g. SELECT aa_len FROM gene_data WHERE gene="G"'"""
+        """Raw SQL query e.g. 'SELECT id FROM gene WHERE gene=\"G\"' """
         print(sql)
         r = None
         try:
             r = self.db_cursor.execute(sql).fetchall()
-        except Exception as ex:
+        except AttributeError as ex:
             print(ex)
         return r
 
-class KeGGTools:
+class KeGGTools(object):
     """
     Class that holds useful methods for querying KeGG via a SUDS provided soap client
     """
@@ -258,22 +333,22 @@ class KeGGTools:
             g = self.Kclient.service.bget("-f -n n %s" % k_gene)
             if g == None:
                 print('\n*****\nWARNING: potential naming error in gene: {}!!\n*****\n'.format(k_gene))
-            g2 = g.split('(N)')[1].replace('\n','')
-        except Exception as ex:
+            g2 = g.split('(N)')[1].replace('\n', '')
+        except AttributeError as ex:
             print('\nGene sequence get exception ({})!\n'.format(k_gene))
             print(ex)
         try:
             p = self.Kclient.service.bget("-f -n a %s" % k_gene)
             if p == None:
                 print('\n*****\nWARNING: potential naming error in gene: {}!!\n*****\n'.format(k_gene))
-            p2 = p.split('(A)')[1].replace('\n','')
-        except Exception as ex:
+            p2 = p.split('(A)')[1].replace('\n', '')
+        except AttributeError as ex:
             print('\nProtein sequence get exception ({})!\n'.format(k_gene))
             print(ex)
         return g2, p2
 
 
-class KeGGSequenceTools:
+class KeGGSequenceTools(object):
     """
     Using the KeGG connector this class provides tools to construct an organims specific sequence database
     """
@@ -293,7 +368,7 @@ class KeGGSequenceTools:
         for ecg in genes:
             print('Processing gene {} of {}'.format(cntr, len(genes)))
             entry_exists = False
-            testg = self.DB.db_cursor.execute('SELECT * FROM %s WHERE gene="%s" ' % (tablename,ecg)).fetchall()
+            testg = self.DB.db_cursor.execute('SELECT * FROM %s WHERE gene="%s" ' % (tablename, ecg)).fetchall()
             if len(testg) > 0:
                 entry_exists = True
 
@@ -307,11 +382,11 @@ class KeGGSequenceTools:
                 gene2, prot2 = self.KEGG.fetchSeqfromKeGG(ecg)
                 if gene2 != 'None' and prot2 != 'None':
                     self.DB.db_cursor.execute("INSERT INTO %s (gene, aa_seq, nuc_seq, aa_len, nuc_len) VALUES (?, ?, ?, ?, ?)" % tablename,
-                                              (str(ecg), str(prot2), str(gene2), int(len(prot2)), int(len(gene2))) )
+                                              (str(ecg), str(prot2), str(gene2), int(len(prot2)), int(len(gene2))))
                 else:
                     print('\nGene {} cannot be found and is probably an incorrect annotation assigning length: {}\n'.format(ecg, default_length))
                     self.DB.db_cursor.execute("INSERT INTO %s (gene, aa_seq, nuc_seq, aa_len, nuc_len) VALUES (?, ?, ?, ?, ?)" % tablename,
-                                              (str(ecg), 'None', 'None', default_length, default_length) )
+                                              (str(ecg), 'None', 'None', default_length, default_length))
             elif entry_exists and UPDATE_IF_EXISTS:
                 print('\tupdating gene {}'.format(ecg), end=" ")
                 gene2, prot2 = self.KEGG.fetchSeqfromKeGG(ecg)
@@ -335,7 +410,7 @@ class KeGGSequenceTools:
             ##  Glen = self.cursor.execute('SELECT aa_len FROM gene_data WHERE gene="%s"' % G).fetchall()[0][0]
             Glen = self.DB.fetchAll('SELECT aa_len FROM gene_data WHERE gene="%s"' % G)[0][0]
             print(Glen)
-            gene_peplen.update({G.replace(keg_prefix,'') : Glen})
+            gene_peplen.update({G.replace(keg_prefix, '') : Glen})
         return gene_peplen
 
 
@@ -402,7 +477,7 @@ class RESTClient(object):
         if self.CONNECTED:
             try:
                 print(query)
-                HTMLhead = { 'User-Agent' : self.USER_AGENT }
+                HTMLhead = {'User-Agent' : self.USER_AGENT}
                 self.conn.request("GET", query, headers=HTMLhead)
                 r1 = self.conn.getresponse()
                 print(r1.status, r1.reason)
@@ -440,14 +515,13 @@ class RESTClient(object):
             self.Log('%s - connection closed' % self.site_root)
             self.site_root = None
 
-
 class MIRIAMTools(object):
     """
     Tools dealing with MIRIAM annotations
     """
 
-    def MiriamURN2IdentifiersURL(self,urn):
-        urn = urn.replace('urn:miriam:','').split(':', 1)
+    def MiriamURN2IdentifiersURL(self, urn):
+        urn = urn.replace('urn:miriam:', '').split(':', 1)
         urn = 'http://identifiers.org/%s/%s' % (urn[0].strip(), urn[1].strip())
         print(urn)
         return urn
@@ -505,4 +579,4 @@ class SemanticSBML(RESTClient, MIRIAMTools):
          - *xml* XML returns from SemanticSBML
 
         """
-        return [i.replace('<item>','').replace('</item>','').strip() for i in re.findall(self.item_re, xml)]
+        return [i.replace('<item>', '').replace('</item>', '').strip() for i in re.findall(self.item_re, xml)]
