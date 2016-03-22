@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 422 2016-03-08 16:44:14Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 423 2016-03-22 23:47:20Z bgoli $)
 
 """
 
@@ -167,7 +167,7 @@ class DBTools(object):
 
         sql = 'UPDATE {} SET '.format(table)
         for d in data:
-            sql += '{}=\"{}\", '.format(d, str(data[d]))
+            sql += '{}=\"{}\", '.format(d, str(data[d]).replace('\"','\''))
         sql = sql[:-2] + ' WHERE {}=\"{}\"'.format(col, rid)
 
         #print(sql)
