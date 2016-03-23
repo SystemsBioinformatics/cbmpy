@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 423 2016-03-22 23:47:20Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 424 2016-03-23 17:40:27Z bgoli $)
 
 """
 
@@ -29,6 +29,7 @@ from __future__ import absolute_import
 #from __future__ import unicode_literals
 
 import os, time, re, webbrowser
+import urllib2
 
 HAVE_SQLITE2 = False
 HAVE_SQLITE3 = False
@@ -48,7 +49,26 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
-class DBTools(object):
+
+class NetDBbase(object):
+    urllib2 = urllib2
+    text_encoding = 'utf8'
+
+    def URLEncode(self, txt):
+        """
+        URL encodes a string.
+
+        """
+        return self.urllib2.quote(txt.encode(self.text_encoding))
+
+    def URLDecode(self, txt):
+        """
+        Decodes a URL encoded string
+
+        """
+        return self.urllib2.unquote(txt)
+
+class DBTools(NetDBbase):
     """
     Tools to work with SQLite DB's (optimized, no SQL required).
 
@@ -433,20 +453,17 @@ class KeGGSequenceTools(object):
         return gene_peplen
 
 
-class RESTClient(object):
+class RESTClient(NetDBbase):
     """
     Class that provides the basis for application specific connectors to REST web services
     """
     site_root = None
-    text_encoding = 'utf8'
     conn = None
     history = ''
     CONNECTED = False
-    urllib2 = None
     USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:13.0) Gecko/20100101 Firefox/13.0'
 
     def __init__(self):
-        import urllib2 as urllib2
         self.urllib2 = urllib2
 
     def Log(self, txt):
@@ -508,20 +525,6 @@ class RESTClient(object):
                 self.Log('ERROR: %s%s' % (self.site_root, query))
                 raise RuntimeError
         return data1
-
-    def URLEncode(self, txt):
-        """
-        URL encodes a string.
-
-        """
-        return self.urllib2.quote(txt.encode(self.text_encoding))
-
-    def URLDecode(self, txt):
-        """
-        Decodes a URL encoded string
-
-        """
-        return self.urllib2.unquote(txt)
 
     def Close(self):
         """
