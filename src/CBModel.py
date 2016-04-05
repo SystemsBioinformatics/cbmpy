@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 416 2016-02-23 16:12:23Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 427 2016-04-05 09:28:55Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -46,12 +46,14 @@ try:
     import sympy
     if int(sympy.__version__.split('.')[1]) >= 7 and int(sympy.__version__.split('.')[2]) >= 5:
         HAVE_SYMPY = True
+    elif int(sympy.__version__.split('.')[0]) >= 1:
+        HAVE_SYMPY = True
     else:
         del sympy
-        print('\nERROR: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
+        print('\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
 except ImportError:
     HAVE_SYMPY = False
-    print('\nERROR: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
+    print('\nERROR: SymPy import error (required for symbolic matrix support only).')
 
 HAVE_SCIPY = False
 try:

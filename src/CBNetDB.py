@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 424 2016-03-23 17:40:27Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 426 2016-04-05 09:24:56Z bgoli $)
 
 """
 
@@ -350,6 +350,13 @@ class DBTools(NetDBbase):
         except AttributeError as ex:
             print(ex)
         return r
+
+    def closeDB(self):
+        """Close the DB connection and reset the DBTools instance (can be reconnected)"""
+        self.db_conn.close()
+        self.db_conn = None
+        self.db_cursor = None
+        self.db_tables = []
 
 class KeGGTools(object):
     """
