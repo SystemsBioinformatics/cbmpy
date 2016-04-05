@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 427 2016-04-05 09:28:55Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 428 2016-04-05 15:30:07Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1139,31 +1139,45 @@ class Model(Fbase):
         """
         self.__genes_idx__ = [g.getPid() for g in self.genes]
 
-    def getAllProteinGeneAssociations(self):
+    def getAllProteinGeneAssociations(self, use_labels=False):
         """
         Returns a dictionary of the proteins associated with each gene
+
+         - *use_labels* use V2 gene labels rather than ID's
 
         """
         prg = {}
         for gpr in self.gpr:
             for g in gpr.getGenes():
-                if g.getPid() not in prg:
-                    prg.update({g.getPid() : [gpr.protein]})
+                if use_labels:
+                    gid = g.getLabel()
                 else:
-                    prg[g.getPid()].append(gpr.protein)
+                    gid = g.getPid()
+                if gid not in prg:
+                    prg.update({gid : [gpr.protein]})
+                else:
+                    prg[gid].append(gpr.protein)
         return prg
 
-    def getAllGeneProteinAssociations(self):
+    def getAllGeneProteinAssociations(self, use_labels=False):
         """
         Returns a dictionary of genes associated with each protein
+
+         - *use_labels* use V2 gene labels rather than ID's
 
         """
         gprmap = {}
         for gpr in self.gpr:
             if gpr.protein not in gprmap:
-                gprmap.update({gpr.protein : gpr.getGeneIds()})
+                if use_labels:
+                    gprmap.update({gpr.protein : gpr.getGeneLabels()})
+                else:
+                    gprmap.update({gpr.protein : gpr.getGeneIds()})
             else:
-                gprmap[gpr.protein].extend(gpr.getGeneIds())
+                if use_labels:
+                    gprmap[gpr.protein].extend(gpr.getGeneLabels())
+                else:
+                    gprmap[gpr.protein].extend(gpr.getGeneIds())
         return gprmap
 
     def getGene(self, g_id):
@@ -1234,6 +1248,18 @@ class Model(Fbase):
             return [g.getPid() for g in self.genes]
         else:
             return [g.getPid() for g in self.genes if substring in g.getPid()]
+
+    def getGeneLabels(self, substring=None):
+        """
+        Returns a list of gene labels (locus tags), applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the id
+
+        """
+        if substring == None:
+            return [g.getLabel() for g in self.genes]
+        else:
+            return [g.getLabel() for g in self.genes if substring in g.getPid()]
 
     def getAllGeneActivities(self):
         """
@@ -3859,6 +3885,12 @@ class GeneProteinAssociation(Fbase):
         """
         return [self.__objref__().getGene(g) for g in self.generefs]
 
+    def getGeneLabels(self):
+        """
+        Return a list of gene labels associated with this GPRass
+        """
+        return [self.__objref__().getGene(g).getLabel() for g in self.generefs]
+
     def getGene(self, gid):
         """
         Return a gene object with id
@@ -3870,13 +3902,17 @@ class GeneProteinAssociation(Fbase):
             print('WARNING: {} is not a valid gene id'.format(gid))
             return None
 
-    def getAssociationStr(self):
+    def getAssociationStr(self, use_labels=False):
         """
-        return the gene association string
+        Return the gene association string, alternatively return string with labels
+
         """
         #if self._MODIFIED_ASSOCIATION_:
             #print('NOTE: this association string has been modified to be evaluable:\n{} --> {}'.format(self.assoc0, self.assoc))
-        return self.assoc
+        out = self.assoc
+
+
+        return out
 
     def getGeneIds(self):
         """
