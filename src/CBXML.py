@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 418 2016-03-03 14:37:00Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 429 2016-04-07 14:36:18Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1688,7 +1688,7 @@ class CBMtoSBML3(FBCconnect):
 
         for g_ in self.fba.gpr:
             rid = g_.getProtein()
-            assoc = g_.getAssociationStr()
+            assoc = g_.getAssociationStr(use_labels=True)
             if rid != None and rid != '':
                 if assoc != None and assoc != '':
                     GPR = self.createGeneAssociationV1(rid, assoc, gprid=g_.getId())
@@ -2258,7 +2258,7 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
      - *sbml_level_version* [default=(3,1)] a tuple containing the SBML level and version e.g. (3,1)
      - *autofix* convert <> to <=>=
      - *return_fbc* return the FBC converter instance
-     - *gpr_from_annot* [default=True] if enabled will attempt to add the gene protein associations from the annotations
+     - *gpr_from_annot* [default=False] if enabled will attempt to add the gene protein associations from the annotations
        if no gene protein association objects exist
      - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_annot* [default=True] add COBRA <notes> annotation

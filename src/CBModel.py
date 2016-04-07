@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 428 2016-04-05 15:30:07Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 429 2016-04-07 14:36:18Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3906,12 +3906,21 @@ class GeneProteinAssociation(Fbase):
         """
         Return the gene association string, alternatively return string with labels
 
+        - *use_lablels* [default=False] return the gene association string with labels rather than geneId's (FBCv2 issue)
+
         """
         #if self._MODIFIED_ASSOCIATION_:
             #print('NOTE: this association string has been modified to be evaluable:\n{} --> {}'.format(self.assoc0, self.assoc))
         out = self.assoc
-
-
+        if use_labels:
+            out = self.assoc
+            keymap = {}
+            for g in self.generefs:
+                keymap[g] = self.__objref__().getGene(g).getLabel()
+            keys = keymap.keys()
+            keys.sort(reverse=True)
+            for k in keys:
+                out = out.replace(k, keymap[k])
         return out
 
     def getGeneIds(self):
