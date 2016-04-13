@@ -1,0 +1,10 @@
+
+CSV Read Report
+********************
+
+Duplicate entries ignored:
+
+Duplicate reactions renamed (instances):
+	None
+
+Duplicate reactions used for gene association:

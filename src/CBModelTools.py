@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModelTools.py 305 2015-04-23 15:18:31Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModelTools.py 431 2016-04-13 10:06:59Z bgoli $)
 
 """
 
@@ -63,17 +63,16 @@ def addSpecies(model, species):
     skeys.sort()
     for S in skeys:
         comp = 'Cell'
-        id = name = species[S]['id']
+        ids = name = species[S].pop('id')
         if 'compartment' in species[S]:
-            comp = species[S]['compartment']
+            comp = species[S].pop('compartment')
         if 'name' in species[S]:
-            name = species[S]['name']
-        sObj = CBModel.Species(id, boundary=species[S]['boundary'],\
+            name = species[S].pop('name')
+        sObj = CBModel.Species(ids, boundary=species[S].pop('boundary'),\
                             name=name, value=0, compartment=comp)
-        if 'SUBSYSTEM' in species[S]:
-            sObj.annotation.update({'SUBSYSTEM' : species[S]['SUBSYSTEM']})
-        else:
-            sObj.annotation.update({'SUBSYSTEM' : 'metabolism'})
+        if len(species[S]) > 0:
+            for a_ in species[S]:
+                sObj.annotation.update({a_ : species[S][a_]})
         model.addSpecies(sObj)
 
 def addBounds(model, bounds):
@@ -108,7 +107,6 @@ def addReactions(model, reactions):
         if len(Bounds) > 0:
             addBounds(model, Bounds)
 
-
         revers = reactions[R]['reversible']
         ##  reagents = []
         react = CBModel.Reaction(id, name=name, reversible=revers)
@@ -122,7 +120,7 @@ def addReactions(model, reactions):
 
         # more generic way of doing this
         for k in reactions[R]:
-            if k in ['SUBSYSTEM', 'GENE_ASSOCIATION', 'EC Number', 'Equation']:
+            if k not in ['lower', 'upper', 'exchange', 'name', 'id', 'reversible', 'reagents']:
                 react.annotation.update({k : reactions[R][k]})
         ##  if 'SUBSYSTEM' in reactions[R]:
             ##  react.annotation.update({'SUBSYSTEM' : reactions[R]['SUBSYSTEM']})

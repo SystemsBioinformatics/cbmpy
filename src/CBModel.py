@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 429 2016-04-07 14:36:18Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 430 2016-04-08 15:21:09Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1701,6 +1701,18 @@ class Model(Fbase):
         for g_ in self.genes:
             if g_.label == label:
                 return g_.getId()
+        return None
+
+    def getGeneByLabel(self, label):
+        """
+        Given a gene label return the corresponding Gene object
+
+         - *label*
+
+        """
+        for g_ in self.genes:
+            if g_.label == label:
+                return g_
         return None
 
     def setGeneInactive(self, g_id, update_reactions=False, lower=0.0, upper=0.0):
@@ -3901,6 +3913,7 @@ class GeneProteinAssociation(Fbase):
         else:
             print('WARNING: {} is not a valid gene id'.format(gid))
             return None
+
 
     def getAssociationStr(self, use_labels=False):
         """

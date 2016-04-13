@@ -1,0 +1,1674 @@
+
+M_acorn_c
+Compartment: c
+
+M_13dpg_c
+Compartment: c
+
+M_3dhq_c
+Compartment: c
+
+M_figlu_c
+Compartment: c
+
+M_dgdp_c
+Compartment: c
+
+M_chol_c
+Compartment: c
+
+M_pnto_R_c
+Compartment: c
+
+M_cpocdacp_c
+Compartment: c
+
+M_na1_e
+Compartment: e
+
+M_r1p_c
+Compartment: c
+
+M_5pmev_c
+Compartment: c
+
+M_fpram_c
+Compartment: c
+
+M_chor_c
+Compartment: c
+
+M_protrna_c
+Compartment: c
+
+M_pa_LLA_c
+Compartment: c
+
+M_3hocacp_c
+Compartment: c
+
+M_LTAala_LLA_c
+Compartment: c
+
+M_dhor_S_c
+Compartment: c
+
+M_pap_c
+Compartment: c
+
+M_2mba_e
+Compartment: e
+
+M_decacp_c
+Compartment: c
+
+M_g3pi_c
+Compartment: c
+
+M_skm_c
+Compartment: c
+
+M_2ddg6p_c
+Compartment: c
+
+M_pyam5p_c
+Compartment: c
+
+M_pro_L_e
+Compartment: e
+
+M_udcpdp_c
+Compartment: c
+
+M_3oxocdacp_c
+Compartment: c
+
+M_spmd_e
+Compartment: e
+
+M_gtp_c
+Compartment: c
+
+M_pro_L_c
+Compartment: c
+
+M_alaala_c
+Compartment: c
+
+M_duri_c
+Compartment: c
+
+M_26dap_M_c
+Compartment: c
+
+M_ribflv_e
+Compartment: e
+
+M_ribflv_c
+Compartment: c
+
+M_h2o_c
+Compartment: c
+
+M_succ_c
+Compartment: c
+
+M_itp_c
+Compartment: c
+
+M_imlac_e
+Compartment: e
+
+M_f6p_c
+Compartment: c
+
+M_h2o_e
+Compartment: e
+
+M_methal_e
+Compartment: e
+
+M_g3pe_c
+Compartment: c
+
+M_dtdp6dm_c
+Compartment: c
+
+M_2ttdeacp_c
+Compartment: c
+
+M_3oxtdacp_c
+Compartment: c
+
+M_2mba_c
+Compartment: c
+
+M_cellb_e
+Compartment: e
+
+M_adp_c
+Compartment: c
+
+M_arg_L_c
+Compartment: c
+
+M_his_L_e
+Compartment: e
+
+M_gln_L_c
+Compartment: c
+
+M_gln_L_e
+Compartment: e
+
+M_his_L_c
+Compartment: c
+
+M_g3pg_c
+Compartment: c
+
+M_arg_L_e
+Compartment: e
+
+M_hmgcoa_c
+Compartment: c
+
+M_pant_R_c
+Compartment: c
+
+M_trnaasp_c
+Compartment: c
+
+M_uAgla_c
+Compartment: c
+
+M_MCOOH_c
+Compartment: c
+
+M_acnam_c
+Compartment: c
+
+M_adprib_c
+Compartment: c
+
+M_gcald_c
+Compartment: c
+
+M_2pg_c
+Compartment: c
+
+M_4h2oxg_c
+Compartment: c
+
+M_ins_e
+Compartment: e
+
+M_gly_e
+Compartment: e
+
+M_ins_c
+Compartment: c
+
+M_glc_D_e
+Compartment: e
+
+M_lac_D_c
+Compartment: c
+
+M_trnapro_c
+Compartment: c
+
+M_lac_D_e
+Compartment: e
+
+M_glc_D_c
+Compartment: c
+
+M_acald_e
+Compartment: e
+
+M_phenol_e
+Compartment: e
+
+M_ura_c
+Compartment: c
+
+M_phenol_c
+Compartment: c
+
+M_ura_e
+Compartment: e
+
+M_acald_c
+Compartment: c
+
+M_5fithf_c
+Compartment: c
+
+M_orn_L_e
+Compartment: e
+
+M_2thdeacp_c
+Compartment: c
+
+M_actn_R_e
+Compartment: e
+
+M_prot_LLA_c
+Compartment: c
+
+M_cystrna_c
+Compartment: c
+
+M_dhap_c
+Compartment: c
+
+M_trnaarg_c
+Compartment: c
+
+M_dadp_c
+Compartment: c
+
+M_pyr_c
+Compartment: c
+
+M_fprica_c
+Compartment: c
+
+M_pyr_e
+Compartment: e
+
+M_fdp_c
+Compartment: c
+
+M_aaacp_c
+Compartment: c
+
+M_dadn_c
+Compartment: c
+
+M_pydx_c
+Compartment: c
+
+M_acp_c
+Compartment: c
+
+M_trdrd_c
+Compartment: c
+
+M_asn_L_e
+Compartment: e
+
+M_phe_L_c
+Compartment: c
+
+M_2ahhmp_c
+Compartment: c
+
+M_phe_L_e
+Compartment: e
+
+M_orot5p_c
+Compartment: c
+
+M_mnl1p_c
+Compartment: c
+
+M_hcys_L_c
+Compartment: c
+
+M_3mba_c
+Compartment: c
+
+M_iletrna_c
+Compartment: c
+
+M_3oxddacp_c
+Compartment: c
+
+M_dgmp_c
+Compartment: c
+
+M_asn_L_c
+Compartment: c
+
+M_34hplac_c
+Compartment: c
+
+M_34hplac_e
+Compartment: e
+
+M_sucr_e
+Compartment: e
+
+M_DNA_LLA_c
+Compartment: c
+
+M_thmmp_c
+Compartment: c
+
+M_glyclt_c
+Compartment: c
+
+M_btd_RR_e
+Compartment: e
+
+M_cmp_c
+Compartment: c
+
+M_glyclt_e
+Compartment: e
+
+M_f1p_c
+Compartment: c
+
+M_no2_e
+Compartment: e
+
+M_uaaAgla_c
+Compartment: c
+
+M_no2_c
+Compartment: c
+
+M_gua_e
+Compartment: e
+
+M_pg_LLA_c
+Compartment: c
+
+M_leu_L_c
+Compartment: c
+
+M_3mbal_c
+Compartment: c
+
+M_3mba_e
+Compartment: e
+
+M_fru_c
+Compartment: c
+
+M_glytrna_c
+Compartment: c
+
+M_amet_c
+Compartment: c
+
+M_ade_c
+Compartment: c
+
+M_rhcys_c
+Compartment: c
+
+M_12dgr_LLA_c
+Compartment: c
+
+M_2dda7p_c
+Compartment: c
+
+M_ade_e
+Compartment: e
+
+M_agly3p_LLA_c
+Compartment: c
+
+M_csn_e
+Compartment: e
+
+M_gsn_c
+Compartment: c
+
+M_cbasp_c
+Compartment: c
+
+M_din_c
+Compartment: c
+
+M_4c2me_c
+Compartment: c
+
+M_methf_c
+Compartment: c
+
+M_gam1p_c
+Compartment: c
+
+M_3htdacp_c
+Compartment: c
+
+M_nh3_e
+Compartment: e
+
+M_nh3_c
+Compartment: c
+
+M_dttp_c
+Compartment: c
+
+M_glyc_c
+Compartment: c
+
+M_hxan_e
+Compartment: e
+
+M_glyc_e
+Compartment: e
+
+M_udp_c
+Compartment: c
+
+M_ump_c
+Compartment: c
+
+M_4ppan_c
+Compartment: c
+
+M_2theacp_c
+Compartment: c
+
+M_bzal_c
+Compartment: c
+
+M_fad_c
+Compartment: c
+
+M_bzal_e
+Compartment: e
+
+M_xtsn_c
+Compartment: c
+
+M_o2_c
+Compartment: c
+
+M_atp_c
+Compartment: c
+
+M_o2_e
+Compartment: e
+
+M_hco3_c
+Compartment: c
+
+M_1pyr5c_c
+Compartment: c
+
+M_3hddacp_c
+Compartment: c
+
+M_ahdt_c
+Compartment: c
+
+M_ala_L_c
+Compartment: c
+
+M_ala_L_e
+Compartment: e
+
+M_g6p_B_c
+Compartment: c
+
+M_pydxn_e
+Compartment: e
+
+M_trnamet_c
+Compartment: c
+
+M_ddeacp_c
+Compartment: c
+
+M_mnl_e
+Compartment: e
+
+M_leu_L_e
+Compartment: e
+
+M_ile_L_c
+Compartment: c
+
+M_acgam1p_c
+Compartment: c
+
+M_na1_c
+Compartment: c
+
+M_thf_c
+Compartment: c
+
+M_pphn_c
+Compartment: c
+
+M_inost_c
+Compartment: c
+
+M_3oxhacp_c
+Compartment: c
+
+M_acmana_c
+Compartment: c
+
+M_lyspg_LLA_c
+Compartment: c
+
+M_udcpp_c
+Compartment: c
+
+M_lac_L_c
+Compartment: c
+
+M_lac_L_e
+Compartment: e
+
+M_accoa_c
+Compartment: c
+
+M_skm5p_c
+Compartment: c
+
+M_2mbol_e
+Compartment: e
+
+M_asp_L_c
+Compartment: c
+
+M_methal_c
+Compartment: c
+
+M_thm_c
+Compartment: c
+
+M_3hdeacp_c
+Compartment: c
+
+M_thm_e
+Compartment: e
+
+M_pydam_c
+Compartment: c
+
+M_asntrna_c
+Compartment: c
+
+M_glu_D_c
+Compartment: c
+
+M_2tdeacp_c
+Compartment: c
+
+M_10fthf_c
+Compartment: c
+
+M_2dr5p_c
+Compartment: c
+
+M_hxan_c
+Compartment: c
+
+M_mi1p_D_c
+Compartment: c
+
+M_orn_L_c
+Compartment: c
+
+M_pan4p_c
+Compartment: c
+
+M_3mbol_c
+Compartment: c
+
+M_lys_L_c
+Compartment: c
+
+M_cit_e
+Compartment: e
+
+M_lys_L_e
+Compartment: e
+
+M_cit_c
+Compartment: c
+
+M_3mbol_e
+Compartment: e
+
+M_fru_e
+Compartment: e
+
+M_2mbal_c
+Compartment: c
+
+M_trnaleu_c
+Compartment: c
+
+M_2mbal_e
+Compartment: e
+
+M_val_L_c
+Compartment: c
+
+M_val_L_e
+Compartment: e
+
+M_2mpa_c
+Compartment: c
+
+M_gmp_c
+Compartment: c
+
+M_udpg_c
+Compartment: c
+
+M_pnto_R_e
+Compartment: e
+
+M_fglu_c
+Compartment: c
+
+M_2mpa_e
+Compartment: e
+
+M_utp_c
+Compartment: c
+
+M_btd_RR_c
+Compartment: c
+
+M_acser_c
+Compartment: c
+
+M_trptrna_c
+Compartment: c
+
+M_NH4_c
+Compartment: c
+
+M_ribflvRD_c
+Compartment: c
+
+M_trnalys_c
+Compartment: c
+
+M_sbt_D_c
+Compartment: c
+
+M_thfglu_c
+Compartment: c
+
+M_sbt_D_e
+Compartment: e
+
+M_pydxn_c
+Compartment: c
+
+M_tre_e
+Compartment: e
+
+M_man1p_c
+Compartment: c
+
+M_5aizc_c
+Compartment: c
+
+M_damp_c
+Compartment: c
+
+M_trp_L_e
+Compartment: e
+
+M_fmet_c
+Compartment: c
+
+M_gar_c
+Compartment: c
+
+M_clpn_LLA_c
+Compartment: c
+
+M_2ddglcn_c
+Compartment: c
+
+M_orot_c
+Compartment: c
+
+M_acgal6p_c
+Compartment: c
+
+M_6pgg_c
+Compartment: c
+
+M_so4_e
+Compartment: e
+
+M_orot_e
+Compartment: e
+
+M_g3pc_c
+Compartment: c
+
+M_dpcoa_c
+Compartment: c
+
+M_3dhsk_c
+Compartment: c
+
+M_etoh_c
+Compartment: c
+
+M_fum_c
+Compartment: c
+
+M_ptrc_e
+Compartment: e
+
+M_2tocdacp_c
+Compartment: c
+
+M_ala_D_c
+Compartment: c
+
+M_glutrnagln_c
+Compartment: c
+
+M_co2_e
+Compartment: e
+
+M_for_e
+Compartment: e
+
+M_for_c
+Compartment: c
+
+M_ahcys_c
+Compartment: c
+
+M_4ahmmp_c
+Compartment: c
+
+M_mn2_c
+Compartment: c
+
+M_dudp_c
+Compartment: c
+
+M_mn2_e
+Compartment: e
+
+M_tyrtrna_c
+Compartment: c
+
+M_4hglu_c
+Compartment: c
+
+M_mql7_c
+Compartment: c
+
+M_5mta_c
+Compartment: c
+
+M_nicrnt_c
+Compartment: c
+
+M_pea_c
+Compartment: c
+
+M_csn_c
+Compartment: c
+
+M_lystrna_c
+Compartment: c
+
+M_2mpol_c
+Compartment: c
+
+M_3mob_c
+Compartment: c
+
+M_glyc_R_c
+Compartment: c
+
+M_thymd_e
+Compartment: e
+
+M_ru5p_L_c
+Compartment: c
+
+M_man6p_c
+Compartment: c
+
+M_dgsn_c
+Compartment: c
+
+M_dcamp_c
+Compartment: c
+
+M_malt_e
+Compartment: e
+
+M_cys_L_e
+Compartment: e
+
+M_malt_c
+Compartment: c
+
+M_cys_L_c
+Compartment: c
+
+M_g6p_c
+Compartment: c
+
+M_PG_c
+Compartment: c
+
+M_3mbal_e
+Compartment: e
+
+M_LTA_LLA_c
+Compartment: c
+
+M_dctp_c
+Compartment: c
+
+M_s7p_c
+Compartment: c
+
+M_2hxic_L_e
+Compartment: e
+
+M_dhnpt_c
+Compartment: c
+
+M_glu_L_c
+Compartment: c
+
+M_cyn_c
+Compartment: c
+
+M_cyn_e
+Compartment: e
+
+M_glu_L_e
+Compartment: e
+
+M_malcoa_c
+Compartment: c
+
+M_5dpmev_c
+Compartment: c
+
+M_4ampm_c
+Compartment: c
+
+M_pea_e
+Compartment: e
+
+M_fmn_c
+Compartment: c
+
+M_nac_e
+Compartment: e
+
+M_cysth_L_c
+Compartment: c
+
+M_nadp_c
+Compartment: c
+
+M_nac_c
+Compartment: c
+
+M_man_e
+Compartment: e
+
+M_dad_2_c
+Compartment: c
+
+M_2dr1p_c
+Compartment: c
+
+M_thmpp_c
+Compartment: c
+
+M_glyald_c
+Compartment: c
+
+M_ac_c
+Compartment: c
+
+M_5mthf_c
+Compartment: c
+
+M_malacp_c
+Compartment: c
+
+M_dcdp_c
+Compartment: c
+
+M_3oxocacp_c
+Compartment: c
+
+M_thymd_c
+Compartment: c
+
+M_m12dg_LLA_c
+Compartment: c
+
+M_pacald_e
+Compartment: e
+
+M_cdpdag_LLA_c
+Compartment: c
+
+M_nh4_e
+Compartment: e
+
+M_dha_e
+Compartment: e
+
+M_dha_c
+Compartment: c
+
+M_2dhp_c
+Compartment: c
+
+M_nh4_c
+Compartment: c
+
+M_histrna_c
+Compartment: c
+
+M_xmp_c
+Compartment: c
+
+M_no3_e
+Compartment: e
+
+M_gdptp_c
+Compartment: c
+
+M_no3_c
+Compartment: c
+
+M_amp_c
+Compartment: c
+
+M_mercppyr_c
+Compartment: c
+
+M_ncam_c
+Compartment: c
+
+M_frdp_c
+Compartment: c
+
+M_achms_c
+Compartment: c
+
+M_mqn7_c
+Compartment: c
+
+M_4adcho_c
+Compartment: c
+
+M_2beacp_c
+Compartment: c
+
+M_ppi_c
+Compartment: c
+
+M_dhpmp_c
+Compartment: c
+
+M_h2s_c
+Compartment: c
+
+M_gdp_c
+Compartment: c
+
+M_3oxhdacp_c
+Compartment: c
+
+M_tdeacp_c
+Compartment: c
+
+M_4mop_c
+Compartment: c
+
+M_pydx5p_c
+Compartment: c
+
+M_aicar_c
+Compartment: c
+
+M_d12dg_LLA_c
+Compartment: c
+
+M_4abz_c
+Compartment: c
+
+M_4abz_e
+Compartment: e
+
+M_trnacys_c
+Compartment: c
+
+M_prpp_c
+Compartment: c
+
+M_h2o2_c
+Compartment: c
+
+M_2mbol_c
+Compartment: c
+
+M_etha_c
+Compartment: c
+
+M_4ppcys_c
+Compartment: c
+
+M_2ahhmd_c
+Compartment: c
+
+M_dtdp_c
+Compartment: c
+
+M_3pg_c
+Compartment: c
+
+M_coa_c
+Compartment: c
+
+M_3mop_c
+Compartment: c
+
+M_tyr_L_c
+Compartment: c
+
+M_tre6p_c
+Compartment: c
+
+M_trnahis_c
+Compartment: c
+
+M_hexacp_c
+Compartment: c
+
+M_trnaasn_c
+Compartment: c
+
+M_glu5sa_c
+Compartment: c
+
+M_glycogen_e
+Compartment: e
+
+M_tyr_L_e
+Compartment: e
+
+M_thr_L_c
+Compartment: c
+
+M_succ_e
+Compartment: e
+
+M_acgala_e
+Compartment: e
+
+M_spmd_c
+Compartment: c
+
+M_thr_L_e
+Compartment: e
+
+M_citr_L_c
+Compartment: c
+
+M_galt_e
+Compartment: e
+
+M_ru5p_D_c
+Compartment: c
+
+M_grdp_c
+Compartment: c
+
+M_glutrna_c
+Compartment: c
+
+M_trnaval_c
+Compartment: c
+
+M_argtrna_c
+Compartment: c
+
+M_gua_c
+Compartment: c
+
+M_CPS_LLA_c
+Compartment: c
+
+M_trnaala_c
+Compartment: c
+
+M_pgp_LLA_c
+Compartment: c
+
+M_mettrna_c
+Compartment: c
+
+M_ptrc_c
+Compartment: c
+
+M_trnaphe_c
+Compartment: c
+
+M_25aics_c
+Compartment: c
+
+M_alalac_c
+Compartment: c
+
+M_etoh_e
+Compartment: e
+
+M_pydam_e
+Compartment: e
+
+M_trnatyr_c
+Compartment: c
+
+M_3hhacp_c
+Compartment: c
+
+M_suc6p_c
+Compartment: c
+
+M_pppi_c
+Compartment: c
+
+M_ocdacp_c
+Compartment: c
+
+M_rib_D_c
+Compartment: c
+
+M_2chdeacp_c
+Compartment: c
+
+M_trnaser_c
+Compartment: c
+
+M_diact_e
+Compartment: e
+
+M_rib_D_e
+Compartment: e
+
+M_sucsal_c
+Compartment: c
+
+M_ctp_c
+Compartment: c
+
+M_2mpol_e
+Compartment: e
+
+M_uaccg_c
+Compartment: c
+
+M_pram_c
+Compartment: c
+
+M_uamag_c
+Compartment: c
+
+M_dutp_c
+Compartment: c
+
+M_gthrd_c
+Compartment: c
+
+M_3hpaacp_c
+Compartment: c
+
+M_ugmdalac_c
+Compartment: c
+
+M_acgam6p_c
+Compartment: c
+
+M_g3p_c
+Compartment: c
+
+M_gthox_c
+Compartment: c
+
+M_pi_c
+Compartment: c
+
+M_xu5p_D_c
+Compartment: c
+
+M_idp_c
+Compartment: c
+
+M_octacp_c
+Compartment: c
+
+M_pi_e
+Compartment: e
+
+M_dtdpglc_c
+Compartment: c
+
+M_5mtr_c
+Compartment: c
+
+M_ile_L_e
+Compartment: e
+
+M_butacp_c
+Compartment: c
+
+M_cytd_c
+Compartment: c
+
+M_g3ps_c
+Compartment: c
+
+M_btn_c
+Compartment: c
+
+M_glu5p_c
+Compartment: c
+
+M_uamr_c
+Compartment: c
+
+M_btn_e
+Compartment: e
+
+M_3psme_c
+Compartment: c
+
+M_mev_R_c
+Compartment: c
+
+M_hista_c
+Compartment: c
+
+M_h_c
+Compartment: c
+
+M_alatrna_c
+Compartment: c
+
+M_h_e
+Compartment: e
+
+M_dhpt_c
+Compartment: c
+
+M_g1p_B_c
+Compartment: c
+
+M_indlac_e
+Compartment: e
+
+M_indlac_c
+Compartment: c
+
+M_pep_c
+Compartment: c
+
+M_ac_e
+Compartment: e
+
+M_LTAAlaGal_LLA_c
+Compartment: c
+
+M_asp_L_e
+Compartment: e
+
+M_2mpal_c
+Compartment: c
+
+M_2toceacp_c
+Compartment: c
+
+M_2mpal_e
+Compartment: e
+
+M_asptrna_c
+Compartment: c
+
+M_imlac_c
+Compartment: c
+
+M_uama_c
+Compartment: c
+
+M_2tddacp_c
+Compartment: c
+
+M_oaa_c
+Compartment: c
+
+M_anth_c
+Compartment: c
+
+M_galt1p_c
+Compartment: c
+
+M_acgam_e
+Compartment: e
+
+M_mal_L_c
+Compartment: c
+
+M_alac_S_c
+Compartment: c
+
+M_uaAgla_c
+Compartment: c
+
+M_2ctdeacp_c
+Compartment: c
+
+M_MCOSH_c
+Compartment: c
+
+M_acmanap_c
+Compartment: c
+
+M_ser_L_e
+Compartment: e
+
+M_trnagly_c
+Compartment: c
+
+M_hista_e
+Compartment: e
+
+M_uacgam_c
+Compartment: c
+
+M_hdeacp_c
+Compartment: c
+
+M_34hpp_c
+Compartment: c
+
+M_sucr_c
+Compartment: c
+
+M_dcmp_c
+Compartment: c
+
+M_actn_R_c
+Compartment: c
+
+M_r5p_c
+Compartment: c
+
+M_actp_c
+Compartment: c
+
+M_26dap_LL_c
+Compartment: c
+
+M_ipdp_c
+Compartment: c
+
+M_aacoa_c
+Compartment: c
+
+M_2mahmp_c
+Compartment: c
+
+M_udpgal_c
+Compartment: c
+
+M_g1p_c
+Compartment: c
+
+M_trnaile_c
+Compartment: c
+
+M_mlthf_c
+Compartment: c
+
+M_trp_L_c
+Compartment: c
+
+M_cdp_c
+Compartment: c
+
+M_impyr_c
+Compartment: c
+
+M_mal_L_e
+Compartment: e
+
+M_phpyr_c
+Compartment: c
+
+M_dump_c
+Compartment: c
+
+M_akg_c
+Compartment: c
+
+M_dnad_c
+Compartment: c
+
+M_trdox_c
+Compartment: c
+
+M_fgam_c
+Compartment: c
+
+M_hom_L_c
+Compartment: c
+
+M_dmpp_c
+Compartment: c
+
+M_glyc3p_c
+Compartment: c
+
+M_dtdpddg_c
+Compartment: c
+
+M_trnagln_c
+Compartment: c
+
+M_dtmp_c
+Compartment: c
+
+M_adn_c
+Compartment: c
+
+M_ugmd_c
+Compartment: c
+
+M_sl26da_c
+Compartment: c
+
+M_trnatrp_c
+Compartment: c
+
+M_glyb_c
+Compartment: c
+
+M_nadh_c
+Compartment: c
+
+M_glyb_e
+Compartment: e
+
+M_apoACP_c
+Compartment: c
+
+M_RNA_LLA_c
+Compartment: c
+
+M_trnathr_c
+Compartment: c
+
+M_5fothf_c
+Compartment: c
+
+M_3hbacp_c
+Compartment: c
+
+M_e4p_c
+Compartment: c
+
+M_uAgl_c
+Compartment: c
+
+M_sertrna_c
+Compartment: c
+
+M_formamide_c
+Compartment: c
+
+M_dgtp_c
+Compartment: c
+
+M_dhf_c
+Compartment: c
+
+M_thrtrna_c
+Compartment: c
+
+M_indpyr_c
+Compartment: c
+
+M_phom_c
+Compartment: c
+
+M_imp_c
+Compartment: c
+
+M_ser_L_c
+Compartment: c
+
+M_glntrna_c
+Compartment: c
+
+M_met_L_e
+Compartment: e
+
+M_so4_c
+Compartment: c
+
+M_met_L_c
+Compartment: c
+
+M_2obut_c
+Compartment: c
+
+M_sbt6p_c
+Compartment: c
+
+M_fol_e
+Compartment: e
+
+M_3hocdacp_c
+Compartment: c
+
+M_uri_c
+Compartment: c
+
+M_gam6p_c
+Compartment: c
+
+M_fol_c
+Compartment: c
+
+M_valtrna_c
+Compartment: c
+
+M_leutrna_c
+Compartment: c
+
+M_4abut_e
+Compartment: e
+
+M_nadph_c
+Compartment: c
+
+M_diact_c
+Compartment: c
+
+M_psd5p_c
+Compartment: c
+
+M_2p4c2me_c
+Compartment: c
+
+M_LTAglc_LLA_c
+Compartment: c
+
+M_3oxdeacp_c
+Compartment: c
+
+M_nad_c
+Compartment: c
+
+M_pacald_c
+Compartment: c
+
+M_co2_c
+Compartment: c
+
+M_2pglyc_c
+Compartment: c
+
+M_2cocdacp_c
+Compartment: c
+
+M_4met2obut_c
+Compartment: c
+
+M_xan_c
+Compartment: c
+
+M_phetrna_c
+Compartment: c
+
+M_glycogen_c
+Compartment: c
+
+M_2hxic_L_c
+Compartment: c
+
+M_4abut_c
+Compartment: c
+
+M_trnaglu_c
+Compartment: c
+
+M_gly_c
+Compartment: c
+
+M_cbp_c
+Compartment: c
+
+M_xan_e
+Compartment: e
+
+M_datp_c
+Compartment: c
+
+M_dtdpddm_c
+Compartment: c
+
+M_air_c
+Compartment: c
+
+M_tcys_c
+Compartment: c
