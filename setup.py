@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 404 2016-01-05 15:24:35Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 432 2016-04-15 13:38:26Z bgoli $)
 
 """
 
@@ -62,11 +62,11 @@ if examplefile.endswith('.xml')]))
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 404 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 432 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
-mypackages= ['cbmpy', 'pyscescbm', 'cbmpy.fluxmodules', 'pyscescbm.fluxmodules', 'cbmpy.solver', 'pyscescbm.solver']
+mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.nosetests', 'cbmpy.solver', 'pyscescbm', 'pyscescbm.fluxmodules', 'pyscescbm.solver']
 
 setup(
  name = "cbmpy",

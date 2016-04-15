@@ -19,20 +19,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBVersion.py 390 2015-10-05 13:44:45Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBVersion.py 432 2016-04-15 13:38:26Z bgoli $)
 
 """
-# bump
+# bump 1
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
-
+ 
 MAJOR = 0
 MINOR = 7
 MICRO = 4
 try:
-    STATUS = '$Rev: 390 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = '$Rev: 432 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = ''
 

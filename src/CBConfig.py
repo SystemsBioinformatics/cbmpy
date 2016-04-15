@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBConfig.py 404 2016-01-05 15:24:35Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBConfig.py 432 2016-04-15 13:38:26Z bgoli $)
 
 """
-## gets rid of "invalid variable name" info
+## gets rid of "invalid variable name" info #
 # pylint: disable=C0103
 ## gets rid of "line to long" info
 # pylint: disable=C0301
@@ -38,7 +38,7 @@ from __future__ import absolute_import
 # release
 
 try:
-    STATUS = '$Rev: 404 $'.replace('Rev: ', '').replace('$', '').strip()
+    STATUS = '$Rev: 432 $'.replace('Rev: ', '').replace('$', '').strip()
 except Exception:
     STATUS = ''
 
