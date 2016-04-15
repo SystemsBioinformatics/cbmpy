@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 429 2016-04-07 14:36:18Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 435 2016-04-15 14:37:38Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -78,12 +78,16 @@ try:
                   libsbml.SBML_FBC_FLUXBOUND : 'fluxbound',
                   libsbml.SBML_FBC_OBJECTIVE : 'objective',
                   libsbml.SBML_FBC_FLUXOBJECTIVE : 'fluxobjective',
-                  libsbml.SBML_FBC_GENEASSOCIATION : 'geneassociation2',
-                  libsbml.SBML_FBC_GENEPRODUCT : 'geneproduct',
-                  libsbml.SBML_FBC_GENEPRODUCTASSOCIATION : 'geneproductassociation',
-                  libsbml.SBML_FBC_GENEPRODUCTREF : 'geneproductref',
                   libsbml.SBML_FBC_V1ASSOCIATION : 'geneassociation1'
                   }
+    try:
+        SBML_TYPES.update({libsbml.SBML_FBC_GENEASSOCIATION : 'geneassociation2',
+                  libsbml.SBML_FBC_GENEPRODUCT : 'geneproduct',
+                  libsbml.SBML_FBC_GENEPRODUCTASSOCIATION : 'geneproductassociation',
+                  libsbml.SBML_FBC_GENEPRODUCTREF : 'geneproductref'})
+    except AttributeError:
+        print('WARNING: FBC support limited!')
+
 except ImportError:
     print('WARNING: SBML support not available, please install libSBML, Python bindings with FBC (sbml.org)')
     _HAVE_SBML_ = False
