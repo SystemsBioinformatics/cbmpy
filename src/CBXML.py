@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 435 2016-04-15 14:37:38Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 443 2016-04-18 21:28:42Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2404,6 +2404,7 @@ def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_int
     """
     try:
         new_file = sbml_convertCOBRASBMLtoFBC(fname, outname=None, work_dir=work_dir, output_dir=output_dir)
+        print(new_file)
     except Exception as why:
         print('\nCOBRA file conversion failed:\n\"{}\"'.format(why))
         return None

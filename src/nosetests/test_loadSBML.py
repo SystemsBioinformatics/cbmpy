@@ -3,7 +3,10 @@ cDir = os.path.dirname(os.path.abspath(__file__))
 MDIR = os.path.join(os.path.split(cDir)[0], 'models')
 MDIR = cDir
 
-import nose
+try:
+    import nose
+except ImportError:
+    print('WARNING: To run tests please install python-nose')
 from nose.tools import assert_equal
 from nose.tools import assert_almost_equal
 from nose.tools import assert_not_equal
@@ -48,8 +51,7 @@ class TestReadSBML(object):
         assert_not_equal(cmod, None)
 
     def test_load_L2CBR_iJR904(self):
-        print('\n\nThis test fails under Linux.\n\n')
-        cmod = cbmpy.readCOBRASBML(os.path.join(MDIR, 'L2CBR_iJR904.glc.xml'), work_dir=self.CDIR,\
+        cmod = cbmpy.readCOBRASBML('L2CBR_iJR904.glc.xml', work_dir=MDIR,\
                                                 output_dir=self.CDIR, delete_intermediate=False)
         assert_not_equal(cmod, None)
 
@@ -61,8 +63,8 @@ class TestRunFBA(object):
         klass.m = {}
         for m in DATA:
             if m.startswith('L2CBR_'):
-                cmod = cbmpy.readCOBRASBML(os.path.join(MDIR, m), work_dir=self.CDIR,\
-                                           output_dir=self.CDIR, delete_intermediate=False)
+                cmod = cbmpy.readCOBRASBML(m, work_dir=MDIR,\
+                                           output_dir=self.CDIR, delete_intermediate=True)
             elif m.startswith('L2FBA_'):
                 cmod = cbmpy.readSBML2FBA(os.path.join(MDIR, m))
             elif m.startswith('L3FBCV1_') or m.startswith('L3FBCV2_'):
@@ -84,9 +86,9 @@ class TestRunFBA(object):
 
     def test_run_fba_cobra(self):
         print('\n\nThis test fails under Linux.\n\n')
-        cmod = cbmpy.readCOBRASBML(os.path.join(MDIR, 'L2CBR_iJR904.glc.xml'), work_dir=self.CDIR,\
-                                                        output_dir=self.CDIR, delete_intermediate=False)
-        cmod2 = cbmpy.readSBML3FBC(os.path.join(MDIR, 'L3FBCV1_iJR904.glc.xml'))
+        cmod = cbmpy.readCOBRASBML('L2CBR_iJR904.glc.xml', work_dir=MDIR,\
+                                                        output_dir=self.CDIR, delete_intermediate=True)
+        cmod2 = cbmpy.readSBML3FBC('L3FBCV1_iJR904.glc.xml', work_dir=MDIR)
         fba1 = cbmpy.doFBA(cmod)
         fba2 = cbmpy.doFBA(cmod2)
         del cmod, cmod2
