@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 443 2016-04-18 21:28:42Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 447 2016-05-04 15:15:25Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3217,8 +3217,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             ACTIVE_OBJ = FBCplg.getActiveObjective().getId()
             print('INFO: Active objective:', ACTIVE_OBJ)
         except Exception as why:
-            print(type(why))
+            #AttributeError
             print('\nINFO: No active objective defined')
+            print('\t', type(why))
 
         for of_ in range(FBCplg.getNumObjectives()):
             SBOf = FBCplg.getObjective(of_)
