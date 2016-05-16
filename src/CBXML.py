@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 447 2016-05-04 15:15:25Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 449 2016-05-16 07:58:30Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1804,17 +1804,20 @@ def sbml_writeKeyValueDataAnnotation(annotations):
             Kval = cgi.escape(str(annotations[K]))
 
         # fix the key to be sid compatible
-        Kfix = ''
-        for l in K:
-            if l.isalnum():
-                Kfix += l
-            else:
-                Kfix += '_'
+        ## removed temporarily, no reason to be an sid
+        #Kfix = ''
+        #for l in K:
+            #if l.isalnum():
+                #Kfix += l
+            #else:
+                #Kfix += '_'
 
-        if not Kfix[0].isalpha():
-            Kfix = 'id_' + Kfix
+        ## removed temporarily, no reason to be an sid
+        #if not Kfix[0].isalpha():
+            #Kfix = 'id_' + Kfix
         ## taken out for now
         #Kfix = Kfix.lower()
+        Kfix = K
 
         #annoSTR += ' <data id="%s" type="%s" value="%s"/>\n' % (Kfix, Ktype, Kval)
         annoSTR += ' <data id="{}" value="{}"/>\n'.format(Kfix, Kval)
