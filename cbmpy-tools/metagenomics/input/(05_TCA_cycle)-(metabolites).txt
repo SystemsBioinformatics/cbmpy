@@ -1,0 +1,40 @@
+id	name	charge	chemformula	compartment	fixed	Legend	AltNames
+C00024	Acetyl-CoA		C23H38N7O17P3S				Acetyl coenzyme A
+C00122	Fumarate		C4H4O4				Fumaric acid;trans-Butenedioic acid
+C00149	(S)-Malate		C4H6O5				L-Malate;L-Apple acid;L-Malic acid;L-2-Hydroxybutanedioic acid;Malate;Malic acid
+C00009	Orthophosphate		H3PO4				Phosphate;Phosphoric acid;Orthophosphoric acid
+C00022	Pyruvate		C3H4O3				Pyruvic acid;2-Oxopropanoate;2-Oxopropanoic acid;Pyroracemic acid
+C00006	NADP+		C21H29N7O17P3				NADP;Nicotinamide adenine dinucleotide phosphate;beta-Nicotinamide adenine dinucleotide phosphate;TPN;Triphosphopyridine nucleotide;beta-NADP+
+C00005	NADPH		C21H30N7O17P3				TPNH;Reduced nicotinamide adenine dinucleotide phosphate
+C00004	NADH		C21H29N7O14P2				DPNH;Reduced nicotinamide adenine dinucleotide
+C00003	NAD+		C21H28N7O14P2				NAD;Nicotinamide adenine dinucleotide;DPN;Diphosphopyridine nucleotide;Nadide;beta-NAD+
+C00288	HCO3-		HCO3				Bicarbonate;Hydrogen carbonate;Acid carbonate
+C00001	H2O		H2O				Water
+C00068	Thiamin diphosphate		C12H19N4O7P2S				Thiamine diphosphate;Thiamin pyrophosphate;TPP;ThPP
+C00026	2-Oxoglutarate		C5H6O5				Oxoglutaric acid;2-Ketoglutaric acid;alpha-Ketoglutaric acid
+C05379	Oxalosuccinate		C6H6O7				Oxalosuccinic acid
+C00008	ADP		C10H15N5O10P2				Adenosine 5'-diphosphate
+C05125	2-(alpha-Hydroxyethyl)thiamine diphosphate		C14H23N4O8P2S				2-Hydroxyethyl-ThPP
+C00417	cis-Aconitate		C6H6O6				cis-Aconitic acid
+C00311	Isocitrate		C6H8O7				Isocitric acid;1-Hydroxytricarballylic acid;1-Hydroxypropane-1,2,3-tricarboxylic acid
+C00010	CoA		C21H36N7O16P3S				Coenzyme A;CoA-SH
+C00091	Succinyl-CoA		C25H40N7O19P3S				Succinyl coenzyme A
+C00036	Oxaloacetate		C4H4O5				Oxalacetic acid;Oxaloacetic acid;2-Oxobutanedioic acid;2-Oxosuccinic acid;keto-Oxaloacetate
+C00158	Citrate		C6H8O7				Citric acid;2-Hydroxy-1,2,3-propanetricarboxylic acid;2-Hydroxytricarballylic acid
+C15973	Enzyme N6-(dihydrolipoyl)lysine		C8H16NOS2R				Dihydrolipoamide-E
+C15972	Enzyme N6-(lipoyl)lysine		C8H14NOS2R				Lipoamide-E
+C00033	Acetate		C2H4O2				Acetic acid;Ethanoic acid
+C00139	Oxidized ferredoxin		Not found				Oxidized ferredoxin [iron-sulfur] cluster
+C00138	Reduced ferredoxin		Not found				Reduced ferredoxin [iron-sulfur] cluster
+C15603	Hydroquinone		Not found				p-Hydroquinone;Quinol;Reduced quinone
+C15602	Quinone		Not found				
+C00074	Phosphoenolpyruvate		C3H5O6P				Phosphoenolpyruvic acid;PEP
+C00002	ATP		C10H16N5O13P3				Adenosine 5'-triphosphate
+C16255	[Dihydrolipoyllysine-residue acetyltransferase] S-acetyldihydrolipoyllysine		C10H18NO2S2R				S-Acetyldihydrolipoamide-E
+C16254	[Dihydrolipoyllysine-residue succinyltransferase] S-succinyldihydrolipoyllysine		C12H20NO4S2R				S-Succinyldihydrolipoamide-E
+C00011	CO2		CO2				Carbon dioxide
+C00080	H+		H				Hydron
+C00035	GDP		C10H15N5O11P2				Guanosine 5'-diphosphate;Guanosine diphosphate
+C00042	Succinate		C4H6O4				Succinic acid;Butanedionic acid;Ethylenesuccinic acid
+C00044	GTP		C10H16N5O14P3				Guanosine 5'-triphosphate
+C05381	3-Carboxy-1-hydroxypropyl-ThPP		C16H25N4O10P2S				Succinate semialdehyde-thiamin diphosphate

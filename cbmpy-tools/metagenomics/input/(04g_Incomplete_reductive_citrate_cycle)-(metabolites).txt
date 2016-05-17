@@ -1,0 +1,24 @@
+id	name	charge	chemformula	compartment	fixed	Legend	AltNames
+C00024	Acetyl-CoA		C23H38N7O17P3S				Acetyl coenzyme A
+C00122	Fumarate		C4H4O4				Fumaric acid;trans-Butenedioic acid
+C00026	2-Oxoglutarate		C5H6O5				Oxoglutaric acid;2-Ketoglutaric acid;alpha-Ketoglutaric acid
+C00009	Orthophosphate		H3PO4				Phosphate;Phosphoric acid;Orthophosphoric acid
+C00022	Pyruvate		C3H4O3				Pyruvic acid;2-Oxopropanoate;2-Oxopropanoic acid;Pyroracemic acid
+C00004	NADH		C21H29N7O14P2				DPNH;Reduced nicotinamide adenine dinucleotide
+C00003	NAD+		C21H28N7O14P2				NAD;Nicotinamide adenine dinucleotide;DPN;Diphosphopyridine nucleotide;Nadide;beta-NAD+
+C00002	ATP		C10H16N5O13P3				Adenosine 5'-triphosphate
+C00001	H2O		H2O				Water
+C00149	(S)-Malate		C4H6O5				L-Malate;L-Apple acid;L-Malic acid;L-2-Hydroxybutanedioic acid;Malate;Malic acid
+C04832	Coenzyme M 7-mercaptoheptanoylthreonine-phosphate heterodisulfide		C13H26NO10PS3				Coenzyme M-HTP heterodisulfide;CoM-S-S-CoB;N-{7-[(2-Sulfoethyl)dithio]heptanoyl}-3-O-phospho-L-threonine
+C00008	ADP		C10H15N5O10P2				Adenosine 5'-diphosphate
+C00010	CoA		C21H36N7O16P3S				Coenzyme A;CoA-SH
+C00091	Succinyl-CoA		C25H40N7O19P3S				Succinyl coenzyme A
+C00036	Oxaloacetate		C4H4O5				Oxalacetic acid;Oxaloacetic acid;2-Oxobutanedioic acid;2-Oxosuccinic acid;keto-Oxaloacetate
+C00011	CO2		CO2				Carbon dioxide
+C00139	Oxidized ferredoxin		Not found				Oxidized ferredoxin [iron-sulfur] cluster
+C00138	Reduced ferredoxin		Not found				Reduced ferredoxin [iron-sulfur] cluster
+C00288	HCO3-		HCO3				Bicarbonate;Hydrogen carbonate;Acid carbonate
+C04628	Coenzyme B		C11H22NO7PS				N-(7-Mercaptoheptanoyl)threonine 3-O-phosphate;N-(7-Mercaptoheptanoyl)threonine O3-phosphate;HTP
+C00080	H+		H				Hydron
+C03576	Coenzyme M		C2H6O3S2				2-Mercaptoethanesulfonate;Reduced coenzyme M;HS-CoM;CoM
+C00042	Succinate		C4H6O4				Succinic acid;Butanedionic acid;Ethylenesuccinic acid
