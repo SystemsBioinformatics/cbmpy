@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 430 2016-04-08 15:21:09Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 452 2016-05-19 09:58:07Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -34,7 +34,7 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import numpy, re, time, weakref, copy, json
+import numpy, re, time, weakref, copy, json, urllib2
 
 try:
     import pickle
@@ -88,6 +88,7 @@ class Fbase(object):
     __objref__ = None
     __metaid__ = None
     __sbo_term__ = None
+    __text_encoding__ = 'utf8'
 
     ##  __pre__ = ''
     ##  __post__ = ''
@@ -160,7 +161,7 @@ class Fbase(object):
         Return the object's notes
 
         """
-        return self.notes
+        return self.__urlDecode(self.notes)
 
     def getAnnotations(self):
         """
@@ -209,7 +210,7 @@ class Fbase(object):
          - *notes* the note string, should preferably be (X)HTML for SBML
 
         """
-        self.notes = notes
+        self.notes = self.__urlEncode(notes)
 
     def setAnnotation(self, key, value):
         """
@@ -410,6 +411,27 @@ class Fbase(object):
         self.__sbo_term__ = sbo
 
 
+    def __urlEncode(self, txt):
+        """
+        URL encodes a string.
+
+        """
+        try:
+            txt = urllib2.quote(str(txt).encode(self.__text_encoding__, errors='replace'), safe='')
+        except UnicodeDecodeError as why:
+            print(why)
+            print(txt)
+        return txt
+
+    def __urlDecode(self, txt):
+        """
+        Decodes a URL encoded string
+
+        """
+        return urllib2.unquote(txt)
+
+
+
 class Model(Fbase):
     """
     Container for constraint based model, adds methods for manipulating:
@@ -576,8 +598,8 @@ class Model(Fbase):
          - *html* any valid html or the empty string to clear ''
 
         """
-
         self.description = html
+        self.notes = self.__urlEncode(html)
 
     def getDescription(self):
         """
@@ -585,7 +607,7 @@ class Model(Fbase):
 
         """
 
-        return self.description
+        return self.__urlDecode(self.notes)
 
     def setCreatedDate(self, date=None):
         """
@@ -1669,6 +1691,31 @@ class Model(Fbase):
             print('No active objective to get')
         return out
 
+    def getActiveObjectiveStoichiometry(self):
+        """
+        Returns a list of (coefficient, flux_objective) tuples
+
+        """
+        out = None
+        try:
+            out = self.objectives[self.activeObjIdx].getFluxObjectiveData()
+        except Exception:
+            print('No active objective to get')
+        return out
+
+
+    def getActiveObjectiveReactionIds(self):
+        """
+        Returns the active objective flux objective reaction id's
+
+        """
+        out = None
+        try:
+            out = self.objectives[self.activeObjIdx].getFluxObjectiveReactions()
+        except Exception:
+            print('No active objective to get')
+        return out
+
     def setActiveObjective(self, objId):
         idz = [o.id for o in self.objectives]
         if objId in idz:
@@ -1787,6 +1834,9 @@ class Model(Fbase):
          - *bound* this is either 'lower' or 'upper', or 'equal'
 
         """
+        if rid not in self.getReactionIds():
+            print('\nERROR setReactionBound: reaction id {} does not exist'.format(rid))
+            return
         c2 = self.getFluxBoundByReactionID(rid, bound)
         # changed to no str() casting
         if c2 != None:
@@ -1810,6 +1860,7 @@ class Model(Fbase):
         - *upper* the upper bound value
 
         """
+
         self.setReactionBound(rid, lower, 'lower')
         self.setReactionBound(rid, upper, 'upper')
 

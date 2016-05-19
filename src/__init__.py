@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 449 2016-05-16 07:58:30Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 453 2016-05-19 10:01:23Z bgoli $)
 
 """
 #

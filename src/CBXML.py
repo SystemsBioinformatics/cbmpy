@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 449 2016-05-16 07:58:30Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 452 2016-05-19 09:58:07Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -817,6 +817,9 @@ def sbml_setCompartmentsL3(model, fba):
         sboterm = cs.getSBOterm()
         if sboterm is not None and sboterm != '':
             comp_def.setSBOTerm(str(sboterm))
+        notes = cs.getNotes()
+        if notes != '' and notes is not None:
+            sbml_setNotes3(comp_def, notes)
 
 
 def sbml_setDescription(model, fba):
@@ -830,10 +833,10 @@ def sbml_setDescription(model, fba):
     ##  try: UseR = getuser()
     ##  except: UseR = ''
     notes = ''
-    if fba.description.strip() in ['', None, ' ']:
+    if fba.notes.strip() in ['', None, ' ']:
         notes += '<html:p><html:br/><html:span size="small">Model \"<html:strong>%s</html:strong>\" (%s) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> (%s) on %s.</html:span></html:p>' % (fba.getPid(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
     else:
-        notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">%s</html:span></html:p>\n' % fba.description
+        notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">%s</html:span></html:p>\n' % fba.notes
     #if fba._SBML_LEVEL_ == 2:
         #notes = '<body xmlns:html="http://www.w3.org/1999/xhtml">\n%s</body>' % notes
     #else:
@@ -847,7 +850,6 @@ def sbml_setDescription(model, fba):
             print('Invalid annotation in model:', fba.getId())
             print(fba.getAnnotations(), '\n')
 
-
 def sbml_setNotes3(obj, s):
     """
     Formats the CBMPy notes as an SBML note and adds it to the SBMl object
@@ -856,7 +858,6 @@ def sbml_setNotes3(obj, s):
      - *s* a string that should be added as a note
 
     """
-    s = str(s).replace('<','&lt;').replace('>','&gt;')
     s = '<html:body>{}</html:body>'.format(s)
     res = obj.setNotes(s)
     if res != 0:
@@ -865,6 +866,21 @@ def sbml_setNotes3(obj, s):
     else:
         return True
 
+def sbml_getNotes(obj):
+    """
+    Returns the SBML objects notes
+
+    - *obj* an SBML object
+
+    """
+    notes = ''
+    try:
+        notes = libsbml.XMLNode_convertXMLNodeToString(obj.getNotes())
+        if notes != '' and notes is not None:
+            notes = xml_stripTags(notes).strip()
+    except Exception as why:
+        print(why)
+    return notes
 
 def sbml_setUnits(model, units=None, give_default=False, L3=True):
     """
@@ -1918,7 +1934,8 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
                                       'boundary' : s.is_boundary,
                                       'chemFormula' : s.chemFormula,
                                       'miriam' : miriam,
-                                      'sboterm' : s.getSBOterm()
+                                      'sboterm' : s.getSBOterm(),
+                                      'notes' : s.getNotes()
                                       }
                         })
 
@@ -1975,12 +1992,14 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
                 annoSTR = sbml_writeAnnotationsAsCOBRANote(species[spe]['annotation']) #GOOD RIDDANCE
                 if annoSTR != None:
                     s.setNotes(annoSTR)
-            elif species[spe]['annotation'] != '' and species[spe]['annotation'] != None:
-                sbml_setNotes3(s, species[spe]['annotation'])
+            elif species[spe]['notes'] != '' and species[spe]['notes'] is not None:
+                sbml_setNotes3(s, species[spe]['notes'])
         if len(species[spe]['miriam']) > 0:
             sbml_setCVterms(s, species[spe]['miriam'], model=False)
         if  species[spe]['sboterm'] is not None and species[spe]['sboterm'] != '':
             s.setSBOTerm(str(species[spe]['sboterm']))
+        if  species[spe]['notes'] is not None and species[spe]['notes'] != '':
+            sbml_setNotes3(s, species[spe]['notes'])
 
 def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=1):
     """
@@ -2065,7 +2084,7 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
                     nres = r.setNotes(annoSTR)
                     if nres != 0:
                         print(nres, annoSTR)
-            elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] != None:
+            elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] is not None:
                 sbml_setNotes3(r, reactions[rxn]['notes'])
         if reactions[rxn]['reversible']:
             r.setReversible(True)
@@ -2148,7 +2167,7 @@ def sbml_setGroupsL3(cs, fba):
         if sbo != None:
             g.setSBOTerm(str(sbo))
         notes = grp.getNotes()
-        if notes != '':
+        if notes != '' and notes is not None:
             sbml_setNotes3(g, notes)
         lom = g.getListOfMembers()
         metaid = '{}{}_members'.format(METAPREFIX, grp.getId())
@@ -2157,7 +2176,7 @@ def sbml_setGroupsL3(cs, fba):
         if sbo != None:
             lom.setSBOTerm(str(sbo))
         notes = grp.getSharedNotes()
-        if notes != '':
+        if notes != '' and notes is not None:
             sbml_setNotes3(lom, notes)
 
         for mid in grp.getMemberIDs():
@@ -2735,6 +2754,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
        - *nogenes* do not load/process genes
        - *noannot* do not load/process any annotations
        - *validate* validate model and display errors and warnings before loading
+       - *readcobra* read the cobra annotation
 
     """
 
@@ -2746,6 +2766,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     LOADANNOT = True
     DEBUG = False
     VALIDATE = False
+    READCOBRA = False
     if 'nogenes' in xoptions and xoptions['nogenes']:
         LOADGENES = False
         print('\nGPR loading disabled!\n')
@@ -2757,6 +2778,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         print('\nDebug enabled!\n')
     if 'validate' in xoptions and xoptions['validate']:
         VALIDATE = True
+    if 'readcobra' in xoptions and xoptions['readcobra']:
+        READCOBRA = True
 
     # DEBUFG
     #global D, M, FBCplg, SBRe, PARAM_D, RFBCplg, GENE_D, GPR_D, FB_data, GPRASSOC
@@ -2826,7 +2849,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     model_id = M.getId()
     model_name = M.getName()
-    model_description = libsbml.XMLNode_convertXMLNodeToString(M.getNotes())
+    model_description = sbml_getNotes(M)
     model_description = xml_stripTags(model_description).strip()
 
     __HAVE_FBA_ANOT_OBJ__ = True
@@ -2871,11 +2894,13 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             S.annotation = sbml_readKeyValueDataAnnotation(SBSp.getAnnotationString())
             if S.annotation == {}:
                 S.annotation = sbml_readCOBRANote(libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes()))
+                #SBSp.unsetNotes()
             manot = sbml_getCVterms(SBSp, model=False)
             if manot != None:
                 S.miriam = manot
             del manot
         setCBSBOterm(SBSp.getSBOTermID(), S)
+        S.setNotes(sbml_getNotes(SBSp))
         SPEC.append(S)
 
     boundary_species = [s.getPid() for s in SPEC if s.is_boundary]
@@ -2896,7 +2921,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                  'name' : P.getName(),
                  'annotation': None,
                  'miriam' : None,
-                 'association' : []
+                 'association' : [],
+                 'notes' : sbml_getNotes(P)
                  }
         if LOADANNOT:
             pdict['annotation'] = sbml_readKeyValueDataAnnotation(P.getAnnotationString())
@@ -2919,6 +2945,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                      'label' : G.getLabel(),
                      'annotation': None,
                      'miriam' : None,
+                     'notes' : sbml_getNotes(G)
                      }
             if LOADANNOT:
                 gdict['annotation'] = sbml_readKeyValueDataAnnotation(G.getAnnotationString())
@@ -2953,7 +2980,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                        'miriam' : PARAM_D[lfbid]['miriam'],
                        'sbo'  : PARAM_D[lfbid]['sbo'],
                        'type' : 'lower',
-                       'name' : PARAM_D[lfbid]['name']
+                       'name' : PARAM_D[lfbid]['name'],
                        }
                 PARAM_D[lfbid]['association'].append(R_id)
                 FB_data.append(fbl)
@@ -3009,6 +3036,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 GPR_D[GPR_id]['miriam'] = None
                 GPR_D[GPR_id]['annotation'] = {}
                 GPR_D[GPR_id]['sbo'] = SBgpr.getSBOTermID()
+                GPR_D[GPR_id]['notes']  = sbml_getNotes(SBgpr)
                 if LOADANNOT:
                     GPR_D[GPR_id]['annotation'] = sbml_readKeyValueDataAnnotation(SBgpr.getAnnotationString())
                     manot = sbml_getCVterms(SBgpr, model=False)
@@ -3046,11 +3074,13 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             # only dig for ancient annotation if not using V2
             if FBCver < 2 and R.annotation == {}:
                 R.annotation = sbml_readCOBRANote(libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes()))
+                #SBRe.unsetNotes()
             manot = sbml_getCVterms(SBRe, model=False)
             if manot != None:
                 R.miriam = manot
             del manot
         setCBSBOterm(SBRe.getSBOTermID(), R)
+        R.setNotes(sbml_getNotes(SBRe))
         REAC.append(R)
 
     if DEBUG: print('Reactions load: {}'.format(round(time.time() - time0, 3)))
@@ -3082,6 +3112,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 C.miriam = manot
             del manot
         setCBSBOterm(SBcmp.getSBOTermID(), C)
+        C.setNotes(sbml_getNotes(SBcmp))
         COMP.append(C)
         del cid, name, size, dimensions, C
 
@@ -3208,6 +3239,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         P.miriam = PARAM_D[p_]['miriam']
         P.__sbo_term__ = PARAM_D[p_]['sbo']
         P._association_ = PARAM_D[p_]['association']
+        P.setNotes(PARAM_D[p_]['notes'])
         PARAM.append(P)
 
     if DEBUG: print('Parameter process: {}'.format(round(time.time() - time0, 3)))
@@ -3268,7 +3300,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     else:
         fm.setMetaId('meta_{}'.format(model_id))
     fm.name = model_name
-    fm.description = model_description
+    fm.setNotes(model_description)
     fm.annotation = sbml_readKeyValueDataAnnotation(M.getAnnotationString())
     fm.__FBC_STRICT__ = FBCstrict
     fm.__FBC_VERSION__ = FBCver
@@ -3351,6 +3383,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 G.annotation = GENE_D[g_]['annotation']
                 G.__sbo_term__ = GENE_D[g_]['sbo']
                 G.miriam = GENE_D[g_]['miriam']
+                G.setNotes(GENE_D[g_]['notes'])
             else:
                 print('Gene {} is not part of a GPR association. Will create anyway!'.format(g_))
                 non_gpr_genes.append(g_)
@@ -3360,6 +3393,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             G.annotation = GENE_D[ng_]['annotation']
             G.__sbo_term__ = GENE_D[ng_]['sbo']
             G.miriam = GENE_D[ng_]['miriam']
+            G.setNotes(GENE_D[ng_]['notes'])
 
     if DEBUG: print('GPR build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
@@ -3416,10 +3450,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 print('sboterm:', 'SBO:{}'.format(str(GR.getSBOTerm()).zfill(7)))
                 print('annotations:', sbml_readKeyValueDataAnnotation(GR.getAnnotationString()))
                 print('notes:', notes)
-
-            # TODO
-            #notes = libsbml.XMLNode_convertXMLNodeToString(GR.getNotes())
-            #notes = GR.getNotesString()
 
             LOM = GR.getListOfMembers()
             if LOM.getSBOTerm() != -1:
