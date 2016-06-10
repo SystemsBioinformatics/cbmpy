@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBVersion.py 453 2016-05-19 10:01:23Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBVersion.py 457 2016-06-10 06:12:55Z bgoli $)
 
 """
 # bump 
@@ -30,9 +30,9 @@ from __future__ import absolute_import
  
 MAJOR = 0
 MINOR = 7
-MICRO = 5
+MICRO = 6
 try:
-    STATUS = '$Rev: 453 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = '$Rev: 457 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = ''
 
