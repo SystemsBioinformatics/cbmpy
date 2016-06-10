@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 450 2016-05-16 07:59:41Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 453 2016-05-19 10:01:23Z bgoli $)
 
 """
 
@@ -43,6 +43,7 @@ else:
 
 # I suspect this is an evil hack to get the data into the install directory
 from distutils.command.install import INSTALL_SCHEMES
+print(INSTALL_SCHEMES)
 for scheme in INSTALL_SCHEMES.values():
     scheme['data'] = scheme['purelib']
 
@@ -62,7 +63,7 @@ if examplefile.endswith('.xml')]))
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 450 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 453 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -70,8 +71,8 @@ mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.nosetests', 'cbmpy.solver', 'p
 
 setup(
  name = "cbmpy",
- version = "0.7.5.{}".format(STATUS),
- #version = "0.7.4",
+ #version = "0.7.5.{}".format(STATUS),
+ version = "0.7.5",
  description = "CBMPy: PySCeS Constraint Based Modelling",
  maintainer = 'Brett G. Olivier',
  maintainer_email = 'bgoli@users.sourceforge.net',

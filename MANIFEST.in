@@ -5,13 +5,10 @@ include docs/*
 include tests/*
 include tests/sbml_test_suite/*
 include src/*.py
-include src/models/*
+include src/models/*.xml
 include src/nosetests/*
-include src/cglpk/*
-include src/cglpk/w447/*
-include src/cglpk/w452/*
+include src/fluxmodules/*.py
 include pyscescbm/*.py
 include pyscescbm/models/*
-include pyscescbm/cglpk/*
-include pyscescbm/cglpk/w447/*
-include pyscescbm/cglpk/w452/*
+include pyscescbm/fluxmodules/*
+include pyscescbm/solver/*

@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 453 2016-05-19 10:01:23Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 456 2016-06-08 05:43:11Z bgoli $)
 
 """
-#
+##
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
@@ -86,6 +86,8 @@ NINF = -float('inf')
 NAN = float('nan')
 
 from . import CBModel, CBDataStruct, CBModelTools, CBRead, CBReadtxt, CBTools, CBVersion, CBWrite, CBXML, CBNetDB, CBPlot
+from . import PyscesSED
+SED = PyscesSED.SEDCBMPY
 
 try:
     from . import nosetests
