@@ -476,22 +476,25 @@ class SED(object):
 
 class SEDCBMPY(SED):
     __cbmpy__ = None
+    __excel_file__ = None
+    cbm_model = None
+    cbm_sed = None
+    cbm_sed_dir = None
+    cbm_sbml_name = None
+    CBM_WITH_EXCEL = True
+    cbm_add_cbmpy_annot = True
+    cbm_add_cobra_annot = False
     
     def __init__(self, id, sedpath):
         super(SEDCBMPY, self).__init__(id, sedpath, libSEDMLpath=None, sbwsedmluri=None)
 
-    def writeSBML(self, mod, mfile):
-        if self.__cbmpy__ == None:
-            import cbmpy
-            self.__cbmpy__ = cbmpy
-        self.__cbmpy__.writeSBML3FBC(mod, mfile)
 
-    def writeModelToCOMBINEarchive(self, mod, fname=None, directory=None, sbmlname=None, withExcel=True, vc_given='CBMPy', vc_family='Software', vc_email='None', vc_org='cbmpy.sourceforge.net', add_cbmpy_annot=True, add_cobra_annot=False):
+    def writeModelToCOMBINEarchive(self, mod, fname=None, directory=None, sbmlname=None, withExcel=True, vc_given='CBMPy', vc_family='Software', vc_email='None', vc_org='cbmpy.sourceforge.net', add_cbmpy_annot=True, add_cobra_annot=False, display_reactions=None):
         """
         Write a model in SBML and Excel format to a COMBINE archive using the following information:
     
         - *mod* a model object
-        - *fname* the output base filename, archive will be <fname>.zip
+        - *fname* the output base filename, archive will be <fname>.sed.omex
         - *directory* [default=None] created the combine archive 'directory'
         - *sbmlname* [default='None'] If *sbmlname* is defined then SBML file is <sbmlname>.xml otherwise sbml will be <fname>.xml.
         - *withExcel* [default=True] include a human readable Excel spreadsheet version of the model
@@ -500,59 +503,171 @@ class SEDCBMPY(SED):
         - *vc_email* [default='None'] email
         - *vc_org* [default='None'] organisation
         - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
-        - *add_cobra_annot* [default=True] add COBRA <notes> annotation
+        - *add_cobra_annot* [default=False] add COBRA <notes> annotation
+        - *display_reactions* [default=None] a list of reaction ids to display otherwise Obj+RID'd 
     
+        """
+        # these must still be set up to actually be user configurable
+        if directory is None:
+            directory = os.getcwd()
+        self.cbm_model = mod
+        self.cbm_sed_file = fname
+        self.cbm_sed_dir = directory
+        self.cbm_sbml_name = sbmlname
+        self.CBM_WITH_EXCEL = withExcel
+        self.cbm_add_cbmpy_annot = add_cbmpy_annot
+        self.cbm_add_cobra_annot  = add_cobra_annot
+
+        #sed = cbmpy.SED('test_model_1', cDir)
+        
+        self.addModel(mod.getId(), mod)
+        if display_reactions is None:
+            ofids = mod.getActiveObjectiveReactionIds()
+            display_reactions = ofids + [a for a in mod.getReactionIds() if a not in ofids]
+        self.addSteadyState('state1', display_reactions, algorithm='KISAO:0000437')
+        self.addTask('task1', 'state1', mod.getId())
+        self.addTaskDataGenerators('task1')
+        self.addTaskReport('task1')
+        self.writeSedScript(sedx=False)
+
+        self.writeCOMBINEArchive(vc_given, vc_family, vc_email, vc_org)
+
+
+    def writeSBML(self, mod, mfile):
+        if self.__cbmpy__ == None:
+            import cbmpy
+            self.__cbmpy__ = cbmpy
+        self.__cbmpy__.writeSBML3FBC(mod, mfile, add_cobra_annot=self.cbm_add_cobra_annot, add_cbmpy_annot=self.cbm_add_cbmpy_annot)
+
+    def writeExcel(self, mod, mfile): 
+        if self.__cbmpy__ == None:
+            import cbmpy
+            self.__cbmpy__ = cbmpy
+        self.__cbmpy__.writeModelToExcel97(mod, mfile)
+
+
+    def writeSedScript(self, sedx=False, excel=True):
+        sedscr = cStringIO.StringIO()
+        if not os.path.exists(self.sedpath):
+            os.makedirs(self.sedpath)
+        for m_ in self.models:
+            if not sedx:
+                mf = os.path.join(self.sedpath, '%s-%s.xml' % (self.id, m_))
+                tmp = (m_, str(os.path.join(self.sedpath,'%s-%s.xml' % (self.id, m_))))
+            else:
+                if not os.path.exists(os.path.join(self.sedpath, 'sedxtmp')):
+                    os.makedirs(os.path.join(self.sedpath, 'sedxtmp'))
+                mf = os.path.join(self.sedpath, 'sedxtmp', '%s-%s.xml' % (self.id, m_))
+                tmp = (m_, str('%s-%s.xml' % (self.id, m_)))
+            self.writeSBML(self.models[m_], mf)
+            if self.CBM_WITH_EXCEL:
+                mf2 = mf.replace('.xml','')
+                self.__excel_file__ = mf2
+                self.writeExcel(self.models[m_], mf2)
+            
+            sedscr.write("AddModel('%s', r'%s', 'urn:sedml:language:sbml')\n" % tmp)
+        sedscr.write('\n')
+
+        for s_ in self.sims:
+            if self.sims[s_]['type'] == 'sim':
+                S = self.sims[s_]
+                sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" %  (s_,\
+                        S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
+            elif self.sims[s_]['type'] == 'state':
+                sedscr.write("AddSteadyState('%s', '%s')\n" %  (s_, self.sims[s_]['algorithm']))  
+        sedscr.write('\n')
+
+        for t_ in self.tasks:
+            T = self.tasks[t_]
+            sedscr.write("AddTask(\'%s\', \'%s\', \'%s\')\n" % (t_, T['sim'], T['model']))
+        sedscr.write('\n')
+
+        dgMap = {}
+
+        for dg_ in self.datagens:
+            D = self.datagens[dg_]
+            sedscr.write("AddColumn('%s', [['%s', '%s', '%s']])\n" % (dg_, D['varId'], D['taskId'], D['var']))
+            dgMap.update({D['var'] : dg_})
+        sedscr.write('\n')
+
+        for p_ in self.plots2d:
+            P = self.plots2d[p_]
+            sedscr.write("AddPlot('%s', '%s', [" % (p_, P['name']))
+            cstr = ''
+            for c_ in P['curves']:
+                cstr += "['%s', '%s']," % (c_[0], c_[1])
+            sedscr.write(cstr[:-1])
+            sedscr.write("])\n")
+        sedscr.write('\n')
+
+        for r_ in self.reports:
+            R = self.reports[r_]
+            cstr = ''
+            for c_ in R['columns']:
+                cstr += '\'{}\', '.format(dgMap[c_])
+            sedscr.write("AddReport('%s', '%s', [%s])" % (r_, R['name'], cstr[:-2]))
+        sedscr.write('\n')
+
+        print '\nThe SED\n++++++\n'
+        sedscr.seek(0)
+        print sedscr.read()
+        sedscr.seek(0)
+        if not sedx:
+            sf = os.path.join(self.sedpath, '%s.txt' % (self.id))
+        else:
+            sf = os.path.join(self.sedpath, 'sedxtmp', '%s.txt' % (self.id))
+        F = file(sf, 'w')
+        F.write(sedscr.read())
+        F.flush()
+        F.close()
+        self.__sedscript__ = sf
+        print '\nSED-ML script files written to:', sf
+
+
+    def writeCOMBINEArchive(self, vc_given='PySCeS', vc_family='Software', vc_email='', vc_org='pysces.sourceforge.net'):
+        """
+        Write a COMBINE archive using the following information:
+
+        - vc_given
+        - vc_family
+        - vc_email
+        - vc_org
+
         """
         scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone/60/60)
         self.writeSedXML(sedx=True)
         sedxname = '%s.sed.omex' % (self.id)
-        fname=sedxname
-        directory=self.sedpath
+        #sedxname = '%s.sed.omex.zip' % (self.id)
         sf = os.path.join(self.sedpath, sedxname)
+        ptmp = os.path.join(self.sedpath, 'sedxtmp')
         self.__sedarchive__ = sf
-        if directory != None:
-            zfpath = os.path.join(directory, fname+'.sbex.omex')
-        else:
-            zfpath = fname+'.sbex.omex'
-        zf = zipfile.ZipFile(zfpath, mode='w', compression=zipfile.ZIP_DEFLATED)
-        if sbmlname != None:
-            if sbmlname.endswith('.xml'):
-                sbmlf = sbmlname
-                xlf = sbmlname[:-4]
-            else:
-                sbmlf = sbmlname+'.xml'
-                xlf = sbmlname
-        else:
-            sbmlf = fname+'.xml'
-            xlf = fname
-        ptmp = os.path.join(os.getcwd(), 'sedxtmp')
-        if not os.path.exists(ptmp):
-            os.makedirs(ptmp)
-        assert os.path.exists(ptmp), "Could not create temporary archive directory: {}".format(ptmp)
-    
+        zf = zipfile.ZipFile(sf, mode='w', compression=zipfile.ZIP_STORED)
+        zf.write(self.__sedxml__, arcname=os.path.split(self.__sedxml__)[-1])
+
         MFstr = ''
         MDstr = ''
         MFstr += '<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">\n'
         MFstr += ' <content location="." format="http://identifiers.org/combine.specifications/omex"/>\n'
-        MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sedml"/>\n' % os.path.split(self.__sedxml__)[-1]
+        MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sed-ml"/>\n' % os.path.split(self.__sedxml__)[-1]
+        for m_ in self.models:
+            modname = '%s-%s.xml' % (self.id, m_)
+            modpath = os.path.join(ptmp, modname)
+            zf.write(modpath, arcname=modname)
+            MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sbml"/>\n' % modname
         MFstr += ' <content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>\n'
-    
-        # SBML
-        self.__cbmpy__.writeSBML3FBC(mod, sbmlf, ptmp, add_cbmpy_annot=add_cbmpy_annot, add_cobra_annot=add_cobra_annot)
-        zf.write(os.path.join(ptmp, sbmlf), arcname=sbmlf)
-        MFstr += ' <content location="./{}" format="http://identifiers.org/combine.specifications/sbml.level-3.version-1"/>\n'.format(sbmlf)
-    
-        # Excel
-        if withExcel and self.__cbmpy__.CBWrite._HAVE_XLWT_:
-            self.__cbmpy__.writeModelToExcel97(mod, os.path.join(ptmp, xlf))
-            xlf += '.xls'
-            zf.write(os.path.join(ptmp, xlf), arcname=xlf)
+        
+        if self.CBM_WITH_EXCEL:
+            xl = self.__excel_file__ + '.xls'
+            xlf = os.path.split(xl)[-1]
+            print(xl)
+            print(xlf)
+            zf.write(xl, arcname=xlf)
             MFstr += ' <content location="./{}" format="http://mediatypes.appspot.com/application/vnd.ms-excel"/>'.format(xlf)
+
         MF = file(os.path.join(ptmp, 'manifest.xml'), 'w')
-        MF.write('<?xml version="1.0" encoding="utf-8"?>\n{}\n</omexManifest>\n'.format(MFstr))
+        MF.write('<?xml version="1.0" encoding="utf-8"?>\n%s\n</omexManifest>\n' % MFstr)
         MF.close()
-    
-    
+
         MD = file(os.path.join(ptmp, 'metadata.rdf'), 'w')
         MD.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         MD.write('<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n')
@@ -560,7 +675,7 @@ class SEDCBMPY(SED):
         MD.write('    xmlns:vCard="http://www.w3.org/2006/vcard/ns#"\n')
         MD.write('    xmlns:bqmodel="http://biomodels.net/models-qualifiers">\n')
         MD.write(' <rdf:Description rdf:about=".">\n')
-        MDstr += '   <dcterms:description>\n     %s\n    </dcterms:description>\n' % self.omex_description
+        #MDstr += '   <dcterms:description>\n     %s\n    </dcterms:description>\n' % self.omex_description
         MDstr += ' <dcterms:creator>\n'
         MDstr += ' <rdf:Bag>\n'
         MDstr += '  <rdf:li rdf:parseType="Resource">\n'
@@ -585,21 +700,18 @@ class SEDCBMPY(SED):
         MD.write(' </rdf:Description>\n')
         MD.write('</rdf:RDF> \n')
         MD.close()
-    
+
         zf.write(os.path.join(ptmp, 'manifest.xml'), arcname='manifest.xml')
         zf.write(os.path.join(ptmp, 'metadata.rdf'), arcname='metadata.rdf')
-        zf.write(self.__sedscript__, arcname=self.__sedscript__)
         zf.close()
-    
+
         for f_ in os.listdir(ptmp):
             os.remove(os.path.join(ptmp, f_))
         os.removedirs(ptmp)
-        print('COMBINE archive created: {}'.format(fname+'.zip'))
-
-
-
-
-
+        if not self._SED_CURRENT_:
+            self.__sedxml__ = None
+        self.__sedscript__ = None
+        print 'COMBINE archive created: %s' % sf
 
 
 def storeObj(obj, filename):
