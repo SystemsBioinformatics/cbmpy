@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 452 2016-05-19 09:58:07Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 462 2016-07-19 13:35:30Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3142,6 +3142,7 @@ class Reaction(Fbase):
     fva_status = None
     __bound_history__ = None
     __is_active__ = True
+    _modifiers_ = None
 
     def __init__(self, pid, name=None, reversible=True):
         self.id = pid
@@ -3151,6 +3152,7 @@ class Reaction(Fbase):
         self.annotation = {}
         self.__TRASH__ = {}
         self.__bound_history__ = []
+        self._modifiers_ = [] # reaction modifiers from SBML, read/write only
 
     def addReagent(self, reag):
         """
@@ -3915,7 +3917,7 @@ class GeneProteinAssociation(Fbase):
 
     def buildEvalFunc(self):
         """
-        Builds a function which evaluates the gene expressions and evaluates to an integer uisng
+        Builds a function which evaluates the gene expressions and evaluates to an integer using
         the following rules:
 
          - True --> 1

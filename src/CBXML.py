@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 452 2016-05-19 09:58:07Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 462 2016-07-19 13:35:30Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2043,7 +2043,8 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
                                         'compartment' : r.compartment,
                                         'miriam' : miriam,
                                         'notes' : r.getNotes(),
-                                        'sboterm' : r.getSBOterm()
+                                        'sboterm' : r.getSBOterm(),
+                                        'modifiers' : r._modifiers_
                                         }
                           })
     if return_dict:
@@ -2094,6 +2095,10 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
         if reactions[rxn]['sboterm'] is not None and reactions[rxn]['sboterm'] != '':
             #print(reactions[rxn]['sboterm'])
             r.setSBOTerm(str(reactions[rxn]['sboterm']))
+
+        if len(reactions[rxn]['modifiers']) > 0:
+            for mo_ in reactions[rxn]['modifiers']:
+                r.addModifier(fbcmod.model.getSpecies(mo_))
 
         if fbc_version == 2:
             FB.setLowerFluxBound(fbcmod.parameter_map[reactions[rxn]['id']]['lb'])
@@ -3081,6 +3086,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             del manot
         setCBSBOterm(SBRe.getSBOTermID(), R)
         R.setNotes(sbml_getNotes(SBRe))
+        if SBRe.getNumModifiers() > 0:
+            for mo_ in range(SBRe.getNumModifiers()):
+                R._modifiers_.append(SBRe.getModifier(mo_).getSpecies())
         REAC.append(R)
 
     if DEBUG: print('Reactions load: {}'.format(round(time.time() - time0, 3)))
