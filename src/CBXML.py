@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 462 2016-07-19 13:35:30Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 463 2016-07-27 13:13:36Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -75,18 +75,18 @@ try:
                   libsbml.SBML_INITIAL_ASSIGNMENT : 'initialassignment',
                   libsbml.SBML_SPECIES_REFERENCE : 'speciesreference',
                   libsbml.SBML_UNKNOWN : 'unknown',
-                  libsbml.SBML_FBC_FLUXBOUND : 'fluxbound',
-                  libsbml.SBML_FBC_OBJECTIVE : 'objective',
-                  libsbml.SBML_FBC_FLUXOBJECTIVE : 'fluxobjective',
-                  libsbml.SBML_FBC_V1ASSOCIATION : 'geneassociation1'
                   }
     try:
-        SBML_TYPES.update({libsbml.SBML_FBC_GENEASSOCIATION : 'geneassociation2',
+        SBML_TYPES.update({libsbml.SBML_FBC_FLUXBOUND : 'fluxbound',
+                  libsbml.SBML_FBC_OBJECTIVE : 'objective',
+                  libsbml.SBML_FBC_FLUXOBJECTIVE : 'fluxobjective',
+                  libsbml.SBML_FBC_V1ASSOCIATION : 'geneassociation1',
+                  libsbml.SBML_FBC_GENEASSOCIATION : 'geneassociation2',
                   libsbml.SBML_FBC_GENEPRODUCT : 'geneproduct',
                   libsbml.SBML_FBC_GENEPRODUCTASSOCIATION : 'geneproductassociation',
                   libsbml.SBML_FBC_GENEPRODUCTREF : 'geneproductref'})
     except AttributeError:
-        print('WARNING: FBC support limited!')
+        print('\nWARNING: No or limited FBC support limited! Please update your libSBML to the latest version.\n')
 
 except ImportError:
     print('WARNING: SBML support not available, please install libSBML, Python bindings with FBC (sbml.org)')
@@ -2298,6 +2298,8 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
        - *fbc_version* [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)
        - *validate* [default=False] validate the output SBML file
        - *compress_bounds* [default=False] try compress output flux bound parameters
+       - *zip_model* [default=False] compress the model using ZIP encoding
+       - *return_model_string* [default=False] return the SBML XML file as a string
 
 
     """
@@ -2308,14 +2310,21 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     fbc_version = 1
     VALIDATE = False
     compress_bounds = False
+    zip_model = False
+    return_model_string = False
     if 'fbc_version' in xoptions:
         fbc_version = xoptions['fbc_version']
     if 'validate' in xoptions:
         VALIDATE = xoptions['validate']
+    if 'return_model_string' in xoptions:
+        return_model_string = xoptions['return_model_string']
     if 'compress_bounds' in xoptions and fbc_version == 2:
         compress_bounds = xoptions['compress_bounds']
+    if 'zip_model' in xoptions:
+        zip_model = xoptions['zip_model']
     if fbc_version == 2:
         autofix = True
+
     print('\nINFO: using FBC version: {}'.format(fbc_version))
 
     if  fba.getName() in [None, '', ' ']:
@@ -2363,27 +2372,41 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     try: UseR = getuser()
     except: UseR = ''
 
-    #raw_input('L%sV%s' % (document.getLevel(),document.getVersion()))
     h1 = '<?xml version="1.0" encoding="utf-8"?>\n'
     h1 += '<!-- SBML created with CBMPy ('+ __version__ + ') on ' + time.strftime("%a, %d %b %Y %H:%M:%S") + ' -->\n'
-    F = file(fname, 'w')
-    F.write(h1 + cs3.doc.toSBML())
-    F.flush()
-    F.close()
+    if return_model_string:
+        modstr = h1 + cs3.doc.toSBML()
+        print('Model returned as string')
+    elif zip_model:
+        cs3.sbml.writeSBMLToFile(cs3.doc, fname+'.zip')
+        print('Model exported as: {}'.format(fname+'.zip'))
+    else:
+        #raw_input('L%sV%s' % (document.getLevel(),document.getVersion()))
+        F = file(fname, 'w')
+        F.write(h1 + cs3.doc.toSBML())
+        F.flush()
+        F.close()
+        print('Model exported as: {}'.format(fname))
 
     if VALIDATE:
         sbml_setValidationOptions(cs3.doc, level='full')
         print('\nPerforming validation on output SBML ...\n')
         errors, warnings, others, DOCUMENT_VALID = sbml_validateDocument(cs3.doc, fullmsg=False)
         if not DOCUMENT_VALID:
-            print('\nSBML document is invalid: filename will be {}.invalid'.format(fname))
-            shutil.move(fname, fname+'.invalid')
+            if return_model_string:
+                fname2 = 'model.invalid.xml'
+                cs3.sbml.writeSBMLToFile(cs3.doc, fname2)
+            else:
+                fname2 = fname+'.invalid'
+                shutil.move(fname, fname2)
+            print('\nSBML document is invalid and written as: {}'.format(fname2))
     else:
         sbml_setValidationOptions(cs3.doc, level='normal')
 
-    print('Model exported as: {}'.format(fname))
     cs3._cleanUP_()
     del cs3
+    if return_model_string:
+        return modstr
 
 def sbml_setValidationOptions(D, level):
     """
@@ -2760,6 +2783,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
        - *noannot* do not load/process any annotations
        - *validate* validate model and display errors and warnings before loading
        - *readcobra* read the cobra annotation
+       - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
 
     """
 
@@ -2772,6 +2796,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     DEBUG = False
     VALIDATE = False
     READCOBRA = False
+    READ_MODEL_STRING = False
     if 'nogenes' in xoptions and xoptions['nogenes']:
         LOADGENES = False
         print('\nGPR loading disabled!\n')
@@ -2785,14 +2810,21 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         VALIDATE = True
     if 'readcobra' in xoptions and xoptions['readcobra']:
         READCOBRA = True
+    if 'read_model_string' in xoptions and xoptions['read_model_string']:
+        READ_MODEL_STRING = True
 
     # DEBUFG
     #global D, M, FBCplg, SBRe, PARAM_D, RFBCplg, GENE_D, GPR_D, FB_data, GPRASSOC
 
-    if work_dir != None:
-        D = libsbml.readSBMLFromFile(str(os.path.join(work_dir, fname)))
+    D = None
+    if READ_MODEL_STRING:
+        D = libsbml.readSBMLFromString(fname)
+        fname = 'string_source'
     else:
-        D = libsbml.readSBMLFromFile(str(fname))
+        if work_dir != None:
+            D = libsbml.readSBMLFromFile(str(os.path.join(work_dir, fname)))
+        else:
+            D = libsbml.readSBMLFromFile(str(fname))
 
     # set consistency checking level for document
 

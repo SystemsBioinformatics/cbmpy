@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 462 2016-07-19 13:35:30Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 463 2016-07-27 13:13:36Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -420,7 +420,7 @@ class Fbase(object):
             txt = urllib2.quote(str(txt).encode(self.__text_encoding__, errors='replace'), safe='')
         except UnicodeDecodeError as why:
             print(why)
-            print(txt)
+            #print(txt)
         return txt
 
     def __urlDecode(self, txt):

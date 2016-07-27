@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 427 2016-04-05 09:28:55Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 463 2016-07-27 13:13:36Z bgoli $)
 
 """
 
@@ -82,8 +82,13 @@ def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
      - *add_cobra_annot* [default=True] add COBRA <notes> annotation
      - *xoptions* extended options
 
+       - *fbc_version* [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)
        - *validate* [default=False] validate the output SBML file
        - *compress_bounds* [default=False] try compress output flux bound parameters
+       - *zip_model* [default=False] compress the model using PKZIP encoding
+       - *return_model_string* [default=False] return the SBML XML file as a string
+
+
 
     """
     sbml_level_version = (3,1)
@@ -94,7 +99,7 @@ def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
 
 
 def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups=False, add_cbmpy_annot=True, add_cobra_annot=False,\
-                    validate=False, compress_bounds=True):
+                    validate=False, compress_bounds=True, zip_model=False, return_model_string=False):
     """
     Takes an FBA model object and writes it to file as SBML L3 FBCv2 :
 
@@ -107,10 +112,12 @@ def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups
      - *add_cobra_annot* [default=False] add COBRA <notes> annotation
      - *validate* [default=False] validate the output SBML file
      - *compress_bounds* [default=True] try compress output flux bound parameters
+     - *zip_model* [default=False] compress the model using ZIP encoding
+     - *return_model_string* [default=False] return the SBML XML file as a string
 
     """
 
-    xoptions = {'fbc_version': 2, 'validate' : validate, 'compress_bounds' : compress_bounds}
+    xoptions = {'fbc_version': 2, 'validate' : validate, 'compress_bounds' : compress_bounds, 'return_model_string' : return_model_string, 'zip_model' : zip_model}
     sbml_level_version=(3,1)
     autofix=True,
     return_fbc=False
