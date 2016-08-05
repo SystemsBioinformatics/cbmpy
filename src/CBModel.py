@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 463 2016-07-27 13:13:36Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 465 2016-08-05 15:12:18Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -461,7 +461,7 @@ class Model(Fbase):
     __genes_idx__ = None
     __single_gene_effect_map__ = None
     gpr = None
-    _parameters_ = None
+    parameters = None
     N = None
     sourcefile = ''
     description = ''
@@ -509,7 +509,7 @@ class Model(Fbase):
         self.genes = []
         self.__genes_idx__ = []
         self.gpr = []
-        self._parameters_ = []
+        self.parameters = []
         self.annotation = {}
         self.__TRASH__ = {}
         self.MODEL_CREATORS = {}
@@ -906,7 +906,7 @@ class Model(Fbase):
         assert isinstance(par, Parameter), '\nERROR: requires a Parameter object, not something of type {}'.format(type(par))
         if __DEBUG__: print('Adding Parameter: {}'.format(par.id))
         #comp.__objref__ = weakref.ref(self)
-        self._parameters_.append(par)
+        self.parameters.append(par)
 
     def addCompartment(self, comp):
         """
@@ -1455,6 +1455,18 @@ class Model(Fbase):
         for s in self.species:
             if s.getPid() == sid:
                 out = s
+                break
+        return out
+
+    def getParameter(self, pid):
+        """
+        Returns a parameter object with pid
+
+        """
+        out = None
+        for p in self.parameters:
+            if p.getPid() == pid:
+                out = p
                 break
         return out
 
@@ -3070,6 +3082,7 @@ class Parameter(Fbase):
     _association_ = None
     constant = True
     value = None
+    _is_fluxbound_ = False
 
     def __init__(self, pid, value, name=None, constant=True):
         """
@@ -3109,25 +3122,26 @@ class Parameter(Fbase):
 
     def getAssociations(self):
         """
-        Return the FluxBounds ID's associated with this object
+        Return the Object ID's associated with this parameter
 
         """
         return self._association_
 
     def addAssociation(self, assoc):
         """
-        Add a fluxbound ID's to associate with this object
+        Add an object ID to associate with this object
 
         """
         self._association_.append(assoc)
 
     def deleteAssociation(self, assoc):
         """
-        Delete the fluxbound id associated with this object
+        Delete the object id associated with this object
 
         """
         if assoc in self._association_:
             self._association_.pop(self._association_.index(assoc))
+
 
 class Reaction(Fbase):
     """Holds reaction information"""
@@ -3332,7 +3346,7 @@ class Reaction(Fbase):
 
         """
         if not use_names:
-            out = [(r.coefficient, r.species_ref) for r in self.reagents]
+            out = [(r.getCoefficient(), r.species_ref) for r in self.reagents]
             if not altout:
                 return out
             else:
@@ -3341,7 +3355,7 @@ class Reaction(Fbase):
                     out2[r[1]] = r[0]
                 return out2
         else:
-            out = [(r.coefficient, self.__objref__().getSpecies(r.species_ref).getName()) for r in self.reagents]
+            out = [(r.getCoefficient(), self.__objref__().getSpecies(r.species_ref).getName()) for r in self.reagents]
             if not altout:
                 return out
             else:
@@ -3359,9 +3373,9 @@ class Reaction(Fbase):
 
         """
         if not use_names:
-            return [r.species_ref for r in self.reagents if r.coefficient < 0.0]
+            return [r.species_ref for r in self.reagents if r.getCoefficient() < 0.0]
         else:
-            return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.coefficient < 0.0]
+            return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.getCoefficient() < 0.0]
 
     def getProductIds(self, use_names=False):
         """
@@ -3371,9 +3385,9 @@ class Reaction(Fbase):
 
         """
         if not use_names:
-            return [r.species_ref for r in self.reagents if r.coefficient > 0.0]
+            return [r.species_ref for r in self.reagents if r.getCoefficient() > 0.0]
         else:
-            return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.coefficient > 0.0]
+            return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.getCoefficient() > 0.0]
 
     def deleteReagentWithSpeciesRef(self, species):
         """
@@ -3484,9 +3498,9 @@ class Reaction(Fbase):
         sub = ''
         prod = ''
         for r in self.reagents:
-            coeff = abs(r.coefficient)
-            if r.role == 'substrate':
-                if coeff == 1.0:
+            coeff = r.getCoefficient()
+            if coeff < 0.0:
+                if abs(coeff) == 1.0:
                     if not use_names:
                         sub += '{} + '.format(r.species_ref)
                     else:
@@ -3497,7 +3511,7 @@ class Reaction(Fbase):
                     else:
                         sub += '({}) {} + '.format(coeff, self.__objref__().getSpecies(r.species_ref).getName())
             else:
-                if coeff == 1.0:
+                if abs(coeff) == 1.0:
                     if not use_names:
                         prod += '{} + '.format(r.species_ref)
                     else:
@@ -3507,6 +3521,8 @@ class Reaction(Fbase):
                         prod += '({}) {} + '.format(coeff, r.species_ref)
                     else:
                         prod += '({}) {} + '.format(coeff, self.__objref__().getSpecies(r.species_ref).getName())
+        #print(sub)
+        #print(prod)
         if self.reversible:
             eq = '{} {} {}'.format(sub[:-3], reverse_symb, prod[:-2])
         else:
@@ -3654,25 +3670,21 @@ class Reagent(Fbase):
     coefficient = None
     role = None
     species_ref = None
+    _value_is_ref_ = False
 
     def __init__(self, reid, species_ref, coef):
         """
-        Instantiates a reagent
+        Instantiates a reagent from a metatabolite and coefficient, note that now the coefficient
+        can be a Parameter object in which case a connection is made to the linked Parameter
 
          - *reid* a unique id
          - *species_ref* a reference to a species id
-         - *coefficient* the metabolite coefficient
+         - *coefficient* the stoichiometric coefficient, a non-zero integer or Parameter
 
         """
         self.id = reid
         self.species_ref = species_ref
-        self.coefficient = coef
-        if coef > 0.0:
-            self.role = 'product'
-        elif coef < 0.0:
-            self.role = 'substrate'
-        else:
-            raise RuntimeError('\nZero coefficients are not supported for now: {%s}%s!' % (coef, reid))
+        self.setCoefficient(coef)
         self.annotation = {}
         self.compartment = None
         self.__delattr__('compartment')
@@ -3684,20 +3696,36 @@ class Reagent(Fbase):
          - *coeff* the new coefficient
 
         """
-        self.coefficient = coef
-        if self.coefficient < 0.0:
+        if type(coef) is Parameter:
+            self.coefficient = weakref.ref(coef)
+            self._value_is_ref_ = True
+            value = coef.getValue()
+        else:
+            self.coefficient = coef
+            self._value_is_ref_ = False
+            value = coef
+
+        if value < 0.0:
             self.role = 'substrate'
-        elif self.coefficient > 0.0:
+        elif value > 0.0:
             self.role = 'product'
         else:
             self.role = None
+            raise RuntimeError('Zero coefficient detected and are currently not supported: ({}) {}!' % (value, self.getId()))
+
 
     def getCoefficient(self):
         """
         Returns the reagent coefficient
 
         """
-        return self.coefficient
+
+        if not self._value_is_ref_:
+            value = self.coefficient
+        else:
+            value = self.coefficient().getValue()
+
+        return value
 
     def setSpecies(self, spe):
         """
@@ -3725,6 +3753,34 @@ class Reagent(Fbase):
         #else:
             #self.role = None
         return self.role
+
+## bgoli concept future reagent
+#class Reagent():
+    #_value = None
+    #_weakref_ = False
+
+    #@property
+    #def coefficient(self):
+        #print(self._value, self._weakref_)
+
+    #@coefficient.setter
+    #def coefficient(self, value):
+        #if type(value) is Parameter:
+            #self._value = weakref.ref(value)
+            #self._weakref_ = True
+        #else:
+            #self._value = value
+            #self._weakref_ = False
+
+    #@coefficient.getter
+    #def coefficient(self):
+        #if self._weakref_:
+            #x = self._value().value
+        #else:
+            #x = self._value
+        #return x
+
+
 
 class Gene(Fbase):
     """

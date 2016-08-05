@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 463 2016-07-27 13:13:36Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 464 2016-08-05 11:43:02Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -821,6 +821,52 @@ def sbml_setCompartmentsL3(model, fba):
         if notes != '' and notes is not None:
             sbml_setNotes3(comp_def, notes)
 
+def sbml_setParametersL3Fbc(fbcmod, add_cbmpy_anno=True):
+    """
+    Add non fluxbound related parameters to the model
+
+     - *fbcmod* a CBM2SBML instance
+     - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation.
+
+    """
+
+    cntr = 0
+    for par in fbcmod.fba.parameters:
+        if not par._is_fluxbound_:
+            fbcmod.createParParameter(par, add_cbmpy_anno)
+            cntr += 1
+
+    print('INFO: added {} non fluxbound parameters to model'.format(cntr))
+
+
+
+def sbml_setAnnotationsL3Fbc(cbmo, sbmlo):
+    """
+    Add CBMPy Fbase annotations to an SBML object, MIRIAM, SBO, Notes. Should
+    be called last when creating SBML objects.
+
+     - *cbmo* the CBMPy object
+     - *sbmlo* SBML object
+
+     Note: this function should be used for new code, old code still needs to be
+     refactored.
+
+    """
+
+    if len(cbmo.getAnnotations()) > 0:
+        annoSTRnew = sbml_writeKeyValueDataAnnotation(cbmo.getAnnotations())
+        annores = sbmlo.appendAnnotation(annoSTRnew)
+    if cbmo.miriam != None:
+        miriam = cbmo.miriam.getAllMIRIAMUris()
+        if len(miriam) > 0:
+            sbml_setCVterms(sbmlo, miriam, model=False)
+    sboterm = cbmo.getSBOterm()
+    if sboterm is not None and sboterm != '':
+        sbmlo.setSBOTerm(str(sboterm))
+    notes = cbmo.getNotes()
+    if notes != '' and notes is not None:
+        sbml_setNotes3(sbmlo, notes)
+
 
 def sbml_setDescription(model, fba):
     '''
@@ -1581,7 +1627,7 @@ class CBMtoSBML3(FBCconnect):
         if compress_bounds:
             for v_ in shared_values:
                 if v_ not in shared_names:
-                    pid = self.createParameterSharedV2(v_, name=shared_values[v_][0].getName())
+                    pid = self.createFbParameterSharedV2(v_, name=shared_values[v_][0].getName())
                     #print(pid)
                     vp_map[v_] = pid
                 else:
@@ -1592,7 +1638,7 @@ class CBMtoSBML3(FBCconnect):
                         #print(shared_names[v_][n_])
                         spidn = 'par{}_{}'.format(self.parameter_cntr, spid.index(shared_names[v_][n_]))
                         #print(spidn)
-                        pid = self.createParameterSharedV2(v_, spidn, shared_values[v_][n_].getName())
+                        pid = self.createFbParameterSharedV2(v_, spidn, shared_values[v_][n_].getName())
                         vp_map[v_] = pid
                     self.parameter_cntr += len(spid)
 
@@ -1604,13 +1650,13 @@ class CBMtoSBML3(FBCconnect):
             if compress_bounds and b_['lower'].getId() in shared_ids:
                 self.parameter_map[b_['rid']]['lb'] = vp_map[b_['lower'].getValue()]
             else:
-                self.createParameterV2(b_['lower'])
+                self.createFbParameterV2(b_['lower'])
                 self.parameter_map[b_['rid']]['lb'] = b_['lower'].getId()
 
             if compress_bounds and b_['upper'].getId() in shared_ids:
                 self.parameter_map[b_['rid']]['ub'] = vp_map[b_['upper'].getValue()]
             else:
-                self.createParameterV2(b_['upper'])
+                self.createFbParameterV2(b_['upper'])
                 self.parameter_map[b_['rid']]['ub'] = b_['upper'].getId()
 
     def addBoundsV1(self, autofix=False):
@@ -1721,7 +1767,33 @@ class CBMtoSBML3(FBCconnect):
             else:
                 print('WARNING: Skipping GPR association: \"{}\"\n\"{}\"--> \"{}\"'.format(g_.getId(), rid, assoc))
 
-    def createParameterV2(self, bnd):
+    def createParParameter(self, param, add_cbmpy_anno=True):
+        """
+        Create a generic SBML parameter from a CBMPy parameter
+
+         - *param* a CBMPy parameter object
+         - *add_cbmpy_anno* [default=True] add annotation to SBML object
+
+        """
+
+        par = self.model.createParameter()
+        par.setId(param.getId())
+        par.setMetaId('meta_{}'.format(param.getId()))
+        par.setName(param.getName())
+        par.setValue(param.getValue())
+        par.setConstant(True)
+        if add_cbmpy_anno:
+            if param.getSBOterm() is not None:
+                par.setSBOTerm(param.getSBOterm())
+            if len(param.annotation) > 0:
+                annoSTRnew = sbml_writeKeyValueDataAnnotation(param.annotation)
+                annores = par.appendAnnotation(annoSTRnew)
+            if param.miriam != None:
+                miriam = param.miriam.getAllMIRIAMUris()
+                if len(miriam) > 0:
+                    sbml_setCVterms(param, miriam, model=False)
+
+    def createFbParameterV2(self, bnd, add_cbmpy_anno=True):
         """
         Create SBML V2 flux bound parameters for reaction
 
@@ -1737,18 +1809,19 @@ class CBMtoSBML3(FBCconnect):
         par.setConstant(True)
         par.setSBOTerm('SBO:0000625')
 
-        if len(bnd.annotation) > 0:
-            annoSTRnew = sbml_writeKeyValueDataAnnotation(bnd.annotation)
-            annores = par.appendAnnotation(annoSTRnew)
-            if annores == -3:
-                print('Invalid annotation in bound:', bnd.getId())
-                print(bnd.annotation, '\n')
-        if bnd.miriam != None:
-            miriam = bnd.miriam.getAllMIRIAMUris()
-            if len(miriam) > 0:
-                sbml_setCVterms(par, miriam, model=False)
+        if add_cbmpy_anno:
+            if len(bnd.annotation) > 0:
+                annoSTRnew = sbml_writeKeyValueDataAnnotation(bnd.annotation)
+                annores = par.appendAnnotation(annoSTRnew)
+                if annores == -3:
+                    print('Invalid annotation in bound:', bnd.getId())
+                    print(bnd.annotation, '\n')
+            if bnd.miriam != None:
+                miriam = bnd.miriam.getAllMIRIAMUris()
+                if len(miriam) > 0:
+                    sbml_setCVterms(par, miriam, model=False)
 
-    def createParameterSharedV2(self, value, pid=None, name=None):
+    def createFbParameterSharedV2(self, value, pid=None, name=None, add_cbmpy_anno=True):
         """
         Create SBML V2 flux bound parameters for reaction
 
@@ -2001,20 +2074,19 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
         if  species[spe]['notes'] is not None and species[spe]['notes'] != '':
             sbml_setNotes3(s, species[spe]['notes'])
 
-def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=1):
+def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=1):
     """
     Add the FBA instance reactions to the SBML model
 
      - *fbcmod* a CBM2SBML instance
-     - *fba* a PySCeSCBM model instance
      - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
      - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_anno* [default=False] add COBRA <notes> annotation
      - *fbc_version* [default=1] writes either FBC v1 (2013) or v2 (2015)
 
-
     """
 
+    fba = fbcmod.fba
     gpr_reaction_map = {}
     for gpr in fba.gpr:
         gpr_reaction_map[gpr.getProtein()] = gpr.getId()
@@ -2357,7 +2429,9 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     sbml_setUnits(cs3.model, units=None, L3=True)
     sbml_setSpeciesL3(cs3.model, fba, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, substance_units=True)
     sbml_setCompartmentsL3(cs3.model, fba)
-    sbml_setReactionsL3Fbc(cs3, fba, return_dict=False, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, fbc_version=fbc_version)
+    sbml_setReactionsL3Fbc(cs3, return_dict=False, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, fbc_version=fbc_version)
+    sbml_setParametersL3Fbc(cs3, add_cbmpy_anno=add_cbmpy_annot)
+
     if USE_GROUPS:
         sbml_setGroupsL3(cs3, fba)
 
@@ -2959,7 +3033,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                  'annotation': None,
                  'miriam' : None,
                  'association' : [],
-                 'notes' : sbml_getNotes(P)
+                 'notes' : sbml_getNotes(P),
+                 'is_fluxbound'  : False
                  }
         if LOADANNOT:
             pdict['annotation'] = sbml_readKeyValueDataAnnotation(P.getAnnotationString())
@@ -2982,7 +3057,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                      'label' : G.getLabel(),
                      'annotation': None,
                      'miriam' : None,
-                     'notes' : sbml_getNotes(G)
+                     'notes' : sbml_getNotes(G),
                      }
             if LOADANNOT:
                 gdict['annotation'] = sbml_readKeyValueDataAnnotation(G.getAnnotationString())
@@ -3020,6 +3095,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                        'name' : PARAM_D[lfbid]['name'],
                        }
                 PARAM_D[lfbid]['association'].append(R_id)
+                PARAM_D[lfbid]['is_fluxbound'] = True
                 FB_data.append(fbl)
             if lfbid != '':
                 fbu = {'reaction' : R_id,
@@ -3034,6 +3110,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                        'name' : PARAM_D[ufbid]['name']
                        }
                 PARAM_D[ufbid]['association'].append(R_id)
+                PARAM_D[ufbid]['is_fluxbound'] = True
                 FB_data.append(fbu)
 
             # deal with new gene associations (why larry why ...)
@@ -3280,6 +3357,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         P.__sbo_term__ = PARAM_D[p_]['sbo']
         P._association_ = PARAM_D[p_]['association']
         P.setNotes(PARAM_D[p_]['notes'])
+        if PARAM_D[p_]['is_fluxbound']:
+            P._is_fluxbound_ = True
         PARAM.append(P)
 
     if DEBUG: print('Parameter process: {}'.format(round(time.time() - time0, 3)))
