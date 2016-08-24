@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 463 2016-07-27 13:13:36Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 470 2016-08-19 08:49:34Z bgoli $)
 
 """
 
@@ -46,18 +46,18 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
-HAVE_SYMPY = False
+_HAVE_SYMPY_ = False
 try:
     import sympy
     if int(sympy.__version__.split('.')[1]) >= 7 and int(sympy.__version__.split('.')[2]) >= 5:
-        HAVE_SYMPY = True
+        _HAVE_SYMPY_ = True
     elif int(sympy.__version__.split('.')[0]) >= 1:
-        HAVE_SYMPY = True
+        _HAVE_SYMPY_ = True
     else:
         del sympy
         print('\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
 except ImportError:
-    HAVE_SYMPY = False
+    _HAVE_SYMPY_ = False
     print('\nERROR: SymPy import error (required for symbolic matrix support only).')
 
 _HAVE_XLWT_ = False

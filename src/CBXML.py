@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 464 2016-08-05 11:43:02Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 471 2016-08-24 07:06:41Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -171,6 +171,17 @@ def xml_stripTags(html):
     """
     __tagStripper__.feed(html)
     return __tagStripper__.get_data()
+
+def formatSbmlId(s):
+    out = ''
+    for x in s:
+        if x.isalnum():
+            out += x
+        else:
+            out += '_'
+    if not out[0].isalpha() and out[0] is not '_':
+        out = '_'+out
+    return out
 
 def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_species_search=False):
     """
@@ -1416,7 +1427,10 @@ class FBCconnect(object):
         """
         GPR = self.fbc.createGeneAssociation()
         if gprid == None:
+            # try this: get rid of invalid symbols in GPRid
+            
             GPR.setId('{}_gpra'.format(rid))
+            
         else:
             GPR.setId(gprid)
 
@@ -1437,6 +1451,7 @@ class FBCconnect(object):
                 else:
                     print('ERROR: Could not set reaction: \"{}\"\n\"{}\"'.format(rid, assoc))
         if ret0 != 0:
+            print(ass)
             print('WARNING: Possible invalid gene id: \"{}\" - \"{}\" is not a valid gene association'.format(rid, assoc))
             return GPR
         else:
@@ -1717,11 +1732,12 @@ class CBMtoSBML3(FBCconnect):
 
         for g in self.fba.genes:
             G = self.fbc.createGeneProduct()
-            G.setId(g.getId())
+            
+            G.setId(formatSbmlId(g.getId()))
             name = g.getName()
             if name != None:
                 G.setName(name)
-            G.setMetaId(g.getMetaId())
+            G.setMetaId(formatSbmlId(g.getMetaId()))
             G.setLabel(g.getLabel())
             sboterm = g.getSBOterm()
             if sboterm is not None and sboterm != '':
@@ -2330,7 +2346,14 @@ def sbml_createAssociationFromAST(node, out):
         #print('Name:', node.id)
         ref = out.createGeneProductRef()
         ref.setGeneProduct(node.id)
-        #ref.setId(node.id)
+        
+    elif isinstance(node, ast.BinOp):
+        left = node.left.id
+        right = node.right.id
+        ref = out.createGeneProductRef()
+        gref = '{}-{}'.format(left, right)
+        print('YAFLTID', gref)
+        ref.setGeneProduct(formatSbmlId(gref))
     else:
         if isinstance(node, ast.Expr):
             children = [node.value]
@@ -2982,6 +3005,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     SPEC = []
     for s in range(M.getNumSpecies()):
+        # add support for initialAmount and hasOnlySubstanceUnits
         SBSp = M.getSpecies(s)
         boundCon = False
         if SBSp.getBoundaryCondition():
