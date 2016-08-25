@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 463 2016-07-27 13:13:36Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 472 2016-08-25 10:01:41Z bgoli $)
 
 """
 
@@ -40,7 +40,6 @@ try:
 except ImportError:
     import io as csio
 from . import CBXML, CBModel
-
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
@@ -96,7 +95,6 @@ def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'valid
        - *validate* validate model and display errors and warnings before loading
        - *readcobra* read the cobra annotation
        - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
-
 
     """
 

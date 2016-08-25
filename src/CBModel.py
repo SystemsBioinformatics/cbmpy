@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 465 2016-08-05 15:12:18Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 476 2016-08-25 12:45:06Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2260,8 +2260,14 @@ class Model(Fbase):
         var_spec = [s for s in self.species if not s.is_boundary]
         var_spec_id = [s.getPid() for s in self.species if not s.is_boundary]
         reac_id = self.getReactionIds()
+        if len(var_spec_id) != len(set(var_spec_id)):
+            print('\nBUILD STOICHIOMETRY WARNING: duplicate species IDs detected!\n')
+        if len(reac_id) != len(set(reac_id)):
+            print('\nBUILD STOICHIOMETRY WARNING: duplicate reaction IDs detected!\n')
+
         num_col = len(self.reactions)
         num_row = len(var_spec)
+
         sym_dlim = __CBCONFIG__['SYMPY_DENOM_LIMIT']
         if __DEBUG__: print('N-dimension = (%s, %s)' % (num_row, num_col))
         if matrix_type == 'scipy_csr' and not HAVE_SCIPY:
@@ -3603,6 +3609,7 @@ class Species(Fbase):
          - *rid* a valid reaction id
 
         """
+        print('INFO: The static .setReagentOf() method will be deprecated, please update your code to use: \".isReagentOf()\"')
         if rid not in self.reagent_of:
             self.reagent_of.append(rid)
 
@@ -3657,6 +3664,25 @@ class Species(Fbase):
 
         """
         self.is_boundary = False
+
+
+    def rename(self, newid, overwrite=True):
+        """
+        Changes the species id and updates all reagents in the model reactions. Note that existing species with id == newid
+        will be overwritten/deleted.
+
+         - *newid* the new species id.
+         - *overwrite* [default=True] overwrite species objects (highly recommended)
+
+        """
+        assert self.__objref__ is not None, "\nWARNING: needs to be part of a model (cmod.addSpecies()) to work"
+        mod = self.__objref__()
+        if overwrite and newid in mod.getSpeciesIds():
+            print('INFO: overwriting existing species: {}'.format(newid))
+            mod.deleteSpecies(newid)
+        for rr in mod.getFluxesAssociatedWithSpecies(self.getId()):
+                mod.getReaction(rr[0]).getReagentWithSpeciesRef(self.getId()).setSpecies(newid)
+        self.setId(newid)
 
 
 class Reagent(Fbase):
