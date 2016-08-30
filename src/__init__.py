@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 456 2016-06-08 05:43:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 472 2016-08-25 10:01:41Z bgoli $)
 
 """
 ##
@@ -54,7 +54,7 @@ except AttributeError:
 
 from .CBRead import readSBML3FBC, readSBML2FBA, readCOBRASBML
 from .CBWrite import writeSBML3FBC, writeFVAtoCSV, writeModelToExcel97, writeModelToCOMBINEarchive, writeCOBRASBML, writeSBML3FBCV2
-
+from .CBXML import sbml_getSBMLFileVersion as getSBMLFileVersion
 
 ## "optional" modules extended dependencies
 # debug
