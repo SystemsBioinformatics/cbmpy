@@ -1,0 +1,344 @@
+=================
+pyOpt Solutions
+=================
+
+Maximum deletions: 3.0
+Use knockout weighting (minimization): False
+
+=================
+
+
+Product reaction (R_EX_3pg_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_pre5_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_dna5mtc_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_dad_5_c): 0.00226
+Biomass reaction (R_BiomassAuto): 0.05168
+Deleted genes (3): ['sll1214', 'sll1185', 'sll1874']
+_________________
+
+Product reaction (R_EX_4r5au_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_g3p_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['sll1102', 'slr1434', 'sll1223']
+_________________
+
+Product reaction (R_EX_udp_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_4hba_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_akg_e): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_pre8_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_fgam_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_5g2oxpt_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_fprica_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_dtmp_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr1380', 'sll1223', 'slr0033']
+_________________
+
+Product reaction (R_EX_adn_c): 0.00131
+Biomass reaction (R_BiomassAuto): 0.05196
+Deleted genes (2): ['sll1758', 'slr1993']
+_________________
+
+Product reaction (R_EX_4ppcys_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr1200', 'slr0772', 'sll1223']
+_________________
+
+Product reaction (R_EX_fmettrna_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_biliverd_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_pap_c): 0.01032
+Biomass reaction (R_BiomassAuto): 0.04889
+Deleted genes (3): ['sll1234', 'sll0895', 'sll1085']
+_________________
+
+Product reaction (R_EX_25dhpp_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_4hpro_LT_c): 1e-05
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr1233', 'sll1561', 'slr0370']
+_________________
+
+Product reaction (R_EX_eig3p_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.04385
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_pre3a_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_hpyr_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_e4p_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_btn_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_ump_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_5mta_c): 0.00035
+Biomass reaction (R_BiomassAuto): 0.05226
+Deleted genes (3): ['sll1258', 'sll0135', 'sll0370']
+_________________
+
+Product reaction (R_EX_2dhp_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_dcamp_c): -0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr1735', 'sll1221', 'slr0559']
+_________________
+
+Product reaction (R_EX_pqh2_p): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_gmp_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (2): ['slr0772', 'sll1223']
+_________________
+
+Product reaction (R_EX_orot_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_4ahmmp_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_thmpp_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_peptido_syn_c): -0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr1200', 'slr0772', 'sll1223']
+_________________
+
+Product reaction (R_EX_ac_e): 0.01132
+Biomass reaction (R_BiomassAuto): 0.0515
+Deleted genes (3): ['sll0542', 'sll1234', 'sll1299']
+_________________
+
+Product reaction (R_EX_acmana_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_2mecdp_c): -0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_s7p_c): -0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_ncam_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_fum_e): 0.10886
+Biomass reaction (R_BiomassAuto): 0.04478
+Deleted genes (3): ['slr0018', 'slr0458', 'sll1349']
+_________________
+
+Product reaction (R_EX_pqh2_u): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_glyald_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_urea_e): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_cmp_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_acglu_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_dscl_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_for_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_ahcys_c): 0.0013
+Biomass reaction (R_BiomassAuto): 0.05184
+Deleted genes (2): ['sll1234', 'slr0633']
+_________________
+
+Product reaction (R_EX_suc6p_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_q8h2_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_db4p_c): 0.03697
+Biomass reaction (R_BiomassAuto): 0.05052
+Deleted genes (3): ['sll0753', 'sll0330', 'sll1556']
+_________________
+
+Product reaction (R_EX_ade_c): 0.00131
+Biomass reaction (R_BiomassAuto): 0.05199
+Deleted genes (3): ['sll1214', 'sll1430', 'sll1874']
+_________________
+
+Product reaction (R_EX_4mpetz_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_pppg9_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr0772', 'sll1223', 'slr1201']
+_________________
+
+Product reaction (R_EX_pre4_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_mppp9om_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_dudp_c): -0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (2): ['slr0447', 'sll1221']
+_________________
+
+Product reaction (R_EX_C04051_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_dhap_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (2): ['sll1221', 'slr1379']
+_________________
+
+Product reaction (R_EX_lac_D_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr1735', 'sll1221', 'slr0559']
+_________________
+
+Product reaction (R_EX_pre6a_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.04385
+Deleted genes (0): []
+_________________
+
+Product reaction (R_EX_26dap_LL_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr1200', 'slr0772', 'sll1223']
+_________________
+
+Product reaction (R_EX_ahdt_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr0447', 'sll1223', 'slr1830']
+_________________
+
+Product reaction (R_EX_g1p_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (3): ['slr1735', 'slr0044', 'sll1223']
+_________________
+
+Product reaction (R_EX_acald_c): 0.0
+Biomass reaction (R_BiomassAuto): 0.05233
+Deleted genes (0): []
+_________________

@@ -1,0 +1,44 @@
+=================
+pyOpt Solutions
+=================
+
+Maximum deletions: 1.0
+All metabolites tested: ['M_23DB_c', 'M_akg_c', 'M_pyr_c', 'M_pi_c', 'M_o2_c', 'M_hco3_c', 'M_glu_L_c', 'M_fe2_c', 'M_k_c', 'M_photon_c', 'M_ni2_c', 'M_mg2_c', 'M_ala_L_c', 'M_fe3_c', 'M_pro_L_c', 'M_glcglyc_c', 'M_ser_L_c', 'M_succ_c', 'M_h2o_c', 'M_spmd_c', 'M_so4_c', 'M_ac_c', 'M_etoh_c', 'M_fum_c', 'M_zn2_c', 'M_cynt_c', 'M_urea_c', 'M_ptrc_c', 'M_mobd_c', 'M_na1_c', 'M_gln_L_c', 'M_his_L_c', 'M_nh4_c', 'M_leu_L_c', 'M_fru_c', 'M_no3_c', 'M_mn2_c', 'M_co2_c', 'M_arg_L_c', 'M_h_c', 'M_mal_L_c', 'M_cobalt2_c', 'M_sucr_c', 'M_lys_L_c', 'M_cit_c', 'M_glc_D_c', 'M_gly_c', 'M_co_c', 'M_cu2_c', 'M_h2_c', 'M_ca2_c']
+
+=================
+
+
+Product reaction (R_EX_dad_5_c): 0.00226 to 0.00226
+Biomass reaction (R_BiomassAuto): 0.05168
+Deleted genes (1): ['sll1185']
+_________________
+
+Product reaction (R_EX_adn_c): 0.00166 to 0.00166
+Biomass reaction (R_BiomassAuto): 0.05187
+Deleted genes (1): ['sll1430']
+_________________
+
+Product reaction (R_EX_pap_c): 0.00924 to 0.00924
+Biomass reaction (R_BiomassAuto): 0.04967
+Deleted genes (1): ['sll0895']
+_________________
+
+Product reaction (R_EX_5mta_c): 0.00035 to 0.00035
+Biomass reaction (R_BiomassAuto): 0.05226
+Deleted genes (1): ['sll0135']
+_________________
+
+Product reaction (R_EX_fum_e): 0.0428 to 0.0428
+Biomass reaction (R_BiomassAuto): 0.0505
+Deleted genes (1): ['slr0018']
+_________________
+
+Product reaction (R_EX_ahcys_c): 0.0013 to 0.0013
+Biomass reaction (R_BiomassAuto): 0.05184
+Deleted genes (1): ['sll1758']
+_________________
+
+Product reaction (R_EX_ade_c): 0.00166 to 0.00166
+Biomass reaction (R_BiomassAuto): 0.05199
+Deleted genes (1): ['sll1430']
+_________________

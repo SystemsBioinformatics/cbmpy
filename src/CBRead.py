@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 416 2016-02-23 16:12:23Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 472 2016-08-25 10:01:41Z bgoli $)
 
 """
 
@@ -40,7 +40,6 @@ try:
 except ImportError:
     import io as csio
 from . import CBXML, CBModel
-
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
@@ -86,15 +85,16 @@ __test_models__ = {'cbmpy_test_core' : 'core_memesa_model.xml',
 def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}):
     """
     Read in an SBML Level 3 file with FBC annotation where and return either a CBM model object
-    or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
 
      - *fname* is the filename
      - *work_dir* is the working directory
-     - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
+     - *return_sbml_model* deprecated and ignored please update code
      - *xoptions* special load options enable with option = True
        - *nogenes* do not load/process genes
        - *noannot* do not load/process any annotations
        - *validate* validate model and display errors and warnings before loading
+       - *readcobra* read the cobra annotation
+       - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
 
     """
 

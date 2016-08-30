@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 411 2016-01-27 12:32:01Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 470 2016-08-19 08:49:34Z bgoli $)
 
 """
 
@@ -51,12 +51,14 @@ try:
     import sympy
     if int(sympy.__version__.split('.')[1]) >= 7 and int(sympy.__version__.split('.')[2]) >= 5:
         _HAVE_SYMPY_ = True
+    elif int(sympy.__version__.split('.')[0]) >= 1:
+        _HAVE_SYMPY_ = True
     else:
         del sympy
-        print('\nERROR: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
+        print('\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
 except ImportError:
     _HAVE_SYMPY_ = False
-    print('\nERROR: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
+    print('\nERROR: SymPy import error (required for symbolic matrix support only).')
 
 _HAVE_XLWT_ = False
 try:
@@ -65,7 +67,7 @@ try:
 except ImportError:
     print('\nINFO: No xlwt module available, Excel spreadsheet creation disabled')
 
-def writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), autofix=True, gpr_from_annot=False,\
+def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
                        add_groups=False, add_cbmpy_annot=True, add_cobra_annot=False,\
                        xoptions={'fbc_version': 1, 'validate' : False, 'compress_bounds' : True}):
     """
@@ -74,8 +76,6 @@ def writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), autofix=
      - *fba* an fba model object
      - *fname* the model will be written as XML to *fname*
      - *directory* [default=None] if defined it is prepended to fname
-     - *sbml_level_version* [default=(3,1)] a tuple containing the SBML level and version e.g. (3,1)
-     - *autofix* convert <> to <=>=
      - *gpr_from_annot* [default=True] if enabled will attempt to add the gene protein associations from the annotations
        if no gene protein association objects exist
      - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
@@ -85,20 +85,23 @@ def writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), autofix=
        - *fbc_version* [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)
        - *validate* [default=False] validate the output SBML file
        - *compress_bounds* [default=False] try compress output flux bound parameters
+       - *zip_model* [default=False] compress the model using PKZIP encoding
+       - *return_model_string* [default=False] return the SBML XML file as a string
+
+
 
     """
     sbml_level_version = (3,1)
+    autofix=True
     return_fbc=False
-    #if fbc_version == 2:
-        #add_cobra_annot = False
     return CBXML.sbml_writeSBML3FBC(fba, fname, directory, sbml_level_version, autofix, return_fbc,\
                                     gpr_from_annot, add_groups, add_cbmpy_annot, add_cobra_annot, xoptions)
 
 
 def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups=False, add_cbmpy_annot=True, add_cobra_annot=False,\
-                    validate=False, compress_bounds=True):
+                    validate=False, compress_bounds=True, zip_model=False, return_model_string=False):
     """
-    Takes an FBA model object and writes it to file as SBML L3 FBC:
+    Takes an FBA model object and writes it to file as SBML L3 FBCv2 :
 
      - *fba* an fba model object
      - *fname* the model will be written as XML to *fname*
@@ -109,12 +112,12 @@ def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups
      - *add_cobra_annot* [default=False] add COBRA <notes> annotation
      - *validate* [default=False] validate the output SBML file
      - *compress_bounds* [default=True] try compress output flux bound parameters
+     - *zip_model* [default=False] compress the model using ZIP encoding
+     - *return_model_string* [default=False] return the SBML XML file as a string
 
     """
 
-    print('\nExperimental support for new FBC V2 standard (2015)')
-
-    xoptions = {'fbc_version': 2, 'validate' : validate, 'compress_bounds' : compress_bounds}
+    xoptions = {'fbc_version': 2, 'validate' : validate, 'compress_bounds' : compress_bounds, 'return_model_string' : return_model_string, 'zip_model' : zip_model}
     sbml_level_version=(3,1)
     autofix=True,
     return_fbc=False

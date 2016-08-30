@@ -24,6 +24,10 @@ class TestSBO(object):
         """This method is run once for each class before any tests are run"""
         klass.mcore = cbmpy.readSBML3FBC('cbmpy_test_core')
         klass.sboterm1 = 'SBO:1234567'
+        if 'HOME' in os.environ:
+            klass.CDIR = os.environ['HOME']
+        else:
+            klass.CDIR = os.getcwd()
 
     @classmethod
     def teardown_class(klass):
@@ -32,9 +36,9 @@ class TestSBO(object):
 
     def roundTripModelV1(self, model):
         modname = 'rtv1.xml'
-        cbmpy.writeSBML3FBC(model, modname)
+        cbmpy.writeSBML3FBC(model, modname, directory=self.CDIR)
         del model
-        model = cbmpy.readSBML3FBC(modname)
+        model = cbmpy.readSBML3FBC(modname, work_dir=self.CDIR)
         return model
 
     def test_sbo_reactions_getset(self):

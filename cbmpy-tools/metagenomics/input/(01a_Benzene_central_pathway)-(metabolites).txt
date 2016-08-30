@@ -1,0 +1,164 @@
+id	name	charge	chemformula	compartment	fixed	Legend	AltNames
+C00001	H2O		H2O				Water
+C00002	ATP		C10H16N5O13P3				Adenosine 5'-triphosphate
+C00003	NAD+		C21H28N7O14P2				NAD;Nicotinamide adenine dinucleotide;DPN;Diphosphopyridine nucleotide;Nadide;beta-NAD+
+C00004	NADH		C21H29N7O14P2				DPNH;Reduced nicotinamide adenine dinucleotide
+C00005	NADPH		C21H30N7O17P3				TPNH;Reduced nicotinamide adenine dinucleotide phosphate
+C00006	NADP+		C21H29N7O17P3				NADP;Nicotinamide adenine dinucleotide phosphate;beta-Nicotinamide adenine dinucleotide phosphate;TPN;Triphosphopyridine nucleotide;beta-NADP+
+C00007	Oxygen		O2				O2
+C00008	ADP		C10H15N5O10P2				Adenosine 5'-diphosphate
+C00009	Orthophosphate		H3PO4				Phosphate;Phosphoric acid;Orthophosphoric acid
+C00010	CoA		C21H36N7O16P3S				Coenzyme A;CoA-SH
+C00011	CO2		CO2				Carbon dioxide
+C00012	Peptide		C2H4NO2R(C2H2NOR)n				
+C00013	Diphosphate		H4P2O7				Diphosphoric acid;Pyrophosphate;Pyrophosphoric acid;PPi
+C00014	Ammonia		NH3				NH3
+C00019	S-Adenosyl-L-methionine		C15H22N6O5S				S-Adenosylmethionine;AdoMet;SAM
+C00020	AMP		C10H14N5O7P				Adenosine 5'-monophosphate;Adenylic acid;Adenylate;5'-AMP;5'-Adenylic acid;5'-Adenosine monophosphate;Adenosine 5'-phosphate
+C00021	S-Adenosyl-L-homocysteine		C14H20N6O5S				S-Adenosylhomocysteine
+C00022	Pyruvate		C3H4O3				Pyruvic acid;2-Oxopropanoate;2-Oxopropanoic acid;Pyroracemic acid
+C00024	Acetyl-CoA		C23H38N7O17P3S				Acetyl coenzyme A
+C00025	L-Glutamate		C5H9NO4				L-Glutamic acid;L-Glutaminic acid;Glutamate
+C00026	2-Oxoglutarate		C5H6O5				Oxoglutaric acid;2-Ketoglutaric acid;alpha-Ketoglutaric acid
+C00027	Hydrogen peroxide		H2O2				H2O2;Oxydol
+C00028	Acceptor		Not found				Hydrogen-acceptor;A;Oxidized donor
+C00030	Reduced acceptor		Not found				AH2;Hydrogen-donor;Donor
+C00033	Acetate		C2H4O2				Acetic acid;Ethanoic acid
+C00035	GDP		C10H15N5O11P2				Guanosine 5'-diphosphate;Guanosine diphosphate
+C00036	Oxaloacetate		C4H4O5				Oxalacetic acid;Oxaloacetic acid;2-Oxobutanedioic acid;2-Oxosuccinic acid;keto-Oxaloacetate
+C00042	Succinate		C4H6O4				Succinic acid;Butanedionic acid;Ethylenesuccinic acid
+C00044	GTP		C10H16N5O14P3				Guanosine 5'-triphosphate
+C00047	L-Lysine		C6H14N2O2				"Lysine acid;2,6-Diaminohexanoic acid"
+C00048	Glyoxylate		C2H2O3				Glyoxalate;Glyoxylic acid
+C00058	Formate		CH2O2				Methanoic acid;Formic acid
+C00060	Carboxylate		CO2R				R-COOH;Monocarboxylate;Carboxylic acid
+C00061	FMN		C17H21N4O9P				Riboflavin-5-phosphate;Flavin mononucleotide
+C00064	L-Glutamine		C5H10N2O3				L-2-Aminoglutaramic acid
+C00068	Thiamin diphosphate		C12H19N4O7P2S				Thiamine diphosphate;Thiamin pyrophosphate;TPP;ThPP
+C00071	Aldehyde		CHOR				RCHO
+C00074	Phosphoenolpyruvate		C3H5O6P				Phosphoenolpyruvic acid;PEP
+C00080	H+		H				Hydron
+C00083	Malonyl-CoA		C24H38N7O19P3S				Malonyl coenzyme A
+C00084	Acetaldehyde		C2H4O				Ethanal
+C00088	Nitrite		HNO2				
+C00091	Succinyl-CoA		C25H40N7O19P3S				Succinyl coenzyme A
+C00100	Propanoyl-CoA		C24H40N7O17P3S				Propionyl-CoA;Propionyl coenzyme A
+C00120	Biotin		C10H16N2O3S				D-Biotin;Vitamin H;Coenzyme R
+C00122	Fumarate		C4H4O4				Fumaric acid;trans-Butenedioic acid
+C00125	Ferricytochrome c		C42H44FeN8O8S2R4				Cytochrome c3+
+C00126	Ferrocytochrome c		C42H44FeN8O8S2R4				Cytochrome c2+;Reduced cytochrome c
+C00138	Reduced ferredoxin		Not found				Reduced ferredoxin [iron-sulfur] cluster
+C00139	Oxidized ferredoxin		Not found				Oxidized ferredoxin [iron-sulfur] cluster
+C00146	Phenol		C6H6O				Benzenol;Hydroxybenzene;Phenic acid;Phenylic acid
+C00149	(S)-Malate		C4H6O5				L-Malate;L-Apple acid;L-Malic acid;L-2-Hydroxybutanedioic acid;Malate;Malic acid
+C00156	4-Hydroxybenzoate		C7H6O3				Hydroxybenzoic acid;4-Hydroxybenzoic acid;Hydroxybenzenecarboxylic acid
+C00158	Citrate		C6H8O7				"Citric acid;2-Hydroxy-1,2,3-propanetricarboxylic acid;2-Hydroxytricarballylic acid"
+C00169	Carbamoyl phosphate		CH4NO5P				
+C00180	Benzoate		C7H6O2				Benzoic acid;Benzenecarboxylic acid;Phenylformic acid;Dracylic acid
+C00192	Hydroxylamine		NH3O				NH2OH
+C00194	Cobamide coenzyme		C72H100CoN18O17P				"Adenosylcobalamin;Adenosylcob(III)alamin;Deoxyadenosylcobalamin;Cobamamide;Vitamin B12 coenzyme;5,6-Dimethylbenzimidazolyl-5-deoxyadenosyl-cobamide;(5'-Deoxy-5'-adenosyl)cobamide coenzyme;(5,6-Dimethylbenzimidazolyl)cobamide coenzyme;alpha-(5,6-Dimethylbenzimidazolyl)cobamide coenzyme;5'-Deoxy-5'-adenosylcobalamin;5'-Deoxy-5'-adenosyl vitamin B12;5'-Deoxy-5'-adenosyl-5,6-dimethylbenzimidazolylcobamide;5,6-Dimethylbenzimidazolyl-Co-5'-deoxy-5'-adenosylcobamide;Calomide;Cobalamin coenzyme;Coenzyme B12;DMBC coenzyme;Dibencozide;Funacomide"
+C00222	3-Oxopropanoate		C3H4O3				Malonate semialdehyde
+C00227	Acetyl phosphate		C2H5O5P				
+C00232	Succinate semialdehyde		C4H6O3				Succinic semialdehyde;4-Oxobutanoate
+C00244	Nitrate		HNO3				Nitric acid
+C00282	Hydrogen		H2				H2
+C00288	HCO3-		HCO3				Bicarbonate;Hydrogen carbonate;Acid carbonate
+C00311	Isocitrate		C6H8O7				"Isocitric acid;1-Hydroxytricarballylic acid;1-Hydroxypropane-1,2,3-tricarboxylic acid"
+C00332	Acetoacetyl-CoA		C25H40N7O18P3S				Acetoacetyl coenzyme A;3-Acetoacetyl-CoA
+C00390	Ubiquinol		C14H20O4(C5H8)n				QH2;CoQH2
+C00399	Ubiquinone		C14H18O4(C5H8)n				Coenzyme Q;CoQ;Q
+C00417	cis-Aconitate		C6H6O6				cis-Aconitic acid
+C00488	Formamide		CH3NO				Methanamide
+C00512	S-Benzoate coenzyme A		C28H40N7O17P3S				Benzoyl-CoA
+C00533	Nitric oxide		NO				NO;Nitrogen monoxide
+C00536	Triphosphate		H5P3O10				Triphosphoric acid;Tripolyphosphate;Inorganic triphosphate
+C00541	Cob(II)alamin		C62H88CoN13O14P				Vitamin B12r
+C00683	(S)-Methylmalonyl-CoA		C25H40N7O19P3S				(S)-Methylmalonyl-coenzyme A;(2S)-Methylmalonyl-CoA;D-Methylmalonyl-CoA
+C00697	Nitrogen		N2				N2
+C00726	Nitrile		CNR				R-CN
+C00853	Cob(I)alamin		C62H89CoN13O14P				Cbl;Vitamin B12s
+C00877	Crotonoyl-CoA		C25H40N7O17P3S				Crotonyl-CoA;2-Butenoyl-CoA;trans-But-2-enoyl-CoA;But-2-enoyl-CoA;(E)-But-2-enoyl-CoA
+C00887	Nitrous oxide		N2O				Dinitrogen monoxide;Dinitrogen oxide;N2O
+C00894	Propenoyl-CoA		C24H38N7O17P3S				Acryloyl-CoA;Acrylyl-CoA
+C00989	4-Hydroxybutanoic acid		C4H8O3				4-Hydroxybutanoate;4-Hydroxybutyric acid
+C00992	Aquacob(III)alamin		C62H90CoN13O15P				Aquacobalamin
+C00997	Ferricytochrome c2		Not found				
+C01000	Ferrocytochrome c2		Not found				
+C01011	(3S)-Citramalyl-CoA		C26H42N7O20P3S				L-Citramalyl-CoA;(S)-Citramalyl-CoA;(3S)-3-Carboxy-3-hydroxybutanoyl-CoA
+C01013	3-Hydroxypropanoate		C3H6O3				3-Hydroxypropanoic acid;3-Hydroxypropionate;3-Hydroxypropionic acid;Hydracrylic acid
+C01144	(S)-3-Hydroxybutanoyl-CoA		C25H42N7O18P3S				(S)-3-Hydroxybutyryl-CoA
+C01213	(R)-Methylmalonyl-CoA		C25H40N7O19P3S				L-Methylmalonyl-CoA
+C01230	all-trans-Hexaprenyl diphosphate		C30H52O7P2				
+C01407	Benzene		C6H6				
+C01417	Cyanate		CHNO				Cyanic acid
+C01455	Toluene		C7H8				Methylbenzene;Toluol
+C01563	Carbamate		CH3NO2				Carbamic acid;Aminoformic acid
+C01847	Reduced FMN		C17H23N4O9P				FMNH2
+C01894	Biotinyl-CoA		C31H50N9O18P3S2				
+C01967	Ubiquinone-9		C54H82O4				Ubiquinone-45;Coenzyme Q(9)
+C02734	Phenylphosphate		C6H7O4P				"Phenolic phosphate	 Phenylphosphate"
+C02949	4-Hydroxybenzoyl-CoA		C28H40N7O18P3S				
+C03226	3-Demethylubiquinone-9		C53H80O4				
+C03576	Coenzyme M		C2H6O3S2				2-Mercaptoethanesulfonate;Reduced coenzyme M;HS-CoM;CoM
+C03885	3-Nonaprenyl-4-hydroxybenzoate		C52H78O3				Nonaprenyl-4-hydroxybenzoate
+C04145	all-trans-Nonaprenyl diphosphate		C45H76O7P2				Solanesyl pyrophosphate;Solanesyl diphosphate
+C04146	all-trans-Octaprenyl diphosphate		C40H68O7P2				Farnesylfarnesylgeraniol
+C04253	Electron-transferring flavoprotein		Not found				Electron-transfer flavoprotein
+C04348	L-Malyl-CoA		C25H40N7O20P3S				(S)-Malyl-CoA;Malyl-CoA;(3S)-3-Carboxy-3-hydroxypropanoyl-CoA;(3S)-3-Carboxy-3-hydroxypropionyl-CoA
+C04570	Reduced electron-transferring flavoprotein		Not found				Reduced electron-transfer flavoprotein
+C04628	Coenzyme B		C11H22NO7PS				N-(7-Mercaptoheptanoyl)threonine 3-O-phosphate;N-(7-Mercaptoheptanoyl)threonine O3-phosphate;HTP
+C04832	Coenzyme M 7-mercaptoheptanoylthreonine-phosphate heterodisulfide		C13H26NO10PS3				Coenzyme M-HTP heterodisulfide;CoM-S-S-CoB;N-{7-[(2-Sulfoethyl)dithio]heptanoyl}-3-O-phospho-L-threonine
+C05125	2-(alpha-Hydroxyethyl)thiamine diphosphate		C14H23N4O8P2S				2-Hydroxyethyl-ThPP
+C05200	"3-Hexaprenyl-4,5-dihydroxybenzoate"		C37H54O4				
+C05313	3-Hexaprenyl-4-hydroxy-5-methoxybenzoate		C38H56O4				
+C05357	Oxidized azurin		Not found				Azurinox
+C05358	Reduced azurin		Not found				Azurinred
+C05379	Oxalosuccinate		C6H6O7				Oxalosuccinic acid
+C05381	3-Carboxy-1-hydroxypropyl-ThPP		C16H25N4O10P2S				Succinate semialdehyde-thiamin diphosphate
+C05552	Biocytin		C16H28N4O4S				N6-D-Biotinyl-L-lysine;epsilon-N-Biotinyl-L-lysine
+C05668	3-Hydroxypropionyl-CoA		C24H40N7O18P3S				3-Hydroxypropionyl coenzyme A;3-Hydroxypropanoyl-CoA;3-Hydroxypropanoyl coenzymeA;beta-Hydroxypropionyl-CoA
+C05802	2-Hexaprenyl-6-methoxyphenol		C37H56O2				
+C05803	"2-Hexaprenyl-6-methoxy-1,4-benzoquinone"		C37H54O3				
+C05804	"2-Hexaprenyl-3-methyl-6-methoxy-1,4-benzoquinone"		C38H56O3				
+C05805	"2-Hexaprenyl-3-methyl-5-hydroxy-6-methoxy-1,4-benzoquinone"		C38H56O4				
+C05807	2-Polyprenylphenol		C11H14O(C5H8)n				
+C05809	3-Octaprenyl-4-hydroxybenzoate		C47H70O3				4-Hydroxy-3-octaprenylbenzoate
+C05810	2-Octaprenylphenol		C46H70O				
+C05811	2-Octaprenyl-6-hydroxyphenol		C46H70O2				3-Octaprenylcatechol
+C05812	2-Octaprenyl-6-methoxyphenol		C47H72O2				
+C05813	"2-Octaprenyl-6-methoxy-1,4-benzoquinone"		C47H70O3				
+C05814	"2-Octaprenyl-3-methyl-6-methoxy-1,4-benzoquinone"		C48H72O3				
+C05815	"2-Octaprenyl-3-methyl-5-hydroxy-6-methoxy-1,4-benzoquinone"		C48H72O4				
+C05847	all-trans-Polyprenyl diphosphate		C5H12O7P2(C5H8)n				Polyisopentenylpyrophosphate;Polyisopentenyldiphosphate;trans-Polyisopentenyldiphosphate;Polyprenyl diphosphate
+C05848	4-Hydroxy-3-polyprenylbenzoate		C12H14O3(C5H8)n				
+C05921	Biotinyl-5'-AMP		C20H28N7O9PS				
+C06027	L-erythro-3-Methylmalyl-CoA		C26H42N7O20P3S				"beta-Methylmalyl-CoA;(2R,3S)-2-Methylmalyl-CoA;L-erythro-beta-Methylmalyl-CoA;(2R,3S)-2-Methyl-3-carboxy-3-hydroxypropanoyl-CoA"
+C06028	2-Methylfumaryl-CoA		C26H40N7O19P3S				Mesaconyl-CoA;Mesaconyl-C1-CoA;(E)-3-Carboxy-2-methylprop-2-enoyl-CoA
+C06058	Nitroalkane		NO2R				
+C06249	Apo-[carboxylase]		C7H13N3O2R2				
+C06250	Holo-[carboxylase]		C17H27N5O4SR2				Biotin-carboxyl-carrier protein
+C09816	Benzylsuccinate		C11H12O4				(R)-2-Benzylsuccinate
+C09817	Benzylsuccinyl-CoA		C32H46N7O19P3S				(R)-2-Benzylsuccinyl-CoA
+C09818	E-Phenylitaconyl-CoA		C32H44N7O19P3S				(E)-2-Benzylidenesuccinyl-CoA
+C09819	(Hydroxymethylphenyl)succinyl-CoA		C32H46N7O20P3S				
+C09820	Benzoylsuccinyl-CoA		C32H44N7O20P3S				2-Benzoylsuccinyl-CoA
+C11062	4-Hydroxybutyryl-CoA		C25H42N7O18P3S				4-Hydroxybutanoyl-CoA
+C13425	3-Hexaprenyl-4-hydroxybenzoate		C37H54O3				3-Hexaprenyl-4-hydroxybenzoic acid
+C15602	Quinone		Not found				
+C15603	Hydroquinone		Not found				p-Hydroquinone;Quinol;Reduced quinone
+C15972	Enzyme N6-(lipoyl)lysine		C8H14NOS2R				Lipoamide-E
+C15973	Enzyme N6-(dihydrolipoyl)lysine		C8H16NOS2R				Dihydrolipoamide-E
+C16254	[Dihydrolipoyllysine-residue succinyltransferase] S-succinyldihydrolipoyllysine		C12H20NO4S2R				S-Succinyldihydrolipoamide-E
+C16255	[Dihydrolipoyllysine-residue acetyltransferase] S-acetyldihydrolipoyllysine		C10H18NO2S2R				S-Acetyldihydrolipoamide-E
+C17551	2-Polyprenyl-6-hydroxyphenol		C11H14O2(C5H8)n				3-Polyprenylcatechol
+C17552	2-Polyprenyl-6-methoxyphenol		C12H16O2(C5H8)n				
+C17554	"3-Polyprenyl-4,5-dihydroxybenzoate"		C12H14O4(C5H8)n				"3,4-Dihydroxy-5-polyprenylbenzoate"
+C17559	3-Polyprenyl-4-hydroxy-5-methoxybenzoate		C13H16O4(C5H8)n				
+C17560	"2-Polyprenyl-6-methoxy-1,4-benzoquinone"		C12H14O3(C5H8)n				
+C17561	"2-Polyprenyl-3-methyl-6-methoxy-1,4-benzoquinone"		C13H16O3(C5H8)n				
+C17562	"2-Polyprenyl-3-methyl-5-hydroxy-6-methoxy-1,4-benzoquinone"		C13H16O4(C5H8)n				
+C17568	Ubiquinone-6		C39H58O4				Coenzyme Q6
+C17569	Ubiquinone-8		C49H74O4				Coenzyme Q8
+C18091	Ethylnitronate		C2H4NO2				
+C18323	3-Methylfumaryl-CoA		C26H40N7O19P3S				(E)-3-Carboxybut-2-enoyl-CoA;Mesaconyl-C4-CoA
+C20386	Biotin sulfoxide		C10H16N2O4S				

@@ -1,0 +1,123 @@
+(bulgTherSrc.xml)-(consets.csv)
+1,"['R_LYSt6_bulg', 'R_PHEt6_bulg', 'R_VALt6_bulg', 'R_ALA_Lt6_bulg', 'R_SERt6_bulg', 'R_ILEt6_bulg', 'R_LEUt6_bulg', 'R_METt6_bulg', 'R_TRPt6_ther', 'R_TYRt6_ther']","['R_METt6_bulg', 'R_PHEt6_bulg', 'R_TRPt6_ther', 'R_ILEt6_bulg', 'R_LEUt6_bulg', 'R_LYSt6_bulg', 'R_VALt6_bulg', 'R_ALA_Lt6_bulg', 'R_SERt6_bulg', 'R_TYRt6_ther']"
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+3, infeasible model (LPS_NONE)
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+3, infeasible model (LPS_NONE)
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+3, infeasible model (LPS_NONE)
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+3, infeasible model (LPS_NONE)
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+3, infeasible model (LPS_NONE)
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+3, infeasible model (LPS_NONE)
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+3, infeasible model (LPS_NONE)
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+14, infeasible model (LPS_INFEAS)
+13, success
+12, success
+11, success
+10, success
+9, success
+8, success
+7, success
+6, success
+5, success
+4, success
+3, success
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_TYRt6_ther): -0.01
+3, infeasible model (LPS_NONE)
+2, success
+1, setting upper bound (R_METt6_bulg): -0.01
+1, setting upper bound (R_PHEt6_bulg): -0.01
+1, setting upper bound (R_TRPt6_ther): -0.01
+1, setting upper bound (R_ILEt6_bulg): -0.01
+1, setting upper bound (R_LEUt6_bulg): -0.01
+1, setting upper bound (R_LYSt6_bulg): -0.01
+1, setting upper bound (R_VALt6_bulg): -0.01
+1, setting upper bound (R_ALA_Lt6_bulg): -0.01
+1, setting upper bound (R_SERt6_bulg): -0.01
+2, infeasible model (LPS_INFEAS)
+1, success

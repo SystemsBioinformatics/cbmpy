@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 416 2016-02-23 16:12:23Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 476 2016-08-25 12:45:06Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -34,7 +34,7 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import numpy, re, time, weakref, copy, json
+import numpy, re, time, weakref, copy, json, urllib2
 
 try:
     import pickle
@@ -46,12 +46,14 @@ try:
     import sympy
     if int(sympy.__version__.split('.')[1]) >= 7 and int(sympy.__version__.split('.')[2]) >= 5:
         HAVE_SYMPY = True
+    elif int(sympy.__version__.split('.')[0]) >= 1:
+        HAVE_SYMPY = True
     else:
         del sympy
-        print('\nERROR: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
+        print('\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
 except ImportError:
     HAVE_SYMPY = False
-    print('\nERROR: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
+    print('\nERROR: SymPy import error (required for symbolic matrix support only).')
 
 HAVE_SCIPY = False
 try:
@@ -86,6 +88,7 @@ class Fbase(object):
     __objref__ = None
     __metaid__ = None
     __sbo_term__ = None
+    __text_encoding__ = 'utf8'
 
     ##  __pre__ = ''
     ##  __post__ = ''
@@ -158,7 +161,7 @@ class Fbase(object):
         Return the object's notes
 
         """
-        return self.notes
+        return self.__urlDecode(self.notes)
 
     def getAnnotations(self):
         """
@@ -207,7 +210,7 @@ class Fbase(object):
          - *notes* the note string, should preferably be (X)HTML for SBML
 
         """
-        self.notes = notes
+        self.notes = self.__urlEncode(notes)
 
     def setAnnotation(self, key, value):
         """
@@ -408,6 +411,27 @@ class Fbase(object):
         self.__sbo_term__ = sbo
 
 
+    def __urlEncode(self, txt):
+        """
+        URL encodes a string.
+
+        """
+        try:
+            txt = urllib2.quote(str(txt).encode(self.__text_encoding__, errors='replace'), safe='')
+        except UnicodeDecodeError as why:
+            print(why)
+            #print(txt)
+        return txt
+
+    def __urlDecode(self, txt):
+        """
+        Decodes a URL encoded string
+
+        """
+        return urllib2.unquote(txt)
+
+
+
 class Model(Fbase):
     """
     Container for constraint based model, adds methods for manipulating:
@@ -437,7 +461,7 @@ class Model(Fbase):
     __genes_idx__ = None
     __single_gene_effect_map__ = None
     gpr = None
-    _parameters_ = None
+    parameters = None
     N = None
     sourcefile = ''
     description = ''
@@ -485,7 +509,7 @@ class Model(Fbase):
         self.genes = []
         self.__genes_idx__ = []
         self.gpr = []
-        self._parameters_ = []
+        self.parameters = []
         self.annotation = {}
         self.__TRASH__ = {}
         self.MODEL_CREATORS = {}
@@ -574,8 +598,8 @@ class Model(Fbase):
          - *html* any valid html or the empty string to clear ''
 
         """
-
         self.description = html
+        self.notes = self.__urlEncode(html)
 
     def getDescription(self):
         """
@@ -583,7 +607,7 @@ class Model(Fbase):
 
         """
 
-        return self.description
+        return self.__urlDecode(self.notes)
 
     def setCreatedDate(self, date=None):
         """
@@ -882,7 +906,7 @@ class Model(Fbase):
         assert isinstance(par, Parameter), '\nERROR: requires a Parameter object, not something of type {}'.format(type(par))
         if __DEBUG__: print('Adding Parameter: {}'.format(par.id))
         #comp.__objref__ = weakref.ref(self)
-        self._parameters_.append(par)
+        self.parameters.append(par)
 
     def addCompartment(self, comp):
         """
@@ -1137,31 +1161,45 @@ class Model(Fbase):
         """
         self.__genes_idx__ = [g.getPid() for g in self.genes]
 
-    def getAllProteinGeneAssociations(self):
+    def getAllProteinGeneAssociations(self, use_labels=False):
         """
         Returns a dictionary of the proteins associated with each gene
+
+         - *use_labels* use V2 gene labels rather than ID's
 
         """
         prg = {}
         for gpr in self.gpr:
             for g in gpr.getGenes():
-                if g.getPid() not in prg:
-                    prg.update({g.getPid() : [gpr.protein]})
+                if use_labels:
+                    gid = g.getLabel()
                 else:
-                    prg[g.getPid()].append(gpr.protein)
+                    gid = g.getPid()
+                if gid not in prg:
+                    prg.update({gid : [gpr.protein]})
+                else:
+                    prg[gid].append(gpr.protein)
         return prg
 
-    def getAllGeneProteinAssociations(self):
+    def getAllGeneProteinAssociations(self, use_labels=False):
         """
         Returns a dictionary of genes associated with each protein
+
+         - *use_labels* use V2 gene labels rather than ID's
 
         """
         gprmap = {}
         for gpr in self.gpr:
             if gpr.protein not in gprmap:
-                gprmap.update({gpr.protein : gpr.getGeneIds()})
+                if use_labels:
+                    gprmap.update({gpr.protein : gpr.getGeneLabels()})
+                else:
+                    gprmap.update({gpr.protein : gpr.getGeneIds()})
             else:
-                gprmap[gpr.protein].extend(gpr.getGeneIds())
+                if use_labels:
+                    gprmap[gpr.protein].extend(gpr.getGeneLabels())
+                else:
+                    gprmap[gpr.protein].extend(gpr.getGeneIds())
         return gprmap
 
     def getGene(self, g_id):
@@ -1232,6 +1270,18 @@ class Model(Fbase):
             return [g.getPid() for g in self.genes]
         else:
             return [g.getPid() for g in self.genes if substring in g.getPid()]
+
+    def getGeneLabels(self, substring=None):
+        """
+        Returns a list of gene labels (locus tags), applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the id
+
+        """
+        if substring == None:
+            return [g.getLabel() for g in self.genes]
+        else:
+            return [g.getLabel() for g in self.genes if substring in g.getPid()]
 
     def getAllGeneActivities(self):
         """
@@ -1405,6 +1455,18 @@ class Model(Fbase):
         for s in self.species:
             if s.getPid() == sid:
                 out = s
+                break
+        return out
+
+    def getParameter(self, pid):
+        """
+        Returns a parameter object with pid
+
+        """
+        out = None
+        for p in self.parameters:
+            if p.getPid() == pid:
+                out = p
                 break
         return out
 
@@ -1641,6 +1703,31 @@ class Model(Fbase):
             print('No active objective to get')
         return out
 
+    def getActiveObjectiveStoichiometry(self):
+        """
+        Returns a list of (coefficient, flux_objective) tuples
+
+        """
+        out = None
+        try:
+            out = self.objectives[self.activeObjIdx].getFluxObjectiveData()
+        except Exception:
+            print('No active objective to get')
+        return out
+
+
+    def getActiveObjectiveReactionIds(self):
+        """
+        Returns the active objective flux objective reaction id's
+
+        """
+        out = None
+        try:
+            out = self.objectives[self.activeObjIdx].getFluxObjectiveReactions()
+        except Exception:
+            print('No active objective to get')
+        return out
+
     def setActiveObjective(self, objId):
         idz = [o.id for o in self.objectives]
         if objId in idz:
@@ -1673,6 +1760,18 @@ class Model(Fbase):
         for g_ in self.genes:
             if g_.label == label:
                 return g_.getId()
+        return None
+
+    def getGeneByLabel(self, label):
+        """
+        Given a gene label return the corresponding Gene object
+
+         - *label*
+
+        """
+        for g_ in self.genes:
+            if g_.label == label:
+                return g_
         return None
 
     def setGeneInactive(self, g_id, update_reactions=False, lower=0.0, upper=0.0):
@@ -1747,6 +1846,9 @@ class Model(Fbase):
          - *bound* this is either 'lower' or 'upper', or 'equal'
 
         """
+        if rid not in self.getReactionIds():
+            print('\nERROR setReactionBound: reaction id {} does not exist'.format(rid))
+            return
         c2 = self.getFluxBoundByReactionID(rid, bound)
         # changed to no str() casting
         if c2 != None:
@@ -1770,6 +1872,7 @@ class Model(Fbase):
         - *upper* the upper bound value
 
         """
+
         self.setReactionBound(rid, lower, 'lower')
         self.setReactionBound(rid, upper, 'upper')
 
@@ -2157,8 +2260,14 @@ class Model(Fbase):
         var_spec = [s for s in self.species if not s.is_boundary]
         var_spec_id = [s.getPid() for s in self.species if not s.is_boundary]
         reac_id = self.getReactionIds()
+        if len(var_spec_id) != len(set(var_spec_id)):
+            print('\nBUILD STOICHIOMETRY WARNING: duplicate species IDs detected!\n')
+        if len(reac_id) != len(set(reac_id)):
+            print('\nBUILD STOICHIOMETRY WARNING: duplicate reaction IDs detected!\n')
+
         num_col = len(self.reactions)
         num_row = len(var_spec)
+
         sym_dlim = __CBCONFIG__['SYMPY_DENOM_LIMIT']
         if __DEBUG__: print('N-dimension = (%s, %s)' % (num_row, num_col))
         if matrix_type == 'scipy_csr' and not HAVE_SCIPY:
@@ -2979,6 +3088,7 @@ class Parameter(Fbase):
     _association_ = None
     constant = True
     value = None
+    _is_fluxbound_ = False
 
     def __init__(self, pid, value, name=None, constant=True):
         """
@@ -3018,25 +3128,26 @@ class Parameter(Fbase):
 
     def getAssociations(self):
         """
-        Return the FluxBounds ID's associated with this object
+        Return the Object ID's associated with this parameter
 
         """
         return self._association_
 
     def addAssociation(self, assoc):
         """
-        Add a fluxbound ID's to associate with this object
+        Add an object ID to associate with this object
 
         """
         self._association_.append(assoc)
 
     def deleteAssociation(self, assoc):
         """
-        Delete the fluxbound id associated with this object
+        Delete the object id associated with this object
 
         """
         if assoc in self._association_:
             self._association_.pop(self._association_.index(assoc))
+
 
 class Reaction(Fbase):
     """Holds reaction information"""
@@ -3051,6 +3162,7 @@ class Reaction(Fbase):
     fva_status = None
     __bound_history__ = None
     __is_active__ = True
+    _modifiers_ = None
 
     def __init__(self, pid, name=None, reversible=True):
         self.id = pid
@@ -3060,6 +3172,7 @@ class Reaction(Fbase):
         self.annotation = {}
         self.__TRASH__ = {}
         self.__bound_history__ = []
+        self._modifiers_ = [] # reaction modifiers from SBML, read/write only
 
     def addReagent(self, reag):
         """
@@ -3239,7 +3352,7 @@ class Reaction(Fbase):
 
         """
         if not use_names:
-            out = [(r.coefficient, r.species_ref) for r in self.reagents]
+            out = [(r.getCoefficient(), r.species_ref) for r in self.reagents]
             if not altout:
                 return out
             else:
@@ -3248,7 +3361,7 @@ class Reaction(Fbase):
                     out2[r[1]] = r[0]
                 return out2
         else:
-            out = [(r.coefficient, self.__objref__().getSpecies(r.species_ref).getName()) for r in self.reagents]
+            out = [(r.getCoefficient(), self.__objref__().getSpecies(r.species_ref).getName()) for r in self.reagents]
             if not altout:
                 return out
             else:
@@ -3266,9 +3379,9 @@ class Reaction(Fbase):
 
         """
         if not use_names:
-            return [r.species_ref for r in self.reagents if r.coefficient < 0.0]
+            return [r.species_ref for r in self.reagents if r.getCoefficient() < 0.0]
         else:
-            return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.coefficient < 0.0]
+            return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.getCoefficient() < 0.0]
 
     def getProductIds(self, use_names=False):
         """
@@ -3278,9 +3391,9 @@ class Reaction(Fbase):
 
         """
         if not use_names:
-            return [r.species_ref for r in self.reagents if r.coefficient > 0.0]
+            return [r.species_ref for r in self.reagents if r.getCoefficient() > 0.0]
         else:
-            return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.coefficient > 0.0]
+            return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.getCoefficient() > 0.0]
 
     def deleteReagentWithSpeciesRef(self, species):
         """
@@ -3391,9 +3504,9 @@ class Reaction(Fbase):
         sub = ''
         prod = ''
         for r in self.reagents:
-            coeff = abs(r.coefficient)
-            if r.role == 'substrate':
-                if coeff == 1.0:
+            coeff = r.getCoefficient()
+            if coeff < 0.0:
+                if abs(coeff) == 1.0:
                     if not use_names:
                         sub += '{} + '.format(r.species_ref)
                     else:
@@ -3404,7 +3517,7 @@ class Reaction(Fbase):
                     else:
                         sub += '({}) {} + '.format(coeff, self.__objref__().getSpecies(r.species_ref).getName())
             else:
-                if coeff == 1.0:
+                if abs(coeff) == 1.0:
                     if not use_names:
                         prod += '{} + '.format(r.species_ref)
                     else:
@@ -3414,6 +3527,8 @@ class Reaction(Fbase):
                         prod += '({}) {} + '.format(coeff, r.species_ref)
                     else:
                         prod += '({}) {} + '.format(coeff, self.__objref__().getSpecies(r.species_ref).getName())
+        #print(sub)
+        #print(prod)
         if self.reversible:
             eq = '{} {} {}'.format(sub[:-3], reverse_symb, prod[:-2])
         else:
@@ -3494,6 +3609,7 @@ class Species(Fbase):
          - *rid* a valid reaction id
 
         """
+        print('INFO: The static .setReagentOf() method will be deprecated, please update your code to use: \".isReagentOf()\"')
         if rid not in self.reagent_of:
             self.reagent_of.append(rid)
 
@@ -3550,6 +3666,25 @@ class Species(Fbase):
         self.is_boundary = False
 
 
+    def rename(self, newid, overwrite=True):
+        """
+        Changes the species id and updates all reagents in the model reactions. Note that existing species with id == newid
+        will be overwritten/deleted.
+
+         - *newid* the new species id.
+         - *overwrite* [default=True] overwrite species objects (highly recommended)
+
+        """
+        assert self.__objref__ is not None, "\nWARNING: needs to be part of a model (cmod.addSpecies()) to work"
+        mod = self.__objref__()
+        if overwrite and newid in mod.getSpeciesIds():
+            print('INFO: overwriting existing species: {}'.format(newid))
+            mod.deleteSpecies(newid)
+        for rr in mod.getFluxesAssociatedWithSpecies(self.getId()):
+                mod.getReaction(rr[0]).getReagentWithSpeciesRef(self.getId()).setSpecies(newid)
+        self.setId(newid)
+
+
 class Reagent(Fbase):
     """
     Has a reactive species id and stoichiometric coefficient:
@@ -3561,25 +3696,21 @@ class Reagent(Fbase):
     coefficient = None
     role = None
     species_ref = None
+    _value_is_ref_ = False
 
     def __init__(self, reid, species_ref, coef):
         """
-        Instantiates a reagent
+        Instantiates a reagent from a metatabolite and coefficient, note that now the coefficient
+        can be a Parameter object in which case a connection is made to the linked Parameter
 
          - *reid* a unique id
          - *species_ref* a reference to a species id
-         - *coefficient* the metabolite coefficient
+         - *coefficient* the stoichiometric coefficient, a non-zero integer or Parameter
 
         """
         self.id = reid
         self.species_ref = species_ref
-        self.coefficient = coef
-        if coef > 0.0:
-            self.role = 'product'
-        elif coef < 0.0:
-            self.role = 'substrate'
-        else:
-            raise RuntimeError('\nZero coefficients are not supported for now: {%s}%s!' % (coef, reid))
+        self.setCoefficient(coef)
         self.annotation = {}
         self.compartment = None
         self.__delattr__('compartment')
@@ -3591,20 +3722,36 @@ class Reagent(Fbase):
          - *coeff* the new coefficient
 
         """
-        self.coefficient = coef
-        if self.coefficient < 0.0:
+        if type(coef) is Parameter:
+            self.coefficient = weakref.ref(coef)
+            self._value_is_ref_ = True
+            value = coef.getValue()
+        else:
+            self.coefficient = coef
+            self._value_is_ref_ = False
+            value = coef
+
+        if value < 0.0:
             self.role = 'substrate'
-        elif self.coefficient > 0.0:
+        elif value > 0.0:
             self.role = 'product'
         else:
             self.role = None
+            raise RuntimeError('Zero coefficient detected and are currently not supported: ({}) {}!' % (value, self.getId()))
+
 
     def getCoefficient(self):
         """
         Returns the reagent coefficient
 
         """
-        return self.coefficient
+
+        if not self._value_is_ref_:
+            value = self.coefficient
+        else:
+            value = self.coefficient().getValue()
+
+        return value
 
     def setSpecies(self, spe):
         """
@@ -3632,6 +3779,34 @@ class Reagent(Fbase):
         #else:
             #self.role = None
         return self.role
+
+## bgoli concept future reagent
+#class Reagent():
+    #_value = None
+    #_weakref_ = False
+
+    #@property
+    #def coefficient(self):
+        #print(self._value, self._weakref_)
+
+    #@coefficient.setter
+    #def coefficient(self, value):
+        #if type(value) is Parameter:
+            #self._value = weakref.ref(value)
+            #self._weakref_ = True
+        #else:
+            #self._value = value
+            #self._weakref_ = False
+
+    #@coefficient.getter
+    #def coefficient(self):
+        #if self._weakref_:
+            #x = self._value().value
+        #else:
+            #x = self._value
+        #return x
+
+
 
 class Gene(Fbase):
     """
@@ -3824,7 +3999,7 @@ class GeneProteinAssociation(Fbase):
 
     def buildEvalFunc(self):
         """
-        Builds a function which evaluates the gene expressions and evaluates to an integer uisng
+        Builds a function which evaluates the gene expressions and evaluates to an integer using
         the following rules:
 
          - True --> 1
@@ -3857,6 +4032,12 @@ class GeneProteinAssociation(Fbase):
         """
         return [self.__objref__().getGene(g) for g in self.generefs]
 
+    def getGeneLabels(self):
+        """
+        Return a list of gene labels associated with this GPRass
+        """
+        return [self.__objref__().getGene(g).getLabel() for g in self.generefs]
+
     def getGene(self, gid):
         """
         Return a gene object with id
@@ -3868,13 +4049,27 @@ class GeneProteinAssociation(Fbase):
             print('WARNING: {} is not a valid gene id'.format(gid))
             return None
 
-    def getAssociationStr(self):
+
+    def getAssociationStr(self, use_labels=False):
         """
-        return the gene association string
+        Return the gene association string, alternatively return string with labels
+
+        - *use_lablels* [default=False] return the gene association string with labels rather than geneId's (FBCv2 issue)
+
         """
         #if self._MODIFIED_ASSOCIATION_:
             #print('NOTE: this association string has been modified to be evaluable:\n{} --> {}'.format(self.assoc0, self.assoc))
-        return self.assoc
+        out = self.assoc
+        if use_labels:
+            out = self.assoc
+            keymap = {}
+            for g in self.generefs:
+                keymap[g] = self.__objref__().getGene(g).getLabel()
+            keys = keymap.keys()
+            keys.sort(reverse=True)
+            for k in keys:
+                out = out.replace(k, keymap[k])
+        return out
 
     def getGeneIds(self):
         """

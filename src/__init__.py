@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 407 2016-01-21 13:47:59Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 472 2016-08-25 10:01:41Z bgoli $)
 
 """
 ##
@@ -54,7 +54,7 @@ except AttributeError:
 
 from .CBRead import readSBML3FBC, readSBML2FBA, readCOBRASBML
 from .CBWrite import writeSBML3FBC, writeFVAtoCSV, writeModelToExcel97, writeModelToCOMBINEarchive, writeCOBRASBML, writeSBML3FBCV2
-
+from .CBXML import sbml_getSBMLFileVersion as getSBMLFileVersion
 
 ## "optional" modules extended dependencies
 # debug
@@ -86,6 +86,8 @@ NINF = -float('inf')
 NAN = float('nan')
 
 from . import CBModel, CBDataStruct, CBModelTools, CBRead, CBReadtxt, CBTools, CBVersion, CBWrite, CBXML, CBNetDB, CBPlot
+from . import PyscesSED
+SED = PyscesSED.SEDCBMPY
 
 try:
     from . import nosetests
@@ -106,12 +108,12 @@ if not __SILENT_START__:
     print('\n\n***********************************************************************')
     print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling        *'.format(__version__.replace('.{}'.format(rev),'')))
     print('*                http://cbmpy.sourceforge.net                         *')
-    #print('*                     Somewhere In Time                               *')
-    print('* Copyright(C) Brett G. Olivier 2010 - 2015                           *')
+    print('* Copyright(C) Brett G. Olivier 2014 - 2016                           *')
     print('* Dept. of Systems Bioinformatics                                     *')
     print('* Vrije Universiteit Amsterdam, Amsterdam, The Netherlands            *')
+    print('* CBMPy is developed as part of the BeBasic MetaToolKit Project       *')
     #print('* PySCeS is distributed under the PySCeS (BSD style) licence, see     *')
-    print('* CBMPy is distributed under the GNU GPL v 3.0 licence, see           *')
+    print('* Distributed under the GNU GPL v 3.0 licence, see                    *')
     print('* LICENCE (supplied with this release) for details                    *')
     ##  print('*                 ** Read about PySCeS **                             *')
     ##  print('* http://bioinformatics.oupjournals.org/cgi/content/short/21/4/560    *')

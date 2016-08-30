@@ -1,0 +1,47 @@
+=================
+pyOpt Solutions
+=================
+
+Maximum deletions: 2.0
+Use knockout weighting (minimization): False
+
+=================
+
+Product reaction (R_EX_dad_5_c): 0.00226
+Biomass reaction (R_BiomassAuto): 0.05168
+Deleted genes (2): ['sll1556', 'sll1185']
+_________________
+
+Product reaction (R_EX_adn_c): 0.00131
+Biomass reaction (R_BiomassAuto): 0.05196
+Deleted genes (2): ['sll1758', 'slr0782']
+_________________
+
+Product reaction (R_EX_pap_c): 0.01032
+Biomass reaction (R_BiomassAuto): 0.04889
+Deleted genes (2): ['sll1234', 'sll0895']
+_________________
+
+Product reaction (R_EX_5mta_c): 0.00035
+Biomass reaction (R_BiomassAuto): 0.05226
+Deleted genes (1): ['sll0135']
+_________________
+
+Product reaction (R_EX_ac_e): 0.01012
+Biomass reaction (R_BiomassAuto): 0.05203
+Deleted genes (2): ['sll0542', 'sll1299']
+_________________
+
+Product reaction (R_EX_fum_e): 0.0577
+Biomass reaction (R_BiomassAuto): 0.04732
+Deleted genes (2): ['slr0018', 'sll0895']
+_________________
+
+Product reaction (R_EX_ahcys_c): 0.0013
+Biomass reaction (R_BiomassAuto): 0.05184
+Deleted genes (2): ['slr0782', 'sll1234']
+_________________
+
+Product reaction (R_EX_ade_c): 0.00131
+Biomass reaction (R_BiomassAuto): 0.05199
+Deleted genes (2): ['sll0554', 'sll1430']

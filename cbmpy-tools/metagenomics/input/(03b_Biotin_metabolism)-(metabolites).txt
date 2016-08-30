@@ -1,0 +1,56 @@
+id	name	charge	chemformula	compartment	fixed	Legend	AltNames
+C00120	Biotin		C10H16N2O3S				D-Biotin;Vitamin H;Coenzyme R
+C00024	Acetyl-CoA		C23H38N7O17P3S				Acetyl coenzyme A
+C00122	Fumarate		C4H4O4				Fumaric acid;trans-Butenedioic acid
+C00026	2-Oxoglutarate		C5H6O5				Oxoglutaric acid;2-Ketoglutaric acid;alpha-Ketoglutaric acid
+C00020	AMP		C10H14N5O7P				Adenosine 5'-monophosphate;Adenylic acid;Adenylate;5'-AMP;5'-Adenylic acid;5'-Adenosine monophosphate;Adenosine 5'-phosphate
+C00009	Orthophosphate		H3PO4				Phosphate;Phosphoric acid;Orthophosphoric acid
+C00022	Pyruvate		C3H4O3				Pyruvic acid;2-Oxopropanoate;2-Oxopropanoic acid;Pyroracemic acid
+C00006	NADP+		C21H29N7O17P3				NADP;Nicotinamide adenine dinucleotide phosphate;beta-Nicotinamide adenine dinucleotide phosphate;TPN;Triphosphopyridine nucleotide;beta-NADP+
+C00005	NADPH		C21H30N7O17P3				TPNH;Reduced nicotinamide adenine dinucleotide phosphate
+C00004	NADH		C21H29N7O14P2				DPNH;Reduced nicotinamide adenine dinucleotide
+C00003	NAD+		C21H28N7O14P2				NAD;Nicotinamide adenine dinucleotide;DPN;Diphosphopyridine nucleotide;Nadide;beta-NAD+
+C00002	ATP		C10H16N5O13P3				Adenosine 5'-triphosphate
+C00001	H2O		H2O				Water
+C00683	(S)-Methylmalonyl-CoA		C25H40N7O19P3S				(S)-Methylmalonyl-coenzyme A;(2S)-Methylmalonyl-CoA;D-Methylmalonyl-CoA
+C00149	(S)-Malate		C4H6O5				L-Malate;L-Apple acid;L-Malic acid;L-2-Hydroxybutanedioic acid;Malate;Malic acid
+C00036	Oxaloacetate		C4H4O5				Oxalacetic acid;Oxaloacetic acid;2-Oxobutanedioic acid;2-Oxosuccinic acid;keto-Oxaloacetate
+C04832	Coenzyme M 7-mercaptoheptanoylthreonine-phosphate heterodisulfide		C13H26NO10PS3				Coenzyme M-HTP heterodisulfide;CoM-S-S-CoB;N-{7-[(2-Sulfoethyl)dithio]heptanoyl}-3-O-phospho-L-threonine
+C11062	4-Hydroxybutyryl-CoA		C25H42N7O18P3S				4-Hydroxybutanoyl-CoA
+C01894	Biotinyl-CoA		C31H50N9O18P3S2				
+C00100	Propanoyl-CoA		C24H40N7O17P3S				Propionyl-CoA;Propionyl coenzyme A
+C05921	Biotinyl-5'-AMP		C20H28N7O9PS				
+C05668	3-Hydroxypropionyl-CoA		C24H40N7O18P3S				3-Hydroxypropionyl coenzyme A;3-Hydroxypropanoyl-CoA;3-Hydroxypropanoyl coenzymeA;beta-Hydroxypropionyl-CoA
+C01144	(S)-3-Hydroxybutanoyl-CoA		C25H42N7O18P3S				(S)-3-Hydroxybutyryl-CoA
+C00008	ADP		C10H15N5O10P2				Adenosine 5'-diphosphate
+C00047	L-Lysine		C6H14N2O2				Lysine acid;2,6-Diaminohexanoic acid
+C06250	Holo-[carboxylase]		C17H27N5O4SR2				Biotin-carboxyl-carrier protein
+C00091	Succinyl-CoA		C25H40N7O19P3S				Succinyl coenzyme A
+C00232	Succinate semialdehyde		C4H6O3				Succinic semialdehyde;4-Oxobutanoate
+C00989	4-Hydroxybutanoic acid		C4H8O3				4-Hydroxybutanoate;4-Hydroxybutyric acid
+C00010	CoA		C21H36N7O16P3S				Coenzyme A;CoA-SH
+C00011	CO2		CO2				Carbon dioxide
+C00012	Peptide		C2H4NO2R(C2H2NOR)n				
+C00013	Diphosphate		H4P2O7				Diphosphoric acid;Pyrophosphate;Pyrophosphoric acid;PPi
+C00033	Acetate		C2H4O2				Acetic acid;Ethanoic acid
+C00139	Oxidized ferredoxin		Not found				Oxidized ferredoxin [iron-sulfur] cluster
+C00138	Reduced ferredoxin		Not found				Reduced ferredoxin [iron-sulfur] cluster
+C20386	Biotin sulfoxide		C10H16N2O4S				
+C00332	Acetoacetyl-CoA		C25H40N7O18P3S				Acetoacetyl coenzyme A;3-Acetoacetyl-CoA
+C15603	Hydroquinone		Not found				p-Hydroquinone;Quinol;Reduced quinone
+C15602	Quinone		Not found				
+C00074	Phosphoenolpyruvate		C3H5O6P				Phosphoenolpyruvic acid;PEP
+C00288	HCO3-		HCO3				Bicarbonate;Hydrogen carbonate;Acid carbonate
+C01013	3-Hydroxypropanoate		C3H6O3				3-Hydroxypropanoic acid;3-Hydroxypropionate;3-Hydroxypropionic acid;Hydracrylic acid
+C00877	Crotonoyl-CoA		C25H40N7O17P3S				Crotonyl-CoA;2-Butenoyl-CoA;trans-But-2-enoyl-CoA;But-2-enoyl-CoA;(E)-But-2-enoyl-CoA
+C05552	Biocytin		C16H28N4O4S				N6-D-Biotinyl-L-lysine;epsilon-N-Biotinyl-L-lysine
+C00227	Acetyl phosphate		C2H5O5P				
+C00083	Malonyl-CoA		C24H38N7O19P3S				Malonyl coenzyme A
+C00222	3-Oxopropanoate		C3H4O3				Malonate semialdehyde
+C04628	Coenzyme B		C11H22NO7PS				N-(7-Mercaptoheptanoyl)threonine 3-O-phosphate;N-(7-Mercaptoheptanoyl)threonine O3-phosphate;HTP
+C00080	H+		H				Hydron
+C06249	Apo-[carboxylase]		C7H13N3O2R2				
+C03576	Coenzyme M		C2H6O3S2				2-Mercaptoethanesulfonate;Reduced coenzyme M;HS-CoM;CoM
+C00042	Succinate		C4H6O4				Succinic acid;Butanedionic acid;Ethylenesuccinic acid
+C00894	Propenoyl-CoA		C24H38N7O17P3S				Acryloyl-CoA;Acrylyl-CoA
+C01213	(R)-Methylmalonyl-CoA		C25H40N7O19P3S				L-Methylmalonyl-CoA

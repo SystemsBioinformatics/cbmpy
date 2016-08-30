@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 416 2016-02-23 16:12:23Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 472 2016-08-25 10:01:41Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -75,15 +75,19 @@ try:
                   libsbml.SBML_INITIAL_ASSIGNMENT : 'initialassignment',
                   libsbml.SBML_SPECIES_REFERENCE : 'speciesreference',
                   libsbml.SBML_UNKNOWN : 'unknown',
-                  libsbml.SBML_FBC_FLUXBOUND : 'fluxbound',
+                  }
+    try:
+        SBML_TYPES.update({libsbml.SBML_FBC_FLUXBOUND : 'fluxbound',
                   libsbml.SBML_FBC_OBJECTIVE : 'objective',
                   libsbml.SBML_FBC_FLUXOBJECTIVE : 'fluxobjective',
+                  libsbml.SBML_FBC_V1ASSOCIATION : 'geneassociation1',
                   libsbml.SBML_FBC_GENEASSOCIATION : 'geneassociation2',
                   libsbml.SBML_FBC_GENEPRODUCT : 'geneproduct',
                   libsbml.SBML_FBC_GENEPRODUCTASSOCIATION : 'geneproductassociation',
-                  libsbml.SBML_FBC_GENEPRODUCTREF : 'geneproductref',
-                  libsbml.SBML_FBC_V1ASSOCIATION : 'geneassociation1'
-                  }
+                  libsbml.SBML_FBC_GENEPRODUCTREF : 'geneproductref'})
+    except AttributeError:
+        print('\nWARNING: No or limited FBC support limited! Please update your libSBML to the latest version.\n')
+
 except ImportError:
     print('WARNING: SBML support not available, please install libSBML, Python bindings with FBC (sbml.org)')
     _HAVE_SBML_ = False
@@ -129,6 +133,64 @@ MODEL_UNITS = {'extent' : 'mmol_per_gdw',
                'substance' : 'mmol_per_gdw',
                'time' : 'hour'}
 
+SBML_NS = [('http://www.sbml.org/sbml/level3/version1/fbc/version2', 'L3V1FBC2'),
+           ('http://www.sbml.org/sbml/level3/version1/fbc/version1', 'L3V1FBC1'),
+           ('http://www.sbml.org/sbml/level3/version2/fbc/version2', 'L3V2FBC2'),
+           ('http://www.sbml.org/sbml/level3/version2/fbc/version1', 'L3V2FBC1'),
+           ('http://www.sbml.org/sbml/level3/version2/core', 'L3V2core'),
+           ('http://www.sbml.org/sbml/level3/version1/core', 'L3V1core'),
+           ('http://www.sbml.org/sbml/level2/version4', 'L2'),
+           ('http://www.sbml.org/sbml/level2','L2')]
+
+
+def sbml_getSBMLFileVersion(f):
+    """
+    Try and find the SBML version and FBC extension present in an SBML file. Returns one of
+    the following descriptors: L3V1FBC2, L3V1FBC1, L3V2FBC2, L3V2FBC1, L3V2core, L3V1core, L2.
+
+     - *f* the SBML file
+
+    """
+
+    if not os.path.exists(f) or not _HAVE_SBML_:
+        return None
+    D = libsbml.readSBMLFromFile(f)
+    ns = D.getNamespaces()
+    uris = []
+    for n in range(ns.getNumNamespaces()):
+        uris.append(ns.getURI(n))
+    output = None
+    for ns,idx in SBML_NS:
+        if ns in uris:
+            output = idx
+            break
+    if output == 'L2':
+        F = open(f, 'r')
+        l2type = None
+        for l in F:
+            if '<fba:fluxBalance xmlns:fba="http://www.sbml.org/sbml/level3/version1/fba/version1">' in l:
+                l2type = 'L2FBA'
+                break
+            if '<parameter id="OBJECTIVE_COEFFICIENT" value="0"' in l:
+                l2type = 'COBRA'
+                break
+        F.close()
+        if l2type is not None:
+            output = l2type
+
+    if output == 'L3V1FBC1' or output == 'L3V1FBC2':
+        print('\nINFO: SBML Level 3 FBC model detected, load with cbmpy.readSBML3FBC()')
+    elif output == 'L2FBA':
+        print('\nINFO: SBML Level 2 FAME model detected, load with cbmpy.readSBML2FBA()')
+    elif output == 'COBRA':
+        print('\nINFO: COBRA SBML L2 model detected, load with cbmpy.readCOBRASBML()')
+    else:
+        print('\nINFO: No constraint-based modelling SBML extension detected for type {} please choose a cbmpy reader.'.format(output))
+
+    return output
+
+
+
 class MLStripper(HTMLParser):
     """
     Class for stripping a string of HTML/XML used from:
@@ -167,6 +229,17 @@ def xml_stripTags(html):
     """
     __tagStripper__.feed(html)
     return __tagStripper__.get_data()
+
+def formatSbmlId(s):
+    out = ''
+    for x in s:
+        if x.isalnum():
+            out += x
+        else:
+            out += '_'
+    if not out[0].isalpha() and out[0] is not '_':
+        out = '_'+out
+    return out
 
 def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_species_search=False):
     """
@@ -813,6 +886,55 @@ def sbml_setCompartmentsL3(model, fba):
         sboterm = cs.getSBOterm()
         if sboterm is not None and sboterm != '':
             comp_def.setSBOTerm(str(sboterm))
+        notes = cs.getNotes()
+        if notes != '' and notes is not None:
+            sbml_setNotes3(comp_def, notes)
+
+def sbml_setParametersL3Fbc(fbcmod, add_cbmpy_anno=True):
+    """
+    Add non fluxbound related parameters to the model
+
+     - *fbcmod* a CBM2SBML instance
+     - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation.
+
+    """
+
+    cntr = 0
+    for par in fbcmod.fba.parameters:
+        if not par._is_fluxbound_:
+            fbcmod.createParParameter(par, add_cbmpy_anno)
+            cntr += 1
+
+    print('INFO: added {} non fluxbound parameters to model'.format(cntr))
+
+
+
+def sbml_setAnnotationsL3Fbc(cbmo, sbmlo):
+    """
+    Add CBMPy Fbase annotations to an SBML object, MIRIAM, SBO, Notes. Should
+    be called last when creating SBML objects.
+
+     - *cbmo* the CBMPy object
+     - *sbmlo* SBML object
+
+     Note: this function should be used for new code, old code still needs to be
+     refactored.
+
+    """
+
+    if len(cbmo.getAnnotations()) > 0:
+        annoSTRnew = sbml_writeKeyValueDataAnnotation(cbmo.getAnnotations())
+        annores = sbmlo.appendAnnotation(annoSTRnew)
+    if cbmo.miriam != None:
+        miriam = cbmo.miriam.getAllMIRIAMUris()
+        if len(miriam) > 0:
+            sbml_setCVterms(sbmlo, miriam, model=False)
+    sboterm = cbmo.getSBOterm()
+    if sboterm is not None and sboterm != '':
+        sbmlo.setSBOTerm(str(sboterm))
+    notes = cbmo.getNotes()
+    if notes != '' and notes is not None:
+        sbml_setNotes3(sbmlo, notes)
 
 
 def sbml_setDescription(model, fba):
@@ -826,10 +948,10 @@ def sbml_setDescription(model, fba):
     ##  try: UseR = getuser()
     ##  except: UseR = ''
     notes = ''
-    if fba.description.strip() in ['', None, ' ']:
+    if fba.notes.strip() in ['', None, ' ']:
         notes += '<html:p><html:br/><html:span size="small">Model \"<html:strong>%s</html:strong>\" (%s) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> (%s) on %s.</html:span></html:p>' % (fba.getPid(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
     else:
-        notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">%s</html:span></html:p>\n' % fba.description
+        notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">%s</html:span></html:p>\n' % fba.notes
     #if fba._SBML_LEVEL_ == 2:
         #notes = '<body xmlns:html="http://www.w3.org/1999/xhtml">\n%s</body>' % notes
     #else:
@@ -843,7 +965,6 @@ def sbml_setDescription(model, fba):
             print('Invalid annotation in model:', fba.getId())
             print(fba.getAnnotations(), '\n')
 
-
 def sbml_setNotes3(obj, s):
     """
     Formats the CBMPy notes as an SBML note and adds it to the SBMl object
@@ -852,7 +973,6 @@ def sbml_setNotes3(obj, s):
      - *s* a string that should be added as a note
 
     """
-    s = str(s).replace('<','&lt;').replace('>','&gt;')
     s = '<html:body>{}</html:body>'.format(s)
     res = obj.setNotes(s)
     if res != 0:
@@ -861,6 +981,21 @@ def sbml_setNotes3(obj, s):
     else:
         return True
 
+def sbml_getNotes(obj):
+    """
+    Returns the SBML objects notes
+
+    - *obj* an SBML object
+
+    """
+    notes = ''
+    try:
+        notes = libsbml.XMLNode_convertXMLNodeToString(obj.getNotes())
+        if notes != '' and notes is not None:
+            notes = xml_stripTags(notes).strip()
+    except Exception as why:
+        print(why)
+    return notes
 
 def sbml_setUnits(model, units=None, give_default=False, L3=True):
     """
@@ -1350,7 +1485,10 @@ class FBCconnect(object):
         """
         GPR = self.fbc.createGeneAssociation()
         if gprid == None:
+            # try this: get rid of invalid symbols in GPRid
+
             GPR.setId('{}_gpra'.format(rid))
+
         else:
             GPR.setId(gprid)
 
@@ -1371,6 +1509,7 @@ class FBCconnect(object):
                 else:
                     print('ERROR: Could not set reaction: \"{}\"\n\"{}\"'.format(rid, assoc))
         if ret0 != 0:
+            print(ass)
             print('WARNING: Possible invalid gene id: \"{}\" - \"{}\" is not a valid gene association'.format(rid, assoc))
             return GPR
         else:
@@ -1561,7 +1700,7 @@ class CBMtoSBML3(FBCconnect):
         if compress_bounds:
             for v_ in shared_values:
                 if v_ not in shared_names:
-                    pid = self.createParameterSharedV2(v_, name=shared_values[v_][0].getName())
+                    pid = self.createFbParameterSharedV2(v_, name=shared_values[v_][0].getName())
                     #print(pid)
                     vp_map[v_] = pid
                 else:
@@ -1572,7 +1711,7 @@ class CBMtoSBML3(FBCconnect):
                         #print(shared_names[v_][n_])
                         spidn = 'par{}_{}'.format(self.parameter_cntr, spid.index(shared_names[v_][n_]))
                         #print(spidn)
-                        pid = self.createParameterSharedV2(v_, spidn, shared_values[v_][n_].getName())
+                        pid = self.createFbParameterSharedV2(v_, spidn, shared_values[v_][n_].getName())
                         vp_map[v_] = pid
                     self.parameter_cntr += len(spid)
 
@@ -1584,13 +1723,13 @@ class CBMtoSBML3(FBCconnect):
             if compress_bounds and b_['lower'].getId() in shared_ids:
                 self.parameter_map[b_['rid']]['lb'] = vp_map[b_['lower'].getValue()]
             else:
-                self.createParameterV2(b_['lower'])
+                self.createFbParameterV2(b_['lower'])
                 self.parameter_map[b_['rid']]['lb'] = b_['lower'].getId()
 
             if compress_bounds and b_['upper'].getId() in shared_ids:
                 self.parameter_map[b_['rid']]['ub'] = vp_map[b_['upper'].getValue()]
             else:
-                self.createParameterV2(b_['upper'])
+                self.createFbParameterV2(b_['upper'])
                 self.parameter_map[b_['rid']]['ub'] = b_['upper'].getId()
 
     def addBoundsV1(self, autofix=False):
@@ -1651,11 +1790,12 @@ class CBMtoSBML3(FBCconnect):
 
         for g in self.fba.genes:
             G = self.fbc.createGeneProduct()
-            G.setId(g.getId())
+
+            G.setId(formatSbmlId(g.getId()))
             name = g.getName()
             if name != None:
                 G.setName(name)
-            G.setMetaId(g.getMetaId())
+            G.setMetaId(formatSbmlId(g.getMetaId()))
             G.setLabel(g.getLabel())
             sboterm = g.getSBOterm()
             if sboterm is not None and sboterm != '':
@@ -1688,7 +1828,7 @@ class CBMtoSBML3(FBCconnect):
 
         for g_ in self.fba.gpr:
             rid = g_.getProtein()
-            assoc = g_.getAssociationStr()
+            assoc = g_.getAssociationStr(use_labels=True)
             if rid != None and rid != '':
                 if assoc != None and assoc != '':
                     GPR = self.createGeneAssociationV1(rid, assoc, gprid=g_.getId())
@@ -1701,7 +1841,33 @@ class CBMtoSBML3(FBCconnect):
             else:
                 print('WARNING: Skipping GPR association: \"{}\"\n\"{}\"--> \"{}\"'.format(g_.getId(), rid, assoc))
 
-    def createParameterV2(self, bnd):
+    def createParParameter(self, param, add_cbmpy_anno=True):
+        """
+        Create a generic SBML parameter from a CBMPy parameter
+
+         - *param* a CBMPy parameter object
+         - *add_cbmpy_anno* [default=True] add annotation to SBML object
+
+        """
+
+        par = self.model.createParameter()
+        par.setId(param.getId())
+        par.setMetaId('meta_{}'.format(param.getId()))
+        par.setName(param.getName())
+        par.setValue(param.getValue())
+        par.setConstant(True)
+        if add_cbmpy_anno:
+            if param.getSBOterm() is not None:
+                par.setSBOTerm(param.getSBOterm())
+            if len(param.annotation) > 0:
+                annoSTRnew = sbml_writeKeyValueDataAnnotation(param.annotation)
+                annores = par.appendAnnotation(annoSTRnew)
+            if param.miriam != None:
+                miriam = param.miriam.getAllMIRIAMUris()
+                if len(miriam) > 0:
+                    sbml_setCVterms(param, miriam, model=False)
+
+    def createFbParameterV2(self, bnd, add_cbmpy_anno=True):
         """
         Create SBML V2 flux bound parameters for reaction
 
@@ -1717,18 +1883,19 @@ class CBMtoSBML3(FBCconnect):
         par.setConstant(True)
         par.setSBOTerm('SBO:0000625')
 
-        if len(bnd.annotation) > 0:
-            annoSTRnew = sbml_writeKeyValueDataAnnotation(bnd.annotation)
-            annores = par.appendAnnotation(annoSTRnew)
-            if annores == -3:
-                print('Invalid annotation in bound:', bnd.getId())
-                print(bnd.annotation, '\n')
-        if bnd.miriam != None:
-            miriam = bnd.miriam.getAllMIRIAMUris()
-            if len(miriam) > 0:
-                sbml_setCVterms(par, miriam, model=False)
+        if add_cbmpy_anno:
+            if len(bnd.annotation) > 0:
+                annoSTRnew = sbml_writeKeyValueDataAnnotation(bnd.annotation)
+                annores = par.appendAnnotation(annoSTRnew)
+                if annores == -3:
+                    print('Invalid annotation in bound:', bnd.getId())
+                    print(bnd.annotation, '\n')
+            if bnd.miriam != None:
+                miriam = bnd.miriam.getAllMIRIAMUris()
+                if len(miriam) > 0:
+                    sbml_setCVterms(par, miriam, model=False)
 
-    def createParameterSharedV2(self, value, pid=None, name=None):
+    def createFbParameterSharedV2(self, value, pid=None, name=None, add_cbmpy_anno=True):
         """
         Create SBML V2 flux bound parameters for reaction
 
@@ -1800,17 +1967,20 @@ def sbml_writeKeyValueDataAnnotation(annotations):
             Kval = cgi.escape(str(annotations[K]))
 
         # fix the key to be sid compatible
-        Kfix = ''
-        for l in K:
-            if l.isalnum():
-                Kfix += l
-            else:
-                Kfix += '_'
+        ## removed temporarily, no reason to be an sid
+        #Kfix = ''
+        #for l in K:
+            #if l.isalnum():
+                #Kfix += l
+            #else:
+                #Kfix += '_'
 
-        if not Kfix[0].isalpha():
-            Kfix = 'id_' + Kfix
+        ## removed temporarily, no reason to be an sid
+        #if not Kfix[0].isalpha():
+            #Kfix = 'id_' + Kfix
         ## taken out for now
         #Kfix = Kfix.lower()
+        Kfix = K
 
         #annoSTR += ' <data id="%s" type="%s" value="%s"/>\n' % (Kfix, Ktype, Kval)
         annoSTR += ' <data id="{}" value="{}"/>\n'.format(Kfix, Kval)
@@ -1911,7 +2081,8 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
                                       'boundary' : s.is_boundary,
                                       'chemFormula' : s.chemFormula,
                                       'miriam' : miriam,
-                                      'sboterm' : s.getSBOterm()
+                                      'sboterm' : s.getSBOterm(),
+                                      'notes' : s.getNotes()
                                       }
                         })
 
@@ -1968,27 +2139,28 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
                 annoSTR = sbml_writeAnnotationsAsCOBRANote(species[spe]['annotation']) #GOOD RIDDANCE
                 if annoSTR != None:
                     s.setNotes(annoSTR)
-            elif species[spe]['annotation'] != '' and species[spe]['annotation'] != None:
-                sbml_setNotes3(s, species[spe]['annotation'])
+            elif species[spe]['notes'] != '' and species[spe]['notes'] is not None:
+                sbml_setNotes3(s, species[spe]['notes'])
         if len(species[spe]['miriam']) > 0:
             sbml_setCVterms(s, species[spe]['miriam'], model=False)
         if  species[spe]['sboterm'] is not None and species[spe]['sboterm'] != '':
             s.setSBOTerm(str(species[spe]['sboterm']))
+        if  species[spe]['notes'] is not None and species[spe]['notes'] != '':
+            sbml_setNotes3(s, species[spe]['notes'])
 
-def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=1):
+def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=1):
     """
     Add the FBA instance reactions to the SBML model
 
      - *fbcmod* a CBM2SBML instance
-     - *fba* a PySCeSCBM model instance
      - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
      - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_anno* [default=False] add COBRA <notes> annotation
      - *fbc_version* [default=1] writes either FBC v1 (2013) or v2 (2015)
 
-
     """
 
+    fba = fbcmod.fba
     gpr_reaction_map = {}
     for gpr in fba.gpr:
         gpr_reaction_map[gpr.getProtein()] = gpr.getId()
@@ -2017,7 +2189,8 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
                                         'compartment' : r.compartment,
                                         'miriam' : miriam,
                                         'notes' : r.getNotes(),
-                                        'sboterm' : r.getSBOterm()
+                                        'sboterm' : r.getSBOterm(),
+                                        'modifiers' : r._modifiers_
                                         }
                           })
     if return_dict:
@@ -2058,7 +2231,7 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
                     nres = r.setNotes(annoSTR)
                     if nres != 0:
                         print(nres, annoSTR)
-            elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] != None:
+            elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] is not None:
                 sbml_setNotes3(r, reactions[rxn]['notes'])
         if reactions[rxn]['reversible']:
             r.setReversible(True)
@@ -2068,6 +2241,10 @@ def sbml_setReactionsL3Fbc(fbcmod, fba, return_dict=False, add_cobra_anno=False,
         if reactions[rxn]['sboterm'] is not None and reactions[rxn]['sboterm'] != '':
             #print(reactions[rxn]['sboterm'])
             r.setSBOTerm(str(reactions[rxn]['sboterm']))
+
+        if len(reactions[rxn]['modifiers']) > 0:
+            for mo_ in reactions[rxn]['modifiers']:
+                r.addModifier(fbcmod.model.getSpecies(mo_))
 
         if fbc_version == 2:
             FB.setLowerFluxBound(fbcmod.parameter_map[reactions[rxn]['id']]['lb'])
@@ -2141,7 +2318,7 @@ def sbml_setGroupsL3(cs, fba):
         if sbo != None:
             g.setSBOTerm(str(sbo))
         notes = grp.getNotes()
-        if notes != '':
+        if notes != '' and notes is not None:
             sbml_setNotes3(g, notes)
         lom = g.getListOfMembers()
         metaid = '{}{}_members'.format(METAPREFIX, grp.getId())
@@ -2150,7 +2327,7 @@ def sbml_setGroupsL3(cs, fba):
         if sbo != None:
             lom.setSBOTerm(str(sbo))
         notes = grp.getSharedNotes()
-        if notes != '':
+        if notes != '' and notes is not None:
             sbml_setNotes3(lom, notes)
 
         for mid in grp.getMemberIDs():
@@ -2227,7 +2404,14 @@ def sbml_createAssociationFromAST(node, out):
         #print('Name:', node.id)
         ref = out.createGeneProductRef()
         ref.setGeneProduct(node.id)
-        #ref.setId(node.id)
+
+    elif isinstance(node, ast.BinOp):
+        left = node.left.id
+        right = node.right.id
+        ref = out.createGeneProductRef()
+        gref = '{}-{}'.format(left, right)
+        print('YAFLTID', gref)
+        ref.setGeneProduct(formatSbmlId(gref))
     else:
         if isinstance(node, ast.Expr):
             children = [node.value]
@@ -2258,7 +2442,7 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
      - *sbml_level_version* [default=(3,1)] a tuple containing the SBML level and version e.g. (3,1)
      - *autofix* convert <> to <=>=
      - *return_fbc* return the FBC converter instance
-     - *gpr_from_annot* [default=True] if enabled will attempt to add the gene protein associations from the annotations
+     - *gpr_from_annot* [default=False] if enabled will attempt to add the gene protein associations from the annotations
        if no gene protein association objects exist
      - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_annot* [default=True] add COBRA <notes> annotation
@@ -2267,6 +2451,8 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
        - *fbc_version* [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)
        - *validate* [default=False] validate the output SBML file
        - *compress_bounds* [default=False] try compress output flux bound parameters
+       - *zip_model* [default=False] compress the model using ZIP encoding
+       - *return_model_string* [default=False] return the SBML XML file as a string
 
 
     """
@@ -2277,14 +2463,21 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     fbc_version = 1
     VALIDATE = False
     compress_bounds = False
+    zip_model = False
+    return_model_string = False
     if 'fbc_version' in xoptions:
         fbc_version = xoptions['fbc_version']
     if 'validate' in xoptions:
         VALIDATE = xoptions['validate']
+    if 'return_model_string' in xoptions:
+        return_model_string = xoptions['return_model_string']
     if 'compress_bounds' in xoptions and fbc_version == 2:
         compress_bounds = xoptions['compress_bounds']
+    if 'zip_model' in xoptions:
+        zip_model = xoptions['zip_model']
     if fbc_version == 2:
         autofix = True
+
     print('\nINFO: using FBC version: {}'.format(fbc_version))
 
     if  fba.getName() in [None, '', ' ']:
@@ -2317,7 +2510,9 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     sbml_setUnits(cs3.model, units=None, L3=True)
     sbml_setSpeciesL3(cs3.model, fba, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, substance_units=True)
     sbml_setCompartmentsL3(cs3.model, fba)
-    sbml_setReactionsL3Fbc(cs3, fba, return_dict=False, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, fbc_version=fbc_version)
+    sbml_setReactionsL3Fbc(cs3, return_dict=False, add_cobra_anno=add_cobra_annot, add_cbmpy_anno=add_cbmpy_annot, fbc_version=fbc_version)
+    sbml_setParametersL3Fbc(cs3, add_cbmpy_anno=add_cbmpy_annot)
+
     if USE_GROUPS:
         sbml_setGroupsL3(cs3, fba)
 
@@ -2332,27 +2527,41 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     try: UseR = getuser()
     except: UseR = ''
 
-    #raw_input('L%sV%s' % (document.getLevel(),document.getVersion()))
     h1 = '<?xml version="1.0" encoding="utf-8"?>\n'
     h1 += '<!-- SBML created with CBMPy ('+ __version__ + ') on ' + time.strftime("%a, %d %b %Y %H:%M:%S") + ' -->\n'
-    F = file(fname, 'w')
-    F.write(h1 + cs3.doc.toSBML())
-    F.flush()
-    F.close()
+    if return_model_string:
+        modstr = h1 + cs3.doc.toSBML()
+        print('Model returned as string')
+    elif zip_model:
+        cs3.sbml.writeSBMLToFile(cs3.doc, fname+'.zip')
+        print('Model exported as: {}'.format(fname+'.zip'))
+    else:
+        #raw_input('L%sV%s' % (document.getLevel(),document.getVersion()))
+        F = file(fname, 'w')
+        F.write(h1 + cs3.doc.toSBML())
+        F.flush()
+        F.close()
+        print('Model exported as: {}'.format(fname))
 
     if VALIDATE:
         sbml_setValidationOptions(cs3.doc, level='full')
         print('\nPerforming validation on output SBML ...\n')
         errors, warnings, others, DOCUMENT_VALID = sbml_validateDocument(cs3.doc, fullmsg=False)
         if not DOCUMENT_VALID:
-            print('\nSBML document is invalid: filename will be {}.invalid'.format(fname))
-            shutil.move(fname, fname+'.invalid')
+            if return_model_string:
+                fname2 = 'model.invalid.xml'
+                cs3.sbml.writeSBMLToFile(cs3.doc, fname2)
+            else:
+                fname2 = fname+'.invalid'
+                shutil.move(fname, fname2)
+            print('\nSBML document is invalid and written as: {}'.format(fname2))
     else:
         sbml_setValidationOptions(cs3.doc, level='normal')
 
-    print('Model exported as: {}'.format(fname))
     cs3._cleanUP_()
     del cs3
+    if return_model_string:
+        return modstr
 
 def sbml_setValidationOptions(D, level):
     """
@@ -2400,6 +2609,7 @@ def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_int
     """
     try:
         new_file = sbml_convertCOBRASBMLtoFBC(fname, outname=None, work_dir=work_dir, output_dir=output_dir)
+        print(new_file)
     except Exception as why:
         print('\nCOBRA file conversion failed:\n\"{}\"'.format(why))
         return None
@@ -2579,7 +2789,7 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
 
     print('\nRead ...')
     sbmldoc = SBMLreader.readSBML(fname)
-    print('Read reports {} errors'.format(sbmldoc.getNumErrors()))
+    print('Converter reports {} errors, this is probably normal.'.format(sbmldoc.getNumErrors()))
     # debug stuff
     #M = sbmldoc.getModel()
     #for s_ in range(M.getNumSpecies()):
@@ -2591,17 +2801,17 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
         #r.unsetAnnotation()
         #r.unsetNotes()
 
-    if sbmldoc.getNumErrors() > 0:
-        if sbmldoc.getError(0).getErrorId() == libsbml.XMLFileUnreadable:
-            # Handle case of unreadable file here.
-            sbmldoc.printErrors()
-        elif sbmldoc.getError(0).getErrorId() == libsbml.XMLFileOperationError:
-            # Handle case of other file error here.
-            sbmldoc.printErrors()
-        else:
-            # Handle other error cases here.
-            sbmldoc.printErrors()
-        return None
+    #if sbmldoc.getNumErrors() > 0:
+        #if sbmldoc.getError(0).getErrorId() == libsbml.XMLFileUnreadable:
+            ## Handle case of unreadable file here.
+            #sbmldoc.printErrors()
+        #elif sbmldoc.getError(0).getErrorId() == libsbml.XMLFileOperationError:
+            ## Handle case of other file error here.
+            #sbmldoc.printErrors()
+        #else:
+            ## Handle other error cases here.
+            #sbmldoc.printErrors()
+        #return None
 
     props = libsbml.ConversionProperties()
     props.addOption("convert fbc to cobra", True, "Convert FBC model to Cobra model")
@@ -2727,6 +2937,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
        - *nogenes* do not load/process genes
        - *noannot* do not load/process any annotations
        - *validate* validate model and display errors and warnings before loading
+       - *readcobra* read the cobra annotation
+       - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
 
     """
 
@@ -2738,6 +2950,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     LOADANNOT = True
     DEBUG = False
     VALIDATE = False
+    READCOBRA = False
+    READ_MODEL_STRING = False
     if 'nogenes' in xoptions and xoptions['nogenes']:
         LOADGENES = False
         print('\nGPR loading disabled!\n')
@@ -2749,14 +2963,23 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         print('\nDebug enabled!\n')
     if 'validate' in xoptions and xoptions['validate']:
         VALIDATE = True
+    if 'readcobra' in xoptions and xoptions['readcobra']:
+        READCOBRA = True
+    if 'read_model_string' in xoptions and xoptions['read_model_string']:
+        READ_MODEL_STRING = True
 
     # DEBUFG
     #global D, M, FBCplg, SBRe, PARAM_D, RFBCplg, GENE_D, GPR_D, FB_data, GPRASSOC
 
-    if work_dir != None:
-        D = libsbml.readSBMLFromFile(str(os.path.join(work_dir, fname)))
+    D = None
+    if READ_MODEL_STRING:
+        D = libsbml.readSBMLFromString(fname)
+        fname = 'string_source'
     else:
-        D = libsbml.readSBMLFromFile(str(fname))
+        if work_dir != None:
+            D = libsbml.readSBMLFromFile(str(os.path.join(work_dir, fname)))
+        else:
+            D = libsbml.readSBMLFromFile(str(fname))
 
     # set consistency checking level for document
 
@@ -2818,7 +3041,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     model_id = M.getId()
     model_name = M.getName()
-    model_description = libsbml.XMLNode_convertXMLNodeToString(M.getNotes())
+    model_description = sbml_getNotes(M)
     model_description = xml_stripTags(model_description).strip()
 
     __HAVE_FBA_ANOT_OBJ__ = True
@@ -2840,6 +3063,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     SPEC = []
     for s in range(M.getNumSpecies()):
+        # add support for initialAmount and hasOnlySubstanceUnits
         SBSp = M.getSpecies(s)
         boundCon = False
         if SBSp.getBoundaryCondition():
@@ -2863,11 +3087,13 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             S.annotation = sbml_readKeyValueDataAnnotation(SBSp.getAnnotationString())
             if S.annotation == {}:
                 S.annotation = sbml_readCOBRANote(libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes()))
+                #SBSp.unsetNotes()
             manot = sbml_getCVterms(SBSp, model=False)
             if manot != None:
                 S.miriam = manot
             del manot
         setCBSBOterm(SBSp.getSBOTermID(), S)
+        S.setNotes(sbml_getNotes(SBSp))
         SPEC.append(S)
 
     boundary_species = [s.getPid() for s in SPEC if s.is_boundary]
@@ -2888,7 +3114,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                  'name' : P.getName(),
                  'annotation': None,
                  'miriam' : None,
-                 'association' : []
+                 'association' : [],
+                 'notes' : sbml_getNotes(P),
+                 'is_fluxbound'  : False
                  }
         if LOADANNOT:
             pdict['annotation'] = sbml_readKeyValueDataAnnotation(P.getAnnotationString())
@@ -2911,6 +3139,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                      'label' : G.getLabel(),
                      'annotation': None,
                      'miriam' : None,
+                     'notes' : sbml_getNotes(G),
                      }
             if LOADANNOT:
                 gdict['annotation'] = sbml_readKeyValueDataAnnotation(G.getAnnotationString())
@@ -2945,9 +3174,10 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                        'miriam' : PARAM_D[lfbid]['miriam'],
                        'sbo'  : PARAM_D[lfbid]['sbo'],
                        'type' : 'lower',
-                       'name' : PARAM_D[lfbid]['name']
+                       'name' : PARAM_D[lfbid]['name'],
                        }
                 PARAM_D[lfbid]['association'].append(R_id)
+                PARAM_D[lfbid]['is_fluxbound'] = True
                 FB_data.append(fbl)
             if lfbid != '':
                 fbu = {'reaction' : R_id,
@@ -2962,6 +3192,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                        'name' : PARAM_D[ufbid]['name']
                        }
                 PARAM_D[ufbid]['association'].append(R_id)
+                PARAM_D[ufbid]['is_fluxbound'] = True
                 FB_data.append(fbu)
 
             # deal with new gene associations (why larry why ...)
@@ -3001,6 +3232,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 GPR_D[GPR_id]['miriam'] = None
                 GPR_D[GPR_id]['annotation'] = {}
                 GPR_D[GPR_id]['sbo'] = SBgpr.getSBOTermID()
+                GPR_D[GPR_id]['notes']  = sbml_getNotes(SBgpr)
                 if LOADANNOT:
                     GPR_D[GPR_id]['annotation'] = sbml_readKeyValueDataAnnotation(SBgpr.getAnnotationString())
                     manot = sbml_getCVterms(SBgpr, model=False)
@@ -3038,11 +3270,16 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             # only dig for ancient annotation if not using V2
             if FBCver < 2 and R.annotation == {}:
                 R.annotation = sbml_readCOBRANote(libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes()))
+                #SBRe.unsetNotes()
             manot = sbml_getCVterms(SBRe, model=False)
             if manot != None:
                 R.miriam = manot
             del manot
         setCBSBOterm(SBRe.getSBOTermID(), R)
+        R.setNotes(sbml_getNotes(SBRe))
+        if SBRe.getNumModifiers() > 0:
+            for mo_ in range(SBRe.getNumModifiers()):
+                R._modifiers_.append(SBRe.getModifier(mo_).getSpecies())
         REAC.append(R)
 
     if DEBUG: print('Reactions load: {}'.format(round(time.time() - time0, 3)))
@@ -3074,6 +3311,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 C.miriam = manot
             del manot
         setCBSBOterm(SBcmp.getSBOTermID(), C)
+        C.setNotes(sbml_getNotes(SBcmp))
         COMP.append(C)
         del cid, name, size, dimensions, C
 
@@ -3200,6 +3438,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         P.miriam = PARAM_D[p_]['miriam']
         P.__sbo_term__ = PARAM_D[p_]['sbo']
         P._association_ = PARAM_D[p_]['association']
+        P.setNotes(PARAM_D[p_]['notes'])
+        if PARAM_D[p_]['is_fluxbound']:
+            P._is_fluxbound_ = True
         PARAM.append(P)
 
     if DEBUG: print('Parameter process: {}'.format(round(time.time() - time0, 3)))
@@ -3212,8 +3453,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             ACTIVE_OBJ = FBCplg.getActiveObjective().getId()
             print('INFO: Active objective:', ACTIVE_OBJ)
         except Exception as why:
-            print(type(why))
+            #AttributeError
             print('\nINFO: No active objective defined')
+            print('\t', type(why))
 
         for of_ in range(FBCplg.getNumObjectives()):
             SBOf = FBCplg.getObjective(of_)
@@ -3259,7 +3501,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     else:
         fm.setMetaId('meta_{}'.format(model_id))
     fm.name = model_name
-    fm.description = model_description
+    fm.setNotes(model_description)
     fm.annotation = sbml_readKeyValueDataAnnotation(M.getAnnotationString())
     fm.__FBC_STRICT__ = FBCstrict
     fm.__FBC_VERSION__ = FBCver
@@ -3342,6 +3584,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 G.annotation = GENE_D[g_]['annotation']
                 G.__sbo_term__ = GENE_D[g_]['sbo']
                 G.miriam = GENE_D[g_]['miriam']
+                G.setNotes(GENE_D[g_]['notes'])
             else:
                 print('Gene {} is not part of a GPR association. Will create anyway!'.format(g_))
                 non_gpr_genes.append(g_)
@@ -3351,6 +3594,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             G.annotation = GENE_D[ng_]['annotation']
             G.__sbo_term__ = GENE_D[ng_]['sbo']
             G.miriam = GENE_D[ng_]['miriam']
+            G.setNotes(GENE_D[ng_]['notes'])
 
     if DEBUG: print('GPR build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
@@ -3407,10 +3651,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 print('sboterm:', 'SBO:{}'.format(str(GR.getSBOTerm()).zfill(7)))
                 print('annotations:', sbml_readKeyValueDataAnnotation(GR.getAnnotationString()))
                 print('notes:', notes)
-
-            # TODO
-            #notes = libsbml.XMLNode_convertXMLNodeToString(GR.getNotes())
-            #notes = GR.getNotesString()
 
             LOM = GR.getListOfMembers()
             if LOM.getSBOTerm() != -1:
