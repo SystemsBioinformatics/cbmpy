@@ -1,0 +1,41 @@
+Building Erik Quaeghebeur's cython interface to GLPK cyglpki (https://github.com/equaeghe/ecyglpki)
+===================================================================================================
+
+Tested with 64 bit Anaconda on Windows 8.1
+
+First grab the source zipo from GitHub e.g.:
+
+ https://github.com/equaeghe/ecyglpki/tree/37.1-0.22
+
+and unpack it into a working directory (in this case d:/work)
+
+Next grab the glpk source from http://ftp.gnu.org/gnu/glpk/
+
+ http://ftp.gnu.org/gnu/glpk/glpk-4.55.tar.gz
+ 
+and unpack it into the same directory
+
+open a terminal and change directory to the ecyglpki-37.1-0.22 directory
+note the work directory here should be changed to wherever you installed glpk. Run::
+
+ python setup.py build
+ 
+this will fail with the error:
+
+ ecyglpki.c:247:18: fatal error: glpk.h: No such file or directory
+ compilation terminated.
+ error: command 'C:\\Anaconda\\Scripts\\gcc.bat' failed with exit status 1
+
+never fear, now run this and it should work::
+
+ python setup.py build build_ext -n -I/work/glpk-4.55/src build
+ 
+if that is successful then run the following to install it::
+
+ python setup.py build build_ext -n -I/work/glpk-4.55/src install bdist_wininst sdist
+ 
+Alternatively you can download the unofficial windows binary from
+ 
+ https://sourceforge.net/projects/cbmpy/files/tools/ecyglpki
+ 
+Brett, Amsterdam 2015

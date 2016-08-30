@@ -1,0 +1,37 @@
+\BOOKMARK [0][-]{chapter.1}{CBMPy: Installation Guide}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Support}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{Python standard library modules}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.3}{Required libraries \(Python bindings\)}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.4}{Installation types: quick reference}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.5}{Generic installation Windows \(XP, 7, 8.1\)}{chapter.1}% 6
+\BOOKMARK [1][-]{section.1.6}{Linux: Ubuntu}{chapter.1}% 7
+\BOOKMARK [1][-]{section.1.7}{Linux: Ubuntu 14.04}{chapter.1}% 8
+\BOOKMARK [1][-]{section.1.8}{Apple Macintosh: OS X}{chapter.1}% 9
+\BOOKMARK [1][-]{section.1.9}{Installing PySCeS-CBM Mariner \(Microsoft Windows and Linux\)}{chapter.1}% 10
+\BOOKMARK [0][-]{chapter.2}{Introduction}{}% 11
+\BOOKMARK [0][-]{chapter.3}{CBMPy Module Reference}{}% 12
+\BOOKMARK [1][-]{section.3.1}{CBMPy: CBCommon module}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.2}{CBMPy: CBConfig module}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.3}{CBMPy: CBCPLEX module}{chapter.3}% 15
+\BOOKMARK [1][-]{section.3.4}{CBMPy: CBDataStruct module}{chapter.3}% 16
+\BOOKMARK [1][-]{section.3.5}{CBMPy: CBGUI module}{chapter.3}% 17
+\BOOKMARK [1][-]{section.3.6}{CBMPy: CBModel module}{chapter.3}% 18
+\BOOKMARK [1][-]{section.3.7}{CBMPy: CBModelTools module}{chapter.3}% 19
+\BOOKMARK [1][-]{section.3.8}{CBMPy: CBMultiCore module}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.9}{CBMPy: CBMultiEnv module}{chapter.3}% 21
+\BOOKMARK [1][-]{section.3.10}{CBMPy: CBNetDB module}{chapter.3}% 22
+\BOOKMARK [1][-]{section.3.11}{CBMPy: CBPlot module}{chapter.3}% 23
+\BOOKMARK [1][-]{section.3.12}{CBMPy: CBQt4 module}{chapter.3}% 24
+\BOOKMARK [1][-]{section.3.13}{CBMPy: CBRead module}{chapter.3}% 25
+\BOOKMARK [1][-]{section.3.14}{CBMPy: CBReadtxt module}{chapter.3}% 26
+\BOOKMARK [1][-]{section.3.15}{CBMPy: CBSolver module}{chapter.3}% 27
+\BOOKMARK [1][-]{section.3.16}{CBMPy: CBTools module}{chapter.3}% 28
+\BOOKMARK [1][-]{section.3.17}{CBMPy: CBWrite module}{chapter.3}% 29
+\BOOKMARK [1][-]{section.3.18}{CBMPy: CBWx module}{chapter.3}% 30
+\BOOKMARK [1][-]{section.3.19}{CBMPy: CBXML module}{chapter.3}% 31
+\BOOKMARK [1][-]{section.3.20}{PyscesStoich}{chapter.3}% 32
+\BOOKMARK [1][-]{section.3.21}{CBMPy: MultiCoreFVA module}{chapter.3}% 33
+\BOOKMARK [1][-]{section.3.22}{CBMPy: MultiCoreEnvFVA module}{chapter.3}% 34
+\BOOKMARK [0][-]{chapter.4}{Indices and tables}{}% 35
+\BOOKMARK [0][-]{section*.552}{Python Module Index}{}% 36
+\BOOKMARK [0][-]{section*.553}{Index}{}% 37

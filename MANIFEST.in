@@ -1,0 +1,17 @@
+include LICENCE_GPLv3.txt
+include README.txt
+include demo/*
+include docs/*
+include tests/*
+include tests/sbml_test_suite/*
+include src/*.py
+include src/models/*
+include src/nosetests/*
+include src/cglpk/*
+include src/cglpk/w447/*
+include src/cglpk/w452/*
+include pyscescbm/*.py
+include pyscescbm/models/*
+include pyscescbm/cglpk/*
+include pyscescbm/cglpk/w447/*
+include pyscescbm/cglpk/w452/*
