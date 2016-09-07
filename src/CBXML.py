@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 472 2016-08-25 10:01:41Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 478 2016-09-07 08:28:14Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -90,6 +90,7 @@ try:
 
 except ImportError:
     print('WARNING: SBML support not available, please install libSBML, Python bindings with FBC (sbml.org)')
+    SBML_TYPES = {}
     _HAVE_SBML_ = False
 try:
     GROUP_KINDS = {libsbml.GROUP_KIND_CLASSIFICATION : 'classification',
@@ -98,14 +99,14 @@ try:
                    libsbml.GROUP_KIND_UNKNOWN : 'collection'
                    }
     SBML_TYPES['group'] = libsbml.SBML_GROUPS_GROUP
-except AttributeError:
+except AttributeError, NameError:
     print('INFO: SBML+GROUPS support not available, update to latest version of libSBML if required')
+    GROUP_KINDS = {}
     _HAVE_GROUPS_ = False
 
 _TEMP_XML_FILE_ = '_tmpxml.tmp'
 FBA_NS = 'http://www.sbml.org/sbml/level3/version1/fba/version1'
 METAPREFIX = 'meta_'
-
 
 UNIT_DICTIONARY_L2 = {'area': {0 : {'exponent': 2, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
                    'length': {0 : {'exponent': 1, 'kind': 'metre', 'multiplier': 1.0, 'scale': 0}},
