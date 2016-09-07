@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 478 2016-09-07 08:28:14Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 479 2016-09-07 10:24:40Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -99,7 +99,7 @@ try:
                    libsbml.GROUP_KIND_UNKNOWN : 'collection'
                    }
     SBML_TYPES['group'] = libsbml.SBML_GROUPS_GROUP
-except AttributeError, NameError:
+except (AttributeError, NameError):
     print('INFO: SBML+GROUPS support not available, update to latest version of libSBML if required')
     GROUP_KINDS = {}
     _HAVE_GROUPS_ = False
