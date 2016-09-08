@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 479 2016-09-07 10:24:40Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 481 2016-09-08 10:18:09Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2594,7 +2594,7 @@ def sbml_setValidationOptions(D, level):
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_MODELING_PRACTICE, True)
 
 
-def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False, output_dir=None, speciesAnnotationFix=True):
+def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False, output_dir=None, speciesAnnotationFix=True, skip_genes=False):
     """
     Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
     or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
@@ -2606,6 +2606,7 @@ def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_int
      - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
      - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
      - *speciesAnnotationFix* [default=True]
+     - *skip_genes* [default=False] convert GPR associations
 
     """
     try:
@@ -2614,7 +2615,7 @@ def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_int
     except Exception as why:
         print('\nCOBRA file conversion failed:\n\"{}\"'.format(why))
         return None
-    res = sbml_readSBML3FBC(new_file, work_dir=work_dir, return_sbml_model=return_sbml_model, xoptions={'nogenes':True})
+    res = sbml_readSBML3FBC(new_file, work_dir=work_dir, return_sbml_model=False, xoptions={'nogenes' : skip_genes})
     if fake_boundary_species_search:
         if return_sbml_model:
             cmod = res[0]

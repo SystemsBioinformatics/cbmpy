@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 476 2016-08-25 12:45:06Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 480 2016-09-07 13:44:32Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1622,11 +1622,12 @@ class Model(Fbase):
         else:
             return [c.getPid() for c in self.compartments if substring in c.getPid()]
 
-    def getSpeciesIds(self, substring=None):
+    def getSpeciesIds(self, substring=None, non_boundary=False):
         """
         Returns a list of species Ids, applies a substring search if substring is defined
 
          - *substring* search for this pattern anywhere in the id
+         - *non_boundary* [default=False] return only non-boundary species, i.e., variable metabolites that appear in the stoichiometric matrix. The default is to return all metabolites boundary and variable.
 
         """
         if substring == None:

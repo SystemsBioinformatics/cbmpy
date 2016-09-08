@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 472 2016-08-25 10:01:41Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 481 2016-09-08 10:18:09Z bgoli $)
 
 """
 
@@ -105,20 +105,20 @@ def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'valid
 
     return CBXML.sbml_readSBML3FBC(fname, work_dir, return_sbml_model, xoptions)
 
-def readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False, output_dir=None):
+def readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False, output_dir=None, skip_genes=False):
     """
     Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
     or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
 
      - *fname* is the filename
      - *work_dir* is the working directory
-     - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
      - *delete_intermediate* [default=False] delete the intermediate SBML Level 3 FBC file
      - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
      - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
+     - *skip_genes* [default=False] do not load GPR data
 
     """
-    return CBXML.sbml_readCOBRASBML(fname, work_dir=work_dir, return_sbml_model=return_sbml_model, delete_intermediate=delete_intermediate, fake_boundary_species_search=fake_boundary_species_search, output_dir=output_dir)
+    return CBXML.sbml_readCOBRASBML(fname, work_dir=work_dir, return_sbml_model=False, delete_intermediate=delete_intermediate, fake_boundary_species_search=fake_boundary_species_search, output_dir=output_dir, skip_genes=skip_genes)
 
 def readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_species_search=False):
     """
@@ -131,7 +131,7 @@ def readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_sp
 
 
     """
-    return CBXML.sbml_readSBML2FBA(fname, work_dir, return_sbml_model, fake_boundary_species_search)
+    return CBXML.sbml_readSBML2FBA(fname, work_dir, return_sbml_model=False, fake_boundary_species_search=fake_boundary_species_search)
 
 def readLPtoList(fname, work_dir):
     NEW = False
