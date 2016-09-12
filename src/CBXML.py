@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 481 2016-09-08 10:18:09Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 482 2016-09-12 10:03:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2125,9 +2125,9 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
             if substance_units:
                 # set the species to be in amounts or concentrations default is amounts for mmol/gdw.h
                 s.setInitialAmount(float(species[spe]['value']))
-                s.setHasOnlySubstanceUnits(substance_units)
             else:
                 s.setInitialConcentration(float(species[spe]['value']))
+        s.setHasOnlySubstanceUnits(substance_units)
 
         if len(species[spe]['annotation']) > 0:
             if add_cbmpy_anno:
@@ -2547,7 +2547,7 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     if VALIDATE:
         sbml_setValidationOptions(cs3.doc, level='full')
         print('\nPerforming validation on output SBML ...\n')
-        errors, warnings, others, DOCUMENT_VALID = sbml_validateDocument(cs3.doc, fullmsg=False)
+        errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = sbml_validateDocument(cs3.doc, fullmsg=False)
         if not DOCUMENT_VALID:
             if return_model_string:
                 fname2 = 'model.invalid.xml'
@@ -2556,6 +2556,11 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
                 fname2 = fname+'.invalid'
                 shutil.move(fname, fname2)
             print('\nSBML document is invalid and written as: {}'.format(fname2))
+        if not MODEL_VALID:
+            print('\nSBML document is valid but the model is not (or is incomplete):')
+            for e in errors:
+                print(errors[e])
+
     else:
         sbml_setValidationOptions(cs3.doc, level='normal')
 
@@ -2577,16 +2582,18 @@ def sbml_setValidationOptions(D, level):
     """
 
     if level == 'normal':
-        D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, True)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_IDENTIFIER_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_INTERNAL_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, True)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_UNITS_CONSISTENCY, False)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_MATHML_CONSISTENCY, False)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_SBO_CONSISTENCY, False)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_OVERDETERMINED_MODEL, False)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_MODELING_PRACTICE, False)
     elif level == 'full':
-        D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, True)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_IDENTIFIER_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_INTERNAL_CONSISTENCY, True)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, True)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_UNITS_CONSISTENCY, True)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_MATHML_CONSISTENCY, True)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_SBO_CONSISTENCY, True)
@@ -2841,6 +2848,7 @@ def sbml_validateDocument(D, fullmsg=False):
     errors = {}
     others = {}
     DOCUMENT_VALID = True
+    MODEL_VALID = True
     e = None
     for e_ in range(D.validateSBML()):
         e = D.getError(e_)
@@ -2854,8 +2862,12 @@ def sbml_validateDocument(D, fullmsg=False):
                'isfatal' : e.isFatal(),
                'isxml' : e.isXML()
                }
-        if msg['isfatal'] or msg['isfatal']:
+        if msg['isfatal']:
             DOCUMENT_VALID = False
+            MODEL_VALID = False
+        # fail model validaty on model error
+        if msg['severity_int'] == 2:
+            MODEL_VALID = False
 
         if e.isError():
             if eid not in errors:
@@ -2910,7 +2922,7 @@ def sbml_validateDocument(D, fullmsg=False):
             print('Info {} (severity={}):\n\n - {}\n - lines: {}\n'.format(e_, others[e_]['severity'], others[e_]['msg'], others[e_]['line']))
     print('End.\n')
 
-    return errors, warnings, others, DOCUMENT_VALID
+    return errors, warnings, others, DOCUMENT_VALID, MODEL_VALID
 
 
 def setCBSBOterm(sbo, obj):
@@ -2988,11 +3000,14 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if VALIDATE:
         sbml_setValidationOptions(D, level='full')
         print('\nPerforming validation on input SBML ...\n')
-        errors, warnings, others, DOCUMENT_VALID = sbml_validateDocument(D)
+        errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = sbml_validateDocument(D)
         if not DOCUMENT_VALID:
             raise RuntimeError("\nValidation has detected an invalid SBML document")
-        else:
-            time.sleep(1)
+        elif not MODEL_VALID:
+            print('\nERROR: SBML document is valid but the model contains errors, I will try to load it anyway\n')
+            time.sleep(2)
+            for e in errors:
+                print(errors[e])
     else:
         sbml_setValidationOptions(D, level='normal')
 
