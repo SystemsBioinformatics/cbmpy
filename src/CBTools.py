@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 414 2016-02-17 08:21:03Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 483 2016-09-12 10:38:25Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -259,7 +259,7 @@ def splitReversibleReactions(fba, selected_reactions=None):
      - *selected_reactions* if a reversible reaction id is in here split it
 
     """
-    if selected_reactions is Nonee:
+    if selected_reactions is None:
         selected_reactions = []
     M = fba.clone()
     if len(selected_reactions) == 0:

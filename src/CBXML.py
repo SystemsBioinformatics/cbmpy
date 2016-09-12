@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 482 2016-09-12 10:03:47Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 483 2016-09-12 10:38:25Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2924,6 +2924,79 @@ def sbml_validateDocument(D, fullmsg=False):
 
     return errors, warnings, others, DOCUMENT_VALID, MODEL_VALID
 
+def sbml_fileValidate(f, level="normal"):
+    """
+    Validate an SBML file and model
+
+     - *f* the SBML file
+     - *level* [default='normal'] the level of validation "normal" or "full"
+
+    """
+    if not os.path.exists(f):
+        print('ERROR: invalid file')
+        return None, None
+    D = libsbml.readSBMLFromFile(f)
+    cbmpy.CBXML.sbml_setValidationOptions(D, level=level)
+    print('\nPerforming validation on input SBML ...\n')
+    DOCUMENT_VALID = True
+    errors = warnings = others = {}
+    errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = cbmpy.CBXML.sbml_validateDocument(D)
+    del D
+    if not DOCUMENT_VALID:
+        print('\nValidation \"{}\" has detected an invalid SBML document'.format(level))
+    elif not MODEL_VALID:
+        print('\nValidation \"{}\" has detected an invalid SBML model'.format(level))
+    else:
+        print('\nValidation \"{}\" successful'.format(level))
+    return DOCUMENT_VALID, MODEL_VALID, errors
+
+
+def sbml_fileFindVersion(f):
+    """
+    Try and find the SBML version and FBC support
+
+     - *f* the SBML file
+
+    """
+    if not os.path.exists(f):
+        print('ERROR: invalid file')
+        return None
+    D = libsbml.readSBMLFromFile(f)
+    ns = D.getNamespaces()
+    uris = []
+    for n in range(ns.getNumNamespaces()):
+        uris.append(ns.getURI(n))
+    output = None
+    for ns,idx in SBML_NS:
+        if ns in uris:
+            output = idx
+            break
+    if output == 'L2':
+        F = open(f, 'r')
+        l2type = None
+        for l in F:
+            if '<fba:fluxBalance xmlns:fba="http://www.sbml.org/sbml/level3/version1/fba/version1">' in l:
+                l2type = 'L2FBA'
+                break
+            if '<parameter id="OBJECTIVE_COEFFICIENT" value="0"' in l:
+                l2type = 'COBRA'
+                break
+        F.close()
+        if l2type is not None:
+            output = l2type
+
+    msg = ''
+    if output == 'L3V1FBC1' or output == 'L3V1FBC2':
+        msg = 'SBML Level 3 FBC model detected, load with cbmpy.readSBML3FBC()'
+    elif output == 'L2FBA':
+        msg = 'SBML Level 2 FAME model detected, load with cbmpy.readSBML2FBA()'
+    elif output == 'COBRA':
+        msg = 'COBRA SBML L2 model detected, load with cbmpy.readCOBRASBML()'
+    else:
+        msg = 'No constraint-based modelling SBML extension detected. This may be a kinetic model, perhaps check for a variation of an old, pre-2013, COBRA dialect and try cbmpy.readCOBRASBML().'
+    del D
+    print(msg)
+    return output, msg
 
 def setCBSBOterm(sbo, obj):
     """
