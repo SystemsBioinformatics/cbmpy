@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 483 2016-09-12 10:38:25Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 486 2016-09-21 16:49:28Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -142,55 +142,6 @@ SBML_NS = [('http://www.sbml.org/sbml/level3/version1/fbc/version2', 'L3V1FBC2')
            ('http://www.sbml.org/sbml/level3/version1/core', 'L3V1core'),
            ('http://www.sbml.org/sbml/level2/version4', 'L2'),
            ('http://www.sbml.org/sbml/level2','L2')]
-
-
-def sbml_getSBMLFileVersion(f):
-    """
-    Try and find the SBML version and FBC extension present in an SBML file. Returns one of
-    the following descriptors: L3V1FBC2, L3V1FBC1, L3V2FBC2, L3V2FBC1, L3V2core, L3V1core, L2.
-
-     - *f* the SBML file
-
-    """
-
-    if not os.path.exists(f) or not _HAVE_SBML_:
-        return None
-    D = libsbml.readSBMLFromFile(f)
-    ns = D.getNamespaces()
-    uris = []
-    for n in range(ns.getNumNamespaces()):
-        uris.append(ns.getURI(n))
-    output = None
-    for ns,idx in SBML_NS:
-        if ns in uris:
-            output = idx
-            break
-    if output == 'L2':
-        F = open(f, 'r')
-        l2type = None
-        for l in F:
-            if '<fba:fluxBalance xmlns:fba="http://www.sbml.org/sbml/level3/version1/fba/version1">' in l:
-                l2type = 'L2FBA'
-                break
-            if '<parameter id="OBJECTIVE_COEFFICIENT" value="0"' in l:
-                l2type = 'COBRA'
-                break
-        F.close()
-        if l2type is not None:
-            output = l2type
-
-    if output == 'L3V1FBC1' or output == 'L3V1FBC2':
-        print('\nINFO: SBML Level 3 FBC model detected, load with cbmpy.readSBML3FBC()')
-    elif output == 'L2FBA':
-        print('\nINFO: SBML Level 2 FAME model detected, load with cbmpy.readSBML2FBA()')
-    elif output == 'COBRA':
-        print('\nINFO: COBRA SBML L2 model detected, load with cbmpy.readCOBRASBML()')
-    else:
-        print('\nINFO: No constraint-based modelling SBML extension detected for type {} please choose a cbmpy reader.'.format(output))
-
-    return output
-
-
 
 class MLStripper(HTMLParser):
     """
@@ -3685,6 +3636,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             G.__sbo_term__ = GENE_D[ng_]['sbo']
             G.miriam = GENE_D[ng_]['miriam']
             G.setNotes(GENE_D[ng_]['notes'])
+            print('WARNING: Non-gpr gene detected.')
 
     if DEBUG: print('GPR build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 480 2016-09-07 13:44:32Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 486 2016-09-21 16:49:28Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -130,7 +130,7 @@ class Fbase(object):
         Return the object ID.
 
         """
-        return self.id
+        return self.getId()
 
     def getId(self):
         """
@@ -268,16 +268,30 @@ class Fbase(object):
          - *fid* a valid c variable style id string
 
         """
-        self.id = fid
+        self.setId(fid)
 
-    def setId(self, fid):
+    def setId(self, fid, replace_obj=False):
         """
         Sets the object Id
 
          - *fid* a valid c variable style id string
 
         """
-        self.id = fid
+        if self.__objref__ is not None:
+            if fid not in self.__objref__().__global_id__:
+                self.id = fid
+                self.__objref__().__global_id__[self.id] = True
+            else:
+                print('WARNING: setId(\"{}\") - object with id \"{}\" already exists, id not set.'.format(fid, fid))
+                #if not replace_obj:
+                    #print('WARNING: setId(\"{}\") - object with id \"{}\" already exists.'.format(fid, fid))
+                #else:
+                    #self.__objref__().__global_id__.pop(self.id)
+                    #self.id = fid
+                    #self.__objref__().__global_id__[self.id] = True
+        #except (TypeError):
+        else:
+            self.id = fid
 
     def setMetaId(self, mid=None):
         """
@@ -481,6 +495,7 @@ class Model(Fbase):
     __FBC_VERSION__ = 1
     __FBC_STRICT__ = True
     #__objref__ = None
+    __global_id__ = None
 
     def __init__(self, pid):
         """
@@ -516,6 +531,7 @@ class Model(Fbase):
         self.__gene_deactivated_reactions__ = {}
         self.compartment = None
         self.__delattr__('compartment')
+        self.__global_id__ = {}
 
     def clone(self):
         """
@@ -535,7 +551,9 @@ class Model(Fbase):
     def __setModelSelf__(self):
         """
         This method sets the model reference (updates the weakref) to the current instance. This is a
-        utility function that mostly comes into play when a model is cloned or objects are mixed between models
+        utility function that mostly comes into play when a model is cloned or objects are mixed between models.
+
+        NB: synch with __unsetModelSelf__()
 
         """
         for r in self.reactions:
@@ -546,15 +564,19 @@ class Model(Fbase):
             fb.__setObjRef__(self)
         for o in self.objectives:
             o.__setObjRef__(self)
-        for g in self.gpr:
-            g.__setObjRef__(self)
         for c in self.compartments:
             c.__setObjRef__(self)
+        for gp in self.gpr:
+            gp.__setObjRef__(self)
+        for g in self.genes:
+            g.__setObjRef__(self)
 
     def __unsetModelSelf__(self):
         """
         This method unsets the model reference (deletes the weakref). This is a
-        utility function that mostly comes into play when a model is cloned or objects are mixed between models
+        utility function that mostly comes into play when a model is cloned or objects are mixed between models.
+
+        NB: synch with __setModelSelf__()
 
         """
         for r in self.reactions:
@@ -565,10 +587,12 @@ class Model(Fbase):
             fb.__unsetObjRef__()
         for o in self.objectives:
             o.__unsetObjRef__()
-        for g in self.gpr:
-            g.__unsetObjRef__()
         for c in self.compartments:
             c.__unsetObjRef__()
+        for gp in self.gpr:
+            gp.__unsetObjRef__()
+        for g in self.genes:
+            g.__unsetObjRef__()
 
     def __setstate__(self, dic):
         """
@@ -681,6 +705,10 @@ class Model(Fbase):
         """
         assert type(obj) == Objective, '\nERROR: requires an Objective object, not something of type {}'.format(type(obj))
         print('Adding objective: {}'.format(obj.id))
+        if obj.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate obj ID detected: {}'.format(obj.getId()))
+        else:
+            self.__global_id__[obj.getId()] = True
         obj.__objref__ = weakref.ref(self)
         self.objectives.append(obj)
         self.obj_func = self.objectives[-1]
@@ -805,7 +833,6 @@ class Model(Fbase):
         newId = '%s_%s_bnd'% (reaction, 'lower')
         self.addFluxBound(FluxBound(newId, reaction, 'greaterEqual', value))
 
-
     def createReactionUpperBound(self, reaction, value):
         """
         Create a new upper bound for a reaction: reaction <= value
@@ -839,8 +866,6 @@ class Model(Fbase):
         newId = '%s_%s_bnd'% (reaction, 'upper')
         self.addFluxBound(FluxBound(newId, reaction, 'lessEqual', ub_value))
 
-
-
     def addFluxBound(self, fluxbound, fbexists=None):
         """
         Add an instantiated FluxBound object to the FBA model
@@ -849,7 +874,12 @@ class Model(Fbase):
 
         """
         assert type(fluxbound) == FluxBound, '\nERROR: requires a FluxBound object, not something of type {}'.format(type(fluxbound))
-        if fbexists == None:
+        if fluxbound.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate fluxbound ID detected: {}'.format(fluxbound.getId()))
+        else:
+            self.__global_id__[fluxbound.getId()] = True
+
+        if fbexists is None:
             RL = self.getFluxBoundByReactionID(fluxbound.getReactionId(), 'lower')
             RU = self.getFluxBoundByReactionID(fluxbound.getReactionId(), 'upper')
             GO = True
@@ -881,6 +911,10 @@ class Model(Fbase):
         """
         assert isinstance(species, Species), '\nERROR: requires a Species object, not something of type {}'.format(type(species))
         if __DEBUG__: print('Adding species: {}'.format(species.id))
+        if species.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate species ID detected: {}'.format(species.getId()))
+        else:
+            self.__global_id__[species.getId()] = True
         species.__objref__ = weakref.ref(self)
         self.species.append(species)
 
@@ -893,6 +927,10 @@ class Model(Fbase):
         """
         assert isinstance(gene, Gene), '\nERROR: requires a Species object, not something of type {}'.format(type(gene))
         if __DEBUG__: print('Adding Gene: {}'.format(gene.id))
+        if gene.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate gene ID detected: {}'.format(gene.getId()))
+        else:
+            self.__global_id__[gene.getId()] = True
         gene.__objref__ = weakref.ref(self)
         self.genes.append(gene)
 
@@ -905,7 +943,10 @@ class Model(Fbase):
         """
         assert isinstance(par, Parameter), '\nERROR: requires a Parameter object, not something of type {}'.format(type(par))
         if __DEBUG__: print('Adding Parameter: {}'.format(par.id))
-        #comp.__objref__ = weakref.ref(self)
+        if par.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate par ID detected: {}'.format(par.getId()))
+        else:
+            self.__global_id__[par.getId()] = True
         self.parameters.append(par)
 
     def addCompartment(self, comp):
@@ -917,6 +958,10 @@ class Model(Fbase):
         """
         assert isinstance(comp, Compartment), '\nERROR: requires a Compartment object, not something of type {}'.format(type(comp))
         if __DEBUG__: print('Adding Compartment: {}'.format(comp.id))
+        if comp.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate comp ID detected: {}'.format(comp.getId()))
+        else:
+            self.__global_id__[comp.getId()] = True
         comp.__objref__ = weakref.ref(self)
         self.compartments.append(comp)
 
@@ -930,7 +975,10 @@ class Model(Fbase):
         assert isinstance(reaction, Reaction), '\nERROR: requires a Reaction object, not something of type {}'.format(type(reaction))
 
         if __DEBUG__: print('Adding reaction: {}'.format(reaction.id))
-
+        if reaction.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate reaction ID detected: {}'.format(reaction.getId()))
+        else:
+            self.__global_id__[reaction.getId()] = True
         reaction.__objref__ = weakref.ref(self)
         self.reactions.append(reaction)
 
@@ -969,7 +1017,6 @@ class Model(Fbase):
                                               'operator' : operator,
                                               'rhs' : rhs}
                                       })
-
 
     def deleteReactionAndBounds(self, rid):
         """
@@ -3991,7 +4038,7 @@ class GeneProteinAssociation(Fbase):
                     elif gid in mod_genes:
                         self.addGeneref(gid)
                     else:
-                        genelist.append(Gene(gid, label, active=True))
+                        self.__objref__().addGene(Gene(gid, label, active=True))
                         self.addGeneref(gid)
         else:
             self.generefs = []

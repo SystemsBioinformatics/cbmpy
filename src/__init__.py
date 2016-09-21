@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 472 2016-08-25 10:01:41Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 486 2016-09-21 16:49:28Z bgoli $)
 
 """
 ##
@@ -47,32 +47,31 @@ try:
     doFBA = CBSolver.analyzeModel
     doFVA = CBSolver.FluxVariabilityAnalysis
     doFBAMinSum = CBSolver.MinimizeSumOfAbsFluxes
-except ImportError:
-    print('No solver present, unable to create shortcuts')
-except AttributeError:
+except (ImportError, AttributeError):
     print('No solver present, unable to create shortcuts')
 
-from .CBRead import readSBML3FBC, readSBML2FBA, readCOBRASBML
-from .CBWrite import writeSBML3FBC, writeFVAtoCSV, writeModelToExcel97, writeModelToCOMBINEarchive, writeCOBRASBML, writeSBML3FBCV2
-from .CBXML import sbml_getSBMLFileVersion as getSBMLFileVersion
+from .CBWrite import writeFVAtoCSV, writeModelToExcel97
+from .CBXML import _HAVE_SBML_
+if _HAVE_SBML_:
+    from .CBXML import sbml_fileFindVersion, sbml_fileValidate
+    from .CBRead import readSBML3FBC, readSBML2FBA, readCOBRASBML
+    from .CBWrite import writeSBML3FBC, writeModelToExcel97, writeModelToCOMBINEarchive, writeCOBRASBML, writeSBML3FBCV2
+else:
+    print('\nWARNING: No SBML support, top-level SBML read/write functions disabled.\n')
 
-## "optional" modules extended dependencies
-# debug
-#import cbmpy.CBGUI
-
+# CBMPy GUI development has ended with WxGUI, download Metatoolkit instead
 try:
-    from .CBGUI import *
+    from .CBWx import runModelEditor as loadCBGUI
 except ImportError as ex:
-    print(ex)
     print('GUI module not available')
-    CBGUI = None
-#import CBMultiEnv
-try:
-    from . import CBMultiEnv
-except ImportError as ex:
-    print(ex)
-    print('MultiEnvironment module not available')
-    CBMultiEnv = None
+
+##import CBMultiEnv to be deprecated
+#try:
+    #from . import CBMultiEnv
+#except ImportError as ex:
+    #print(ex)
+    #print('MultiEnvironment module not available')
+    #CBMultiEnv = None
 #import CBMultiCore
 try:
     from . import CBMultiCore
