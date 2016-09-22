@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 486 2016-09-21 16:49:28Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 488 2016-09-22 14:45:37Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -925,14 +925,17 @@ class Model(Fbase):
         - *gene* an instance of the G class
 
         """
+        # TODO: fix this whole gene thing, genes must use labels for gene names and id's for object search
         assert isinstance(gene, Gene), '\nERROR: requires a Species object, not something of type {}'.format(type(gene))
         if __DEBUG__: print('Adding Gene: {}'.format(gene.id))
         if gene.getId() in self.__global_id__:
-            raise RuntimeError('Duplicate gene ID detected: {}'.format(gene.getId()))
+            if gene.getId() in self.__genes_idx__:
+                raise RuntimeError('Duplicate gene ID detected: {}'.format(gene.getId()))
         else:
             self.__global_id__[gene.getId()] = True
         gene.__objref__ = weakref.ref(self)
         self.genes.append(gene)
+
 
     def addParameter(self, par):
         """
