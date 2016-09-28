@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 481 2016-09-08 10:18:09Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 486 2016-09-21 16:49:28Z bgoli $)
 
 """
 
@@ -82,7 +82,7 @@ __test_models__ = {'cbmpy_test_core' : 'core_memesa_model.xml',
                    'cbmpy_test_ecoli' : 'Ecoli_iJR904.glc.xml',
                    }
 
-def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}):
+def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}, scan_notes_gpr=True):
     """
     Read in an SBML Level 3 file with FBC annotation where and return either a CBM model object
 
@@ -90,11 +90,14 @@ def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'valid
      - *work_dir* is the working directory
      - *return_sbml_model* deprecated and ignored please update code
      - *xoptions* special load options enable with option = True
+
        - *nogenes* do not load/process genes
        - *noannot* do not load/process any annotations
        - *validate* validate model and display errors and warnings before loading
        - *readcobra* read the cobra annotation
        - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
+
+    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
 
     """
 
@@ -103,9 +106,13 @@ def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'valid
         print(fname)
         fname = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'models', fname)
 
-    return CBXML.sbml_readSBML3FBC(fname, work_dir, return_sbml_model, xoptions)
+    xmod = CBXML.sbml_readSBML3FBC(fname, work_dir, return_sbml_model, xoptions)
+    if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
+        xmod.createGeneAssociationsFromAnnotations()
+    return xmod
 
-def readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False, output_dir=None, skip_genes=False):
+def readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False,\
+                  output_dir=None, skip_genes=False, scan_notes_gpr=True):
     """
     Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
     or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
@@ -116,11 +123,16 @@ def readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermed
      - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
      - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
      - *skip_genes* [default=False] do not load GPR data
+     - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
 
     """
-    return CBXML.sbml_readCOBRASBML(fname, work_dir=work_dir, return_sbml_model=False, delete_intermediate=delete_intermediate, fake_boundary_species_search=fake_boundary_species_search, output_dir=output_dir, skip_genes=skip_genes)
+    xmod = CBXML.sbml_readCOBRASBML(fname, work_dir=work_dir, return_sbml_model=False, delete_intermediate=delete_intermediate, fake_boundary_species_search=fake_boundary_species_search, output_dir=output_dir, skip_genes=skip_genes)
+    if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
+        xmod.createGeneAssociationsFromAnnotations()
+    return xmod
 
-def readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_species_search=False):
+
+def readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_species_search=False, scan_notes_gpr=True):
     """
     Read in an SBML Level 2 file with FBA annotation where:
 
@@ -128,10 +140,15 @@ def readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_sp
      - *work_dir* is the working directory if None then only fname is used
      - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
      - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
-
+     - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
 
     """
-    return CBXML.sbml_readSBML2FBA(fname, work_dir, return_sbml_model=False, fake_boundary_species_search=fake_boundary_species_search)
+
+    xmod = CBXML.sbml_readSBML2FBA(fname, work_dir, return_sbml_model=False, fake_boundary_species_search=fake_boundary_species_search)
+    if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
+        xmod.createGeneAssociationsFromAnnotations()
+    return xmod
+
 
 def readLPtoList(fname, work_dir):
     NEW = False

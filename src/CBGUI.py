@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBGUI.py 305 2015-04-23 15:18:31Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBGUI.py 486 2016-09-21 16:49:28Z bgoli $)
 
 """
 
@@ -36,17 +36,17 @@ try:
     from . import CBWx
     __HAVE_WX__ = True
 except ImportError as ex:
-    print('WARNING: Error importing CBWx module')
+    print('WARNING: Error importing wxpython module')
     #print(ex)
-try:
-    if os.sys.platform == 'win32':
-        from . import CBQt4
-        __HAVE_QT4__ = True
-    else:
-        print('\nINFO: Qt currently only available on Windows')
-except ImportError as ex:
-    print('WARNING: Error importing CBQt4 module')
-    #print(ex)
+#try:
+    #if os.sys.platform == 'win32':
+        #from . import CBQt4
+        #__HAVE_QT4__ = True
+    #else:
+        #print('\nINFO: Qt currently only available on Windows')
+#except ImportError as ex:
+    #print('WARNING: Error importing CBQt4 module')
+    ##print(ex)
 
 if __HAVE_WX__:
     def loadCBGUI(mod, version=2):
@@ -57,7 +57,7 @@ if __HAVE_WX__:
 
         """
         if version == 2:
-            CBWx.runModelEditor(mod)
+            loadCBGUI = CBWx.runModelEditor(mod)
         elif version == 3:
             CBWx.runMyAUIApp()
 else:
