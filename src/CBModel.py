@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 489 2016-09-29 14:41:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 491 2016-09-29 17:27:43Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -282,14 +282,14 @@ class Fbase(object):
                 self.id = fid
                 self.__objref__().__global_id__[self.id] = True
             else:
-                print('WARNING: setId(\"{}\") - object with id \"{}\" already exists, id not set.'.format(fid, fid))
-                #if not replace_obj:
-                    #print('WARNING: setId(\"{}\") - object with id \"{}\" already exists.'.format(fid, fid))
-                #else:
+                if not replace_obj:
+                    print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
+                else:
+                    pass
+                    #print('ERROR: setId(\"{}\") - object with id \"{}\" already exists ... (future) replacing existing object.'.format(fid, fid))
                     #self.__objref__().__global_id__.pop(self.id)
                     #self.id = fid
                     #self.__objref__().__global_id__[self.id] = True
-        #except (TypeError):
         else:
             self.id = fid
 
@@ -444,8 +444,7 @@ class Fbase(object):
         """
         return urllib2.unquote(txt)
 
-
-
+__ENABLE_GLOBAL_WEAKREF__ = False
 class Model(Fbase):
     """
     Container for constraint based model, adds methods for manipulating:
@@ -497,6 +496,7 @@ class Model(Fbase):
     #__objref__ = None
     __global_id__ = None
 
+
     def __init__(self, pid):
         """
         Container for constraint based model.
@@ -531,7 +531,15 @@ class Model(Fbase):
         self.__gene_deactivated_reactions__ = {}
         self.compartment = None
         self.__delattr__('compartment')
-        self.__global_id__ = {}
+
+        # testing weakref dictionary, needs work ...
+
+        if __ENABLE_GLOBAL_WEAKREF__:
+            wd = {pid : self}
+            self.__global_id__ = weakref.WeakValueDictionary(wd)
+        else:
+            self.__global_id__ = {}
+
 
     def clone(self):
         """
@@ -708,7 +716,10 @@ class Model(Fbase):
         if obj.getId() in self.__global_id__:
             raise RuntimeError('Duplicate obj ID detected: {}'.format(obj.getId()))
         else:
-            self.__global_id__[obj.getId()] = True
+            if not __ENABLE_GLOBAL_WEAKREF__:
+                self.__global_id__[obj.getId()] = True
+            else:
+                self.__global_id__[obj.getId()] = obj
         obj.__objref__ = weakref.ref(self)
         self.objectives.append(obj)
         self.obj_func = self.objectives[-1]
@@ -815,7 +826,8 @@ class Model(Fbase):
         assert R != None, '\nReaction {} does not exist'.format(reaction)
         assert S != None, '\nMetabolite {} does not exist'.format(metabolite)
         R.createReagent(metabolite, coefficient)
-        S.setReagentOf(reaction)
+        # this is handles by dynamic code
+        #S.setReagentOf(reaction)
         if not silent:
             print('Added \"{}\" as a reagent of reaction \"{}\"'.format(metabolite, reaction))
 
@@ -877,7 +889,10 @@ class Model(Fbase):
         if fluxbound.getId() in self.__global_id__:
             raise RuntimeError('Duplicate fluxbound ID detected: {}'.format(fluxbound.getId()))
         else:
-            self.__global_id__[fluxbound.getId()] = True
+            if not __ENABLE_GLOBAL_WEAKREF__:
+                self.__global_id__[fluxbound.getId()] = True
+            else:
+                self.__global_id__[fluxbound.getId()] = fluxbound
 
         if fbexists is None:
             RL = self.getFluxBoundByReactionID(fluxbound.getReactionId(), 'lower')
@@ -914,7 +929,10 @@ class Model(Fbase):
         if species.getId() in self.__global_id__:
             raise RuntimeError('Duplicate species ID detected: {}'.format(species.getId()))
         else:
-            self.__global_id__[species.getId()] = True
+            if not __ENABLE_GLOBAL_WEAKREF__:
+                self.__global_id__[species.getId()] = True
+            else:
+                self.__global_id__[species.getId()] = species
         species.__objref__ = weakref.ref(self)
         self.species.append(species)
 
@@ -932,7 +950,10 @@ class Model(Fbase):
             if gene.getId() in self.__genes_idx__:
                 raise RuntimeError('Duplicate gene ID detected: {}'.format(gene.getId()))
         else:
-            self.__global_id__[gene.getId()] = True
+            if not __ENABLE_GLOBAL_WEAKREF__:
+                self.__global_id__[gene.getId()] = True
+            else:
+                self.__global_id__[gene.getId()] = gene
         gene.__objref__ = weakref.ref(self)
         self.genes.append(gene)
 
@@ -949,7 +970,10 @@ class Model(Fbase):
         if par.getId() in self.__global_id__:
             raise RuntimeError('Duplicate par ID detected: {}'.format(par.getId()))
         else:
-            self.__global_id__[par.getId()] = True
+            if not __ENABLE_GLOBAL_WEAKREF__:
+                self.__global_id__[par.getId()] = True
+            else:
+                self.__global_id__[par.getId()] = par
         self.parameters.append(par)
 
     def addCompartment(self, comp):
@@ -964,7 +988,10 @@ class Model(Fbase):
         if comp.getId() in self.__global_id__:
             raise RuntimeError('Duplicate comp ID detected: {}'.format(comp.getId()))
         else:
-            self.__global_id__[comp.getId()] = True
+            if not __ENABLE_GLOBAL_WEAKREF__:
+                self.__global_id__[comp.getId()] = True
+            else:
+                self.__global_id__[comp.getId()] = comp
         comp.__objref__ = weakref.ref(self)
         self.compartments.append(comp)
 
@@ -981,7 +1008,10 @@ class Model(Fbase):
         if reaction.getId() in self.__global_id__:
             raise RuntimeError('Duplicate reaction ID detected: {}'.format(reaction.getId()))
         else:
-            self.__global_id__[reaction.getId()] = True
+            if not __ENABLE_GLOBAL_WEAKREF__:
+                self.__global_id__[reaction.getId()] = True
+            else:
+                self.__global_id__[reaction.getId()] = reaction
         reaction.__objref__ = weakref.ref(self)
         self.reactions.append(reaction)
 
@@ -1036,10 +1066,12 @@ class Model(Fbase):
             if self.reactions[r].getPid() == rid:
                 Ridx = rid
                 Robj = self.reactions.pop(r)
+                self.__global_id__.pop(rid)
         Bounds = []
         for b in range(len(self.flux_bounds)-1, -1, -1):
             if self.flux_bounds[b].reaction == rid:
                 Bounds.append(self.flux_bounds.pop(b))
+                self.__global_id__.pop(Bounds[-1].getId())
         print('Deleting reaction {} and {} associated bounds'.format(Ridx, len(Bounds)))
         for s_ in Robj.getSpeciesIds():
             S = self.getSpecies(s_)
@@ -1059,11 +1091,11 @@ class Model(Fbase):
 
         assert objective_id in self.getObjectiveIds(), '\nNo ....'
         for o in range(len(self.objectives)-1, -1, -1):
-            if self.objectives[o].getPid() == objective_id:
-                Oidx = objective_id
+            if self.objectives[o].getId() == objective_id:
                 Oobj = self.objectives.pop(o)
-        print('Deleting objective {}'.format(Oidx))
-        self.__TRASH__.update({Oidx : Oobj})
+        self.__global_id__.pop(objective_id)
+        print('Deleting objective {}'.format(objective_id))
+        self.__TRASH__.update({objective_id : Oobj})
 
     def undeleteObjective(self, objective_id):
         """
@@ -1115,9 +1147,9 @@ class Model(Fbase):
         assert rid in self.__TRASH__, '\nOops I did it again ...'
         Ridx = self.__TRASH__[rid]['react']
         self.addReaction(Ridx)
-        # this is just while transitioning to new dynamic structures
-        for s_ in Ridx.getSpeciesIds():
-            self.getSpecies(s_).setReagentOf(rid)
+        # this is just while transitioning to new dynamic structures ... gone!
+        #for s_ in Ridx.getSpeciesIds():
+            #self.getSpecies(s_).setReagentOf(rid)
         for b in self.__TRASH__[rid]['bnds']:
             self.addFluxBound(b)
         self.__TRASH__.pop(rid)
@@ -1434,6 +1466,14 @@ class Model(Fbase):
 
         """
         s = self.species.pop(self.getSpeciesIds().index(sid))
+        self.__global_id__.pop(sid)
+
+    def __pushGlobalId__(self, sid, val=True):
+        self.__global_id__[sid] = value
+
+    def __popGlobalId__(self, sid):
+        x = self.__global_id__.pop(sid)
+        del x
 
     def deleteNonReactingSpecies(self, simulate=True):
         """
@@ -3650,8 +3690,8 @@ class Species(Fbase):
         Returns a list of reaction id's that this metabolite occurs in
 
         """
-        print('INFO: The static .getReagentOf() method will be deprecated, please update your code to use: \".isReagentOf()\"')
-        return self.reagent_of
+        print('INFO: The static .getReagentOf() method is deprecated, please update your code to use: \".isReagentOf()\"')
+        return self.isReagentOf()
 
     def setReagentOf(self, rid):
         """
@@ -3660,9 +3700,9 @@ class Species(Fbase):
          - *rid* a valid reaction id
 
         """
-        print('INFO: The static .setReagentOf() method will be deprecated, please update your code to use: \".isReagentOf()\"')
-        if rid not in self.reagent_of:
-            self.reagent_of.append(rid)
+        raise RuntimeError('\nINFO: The static .setReagentOf() method is deprecated, please update your code to use: \".isReagentOf()\"')
+        #if rid not in self.reagent_of:
+            #self.reagent_of.append(rid)
 
     def setChemFormula(self, cf):
         """
