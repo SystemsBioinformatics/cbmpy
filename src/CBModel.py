@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 488 2016-09-22 14:45:37Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 489 2016-09-29 14:41:33Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3879,9 +3879,10 @@ class Gene(Fbase):
          - *active* is the gene is active or not (boolean)
 
         """
-        self.setId(gid)
         if label == None:
             label = gid
+            gid = 'g_' + gid
+        self.setId(gid)
         self.setLabel(label)
         self.active0 = active
         self.active = active
@@ -4030,12 +4031,13 @@ class GeneProteinAssociation(Fbase):
                         label = altlabels[gid]
                     else:
                         label = gid
-                    #if not checkId(gid):
-                        #gid2 = fixId(gid, replace='_')
-                        #self.assoc = self.assoc.replace(gid, gid2)
-                        #self._MODIFIED_ASSOCIATION_ = True
-                        #print('Incompatible geneId \"{}\" replacing with \"{}\"\n{}\n{}'.format(gid, gid2, self.assoc0, self.assoc))
-                        #gid = gid2
+                        newgid = fixId(gid, replace='_')
+                        # actually the code might work better if the eval code searched for and used labels
+                        if gid != newgid:
+                            print('Incompatible geneId, replacing \"{}\" with {}'.format(gid, newgid))
+                            self.assoc = self.assoc.replace(gid, newgid)
+                            self._MODIFIED_ASSOCIATION_ = True
+                        gid = newgid
                     if gid in self.generefs:
                         pass
                     elif gid in mod_genes:

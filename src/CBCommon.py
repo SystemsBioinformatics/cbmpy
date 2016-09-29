@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 346 2015-08-03 14:09:32Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 489 2016-09-29 14:41:33Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -332,18 +332,20 @@ def fixId(s, replace=None):
     - *replace* [None] default is to leave out offensive character, otherwise replace with this one
 
     """
-    s2 = ''
+
     if s[0].isdigit():
         s2 = '_'
-        print('Illegal start character \"{}\": prefixing an underscore'.format(s[0]))
+        #print('Illegal start character \"{}\": prefixing an underscore'.format(s[0]))
+    else:
+        s2 = ''
     for c in s:
         if c.isalnum() or c == '_':
             s2 += c
         elif replace != None:
             s2 += replace
-            print('Replacing illegal character \"{}\": {} --> {}'.format(c, s, s2))
-        else:
-            print('Skipping illegal character \"{}\": {} --> {}'.format(c, s, s2))
+            #print('Replacing illegal character \"{}\": {} --> {}'.format(c, s, s2))
+        #else:
+            #print('Skipping illegal character \"{}\": {} --> {}'.format(c, s, s2))
     return s2
 
 def checkId(s):

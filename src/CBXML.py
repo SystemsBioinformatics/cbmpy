@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 486 2016-09-21 16:49:28Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 489 2016-09-29 14:41:33Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3603,7 +3603,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     time0 = time.time()
     if FBCver == 1 and LOADGENES:
         for g_ in GPRASSOC:
-            if 'reaction' in GPRASSOC[g_]:
+            if 'reaction' in GPRASSOC[g_] and GPRASSOC[g_]['gpr_by_id'] is not None and GPRASSOC[g_]['gpr_by_id'] != 'None':
                 fm.createGeneProteinAssociation(GPRASSOC[g_]['reaction'], GPRASSOC[g_]['gpr_by_id'], gid=g_, update_idx=False)
         fm.__updateGeneIdx__()
     elif FBCver == 2 and LOADGENES:

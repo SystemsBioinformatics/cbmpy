@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 486 2016-09-21 16:49:28Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 489 2016-09-29 14:41:33Z bgoli $)
 
 """
 
@@ -108,6 +108,7 @@ def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'valid
 
     xmod = CBXML.sbml_readSBML3FBC(fname, work_dir, return_sbml_model, xoptions)
     if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
+        print('INFO: no standard gene encoding detected, attempting to load from annotations.')
         xmod.createGeneAssociationsFromAnnotations()
     return xmod
 

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 483 2016-09-12 10:38:25Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 489 2016-09-29 14:41:33Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -709,11 +709,11 @@ def processSBMLAnnotationNotes(fba, annotation_key='note'):
 
     """
 
-    if hasattr(fba, '_SBML_LEVEL_') and fba._SBML_LEVEL_ != None:
-        print('\n==================================\nINFO \"CBTools.processSBMLAnnotationNotes()\":\n')
-        print('This function is now called automatically\nduring model load and can be ignored.')
-        print('==================================\n')
-        return
+    #if hasattr(fba, '_SBML_LEVEL_') and fba._SBML_LEVEL_ != None:
+        #print('\n==================================\nINFO \"CBTools.processSBMLAnnotationNotes()\":\n')
+        #print('This function is now called automatically\nduring model load and can be ignored.')
+        #print('==================================\n')
+        #return
 
     html_p = re.compile("<p>.*?</p>")
     html_span = re.compile("<span>.*?</span>")
@@ -788,10 +788,10 @@ def processSBMLAnnotationNotes(fba, annotation_key='note'):
         elif 'FORMULA' in s.annotation and (s.chemFormula is None or s.chemFormula == ''):
             s.chemFormula = s.annotation.pop('FORMULA')
 
-        if not checkChemFormula(s.chemFormula):
+        if s.chemFormula != '' and not checkChemFormula(s.chemFormula):
             s.chemFormula = ''
 
-        if (s.charge is None or s.charge == '') and 'charge' in s.annotation:
+        if (s.charge is None or s.charge == '' or s.charge == 0) and 'charge' in s.annotation and s.annotation['charge'] != '':
             chrg = s.annotation.pop('charge')
             try:
                 s.charge = int(chrg)
@@ -799,7 +799,7 @@ def processSBMLAnnotationNotes(fba, annotation_key='note'):
                 s.charge = None
                 print('Invalid charge: {} defined for species {}'.format(chrg, s.getPid()))
             if __DEBUG__: print(s.annotation)
-        elif (s.charge is None or s.charge == '') and 'CHARGE' in s.annotation:
+        elif (s.charge is None or s.charge == '' or s.charge == 0) and 'CHARGE' in s.annotation and s.annotation['CHARGE'] != '':
             chrg = s.annotation.pop('CHARGE')
             try:
                 s.charge = int(chrg)
