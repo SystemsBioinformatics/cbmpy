@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 489 2016-09-29 14:41:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 493 2016-10-08 14:20:08Z bgoli $)
 
 """
 
@@ -44,7 +44,6 @@ from . import CBXML, CBModel
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
-__CBCONFIG__['CBMPY_DIR'] = os.path.split(CBXML.__file__)[0]
 
 ##  try:
     ##  import psyco
@@ -78,9 +77,20 @@ except ImportError:
 
 
 
-__test_models__ = {'cbmpy_test_core' : 'core_memesa_model.xml',
-                   'cbmpy_test_ecoli' : 'Ecoli_iJR904.glc.xml',
+__example_models__ = {'cbmpy_test_core' : 'core_memesa_model.l3.xml',
+                   'cbmpy_test_ecoli' : 'Ecoli_iJR904.glc.l3.xml',
                    }
+__example_model_path__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'models')
+
+if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3.xml')) or\
+   not os.path.exists(os.path.join(__example_model_path__, 'Ecoli_iJR904.glc.l3.xml')):
+    import zipfile
+    print('Installing default models ...')
+    zfile = zipfile.ZipFile(os.path.join(__example_model_path__, 'default_models.zip.py'), allowZip64=True)
+    zfile.extractall(path=__example_model_path__)
+    zfile.close()
+    del zipfile, zfile
+    
 
 def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}, scan_notes_gpr=True):
     """
@@ -97,14 +107,14 @@ def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'valid
        - *readcobra* read the cobra annotation
        - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
 
-    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
+    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are__example_models__can the <notes> field for GPR associationa
 
     """
 
-    if fname in __test_models__:
-        fname = __test_models__[fname].replace('.xml','.l3.xml')
+    if fname in __example_models__:
+        fname = __example_models__[fname]
         print(fname)
-        fname = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'models', fname)
+        fname = os.path.join(__example_model_path__, fname)
 
     xmod = CBXML.sbml_readSBML3FBC(fname, work_dir, return_sbml_model, xoptions)
     if scan_notes_gpr and len(xmod.getGeneIds()) == 0:

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 486 2016-09-21 16:49:28Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 493 2016-10-08 14:20:08Z bgoli $)
 
 """
 ##
@@ -28,12 +28,14 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
+import os
+
 # Setup some environment
 __SILENT_START__ = False
 from . import CBConfig
 __CBCONFIG__ = CBConfig.__CBCONFIG__
 __version__ = CBConfig.__CBCONFIG__['VERSION']
-
+__CBCONFIG__['CBMPY_DIR'] = os.path.split(CBConfig.__file__)[0]
 
 # This is just a hack for backwards compatibility with existing scripts
 # that enables "from cbmpy import *" to work - bgoli
@@ -89,12 +91,26 @@ from . import PyscesSED
 SED = PyscesSED.SEDCBMPY
 
 try:
-    from . import nosetests
+    from . import nosetests 
+    __test_dir__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'nosetests')
+    test_set = 1
+    test_bundle = os.path.join(__test_dir__, 'cbmpy_test_bundle_v{}.zip.py'.format(test_set))
+    test_file = os.path.join(__test_dir__, 'installed.v{}'.format(test_set))
+    if not os.path.exists(test_file):
+        import zipfile
+        print('Installing test files (v{})...'.format(test_set))
+        zfile = zipfile.ZipFile(test_bundle, allowZip64=True)
+        zfile.extractall(path=__test_dir__)
+        zfile.close()
+        #os.remove(test_bundle)
+        del zipfile, zfile
     test = nosetests.run
-    del nosetests
+    del nosetests, test_bundle, test_file, test_set
 except ImportError:
     def test():
         print("ERROR: Tests not installed")
+
+del os
 
 if not __SILENT_START__:
     print('\nCBMPy environment\n******************')

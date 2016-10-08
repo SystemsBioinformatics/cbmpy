@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 473 2016-08-25 10:28:38Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 494 2016-10-08 14:21:16Z bgoli $)
 
 """
 
@@ -35,31 +35,35 @@ else:
     # distutils
     from distutils.core import setup
 
+# new more elegant hack implemented to get rid of evil hack and allow pip install
+"""
 # I suspect this is a distutils specific evil hack to get the data into the install directory
 from distutils.command.install import INSTALL_SCHEMES
 for scheme in INSTALL_SCHEMES.values():
     scheme['data'] = scheme['purelib']
-
+"""
 mydata_files = []
-mydata_files.append((os.path.join('cbmpy', 'models'),\
-[os.path.join(local_path,'src','models',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','models'))\
-if examplefile.endswith('.xml')]))
+# new hack should get rid of the need for this
+#mydata_files.append((os.path.join('cbmpy', 'models'),\
+#[os.path.join(local_path,'src','models',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','models'))\
+#if examplefile.endswith('.xml')]))
 
-mydata_files.append((os.path.join('cbmpy', 'nosetests'),\
-[os.path.join(local_path,'src','nosetests',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','nosetests'))\
-if examplefile.endswith('.xml') or examplefile.endswith('.json')]))
+# new hack should get rid of the need for this
+#mydata_files.append((os.path.join('cbmpy', 'nosetests'),\
+#[os.path.join(local_path,'src','nosetests',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','nosetests'))\
+#if examplefile.endswith('.xml') or examplefile.endswith('.json')]))
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 473 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 494 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
-mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.nosetests', 'cbmpy.solver', 'pyscescbm']
+mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.models', 'cbmpy.nosetests', 'cbmpy.solver', 'pyscescbm']
 
 setup(
  name = "cbmpy",
- version = "0.7.6.{}".format(STATUS),
+ version = "0.7.7.{}".format(STATUS),
  #version = "0.7.5",
  description = "CBMPy: PySCeS Constraint Based Modelling",
  maintainer = 'Brett G. Olivier',

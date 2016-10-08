@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 489 2016-09-29 14:41:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 493 2016-10-08 14:20:08Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -168,12 +168,13 @@ def checkChemFormula(cf, quiet=False):
     else:
         return True
 
-def extractGeneIdsFromString(g):
+def extractGeneIdsFromString(g, return_clean_gpr=False):
     """
     Extract and return a list of gene names from a gene association string formulation
 
     - *g* a COBRA style gene association string
-
+    - *return_clean_gpr* [default=False] in addition to the list returns the "cleaned" GPR string
+    
     """
     #print('\n{}'.format(g))
     g2 = g
@@ -213,8 +214,13 @@ def extractGeneIdsFromString(g):
             names.append(n)
     if names == ['']:
         names = []
-    #print(names)
-    return names
+
+    if not return_clean_gpr:
+        return names
+    else:
+        return names, g2
+
+
 
 class ComboGen(object):
     """

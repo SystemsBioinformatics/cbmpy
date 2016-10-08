@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 489 2016-09-29 14:41:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 492 2016-10-05 07:50:58Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -300,28 +300,37 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
     for r in range(M.getNumReactions()):
         SBRe = M.getReaction(r)
         R_id = SBRe.getId()
-        reagents = []
+        reagents = {}
         EXREAC = False
         reactionIDs.append(R_id)
         for rea in range(SBRe.getNumReactants()):
             spec = SBRe.getReactant(rea).getSpecies()
             stoi = -SBRe.getReactant(rea).getStoichiometry()
-            reagents.append((stoi,spec))
+            #reagents.append((stoi,spec))
+            if spec not in reagents:
+                reagents[spec] = float(stoi)
+            else:
+                reagents[spec] += float(stoi)
             if spec in boundary_species:
                 EXREAC = True
         for pr in range(SBRe.getNumProducts()):
             spec2 = SBRe.getProduct(pr).getSpecies()
             stoi2 = SBRe.getProduct(pr).getStoichiometry()
-            reagents.append((stoi2,spec2))
+            #reagents.append((stoi2, spec2))
+            if spec2 not in reagents:
+                reagents[spec2] = float(stoi2)
+            else:
+                reagents[spec2] += float(stoi2)
             if spec2 in boundary_species:
                 EXREAC = True
         R = CBModel.Reaction(SBRe.getId(), SBRe.getName(), reversible=SBRe.getReversible())
         reactionsReversability.append(SBRe.getReversible())
         for r in reagents:
-            rgtmp = CBModel.Reagent(SBRe.getId()+r[1], r[1], r[0])
-            R.addReagent(rgtmp)
-            if R.getPid() not in SPEC[spec_id.index(r[1])].reagent_of:
-                SPEC[spec_id.index(r[1])].reagent_of.append(R.getPid())
+            R.addReagent(CBModel.Reagent('{}_{}'.format(SBRe.getId(), r), r, reagents[r]))
+            # TODO check this; I'm almost sure it is nore needed anymore
+            #if R.getPid() not in SPEC[spec_id.index(r[1])].reagent_of:
+                #SPEC[spec_id.index(r[1])].reagent_of.append(R.getPid())
+        del reagents
         if EXREAC:
             R.is_exchange = True
         #R.setAnnotation('note', libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes()))
@@ -3281,28 +3290,40 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                         GPR_D[GPR_id]['miriam'] = manot
                     del manot
 
-        reagents = []
+        reagents = {}
         EXREAC = False
         reactionIDs.append(R_id)
         for sub in range(SBRe.getNumReactants()):
             spec = SBRe.getReactant(sub).getSpecies()
             stoi = -SBRe.getReactant(sub).getStoichiometry()
-            reagents.append((stoi,spec))
+            #reagents.append((stoi,spec))
+            if spec not in reagents:
+                reagents[spec] = float(stoi)
+            else:
+                reagents[spec] += float(stoi)          
             if spec in boundary_species:
                 EXREAC = True
         for pr in range(SBRe.getNumProducts()):
             spec2 = SBRe.getProduct(pr).getSpecies()
             stoi2 = SBRe.getProduct(pr).getStoichiometry()
-            reagents.append((stoi2,spec2))
+            #reagents.append((stoi2,spec2))
+            if spec2 not in reagents:
+                reagents[spec2] = float(stoi2)
+            else:
+                reagents[spec2] += float(stoi2)
+            
             if spec2 in boundary_species:
                 EXREAC = True
         R = CBModel.Reaction(SBRe.getId(), SBRe.getName(), reversible=SBRe.getReversible())
         reactionsReversability.append(SBRe.getReversible())
         for r in reagents:
-            rgtmp = CBModel.Reagent(SBRe.getId()+r[1], r[1], r[0])
-            R.addReagent(rgtmp)
-            if R.getPid() not in SPEC[spec_id.index(r[1])].reagent_of:
-                SPEC[spec_id.index(r[1])].reagent_of.append(R.getPid())
+            #rgtmp = CBModel.Reagent(SBRe.getId()+r[1], r[1], r[0])
+            #R.addReagent(rgtmp)
+            R.addReagent(CBModel.Reagent('{}_{}'.format(SBRe.getId(), r), r, reagents[r]))
+            # TODO: check if this is still needed
+            #if R.getPid() not in SPEC[spec_id.index(r[1])].reagent_of:
+                #SPEC[spec_id.index(r[1])].reagent_of.append(R.getPid())
+        del reagents        
         if EXREAC:
             R.is_exchange = True
         R.annotation = {}
