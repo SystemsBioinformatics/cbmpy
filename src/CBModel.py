@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 493 2016-10-08 14:20:08Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 502 2016-10-14 14:21:22Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -270,25 +270,22 @@ class Fbase(object):
         """
         self.setId(fid)
 
-    def setId(self, fid, replace_obj=False):
+    def setId(self, fid):
         """
         Sets the object Id
 
          - *fid* a valid c variable style id string
-         
-         
-         Overloaded in @Reaction
+
+
+         Reimplemented by @Reaction, @Species
 
         """
         if self.__objref__ is not None:
             if fid not in self.__objref__().__global_id__:
+                self.__objref__().__changeGlobalId__(self.id, fid, self)
                 self.id = fid
-                self.__objref__().__pushGlobalId__(self.id, self)
             else:
-                if not replace_obj:
-                    print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
-                else:
-                    pass
+                print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
         else:
             self.id = fid
 
@@ -512,7 +509,7 @@ class Model(Fbase):
          - N a structmatrix object
 
         """
-        self.setPid(pid)
+        self.setId(pid)
         self.objectives = []
         self.flux_bounds = []
         self.reactions = []
@@ -529,14 +526,18 @@ class Model(Fbase):
         self.__gene_deactivated_reactions__ = {}
         self.compartment = None
         self.__delattr__('compartment')
+        self.__setGlobalIdStore__()
 
+    def __setGlobalIdStore__(self):
+        """
+        Does exactly what the function name says (creates/replaces the globalId store)
+
+        """
         # testing weakref dictionary, needs work ...
-
         if self.__ENABLE_GLOBAL_WEAKREF__:
-            wd = {pid : self}
-            self.__global_id__ = weakref.WeakValueDictionary(wd)
+            self.__global_id__ = weakref.WeakValueDictionary({self.getId() : self})
         else:
-            self.__global_id__ = {}
+            self.__global_id__ = {self.getId() : None}
 
     def clone(self):
         """
@@ -548,21 +549,55 @@ class Model(Fbase):
             self.__TRASH__.clear()
         else:
             self.__TRASH__ = None
+
         cpy = copy.deepcopy(self)
+        cpy.__global_id__.clear()
         cpy.__setModelSelf__()
+        cpy.__setGlobalIdStore__()
+        cpy.__populateGlobalIdStore__()
+
         print('Model clone time: {}'.format(time.time()-tzero))
         return cpy
+
+    def __populateGlobalIdStore__(self):
+        """
+        This method populates the globalID store after a clone This is a utility function that comes into play when a model is cloned.
+
+        NB: synch with __setModelSelf__()
+
+        """
+        for r in self.reactions:
+            r.__setObjRef__(self)
+            self.__global_id__[r.getId()] = r
+            for rr in r.reagents:
+                self.__global_id__[rr.getId()] = rr
+        for s in self.species:
+            self.__global_id__[s.getId()] = s
+        for fb in self.flux_bounds:
+            self.__global_id__[fb.getId()] = fb
+        for o in self.objectives:
+            self.__global_id__[o.getId()] = o
+        for c in self.compartments:
+            self.__global_id__[c.getId()] = c
+        for gp in self.gpr:
+            self.__global_id__[gp.getId()] = gp
+        for g in self.genes:
+            self.__global_id__[g.getId()] = g
+        for p in self.parameters:
+            self.__global_id__[p.getId()] = p
 
     def __setModelSelf__(self):
         """
         This method sets the model reference (updates the weakref) to the current instance. This is a
         utility function that mostly comes into play when a model is cloned or objects are mixed between models.
 
-        NB: synch with __unsetModelSelf__()
+        NB: synch with __unsetModelSelf__() and __populateGlobalIdStore__()
 
         """
         for r in self.reactions:
             r.__setObjRef__(self)
+            for rr in r.reagents:
+                rr.__setObjRef__(self)
         for s in self.species:
             s.__setObjRef__(self)
         for fb in self.flux_bounds:
@@ -575,17 +610,22 @@ class Model(Fbase):
             gp.__setObjRef__(self)
         for g in self.genes:
             g.__setObjRef__(self)
+        for p in self.parameters:
+            p.__setObjRef__(self)
+
 
     def __unsetModelSelf__(self):
         """
         This method unsets the model reference (deletes the weakref). This is a
         utility function that mostly comes into play when a model is cloned or objects are mixed between models.
 
-        NB: synch with __setModelSelf__()
+        NB: synch with __setModelSelf__() and __populateGlobalIdStore__()
 
         """
         for r in self.reactions:
             r.__unsetObjRef__()
+            for rr in r.reagents:
+                rr.__unsetObjRef__()
         for s in self.species:
             s.__unsetObjRef__()
         for fb in self.flux_bounds:
@@ -598,6 +638,9 @@ class Model(Fbase):
             gp.__unsetObjRef__()
         for g in self.genes:
             g.__unsetObjRef__()
+        for p in self.parameters:
+            p.__unsetObjRef__()
+
 
     def __setstate__(self, dic):
         """
@@ -994,7 +1037,7 @@ class Model(Fbase):
             if rr.getId() in self.__global_id__:
                 raise RuntimeError('Duplicate reagent ID detected: {}'.format(reaction.getId()))
             else:
-                self.__pushGlobalId__(rr.getId(), rr)            
+                self.__pushGlobalId__(rr.getId(), rr)
         self.reactions.append(reaction)
 
     def addUserConstraint(self, pid, fluxes=None, operator='=', rhs=0.0):
@@ -1305,7 +1348,7 @@ class Model(Fbase):
 
         """
         out = None
-        assert self.getReaction(rid) != None, '\n%ERROR: %s is not a valid reaction id' % rid
+        assert self.getReaction(rid) is not None, '\nERROR: \"{}\" is not a valid reaction id'.format(rid)
         for gpr_ in self.gpr:
             if gpr_.getProtein() == rid:
                 out = gpr_
@@ -1430,7 +1473,7 @@ class Model(Fbase):
 
     def deleteAllFluxBoundsWithValue(self, value):
         """
-        Delete all flux bounds which have a specified value: 
+        Delete all flux bounds which have a specified value:
 
          - *value* the value of the flux bound(s) to delete
 
@@ -1449,7 +1492,7 @@ class Model(Fbase):
 
         - *sid* the species id
         - *also_delete* [default=None] only delete the species
-        
+
         -- 'reagents' delete the species from the reactions it participates in as a **reagent**
         -- 'reactions' deletes the **reactions** that the species participates in
 
@@ -1477,17 +1520,23 @@ class Model(Fbase):
         assert sid in self.__TRASH__, '\nNo deleted object of with this id'
         self.addSpecies(self.__TRASH__[sid])
 
-
-    def __pushGlobalId__(self, sid, val):
+    def __pushGlobalId__(self, sid, obj):
         if not self.__ENABLE_GLOBAL_WEAKREF__:
             self.__global_id__[sid] = True
         else:
-            self.__global_id__[sid] = val
+            self.__global_id__[sid] = obj
 
     def __popGlobalId__(self, sid):
         if not self.__ENABLE_GLOBAL_WEAKREF__:
             x = self.__global_id__.pop(sid)
             del x
+
+    def __changeGlobalId__(self, old, new, obj):
+        if not self.__ENABLE_GLOBAL_WEAKREF__:
+            self.__global_id__[new] = True
+            self.__global_id__.pop(old)
+        else:
+            self.__global_id__[new] = obj
 
     def deleteNonReactingSpecies(self, simulate=True):
         """
@@ -2248,13 +2297,12 @@ class Model(Fbase):
 
         """
         out = {}
-        reacts = []
         if only_exchange:
-            reacts = self.getExchangeReactionIds()
-        else:
-            reacts = self.getReactionIds()
-        for rid in reacts:
-            out.update({rid : self.getReaction(rid).value})
+            exrids = set(self.getExchangeReactionIds())
+        for r in self.reactions:
+            if only_exchange and not r.getId() in exrids:
+                continue
+            out[r.getId()] = r.getValue()
         return out
 
     def getSolutionVector(self, names=False):
@@ -2270,7 +2318,6 @@ class Model(Fbase):
             return J
         else:
             return J, tuple(self.N.col)
-
 
     def getReversibleReactionIds(self):
         """
@@ -2631,10 +2678,10 @@ class Model(Fbase):
     def emptyUndelete(self):
         """
         Empties the undelete cache
-        
+
         """
         self.__TRASH__.clear()
-        
+
 
 class Objective(Fbase):
     """
@@ -3306,7 +3353,7 @@ class Reaction(Fbase):
     """
     # TODO: next major revision 0.8 is to get rid of fluxbound array
     # by adding fluxbound objects directly to the reactions this should simplify the
-    # data structure but will mean a major rewrite of existing code and potentially breaking 
+    # data structure but will mean a major rewrite of existing code and potentially breaking
     # backwards compatability
     upper_bound = numpy.Inf
     lower_bound = -numpy.Inf
@@ -3327,8 +3374,10 @@ class Reaction(Fbase):
 
         """
         if self.__objref__ is not None:
-            #reag.__setObjRef__(self.__objref__())
-            self.__objref__().__pushGlobalId__(reag.getId(), reag)
+            if reag.getId() in self.__objref__().__global_id__:
+                raise RuntimeError('Duplicate obj ID detected: {}'.format(reag.getId()))
+            else:
+                self.__objref__().__pushGlobalId__(reag.getId(), reag)
         self.reagents.append(reag)
 
     def createReagent(self, metabolite, coefficient):
@@ -3360,8 +3409,7 @@ class Reaction(Fbase):
         Returns a list of the reagents/metabolites
 
         """
-        print('\nDEPRECATED: please use <reaction>.getSpeciesIds')
-        return [r.species_ref for r in self.reagents]
+        raise DeprecationWarning('DEPRECATED: please use <reaction>.getSpeciesIds')
 
     def getSpeciesIds(self):
         """
@@ -3433,15 +3481,13 @@ class Reaction(Fbase):
         """
         self.setId(pid)
 
-
-    def setId(self, fid, replace_obj=False):
+    def setId(self, fid):
         """
         Sets the object Id
 
          - *fid* a valid c variable style id string
-         
-         
-         Overloaded from @FBase
+
+         Reimplements @FBase.setId()
 
         """
 
@@ -3449,20 +3495,17 @@ class Reaction(Fbase):
         if self.__objref__ is not None:
             if fid not in self.__objref__().__global_id__:
                 self.id = fid
-                self.__objref__().__pushGlobalId__(self.id, self)
+                self.__objref__().__changeGlobalId__(oldId, self.id, self)
+                for fb in self.__objref__().getFluxBoundsByReactionID(oldId):
+                    if fb is not None:
+                        fb.setReactionId(fid)
+                for gpr_ in self.__objref__().gpr:
+                    if gpr_.getProtein() == oldId:
+                        gpr_.setProtein(fid)
             else:
-                if not replace_obj:
-                    print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
-                else:
-                    pass
-            ## inserted for reactions to update flux bounds
-            for fb in self.__objref__().getFluxBoundsByReactionID(oldId):
-                if fb is not None:
-                    fb.setReactionId(fid)
-            ## inserted for reactions to update flux bounds
+                print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
         else:
             self.id = fid
-            
 
     def getValue(self):
         """
@@ -3480,7 +3523,8 @@ class Reaction(Fbase):
 
     def getReagentWithSpeciesRef(self, sid):
         """
-        Return the reagent object which refers to the *species* id:
+        Return the reagent object which refers to the *species* id. If there are multiple reagents that
+        refer to the same species a list is returned.
 
          - *sid* the species/metabolite id
 
@@ -3491,19 +3535,8 @@ class Reaction(Fbase):
         elif len(rgnt) == 1:
             return rgnt[0]
         else:
-            print('\nINFO: multiple reagents defined for species: {}'.format(sid))
+            print('WARNING: multiple reagents defined for species: {}'.format(sid))
             return rgnt
-
-    def changeReagentCoefficientForSpecies(self, s_id, coefficient):
-        """
-        Change the coefficient of reagent which refers to s_id. If there is more than one reagent that refers
-        to this species return a warning and a list of reagents otherwise None.
-
-         - *s_id* a species/metabolite id
-         - *coefficient* the new coefficient
-
-        """
-        raise RuntimeWarning('\nDEPRECATED: please use <reaction>.setStoichCoefficient')
 
     def setStoichCoefficient(self, sid, value):
         """
@@ -3514,19 +3547,20 @@ class Reaction(Fbase):
         - *value* a floating point value != 0
 
         """
-        if value == 0.0:
-            print('WARNING: for now a coefficient cannot be set to zero')
+        S = self.getReagentWithSpeciesRef(sid)
+        if S != None and not type(S) == list:
+            S.setCoefficient(value)
+        elif type(S) == list:
+            raise RuntimeWarning('setStoichCoefficient({}) warning, species {} is referenced by multiple reagents: {}'.format(self.getId(), sid, [a.getId() for a in S]))
         else:
-            S = self.getReagentWithSpeciesRef(sid)
-            if S != None and type(S) != list:
-                S.setCoefficient(value)
+            print('ERROR: setStoichCoefficient: species {} does not exist'.format(sid))
 
     def getStoichiometry(self, use_names=False, altout=False):
         """
         Returns a list of (coefficient, species) pairs for this reaction
 
         - *use_names* [default = False] use species names rather than id's
-        - *altout* [default = False] returns a dictionary
+        - *altout* [default = False] returns a dictionary [DEPRECATED]
 
         """
         if not use_names:
@@ -3534,20 +3568,13 @@ class Reaction(Fbase):
             if not altout:
                 return out
             else:
-                out2 = {}
-                for r in out:
-                    out2[r[1]] = r[0]
-                return out2
+                raise RuntimeError('getStoichiometry(altout=True) has been deprecated')
         else:
             out = [(r.getCoefficient(), self.__objref__().getSpecies(r.species_ref).getName()) for r in self.reagents]
             if not altout:
                 return out
             else:
-                out2 = {}
-                for r in out:
-                    out2[r[1]] = r[0]
-                return out2
-
+                raise RuntimeError('getStoichiometry(altout=True) has been deprecated')
 
     def getSubstrateIds(self, use_names=False):
         """
@@ -3565,7 +3592,7 @@ class Reaction(Fbase):
         """
         Returns a list of the reaction products, species identifiers
 
-        - *use_names* [defualt = False] use species names rather than id's
+        - *use_names* [default = False] use species names rather than id's
 
         """
         if not use_names:
@@ -3575,16 +3602,19 @@ class Reaction(Fbase):
 
     def deleteReagentWithSpeciesRef(self, sid):
         """
-        Delete a reagent that refers to the species id:
+        Delete a reagent (or reagents) that refers to the species id:
 
          - *sid* a species/metabolite id
 
         """
         reags = self.getSpeciesIds()
         assert sid in reags, '\nThats not a good metabolite/species ref'
-        rg = self.reagents.pop(reags.index(sid))
-        self.__TRASH__.update({rg.getId() : rg.clone()})
-        self.__objref__().__popGlobalId__(rg.getId())
+        for rr in range(len(self.reagents)-1,-1,-1):
+            if self.reagents[rr].getSpecies() == sid:
+                rg = self.reagents.pop(rr)
+                print('Deleting reagent: {}'.format(rg.getId()))
+                self.__TRASH__.update({rg.getId() : rg.clone()})
+                self.__objref__().__popGlobalId__(rg.getId())
         del rg
 
     def undeleteReagentWithSpeciesRef(self, sid):
@@ -3598,7 +3628,7 @@ class Reaction(Fbase):
         for rg in list(self.__TRASH__.keys()):
             if self.__TRASH__[rg].species_ref == sid:
                 self.addReagent(self.__TRASH__.pop(rg))
-        
+
     def getLowerBound(self):
         """
         Get the value of the reactions lower bound
@@ -3754,6 +3784,35 @@ class Species(Fbase):
         self.reagent_of = []
         self.annotation = {}
 
+    def setId(self, fid):
+        """
+        Sets the object Id
+
+         - *fid* a valid c variable style id string
+
+         Reimplements @FBase.setId()
+
+        """
+
+        oldId = self.getId()
+        if self.__objref__ is not None:
+            if fid not in self.__objref__().__global_id__:
+                rids = [a[0] for a in self.__objref__().getFluxesAssociatedWithSpecies(oldId)]
+                self.id = fid
+                self.__objref__().__changeGlobalId__(oldId, self.id, self)
+                for r_ in self.__objref__().reactions:
+                    if r_.getId() in rids:
+                        rr = r_.getReagentWithSpeciesRef(oldId)
+                        if type(rr) != list:
+                            rr.setSpecies(fid)
+                        else:
+                            for rr2 in rr:
+                                rr2.setSpecies(fid)
+            else:
+                print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
+        else:
+            self.id = fid
+
     def getValue(self):
         """
         Returns the current value of the attribute (input/solution)
@@ -3891,7 +3950,7 @@ class Reagent(Fbase):
          - *coefficient* the stoichiometric coefficient, a non-zero integer or Parameter
 
         """
-        self.id = reid
+        self.setId(reid)
         self.species_ref = species_ref
         self.setCoefficient(coef)
         self.annotation = {}
@@ -3920,7 +3979,8 @@ class Reagent(Fbase):
             self.role = 'product'
         else:
             self.role = None
-            raise RuntimeError('Zero coefficient detected and are currently not supported: ({}) {}!' % (value, self.getId()))
+            print('WARNING - setCoefficient(): Zero coefficient detected {}!'.format(self.getId()))
+            # raise RuntimeError('Zero coefficient detected and are currently not supported: ({}) {}!' % (value, self.getId()))
 
 
     def getCoefficient(self):
@@ -4128,7 +4188,7 @@ class GeneProteinAssociation(Fbase):
 
         """
         self.assoc = assoc
-    
+
     def createAssociationAndGeneRefs(self, assoc, altlabels=None):
         """
         Evaluate the gene/protein association and add the genes necessary to evaluate it
@@ -4152,7 +4212,7 @@ class GeneProteinAssociation(Fbase):
         self.generefs = []
         if assoc != None and assoc != '':
             genes, self.assoc = extractGeneIdsFromString(assoc, return_clean_gpr=True)
-            
+
             #print(genes)
             #geneLabels = []
             #for g_ in genes:
@@ -4280,8 +4340,16 @@ class GeneProteinAssociation(Fbase):
     def getProtein(self):
         """
         Return the protein associated with this set of genes
+
         """
         return self.protein
+
+    def setProtein(self, protein):
+        """
+        Sets the protein associated with this set of genes
+
+        """
+        self.protein = protein
 
     def setGeneInactive(self, gid):
         """

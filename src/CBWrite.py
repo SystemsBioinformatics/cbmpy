@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 470 2016-08-19 08:49:34Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 500 2016-10-12 16:42:19Z bgoli $)
 
 """
 
@@ -68,7 +68,7 @@ except ImportError:
     print('\nINFO: No xlwt module available, Excel spreadsheet creation disabled')
 
 def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
-                       add_groups=False, add_cbmpy_annot=True, add_cobra_annot=False,\
+                       add_groups=True, add_cbmpy_annot=True, add_cobra_annot=False,\
                        xoptions={'fbc_version': 1, 'validate' : False, 'compress_bounds' : True}):
     """
     Takes an FBA model object and writes it to file as SBML L3 FBC:
@@ -78,6 +78,7 @@ def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
      - *directory* [default=None] if defined it is prepended to fname
      - *gpr_from_annot* [default=True] if enabled will attempt to add the gene protein associations from the annotations
        if no gene protein association objects exist
+     - *add_groups* [default=True] add SBML3 groups (if supported by libSBML)
      - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_annot* [default=True] add COBRA <notes> annotation
      - *xoptions* extended options
@@ -98,7 +99,7 @@ def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
                                     gpr_from_annot, add_groups, add_cbmpy_annot, add_cobra_annot, xoptions)
 
 
-def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups=False, add_cbmpy_annot=True, add_cobra_annot=False,\
+def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups=True, add_cbmpy_annot=True, add_cobra_annot=False,\
                     validate=False, compress_bounds=True, zip_model=False, return_model_string=False):
     """
     Takes an FBA model object and writes it to file as SBML L3 FBCv2 :
@@ -107,7 +108,7 @@ def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups
      - *fname* the model will be written as XML to *fname*
      - *directory* [default=None] if defined it is prepended to fname
      - *gpr_from_annot* [default=False] if enabled will attempt to add the gene protein associations from the annotations
-     - *add_groups* [default=False] add SBML3 groups (if supported by libSBML)
+     - *add_groups* [default=True] add SBML3 groups (if supported by libSBML)
      - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_annot* [default=False] add COBRA <notes> annotation
      - *validate* [default=False] validate the output SBML file
