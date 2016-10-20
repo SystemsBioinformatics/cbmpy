@@ -432,3 +432,33 @@ def Define_flp_model_2():
     
     return model_name, Reactions, Species, Bounds, Objective_function
     
+def Define_gpr_test_model():
+    """\nModel to test various GPR encodings\n"""
+    
+    model_name = 'test_gpr'
+    
+    Reactions ={'R01' : {'id' : 'R01', 'reversible' : False, 'reagents' : [(-1, 'X0'), (1, 'A')], 'SUBSYSTEM' : ''},
+                'R02' : {'id' : 'R02', 'reversible' : True, 'reagents' : [(-1, 'A'), (1, 'B')], 'SUBSYSTEM' : 'C1'},
+                'R03' : {'id' : 'R03', 'reversible' : True, 'reagents' : [(-1, 'A'), (1, 'C')], 'SUBSYSTEM' : 'C1'},
+                'R04' : {'id' : 'R04', 'reversible' : True, 'reagents' : [(-1, 'C'), (1, 'B')], 'SUBSYSTEM' : 'C1'},
+                'R05' : {'id' : 'R05', 'reversible' : False, 'reagents' : [(-1, 'B'), (1, 'D')], 'SUBSYSTEM' : ''},
+                'R06' : {'id' : 'R06', 'reversible' : False, 'reagents' : [(-1, 'D'), (1, 'E1')], 'SUBSYSTEM' : 'C2'},
+                'R07' : {'id' : 'R07', 'reversible' : False, 'reagents' : [(-1, 'E1'), (1, 'E2')], 'SUBSYSTEM' : 'C2'},
+                'R08' : {'id' : 'R08', 'reversible' : False, 'reagents' : [(-1, 'E2'), (1, 'G')], 'SUBSYSTEM' : 'C2'},
+               }
+               
+    Species = { 'X0' : {'id' : 'X0', 'boundary' : True},
+                'A' : {'id' : 'A', 'boundary' : False},
+                'B' : {'id' : 'B', 'boundary' : False},
+                'C' : {'id' : 'C', 'boundary' : False},
+                'D' : {'id' : 'D', 'boundary' : False},
+                'E1' : {'id' : 'E1', 'boundary' : False},
+                'E2' : {'id' : 'E2', 'boundary' : False},
+                'G' : {'id' : 'G', 'boundary' : True}
+              }
+              
+    Bounds = {'R01' : {'lower' : 0, 'upper' : 1}}
+    
+    Objective_function = {'obj1' : {'id' : 'obj1', 'flux' : 'R08', 'coefficient' : 1, 'sense' : 'Maximize', 'active' : True}}
+    
+    return model_name, Reactions, Species, Bounds, Objective_function

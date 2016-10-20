@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModelTools.py 431 2016-04-13 10:06:59Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModelTools.py 503 2016-10-19 10:34:11Z bgoli $)
 
 """
 
@@ -92,7 +92,7 @@ def addReactions(model, reactions):
     for R in rkeys:
         Bounds = {}
         exchange = False
-        id = name = reactions[R]['id']
+        rid = name = reactions[R]['id']
         if 'lower' in reactions[R]:
             Bounds.update({R : {'lower' : float(reactions[R]['lower'])}})
         if 'upper' in reactions[R]:
@@ -109,10 +109,11 @@ def addReactions(model, reactions):
 
         revers = reactions[R]['reversible']
         ##  reagents = []
-        react = CBModel.Reaction(id, name=name, reversible=revers)
+        react = CBModel.Reaction(rid, name=name, reversible=revers)
+        model.addReaction(react)
         for RG in reactions[R]['reagents']:
             if RG[1] in specId:
-                react.addReagent(CBModel.Reagent(id+RG[1], RG[1], RG[0]))
+                react.addReagent(CBModel.Reagent(rid+RG[1], RG[1], RG[0]))
                 ##  reagents.append(CBModel.Reagent(RG[1], RG[0]))
             else:
                 print(reactions[R]['reagents'])
@@ -127,7 +128,7 @@ def addReactions(model, reactions):
         ##  else:
             ##  react.annotation.update({'SUBSYSTEM' : 'metabolism'})
         react.is_exchange = exchange
-        model.addReaction(react)
+
 
 def addObjectiveFunction(model, objective_function):
     for o in objective_function:

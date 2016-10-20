@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 502 2016-10-14 14:21:22Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 504 2016-10-20 10:44:48Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1455,7 +1455,8 @@ class FBCconnect(object):
 
         GA = GPR.createAssociation()
         ass = GA.parseInfixAssociation(assoc)
-        # libSBML parsing workaround required
+        #print(ass)
+        # libSBML parsing workaround required (reported to Frank)
         if ass == None:
             ret0 = -1
         else:
@@ -1465,14 +1466,12 @@ class FBCconnect(object):
                 ret0 = 0
             else:
                 ret0 = -1
-                if ret1 == 0:
-                    print('ERROR: Could not set association: \"{}\"\n\"{}\"'.format(rid, assoc))
-                else:
-                    print('ERROR: Could not set reaction: \"{}\"\n\"{}\"'.format(rid, assoc))
+                #if ret1 == 0:
+                    #print('ERROR: Could not set association: \"{}\"\n\"{}\"'.format(rid, assoc))
+                #else:
+                    #print('ERROR: Could not set reaction: \"{}\"\n\"{}\"'.format(rid, assoc))
         if ret0 != 0:
-            print(ass)
-            print('WARNING: Possible invalid gene id: \"{}\" - \"{}\" is not a valid gene association'.format(rid, assoc))
-            return GPR
+            print('WARNING: Incompatible gene label: \"{}\".({}) only dots and underscores are currently allowed in gene labels'.format(rid, assoc))
         else:
             return GPR
 
@@ -1839,7 +1838,10 @@ class CBMtoSBML3(FBCconnect):
         par.setId(bnd.getId())
         par.setMetaId('meta_{}'.format(bnd.getId()))
         #print(bnd.getName())
-        par.setName(bnd.getName())
+        name = bnd.getName()
+        if name is None:
+            name = ''
+        par.setName(name)
         par.setValue(bnd.getValue())
         par.setConstant(True)
         par.setSBOTerm('SBO:0000625')
@@ -1875,7 +1877,7 @@ class CBMtoSBML3(FBCconnect):
         par = self.model.createParameter()
         par.setId(pid)
         par.setMetaId('meta_{}'.format(par.getId()))
-        if name == None:
+        if name is None:
             par.setName('shared flux bound parameter')
         else:
             par.setName(name)
@@ -2371,7 +2373,7 @@ def sbml_createAssociationFromAST(node, out):
         right = node.right.id
         ref = out.createGeneProductRef()
         gref = '{}-{}'.format(left, right)
-        print('YAFLTID', gref)
+        #print('YAFLTID', gref)
         ref.setGeneProduct(formatSbmlId(gref))
     else:
         if isinstance(node, ast.Expr):
