@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 494 2016-10-08 14:21:16Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 509 2016-10-21 15:14:37Z bgoli $)
 
 """
 
@@ -55,26 +55,30 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 494 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 509 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
-mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.models', 'cbmpy.nosetests', 'cbmpy.solver', 'pyscescbm']
+mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.models', 'cbmpy.nosetests', 'cbmpy.solver']
 
 setup(
+ package_dir = {'cbmpy' : 'src'},
+ packages = mypackages,
+ data_files = mydata_files,
  name = "cbmpy",
+ summary = "CBMPy: Constraint Based Modelling in Python",
  version = "0.7.7.{}".format(STATUS),
- #version = "0.7.5",
- description = "CBMPy: PySCeS Constraint Based Modelling",
+ #version = "0.7.7",
  maintainer = 'Brett G. Olivier',
+ author = 'Brett G. Olivier',
  maintainer_email = 'bgoli@users.sourceforge.net',
     url = "http://cbmpy.sourceforge.net",
     download_url = "http://sourceforge.net/projects/cbmpy/files/release/0.7/",
     license = "GNU General Public License (GPL)",
-    keywords = "computational systems biology, modelling, simulation, genome scale, sbml" ,
-    zip_safe = False,
-    requires = ['numpy'],
-    platforms = ["Windows", "Linux"],
+    keywords = "computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard" ,
+    #zip_safe = False,
+    requires = ['numpy', 'sympy', 'libsbml', 'nose'],
+    platforms = ["Windows", "Linux", "Mac"],
     classifiers = [
     'Development Status :: 4 - Beta',
     'Environment :: Console',
@@ -87,7 +91,147 @@ setup(
     'Topic :: Scientific/Engineering :: Bio-Informatics',
     'Topic :: Scientific/Engineering :: Chemistry',
      ],
- package_dir = {'cbmpy' : 'src', 'pyscescbm' : 'pyscescbm'},
- packages = mypackages,
- data_files = mydata_files
- )
+ description =\
+""" PySCeS-CBMPy
+============
+
+PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
+based modelling and analysis. It has been designed using principles developed 
+in the PySCeS simulation software project: usability, flexibility and accessibility. Its architecture is both extensible and flexible using data structures that are intuitive to  the biologist (metabolites, reactions, compartments) while transparently translating these into the underlying mathematical structures used in advanced analysis (LP's, MILP's).
+
+PySCeS CBMPy implements popular analyses such as FBA, FVA, element/charge
+balancing, network analysis and model editing as well as advanced methods
+developed specifically for the ecosystem modelling: minimal distance methods,
+flux minimization and input selection. To cater for a diverse range of modelling
+needs PySCeS CBMPy supports user interaction via:
+
+- interactive console, scripting for advanced use or as a library for software development
+- GUI, for quick access to a visual representation of the model, analysis methods and annotation tools
+- SOAP based web services: using the Mariner framework much high level functionality is exposed for integration into web tools
+
+For more information on the development and use of PySCeS CBMPy feel free to contact me:
+
+PySCeS-CBMPy has been tested on Windows 7 and 8.1, Mac OSX and Ubuntu Linux 12.04, 14.04, 16.04. It is compatible with both Python 2.7+ and includes experimental support for Python 3.4+ It is highly recommend to use
+Python 2.7 as not all Python package dependencies (extended functionality) are available for Python 3. 
+
+PySCeS CBMPy is now accessible as a Python module **cbmpy** in place of the the previously used **pyscescbm**. This release contains both modules with a reminder to update old scripts to use the new format. CBMPy includes support for  reading/writing models in SBML3 FBC versions 1 and 2 as well as COBRA dialect, Excel spreadsheets and Python.
+
+To use follow the installation instructions given below and try the following in a Python shell::
+
+import cbmpy
+cmod = cbmpy.readSBML3FBC('cbmpy_test_core')
+cbmpy.doFBA(cmod)
+
+New Ipython notebook tutorials will be available soon. Happy modelling!
+
+The following installation instructions are for Ubuntu 14.04 but should be adaptable to any
+Linux package managment system, OSX, Debian, etc. Except for GLPK (4.47) and SymPy (0.7.4 or newer)
+no specific library version is required. For more detailed installation instructions and Windows
+please see the online documentation http://cbmpy.sourceforge.net/reference/install_doc.html 
+
+New! auto-dependency configuration
+----------------------------------
+
+I am in the process of creating automated dependency checking and building tools for CBMPy. These can be found at::
+
+ https://github.com/bgoli/cbmpy-build
+ 
+Ubuntu support is almost complete with Windows/Conda support in development, grab form GitHub::
+
+ https://github.com/bgoli/cbmpy-build.git
+ 
+Manual dependency configuration is provided below.
+
+Python2
+-------
+
+First we create a scientific Python workbench::
+
+sudo apt-get install python-dev python-numpy python-scipy python-matplotlib  python-pip
+sudo apt-get install python-sympy python-suds python-xlrd python-xlwt python-h5py
+sudo apt-get install python-wxgtk2.8
+sudo apt-get install ipython ipython-notebook
+
+
+libSBML
+~~~~~~~
+
+Installing libSBML is now easy using Pip::
+
+sudo apt-get install libxml2 libxml2-dev
+sudo apt-get install zlib1g zlib1g-dev
+sudo apt-get install bzip2 libbz2-dev
+
+sudo pip install --update python-libsbml
+
+
+glpk/python-glpk
+~~~~~~~~~~~~~~~~
+
+
+Download the install script that will install GLPK/PyGLPK for CBMPy on Ubuntu 14.04 or newer::
+
+ curl --remote-name https://raw.githubusercontent.com/bgoli/cbmpy-glpk/master/install_glpk.sh
+
+Make executable::
+
+ chmod 744 install_glpk.sh
+
+and run::
+
+ ./install_glpk.sh
+
+Note this script is designed to be used for building containers and will remove any installed version of GLPK (apt-get purge) and build and install the older version needed for PyGLPK.
+
+No warranty of any kind assumed or otherwise, use at own risk!
+
+CBMPy
+~~~~~
+
+Finally, install CBMPy::
+
+ sudo easy_install cbmpy
+
+or
+
+ sudo pip install cbmpy
+
+or try the new experimental CONDA support::
+
+ conda install -c bgoli cbmpy
+
+or download the source  and run::
+
+ python setup.py build sdist
+ sudo python setup.py install
+
+
+Python3 (experimental)
+----------------------
+
+Not all dependencies are available for Python3::
+
+sudo apt-get install python3-dev python3-numpy python3-scipy python3-matplotlib  python3-pip
+sudo apt-get install python3-xlrd python3-h5py
+
+# need to find out what is going on with Python3 and xlwt suds
+# easy_install3 sympy ???
+# wxPython and PyQt4 not in Ubuntu P3 builds yet
+
+sudo apt-get install ipython3 ipython3-notebook
+
+sudo apt-get install libxml2 libxml2-dev
+sudo apt-get install zlib1g zlib1g-dev
+sudo apt-get install bzip2 libbz2-dev
+
+sudo pip3 install python-libsbml-experimental
+
+sudo apt-get install python-sip python-sip-dev build-essential
+
+More information in the docs/ directory.
+
+""")
+try:
+    import cbmpy
+except ImportError:
+    pass

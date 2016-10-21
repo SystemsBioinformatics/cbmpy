@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 504 2016-10-20 10:44:48Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 510 2016-10-21 15:18:27Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3260,6 +3260,10 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     GPR_D[GPR_id] = {'gpr_by_id' : ''}
                 GPR_D[GPR_id]['reaction'] = R_id
 
+                #print(ass.toInfix())
+                #time.sleep(2)
+
+
                 GPR_D[GPR_id]['gene_ids'] = []
                 ## dirty hack
                 #for g_ in re.findall(gprregex, GPR_D[GPR_id]['gpr_by_id']):
@@ -3276,11 +3280,44 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 GPR_D[GPR_id]['gpr_by_label'] = GPR_D[GPR_id]['gpr_by_id']
                 GPR_D[GPR_id]['gpr_by_name'] = GPR_D[GPR_id]['gpr_by_id']
                 GPR_D[GPR_id]['gene_labels'] = []
-                for x_ in gene_ids_sorted:
-                    #print(GPR_D[GPR_id])
-                    GPR_D[GPR_id]['gpr_by_label'] = GPR_D[GPR_id]['gpr_by_label'].replace(x_, GENE_D[x_]['label'])
-                    GPR_D[GPR_id]['gpr_by_name'] = GPR_D[GPR_id]['gpr_by_name'].replace(x_, GENE_D[x_]['name'])
-                    GPR_D[GPR_id]['gene_labels'].append(GENE_D[x_]['label'])
+
+
+                #print('\n')
+                #print(GPR_D[GPR_id]['gene_ids'])
+                #print(gene_ids_sorted)
+                gene_labels_sorted = [GENE_D[x_]['label'] for x_ in gene_ids_sorted]
+                gene_names_sorted = [GENE_D[x_]['name'] for x_ in gene_ids_sorted]
+                #print(gene_labels_sorted)
+                #print('-')
+                #print(GPR_D[GPR_id]['gpr_by_id'])
+                ## #$%^&*()_+ two days of debugging and this is solved in 5 lines of additional code thanks libSBML :-)
+                for x_ in range(len(gene_labels_sorted)):
+                    if libsbml.LIBSBML_VERSION >= 51300:
+                        GPR_D[GPR_id]['gpr_by_id'] = GPR_D[GPR_id]['gpr_by_id'].replace(gene_labels_sorted[x_],\
+                                                                                       gene_ids_sorted[x_])
+                        GPR_D[GPR_id]['gpr_by_name'] = GPR_D[GPR_id]['gpr_by_name'].replace(gene_labels_sorted[x_],\
+                                                                                       gene_names_sorted[x_])
+                    else:
+                        GPR_D[GPR_id]['gpr_by_label'] = GPR_D[GPR_id]['gpr_by_label'].replace(gene_ids_sorted[x_],\
+                                                                                       gene_labels_sorted[x_])
+                        GPR_D[GPR_id]['gpr_by_name'] = GPR_D[GPR_id]['gpr_by_name'].replace(gene_ids_sorted[x_],\
+                                                                                       gene_names_sorted[x_])
+
+
+                GPR_D[GPR_id]['gene_labels'] = gene_labels_sorted
+                #print(GPR_D[GPR_id]['gpr_by_id'])
+                #print(GPR_D[GPR_id]['gpr_by_label'])
+                #print(GPR_D[GPR_id]['gpr_by_name'])
+                #print(GPR_D[GPR_id]['gene_labels'])
+
+                #print(GPR_D[GPR_id]['gpr_by_id'])
+                #print(GPR_D[GPR_id]['gpr_by_label'])
+                #print(GPR_D[GPR_id]['gpr_by_name'])
+                #print(GPR_D[GPR_id]['gene_ids'])
+                #print(GPR_D[GPR_id]['gene_labels'])
+                #print('')
+                #time.sleep(0.1)
+
                 GPR_D[GPR_id]['miriam'] = None
                 GPR_D[GPR_id]['annotation'] = {}
                 GPR_D[GPR_id]['sbo'] = SBgpr.getSBOTermID()
@@ -3655,16 +3692,20 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         fm.addParameter(p_)
     if DEBUG: print('Parameter build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
+    gene_labels = {}
+    for g_ in GENE_D:
+        gene_labels[GENE_D[g_]['id']] = GENE_D[g_]['label']
+
     if FBCver == 1 and LOADGENES:
         for g_ in GPRASSOC:
             if 'reaction' in GPRASSOC[g_] and GPRASSOC[g_]['gpr_by_id'] is not None and GPRASSOC[g_]['gpr_by_id'] != 'None':
-                fm.createGeneProteinAssociation(GPRASSOC[g_]['reaction'], GPRASSOC[g_]['gpr_by_id'], gid=g_, update_idx=False)
+                fm.createGeneProteinAssociation(GPRASSOC[g_]['reaction'], GPRASSOC[g_]['gpr_by_id'], gid=g_, update_idx=False, altlabels=gene_labels)
         fm.__updateGeneIdx__()
     elif FBCver == 2 and LOADGENES:
         # note we may want to add branches here for using indexes etc etc
         non_gpr_genes = []
         for g_ in GPR_D:
-            fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_, update_idx=False)
+            fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_, update_idx=False, altlabels=gene_labels)
             gpr = fm.getGPRassociation(g_)
             if gpr != None:
                 gpr.annotation = GPR_D[g_]['annotation']
@@ -3673,7 +3714,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         fm.__updateGeneIdx__()
         for g_ in GENE_D:
             G = fm.getGene(g_)
-            if G != None:
+            if G is not None:
                 G.setLabel(GENE_D[g_]['label'])
                 G.name = GENE_D[g_]['name']
                 G.annotation = GENE_D[g_]['annotation']
@@ -3690,7 +3731,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             G.__sbo_term__ = GENE_D[ng_]['sbo']
             G.miriam = GENE_D[ng_]['miriam']
             G.setNotes(GENE_D[ng_]['notes'])
-            print('WARNING: Non-gpr gene detected.')
+            print('WARNING: Non-gpr gene detected.', G.getId(), G.getLabel(), fm.getId())
+            raise RuntimeError()
 
     if DEBUG: print('GPR build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 504 2016-10-20 10:44:48Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 505 2016-10-20 15:46:12Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1252,7 +1252,7 @@ class Model(Fbase):
          - *altlabels* [default=None] alternative labels for genes, default uses geneIds
 
         """
-        if altlabels == None:
+        if altlabels is None:
             altlabels = {}
         if assoc != '' and assoc != None:
             if gid == None:
@@ -4200,7 +4200,7 @@ class GeneProteinAssociation(Fbase):
         """
         if self.__objref__() == None:
             raise RuntimeError("\nPlease add this GeneAssociation to a model with cmod.addGPRAssociation() before calling this method!")
-        if altlabels == None:
+        if altlabels is None:
             altlabels = {}
         genelist = self.__objref__().genes
         mod_genes = [g.getPid() for g in genelist]
@@ -4215,6 +4215,7 @@ class GeneProteinAssociation(Fbase):
             #print(self.assoc)
             genes, self.assoc = extractGeneIdsFromString(assoc, return_clean_gpr=True)
             #print(self.assoc)
+            #print(genes)
 
             #print(genes)
             #geneLabels = []
@@ -4229,7 +4230,6 @@ class GeneProteinAssociation(Fbase):
                     else:
                         label = gid
                         newgid = fixId(gid, replace='_')
-                        # actually the code might work better if the eval code searched for and used labels
                         if gid != newgid:
                             newgid = fixId(gid, replace='_{}_'.format(self._gene_id_ucntr_))
                             self._gene_id_ucntr_ += 1
@@ -4238,10 +4238,13 @@ class GeneProteinAssociation(Fbase):
                             self._MODIFIED_ASSOCIATION_ = True
                         gid = newgid
                     if gid in self.generefs:
+                        #print('gid in generef')
                         pass
                     elif gid in mod_genes:
                         self.addGeneref(gid)
+                        #print('addGeneRef')
                     else:
+                        #print('createAssociationAndGeneRefs\n', gid, label, assoc, self.assoc)
                         self.__objref__().addGene(Gene(gid, label, active=True))
                         self.addGeneref(gid)
         else:
