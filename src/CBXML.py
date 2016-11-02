@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 510 2016-10-21 15:18:27Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 512 2016-11-02 13:01:34Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2948,14 +2948,16 @@ def sbml_fileFindVersion(f):
             output = l2type
 
     msg = ''
-    if output == 'L3V1FBC1' or output == 'L3V1FBC2':
-        msg = 'SBML Level 3 FBC model detected, load with cbmpy.readSBML3FBC()'
+    if output == 'L3V1FBC1':
+        msg = 'SBML Level 3 FBC version 1 model detected, load with cbmpy.readSBML3FBC()'
+    elif output == 'L3V1FBC2':
+        msg = 'SBML Level 3 FBC version 2 model detected, load with cbmpy.readSBML3FBC()'
     elif output == 'L2FBA':
         msg = 'SBML Level 2 FAME model detected, load with cbmpy.readSBML2FBA()'
     elif output == 'COBRA':
         msg = 'COBRA SBML L2 model detected, load with cbmpy.readCOBRASBML()'
     else:
-        msg = 'No constraint-based modelling SBML extension detected. This may be a kinetic model, perhaps check for a variation of an old, pre-2013, COBRA dialect and try cbmpy.readCOBRASBML().'
+        msg = 'Unknown model type, contact the SBML community or developer for more details.'
     del D
     print(msg)
     return output, msg

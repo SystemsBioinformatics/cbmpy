@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 489 2016-09-29 14:41:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 511 2016-10-25 15:14:48Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -696,8 +696,6 @@ def processBiGGannotationNote(fba, annotation_key='note'):
                     new_ann.update({ps[0].strip() : ps[1].strip()})
             r.annotation.update(new_ann)
         if __DEBUG__: print(r.annotation)
-
-
 
 def processSBMLAnnotationNotes(fba, annotation_key='note'):
     """
