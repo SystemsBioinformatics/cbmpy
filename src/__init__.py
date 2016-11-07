@@ -2,7 +2,7 @@
 CBMPy: __init__.py
 ==================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2016 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 493 2016-10-08 14:20:08Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 515 2016-11-07 14:20:11Z bgoli $)
 
 """
 ##
@@ -91,7 +91,7 @@ from . import PyscesSED
 SED = PyscesSED.SEDCBMPY
 
 try:
-    from . import nosetests 
+    from . import nosetests
     __test_dir__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'nosetests')
     test_set = 1
     test_bundle = os.path.join(__test_dir__, 'cbmpy_test_bundle_v{}.zip.py'.format(test_set))

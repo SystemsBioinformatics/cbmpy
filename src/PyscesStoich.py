@@ -1,7 +1,7 @@
 """
 PySCeS - Python Simulator for Cellular Systems (http://pysces.sourceforge.net)
 
-Copyright (C) 2004-2015 B.G. Olivier, J.M. Rohwer, J.-H.S Hofmeyr all rights reserved,
+Copyright (C) 2004-2016 B.G. Olivier, J.M. Rohwer, J.-H.S Hofmeyr all rights reserved,
 
 Brett G. Olivier (bgoli@users.sourceforge.net)
 Triple-J Group for Molecular Cell Physiology
@@ -1188,7 +1188,7 @@ class Stoich(MathArrayFunc):
 
             #row_vector = scipy.concatenate((row_vector_independent,row_vector_dependent),1)
             row_vector = scipy.hstack((row_vector_independent,row_vector_dependent))
-            
+
             column_vector = column_vector[pos_holder + 1:]
             K_switch = 1
         else:

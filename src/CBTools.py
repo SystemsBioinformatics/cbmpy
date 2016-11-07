@@ -2,7 +2,7 @@
 CBMPy: CBTools module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2016 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 511 2016-10-25 15:14:48Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 515 2016-11-07 14:20:11Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info

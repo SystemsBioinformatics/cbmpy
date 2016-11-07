@@ -2,7 +2,7 @@
 CBMPy: setup.py
 ===============
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2016 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 509 2016-10-21 15:14:37Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 516 2016-11-07 15:22:49Z bgoli $)
 
 """
 
@@ -55,7 +55,7 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 509 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 516 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -67,8 +67,8 @@ setup(
  data_files = mydata_files,
  name = "cbmpy",
  summary = "CBMPy: Constraint Based Modelling in Python",
- version = "0.7.7.{}".format(STATUS),
- #version = "0.7.7",
+ #version = "0.7.7.{}".format(STATUS),
+ version = "0.7.7",
  maintainer = 'Brett G. Olivier',
  author = 'Brett G. Olivier',
  maintainer_email = 'bgoli@users.sourceforge.net',
@@ -96,7 +96,7 @@ setup(
 ============
 
 PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
-based modelling and analysis. It has been designed using principles developed 
+based modelling and analysis. It has been designed using principles developed
 in the PySCeS simulation software project: usability, flexibility and accessibility. Its architecture is both extensible and flexible using data structures that are intuitive to  the biologist (metabolites, reactions, compartments) while transparently translating these into the underlying mathematical structures used in advanced analysis (LP's, MILP's).
 
 PySCeS CBMPy implements popular analyses such as FBA, FVA, element/charge
@@ -112,9 +112,9 @@ needs PySCeS CBMPy supports user interaction via:
 For more information on the development and use of PySCeS CBMPy feel free to contact me:
 
 PySCeS-CBMPy has been tested on Windows 7 and 8.1, Mac OSX and Ubuntu Linux 12.04, 14.04, 16.04. It is compatible with both Python 2.7+ and includes experimental support for Python 3.4+ It is highly recommend to use
-Python 2.7 as not all Python package dependencies (extended functionality) are available for Python 3. 
+Python 2.7 as not all Python package dependencies (extended functionality) are available for Python 3.
 
-PySCeS CBMPy is now accessible as a Python module **cbmpy** in place of the the previously used **pyscescbm**. This release contains both modules with a reminder to update old scripts to use the new format. CBMPy includes support for  reading/writing models in SBML3 FBC versions 1 and 2 as well as COBRA dialect, Excel spreadsheets and Python.
+PySCeS CBMPy is now accessible as a Python module **cbmpy** in place of the the previously used **pyscescbm** which is no longer supported. CBMPy includes support for  reading/writing models in SBML3 FBC versions 1 and 2 as well as COBRA dialect, Excel spreadsheets and Python.
 
 To use follow the installation instructions given below and try the following in a Python shell::
 
@@ -122,12 +122,12 @@ import cbmpy
 cmod = cbmpy.readSBML3FBC('cbmpy_test_core')
 cbmpy.doFBA(cmod)
 
-New Ipython notebook tutorials will be available soon. Happy modelling!
+New Ipython notebook tutorials are available. Happy modelling!
 
-The following installation instructions are for Ubuntu 14.04 but should be adaptable to any
+The following installation instructions are for Ubuntu 16.04 but should be adaptable to any
 Linux package managment system, OSX, Debian, etc. Except for GLPK (4.47) and SymPy (0.7.4 or newer)
 no specific library version is required. For more detailed installation instructions and Windows
-please see the online documentation http://cbmpy.sourceforge.net/reference/install_doc.html 
+please see the online documentation http://cbmpy.sourceforge.net/reference/install_doc.html
 
 New! auto-dependency configuration
 ----------------------------------
@@ -135,12 +135,13 @@ New! auto-dependency configuration
 I am in the process of creating automated dependency checking and building tools for CBMPy. These can be found at::
 
  https://github.com/bgoli/cbmpy-build
- 
+
 Ubuntu support is almost complete with Windows/Conda support in development, grab form GitHub::
 
  https://github.com/bgoli/cbmpy-build.git
- 
-Manual dependency configuration is provided below.
+
+Manual dependency configuration is provided below. For Windows users most of these utilities are included in
+Python distributions like Anaconda (recomended)
 
 Python2
 -------
@@ -164,10 +165,26 @@ sudo apt-get install bzip2 libbz2-dev
 
 sudo pip install --update python-libsbml
 
+Extended functionality
+~~~~~~~~~~~~~~~~~~~~~~
+
+sudo pip install biopython docx
+
+Windows
+~~~~~~~
+
+Use easy_install, pip or your package manager (e.g. conda) to install the following packages::
+
+ numpy scipy matplotlib sympy xlrd xlwt
+ biopython docx suds wxPython
+
+pip install --update python-libsbml
+
 
 glpk/python-glpk
 ~~~~~~~~~~~~~~~~
 
+CBMPy requires a linear solver for numerical analysis, the open source (glpk) solver can be automatically built and installed as follows (requires git to be installed and accessible):
 
 Download the install script that will install GLPK/PyGLPK for CBMPy on Ubuntu 14.04 or newer::
 
@@ -181,7 +198,7 @@ and run::
 
  ./install_glpk.sh
 
-Note this script is designed to be used for building containers and will remove any installed version of GLPK (apt-get purge) and build and install the older version needed for PyGLPK.
+Note this script is designed to be used for building containers and will remove any installed version of GLPK and build and install the correct version needed for PyGLPK.
 
 No warranty of any kind assumed or otherwise, use at own risk!
 
@@ -204,7 +221,6 @@ or download the source  and run::
 
  python setup.py build sdist
  sudo python setup.py install
-
 
 Python3 (experimental)
 ----------------------

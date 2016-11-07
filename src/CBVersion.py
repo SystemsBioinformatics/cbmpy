@@ -2,7 +2,7 @@
 CBMPy: CBVersion module
 =======================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2016 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,20 +19,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBVersion.py 457 2016-06-10 06:12:55Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBVersion.py 515 2016-11-07 14:20:11Z bgoli $)
 
 """
-# bump 
+# bump
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
- 
+
 MAJOR = 0
 MINOR = 7
-MICRO = 6
+MICRO = 7
 try:
-    STATUS = '$Rev: 457 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = '$Rev: 515 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = ''
 

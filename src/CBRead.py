@@ -2,7 +2,7 @@
 CBMPy: CBRead module
 ====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2016 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 493 2016-10-08 14:20:08Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 515 2016-11-07 14:20:11Z bgoli $)
 
 """
 
@@ -90,7 +90,7 @@ if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3
     zfile.extractall(path=__example_model_path__)
     zfile.close()
     del zipfile, zfile
-    
+
 
 def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}, scan_notes_gpr=True):
     """
