@@ -1,6 +1,7 @@
 """
 CBMPy
 =====
+
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
 Copyright (C) 2010-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
@@ -25,4 +26,4 @@ Last edit: $Author: bgoli $ ($Id: CBConfig.py 144 2014-01-16 22:27:55Z bgoli $)
 
 More information in the docs/ directory.
 
-(c) Brett G. Olivier, Amsterdam, 2014
+(c) Brett G. Olivier, Amsterdam, 2014-2016
