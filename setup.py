@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 516 2016-11-07 15:22:49Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 521 2016-11-07 21:47:49Z bgoli $)
 
 """
 
@@ -55,7 +55,7 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 516 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 521 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -87,9 +87,9 @@ setup(
     'License :: OSI Approved :: GNU General Public License (GPL)',
     'Natural Language :: English',
     'Operating System :: OS Independent',
-    'Programming Language :: Python :: 2'
+    'Programming Language :: Python :: 2',
     'Topic :: Scientific/Engineering :: Bio-Informatics',
-    'Topic :: Scientific/Engineering :: Chemistry',
+    'Topic :: Scientific/Engineering :: Chemistry'
      ],
  description =\
 """ PySCeS-CBMPy
