@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 505 2016-10-20 15:46:12Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 518 2016-11-07 17:40:44Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -37,9 +37,10 @@ from __future__ import absolute_import
 import numpy, re, time, weakref, copy, json, urllib2
 
 try:
-    import pickle
-except ImportError:
     import cPickle as pickle
+except ImportError:
+    import pickle
+
 
 HAVE_SYMPY = False
 try:
@@ -98,6 +99,8 @@ class Fbase(object):
     def __getstate__(self):
         """
         Internal method that should allow our weakrefs to be 'picklable'
+
+        # overloaded by Model
 
         """
 
@@ -322,16 +325,20 @@ class Fbase(object):
          - *protocol* [default=0] serialize to a string or binary if required,
                       see pickle module documentation for details
 
+        # overloaded in Model
+
         """
         return pickle.dumps(self, protocol=protocol)
 
-    def serializeToDisk(self, filename, protocol=0):
+    def serializeToDisk(self, filename, protocol=2):
         """
         Serialize to disk using pickle protocol:
 
          - *filename* the name of the output file
-         - *protocol* [default=0] serialize to a string or binary if required,
+         - *protocol* [default=2] serialize to a string or binary if required,
                       see pickle module documentation for details
+
+        # overloaded in Model
 
         """
         F = file(filename, 'wb')
@@ -555,6 +562,9 @@ class Model(Fbase):
         cpy.__setModelSelf__()
         cpy.__setGlobalIdStore__()
         cpy.__populateGlobalIdStore__()
+        # TODO: try make the global ID store work exclusively with __setState__ and __getState__ for both clone/serialise
+        self.__setGlobalIdStore__()
+        self.__populateGlobalIdStore__()
 
         print('Model clone time: {}'.format(time.time()-tzero))
         return cpy
@@ -641,6 +651,21 @@ class Model(Fbase):
         for p in self.parameters:
             p.__unsetObjRef__()
 
+    def __getstate__(self):
+        """
+        Internal method that should allow our weakrefs to be 'picklable'
+
+        # overloaded by Model
+
+        """
+
+        self.__global_id__ = None
+        if '__objref__' not in self.__dict__:
+            return self.__dict__
+        else:
+            cpy = self.__dict__.copy()
+            cpy['__objref__'] = None
+            return cpy
 
     def __setstate__(self, dic):
         """
@@ -649,6 +674,40 @@ class Model(Fbase):
         """
         self.__dict__ = dic
         self.__setModelSelf__()
+        self.__setGlobalIdStore__()
+        self.__populateGlobalIdStore__()
+
+    def serialize(self, protocol=0):
+        """
+        Serialize object, returns a string by default
+
+         - *protocol* [default=0] serialize to a string or binary if required,
+                      see pickle module documentation for details
+
+        # overloaded in CBModel
+
+        """
+        s = pickle.dumps(self, protocol=protocol)
+        self.__setGlobalIdStore__()
+        self.__populateGlobalIdStore__()
+        return s
+
+    def serializeToDisk(self, filename, protocol=2):
+        """
+        Serialize to disk using pickle protocol:
+
+         - *filename* the name of the output file
+         - *protocol* [default=2] serialize to a string or binary if required,
+                      see pickle module documentation for details
+
+        # overloaded in CBModel
+
+        """
+        F = file(filename, 'wb')
+        pickle.dump(self, F, protocol=protocol)
+        F.close()
+        self.__setGlobalIdStore__()
+        self.__populateGlobalIdStore__()
 
     def addMIRIAMannotation(self, qual, entity, mid):
         """

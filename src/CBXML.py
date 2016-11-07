@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 520 2016-11-07 21:10:45Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3726,7 +3726,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             else:
                 print('Gene {} is not part of a GPR association. Will create anyway!'.format(g_))
                 non_gpr_genes.append(g_)
-        # TODO: this is a corner case I'll deal with it better later, non GPR associated genes are added as inactive gene objects
+
         for ng_ in non_gpr_genes:
             G = CBModel.Gene(ng_, label=GENE_D[ng_]['label'], active=False)
             G.annotation = GENE_D[ng_]['annotation']
@@ -3734,7 +3734,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             G.miriam = GENE_D[ng_]['miriam']
             G.setNotes(GENE_D[ng_]['notes'])
             print('WARNING: Non-gpr gene detected.', G.getId(), G.getLabel(), fm.getId())
-            raise RuntimeError()
+            #raise RuntimeError()
 
     if DEBUG: print('GPR build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 518 2016-11-07 17:40:44Z bgoli $)
 
 """
 
@@ -41,14 +41,14 @@ from . import _multicorefva
 MULTIFVAFILE = __file__.replace('CBMultiCore', '_multicorefva')
 del _multicorefva
 
-try:
-    from . import _multicoreenvfva
-    MULTIENVFVAFILE = __file__.replace('CBMultiCore','_multicoreenvfva')
-    del _multicoreenvfva
-    HAVE_MULTIENV = True
-except ImportError as ex:
-    print(ex)
-    HAVE_MULTIENV = False
+#try:
+    #from . import _multicoreenvfva
+    #MULTIENVFVAFILE = __file__.replace('CBMultiCore','_multicoreenvfva')
+    #del _multicoreenvfva
+    #HAVE_MULTIENV = True
+#except ImportError as ex:
+    #print(ex)
+    #HAVE_MULTIENV = False
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
@@ -101,110 +101,47 @@ def runMultiCoreFVA(fba, selected_reactions=None, pre_opt=True, tol=None, objF2c
             REAC.reduced_costs = fva[R][1]
     return fva, fvan
 
-if HAVE_MULTIENV:
-    def runMultiCoreMultiEnvFVA(lp, selected_reactions=None, tol=None, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False, procs=2):
-        """
-        Run a multicore FVA where:
+#if HAVE_MULTIENV:
+    #def runMultiCoreMultiEnvFVA(lp, selected_reactions=None, tol=None, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False, procs=2):
+        #"""
+        #Run a multicore FVA where:
 
-         - *lp* is a multienvironment lp model instance
-         - *procs* [default=2] number of processing threads (optimum seems to be about the number of physical cores)
+         #- *lp* is a multienvironment lp model instance
+         #- *procs* [default=2] number of processing threads (optimum seems to be about the number of physical cores)
 
-        """
-        fN = os.path.join(work_dir, str(time.time()).split('.')[0])
-        lp.write(fN+'.lp', filetype='lp')
-        MEargs = [fN+'.lp', selected_reactions, tol, rhs_sense, optPercentage, work_dir, debug]
-        print(MEargs)
-        print(fN)
-        F = file(fN, 'wb')
-        pickle.dump(MEargs, F, protocol=-1)
-        F.close()
-        subprocess.call(['python', MULTIENVFVAFILE, str(procs), fN])
-        F = file(fN, 'rb')
-        res = pickle.load(F)
-        F.close()
-        os.remove(fN)
+        #"""
+        #fN = os.path.join(work_dir, str(time.time()).split('.')[0])
+        #lp.write(fN+'.lp', filetype='lp')
+        #MEargs = [fN+'.lp', selected_reactions, tol, rhs_sense, optPercentage, work_dir, debug]
+        #print(MEargs)
+        #print(fN)
+        #F = file(fN, 'wb')
+        #pickle.dump(MEargs, F, protocol=-1)
+        #F.close()
+        #subprocess.call(['python', MULTIENVFVAFILE, str(procs), fN])
+        #F = file(fN, 'rb')
+        #res = pickle.load(F)
+        #F.close()
+        #os.remove(fN)
 
-        fva = res[0]
-        fvan = res[1]
+        #fva = res[0]
+        #fvan = res[1]
 
-        if len(fva) == 1:
-            fva = fva[0]
-            fvan = fvan[0]
-        elif len(fva) > 1:
-            fva = numpy.vstack(fva)
-            fvan2 = []
-            for n_ in fvan:
-                fvan2 += n_
-            fvan = fvan2
+        #if len(fva) == 1:
+            #fva = fva[0]
+            #fvan = fvan[0]
+        #elif len(fva) > 1:
+            #fva = numpy.vstack(fva)
+            #fvan2 = []
+            #for n_ in fvan:
+                #fvan2 += n_
+            #fvan = fvan2
 
-        return fva, fvan
-else:
-    def runMultiCoreMultiEnvFVA(lp, selected_reactions=None, tol=None, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False, procs=2):
-        raise RuntimeError('\nMultiCore module not present')
-
-
+        #return fva, fvan
+#else:
+    #def runMultiCoreMultiEnvFVA(lp, selected_reactions=None, tol=None, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False, procs=2):
+        #raise RuntimeError('\nMultiCore module not present')
 
 
-# look at using if __name__ != '__main__'
-
-"""
-import os, time, math, pickle
-import multiprocessing
-import CBSolver, CBMultiCore
-
-def funcFVA(x,r):
-    try:
-        fva, fvan = CBSolver.FluxVariabilityAnalysis(x, selected_reactions=r, pre_opt=True, quiet=True, oldlpgen=False)
-    except Exception as ex:
-        print ex
-        fva = fvan = None
-        raise RuntimeError(ex)
-    return fva, fvan
-
-def multiCoreFVA(fvamod, procs=2, timeout=None):
-    #assert procs >= 2, '\nMinimum 2 processes required'
-    rid = fvamod.getReactionIds()
-    PRs = [d_[0] for d_ in list(CBMultiCore.grouper(int(math.ceil(len(rid)/float(procs))), range(len(rid))))]
-    print procs, len(PRs), PRs
-
-    s2time = time.time()
-    TP = multiprocessing.Pool(processes=procs)
-    results = []
-    if procs == 1:
-        results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid)))
-    else:
-        for p_ in range(len(PRs)-1):
-            print '%s -> %s' % (PRs[p_], PRs[p_+1])
-            results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[p_]:PRs[p_+1]])))
-        results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[-1]:])))
-    fva = []
-    fvan = []
-    for r_ in results:
-        out = r_.get(timeout)
-        fva.append(out[0])
-        fvan.append(out[1])
-    e2time = time.time()
-    del results
-
-    print '\nMulticore FVA took: %.2f min (%s processes)' % ((e2time-s2time)/60., procs)
-    return fva, fvan
 
 
-if __name__ == '__main__':
-    print os.sys.argv
-
-    cores = int(os.sys.argv[1])
-    F = file(os.sys.argv[2],'rb')
-    cmod = pickle.load(F)
-    F.close()
-
-
-    CBSolver.analyzeModel(cmod, oldlpgen=False)
-    res = multiCoreFVA(cmod, procs=cores)
-
-    F = file(os.sys.argv[2], 'wb')
-    pickle.dump(res, F, protocol=-1)
-    F.flush()
-    F.close()
-
-"""

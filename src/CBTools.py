@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 518 2016-11-07 17:40:44Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -97,6 +97,17 @@ def deSerialize(s):
 
     """
     return pickle.loads(s)
+
+def deSerializeFromDisk(filename):
+    """
+    Loads a serialised Python pickle from *filename* returns the Python object(s)
+
+    """
+    assert os.path.exists(filename), '\nFile \"{}\" does not exist'.format(filename)
+    F = file(filename, 'rb')
+    obj = pickle.load(F)
+    F.close()
+    return obj
 
 def addStoichToFBAModel(fm):
     """
