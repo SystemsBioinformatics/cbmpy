@@ -98,6 +98,52 @@ For a local user installation of Anaconda try the following. This is not strictl
 in both cases a shell script `metatoolkit_install_dependencies.sh` is generated and printed to the screen. Run this script 
 or install the relevant packages by hand.
 
+Installing or upgrading CBMPy
+-----------------------------
+
+Installing or upgrading CBMPy can easily be done with pip::
+
+ sudo pip install cbmpy
+ sudo pip install --upgrade cbmpy
+
+or try the new CONDA support::
+
+ conda install -c bgoli -c SBMLTeam cbmpy
+ conda update cbmpy
+
+or download the relevant source from SourceForge:
+
+ https://sourceforge.net/projects/cbmpy/files/release/0.7/
+
+and run::
+
+ python setup.py build sdist
+ sudo python setup.py install
+
+Installing glpk/python-glpk
+---------------------------
+
+CBMPy requires a linear solver for numerical analysis, the open source (glpk) solver can be automatically built and installed as follows (requires git to be installed and accessible):
+
+Download the install script that will install GLPK/PyGLPK for CBMPy on Ubuntu 14.04 or newer::
+
+ curl --remote-name https://raw.githubusercontent.com/bgoli/cbmpy-glpk/master/install_glpk.sh
+
+Make executable::
+
+ chmod 744 install_glpk.sh
+
+and run::
+
+ ./install_glpk.sh
+
+Note this script is designed to be used for building containers and will remove any installed version of GLPK and build and install the correct version needed for PyGLPK.
+
+No warranty of any kind assumed or otherwise, use at own risk!
+
+Legacy installation
+===================
+
 Python2
 -------
 
@@ -134,48 +180,6 @@ Use easy_install, pip or your package manager (e.g. conda) to install the follow
  biopython docx suds wxPython
 
 pip install --update python-libsbml
-
-
-glpk/python-glpk
-~~~~~~~~~~~~~~~~
-
-CBMPy requires a linear solver for numerical analysis, the open source (glpk) solver can be automatically built and installed as follows (requires git to be installed and accessible):
-
-Download the install script that will install GLPK/PyGLPK for CBMPy on Ubuntu 14.04 or newer::
-
- curl --remote-name https://raw.githubusercontent.com/bgoli/cbmpy-glpk/master/install_glpk.sh
-
-Make executable::
-
- chmod 744 install_glpk.sh
-
-and run::
-
- ./install_glpk.sh
-
-Note this script is designed to be used for building containers and will remove any installed version of GLPK and build and install the correct version needed for PyGLPK.
-
-No warranty of any kind assumed or otherwise, use at own risk!
-
-CBMPy
-~~~~~
-
-Finally, install CBMPy::
-
- sudo easy_install cbmpy
-
-or
-
- sudo pip install cbmpy
-
-or try the new experimental CONDA support::
-
- conda install -c bgoli cbmpy
-
-or download the source  and run::
-
- python setup.py build sdist
- sudo python setup.py install
 
 Python3 (experimental)
 ----------------------
