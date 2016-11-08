@@ -60,9 +60,8 @@ New Ipython notebook tutorials are available. Happy modelling!
 New cross-platform conda support
 --------------------------------
 
-CBMPy is now available as a crosss platform Anaconda package available for Win32/64, Linux32/64 and OSX. This is the first
-major release using the conda platform and all feedback is welcomed. If you have Anaconda installed (tested with 4.2.0)
-simply try the following::
+CBMPy is now available as a crosss platform Anaconda package available for Win32/64, Linux32/64 and OSX from the Anaconda cloud (https://anaconda.org/bgoli/repo). This is the first
+major release using the conda platform and all feedback is welcomed. If you have Anaconda installed (tested with 4.2.0) simply try the following::
 
  conda install -c bgoli -c SBMLTeam cbmpy
  
