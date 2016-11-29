@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 528 2016-11-28 16:55:31Z bgoli $)
 
 """
 
@@ -2663,9 +2663,10 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         Rdi['upperbound'] = fba.getReactionUpperBound(Rdi['id'])
         udata = {}
         for k_ in REAC.getAnnotations():
-            if k_ not in RUcols:
-                RUcols.append(k_)
-            udata[k_] = REAC.annotation[k_]
+            if REAC.annotation[k_] is not None:
+                if k_ not in RUcols:
+                    RUcols.append(k_)
+                udata[k_] = REAC.annotation[k_]
         Rdi['data'] = udata
         subs = []
         prods = []
@@ -2776,10 +2777,13 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         wsMet.write(s, Mcols.index('fixed'), Mlist[s_]['fixed'])
         #wsMet.write(s, Mcols.index('bgid'), Mlist[s_]['bgid'])
         for ud_ in Mlist[s_]['data']:
-            if len(Mlist[s_]['data'][ud_]) < 30000:
-                wsMet.write(s, len(Mcols)+MUcols.index(ud_), Mlist[s_]['data'][ud_])
-            else:
-                wsMet.write(s, len(Mcols)+MUcols.index(ud_),'Data too long (more than 30000 characters)', styleBold)
+            try:
+                if len(Mlist[s_]['data'][ud_]) < 30000:
+                    wsMet.write(s, len(Mcols)+MUcols.index(ud_), Mlist[s_]['data'][ud_])
+                else:
+                    wsMet.write(s, len(Mcols)+MUcols.index(ud_),'Data too long (more than 30000 characters)', styleBold)
+            except TypeError:
+                print('\nAnnotation write error: TypeError')
 
         wsStR.write(stridx, 0, Mlist[s_]['id'], styleBold)
         cidx = 0

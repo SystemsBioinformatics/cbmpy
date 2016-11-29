@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 518 2016-11-07 17:40:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 527 2016-11-25 15:47:02Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1119,7 +1119,7 @@ class Model(Fbase):
             assert J[1] not in fluxlist, '\nFluxes may only appear once per constraint:\n%s' % fluxes
             fluxlist.append(J[1])
         operator = operator.strip()
-        assert operator in ['>', '<', '<=', '>=', '=', 'L', 'G', 'E'], '\n%s is not a valid operator' % operator
+        assert operator in ['>', '<', '<=', '>=', '=', 'L', 'G', 'E'], '\n{} is not a valid operator'.format(operator)
         if operator == '=' or operator == 'E':
             operator = 'E'
         elif operator in ['>=', '>', 'G']:
@@ -1128,7 +1128,7 @@ class Model(Fbase):
             operator = 'L'
 
         rhs = float(rhs)
-        if pid == None:
+        if pid is None:
             pid = 'uConstr%s' % (len(self.user_constraints)+1)
         self.user_constraints.update({pid : {'fluxes' : fluxes,
                                               'operator' : operator,
@@ -3921,7 +3921,7 @@ class Species(Fbase):
          - *cf* a chemical formula e.g. CH3NO2
 
         """
-        assert checkChemFormula(cf)
+        assert cf == '' or checkChemFormula(cf)
         self.chemFormula = cf
         #if checkChemFormula(cf):
             #self.chemFormula = cf

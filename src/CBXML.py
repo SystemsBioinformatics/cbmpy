@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 520 2016-11-07 21:10:45Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 527 2016-11-25 15:47:02Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1597,7 +1597,7 @@ class CBMtoSBML3(FBCconnect):
                     ub = c_
                 elif c_.reaction == r_ and c_.is_bound == 'equality':
                     lb = ub = c_
-                if lb != None and ub != None:
+                if lb is not None and ub is not None:
                     break
             if ub.value not in shared_values:
                 shared_values[ub.value] = [ub]

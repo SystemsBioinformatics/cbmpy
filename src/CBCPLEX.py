@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 529 2016-11-29 23:18:21Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -65,6 +65,7 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
+
 
 ##  class FluxSensitivity(object):
     ##  """
@@ -149,6 +150,12 @@ CPLX_RESULT_STREAM_FILE = None
 CPLX_RESULT_STREAM_IO = None
 CPLX_SILENT_MODE = True
 
+CPLX_LP_PARAMETERS = {
+    'simplex.tolerances.optimality' : 1e-6,
+    'simplex.tolerances.feasibility' : 1e-6
+    }
+
+
 def cplx_fixConSense(operator):
     """
     Fixes the sense of inequality operators, returns corrected sense symbol
@@ -181,6 +188,10 @@ def cplx_constructLPfromFBA(fba, fname=None):
 
     # define model and add variables
     lp = cplex.Cplex()
+    # define simplex tolerances for the model
+    lp.parameters.simplex.tolerances.optimality.set(CPLX_LP_PARAMETERS['simplex.tolerances.optimality'])
+    lp.parameters.simplex.tolerances.feasibility.set(CPLX_LP_PARAMETERS['simplex.tolerances.feasibility'])
+    print(lp.parameters.simplex.get_changed())
     lp.set_problem_name('%s' % (fba.getPid()))
     lp.variables.add(names=fba.N.col)
     try:
@@ -267,7 +278,6 @@ def cplx_constructLPfromFBA(fba, fname=None):
                 nz = CMmat[n].nonzero()[0]
             else:
                 nz = CMmat[n].nonzero()[1]
-
             lin_expr.append(cplex.SparsePair([fba.CM.col[c] for c in nz], [CMmat[n, c] for c in nz]))
             rhs.append(CMrhs[n])
             senses.append(cplx_fixConSense(fba.CM.operators[n]))
@@ -515,6 +525,9 @@ def cplx_getModelFromLP(lptFile, Dir=None):
         assert os.path.exists(Dir), '\nIncorrect path'
         lptFile = os.path.join(Dir, lptFile)
     lp = cplex.Cplex(lptFile)
+    # define simplex tolerances for the model
+    lp.parameters.simplex.tolerances.optimality.set(CPLX_LP_PARAMETERS['simplex.tolerances.optimality'])
+    lp.parameters.simplex.tolerances.feasibility.set(CPLX_LP_PARAMETERS['simplex.tolerances.feasibility'])
     return lp
 
 def cplx_getCPLEXModelFromLP(lptFile, Dir=None):
