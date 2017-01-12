@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 527 2016-11-25 15:47:02Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 544 2017-01-12 16:31:50Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -587,6 +587,8 @@ class Model(Fbase):
             self.__global_id__[fb.getId()] = fb
         for o in self.objectives:
             self.__global_id__[o.getId()] = o
+            for fo in o.fluxObjectives:
+                self.__global_id__[fo.getId()] = fo
         for c in self.compartments:
             self.__global_id__[c.getId()] = c
         for gp in self.gpr:
@@ -614,6 +616,8 @@ class Model(Fbase):
             fb.__setObjRef__(self)
         for o in self.objectives:
             o.__setObjRef__(self)
+            for fo in o.fluxObjectives:
+                fo.__setObjRef__(self)
         for c in self.compartments:
             c.__setObjRef__(self)
         for gp in self.gpr:
@@ -642,6 +646,8 @@ class Model(Fbase):
             fb.__unsetObjRef__()
         for o in self.objectives:
             o.__unsetObjRef__()
+            for fo in o.fluxObjectives:
+                fo.__unsetObjRef__()
         for c in self.compartments:
             c.__unsetObjRef__()
         for gp in self.gpr:
@@ -811,6 +817,7 @@ class Model(Fbase):
 
         """
         assert type(obj) == Objective, '\nERROR: requires an Objective object, not something of type {}'.format(type(obj))
+        assert obj.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(obj.__objref__).split('to')[1][1:-1])
         print('Adding objective: {}'.format(obj.id))
         obj.__objref__ = weakref.ref(self)
         if obj.getId() in self.__global_id__:
@@ -840,8 +847,8 @@ class Model(Fbase):
                 self.deleteObjective(o)
         obj = Objective(new_obj_id, osense)
         FO = FluxObjective('{}_{}_fluxobj'.format(new_obj_id, rid), rid, coefficient)
-        obj.addFluxObjective(FO)
         self.addObjective(obj, active=active)
+        obj.addFluxObjective(FO)
 
     def createSpecies(self, sid, boundary=False, name='', value=float('nan'), compartment=None, charge=None, chemFormula=None):
         """
@@ -894,19 +901,9 @@ class Model(Fbase):
         """
 
         assert rid not in self.getReactionIds(), '\nReaction ID %s already exists' % rid
-        self.addReaction(Reaction(rid, name, reversible))
-        if create_default_bounds:
-            self.createReactionUpperBound(rid, numpy.inf)
-            if reversible:
-                self.createReactionLowerBound(rid, -numpy.inf)
-                if not silent:
-                    print('\nReaction bounds set to: -INF <= {} <= INF'.format(rid))
-            else:
-                self.createReactionLowerBound(rid, 0)
-                if not silent:
-                    print('\nReaction bounds set to: 0 <= {} <= INF'.format(rid))
+        self.addReaction(Reaction(rid, name, reversible), create_default_bounds=create_default_bounds)
         if not silent:
-            print('\nAdd reagents with cmod.createReactionReagent({}, metabolite, coefficient)'.format(rid))
+            print('Add reagents with cmod.createReactionReagent({}, metabolite, coefficient)'.format(rid))
 
     def createReactionReagent(self, reaction, metabolite, coefficient, silent=False):
         """
@@ -982,6 +979,7 @@ class Model(Fbase):
 
         """
         assert type(fluxbound) == FluxBound, '\nERROR: requires a FluxBound object, not something of type {}'.format(type(fluxbound))
+        assert fluxbound.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(fluxbound.__objref__).split('to')[1][1:-1])
         if fluxbound.getId() in self.__global_id__:
             raise RuntimeError('Duplicate fluxbound ID detected: {}'.format(fluxbound.getId()))
         else:
@@ -1018,6 +1016,7 @@ class Model(Fbase):
 
         """
         assert isinstance(species, Species), '\nERROR: requires a Species object, not something of type {}'.format(type(species))
+        assert species.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(species.__objref__).split('to')[1][1:-1])
         if __DEBUG__: print('Adding species: {}'.format(species.id))
         if species.getId() in self.__global_id__:
             raise RuntimeError('Duplicate species ID detected: {}'.format(species.getId()))
@@ -1034,7 +1033,8 @@ class Model(Fbase):
 
         """
         # TODO: fix this whole gene thing, genes must use labels for gene names and id's for object search
-        assert isinstance(gene, Gene), '\nERROR: requires a Species object, not something of type {}'.format(type(gene))
+        assert isinstance(gene, Gene), '\nERROR: requires a Gene object, not something of type {}'.format(type(gene))
+        assert gene.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(gene.__objref__).split('to')[1][1:-1])
         if __DEBUG__: print('Adding Gene: {}'.format(gene.id))
         if gene.getId() in self.__global_id__:
             if gene.getId() in self.__genes_idx__:
@@ -1053,6 +1053,7 @@ class Model(Fbase):
 
         """
         assert isinstance(par, Parameter), '\nERROR: requires a Parameter object, not something of type {}'.format(type(par))
+        assert par.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(par.__objref__).split('to')[1][1:-1])
         if __DEBUG__: print('Adding Parameter: {}'.format(par.id))
         if par.getId() in self.__global_id__:
             raise RuntimeError('Duplicate par ID detected: {}'.format(par.getId()))
@@ -1068,6 +1069,7 @@ class Model(Fbase):
 
         """
         assert isinstance(comp, Compartment), '\nERROR: requires a Compartment object, not something of type {}'.format(type(comp))
+        assert comp.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(comp.__objref__).split('to')[1][1:-1])
         if __DEBUG__: print('Adding Compartment: {}'.format(comp.id))
         if comp.getId() in self.__global_id__:
             raise RuntimeError('Duplicate comp ID detected: {}'.format(comp.getId()))
@@ -1076,14 +1078,16 @@ class Model(Fbase):
         comp.__objref__ = weakref.ref(self)
         self.compartments.append(comp)
 
-    def addReaction(self, reaction):
+    def addReaction(self, reaction, create_default_bounds=False):
         """
         Adds a reaction object to the model
 
         - *reaction* an instance of the Reaction class
+        - *create_default_bounds* create default reaction bounds, irreversible 0 <= J <= INF, reversable -INF <= J <= INF
 
         """
         assert isinstance(reaction, Reaction), '\nERROR: requires a Reaction object, not something of type {}'.format(type(reaction))
+        assert reaction.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(reaction.__objref__).split('to')[1][1:-1])
 
         if __DEBUG__: print('Adding reaction: {}'.format(reaction.id))
         if reaction.getId() in self.__global_id__:
@@ -1098,6 +1102,16 @@ class Model(Fbase):
             else:
                 self.__pushGlobalId__(rr.getId(), rr)
         self.reactions.append(reaction)
+        if create_default_bounds:
+            self.createReactionUpperBound(rid, numpy.inf)
+            if reaction.reversible:
+                self.createReactionLowerBound(rid, -numpy.inf)
+                if not silent:
+                    print('\nReaction bounds set to: -INF <= {} <= INF'.format(rid))
+            else:
+                self.createReactionLowerBound(rid, 0)
+                if not silent:
+                    print('\nReaction bounds set to: 0 <= {} <= INF'.format(rid))
 
     def addUserConstraint(self, pid, fluxes=None, operator='=', rhs=0.0):
         """
@@ -1149,21 +1163,24 @@ class Model(Fbase):
         for r in range(len(self.reactions)-1, -1, -1):
             if self.reactions[r].getPid() == rid:
                 Ridx = rid
-                Robj = self.reactions.pop(r).clone()
+                Robj = self.reactions.pop(r)
                 self.__popGlobalId__(rid)
-                #self.__global_id__.pop(rid)
         Bounds = []
         for b in range(len(self.flux_bounds)-1, -1, -1):
             if self.flux_bounds[b].reaction == rid:
-                Bounds.append(self.flux_bounds.pop(b).clone())
-                #self.__global_id__.pop(Bounds[-1].getId())
+                Bounds.append(self.flux_bounds.pop(b))
                 self.__popGlobalId__(Bounds[-1].getId())
-        print('Deleting reaction {} and {} associated bounds'.format(Ridx, len(Bounds)))
-        for s_ in Robj.getSpeciesIds():
-            S = self.getSpecies(s_)
+        for re in Robj.reagents:
+            S = self.getSpecies(re.getSpecies())
             if Ridx in S.reagent_of:
                 S.reagent_of.remove(Ridx)
-        self.__TRASH__.update({Ridx : {'react' : Robj, 'bnds' : Bounds}})
+            self.__popGlobalId__(re.getId())
+        Robj.reagents = []
+        print('Deleting reaction {} and {} associated bounds'.format(Ridx, len(Bounds)))
+        del Bounds, Robj
+        #removed until I have a more secure way of doing this
+        #self.__TRASH__.update({Ridx : {'react' : Robj.clone(), 'bnds' : [b.clone() for b in Bounds]}})
+
 
     def deleteObjective(self, objective_id):
         """
@@ -1179,21 +1196,25 @@ class Model(Fbase):
         for o in range(len(self.objectives)-1, -1, -1):
             if self.objectives[o].getId() == objective_id:
                 Oobj = self.objectives.pop(o)
-        #self.__global_id__.pop(objective_id)
-        self.__popGlobalId__(objective_id)
+                for fo in Oobj.fluxObjectives:
+                    self.__popGlobalId__(fo.getId())
+                self.__popGlobalId__(objective_id)
         print('Deleting objective {}'.format(objective_id))
-        self.__TRASH__.update({objective_id : Oobj.clone()})
+        del Oobj
+        #removed until I have a more secure way of doing this
+        #self.__TRASH__.update({objective_id : Oobj.clone()})
 
-    def undeleteObjective(self, objective_id):
-        """
-        Undeltes a deleted objective function:
+    #removed until I have a more secure way of doing this
+    #def undeleteObjective(self, objective_id):
+        #"""
+        #Undeltes a deleted objective function:
 
-         - *objective_id* the id of an objeective function
+         #- *objective_id* the id of an objeective function
 
-        """
+        #"""
 
-        assert objective_id in self.__TRASH__, '\nNo deleted object of with this id'
-        self.addObjective(self.__TRASH__[objective_id])
+        #assert objective_id in self.__TRASH__, '\nNo deleted object of with this id'
+        #self.addObjective(self.__TRASH__[objective_id])
 
 
     def deleteBoundsForReactionId(self, rid, lower=True, upper=True):
@@ -1218,30 +1239,33 @@ class Model(Fbase):
                 if lower and upper and self.flux_bounds[b].getType() == 'equality':
                     delbound = True
                 if delbound:
-                    Bounds.append(self.flux_bounds.pop(b))
+                    fb = self.flux_bounds.pop(b)
+                    self.__popGlobalId__(fb.getId())
+                    Bounds.append(fb)
         print('Deleting {} bounds associated with reaction {}'.format(len(Bounds), rid))
         del Bounds
 
-    def undeleteReactionAndBounds(self, rid):
-        """
-        Undelete a reaction and bounds deleted with the **deleteReactionAndBounds** method
+    #removed until I have a more secure way of doing this
+    #def undeleteReactionAndBounds(self, rid):
+        #"""
+        #Undelete a reaction and bounds deleted with the **deleteReactionAndBounds** method
 
-         - *rid* a deleted reaction id
+         #- *rid* a deleted reaction id
 
-        Please note this method is still experimental ;-)
+        #Please note this method is still experimental ;-)
 
-        """
-        assert rid in self.__TRASH__, '\nOops I did it again ...'
-        Ridx = self.__TRASH__[rid]['react']
-        self.addReaction(Ridx)
-        # this is just while transitioning to new dynamic structures ... gone!
-        #for s_ in Ridx.getSpeciesIds():
-            #self.getSpecies(s_).setReagentOf(rid)
-        for b in self.__TRASH__[rid]['bnds']:
-            self.addFluxBound(b)
-        self.__TRASH__.pop(rid)
+        #"""
+        #assert rid in self.__TRASH__, '\nOops I did it again ...'
+        #Ridx = self.__TRASH__[rid]['react']
+        #self.addReaction(Ridx, create_default_bounds=False)
+        ## this is just while transitioning to new dynamic structures ... gone!
+        ##for s_ in Ridx.getSpeciesIds():
+            ##self.getSpecies(s_).setReagentOf(rid)
+        #for b in self.__TRASH__[rid]['bnds']:
+            #self.addFluxBound(b)
+        #self.__TRASH__.pop(rid)
 
-        print('Undeleting reaction: {}'.format(rid))
+        #print('Undeleting reaction: {}'.format(rid))
 
     def createGeneAssociationsFromAnnotations(self, annotation_key='GENE ASSOCIATION', replace_existing=True):
         """
@@ -1292,6 +1316,7 @@ class Model(Fbase):
          - *gpr* an instantiated GeneProteinAssociation object
 
         """
+        assert gpr.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(gpr.__objref__).split('to')[1][1:-1])
         if update_idx:
             self.__updateGeneIdx__()
 
@@ -1542,6 +1567,7 @@ class Model(Fbase):
             if self.flux_bounds[b].value == value:
                 db = self.flux_bounds.pop(b)
                 self.__popGlobalId__(db.getId())
+                del db
                 cntr += 1
         print('\nDeleted {} \"{}\" bounds'.format(cntr, value))
 
@@ -1565,19 +1591,23 @@ class Model(Fbase):
             elif also_delete == 'reactions':
                 for r in rids:
                     self.deleteReactionAndBounds(r)
+        SP = self.species.pop(self.getSpeciesIds().index(sid))
         self.__popGlobalId__(sid)
-        self.__TRASH__[sid] = self.species.pop(self.getSpeciesIds().index(sid)).clone()
+        del SP
+        #removed until I have a more secure way of doing this
+        #self.__TRASH__[sid] = SP.clone()
 
-    def undeleteSpecies(self, sid):
-        """
-        Undeltes a deleted species:
+    #removed until I have a more secure way of doing this
+    #def undeleteSpecies(self, sid):
+        #"""
+        #Undeltes a deleted species:
 
-         - *species* the species id
+         #- *species* the species id
 
-        """
+        #"""
 
-        assert sid in self.__TRASH__, '\nNo deleted object of with this id'
-        self.addSpecies(self.__TRASH__[sid])
+        #assert sid in self.__TRASH__, '\nNo deleted object of with this id'
+        #self.addSpecies(self.__TRASH__[sid])
 
     def __pushGlobalId__(self, sid, obj):
         if not self.__ENABLE_GLOBAL_WEAKREF__:
@@ -1586,9 +1616,9 @@ class Model(Fbase):
             self.__global_id__[sid] = obj
 
     def __popGlobalId__(self, sid):
-        if not self.__ENABLE_GLOBAL_WEAKREF__:
-            x = self.__global_id__.pop(sid)
-            del x
+        #if not self.__ENABLE_GLOBAL_WEAKREF__:
+        x = self.__global_id__.pop(sid)
+        del x
 
     def __changeGlobalId__(self, old, new, obj):
         if not self.__ENABLE_GLOBAL_WEAKREF__:
@@ -1596,6 +1626,7 @@ class Model(Fbase):
             self.__global_id__.pop(old)
         else:
             self.__global_id__[new] = obj
+            self.__global_id__.pop(old)
 
     def deleteNonReactingSpecies(self, simulate=True):
         """
@@ -2695,6 +2726,7 @@ class Model(Fbase):
          - *obj* the Group instance
 
         """
+        assert obj.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(obj.__objref__).split('to')[1][1:-1])
         if obj.getId() not in self.getGroupIds():
             self.groups.append(obj)
         else:
@@ -2785,14 +2817,19 @@ class Objective(Fbase):
         """
         return self.operation
 
-    def addFluxObjective(self, fobj):
+    def addFluxObjective(self, fobj, override=False):
         """
         Adds a FluxObjective instance to the Objective
+
+         - *fobj* the FluxObjective object
+         - *override* [default=False] override pushing the global id map, this should never be used
 
         """
         if fobj.getPid() in self.getFluxObjectiveIDs():
             print('\nWARNING: a flux objective with id \"{}\" already exists ... not adding!\n'.format(fobj.getPid()))
             return
+        if not override:
+            self.__objref__().__pushGlobalId__(fobj.getId(), fobj)
         self.fluxObjectives.append(fobj)
 
     def createFluxObjectives(self, fluxlist):
@@ -2805,7 +2842,8 @@ class Objective(Fbase):
         FOreact = self.getFluxObjectiveReactions()
         for J in fluxlist:
             if J[1] not in FOreact:
-                self.addFluxObjective(FluxObjective(J[1]+'_fobj', J[1], J[0]))
+                fid = '{}_{}_fobj'.format(self.getId(), J[1])
+                self.addFluxObjective(FluxObjective(fid, J[1], J[0]))
             else:
                 print('\nObjective {} already contains flux {} ... skipping!\n'.format(self.getPid(), J[1]))
 
@@ -2814,6 +2852,8 @@ class Objective(Fbase):
         Delete all flux objectives
 
         """
+        for fo in self.fluxObjectives:
+            self.__objref__().__popGlobalId__(fo.getId())
         self.fluxObjectives = []
 
     def getFluxObjectiveIDs(self):
@@ -3561,6 +3601,12 @@ class Reaction(Fbase):
                 for gpr_ in self.__objref__().gpr:
                     if gpr_.getProtein() == oldId:
                         gpr_.setProtein(fid)
+                for reag in self.reagents:
+                    reag.setId('{}_{}'.format(fid, reag.getSpecies()))
+                for obj in self.__objref__().objectives:
+                    for fo in obj.fluxObjectives:
+                        if fo.getReactionId() == oldId:
+                            fo.setReactionId(fid)
             else:
                 print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
         else:
@@ -3672,21 +3718,23 @@ class Reaction(Fbase):
             if self.reagents[rr].getSpecies() == sid:
                 rg = self.reagents.pop(rr)
                 print('Deleting reagent: {}'.format(rg.getId()))
-                self.__TRASH__.update({rg.getId() : rg.clone()})
+                #removed until I have a more secure way of doing this
+                #self.__TRASH__.update({rg.getId() : rg.clone()})
                 self.__objref__().__popGlobalId__(rg.getId())
         del rg
 
-    def undeleteReagentWithSpeciesRef(self, sid):
-        """
-        Attempts to unDelete reagent deleted with deleteReagent() that refers to the species id:
+    #removed until I have a more secure way of doing this
+    #def undeleteReagentWithSpeciesRef(self, sid):
+        #"""
+        #Attempts to unDelete reagent deleted with deleteReagent() that refers to the species id:
 
-         - *sid* a species/metabolite id
+         #- *sid* a species/metabolite id
 
-        """
-        #assert self.getId()+sid in self.__TRASH__, '\nAha, yes, sure, maybe, perhaps ...'
-        for rg in list(self.__TRASH__.keys()):
-            if self.__TRASH__[rg].species_ref == sid:
-                self.addReagent(self.__TRASH__.pop(rg))
+        #"""
+        ##assert self.getId()+sid in self.__TRASH__, '\nAha, yes, sure, maybe, perhaps ...'
+        #for rg in list(self.__TRASH__.keys()):
+            #if self.__TRASH__[rg].species_ref == sid:
+                #self.addReagent(self.__TRASH__.pop(rg))
 
     def getLowerBound(self):
         """

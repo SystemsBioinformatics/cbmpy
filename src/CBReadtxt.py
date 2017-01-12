@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 544 2017-01-12 16:31:50Z bgoli $)
 
 """
 
@@ -377,7 +377,7 @@ def buildFBAobj(reactions, species, objfname, modname='model'):
         R.value = 0.0
         if 'gene' in reactions[r]:
             R.setAnnotation('GENE ASSOCIATION', reactions[r]['gene'])
-        M.addReaction(R)
+        M.addReaction(R, create_default_bounds=False)
         M.addFluxBound(LB)
         M.addFluxBound(UB)
     if objfname != None:

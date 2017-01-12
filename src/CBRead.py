@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 544 2017-01-12 16:31:50Z bgoli $)
 
 """
 
@@ -1012,7 +1012,7 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
             R.createReagent(p_[1], p_[0])
         for a_ in Ri['annot']:
             R.setAnnotation(a_, Ri['annot'][a_])
-        cmod.addReaction(R)
+        cmod.addReaction(R, create_default_bounds=False)
     # cross reference reagents (shortcut)
     for s_ in cmod.species:
         tmp = s_.isReagentOf()

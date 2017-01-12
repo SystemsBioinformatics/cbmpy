@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModelTools.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModelTools.py 544 2017-01-12 16:31:50Z bgoli $)
 
 """
 
@@ -110,7 +110,7 @@ def addReactions(model, reactions):
         revers = reactions[R]['reversible']
         ##  reagents = []
         react = CBModel.Reaction(rid, name=name, reversible=revers)
-        model.addReaction(react)
+        model.addReaction(react, create_default_bounds=False)
         for RG in reactions[R]['reagents']:
             if RG[1] in specId:
                 react.addReagent(CBModel.Reagent(rid+RG[1], RG[1], RG[0]))
@@ -138,10 +138,11 @@ def addObjectiveFunction(model, objective_function):
         coef = objf['coefficient']
         sense = objf['sense']
         active = objf['active']
-        fObj = CBModel.FluxObjective(flux+'_obj', reaction=flux, coefficient=coef)
         objF = CBModel.Objective(id, sense)
-        objF.addFluxObjective(fObj)
         model.addObjective(objF, active=active)
+        fObj = CBModel.FluxObjective(flux+'_obj', reaction=flux, coefficient=coef)
+        objF.addFluxObjective(fObj)
+
 
 def quickDefaultBuild(model_name, Reactions, Species, Bounds, Objective_function, infinity=numpy.inf):
     fba = CBModel.Model(model_name)

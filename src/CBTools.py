@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 518 2016-11-07 17:40:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 544 2017-01-12 16:31:50Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -139,7 +139,7 @@ def addSinkReaction(fbam, species, lb=0.0, ub=1000.0):
     clb = CBModel.FluxBound(Rname+'_lb', Rname, 'greaterEqual', lb)
     cub = CBModel.FluxBound(Rname+'_ub', Rname, 'lessEqual', ub)
 
-    fbam.addReaction(R)
+    fbam.addReaction(R, create_default_bounds=False)
     fbam.addFluxBound(clb)
     fbam.addFluxBound(cub)
 
@@ -174,7 +174,7 @@ def addSourceReaction(fbam, species, lb=0.0, ub=1000.0):
     clb = CBModel.FluxBound(Rname+'_lb', Rname, 'greaterEqual', lb)
     cub = CBModel.FluxBound(Rname+'_ub', Rname, 'lessEqual', ub)
 
-    fbam.addReaction(R)
+    fbam.addReaction(R, create_default_bounds=False)
     fbam.addFluxBound(clb)
     fbam.addFluxBound(cub)
 
@@ -329,8 +329,8 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
     for rr_ in Rb.reagents:
         rr_.setCoefficient(-1.0*rr_.getCoefficient())
         rr_.setPid(rr_.getPid()+'_rev')
-    fba.addReaction(Rf)
-    fba.addReaction(Rb)
+    fba.addReaction(Rf, create_default_bounds=False)
+    fba.addReaction(Rb, create_default_bounds=False)
 
     if EB != None:
         fba.createReactionLowerBound(Rf.getPid(), EB.getValue())
@@ -1064,9 +1064,10 @@ def addFluxAsActiveObjective(f, reaction_id, osense, coefficient=1):
     assert osense in ['maximize', 'minimize'], "\nosense must be ['maximize', 'minimize'] not %s" % osense
     assert reaction_id in [r.getPid() for r in f.reactions], '\n%s is not avalid reaction' % reaction_id
     n_obj = CBModel.Objective(reaction_id+'_objf',osense)
+    f.addObjective(n_obj, active=True)
     n_flux_obj = CBModel.FluxObjective(reaction_id+'_fluxobj', reaction_id, coefficient)
     n_obj.addFluxObjective(n_flux_obj)
-    f.addObjective(n_obj, active=True)
+
 
 def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
     """
@@ -1501,7 +1502,7 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
         if r_.getPid() not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
                 idstore.append(sid)
-                out.addReaction(r_.clone())
+                out.addReaction(r_.clone(), create_default_bounds=False)
             else:
                 print('Skipping duplicate id: \"{}\"'.format(sid))
         else:

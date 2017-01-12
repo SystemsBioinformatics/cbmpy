@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 527 2016-11-25 15:47:02Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 544 2017-01-12 16:31:50Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -345,6 +345,7 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
     CONSTR = []
     OBJFUNCout = []
     objfunc_data = {}
+    multiobj = []
     if __HAVE_FBA_ANOT__:
         #root = ELTree.ElementTree(file=os.path.join(work_dir, _TEMP_XML_FILE_))
         root = ELTree.ElementTree(file=F)
@@ -370,7 +371,6 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
                 if len(ret) == 0:
                     print('No objectives in listOfObjectives')
                 else:
-                    multiobj = []
                     activeId = None
                     if '{http://www.sbml.org/sbml/level3/version1/fba/version1}activeObjective' in ret.attrib:
                         activeId = ret.attrib['{http://www.sbml.org/sbml/level3/version1/fba/version1}activeObjective']
@@ -397,22 +397,7 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
                             flobj_.update({'type' : ftype})
                             flobj_.update({'id' : sid})
 
-        if len(multiobj) > 0:
-            otype = None
-            oid = None
-            OBJFUNCout = []
-            for obj_ in multiobj:
-                flobjs = []
-                for fobj_ in obj_:
-                    otype = fobj_['type']
-                    oid = fobj_['id']
-                    flobjs.append(CBModel.FluxObjective('{}_{}_flobj'.format(fobj_['id'], fobj_['reaction']), fobj_['reaction'],
-                                                        float(fobj_['coefficient'])))
-                OBJFUNCout.append(CBModel.Objective(oid, otype))
-                for f_ in flobjs:
-                    OBJFUNCout[-1].addFluxObjective(f_)
-        else:
-            OBJFUNCout = []
+
 
         cntr = 0
         boundReactionIDs = []
@@ -533,17 +518,31 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
     for s in SPEC:
         fm.addSpecies(s)
     for r in REAC:
-        fm.addReaction(r)
+        fm.addReaction(r, create_default_bounds=False)
     for c in CONSTR:
         fm.addFluxBound(c)
-    for o in OBJFUNCout:
-        print(o.getPid(), activeId)
-        if len(OBJFUNCout) == 1:
-            fm.addObjective(o, active=True)
-        elif o.getPid() == activeId:
-            fm.addObjective(o, active=True)
-        else:
-            fm.addObjective(o, active=False)
+    if len(multiobj) > 0:
+        otype = None
+        oid = None
+        for obj_ in multiobj:
+            flobjs = []
+            for fobj_ in obj_:
+                otype = fobj_['type']
+                oid = fobj_['id']
+                flobjs.append(CBModel.FluxObjective('{}_{}_flobj'.format(fobj_['id'], fobj_['reaction']), fobj_['reaction'],
+                                                    float(fobj_['coefficient'])))
+            o = CBModel.Objective(oid, otype)
+            if len(multiobj) == 1:
+                fm.addObjective(o, active=True)
+            elif o.getPid() == activeId:
+                fm.addObjective(o, active=True)
+            else:
+                fm.addObjective(o, active=False)
+            OBJFUNCout.append(o)
+            print(o.getPid(), activeId)
+            for f_ in flobjs:
+                o.addFluxObjective(f_)
+    del SPEC, REAC, CONSTR
     try:
         F.close()
         del F
@@ -563,8 +562,8 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
     except Exception as ex:
         print(ex)
         print('INFO: unable to construct stoichiometric matrix')
-    del M, D
     if not return_sbml_model:
+        del M, D
         return fm
     else:
         return fm, M.clone()
@@ -3233,7 +3232,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 PARAM_D[lfbid]['association'].append(R_id)
                 PARAM_D[lfbid]['is_fluxbound'] = True
                 FB_data.append(fbl)
-            if lfbid != '':
+            if ufbid != '':
                 fbu = {'reaction' : R_id,
                        'operation' : 'lessEqual',
                        'value' : PARAM_D[ufbid]['value'],
@@ -3580,35 +3579,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('Parameter process: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
 
-    # try extract objective functions
-    OBJFUNCout = []
-    if HAVE_FBC:
-        try:
-            ACTIVE_OBJ = FBCplg.getActiveObjective().getId()
-            print('INFO: Active objective:', ACTIVE_OBJ)
-        except Exception as why:
-            #AttributeError
-            print('\nINFO: No active objective defined')
-            print('\t', type(why))
-
-        for of_ in range(FBCplg.getNumObjectives()):
-            SBOf = FBCplg.getObjective(of_)
-            OF = CBModel.Objective(SBOf.getId(), SBOf.getType())
-            OF.setName(SBOf.getName())
-            for ofl_ in range(SBOf.getNumFluxObjectives()):
-                SBOfl = SBOf.getFluxObjective(ofl_)
-                if SBOfl.getId() in [None, '']:
-                    id = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
-                else:
-                    id = SBOf.getId()
-                Oflx = CBModel.FluxObjective(id, SBOfl.getReaction(), float(SBOfl.getCoefficient()))
-                Oflx.setName(SBOfl.getName())
-                OF.addFluxObjective(Oflx)
-            OBJFUNCout.append(OF)
-
-        if DEBUG: print('ObjectiveFunction load: {}'.format(round(time.time() - time0, 3)))
-        time0 = time.time()
-
     GPRASSOC = {}
     if HAVE_FBC and LOADGENES:
         if FBCver == 1 and __HAVE_FBA_ANOT_GENEASS__:
@@ -3625,10 +3595,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                         GPRASSOC[gprid]['reaction'] = rid
                         GPRASSOC[gprid]['gpr_by_id'] =  assoc
 
-    if DEBUG: print('GPR load: {}'.format(round(time.time() - time0, 3)))
-    time0 = time.time()
 
-    # build model
+    # BUILD MODEL, we now need to do it here to link in the fluxobjectives defined in the objective functions
     fm = CBModel.Model(model_id)
     if M.isSetMetaId():
         fm.__metaid__ = M.getMetaId()
@@ -3639,6 +3607,45 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     fm.annotation = sbml_readKeyValueDataAnnotation(M.getAnnotationString())
     fm.__FBC_STRICT__ = FBCstrict
     fm.__FBC_VERSION__ = FBCver
+
+
+    # try extract objective functions
+    OBJFUNCout = []
+    if HAVE_FBC:
+        try:
+            ACTIVE_OBJ = FBCplg.getActiveObjective().getId()
+            print('INFO: Active objective:', ACTIVE_OBJ)
+        except Exception as why:
+            #AttributeError
+            print('\nINFO: No active objective defined')
+            print('\t', type(why))
+
+        for of_ in range(FBCplg.getNumObjectives()):
+            SBOf = FBCplg.getObjective(of_)
+            OF = CBModel.Objective(SBOf.getId(), SBOf.getType())
+            OF.setName(SBOf.getName())
+            if OF.getPid() == ACTIVE_OBJ:
+                fm.addObjective(OF, active=True)
+            else:
+                fm.addObjective(OF, active=False)
+
+            for ofl_ in range(SBOf.getNumFluxObjectives()):
+                SBOfl = SBOf.getFluxObjective(ofl_)
+                if SBOfl.getId() in [None, '']:
+                    oid = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
+                else:
+                    oid = SBOf.getId()
+                Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()))
+                Oflx.setName(SBOfl.getName())
+                OF.addFluxObjective(Oflx)
+            OBJFUNCout.append(OF)
+
+        if DEBUG: print('ObjectiveFunction load: {}'.format(round(time.time() - time0, 3)))
+        time0 = time.time()
+
+
+    if DEBUG: print('GPR load: {}'.format(round(time.time() - time0, 3)))
+    time0 = time.time()
 
     manot = sbml_getCVterms(M, model=True)
     if manot != None:
@@ -3673,7 +3680,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('Species build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
     for r_ in REAC:
-        fm.addReaction(r_)
+        fm.addReaction(r_, create_default_bounds=False)
     if DEBUG: print('Reaction build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
     fbexists = []
@@ -3683,15 +3690,19 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     del fbexists
     if DEBUG: print('FluxBound build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
-    for o_ in OBJFUNCout:
-        if o_.getPid() == ACTIVE_OBJ:
-            fm.addObjective(o_, active=True)
-        else:
-            fm.addObjective(o_, active=False)
+    #for o_ in OBJFUNCout:
+        #if o_.getPid() == ACTIVE_OBJ:
+            #fm.addObjective(o_, active=True)
+        #else:
+            #fm.addObjective(o_, active=False)
     if DEBUG: print('Objective build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
     for p_ in PARAM:
-        fm.addParameter(p_)
+        try:
+            fm.addParameter(p_)
+        except RuntimeError:
+            print('INFO: duplicate parameter id detected: {}'.format(p_.getId()))
+
     if DEBUG: print('Parameter build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
     gene_labels = {}
@@ -3868,12 +3879,13 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     print('SBML3 load time: {}\n'.format(round(time.time() - time00, 3)))
 
+    del SPEC, GENE_D, REAC, PARAM, PARAM_D
     del M, D
 
     if not return_sbml_model:
         return fm
     else:
-        print('SBML object return temporarily disabled')
+        print('SBML object return disabled')
         return fm, None
 
 re_html_p = re.compile("<p>.*?</p>")

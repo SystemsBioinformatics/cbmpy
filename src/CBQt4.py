@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBQt4.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBQt4.py 544 2017-01-12 16:31:50Z bgoli $)
 
 """
 
@@ -569,7 +569,7 @@ def createReaction(mod):
         for r_ in newR['reagents']:
             R.createReagent(r_, newR['reagents'][r_])
             mod.getSpecies(r_).setReagentOf(newR['id'])
-        mod.addReaction(R)
+        mod.addReaction(R, create_default_bounds=False)
         mod.createReactionLowerBound(newR['id'], newR['lower_bound'])
         mod.createReactionUpperBound(newR['id'], newR['upper_bound'])
         return R
