@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 529 2016-11-29 23:18:21Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 545 2017-01-13 13:17:11Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -191,7 +191,7 @@ def cplx_constructLPfromFBA(fba, fname=None):
     # define simplex tolerances for the model
     lp.parameters.simplex.tolerances.optimality.set(CPLX_LP_PARAMETERS['simplex.tolerances.optimality'])
     lp.parameters.simplex.tolerances.feasibility.set(CPLX_LP_PARAMETERS['simplex.tolerances.feasibility'])
-    print(lp.parameters.simplex.get_changed())
+    #print(lp.parameters.simplex.get_changed())
     lp.set_problem_name('%s' % (fba.getPid()))
     lp.variables.add(names=fba.N.col)
     try:

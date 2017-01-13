@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 544 2017-01-12 16:31:50Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 548 2017-01-13 14:22:59Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1103,15 +1103,17 @@ class Model(Fbase):
                 self.__pushGlobalId__(rr.getId(), rr)
         self.reactions.append(reaction)
         if create_default_bounds:
+            rid = reaction.getId()
+            silent = False
             self.createReactionUpperBound(rid, numpy.inf)
             if reaction.reversible:
                 self.createReactionLowerBound(rid, -numpy.inf)
                 if not silent:
-                    print('\nReaction bounds set to: -INF <= {} <= INF'.format(rid))
+                    print('\nReaction \"{}\" bounds set to: -INF <= {} <= INF'.format(rid, rid))
             else:
                 self.createReactionLowerBound(rid, 0)
                 if not silent:
-                    print('\nReaction bounds set to: 0 <= {} <= INF'.format(rid))
+                    print('\nReaction \"{}\" bounds set to: 0 <= {} <= INF'.format(rid, rid))
 
     def addUserConstraint(self, pid, fluxes=None, operator='=', rhs=0.0):
         """
@@ -3477,6 +3479,7 @@ class Reaction(Fbase):
                 raise RuntimeError('Duplicate obj ID detected: {}'.format(reag.getId()))
             else:
                 self.__objref__().__pushGlobalId__(reag.getId(), reag)
+            reag.__objref__ = self.__objref__
         self.reagents.append(reag)
 
     def createReagent(self, metabolite, coefficient):
