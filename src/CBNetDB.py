@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 552 2017-01-18 22:26:21Z bgoli $)
 
 """
 
@@ -133,8 +133,8 @@ class DBTools(NetDBbase):
 
     def insertData(self, table, data, commit=True):
         """
-        Insert data into a table: "INSERT INTO %s (gene, aa_seq, nuc_seq, aa_len, nuc_len) VALUES (?, ?, ?, ?, ?)" % tablename,
-                                    (str(ecg), str(prot2), str(gene2), int(len(prot2)), int(len(gene2))) )
+        Insert data into a table: "INSERT INTO %s (?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?)" % table,
+                                    (?, ?, ?, ?, ?)) )
 
          - *table* the DB table name
          - *data* a dictionary of {id:value} pairs
@@ -343,7 +343,7 @@ class DBTools(NetDBbase):
 
     def fetchAll(self, sql):
         """Raw SQL query e.g. 'SELECT id FROM gene WHERE gene=\"G\"' """
-        print(sql)
+        #print(sql)
         r = None
         try:
             r = self.db_cursor.execute(sql).fetchall()

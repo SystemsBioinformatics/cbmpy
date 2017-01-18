@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 548 2017-01-13 14:22:59Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 552 2017-01-18 22:26:21Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -893,15 +893,16 @@ class Model(Fbase):
         """
         Create a new blank reaction and add it to the model:
 
-         - **id** the unique reaction ID
-         - **name** the reaction name
-         - **reversible** [default=True] the reaction reversibility. True is reversible, False is irreversible
-         - **create_default_bounds** create default reaction bounds, irreversible 0 <= J <= INF, reversable -INF <= J <= INF
+         - *id* the unique reaction ID
+         - *name* the reaction name
+         - *reversible* [default=True] the reaction reversibility. True is reversible, False is irreversible
+         - *create_default_bounds* create default reaction bounds, irreversible 0 <= J <= INF, reversable -INF <= J <= INF
+         - *silent* [default=False] if enabled this disables the printing of information messages
 
         """
 
         assert rid not in self.getReactionIds(), '\nReaction ID %s already exists' % rid
-        self.addReaction(Reaction(rid, name, reversible), create_default_bounds=create_default_bounds)
+        self.addReaction(Reaction(rid, name, reversible), create_default_bounds=create_default_bounds, silent=silent)
         if not silent:
             print('Add reagents with cmod.createReactionReagent({}, metabolite, coefficient)'.format(rid))
 
@@ -1078,12 +1079,13 @@ class Model(Fbase):
         comp.__objref__ = weakref.ref(self)
         self.compartments.append(comp)
 
-    def addReaction(self, reaction, create_default_bounds=False):
+    def addReaction(self, reaction, create_default_bounds=False, silent=False):
         """
         Adds a reaction object to the model
 
         - *reaction* an instance of the Reaction class
         - *create_default_bounds* create default reaction bounds, irreversible 0 <= J <= INF, reversable -INF <= J <= INF
+        - *silent* [default=False] if enabled this disables the printing of information messages
 
         """
         assert isinstance(reaction, Reaction), '\nERROR: requires a Reaction object, not something of type {}'.format(type(reaction))
@@ -1104,7 +1106,6 @@ class Model(Fbase):
         self.reactions.append(reaction)
         if create_default_bounds:
             rid = reaction.getId()
-            silent = False
             self.createReactionUpperBound(rid, numpy.inf)
             if reaction.reversible:
                 self.createReactionLowerBound(rid, -numpy.inf)
