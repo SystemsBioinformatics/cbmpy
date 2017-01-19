@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 552 2017-01-18 22:26:21Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 553 2017-01-19 17:37:11Z bgoli $)
 
 """
 
@@ -28,7 +28,7 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, re, webbrowser
+import os, time, re, webbrowser, csv
 import urllib2
 
 HAVE_SQLITE2 = False
@@ -298,6 +298,9 @@ class DBTools(NetDBbase):
         #print(sql)
         data = None
         try:
+            data = self.db_cursor.execute(sql).fetchone()
+            if data is None:
+                return None
             data = str(self.db_cursor.execute(sql).fetchone()[0])
         except AttributeError:
             return None
@@ -340,6 +343,23 @@ class DBTools(NetDBbase):
         data.insert(0, head)
         from .CBTools import exportLabelledLinkedList
         exportLabelledLinkedList(data, fname=filename, names=None, sep='\t')
+
+    def dumpTableToCSV(self, table, filename):
+        """
+        Save a table as tab separated txt file
+
+         - *table* the table to export
+         - *filename* the filename of the table dump
+
+        """
+        data, head = self.getTable(table, colOut=True)
+        data.insert(0, head)
+
+        F = open(filename, 'w')
+        csvw = csv.writer(F, dialect='excel')
+        csvw.writerows(data)
+        F.close()
+        del csvw
 
     def fetchAll(self, sql):
         """Raw SQL query e.g. 'SELECT id FROM gene WHERE gene=\"G\"' """
