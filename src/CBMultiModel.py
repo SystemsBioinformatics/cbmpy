@@ -68,7 +68,7 @@ def copySpecies(m_src, m_targ, sid, is_boundary=False):
     del S
     return True
 
-def copyReaction(m_src, m_targ, rid):
+def copyReaction(m_src, m_targ, rid, altrid=None):
     """
     Copy a reaction from a source model to a target model, if the required species exist in the target
     then they are mapped as reagents, otherwise new metabolites are added as boundary species.
@@ -76,12 +76,15 @@ def copyReaction(m_src, m_targ, rid):
      - *m_src* the source model
      - *m_targ* the target model
      - *rid* the reaction id to copy
+     - *altrid* if the reaction name exists in the target, try use this one instead
 
     """
     out = {}
-    if m_targ.getReaction(rid) is not None:
+    targ_exists = False
+    if m_targ.getReaction(rid) is not None and altrid is not None and m_targ.getReaction(altrid) is not None:
         print('ERROR: reaction with id \"{}\" exists in target model'.format(rid))
         out = None
+        targ_exists = True
     if m_src.getReaction(rid) is None:
         print('ERROR: reaction with id \"{}\" does not exist in source model'.format(rid))
         out = None
@@ -89,6 +92,10 @@ def copyReaction(m_src, m_targ, rid):
         return None
 
     R = m_src.getReaction(rid).clone()
+    if targ_exists and altrid is not None:
+        R.setId(altrid)
+        for re in R.reagents:
+            re.setId('{}_{}'.format(altrid, re.getSpecies()))
     tSpecies = m_targ.getSpeciesIds()
     out['new_species'] = []
     out['existing_species'] = []
@@ -107,7 +114,7 @@ def copyReaction(m_src, m_targ, rid):
         else:
             out['existing_species'].append(s)
         out['reagents'].append(s)
-    m_targ.addReaction(R, create_default_bounds=True)
+    m_targ.addReaction(R, create_default_bounds=True, silent=True)
     del R
 
     return out
