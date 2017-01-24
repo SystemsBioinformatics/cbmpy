@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 544 2017-01-12 16:31:50Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 556 2017-01-24 10:58:33Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1760,6 +1760,10 @@ class CBMtoSBML3(FBCconnect):
             if sboterm is not None and sboterm != '':
                 G.setSBOTerm(str(sboterm))
 
+            notes = g.getNotes()
+            if notes != '':
+                sbml_setNotes3(G, notes)
+
             if len(g.annotation) > 0:
                 if add_cbmpy_anno:
                     annoSTRnew = sbml_writeKeyValueDataAnnotation(g.annotation)
@@ -1797,6 +1801,13 @@ class CBMtoSBML3(FBCconnect):
                         #if annores == -3:
                             #printl('Invalid annotation in GPR:', g_.getId())
                             #print(g_.annotation)
+                    gprnotes = ''
+                    for ge_ in g_.getGeneIds():
+                        notes = self.fba.getGene(ge_).getNotes()
+                        if notes != '':
+                            gprnotes += '{}\n'.format(notes)
+                    if gprnotes != '':
+                        sbml_setNotes3(GPR, gprnotes)
             else:
                 print('WARNING: Skipping GPR association: \"{}\"\n\"{}\"--> \"{}\"'.format(g_.getId(), rid, assoc))
 

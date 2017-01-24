@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 552 2017-01-18 22:26:21Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 555 2017-01-24 08:55:37Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1164,7 +1164,7 @@ class Model(Fbase):
         Robj = None
         assert rid in self.getReactionIds(), '\nOh Hellooooooooooooo'
         for r in range(len(self.reactions)-1, -1, -1):
-            if self.reactions[r].getPid() == rid:
+            if self.reactions[r].getId() == rid:
                 Ridx = rid
                 Robj = self.reactions.pop(r)
                 self.__popGlobalId__(rid)
@@ -1193,7 +1193,7 @@ class Model(Fbase):
 
         """
         if objective_id == 'active':
-            objective_id = self.getActiveObjective().getPid()
+            objective_id = self.getActiveObjective().getId()
 
         assert objective_id in self.getObjectiveIds(), '\nNo ....'
         for o in range(len(self.objectives)-1, -1, -1):
@@ -1356,7 +1356,7 @@ class Model(Fbase):
         Update the gene name index
 
         """
-        self.__genes_idx__ = [g.getPid() for g in self.genes]
+        self.__genes_idx__ = [g.getId() for g in self.genes]
 
     def getAllProteinGeneAssociations(self, use_labels=False):
         """
@@ -1371,7 +1371,7 @@ class Model(Fbase):
                 if use_labels:
                     gid = g.getLabel()
                 else:
-                    gid = g.getPid()
+                    gid = g.getId()
                 if gid not in prg:
                     prg.update({gid : [gpr.protein]})
                 else:
@@ -1408,7 +1408,7 @@ class Model(Fbase):
         """
         out = None
         for g_ in self.genes:
-            if g_.getPid() == g_id:
+            if g_.getId() == g_id:
                 out = g_
                 break
         return out
@@ -1422,7 +1422,7 @@ class Model(Fbase):
         """
         out = None
         for g_ in self.gpr:
-            if g_.getPid() == gpr_id:
+            if g_.getId() == gpr_id:
                 out = g_
                 break
         return out
@@ -1464,9 +1464,9 @@ class Model(Fbase):
 
         """
         if substring == None:
-            return [g.getPid() for g in self.genes]
+            return [g.getId() for g in self.genes]
         else:
-            return [g.getPid() for g in self.genes if substring in g.getPid()]
+            return [g.getId() for g in self.genes if substring in g.getId()]
 
     def getGeneLabels(self, substring=None):
         """
@@ -1478,7 +1478,7 @@ class Model(Fbase):
         if substring == None:
             return [g.getLabel() for g in self.genes]
         else:
-            return [g.getLabel() for g in self.genes if substring in g.getPid()]
+            return [g.getLabel() for g in self.genes if substring in g.getId()]
 
     def getAllGeneActivities(self):
         """
@@ -1486,7 +1486,7 @@ class Model(Fbase):
         """
         out = {}
         for g_ in self.genes:
-            out[g_.getPid()] = g_.isActive()
+            out[g_.getId()] = g_.isActive()
         return out
 
     def getAllProteinActivities(self):
@@ -1649,12 +1649,12 @@ class Model(Fbase):
             print('Deleting non-reactive species', end=" ")
         deleted_species = []
         for S in range(len(self.species)-1,-1,-1):
-            if self.species[S].getPid() not in active_reagents:
-                deleted_species.append(self.species[S].getPid())
+            if self.species[S].getId() not in active_reagents:
+                deleted_species.append(self.species[S].getId())
                 if simulate:
                     pass
                 else:
-                    self.deleteSpecies(self.species[S].getPid())
+                    self.deleteSpecies(self.species[S].getId())
                 if __DEBUG__: print(self.getSpeciesIds())
                 print('.', end= " ")
         print(' ')
@@ -1669,7 +1669,7 @@ class Model(Fbase):
         """
         out = None
         for c in self.compartments:
-            if c.getPid() == cid:
+            if c.getId() == cid:
                 out = c
                 break
         if self.compartments.count(cid) > 1:
@@ -1685,7 +1685,7 @@ class Model(Fbase):
         """
         out = None
         for r in self.reactions:
-            if r.getPid() == rid:
+            if r.getId() == rid:
                 out = r
                 break
         return out
@@ -1699,7 +1699,7 @@ class Model(Fbase):
         """
         out = None
         for s in self.species:
-            if s.getPid() == sid:
+            if s.getId() == sid:
                 out = s
                 break
         return out
@@ -1711,7 +1711,7 @@ class Model(Fbase):
         """
         out = None
         for p in self.parameters:
-            if p.getPid() == pid:
+            if p.getId() == pid:
                 out = p
                 break
         return out
@@ -1812,7 +1812,7 @@ class Model(Fbase):
         """
         c_ = None
         for c_ in self.flux_bounds:
-            if c_.getPid() == fid:
+            if c_.getId() == fid:
                 return c_
         return c_
 
@@ -1864,9 +1864,9 @@ class Model(Fbase):
 
         """
         if substring == None:
-            return [c.getPid() for c in self.compartments]
+            return [c.getId() for c in self.compartments]
         else:
-            return [c.getPid() for c in self.compartments if substring in c.getPid()]
+            return [c.getId() for c in self.compartments if substring in c.getId()]
 
     def getSpeciesIds(self, substring=None, non_boundary=False):
         """
@@ -1877,9 +1877,9 @@ class Model(Fbase):
 
         """
         if substring == None:
-            return [s.getPid() for s in self.species]
+            return [s.getId() for s in self.species]
         else:
-            return [s.getPid() for s in self.species if substring in s.getPid()]
+            return [s.getId() for s in self.species if substring in s.getId()]
 
     def getReactionIds(self, substring=None):
         """
@@ -1889,9 +1889,9 @@ class Model(Fbase):
 
         """
         if substring == None:
-            return [r.getPid() for r in self.reactions]
+            return [r.getId() for r in self.reactions]
         else:
-            return [r.getPid() for r in self.reactions if substring in r.getPid()]
+            return [r.getId() for r in self.reactions if substring in r.getId()]
 
     def getReactionNames(self, substring=None):
         """
@@ -1913,9 +1913,9 @@ class Model(Fbase):
 
         """
         if substring == None:
-            return [s.getPid() for s in self.flux_bounds]
+            return [s.getId() for s in self.flux_bounds]
         else:
-            return [s.getPid() for s in self.flux_bounds if substring in s.getPid()]
+            return [s.getId() for s in self.flux_bounds if substring in s.getId()]
 
     def getObjectiveIds(self, substring=None):
         """
@@ -1925,9 +1925,9 @@ class Model(Fbase):
 
         """
         if substring == None:
-            return [s.getPid() for s in self.objectives]
+            return [s.getId() for s in self.objectives]
         else:
-            return [s.getPid() for s in self.objectives if substring in s.getPid()]
+            return [s.getId() for s in self.objectives if substring in s.getId()]
 
     def getObjFuncValue(self):
         """
@@ -1935,7 +1935,7 @@ class Model(Fbase):
 
         """
         AO = self.getActiveObjective()
-        print('Objective {}: \"{}\"'.format(AO.getPid(), AO.operation))
+        print('Objective {}: \"{}\"'.format(AO.getId(), AO.operation))
         return AO.getValue()
 
     def getActiveObjective(self):
@@ -2338,7 +2338,7 @@ class Model(Fbase):
         assert osense in ['maximize', 'minimize'], "\nosense must be ['maximize', 'minimize'] not %s" % osense
         if delete_objflx:
             self.objectives[self.activeObjIdx].fluxObjectives = []
-        FO = FluxObjective('{}_{}_fluxobj'.format(self.objectives[self.activeObjIdx].getPid(), rid), rid, coefficient)
+        FO = FluxObjective('{}_{}_fluxobj'.format(self.objectives[self.activeObjIdx].getId(), rid), rid, coefficient)
         self.objectives[self.activeObjIdx].addFluxObjective(FO)
         self.objectives[self.activeObjIdx].operation = osense
 
@@ -2380,7 +2380,7 @@ class Model(Fbase):
         reactions that contain a boundary species.
 
         """
-        return [r.getPid() for r in self.reactions if r.is_exchange]
+        return [r.getId() for r in self.reactions if r.is_exchange]
 
     def getReactionValues(self, only_exchange=False):
         """
@@ -2420,7 +2420,7 @@ class Model(Fbase):
         output = []
         for r_ in self.reactions:
             if r_.reversible:
-                output.append(r_.getPid())
+                output.append(r_.getId())
         return output
 
     def getIrreversibleReactionIds(self):
@@ -2431,7 +2431,7 @@ class Model(Fbase):
         output = []
         for r_ in self.reactions:
             if not r_.reversible:
-                output.append(r_.getPid())
+                output.append(r_.getId())
         return output
 
     def getBoundarySpeciesIds(self, rid=None):
@@ -2504,7 +2504,7 @@ class Model(Fbase):
         ebs = []
         for b_ in self.flux_bounds:
             if b_.getType() == 'equality':
-                ebs.append(b_.getPid())
+                ebs.append(b_.getId())
         for e_ in ebs:
             old = self.getFluxBoundByID(e_)
             R = old.getReactionId()
@@ -2530,7 +2530,7 @@ class Model(Fbase):
         """
         if __DEBUG__: print('Species:', self.getSpeciesIds())
         var_spec = [s for s in self.species if not s.is_boundary]
-        var_spec_id = [s.getPid() for s in self.species if not s.is_boundary]
+        var_spec_id = [s.getId() for s in self.species if not s.is_boundary]
         reac_id = self.getReactionIds()
         if len(var_spec_id) != len(set(var_spec_id)):
             print('\nBUILD STOICHIOMETRY WARNING: duplicate species IDs detected!\n')
@@ -2559,11 +2559,11 @@ class Model(Fbase):
         if matrix_type == 'sympy':
             SGO = True
         for c in range(num_col):
-            if __DEBUG__: print(self.reactions[c].getPid())
+            if __DEBUG__: print(self.reactions[c].getId())
             if __DEBUG__: print(self.reactions[c].getStoichiometry())
             for reag in self.reactions[c].getStoichiometry():
                 if reag[1] in var_spec_id:
-                    if __DEBUG__: print('{}: setting reagent {} to {} (idx={},{})'.format(self.reactions[c].getPid(), reag[1], reag[0], var_spec_id.index(reag[1]), c))
+                    if __DEBUG__: print('{}: setting reagent {} to {} (idx={},{})'.format(self.reactions[c].getId(), reag[1], reag[0], var_spec_id.index(reag[1]), c))
                     r = var_spec_id.index(reag[1])
                     if SGO:
                         if N[r, c] == 0.0:
@@ -2766,7 +2766,7 @@ class Model(Fbase):
         Delete all group ids
 
         """
-        return [g.getPid() for g in self.groups]
+        return [g.getId() for g in self.groups]
 
 
     def emptyUndelete(self):
@@ -2828,8 +2828,8 @@ class Objective(Fbase):
          - *override* [default=False] override pushing the global id map, this should never be used
 
         """
-        if fobj.getPid() in self.getFluxObjectiveIDs():
-            print('\nWARNING: a flux objective with id \"{}\" already exists ... not adding!\n'.format(fobj.getPid()))
+        if fobj.getId() in self.getFluxObjectiveIDs():
+            print('\nWARNING: a flux objective with id \"{}\" already exists ... not adding!\n'.format(fobj.getId()))
             return
         if not override:
             self.__objref__().__pushGlobalId__(fobj.getId(), fobj)
@@ -2848,7 +2848,7 @@ class Objective(Fbase):
                 fid = '{}_{}_fobj'.format(self.getId(), J[1])
                 self.addFluxObjective(FluxObjective(fid, J[1], J[0]))
             else:
-                print('\nObjective {} already contains flux {} ... skipping!\n'.format(self.getPid(), J[1]))
+                print('\nObjective {} already contains flux {} ... skipping!\n'.format(self.getId(), J[1]))
 
     def deleteAllFluxObjectives(self):
         """
@@ -2865,7 +2865,7 @@ class Objective(Fbase):
         or for coefficient, fluxobjective pairs use *getFluxObjectiveData()*
 
         """
-        return [f.getPid() for f in self.fluxObjectives]
+        return [f.getId() for f in self.fluxObjectives]
 
     def getFluxObjectiveForReaction(self, rid):
         """
@@ -2912,7 +2912,7 @@ class Objective(Fbase):
         """
         fo = None
         for fo_ in self.fluxObjectives:
-            if fo_.getPid() == foid:
+            if fo_.getId() == foid:
                 if fo == None:
                     fo = fo_
                 elif type(fo) == list:
@@ -3004,7 +3004,7 @@ class Compartment(Fbase):
         """
         out = []
         if self.__objref__ != None:
-            out = [s.getPid() for s in self.__objref__().species if s.compartment == self.getPid()]
+            out = [s.getId() for s in self.__objref__().species if s.compartment == self.getId()]
         return out
 
     def containsReactions(self):
@@ -3014,7 +3014,7 @@ class Compartment(Fbase):
         """
         out = []
         if self.__objref__ != None:
-            out = [r.getPid() for r in self.__objref__().reactions if r.compartment == self.getPid()]
+            out = [r.getId() for r in self.__objref__().reactions if r.compartment == self.getId()]
         return out
 
     def getSize(self):
@@ -3497,7 +3497,7 @@ class Reaction(Fbase):
 
         """
         assert metabolite not in self.getSpeciesIds(), '\nA reagent already refers to metabolite: %s' % metabolite
-        rr = Reagent('%s_%s' % (self.getPid(), metabolite), metabolite, coefficient)
+        rr = Reagent('%s_%s' % (self.getId(), metabolite), metabolite, coefficient)
         self.addReagent(rr)
 
     def getReagentObjIds(self):
@@ -3505,7 +3505,7 @@ class Reaction(Fbase):
         Returns a list of the reagent id's. For the name of the reagents/metabolites use *<reaction>.getSpeciesIds()*
 
         """
-        return [r.getPid() for r in self.reagents]
+        return [r.getId() for r in self.reagents]
 
     def getReagentRefs(self):
         """
@@ -3556,7 +3556,7 @@ class Reaction(Fbase):
                     pass
 
         if not silent:
-            print('{}'.format(self.getPid()))
+            print('{}'.format(self.getId()))
             print('Flux:   {}\nFVAmin: {}\nFVAmax: {}\nSpan:   {}\n'.format(out[0], out[1], out[2], out[3]))
         return tuple(out)
 
@@ -3568,7 +3568,7 @@ class Reaction(Fbase):
 
         """
 
-        rgnt = [r for r in self.reagents if r.getPid() == rid]
+        rgnt = [r for r in self.reagents if r.getId() == rid]
         if len(rgnt) == 0:
             return None
         elif len(rgnt) == 1:
@@ -4314,7 +4314,7 @@ class GeneProteinAssociation(Fbase):
         if altlabels is None:
             altlabels = {}
         genelist = self.__objref__().genes
-        mod_genes = [g.getPid() for g in genelist]
+        mod_genes = [g.getId() for g in genelist]
         #self.assoc = self.assoc0 = assoc
         self.assoc = assoc
         react_gene = {}
