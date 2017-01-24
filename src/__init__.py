@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 549 2017-01-13 14:43:38Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 558 2017-01-24 13:05:58Z bgoli $)
 
 """
-##
+#
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import

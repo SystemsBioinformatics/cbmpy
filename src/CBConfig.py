@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBConfig.py 550 2017-01-13 15:01:32Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBConfig.py 561 2017-01-24 13:36:09Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -35,16 +35,16 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-# release 078
+# release
 
 try:
-    STATUS = '$Rev: 550 $'.replace('Rev: ', '').replace('$', '').strip()
+    STATUS = '$Rev: 561 $'.replace('Rev: ', '').replace('$', '').strip()
 except Exception:
     STATUS = ''
 
 __CBCONFIG__ = {'VERSION_MAJOR' : 0,
                 'VERSION_MINOR' : 7,
-                'VERSION_MICRO' : 11,
+                'VERSION_MICRO' : 12,
                 'VERSION_STATUS' : STATUS,
                 'VERSION' : None,
                 'DEBUG' : False,
