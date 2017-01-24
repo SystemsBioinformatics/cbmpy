@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 544 2017-01-12 16:31:50Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -227,7 +227,7 @@ def setSpeciesPropertiesFromAnnotations(fbam, overwriteCharge=False, overwriteCh
         try:
             processSpeciesChargeChemFormulaAnnot(s_, getFromName=False, overwriteCharge=overwriteCharge, overwriteChemFormula=overwriteChemFormula)
         except Exception:
-            print('processSpeciesChargeChemFormulaAnnot failed for species with id: {}'.format(s_.getPid()))
+            print('processSpeciesChargeChemFormulaAnnot failed for species with id: {}'.format(s_.getId()))
 
 def fixReversibility(fbam, auto_correct=False):
     """
@@ -317,69 +317,69 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
         EB = fba.getFluxBoundByReactionID(rid, 'equality')
     fba.deleteReactionAndBounds(rid)
     if fwd_id is None:
-        fwd_id = Rf.getPid()+'_fwd'
+        fwd_id = Rf.getId()+'_fwd'
     Rf.setPid(fwd_id)
     if rev_id is None:
-        rev_id = Rb.getPid()+'_rev'
+        rev_id = Rb.getId()+'_rev'
     Rb.setPid(rev_id)
     Rf.reversible = False
     Rb.reversible = False
     for rr_ in Rf.reagents:
-        rr_.setPid(rr_.getPid()+'_fwd')
+        rr_.setPid(rr_.getId()+'_fwd')
     for rr_ in Rb.reagents:
         rr_.setCoefficient(-1.0*rr_.getCoefficient())
-        rr_.setPid(rr_.getPid()+'_rev')
+        rr_.setPid(rr_.getId()+'_rev')
     fba.addReaction(Rf, create_default_bounds=False)
     fba.addReaction(Rb, create_default_bounds=False)
 
     if EB != None:
-        fba.createReactionLowerBound(Rf.getPid(), EB.getValue())
-        fba.createReactionUpperBound(Rf.getPid(), EB.getValue())
-        fba.createReactionLowerBound(Rb.getPid(), EB.getValue())
-        fba.createReactionUpperBound(Rb.getPid(), EB.getValue())
+        fba.createReactionLowerBound(Rf.getId(), EB.getValue())
+        fba.createReactionUpperBound(Rf.getId(), EB.getValue())
+        fba.createReactionLowerBound(Rb.getId(), EB.getValue())
+        fba.createReactionUpperBound(Rb.getId(), EB.getValue())
     elif LB != None and UB != None:
         if LB.getValue() <= 0.0 and UB.getValue() >= 0.0:
-            fba.createReactionLowerBound(Rf.getPid(), 0.0)
-            fba.createReactionUpperBound(Rf.getPid(), UB.getValue())
-            fba.createReactionLowerBound(Rb.getPid(), 0.0)
-            fba.createReactionUpperBound(Rb.getPid(), abs(LB.getValue()))
+            fba.createReactionLowerBound(Rf.getId(), 0.0)
+            fba.createReactionUpperBound(Rf.getId(), UB.getValue())
+            fba.createReactionLowerBound(Rb.getId(), 0.0)
+            fba.createReactionUpperBound(Rb.getId(), abs(LB.getValue()))
         elif LB.getValue() > 0.0 and UB.getValue() > 0.0:
-            fba.createReactionLowerBound(Rf.getPid(), LB.getValue())
-            fba.createReactionUpperBound(Rf.getPid(), UB.getValue())
-            fba.createReactionLowerBound(Rb.getPid(), 0.0)
-            fba.createReactionUpperBound(Rb.getPid(), 0.0)
+            fba.createReactionLowerBound(Rf.getId(), LB.getValue())
+            fba.createReactionUpperBound(Rf.getId(), UB.getValue())
+            fba.createReactionLowerBound(Rb.getId(), 0.0)
+            fba.createReactionUpperBound(Rb.getId(), 0.0)
         if LB.getValue() < 0.0 and UB.getValue() < 0.0:
-            fba.createReactionLowerBound(Rf.getPid(), 0.0)
-            fba.createReactionUpperBound(Rf.getPid(), 0.0)
-            fba.createReactionLowerBound(Rb.getPid(), abs(UB.getValue()))
-            fba.createReactionUpperBound(Rb.getPid(), abs(LB.getValue()))
+            fba.createReactionLowerBound(Rf.getId(), 0.0)
+            fba.createReactionUpperBound(Rf.getId(), 0.0)
+            fba.createReactionLowerBound(Rb.getId(), abs(UB.getValue()))
+            fba.createReactionUpperBound(Rb.getId(), abs(LB.getValue()))
     elif LB != None and UB is None:
         if LB.getValue() > 0:
-            fba.createReactionLowerBound(Rf.getPid(), LB.getValue())
-            fba.createReactionUpperBound(Rf.getPid(), float('inf'))
-            fba.createReactionLowerBound(Rb.getPid(), 0.0)
-            fba.createReactionUpperBound(Rb.getPid(), 0.0)
+            fba.createReactionLowerBound(Rf.getId(), LB.getValue())
+            fba.createReactionUpperBound(Rf.getId(), float('inf'))
+            fba.createReactionLowerBound(Rb.getId(), 0.0)
+            fba.createReactionUpperBound(Rb.getId(), 0.0)
         else:
-            fba.createReactionLowerBound(Rf.getPid(), 0.0)
-            fba.createReactionUpperBound(Rf.getPid(), float('inf'))
-            fba.createReactionLowerBound(Rb.getPid(), 0.0)
-            fba.createReactionUpperBound(Rb.getPid(), abs(LB.getValue()))
+            fba.createReactionLowerBound(Rf.getId(), 0.0)
+            fba.createReactionUpperBound(Rf.getId(), float('inf'))
+            fba.createReactionLowerBound(Rb.getId(), 0.0)
+            fba.createReactionUpperBound(Rb.getId(), abs(LB.getValue()))
     elif LB is None and UB != None:
         if UB.getValue() >= 0:
-            fba.createReactionLowerBound(Rf.getPid(), 0.0)
-            fba.createReactionUpperBound(Rf.getPid(), UB.getValue())
-            fba.createReactionLowerBound(Rb.getPid(), 0.0)
-            fba.createReactionUpperBound(Rb.getPid(), float('inf'))
+            fba.createReactionLowerBound(Rf.getId(), 0.0)
+            fba.createReactionUpperBound(Rf.getId(), UB.getValue())
+            fba.createReactionLowerBound(Rb.getId(), 0.0)
+            fba.createReactionUpperBound(Rb.getId(), float('inf'))
         else:
-            fba.createReactionLowerBound(Rf.getPid(), 0.0)
-            fba.createReactionUpperBound(Rf.getPid(), 0.0)
-            fba.createReactionLowerBound(Rb.getPid(), abs(UB.getValue()))
-            fba.createReactionUpperBound(Rb.getPid(), float('inf'))
+            fba.createReactionLowerBound(Rf.getId(), 0.0)
+            fba.createReactionUpperBound(Rf.getId(), 0.0)
+            fba.createReactionLowerBound(Rb.getId(), abs(UB.getValue()))
+            fba.createReactionUpperBound(Rb.getId(), float('inf'))
     else:
-        fba.createReactionLowerBound(Rf.getPid(), 0.0)
-        fba.createReactionUpperBound(Rf.getPid(), float('inf'))
-        fba.createReactionLowerBound(Rb.getPid(), 0.0)
-        fba.createReactionUpperBound(Rb.getPid(), float('inf'))
+        fba.createReactionLowerBound(Rf.getId(), 0.0)
+        fba.createReactionUpperBound(Rf.getId(), float('inf'))
+        fba.createReactionLowerBound(Rb.getId(), 0.0)
+        fba.createReactionUpperBound(Rb.getId(), float('inf'))
 
     return (R, LB, UB, EB)
 
@@ -653,7 +653,7 @@ def getExchBoundsDict(fbamod):
                     })
     for r in fbamod.reactions:
         if not r.is_exchange:
-            rBdic.pop(r.getPid())
+            rBdic.pop(r.getId())
     return rBdic
 
 def processBiGGchemFormula(fba):
@@ -806,14 +806,14 @@ def processSBMLAnnotationNotes(fba, annotation_key='note'):
                 s.charge = int(chrg)
             except ValueError:
                 s.charge = None
-                print('Invalid charge: {} defined for species {}'.format(chrg, s.getPid()))
+                print('Invalid charge: {} defined for species {}'.format(chrg, s.getId()))
             if __DEBUG__: print(s.annotation)
         elif (s.charge is None or s.charge == '' or s.charge == 0) and 'CHARGE' in s.annotation and s.annotation['CHARGE'] != '':
             chrg = s.annotation.pop('CHARGE')
             try:
                 s.charge = int(chrg)
             except ValueError:
-                print('Invalid charge: {} defined for species {}'.format(chrg, s.getPid()))
+                print('Invalid charge: {} defined for species {}'.format(chrg, s.getId()))
                 s.charge = None
             if __DEBUG__: print(s.annotation)
 
@@ -899,7 +899,7 @@ def getAllReactionsAssociatedWithGene(fba, gene, gene_annotation_key='GENE ASSOC
             GA = 'GENE_ASSOCIATION'
         if GA != None:
             if gene in r.annotation[GA]:
-                out.append(r.getPid())
+                out.append(r.getId())
     return out
 
 def scanForReactionDuplicates(f, ignore_coefficients=False):
@@ -1001,14 +1001,14 @@ def getModelGenesPerReaction(fba, gene_pattern=None, gene_annotation_key='GENE A
             if len(genes) == 0:
                 ##  print '\n'
                 ##  print 'GA:', r.annotation['GENE ASSOCIATION']
-                ##  print r.getPid(), genes
+                ##  print r.getId(), genes
                 ##  raw_input('x')
                 genes = None
-            ##  print r.getPid(), genes
+            ##  print r.getId(), genes
             ##  raw_input()
-            react_gene.update({r.getPid() : genes})
+            react_gene.update({r.getId() : genes})
         else:
-            react_gene.update({r.getPid() : None})
+            react_gene.update({r.getId() : None})
     return react_gene
 
 def getReactionsPerGene(react_gene):
@@ -1043,7 +1043,7 @@ def removeFixedSpeciesReactions(f):
     for rea in f.reactions:
         lsa = numpy.array([f.getSpecies(r.species_ref).is_boundary for r in rea.reagents])
         if lsa.all():
-            c_react.append(rea.getPid())
+            c_react.append(rea.getId())
     for r in c_react:
         f.deleteReactionAndBounds(r)
 
@@ -1062,7 +1062,7 @@ def addFluxAsActiveObjective(f, reaction_id, osense, coefficient=1):
     if osense in ['maximise', 'minimise']:
         osense = osense.replace('se','ze')
     assert osense in ['maximize', 'minimize'], "\nosense must be ['maximize', 'minimize'] not %s" % osense
-    assert reaction_id in [r.getPid() for r in f.reactions], '\n%s is not avalid reaction' % reaction_id
+    assert reaction_id in [r.getId() for r in f.reactions], '\n%s is not avalid reaction' % reaction_id
     n_obj = CBModel.Objective(reaction_id+'_objf',osense)
     f.addObjective(n_obj, active=True)
     n_flux_obj = CBModel.FluxObjective(reaction_id+'_fluxobj', reaction_id, coefficient)
@@ -1097,7 +1097,7 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
             CF = f.getSpecies(rr.species_ref).chemFormula
             chrg = f.getSpecies(rr.species_ref).charge
             if CF not in [None, '']:
-                #print rid, rr.getPid(), CF
+                #print rid, rr.getId(), CF
                 try:
                     CFP = pp_chemicalFormula.parseString(CF)
                     R2 = [(r[0], int(r[1])) for r in CFP]
@@ -1238,17 +1238,17 @@ def checkExchangeReactions(fba, autocorrect=True):
         if True in [fba.getSpecies(rr_.species_ref).is_boundary for rr_ in r_.reagents]:
             has_fixed = True
         if r_.is_exchange and not has_fixed:
-            print('WARNING: reaction {} is labelled as an exchange reaction but has no fixed reagents.'.format(r_.getPid()))
+            print('WARNING: reaction {} is labelled as an exchange reaction but has no fixed reagents.'.format(r_.getId()))
             if autocorrect:
                 print('INFO: is_exchange reaction attribute corrected')
                 r_.is_exchange = has_fixed
-            badR.append(r_.getPid())
+            badR.append(r_.getId())
         elif not r_.is_exchange and has_fixed:
-            print('WARNING: reaction {} is not labelled as an exchange reaction but contains a fixed reagent.'.format(r_.getPid()))
+            print('WARNING: reaction {} is not labelled as an exchange reaction but contains a fixed reagent.'.format(r_.getId()))
             if autocorrect:
                 print('INFO: is_exchange reaction attribute corrected')
                 r_.is_exchange = has_fixed
-            badR.append(r_.getPid())
+            badR.append(r_.getId())
     return badR
 
 
@@ -1278,7 +1278,7 @@ def checkIds(fba, items='all'):
         output[i_] = []
         ITEMS = fba.__getattribute__(i_)
         for I_ in ITEMS:
-            Id = I_.getPid()
+            Id = I_.getId()
             if Id in iddump:
                 print('INFO: duplicate \"{}\" id: {}'.format(i_, Id))
                 output[i_].append(I_)
@@ -1288,7 +1288,7 @@ def checkIds(fba, items='all'):
                 if 'reagents' not in output:
                     output['reagents'] = []
                 for rr_ in I_.reagents:
-                    rrid = rr_.getPid()
+                    rrid = rr_.getId()
                     if rrid in iddump:
                         print('INFO: duplicate \"reagent\" id: {}'.format(rrid))
                         if rr_ not in output['reagents']:
@@ -1299,7 +1299,7 @@ def checkIds(fba, items='all'):
                 if 'fluxObjectives' not in output:
                     output['fluxObjectives'] = []
                 for fo_ in I_.fluxObjectives:
-                    foid = fo_.getPid()
+                    foid = fo_.getId()
                     if foid in iddump:
                         print('INFO: duplicate \"fluxObjective\" id: {}'.format(foid))
                         if fo_ not in output['fluxObjectives']:
@@ -1427,7 +1427,7 @@ def checkFluxBoundConsistency(fba):
         if assR != None:
             if not assR.reversible:
                 if LB[k_].getValue() < 0.0:
-                    print('ERROR: Reaction {} is marked as irreversible but has a negative lower bound ({})'.format(assR.getPid(), LB[k_].getValue()))
+                    print('ERROR: Reaction {} is marked as irreversible but has a negative lower bound ({})'.format(assR.getId(), LB[k_].getValue()))
                     errors['rev_contradict'].append(assR)
             del assR
 
@@ -1475,20 +1475,20 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
     if ignore is None:
         ignore = []
 
-    out = CBModel.Model(m1.getPid() + m2.getPid())
+    out = CBModel.Model(m1.getId() + m2.getId())
     out.setName(m1.getName() + m2.getName())
     out.createCompartment('OuterMerge', size=1.0, dimensions=3)
 
     idstore = []
     for x_ in m1.compartments+m2.compartments:
-        sid = x_.getPid()
+        sid = x_.getId()
         if sid not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
                 idstore.append(sid)
                 out.addCompartment(x_.clone())
 
     for s_ in m1.species+m2.species:
-        sid = s_.getPid()
+        sid = s_.getId()
         if sid not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
                 idstore.append(sid)
@@ -1498,8 +1498,8 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
         else:
             print('Skipping ignored id: \"{}\"'.format(sid))
     for r_ in m1.reactions+m2.reactions:
-        sid = r_.getPid()
-        if r_.getPid() not in ignore:
+        sid = r_.getId()
+        if r_.getId() not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
                 idstore.append(sid)
                 out.addReaction(r_.clone(), create_default_bounds=False)
@@ -1508,8 +1508,8 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
         else:
             print('Skipping ignored id: \"{}\"'.format(sid))
     for f_ in m1.flux_bounds+m2.flux_bounds:
-        sid = f_.getPid()
-        if f_.getPid() not in ignore:
+        sid = f_.getId()
+        if f_.getId() not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
                 idstore.append(sid)
                 out.addFluxBound(f_.clone())
@@ -1519,8 +1519,8 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
             print('Skipping ignored id: \"{}\"'.format(sid))
     GO = True
     for o_ in m1.objectives+m2.objectives:
-        sid = o_.getPid()
-        if o_.getPid() not in ignore:
+        sid = o_.getId()
+        if o_.getId() not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
                 idstore.append(sid)
                 if GO:
@@ -1661,7 +1661,7 @@ def getReaByMetSuf(fba_mod, suf1, suf2, retSpec=False):
         raise TypeError('Please provide suffixes as strings')
 
     # create a dictionary where keys are reactions IDs and values are species IDs
-    reaSpecDict = {reai.getPid(): fba_mod.getReaction(reai.getPid()).getSpeciesIds() for reai in fba_mod.reactions}
+    reaSpecDict = {reai.getId(): fba_mod.getReaction(reai.getId()).getSpeciesIds() for reai in fba_mod.reactions}
 
     # dictionary where keys are reactions IDs and values are Boolean depending on whether there are species IDs ending
     # with suf1 and suf2

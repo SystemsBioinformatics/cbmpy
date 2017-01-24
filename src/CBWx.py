@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWx.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWx.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 
@@ -123,7 +123,7 @@ if HAVE_WX:
             #self.SetSize(self.PanelSize)
             #self.SetMinSize(self.PanelSize)
             #self.ShowFullScreen(True)
-            self.SetTitle('PySCeS-CBM Model Editor - editing: %s (%s)' % (cmod.getPid(), cmod.getName()))
+            self.SetTitle('PySCeS-CBM Model Editor - editing: %s (%s)' % (cmod.getId(), cmod.getName()))
             fSize = self.GetSize()
             fSize = fSize[0], fSize[1]-20
             self.MainPanel = wx.Panel(self, -1, size=fSize)
@@ -745,9 +745,9 @@ if HAVE_WX:
 
         def CreateMaps(self):
             for S in self._cmod_.species:
-                self.Smap.update({S.getPid() : S.isReagentOf()})
+                self.Smap.update({S.getId() : S.isReagentOf()})
             for R in self._cmod_.reactions:
-                self.Rmap.update({R.getPid() : R.getSpeciesIds()})
+                self.Rmap.update({R.getId() : R.getSpeciesIds()})
             self.GPRmap = self._cmod_.getAllGeneProteinAssociations()
             self.PRGmap = self._cmod_.getAllProteinGeneAssociations()
 
@@ -784,13 +784,13 @@ if HAVE_WX:
             for r in range(len(reactions)):
                 for c in range(self.RGridCol):
                     ##  print r,c
-                    ##  print reactions[r].getPid()
+                    ##  print reactions[r].getId()
                     if self.rlabels[c] == 'LB':
                         ##  grid.SetColFormatFloat(c, 10, 3)
-                        grid.SetCellValue(r, c, '%s' % self._cmod_.getReactionLowerBound(reactions[r].getPid()))
+                        grid.SetCellValue(r, c, '%s' % self._cmod_.getReactionLowerBound(reactions[r].getId()))
                     elif self.rlabels[c] == 'UB':
                         ##  grid.SetColFormatFloat(c, 10, 3)
-                        grid.SetCellValue(r, c, '%s' % self._cmod_.getReactionUpperBound(reactions[r].getPid()))
+                        grid.SetCellValue(r, c, '%s' % self._cmod_.getReactionUpperBound(reactions[r].getId()))
                     elif self.rlabels[c] == 'd':
                         grid.SetCellValue(r, c, '%s' % '   ')
                     elif self.rlabels[c] == 'Balanced':
@@ -828,14 +828,14 @@ if HAVE_WX:
                             grid.SetCellValue(r, c, rcval)
                     elif self.rlabels[c] == 'Reaction':
                         grid.SetCellBackgroundColour(r,c,wx.Colour(198,226,255))
-                        grid.SetCellValue(r, c, str(reactions[r].getPid()))
+                        grid.SetCellValue(r, c, str(reactions[r].getId()))
                         grid.SetReadOnly(r,c,True)
                     elif self.rlabels[c] == 'Name':
                         ##  grid.SetCellBackgroundColour(r,c,wx.Colour(255,255,153))
                         grid.SetCellValue(r, c, str(reactions[r].getName()))
                     else:
                         grid.SetCellValue(r, c, '')
-                    if reactions[r].getPid() in fluxObjs:
+                    if reactions[r].getId() in fluxObjs:
                         grid.SetCellBackgroundColour(r,c,wx.Colour(255,255,153))
             for c in range(self.RGridCol):
                 if self.rlabels[c] not in ('Name'):
@@ -857,9 +857,9 @@ if HAVE_WX:
             for r in range(len(reactions)):
                 for c in range(self.RGridCol):
     ##                 if self.rlabels[c] == 'LB':
-    ##                     grid.SetCellValue(r, c, '%s' % self._cmod_.getFluxBoundByReactionID(reactions[r].getPid(), 'lower').getValue())
+    ##                     grid.SetCellValue(r, c, '%s' % self._cmod_.getFluxBoundByReactionID(reactions[r].getId(), 'lower').getValue())
     ##                 elif self.rlabels[c] == 'UB':
-    ##                     grid.SetCellValue(r, c, '%s' % self._cmod_.getFluxBoundByReactionID(reactions[r].getPid(), 'upper').getValue())
+    ##                     grid.SetCellValue(r, c, '%s' % self._cmod_.getFluxBoundByReactionID(reactions[r].getId(), 'upper').getValue())
                     if self.rlabels[c] == 'Flux':
                         Rval = reactions[r].getValue()
                         try:
@@ -892,8 +892,8 @@ if HAVE_WX:
 
                         # boundary detection
                         if self.__BoundaryDetection:
-                            LB = self._cmod_.getReactionLowerBound(reactions[r].getPid())
-                            UB = self._cmod_.getReactionUpperBound(reactions[r].getPid())
+                            LB = self._cmod_.getReactionLowerBound(reactions[r].getId())
+                            UB = self._cmod_.getReactionUpperBound(reactions[r].getId())
                             try:
                                 if abs(Rval - round(LB, 10)) <= self.ZERO_TOL:
                                     grid.SetCellBackgroundColour(r,self.rlabels.index('LB'), wx.Colour(255,204,204))
@@ -921,7 +921,7 @@ if HAVE_WX:
                         if bval != None and not bval:
                             grid.SetCellBackgroundColour(r, c, wx.Colour(255,193,96))
 
-                    if reactions[r].getPid() in fluxObjs:
+                    if reactions[r].getId() in fluxObjs:
                         grid.SetCellBackgroundColour(r,c,wx.Colour(255,255,153))
             grid.ForceRefresh()
 
@@ -1063,8 +1063,8 @@ if HAVE_WX:
         def SemSBML_id(self,event):
             if self.__ActiveReaction != None:
                 R = self._cmod_.getReaction(self.__ActiveReaction)
-                self.SelectGridRow(R.getPid())
-                searchString = R.getPid()
+                self.SelectGridRow(R.getId())
+                searchString = R.getId()
                 self.CallSemanticSBML(searchString)
             else:
                 self.Sinfbox.SetPage("<html><body>'<h1>Please select a reaction!</h1>'</body></html>")
@@ -1074,7 +1074,7 @@ if HAVE_WX:
         def SemSBML_name(self,event):
             if self.__ActiveReaction != None:
                 R = self._cmod_.getReaction(self.__ActiveReaction)
-                self.SelectGridRow(R.getPid())
+                self.SelectGridRow(R.getId())
                 searchString = R.getName()
                 self.CallSemanticSBML(searchString)
             else:

@@ -27,8 +27,8 @@ import numpy
 
 
 class Matrix:
-    """ sparse matrix of rational numbers (fractions) 
-    
+    """ sparse matrix of rational numbers (fractions)
+
     The matrix grows by demand.
     """
 
@@ -38,19 +38,19 @@ class Matrix:
         """
         self.__cols = []
         self.__nrows = 0
-        
+
         if listRep != None:
             self.addListRep(listRep)
-        
+
     def rows(self):
         return self.__nrows
-    
+
     def cols(self):
         return len(self.__cols)
-    
+
     def getCol(self, idx):
         """ returns the column at index idx as a frozen set of key-value pairs
-        
+
         The returned dictionary does not contain any superfluous zeros.
         """
         out = set()
@@ -65,7 +65,7 @@ class Matrix:
                 else:
                     out.add((k,v))
             return frozenset(out)
-        
+
     def __getitemIdx(self, source, rowidx, out):
         for c in source:
             col = {}
@@ -74,11 +74,11 @@ class Matrix:
                 if i != None:
                     col[i] = v
             out.__cols.append(col)
-        
+
     def transpose(self, scalar=1):
-        """ creates a transpose of the matrix 
-        
-        Optionally, the values can be multiplied by a scalar. 
+        """ creates a transpose of the matrix
+
+        Optionally, the values can be multiplied by a scalar.
         This is for example used to compute the dual matroid.
         """
         assert self.checkRows()
@@ -104,13 +104,13 @@ class Matrix:
         out.__nrows = self.__nrows
         assert out.checkRows()
         return out
-    
+
     def __getitem__(self, indices):
-        """ fetch entries of this matrix 
-        
-        indices must be a 2-tuple indexing rows and columns. 
+        """ fetch entries of this matrix
+
+        indices must be a 2-tuple indexing rows and columns.
         This returns a matrix.
-        
+
         If the index is a 2-tuple of ints, a Fraction is returned.
         Otherwise, a Matrix is returned.
         """
@@ -118,7 +118,7 @@ class Matrix:
         assert self.checkRows()
         rows = indices[0]
         cols = indices[1]
-        
+
         if isinstance(cols, int):
             if isinstance(rows, int):
                 if cols < self.cols():
@@ -129,15 +129,15 @@ class Matrix:
                 cols = [cols]
         elif isinstance(rows, int):
             rows = [rows]
-        
+
         if isinstance(rows, slice):
             rlen = len(xrange(*rows.indices(self.rows())))
         else:
             rlen = len(rows)
-        
+
         out = Matrix()
         out.__nrows = rlen
-        
+
         if isinstance(rows, slice):
             ind = rows.indices(self.rows())
             idx = lambda x: revslice(x, ind)
@@ -146,26 +146,26 @@ class Matrix:
             for i,v in enumerate(rows):
                 ind[v] = i
             idx = lambda x: ind.get(x, None)
-        
+
         if isinstance(cols, slice):
             subcols = self.__cols[cols]
         else:
             subcols = [self.__cols[i] for i in cols if i < self.cols()]
-        
-        self.__getitemIdx(subcols, idx, out)        
+
+        self.__getitemIdx(subcols, idx, out)
         assert out.checkRows()
         return out
-    
+
     def __resetSlice(self, source, rslice):
         assert self.checkRows()
         for c in source:
             for r in c.keys():
-                if (r >= rslice.start 
-                        and r < rslice.stop 
+                if (r >= rslice.start
+                        and r < rslice.stop
                         and r - rslice.start % rslice.step == 0):
                     del c[r]
         assert self.checkRows()
-    
+
     def __resetTest(self, source, rTest):
         assert self.checkRows()
         for c in source:
@@ -173,10 +173,10 @@ class Matrix:
                 if r in rTest:
                     del c[r]
         assert self.checkRows()
-    
+
     def reset(self, rows, cols):
-        """ reset all elements in rows x __cols to zero 
-        
+        """ reset all elements in rows x __cols to zero
+
         This is equivalent (but a bit faster) to self[rows, __cols] = 0
         """
         assert self.checkRows()
@@ -184,13 +184,13 @@ class Matrix:
             subcols = self.__cols[cols]
         else:
             subcols = [self.__cols[i] for i in cols if i < self.cols()]
-        
+
         if isinstance(rows, slice):
             self.__resetSlice(subcols, rows)
         else:
             self.__resetTest(subcols, rows)
         assert self.checkRows()
-                
+
     def __iadd__(self, other):
         """ += operation """
         assert self.checkRows()
@@ -207,7 +207,7 @@ class Matrix:
                     mycol[r] = nv
                 elif mycol.has_key(r):
                     del mycol[r]
-                
+
         self.__nrows = max(self.__nrows, other.__nrows)
         assert self.checkRows()
         return self
@@ -228,10 +228,10 @@ class Matrix:
                     mycol[r] = nv
                 elif mycol.has_key(r):
                     del mycol[r]
-        
-        self.__nrows = max(self.__nrows, other.__nrows)   
+
+        self.__nrows = max(self.__nrows, other.__nrows)
         assert self.checkRows()
-        return self     
+        return self
 
     def __idiv__(self, scalar):
         """ /= operation """
@@ -240,13 +240,13 @@ class Matrix:
             for r,v in c.items():
                 c[r] = v / scalar
         return self
-    
+
     def __itruediv__(self, scalar):
         return self.__idiv__(scalar)
 
     def __imul__(self, v):
-        """ *= operation 
-        
+        """ *= operation
+
         works for scalars and matrices.
         """
         assert self.checkRows()
@@ -274,7 +274,7 @@ class Matrix:
                 for r,val in c.items():
                     c[r] = val * scalar
         return self
-    
+
     def __add__(self, other):
         """ + operation """
         assert self.checkRows()
@@ -282,7 +282,7 @@ class Matrix:
         out.__iadd__(self)
         out.__iadd__(other)
         return out
-        
+
     def __sub__(self, other):
         """ - operation """
         assert self.checkRows()
@@ -290,7 +290,7 @@ class Matrix:
         out.__iadd__(self)
         out.__isub__(other)
         return out
-    
+
     def __mul__(self, v):
         """ * operation (for multiplication with scalars)"""
         assert self.checkRows()
@@ -323,7 +323,7 @@ class Matrix:
 #        out.__iadd__(self)
 #        out.__imul__(v)
         return out
-    
+
     def __div__(self, scalar):
         """ / operation (for division by scalars)"""
         assert self.checkRows()
@@ -331,19 +331,19 @@ class Matrix:
         out.__iadd__(self)
         out.__idiv__(scalar)
         return out
-    
+
     def coladd(self, col, v, scalar=1):
-        """ computes self[:,col] += scalar * v 
-        
+        """ computes self[:,col] += scalar * v
+
         col can only be a single index
         """
         assert self.checkRows()
         assert v.checkRows()
         assert v.cols() >= 1
-        
+
         while self.cols() <= col:
             self.__cols.append({})
-        
+
         c = self.__cols[col]
         oc = v.__cols[0]
         for r,val in oc.items():
@@ -354,20 +354,20 @@ class Matrix:
                     self.__nrows = r+1
             else:
                 del c[r]
-        
+
         assert self.checkRows()
-    
+
     def __setitem__(self, indices, v):
         assert len(indices) == 2
         assert self.checkRows()
         rows = indices[0]
         cols = indices[1]
-        
+
         if isinstance(cols, int):
             cols = [cols]
         if isinstance(rows, int):
             rows = [rows]
-            
+
         if isinstance(rows, slice):
             if rows.start == None:
                 rstart = 0
@@ -392,7 +392,7 @@ class Matrix:
             else:
                 maxcol = self.cols()
             cols = xrange(*cols.indices(maxcol))
-        
+
         if len(rows) == 1 and len(cols) == 1:
             row = rows[0]
             col = cols[0]
@@ -400,7 +400,7 @@ class Matrix:
             if v == 0:
                 if self.cols() > col:
                     if self.__cols[col].has_key(row):
-                        del self.__cols[col][row] 
+                        del self.__cols[col][row]
             else:
                 while self.cols() <= col:
                     self.__cols.append({})
@@ -417,7 +417,7 @@ class Matrix:
                     self.__cols[col][row] = v
                 else:
                     self.__cols[col][row] = Fraction(v) # make sure its a fraction
-        
+
         else:
             assert isinstance(v, Matrix)
             assert self.checkRows()
@@ -432,16 +432,16 @@ class Matrix:
                 for r,val in c.items():
                     assert i < len(cols)
                     assert r < len(rows), "%d < %d %d" % (r, len(rows), v.rows())
-                    self.__cols[cols[i]][rows[r]] = val 
+                    self.__cols[cols[i]][rows[r]] = val
                     self.__nrows = max(self.__nrows, rows[r]+1)
         assert self.checkRows()
-        
+
     def __neg__(self):
         """ return -self """
         out = Matrix()
         out.__isub__(self)
         return out
-        
+
     def __eq__(self, other):
         if isinstance(other, Matrix):
             for i in range(max(len(self.__cols), len(other.__cols))):
@@ -468,20 +468,20 @@ class Matrix:
             return True
         else:
             return False
-    
+
     def __ne__(self, other):
         return not self.__eq__(other)
-    
-                    
+
+
     def addMetabolicNetwork(self, cmod):
         """ adds the stoichiometric matrix of a metabolic network
-        
+
         This is the default method to load the stoichiometric matrix into
         ths matrix. Just create an empty matrix and call this function.
-        
+
         A list of column names is returned.
         """
-        var_spec_id = [s.getPid() for s in cmod.species if not s.is_boundary]
+        var_spec_id = [s.getId() for s in cmod.species if not s.is_boundary]
         num_col = len(cmod.reactions)
         while self.cols() < num_col:
             self.__cols.append({})
@@ -495,7 +495,7 @@ class Matrix:
         self.__nrows = len(var_spec_id)
         assert self.checkRows()
         return labels, var_spec_id
-                    
+
     def addListRep(self, matrix):
         """ adds matrix in list representation (ordered by rows) """
         self.__nrows = max(self.__nrows, len(matrix))
@@ -506,12 +506,12 @@ class Matrix:
                 if v != 0:
                     col = self.__cols[ci]
                     col[ri] = col.get(ri,0)+Fraction(v)
-                    
+
         assert self.checkRows()
 
     def toNumpy(self):
         """ returns floating point numpy representation.
-        
+
         The numpy matrix is a full matrix!
         """
         assert self.checkRows()
@@ -521,7 +521,7 @@ class Matrix:
             for r,v in c.items():
                 out[r,i] = v
         return out
-    
+
     def checkRows(self):
 #        for c in self.__cols:
 #            for r in c.keys():
@@ -529,14 +529,14 @@ class Matrix:
 #                if r >= self.rows():
 #                    return False
         return True
-        
+
     def isZero(self):
         for c in self.__cols:
             for r in c.values():
                 if r != 0:
                     return False
         return True
-            
+
 def revslice(x, sl):
     if sl[2] == 0:
         return None

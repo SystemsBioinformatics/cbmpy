@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModelTools.py 544 2017-01-12 16:31:50Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModelTools.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 
@@ -155,7 +155,7 @@ def quickDefaultBuild(model_name, Reactions, Species, Bounds, Objective_function
 
 def printSolution(fba, wait=False):
     for R in fba.reactions:
-        print(R.getPid(), R.value, end=" ")
+        print(R.getId(), R.value, end=" ")
         if 'SUBSYSTEM' in  R.annotation:
             print(R.annotation['SUBSYSTEM'])
         else:

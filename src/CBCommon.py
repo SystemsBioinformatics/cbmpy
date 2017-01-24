@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -311,7 +311,7 @@ def processSpeciesChargeChemFormulaAnnot(s, getFromName=False, overwriteChemForm
             try:
                 s.charge = int(chrg)
             except ValueError:
-                print('Invalid charge: {} defined for species {}'.format(chrg, s.getPid()))
+                print('Invalid charge: {} defined for species {}'.format(chrg, s.getId()))
                 s.charge = None
                 key2 = None
     if overwriteCharge and s.charge == None:

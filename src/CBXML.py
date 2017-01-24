@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 556 2017-01-24 10:58:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -280,7 +280,7 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
         del manot
         SPEC.append(S)
 
-    boundary_species = [s.getPid() for s in SPEC if s.is_boundary]
+    boundary_species = [s.getId() for s in SPEC if s.is_boundary]
     if len(boundary_species) == 0:
         if not fake_boundary_species_search:
             print('\nINFO: No boundary species detected, if this is not what you expect try searching for boundary species using <name>_b (with \"fake_boundary_species_search=True\")?')
@@ -291,8 +291,8 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
                 if sid[-2:] == '_b':
                     print('Fake boundary (_b) metabolite added: {}'.format(sid))
                     SPEC[s].is_boundary = True
-    boundary_species = [s.getPid() for s in SPEC if s.is_boundary]
-    spec_id = [s.getPid() for s in SPEC]
+    boundary_species = [s.getId() for s in SPEC if s.is_boundary]
+    spec_id = [s.getId() for s in SPEC]
 
     REAC = []
     reactionIDs = []
@@ -328,8 +328,8 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
         for r in reagents:
             R.addReagent(CBModel.Reagent('{}_{}'.format(SBRe.getId(), r), r, reagents[r]))
             # TODO check this; I'm almost sure it is nore needed anymore
-            #if R.getPid() not in SPEC[spec_id.index(r[1])].reagent_of:
-                #SPEC[spec_id.index(r[1])].reagent_of.append(R.getPid())
+            #if R.getId() not in SPEC[spec_id.index(r[1])].reagent_of:
+                #SPEC[spec_id.index(r[1])].reagent_of.append(R.getId())
         del reagents
         if EXREAC:
             R.is_exchange = True
@@ -481,16 +481,16 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
     #printl(__HAVE_FBA_ANOT_BNDS__)
     if not __HAVE_FBA_ANOT_BNDS__ and len(CONSTR) == 0:
         for r_ in REAC:
-            rid = r_.getPid()
+            rid = r_.getId()
             if r_.reversible:
                 newId = '{}_{}_bnd'.format(rid, 'lower')
                 CONSTR.append(CBModel.FluxBound(newId, rid, 'greaterEqual', -numpy.inf))
-                newId = '{}_{}_bnd'.format(r_.getPid(), 'upper')
+                newId = '{}_{}_bnd'.format(r_.getId(), 'upper')
                 CONSTR.append(CBModel.FluxBound(newId, rid, 'lessEqual', numpy.inf))
             else:
                 newId = '{}_{}_bnd'.format(rid, 'lower')
                 CONSTR.append(CBModel.FluxBound(newId, rid, 'greaterEqual', 0.0))
-                newId = '{}_{}_bnd'.format(r_.getPid(), 'upper')
+                newId = '{}_{}_bnd'.format(r_.getId(), 'upper')
                 CONSTR.append(CBModel.FluxBound(newId, rid, 'lessEqual', numpy.inf))
 
     # build model
@@ -534,12 +534,12 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
             o = CBModel.Objective(oid, otype)
             if len(multiobj) == 1:
                 fm.addObjective(o, active=True)
-            elif o.getPid() == activeId:
+            elif o.getId() == activeId:
                 fm.addObjective(o, active=True)
             else:
                 fm.addObjective(o, active=False)
             OBJFUNCout.append(o)
-            print(o.getPid(), activeId)
+            print(o.getId(), activeId)
             for f_ in flobjs:
                 o.addFluxObjective(f_)
     del SPEC, REAC, CONSTR
@@ -718,7 +718,7 @@ def xml_getSBML2FBAannotation(fba, fname=None):
     DOC = xml_createSBML2FBADoc()
     for f in fba.flux_bounds:
         ##  print f.value
-        xml_addSBML2FBAFluxBound(DOC, f.reaction, f.operation, f.value, f.getPid())
+        xml_addSBML2FBAFluxBound(DOC, f.reaction, f.operation, f.value, f.getId())
 
     for o in fba.objectives:
         fluxobjs = [(fo.reaction, fo.coefficient) for fo in  o.fluxObjectives]
@@ -749,10 +749,10 @@ def sbml_createModelL2(fba, level=2, version=1):
     SBML_LEVEL = level = 2
     SBML_VERSION = version = 1
 
-    if fba.getPid() == '' or fba.getPid() == None:
+    if fba.getId() == '' or fba.getId() == None:
         mid0 = 'FBAModel'
     else:
-        mid0 = fba.getPid()
+        mid0 = fba.getId()
 
     mid = ''
     for l in mid0:
@@ -777,8 +777,8 @@ def sbml_createModelL2(fba, level=2, version=1):
         document = libsbml.SBMLDocument(SBML_LEVEL, SBML_VERSION)
     document.getNamespaces().add("http://www.w3.org/1999/xhtml", "html")
 
-    model = document.createModel(fba.getPid())
-    model.setMetaId(METAPREFIX+fba.getPid())
+    model = document.createModel(fba.getId())
+    model.setMetaId(METAPREFIX+fba.getId())
     ## can't do this right now with the custom annotations
     #miriam = fba.miriam.getAllMIRIAMUris()
     #print 'miriam', miriam
@@ -817,7 +817,7 @@ def sbml_setCompartmentsL3(model, fba):
     '''
     for cs in fba.compartments:
         comp_def = model.createCompartment()
-        comp_def.setId(cs.getPid())
+        comp_def.setId(cs.getId())
         comp_def.setName(cs.getName())
         # TODO: look into this for user selectable units
         comp_def.setUnits('dimensionless')
@@ -831,13 +831,13 @@ def sbml_setCompartmentsL3(model, fba):
 
         comp_def.setSpatialDimensions(cs.getDimensions())
         comp_def.setConstant(True)
-        comp_def.setMetaId(METAPREFIX+cs.getPid())
+        comp_def.setMetaId(METAPREFIX+cs.getId())
 
         if len(cs.getAnnotations()) > 0:
             annoSTRnew = sbml_writeKeyValueDataAnnotation(cs.getAnnotations())
             annores = comp_def.appendAnnotation(annoSTRnew)
             if annores == -3:
-                print('Invalid annotation in reaction:', cs.getPid())
+                print('Invalid annotation in reaction:', cs.getId())
                 print(cs.getAnnotations())
         if cs.miriam != None:
             miriam = cs.miriam.getAllMIRIAMUris()
@@ -909,7 +909,7 @@ def sbml_setDescription(model, fba):
     ##  except: UseR = ''
     notes = ''
     if fba.notes.strip() in ['', None, ' ']:
-        notes += '<html:p><html:br/><html:span size="small">Model \"<html:strong>%s</html:strong>\" (%s) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> (%s) on %s.</html:span></html:p>' % (fba.getPid(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
+        notes += '<html:p><html:br/><html:span size="small">Model \"<html:strong>%s</html:strong>\" (%s) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> (%s) on %s.</html:span></html:p>' % (fba.getId(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
     else:
         notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">%s</html:span></html:p>\n' % fba.notes
     #if fba._SBML_LEVEL_ == 2:
@@ -1043,7 +1043,7 @@ def sbml_setSpeciesL2(model, fba, return_dicts=False):
             miriam = {}
         else:
             miriam = s.miriam.getAllMIRIAMUris()
-        species.update({s.getPid() : {'id' : s.getPid(),
+        species.update({s.getId() : {'id' : s.getId(),
                                       'compartment' : s.compartment,
                                       'name' : s.getName(),
                                       'charge' : s.charge,
@@ -1134,7 +1134,7 @@ def sbml_setReactionsL2(model, fba, return_dict=False):
             miriam = {}
         else:
             miriam = r.miriam.getAllMIRIAMUris()
-        reactions.update({r.getPid() : {'id' : r.getPid(),
+        reactions.update({r.getId() : {'id' : r.getId(),
                                         'reactants' : reactants,
                                         'products' : products,
                                         'name' : r.getName(),
@@ -1518,10 +1518,10 @@ class CBMtoSBML3(FBCconnect):
         self.fba = fba
         self.parameter_map = {}
 
-        if fba.getPid() == '' or fba.getPid() == None:
+        if fba.getId() == '' or fba.getId() == None:
             mid0 = 'CBMPY_Model'
         else:
-            mid0 = fba.getPid()
+            mid0 = fba.getId()
 
         mid = ''
         for l in mid0:
@@ -1702,7 +1702,7 @@ class CBMtoSBML3(FBCconnect):
         for fb_ in self.fba.flux_bounds:
             rid = None
             if fb_.id not in [None, '']:
-                rid = fb_.getPid()
+                rid = fb_.getId()
             else:
                 rid = '%s_%s_bnd' % (fb_.reaction, fb_.is_bound)
             if rid not in self.bound_registry:
@@ -1714,7 +1714,7 @@ class CBMtoSBML3(FBCconnect):
                     operation = 'greaterEqual'
                 else:
                     operation = fb_.operation
-                    #print 'Illegal operation in bound %s: %s' % (fb_.getPid(), fb_.operation)
+                    #print 'Illegal operation in bound %s: %s' % (fb_.getId(), fb_.operation)
                 self.createFluxBoundV1(rid, fb_.reaction, operation, fb_.value)
             else:
                 print('Bound %s already exists, skipping ...' % (rid))
@@ -1726,10 +1726,10 @@ class CBMtoSBML3(FBCconnect):
         """
         for ob_ in self.fba.objectives:
             active = False
-            if ob_.getPid() == self.fba.getActiveObjective().getPid():
+            if ob_.getId() == self.fba.getActiveObjective().getId():
                 active = True
             flux_objs = [(o2.reaction, float(o2.coefficient)) for o2 in ob_.fluxObjectives]
-            self.createObjective(ob_.getPid(), ob_.operation, flux_objs, active=active)
+            self.createObjective(ob_.getId(), ob_.operation, flux_objs, active=active)
 
     def addGenesV2(self, parse_from_annotation=False, annotation_key='GENE ASSOCIATION', add_cbmpy_anno=True):
         """
@@ -2028,14 +2028,14 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
             USE_DEFAULT_COMPARTMENT = True
             s.compartment = DEFAULT_COMPARTMENT
             if DEFAULT_COMPARTMENT not in compartments:
-                print('INFO: Species "{}" has no compartment, creating default "{}".'.format(s.getPid(), DEFAULT_COMPARTMENT))
+                print('INFO: Species "{}" has no compartment, creating default "{}".'.format(s.getId(), DEFAULT_COMPARTMENT))
                 C = CBModel.Compartment(DEFAULT_COMPARTMENT, DEFAULT_COMPARTMENT, 1.0, 3)
                 C.setAnnotation('CBMPy_info', 'created by SBML writer')
                 s.setAnnotation('CBMPy_info', 'compartment added by SBML writer')
                 fba.addCompartment(C)
                 compartments = fba.getCompartmentIds()
         elif s.compartment not in compartments:
-            print('INFO: Compartment "{}" used by species "{}" is not defined, creating.'.format(s.compartment, s.getPid()))
+            print('INFO: Compartment "{}" used by species "{}" is not defined, creating.'.format(s.compartment, s.getId()))
             C = CBModel.Compartment(s.compartment, s.compartment, 1.0, 3)
             C.setAnnotation('CBMPy_info', 'created by SBML writer')
             fba.addCompartment(C)
@@ -2045,7 +2045,7 @@ def sbml_setSpeciesL3(model, fba, return_dicts=False, add_cobra_anno=False, add_
             miriam = {}
         else:
             miriam = s.miriam.getAllMIRIAMUris()
-        species.update({s.getPid() : {'id' : s.getPid(),
+        species.update({s.getId() : {'id' : s.getId(),
                                       'compartment' : s.compartment,
                                       'name' : s.getName(),
                                       'charge' : s.charge,
@@ -2152,7 +2152,7 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
             miriam = {}
         else:
             miriam = r.miriam.getAllMIRIAMUris()
-        reactions.update({r.getPid() : {'id' : r.getPid(),
+        reactions.update({r.getId() : {'id' : r.getId(),
                                         'reactants' : reactants,
                                         'products' : products,
                                         'name' : r.getName(),
@@ -2601,7 +2601,7 @@ def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_int
         else:
             cmod = res
         for s_ in cmod.species:
-            sid = s_.getPid()
+            sid = s_.getId()
             if sid[-2:] == '_b':
                 print('INFO: Fake boundary (_b) metabolite fixed: {}'.format(sid))
                 s_.setBoundary()
@@ -2614,7 +2614,7 @@ def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_int
             try:
                 processSpeciesChargeChemFormulaAnnot(s_, getFromName=False, overwriteCharge=True, overwriteChemFormula=True)
             except:
-                print('processSpeciesChargeChemFormulaAnnot failed for species with id: {}'.format(s_.getPid()))
+                print('processSpeciesChargeChemFormulaAnnot failed for species with id: {}'.format(s_.getId()))
         sbml_writeSBML3FBC(cmod, fname=new_file)
     if delete_intermediate:
         os.remove(new_file)
@@ -3160,8 +3160,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         S.setNotes(sbml_getNotes(SBSp))
         SPEC.append(S)
 
-    boundary_species = [s.getPid() for s in SPEC if s.is_boundary]
-    spec_id = [s.getPid() for s in SPEC]
+    boundary_species = [s.getId() for s in SPEC if s.is_boundary]
+    spec_id = [s.getId() for s in SPEC]
 
     if DEBUG: print('Species load: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
@@ -3391,8 +3391,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 #R.addReagent(rgtmp)
                 R.addReagent(CBModel.Reagent('{}_{}'.format(SBRe.getId(), r), r, reagents[r]))
                 # TODO: check if this is still needed
-                #if R.getPid() not in SPEC[spec_id.index(r[1])].reagent_of:
-                    #SPEC[spec_id.index(r[1])].reagent_of.append(R.getPid())
+                #if R.getId() not in SPEC[spec_id.index(r[1])].reagent_of:
+                    #SPEC[spec_id.index(r[1])].reagent_of.append(R.getId())
         else:
             if len(set(substrates).intersection(set(products))) == 0:
                 substrates.update(products)
@@ -3635,7 +3635,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             SBOf = FBCplg.getObjective(of_)
             OF = CBModel.Objective(SBOf.getId(), SBOf.getType())
             OF.setName(SBOf.getName())
-            if OF.getPid() == ACTIVE_OBJ:
+            if OF.getId() == ACTIVE_OBJ:
                 fm.addObjective(OF, active=True)
             else:
                 fm.addObjective(OF, active=False)
@@ -3702,7 +3702,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('FluxBound build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
     #for o_ in OBJFUNCout:
-        #if o_.getPid() == ACTIVE_OBJ:
+        #if o_.getId() == ACTIVE_OBJ:
             #fm.addObjective(o_, active=True)
         #else:
             #fm.addObjective(o_, active=False)

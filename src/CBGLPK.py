@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBGLPK.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBGLPK.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 
@@ -97,7 +97,7 @@ def glpk_constructLPfromFBA(fba, fname=None):
 
     # define model and add variables
     lp = glpk.LPX()
-    lp.name = fba.getPid()
+    lp.name = fba.getId()
     lp.cols.add(len(fba.N.col))
 
 
@@ -131,7 +131,7 @@ def glpk_constructLPfromFBA(fba, fname=None):
             lp.obj.maximize = True
         else:
             raise RuntimeError('\n%s - is not a valid objective operation' % osense)
-        lp.obj.name = fba.getActiveObjective().getPid()
+        lp.obj.name = fba.getActiveObjective().getId()
         for fo_ in fba.getActiveObjective().fluxObjectives:
             lp.obj[varMap[fo_.reaction]] = fo_.coefficient
     except AttributeError:
@@ -189,8 +189,8 @@ def glpk_constructLPfromFBA(fba, fname=None):
     # add bounds
     for r_ in fba.reactions:
         lb = ub = None
-        lb = fba.getReactionLowerBound(r_.getPid())
-        ub = fba.getReactionUpperBound(r_.getPid())
+        lb = fba.getReactionLowerBound(r_.getId())
+        ub = fba.getReactionUpperBound(r_.getId())
 
         if lb in ['Infinity', 'inf', 'Inf', 'infinity']:
             lb = GLPK_INFINITY
@@ -212,15 +212,15 @@ def glpk_constructLPfromFBA(fba, fname=None):
                 ub = GLPK_INFINITY
 
         if ub != GLPK_INFINITY and lb != -GLPK_INFINITY and ub == lb:
-            lp.cols[varMap[r_.getPid()]].bounds = lb
+            lp.cols[varMap[r_.getId()]].bounds = lb
         elif ub != GLPK_INFINITY and lb != -GLPK_INFINITY:
-            lp.cols[varMap[r_.getPid()]].bounds = lb, ub
+            lp.cols[varMap[r_.getId()]].bounds = lb, ub
         elif ub != GLPK_INFINITY:
-            lp.cols[varMap[r_.getPid()]].bounds = None, ub
+            lp.cols[varMap[r_.getId()]].bounds = None, ub
         elif lb != -GLPK_INFINITY:
-            lp.cols[varMap[r_.getPid()]].bounds = lb, None
+            lp.cols[varMap[r_.getId()]].bounds = lb, None
         else:
-            lp.cols[varMap[r_.getPid()]].bounds = None
+            lp.cols[varMap[r_.getId()]].bounds = None
 
     print('\ngplk_constructLPfromFBA time: {}\n'.format(time.time() - _Stime))
     if fname != None:
@@ -370,7 +370,7 @@ def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     else:
         fba.objectives[fba.activeObjIdx].solution, fba.objectives[fba.activeObjIdx].value = sol, numpy.NaN
     for r in fba.reactions:
-        rid = r.getPid()
+        rid = r.getId()
         if rid in sol:
             r.value = sol[rid]
         else:
@@ -695,7 +695,7 @@ def glpk_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
             OPTIMAL_PRESOLUTION = False
             pre_sol = {}
             for r in fba.reactions:
-                pre_sol.update({r.getPid : 0.0})
+                pre_sol.update({r.getId() : 0.0})
                 r.reduced_cost = 0.0
             pre_oval = 0.0
             pre_oid = 'None'
@@ -703,10 +703,10 @@ def glpk_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
     else:
         pre_sol = {}
         for r in fba.reactions:
-            pre_sol.update({r.getPid() : 0.0})
+            pre_sol.update({r.getId() : 0.0})
         if objF2constr:
             pre_oval = fba.objectives[fba.activeObjIdx].value
-            pre_oid = fba.objectives[fba.activeObjIdx].getPid()
+            pre_oid = fba.objectives[fba.activeObjIdx].getId()
         else:
             pre_oval = 0.0
             pre_oid = 'None'
@@ -856,7 +856,7 @@ def getReducedCosts(fba):
     """
     output = {}
     for r in fba.reactions:
-        output.update({r.getPid() : r.reduced_cost})
+        output.update({r.getId() : r.reduced_cost})
     return output
 
 def setReducedCosts(fba, reduced_costs):
@@ -872,8 +872,8 @@ def setReducedCosts(fba, reduced_costs):
         pass
     else:
         for r in fba.reactions:
-            if r.getPid() in reduced_costs:
-                r.reduced_cost = reduced_costs[r.getPid()]
+            if r.getId() in reduced_costs:
+                r.reduced_cost = reduced_costs[r.getId()]
             else:
                 r.reduced_cost = None
 

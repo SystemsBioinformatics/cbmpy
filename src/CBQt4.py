@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBQt4.py 544 2017-01-12 16:31:50Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBQt4.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 
@@ -552,9 +552,9 @@ def createReaction(mod):
     cndict = {}
     ccdict = {}
     for s_ in mod.species:
-        cfdict[s_.getPid()] = s_.getChemFormula()
-        cndict[s_.getPid()] = s_.getName()
-        ccdict[s_.getPid()] = s_.compartment
+        cfdict[s_.getId()] = s_.getChemFormula()
+        cndict[s_.getId()] = s_.getName()
+        ccdict[s_.getId()] = s_.compartment
     app = QtGui.QApplication([])
     ex = ReactionCreator(mod.getReactionIds(), mod.getSpeciesIds(), mod.getBoundarySpeciesIds(), cfdict, cndict, ccdict)
     app.exec_()

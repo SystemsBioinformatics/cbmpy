@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 545 2017-01-13 13:17:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -192,7 +192,7 @@ def cplx_constructLPfromFBA(fba, fname=None):
     lp.parameters.simplex.tolerances.optimality.set(CPLX_LP_PARAMETERS['simplex.tolerances.optimality'])
     lp.parameters.simplex.tolerances.feasibility.set(CPLX_LP_PARAMETERS['simplex.tolerances.feasibility'])
     #print(lp.parameters.simplex.get_changed())
-    lp.set_problem_name('%s' % (fba.getPid()))
+    lp.set_problem_name('%s' % (fba.getId()))
     lp.variables.add(names=fba.N.col)
     try:
         # define objective
@@ -203,7 +203,7 @@ def cplx_constructLPfromFBA(fba, fname=None):
             lp.objective.set_sense(lp.objective.sense.maximize)
         else:
             raise RuntimeError('\n%s - is not a valid objective operation' % osense)
-        lp.objective.set_name(fba.getActiveObjective().getPid())
+        lp.objective.set_name(fba.getActiveObjective().getId())
         lp.objective.set_linear([(fo.reaction, fo.coefficient) for fo in fba.getActiveObjective().fluxObjectives])
     except AttributeError:
         print('\nWARNING(CPLEX create LP): no objective function defined')
@@ -415,7 +415,7 @@ def cplx_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     else:
         fba.objectives[fba.activeObjIdx].solution, fba.objectives[fba.activeObjIdx].value = sol, numpy.NaN
     for r in fba.reactions:
-        rid = r.getPid()
+        rid = r.getId()
         if rid in sol:
             r.value = sol[rid]
         else:
@@ -443,7 +443,7 @@ def getReducedCosts(fba):
     """
     output = {}
     for r in fba.reactions:
-        output.update({r.getPid() : r.reduced_cost})
+        output.update({r.getId() : r.reduced_cost})
     return output
 
 def setReducedCosts(fba, reduced_costs):
@@ -459,8 +459,8 @@ def setReducedCosts(fba, reduced_costs):
         pass
     else:
         for r in fba.reactions:
-            if r.getPid() in reduced_costs:
-                r.reduced_cost = reduced_costs[r.getPid()]
+            if r.getId() in reduced_costs:
+                r.reduced_cost = reduced_costs[r.getId()]
             else:
                 r.reduced_cost = None
 
@@ -1126,7 +1126,7 @@ def cplx_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
             OPTIMAL_PRESOLUTION = False
             pre_sol = {}
             for r in fba.reactions:
-                pre_sol.update({r.getPid : 0.0})
+                pre_sol.update({r.getId() : 0.0})
                 r.reduced_cost = 0.0
             pre_oval = 0.0
             pre_oid = 'None'
@@ -1134,10 +1134,10 @@ def cplx_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
     else:
         pre_sol = {}
         for r in fba.reactions:
-            pre_sol.update({r.getPid() : 0.0})
+            pre_sol.update({r.getId() : 0.0})
         if objF2constr:
             pre_oval = fba.objectives[fba.activeObjIdx].value
-            pre_oid = fba.objectives[fba.activeObjIdx].getPid()
+            pre_oid = fba.objectives[fba.activeObjIdx].getId()
         else:
             pre_oval = 0.0
             pre_oid = 'None'

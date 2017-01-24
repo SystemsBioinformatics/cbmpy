@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBMultiEnv.py 515 2016-11-07 14:20:11Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBMultiEnv.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 
@@ -48,8 +48,8 @@ def addProteinCostAnnotation(F, reaction_gene_map, gene_peptide_map, gene_annota
     reaction_gene_map = reaction_gene_map.copy()
     gene_peptide_map = gene_peptide_map.copy()
     for r in F.reactions:
-        if reaction_gene_map[r.getPid()] != None:
-            r.annotation.update({'CBM_PEPTIDE_LENGTHS' : [(g, gene_peptide_map[g]) for g in reaction_gene_map[r.getPid()]]})
+        if reaction_gene_map[r.getId()] != None:
+            r.annotation.update({'CBM_PEPTIDE_LENGTHS' : [(g, gene_peptide_map[g]) for g in reaction_gene_map[r.getId()]]})
         else:
             r.annotation.update({'CBM_PEPTIDE_LENGTHS' : []})
         GA = None
@@ -93,7 +93,7 @@ def addProteinCostAnnotation(F, reaction_gene_map, gene_peptide_map, gene_annota
                 else:
                     r.annotation.update({'CBM_PEPTIDE_LENGTH_MIN' : None})
                     r.annotation.update({'CBM_PEPTIDE_LENGTH_MAX' : None})
-            ##  print r.getPid(), r.annotation['CBM_PEPTIDE_LENGTH_MIN'], r.annotation['CBM_PEPTIDE_LENGTH_MAX']
+            ##  print r.getId(), r.annotation['CBM_PEPTIDE_LENGTH_MIN'], r.annotation['CBM_PEPTIDE_LENGTH_MAX']
         else:
             r.annotation.update({'CBM_PEPTIDE_SUBSTITUTED_LENGTHS' : None})
             r.annotation.update({'CBM_PEPTIDE_LENGTH_MIN' : None})
@@ -111,7 +111,7 @@ def scaleProteinCostAnnotation(fba):
             R.annotation['CBM_PEPTIDE_COST'] = R.annotation['CBM_PEPTIDE_LENGTH_MAX']/LEN_AVG
         R.annotation['CBM_AVG_PEPTIDE_LENGTH'] = LEN_AVG
     print('\nAverage protein length:', LEN_AVG)
-        ##  print R.getPid(), R.annotation['CBM_PEPTIDE_COST'], R.annotation['CBM_PEPTIDE_LENGTH_MAX']
+        ##  print R.getId(), R.annotation['CBM_PEPTIDE_COST'], R.annotation['CBM_PEPTIDE_LENGTH_MAX']
 
 # Standard amino acid abbreviations with ATP formation/production cost: Stouthamer (1973) Table 4 page 555
 amino_acid_table = [['A', 'Ala', 'Alanine', '+1'],

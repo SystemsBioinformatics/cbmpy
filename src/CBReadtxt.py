@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 544 2017-01-12 16:31:50Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 557 2017-01-24 12:43:47Z bgoli $)
 
 """
 
@@ -364,13 +364,13 @@ def buildFBAobj(reactions, species, objfname, modname='model'):
             R.addReagent(SU)
             spx = M.getSpecies(su[1])
             if su[1] not in spx.isReagentOf():
-                spx.reagent_of.append(R.getPid())
+                spx.reagent_of.append(R.getId())
         for pr in reactions[r]['products']:
             PR = fm.Reagent(r+pr[1], pr[1], pr[0])
             R.addReagent(PR)
             spx = M.getSpecies(pr[1])
             if pr[1] not in spx.isReagentOf():
-                spx.reagent_of.append(R.getPid())
+                spx.reagent_of.append(R.getId())
         R.is_exchange = reactions[r]['exchange']
         LB = fm.FluxBound(r+'min', r, 'greaterEqual', reactions[r]['min'])
         UB = fm.FluxBound(r+'max', r, 'lessEqual', reactions[r]['max'])
