@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 555 2017-01-24 08:55:37Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 565 2017-02-17 00:09:59Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -4340,13 +4340,13 @@ class GeneProteinAssociation(Fbase):
                         label = altlabels[gid]
                     else:
                         label = gid
-                        newgid = fixId(gid, replace='_')
-                        if gid != newgid:
-                            newgid = fixId(gid, replace='_{}_'.format(self._gene_id_ucntr_))
-                            self._gene_id_ucntr_ += 1
-                            print('INFO: geneLabel is not Sid compatible, replacing \"{}\" with {} in geneId'.format(gid, newgid))
-                            self.assoc = self.assoc.replace(gid, newgid)
-                            self._MODIFIED_ASSOCIATION_ = True
+                    newgid = fixId(gid, replace='_')
+                    if gid != newgid:
+                        newgid = fixId(gid, replace='_{}_'.format(self._gene_id_ucntr_))
+                        self._gene_id_ucntr_ += 1
+                        print('INFO: geneLabel is not Sid compatible, replacing \"{}\" with {} in geneId'.format(gid, newgid))
+                        self.assoc = self.assoc.replace(gid, newgid)
+                        self._MODIFIED_ASSOCIATION_ = True
                         gid = newgid
                     if gid in self.generefs:
                         #print('gid in generef')

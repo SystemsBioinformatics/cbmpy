@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBGLPK.py 557 2017-01-24 12:43:47Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBGLPK.py 569 2017-03-10 15:50:07Z bgoli $)
 
 """
 
@@ -336,13 +336,7 @@ def glpk_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='
     glpk_Solve(flp, method)
 
     glpk_setFBAsolutionToModel(f, flp, with_reduced_costs=with_reduced_costs)
-
-    f.SOLUTION_STATUS =  glpk_getSolutionStatus(flp)
-    # TODO: need to synchronise all solvers to same integer system
-    if f.SOLUTION_STATUS == 'LPS_OPT':
-        f.SOLUTION_STATUS_INT = 1
-    else:
-        f.SOLUTION_STATUS_INT = 999
+    glpk_setSolutionStatusToModel(f, flp)
 
     if oldlpgen and del_intermediate:
         os.remove(LPF)
@@ -353,6 +347,18 @@ def glpk_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='
     else:
         del flp
         return objv
+
+def glpk_setSolutionStatusToModel(m, lp):
+    """
+    Sets the lp solutions status to the CBMPy model
+
+    """
+    m.SOLUTION_STATUS =  glpk_getSolutionStatus(lp)
+    # TODO: need to synchronise all solvers to same integer system
+    if m.SOLUTION_STATUS == 'LPS_OPT':
+        m.SOLUTION_STATUS_INT = 1
+    else:
+        m.SOLUTION_STATUS_INT = 999
 
 def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     """
@@ -516,7 +522,7 @@ def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
     # this is a memory hack --> prevents solver going berserk
     mcntr = 0
     mcntr_cntrl = 3
-    mps_filename = '_{}_.mps'.format(str(time.time()).split('.')[0])
+    mps_filename = '_{}_.mps'.format(str(time.time()).replace('.', '_'))
     cpx.write(mps=mps_filename)
     for Ridx in range(NUM_FLX):
         R = selected_reactions[Ridx]
@@ -1076,6 +1082,7 @@ def glpk_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
 
     glpk_Solve(cpx, method=method)
     glpk_setFBAsolutionToModel(fba, cpx, with_reduced_costs=with_reduced_costs)
+    glpk_setSolutionStatusToModel(fba, cpx)
 
     #cpx.write(cpxlp='test.lp'); return cpx
 

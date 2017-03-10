@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 558 2017-01-24 13:05:58Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 567 2017-02-24 16:47:24Z bgoli $)
 
 """
 #
@@ -41,6 +41,7 @@ __CBCONFIG__['CBMPY_DIR'] = os.path.split(CBConfig.__file__)[0]
 # that enables "from cbmpy import *" to work - bgoli
 
 # lets add some shortcuts that will be core commands
+__HAVE_SOLVER__ = False
 try:
     from . import CBSolver
     analyzeModel = CBSolver.analyzeModel
@@ -49,6 +50,7 @@ try:
     doFBA = CBSolver.analyzeModel
     doFVA = CBSolver.FluxVariabilityAnalysis
     doFBAMinSum = CBSolver.MinimizeSumOfAbsFluxes
+    __HAVE_SOLVER__ = True
 except (ImportError, AttributeError):
     print('No solver present, unable to create shortcuts')
 

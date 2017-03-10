@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 557 2017-01-24 12:43:47Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 568 2017-03-06 17:23:28Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1600,21 +1600,17 @@ class CBMtoSBML3(FBCconnect):
                     break
             if ub.value not in shared_values:
                 shared_values[ub.value] = [ub]
-            else:
-                shared_values[ub.value].append(ub)
-            if lb.value not in shared_values:
-                shared_values[lb.value] = [lb]
-            else:
-                shared_values[lb.value].append(lb)
-
-            if ub.value not in shared_names:
                 shared_names[ub.value] = [ub.name]
             else:
+                shared_values[ub.value].append(ub)
                 shared_names[ub.value].append(ub.name)
-            if lb.value not in shared_names:
+            if lb.value not in shared_values:
+                shared_values[lb.value] = [lb]
                 shared_names[lb.value] = [lb.name]
             else:
+                shared_values[lb.value].append(lb)
                 shared_names[lb.value].append(lb.name)
+
 
             bounds.append({'upper' : ub,
                            'lower' : lb,
@@ -1644,7 +1640,7 @@ class CBMtoSBML3(FBCconnect):
 
         for v_ in list(shared_names.keys()):
             POP = False
-            if len(set(shared_names[v_])) == 1:
+            if len(set(shared_names[v_])) <= 1:
                 #print(set(shared_names[v_]))
                 POP = True
             #for fb_ in range(len(shared_values[v_])-1, -1, -1):
@@ -1653,39 +1649,51 @@ class CBMtoSBML3(FBCconnect):
             if POP:
                 shared_names.pop(v_)
 
-        #print(shared_names)
+        shared_ids = list(set(shared_ids))
+        print('shared_ids')
+        print(shared_ids)
+        print('shared_values')
+        #print(shared_values)
+        print('shared_names')
+        print(shared_names)
+        print(shared_names.keys())
 
         vp_map = {}
+        # there is some screwup with the parameter compression where a whole bunch of dummy parameters are created, fortunately
+        # in addition to the existing ones
+        # TODO
+
         if compress_bounds:
+            #print('\n\nTODO: CBXML: 1664\n\n')
             for v_ in shared_values:
                 if v_ not in shared_names:
-                    pid = self.createFbParameterSharedV2(v_, name=shared_values[v_][0].getName())
-                    #print(pid)
+                    pid = self.createFbParameterV2(shared_values[v_][0])
+                    ##print(pid)
                     vp_map[v_] = pid
                 else:
-                    #print(shared_names[v_])
                     spid = list(set(shared_names[v_]))
-                    #print(spid)
+                    print('spid', v_, spid)
                     for n_ in range(len(shared_names[v_])):
                         #print(shared_names[v_][n_])
                         spidn = 'par{}_{}'.format(self.parameter_cntr, spid.index(shared_names[v_][n_]))
                         #print(spidn)
                         pid = self.createFbParameterSharedV2(v_, spidn, shared_values[v_][n_].getName())
                         vp_map[v_] = pid
-                    self.parameter_cntr += len(spid)
-
-        #print(vp_map)
+                    #self.parameter_cntr += len(spid)
+        print(' ')
+        print(vp_map)
+        #raw_input('Help!')
 
         for b_ in bounds:
             if b_['rid'] not in self.parameter_map:
                 self.parameter_map[b_['rid']] = {}
-            if compress_bounds and b_['lower'].getId() in shared_ids:
+
+            if compress_bounds and b_['lower'].getId() in shared_ids and vp_map[b_['lower'].getValue()] is not None:
                 self.parameter_map[b_['rid']]['lb'] = vp_map[b_['lower'].getValue()]
             else:
                 self.createFbParameterV2(b_['lower'])
                 self.parameter_map[b_['rid']]['lb'] = b_['lower'].getId()
-
-            if compress_bounds and b_['upper'].getId() in shared_ids:
+            if compress_bounds and b_['upper'].getId() in shared_ids and vp_map[b_['upper'].getValue()] is not None:
                 self.parameter_map[b_['rid']]['ub'] = vp_map[b_['upper'].getValue()]
             else:
                 self.createFbParameterV2(b_['upper'])
@@ -1819,7 +1827,7 @@ class CBMtoSBML3(FBCconnect):
          - *add_cbmpy_anno* [default=True] add annotation to SBML object
 
         """
-
+        print('createParParameter', param.getId())
         par = self.model.createParameter()
         par.setId(param.getId())
         par.setMetaId('meta_{}'.format(param.getId()))
@@ -1844,6 +1852,8 @@ class CBMtoSBML3(FBCconnect):
          - *bnd* object
 
         """
+        #print('createFbParameterV2', bnd.getId())
+
         par = self.model.createParameter()
         par.setId(bnd.getId())
         par.setMetaId('meta_{}'.format(bnd.getId()))
@@ -1882,8 +1892,23 @@ class CBMtoSBML3(FBCconnect):
         if pid == None:
             pid = 'par{}'.format(self.parameter_cntr)
             self.parameter_cntr += 1
-        if self.model.getParameter(pid) != None:
+
+        if pid == 'par0_4':
+            print('par0_4')
+            os.sys.exit(-1)
+
+
+        #print('createFbParameterSharedV2', pid)
+        ## there is some screwup with the parameter compression where a whole bunch of dummy parameters are created, fortunately
+        ## in addition to the existing ones
+        ## TODO
+        #print('TODO: CBXML: 1891')
+
+        if self.model.getParameter(pid) is not None:
             return pid
+
+        print(self.model.getParameter(pid))
+
         par = self.model.createParameter()
         par.setId(pid)
         par.setMetaId('meta_{}'.format(par.getId()))
@@ -2182,12 +2207,18 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
         r.setFast(False)
         for s in range(len(reactions[rxn]['reactants'])):
             sref = r.createReactant()
-            sref.setConstant(False)
+            if fbcmod.fbcstrict:
+                sref.setConstant(True)
+            else:
+                sref.setConstant(False)
             sref.setStoichiometry(abs(float(reactions[rxn]['reactants'][s][0])))
             sref.setSpecies(reactions[rxn]['reactants'][s][1])
         for p in range(len(reactions[rxn]['products'])):
             pref = r.createProduct()
-            pref.setConstant(False)
+            if fbcmod.fbcstrict:
+                pref.setConstant(True)
+            else:
+                pref.setConstant(False)
             pref.setStoichiometry(abs(float(reactions[rxn]['products'][p][0])))
             pref.setSpecies(reactions[rxn]['products'][p][1])
 

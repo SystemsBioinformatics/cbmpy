@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 557 2017-01-24 12:43:47Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 569 2017-03-10 15:50:07Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -384,8 +384,7 @@ def cplx_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='
         cplx_setOutputStreams(flp, mode=None)
     cplx_Solve(flp, method)
     cplx_setFBAsolutionToModel(f, flp, with_reduced_costs=with_reduced_costs)
-    f.SOLUTION_STATUS_INT = flp.solution.get_status()
-    f.SOLUTION_STATUS = cplx_getSolutionStatus(flp)
+    cplx_setSolutionStatusToModel(f, flp)
     if oldlpgen and del_intermediate:
         os.remove(LPF)
     objv = f.getActiveObjective().getValue()
@@ -1356,6 +1355,8 @@ def cplx_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
 
     cplx_Solve(cpx, method=method)
     cplx_setFBAsolutionToModel(fba, cpx, with_reduced_costs=with_reduced_costs)
+    cplx_setSolutionStatusToModel(fba, cpx)
+
     minSum = cpx.solution.get_objective_value()
     fba.setAnnotation('min_flux_sum', minSum)
     fba.getActiveObjective().setValue(STORED_OPT)
@@ -1367,6 +1368,14 @@ def cplx_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
     else:
         return cpx
 
+
+def cplx_setSolutionStatusToModel(m, lp):
+    """
+    Sets the lp solutions status to the CBMPy model
+
+    """
+    m.SOLUTION_STATUS_INT = lp.solution.get_status()
+    m.SOLUTION_STATUS = cplx_getSolutionStatus(lp)
 
 def cplx_MinimizeNumActiveFluxes(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower', optPercentage=100.0, work_dir=None, quiet=False, debug=False, objective_coefficients=None, return_lp_obj=False, populate=None, oldlpgen=False):
     """

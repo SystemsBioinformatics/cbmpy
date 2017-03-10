@@ -81,13 +81,19 @@ def copyReaction(m_src, m_targ, rid, altrid=None):
     """
     out = {}
     targ_exists = False
-    if m_targ.getReaction(rid) is not None and altrid is not None and m_targ.getReaction(altrid) is not None:
-        print('ERROR: reaction with id \"{}\" exists in target model'.format(rid))
-        out = None
-        targ_exists = True
+    #print('1', m_src, m_targ, rid, altrid)
+    #print('2', m_targ.getReaction(rid), altrid, m_targ.getReaction(altrid))
+    #print('3', m_targ.getReaction(rid) is not None and altrid is not None and m_targ.getReaction(altrid) is not None)
     if m_src.getReaction(rid) is None:
         print('ERROR: reaction with id \"{}\" does not exist in source model'.format(rid))
         out = None
+    if out is not None and m_targ.getReaction(rid) is not None and altrid is not None:
+        print('INFO: reaction with id \"{}\" exists in target model trying alternate id'.format(rid))
+        if m_targ.getReaction(altrid) is not None:
+            print('ERROR: alternative reaction with id \"{}\" already exists in target model'.format(rid))
+            out = None
+        else:
+            targ_exists = True
     if out is None:
         return None
 
