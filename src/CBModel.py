@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 565 2017-02-17 00:09:59Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 570 2017-03-26 10:31:55Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -325,7 +325,7 @@ class Fbase(object):
          - *protocol* [default=0] serialize to a string or binary if required,
                       see pickle module documentation for details
 
-        # overloaded in Model
+        # Reimplemented in Model
 
         """
         return pickle.dumps(self, protocol=protocol)
@@ -338,7 +338,7 @@ class Fbase(object):
          - *protocol* [default=2] serialize to a string or binary if required,
                       see pickle module documentation for details
 
-        # overloaded in Model
+        # Reimplemented in Model
 
         """
         F = file(filename, 'wb')
@@ -3605,8 +3605,7 @@ class Reaction(Fbase):
                 for gpr_ in self.__objref__().gpr:
                     if gpr_.getProtein() == oldId:
                         gpr_.setProtein(fid)
-                for reag in self.reagents:
-                    reag.setId('{}_{}'.format(fid, reag.getSpecies()))
+
                 for obj in self.__objref__().objectives:
                     for fo in obj.fluxObjectives:
                         if fo.getReactionId() == oldId:
@@ -3615,6 +3614,9 @@ class Reaction(Fbase):
                 print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
         else:
             self.id = fid
+        # no matter if the reaction has a model ref or not setId resets reagent refs to new id
+        for reag in self.reagents:
+            reag.setId('{}_{}'.format(fid, reag.getSpecies()))
 
     def getValue(self):
         """
