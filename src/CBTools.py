@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 557 2017-01-24 12:43:47Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 573 2017-03-29 14:56:35Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1551,6 +1551,7 @@ def checkProducibilityMetabolites(mod, metabolites=None, retOnlyZeroEntr=False, 
     This function was contributed by Willi Gottstein, Amsterdam, 2015.
 
     """
+    raise DeprecationWarning("\ncheckProducibilityMetabolites is being refreshed and will return in the next release, our apologies for the inconvenience.")
     if metabolites is None:
         metabolites = []
     res = {}
@@ -1588,6 +1589,7 @@ def checkProducibilityReactions(mod, reactions=None, retOnlyZeroEntr=False, zero
     This function was contributed by Willi Gottstein, Amsterdam, 2015.
 
     """
+    raise DeprecationWarning("\ncheckProducibilityReactions is being refreshed and will return in the next release, our apologies for the inconvenience.")
     if reactions is None:
         reactions = []
     res = {}
@@ -1615,6 +1617,7 @@ def checkProducibility(mod, metabolites=None, reactions=None, retOnlyZeroEntr=Fa
     This function was contributed by Willi Gottstein, Amsterdam, 2015.
 
     """
+    raise DeprecationWarning("\ncheckProducibility is being refreshed and will return in the next release, our apologies for the inconvenience.")
     if metabolites is None:
         metabolites = []
     if reactions is None:

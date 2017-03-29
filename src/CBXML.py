@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 568 2017-03-06 17:23:28Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 573 2017-03-29 14:56:35Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1581,123 +1581,59 @@ class CBMtoSBML3(FBCconnect):
          - *compress_bounds* [default=False] enable parameter compression
 
         """
-        #print('INFO: addBoundsV2')
-        self.bound_registry = []
-        rids = self.fba.getReactionIds()
-        bounds = []
-        shared_values = {}
-        shared_names = {}
-        for r_ in rids:
-            lb = ub = None
-            for c_ in self.fba.flux_bounds:
-                if c_.reaction == r_ and c_.is_bound == 'lower':
-                    lb = c_
-                elif c_.reaction == r_ and c_.is_bound == 'upper':
-                    ub = c_
-                elif c_.reaction == r_ and c_.is_bound == 'equality':
-                    lb = ub = c_
-                if lb is not None and ub is not None:
-                    break
-            if ub.value not in shared_values:
-                shared_values[ub.value] = [ub]
-                shared_names[ub.value] = [ub.name]
-            else:
-                shared_values[ub.value].append(ub)
-                shared_names[ub.value].append(ub.name)
-            if lb.value not in shared_values:
-                shared_values[lb.value] = [lb]
-                shared_names[lb.value] = [lb.name]
-            else:
-                shared_values[lb.value].append(lb)
-                shared_names[lb.value].append(lb.name)
-
-
-            bounds.append({'upper' : ub,
-                           'lower' : lb,
-                           'rid' : r_})
-        #print(bounds)
-        #print(shared_values)
-        #print(shared_names)
-
-        # play with bound compression
-        shared_ids = []
-        for v_ in list(shared_values.keys()):
-            POP = False
-            # remove unique
-            if len(shared_values[v_]) == 1:
-                POP = True
-            # disable compression if there is any annotation
-            if not POP:
-                for fb_ in range(len(shared_values[v_])-1, -1, -1):
-                    if shared_values[v_][fb_].miriam != None or len(shared_values[v_][fb_].annotation) > 0:
-                        shared_values[v_].pop(fb_)
-                        shared_names[v_].pop(fb_)
-            if POP:
-                shared_values.pop(v_)
-                shared_names.pop(v_)
-            else:
-                shared_ids.extend([i.getId() for i in shared_values[v_]])
-
-        for v_ in list(shared_names.keys()):
-            POP = False
-            if len(set(shared_names[v_])) <= 1:
-                #print(set(shared_names[v_]))
-                POP = True
-            #for fb_ in range(len(shared_values[v_])-1, -1, -1):
-                #print(v_, fb_)
-
-            if POP:
-                shared_names.pop(v_)
-
-        shared_ids = list(set(shared_ids))
-        print('shared_ids')
-        print(shared_ids)
-        print('shared_values')
-        #print(shared_values)
-        print('shared_names')
-        print(shared_names)
-        print(shared_names.keys())
-
-        vp_map = {}
-        # there is some screwup with the parameter compression where a whole bunch of dummy parameters are created, fortunately
-        # in addition to the existing ones
-        # TODO
-
         if compress_bounds:
-            #print('\n\nTODO: CBXML: 1664\n\n')
-            for v_ in shared_values:
-                if v_ not in shared_names:
-                    pid = self.createFbParameterV2(shared_values[v_][0])
-                    ##print(pid)
-                    vp_map[v_] = pid
+            print('INFO: V2 bounds compression enabled')
+            bounds = {}
+            shared_values = {}
+            for r_ in self.fba.reactions:
+                lb = round(r_.getLowerBound(), 12)
+                ub = round(r_.getUpperBound(), 12)
+                rid = r_.getId()
+                bounds[rid] = (lb, ub)
+
+                if lb not in shared_values:
+                    shared_values[lb] = ['{}_lb'.format(rid)]
                 else:
-                    spid = list(set(shared_names[v_]))
-                    print('spid', v_, spid)
-                    for n_ in range(len(shared_names[v_])):
-                        #print(shared_names[v_][n_])
-                        spidn = 'par{}_{}'.format(self.parameter_cntr, spid.index(shared_names[v_][n_]))
-                        #print(spidn)
-                        pid = self.createFbParameterSharedV2(v_, spidn, shared_values[v_][n_].getName())
-                        vp_map[v_] = pid
-                    #self.parameter_cntr += len(spid)
-        print(' ')
-        print(vp_map)
-        #raw_input('Help!')
+                    shared_values[lb].append('{}_lb'.format(rid))
+                if ub not in shared_values:
+                    shared_values[ub] = ['{}_ub'.format(rid)]
+                else:
+                    shared_values[ub].append('{}_ub'.format(rid))
 
-        for b_ in bounds:
-            if b_['rid'] not in self.parameter_map:
-                self.parameter_map[b_['rid']] = {}
 
-            if compress_bounds and b_['lower'].getId() in shared_ids and vp_map[b_['lower'].getValue()] is not None:
-                self.parameter_map[b_['rid']]['lb'] = vp_map[b_['lower'].getValue()]
-            else:
-                self.createFbParameterV2(b_['lower'])
-                self.parameter_map[b_['rid']]['lb'] = b_['lower'].getId()
-            if compress_bounds and b_['upper'].getId() in shared_ids and vp_map[b_['upper'].getValue()] is not None:
-                self.parameter_map[b_['rid']]['ub'] = vp_map[b_['upper'].getValue()]
-            else:
-                self.createFbParameterV2(b_['upper'])
-                self.parameter_map[b_['rid']]['ub'] = b_['upper'].getId()
+            bnd_pars = {}
+            cntr = 0
+            for b in shared_values:
+                pid = 'bnd_par{}'.format(cntr)
+                self.createFbParameterSharedV2(pid, b)
+                bnd_pars[b] = pid
+                cntr += 1
+
+            for b_ in bounds:
+                if b_ not in self.parameter_map:
+                    self.parameter_map[b_] = {}
+                    self.parameter_map[b_]['lb'] = bnd_pars[bounds[b_][0]]
+                    self.parameter_map[b_]['ub'] = bnd_pars[bounds[b_][1]]
+                else:
+                    print('Add parameter has detected duplicate reaction: {} (CBXML:1621)'.format(b_))
+            #print(bounds)
+            #print(shared_values)
+            #print(bnd_pars)
+        else:
+            for bnd in self.fba.flux_bounds:
+                bid = self.createFbParameterV2(bnd, add_cbmpy_anno=True)
+                rid = bnd.getReactionId()
+                if rid not in self.parameter_map:
+                    self.parameter_map[rid] = {}
+                btype = bnd.getType()
+                if btype == 'lower':
+                    self.parameter_map[rid]['lb'] = bid
+                elif btype == 'upper':
+                    self.parameter_map[rid]['ub'] = bid
+                else:
+                    print('ERROR: strange flux bound assigment type error (CBXML:1635)')
+        #print(self.parameter_map)
+
 
     def addBoundsV1(self, autofix=False):
         """
@@ -1855,8 +1791,9 @@ class CBMtoSBML3(FBCconnect):
         #print('createFbParameterV2', bnd.getId())
 
         par = self.model.createParameter()
-        par.setId(bnd.getId())
-        par.setMetaId('meta_{}'.format(bnd.getId()))
+        bid = '{}_{}'.format(bnd.getReactionId(), bnd.getType())
+        par.setId(bid)
+        par.setMetaId('meta_{}'.format(bid))
         #print(bnd.getName())
         name = bnd.getName()
         if name is None:
@@ -1871,56 +1808,34 @@ class CBMtoSBML3(FBCconnect):
                 annoSTRnew = sbml_writeKeyValueDataAnnotation(bnd.annotation)
                 annores = par.appendAnnotation(annoSTRnew)
                 if annores == -3:
-                    print('Invalid annotation in bound:', bnd.getId())
+                    print('Invalid annotation in bound:', bid)
                     print(bnd.annotation, '\n')
             if bnd.miriam != None:
                 miriam = bnd.miriam.getAllMIRIAMUris()
                 if len(miriam) > 0:
                     sbml_setCVterms(par, miriam, model=False)
+        return bid
 
-    def createFbParameterSharedV2(self, value, pid=None, name=None, add_cbmpy_anno=True):
+    def createFbParameterSharedV2(self, pid, value):
         """
         Create SBML V2 flux bound parameters for reaction
 
          - *value* parameter value
          - *pid* optional parameter id
-         - *name* optional name
 
          returns parameter id
 
         """
-        if pid == None:
-            pid = 'par{}'.format(self.parameter_cntr)
-            self.parameter_cntr += 1
-
-        if pid == 'par0_4':
-            print('par0_4')
-            os.sys.exit(-1)
-
-
-        #print('createFbParameterSharedV2', pid)
-        ## there is some screwup with the parameter compression where a whole bunch of dummy parameters are created, fortunately
-        ## in addition to the existing ones
-        ## TODO
-        #print('TODO: CBXML: 1891')
-
-        if self.model.getParameter(pid) is not None:
-            return pid
-
-        print(self.model.getParameter(pid))
 
         par = self.model.createParameter()
         par.setId(pid)
-        par.setMetaId('meta_{}'.format(par.getId()))
-        if name is None:
-            par.setName('shared flux bound parameter')
-        else:
-            par.setName(name)
+        par.setMetaId('meta_{}'.format(pid))
+        name = ''
+        par.setName(name)
         par.setValue(value)
         par.setConstant(True)
         par.setSBOTerm('SBO:0000625')
 
-        return par.getId()
 
     def _cleanUP_(self):
         self.fba = None
