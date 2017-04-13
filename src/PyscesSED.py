@@ -1,7 +1,7 @@
 """
 PySCeS - Python Simulator for Cellular Systems (http://pysces.sourceforge.net)
 
-Copyright (C) 2004-2016 B.G. Olivier, J.M. Rohwer, J.-H.S Hofmeyr all rights reserved,
+Copyright (C) 2004-2017 B.G. Olivier, J.M. Rohwer, J.-H.S Hofmeyr all rights reserved,
 
 Brett G. Olivier (bgoli@users.sourceforge.net)
 Triple-J Group for Molecular Cell Physiology
@@ -260,7 +260,7 @@ class SED(object):
                 sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" %  (s_,\
                         S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
             elif self.sims[s_]['type'] == 'state':
-                sedscr.write("AddSteadyState('%s', '%s')\n" %  (s_, self.sims[s_]['algorithm']))  
+                sedscr.write("AddSteadyState('%s', '%s')\n" %  (s_, self.sims[s_]['algorithm']))
         sedscr.write('\n')
 
         for t_ in self.tasks:
@@ -484,7 +484,7 @@ class SEDCBMPY(SED):
     CBM_WITH_EXCEL = True
     cbm_add_cbmpy_annot = True
     cbm_add_cobra_annot = False
-    
+
     def __init__(self, id, sedpath):
         super(SEDCBMPY, self).__init__(id, sedpath, libSEDMLpath=None, sbwsedmluri=None)
 
@@ -492,7 +492,7 @@ class SEDCBMPY(SED):
     def writeModelToCOMBINEarchive(self, mod, fname=None, directory=None, sbmlname=None, withExcel=True, vc_given='CBMPy', vc_family='Software', vc_email='None', vc_org='cbmpy.sourceforge.net', add_cbmpy_annot=True, add_cobra_annot=False, display_reactions=None):
         """
         Write a model in SBML and Excel format to a COMBINE archive using the following information:
-    
+
         - *mod* a model object
         - *fname* the output base filename, archive will be <fname>.sed.omex
         - *directory* [default=None] created the combine archive 'directory'
@@ -504,8 +504,8 @@ class SEDCBMPY(SED):
         - *vc_org* [default='None'] organisation
         - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
         - *add_cobra_annot* [default=False] add COBRA <notes> annotation
-        - *display_reactions* [default=None] a list of reaction ids to display otherwise Obj+RID'd 
-    
+        - *display_reactions* [default=None] a list of reaction ids to display otherwise Obj+RID'd
+
         """
         # these must still be set up to actually be user configurable
         if directory is None:
@@ -519,7 +519,7 @@ class SEDCBMPY(SED):
         self.cbm_add_cobra_annot  = add_cobra_annot
 
         #sed = cbmpy.SED('test_model_1', cDir)
-        
+
         self.addModel(mod.getId(), mod)
         if display_reactions is None:
             ofids = mod.getActiveObjectiveReactionIds()
@@ -539,7 +539,7 @@ class SEDCBMPY(SED):
             self.__cbmpy__ = cbmpy
         self.__cbmpy__.writeSBML3FBC(mod, mfile, add_cobra_annot=self.cbm_add_cobra_annot, add_cbmpy_annot=self.cbm_add_cbmpy_annot)
 
-    def writeExcel(self, mod, mfile): 
+    def writeExcel(self, mod, mfile):
         if self.__cbmpy__ == None:
             import cbmpy
             self.__cbmpy__ = cbmpy
@@ -564,7 +564,7 @@ class SEDCBMPY(SED):
                 mf2 = mf.replace('.xml','')
                 self.__excel_file__ = mf2
                 self.writeExcel(self.models[m_], mf2)
-            
+
             sedscr.write("AddModel('%s', r'%s', 'urn:sedml:language:sbml')\n" % tmp)
         sedscr.write('\n')
 
@@ -574,7 +574,7 @@ class SEDCBMPY(SED):
                 sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" %  (s_,\
                         S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
             elif self.sims[s_]['type'] == 'state':
-                sedscr.write("AddSteadyState('%s', '%s')\n" %  (s_, self.sims[s_]['algorithm']))  
+                sedscr.write("AddSteadyState('%s', '%s')\n" %  (s_, self.sims[s_]['algorithm']))
         sedscr.write('\n')
 
         for t_ in self.tasks:
@@ -655,7 +655,7 @@ class SEDCBMPY(SED):
             zf.write(modpath, arcname=modname)
             MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sbml"/>\n' % modname
         MFstr += ' <content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>\n'
-        
+
         if self.CBM_WITH_EXCEL:
             xl = self.__excel_file__ + '.xls'
             xlf = os.path.split(xl)[-1]
