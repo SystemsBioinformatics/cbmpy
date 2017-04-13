@@ -1,0 +1,38 @@
+package:
+  name: cbmpy
+  version: "0.7.9"
+
+source:
+  svn_url: https://svn.code.sf.net/p/cbmpy/code/trunk/cbmpy
+  svn_rev: 544
+  svn_ignore_externals: True # (defaults to False)
+
+build:
+  number: 1
+  include_recipe: False
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+    - numpy
+    - sympy
+    - python-libsbml
+    - scipy
+    - matplotlib
+    - biopython
+    - suds
+    - nose
+    - wxpython
+    
+about:
+  home: http://cbmpy.sourceforge.net
+  license: GPL
+  licence_file: LICENCE_GPLv3.txt
+  summary: Constraint-based modelling in Python
+
+extra:
+  maintainers:
+   - Brett G. Olivier

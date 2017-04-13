@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.1.27)  25 FEB 2016 15:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.8.19)  13 APR 2017 15:39
 entering extended mode
 **./cbmpy.tex
 (cbmpy.tex
-LaTeX2e <2015/10/01> patch level 2
-Babel <3.9n> and hyphenation patterns for 69 languages loaded.
+LaTeX2e <2016/03/31>
+Babel <3.9r> and hyphenation patterns for 75 language(s) loaded.
 (sphinxmanual.cls
 Document Class: sphinxmanual 2009/06/02 Document class (Sphinx manual)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\report.cls"
@@ -23,21 +23,24 @@ File: size11.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-))
+)) (iftex.sty
+Package: iftex 2013/04/04 v0.2 Provides if(tex) conditional for PDFTeX, XeTeX, 
+and LuaTeX
+)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\inputenc.sty"
 Package: inputenc 2015/03/17 v1.2c Input encoding file
 \inpenc@prehook=\toks14
 \inpenc@posthook=\toks15
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2015/09/07 v1.1p UTF-8 support for inputenc
+File: utf8.def 2016/02/28 v1.1s UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\t1enc.dfu"
-File: t1enc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
+File: t1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
    defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
@@ -107,50 +110,94 @@ File: t1enc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
    defining Unicode char U+00FD (decimal 253)
    defining Unicode char U+00FE (decimal 254)
    defining Unicode char U+00FF (decimal 255)
+   defining Unicode char U+0100 (decimal 256)
+   defining Unicode char U+0101 (decimal 257)
    defining Unicode char U+0102 (decimal 258)
    defining Unicode char U+0103 (decimal 259)
    defining Unicode char U+0104 (decimal 260)
    defining Unicode char U+0105 (decimal 261)
    defining Unicode char U+0106 (decimal 262)
    defining Unicode char U+0107 (decimal 263)
+   defining Unicode char U+0108 (decimal 264)
+   defining Unicode char U+0109 (decimal 265)
+   defining Unicode char U+010A (decimal 266)
+   defining Unicode char U+010B (decimal 267)
    defining Unicode char U+010C (decimal 268)
    defining Unicode char U+010D (decimal 269)
    defining Unicode char U+010E (decimal 270)
    defining Unicode char U+010F (decimal 271)
    defining Unicode char U+0110 (decimal 272)
    defining Unicode char U+0111 (decimal 273)
+   defining Unicode char U+0112 (decimal 274)
+   defining Unicode char U+0113 (decimal 275)
+   defining Unicode char U+0114 (decimal 276)
+   defining Unicode char U+0115 (decimal 277)
+   defining Unicode char U+0116 (decimal 278)
+   defining Unicode char U+0117 (decimal 279)
    defining Unicode char U+0118 (decimal 280)
    defining Unicode char U+0119 (decimal 281)
    defining Unicode char U+011A (decimal 282)
    defining Unicode char U+011B (decimal 283)
+   defining Unicode char U+011C (decimal 284)
+   defining Unicode char U+011D (decimal 285)
    defining Unicode char U+011E (decimal 286)
    defining Unicode char U+011F (decimal 287)
+   defining Unicode char U+0120 (decimal 288)
+   defining Unicode char U+0121 (decimal 289)
+   defining Unicode char U+0122 (decimal 290)
+   defining Unicode char U+0123 (decimal 291)
+   defining Unicode char U+0124 (decimal 292)
+   defining Unicode char U+0125 (decimal 293)
+   defining Unicode char U+0128 (decimal 296)
+   defining Unicode char U+0129 (decimal 297)
+   defining Unicode char U+012A (decimal 298)
+   defining Unicode char U+012B (decimal 299)
+   defining Unicode char U+012C (decimal 300)
+   defining Unicode char U+012D (decimal 301)
+   defining Unicode char U+012E (decimal 302)
+   defining Unicode char U+012F (decimal 303)
    defining Unicode char U+0130 (decimal 304)
    defining Unicode char U+0131 (decimal 305)
    defining Unicode char U+0132 (decimal 306)
    defining Unicode char U+0133 (decimal 307)
+   defining Unicode char U+0134 (decimal 308)
+   defining Unicode char U+0135 (decimal 309)
+   defining Unicode char U+0136 (decimal 310)
+   defining Unicode char U+0137 (decimal 311)
    defining Unicode char U+0139 (decimal 313)
    defining Unicode char U+013A (decimal 314)
+   defining Unicode char U+013B (decimal 315)
+   defining Unicode char U+013C (decimal 316)
    defining Unicode char U+013D (decimal 317)
    defining Unicode char U+013E (decimal 318)
    defining Unicode char U+0141 (decimal 321)
    defining Unicode char U+0142 (decimal 322)
    defining Unicode char U+0143 (decimal 323)
    defining Unicode char U+0144 (decimal 324)
+   defining Unicode char U+0145 (decimal 325)
+   defining Unicode char U+0146 (decimal 326)
    defining Unicode char U+0147 (decimal 327)
    defining Unicode char U+0148 (decimal 328)
    defining Unicode char U+014A (decimal 330)
    defining Unicode char U+014B (decimal 331)
+   defining Unicode char U+014C (decimal 332)
+   defining Unicode char U+014D (decimal 333)
+   defining Unicode char U+014E (decimal 334)
+   defining Unicode char U+014F (decimal 335)
    defining Unicode char U+0150 (decimal 336)
    defining Unicode char U+0151 (decimal 337)
    defining Unicode char U+0152 (decimal 338)
    defining Unicode char U+0153 (decimal 339)
    defining Unicode char U+0154 (decimal 340)
    defining Unicode char U+0155 (decimal 341)
+   defining Unicode char U+0156 (decimal 342)
+   defining Unicode char U+0157 (decimal 343)
    defining Unicode char U+0158 (decimal 344)
    defining Unicode char U+0159 (decimal 345)
    defining Unicode char U+015A (decimal 346)
    defining Unicode char U+015B (decimal 347)
+   defining Unicode char U+015C (decimal 348)
+   defining Unicode char U+015D (decimal 349)
    defining Unicode char U+015E (decimal 350)
    defining Unicode char U+015F (decimal 351)
    defining Unicode char U+0160 (decimal 352)
@@ -159,10 +206,18 @@ File: t1enc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
    defining Unicode char U+0163 (decimal 355)
    defining Unicode char U+0164 (decimal 356)
    defining Unicode char U+0165 (decimal 357)
+   defining Unicode char U+0168 (decimal 360)
+   defining Unicode char U+0169 (decimal 361)
+   defining Unicode char U+016A (decimal 362)
+   defining Unicode char U+016B (decimal 363)
+   defining Unicode char U+016C (decimal 364)
+   defining Unicode char U+016D (decimal 365)
    defining Unicode char U+016E (decimal 366)
    defining Unicode char U+016F (decimal 367)
    defining Unicode char U+0170 (decimal 368)
    defining Unicode char U+0171 (decimal 369)
+   defining Unicode char U+0172 (decimal 370)
+   defining Unicode char U+0173 (decimal 371)
    defining Unicode char U+0174 (decimal 372)
    defining Unicode char U+0175 (decimal 373)
    defining Unicode char U+0176 (decimal 374)
@@ -174,13 +229,38 @@ File: t1enc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
    defining Unicode char U+017C (decimal 380)
    defining Unicode char U+017D (decimal 381)
    defining Unicode char U+017E (decimal 382)
+   defining Unicode char U+01CD (decimal 461)
+   defining Unicode char U+01CE (decimal 462)
+   defining Unicode char U+01CF (decimal 463)
+   defining Unicode char U+01D0 (decimal 464)
+   defining Unicode char U+01D1 (decimal 465)
+   defining Unicode char U+01D2 (decimal 466)
+   defining Unicode char U+01D3 (decimal 467)
+   defining Unicode char U+01D4 (decimal 468)
+   defining Unicode char U+01E2 (decimal 482)
+   defining Unicode char U+01E3 (decimal 483)
+   defining Unicode char U+01E6 (decimal 486)
+   defining Unicode char U+01E7 (decimal 487)
+   defining Unicode char U+01E8 (decimal 488)
+   defining Unicode char U+01E9 (decimal 489)
+   defining Unicode char U+01EA (decimal 490)
+   defining Unicode char U+01EB (decimal 491)
+   defining Unicode char U+01F0 (decimal 496)
+   defining Unicode char U+01F4 (decimal 500)
+   defining Unicode char U+01F5 (decimal 501)
    defining Unicode char U+0218 (decimal 536)
    defining Unicode char U+0219 (decimal 537)
    defining Unicode char U+021A (decimal 538)
    defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+1E02 (decimal 7682)
+   defining Unicode char U+1E03 (decimal 7683)
    defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2010 (decimal 8208)
+   defining Unicode char U+2011 (decimal 8209)
+   defining Unicode char U+2012 (decimal 8210)
    defining Unicode char U+2013 (decimal 8211)
    defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2015 (decimal 8213)
    defining Unicode char U+2018 (decimal 8216)
    defining Unicode char U+2019 (decimal 8217)
    defining Unicode char U+201A (decimal 8218)
@@ -197,7 +277,7 @@ Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ot1enc.dfu"
-File: ot1enc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
+File: ot1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
    defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
@@ -238,7 +318,7 @@ Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omsenc.dfu"
-File: omsenc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
+File: omsenc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
    defining Unicode char U+00B7 (decimal 183)
@@ -273,22 +353,91 @@ Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
 )<<t1.cmap>>)
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
+Package: amsmath 2016/03/10 v2.15b AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
+Package: amstext 2000/06/29 v2.01 AMS text
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks16
+\ex@=\dimen103
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen104
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count88
+LaTeX Info: Redefining \frac on input line 199.
+\uproot@=\count89
+\leftroot@=\count90
+LaTeX Info: Redefining \overline on input line 297.
+\classnum@=\count91
+\DOTSCASE@=\count92
+LaTeX Info: Redefining \ldots on input line 394.
+LaTeX Info: Redefining \dots on input line 397.
+LaTeX Info: Redefining \cdots on input line 518.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 634.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 635.
+\macc@depth=\count93
+\c@MaxMatrixCols=\count94
+\dotsspace@=\muskip10
+\c@parentequation=\count95
+\dspbrk@lvl=\count96
+\tag@help=\toks17
+\row@=\count97
+\column@=\count98
+\maxfields@=\count99
+\andhelp@=\toks18
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks19
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks20
+LaTeX Info: Redefining \[ on input line 2739.
+LaTeX Info: Redefining \] on input line 2740.
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
 ("C:\Program Files\MiKTeX 2.9\tex\generic\babel\babel.sty"
-Package: babel 2016/01/08 3.9n The Babel package
+Package: babel 2016/04/23 3.9r The Babel package
 
 *************************************
 * Local config file bblopts.cfg used
 *
-("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\bblopts.cfg"
-File: bblopts.cfg 2006/07/31 v1.0 MiKTeX 'babel' configuration
+(C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\arabi\bblopts.cfg
+File: bblopts.cfg 2005/09/08 v0.1 add Arabic and Farsi to "declared" options of
+ babel
 )
 (C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\babel-english\english.ldf
 Language: english 2012/08/20 v3.3p English support from the babel system
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\babel\babel.def"
-File: babel.def 2016/01/08 3.9n Babel common definitions
-\babel@savecnt=\count88
-\U@D=\dimen103
+File: babel.def 2016/04/23 3.9r Babel common definitions
+\babel@savecnt=\count100
+\U@D=\dimen112
 )
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
@@ -298,46 +447,46 @@ File: babel.def 2016/01/08 3.9n Babel common definitions
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
 ) (fncychap.sty
 Package: fncychap 2007/07/30 v1.34 LaTeX package (Revised chapters)
-\RW=\skip43
-\mylen=\skip44
-\myhi=\skip45
-\px=\skip46
-\py=\skip47
-\pyy=\skip48
-\pxx=\skip49
-\c@AlphaCnt=\count89
-\c@AlphaDecCnt=\count90
+\RW=\skip46
+\mylen=\skip47
+\myhi=\skip48
+\px=\skip49
+\py=\skip50
+\pyy=\skip51
+\pxx=\skip52
+\c@AlphaCnt=\count101
+\c@AlphaDecCnt=\count102
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\tools\longtable.sty"
 Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
-\LTleft=\skip50
-\LTright=\skip51
-\LTpre=\skip52
-\LTpost=\skip53
-\LTchunksize=\count91
-\LTcapwidth=\dimen104
-\LT@head=\box26
-\LT@firsthead=\box27
-\LT@foot=\box28
-\LT@lastfoot=\box29
-\LT@cols=\count92
-\LT@rows=\count93
-\c@LT@tables=\count94
-\c@LT@chunks=\count95
-\LT@p@ftn=\toks16
+\LTleft=\skip53
+\LTright=\skip54
+\LTpre=\skip55
+\LTpost=\skip56
+\LTchunksize=\count103
+\LTcapwidth=\dimen113
+\LT@head=\box28
+\LT@firsthead=\box29
+\LT@foot=\box30
+\LT@lastfoot=\box31
+\LT@cols=\count104
+\LT@rows=\count105
+\c@LT@tables=\count106
+\c@LT@chunks=\count107
+\LT@p@ftn=\toks21
 ) (sphinx.sty
 Package: sphinx 2010/01/15 LaTeX package (Sphinx markup)
 
 (C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\fancyhdr\fancyhdr.sty
-\fancy@headwidth=\skip54
-\f@ncyO@elh=\skip55
-\f@ncyO@erh=\skip56
-\f@ncyO@olh=\skip57
-\f@ncyO@orh=\skip58
-\f@ncyO@elf=\skip59
-\f@ncyO@erf=\skip60
-\f@ncyO@olf=\skip61
-\f@ncyO@orf=\skip62
+\fancy@headwidth=\skip57
+\f@ncyO@elh=\skip58
+\f@ncyO@erh=\skip59
+\f@ncyO@olh=\skip60
+\f@ncyO@orh=\skip61
+\f@ncyO@elf=\skip62
+\f@ncyO@erf=\skip63
+\f@ncyO@olf=\skip64
+\f@ncyO@orf=\skip65
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\textcomp.sty"
 Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
@@ -360,7 +509,7 @@ Now handling font encoding TS1 ...
 ... processing UTF-8 mapping file for font encoding TS1
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ts1enc.dfu"
-File: ts1enc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
+File: ts1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
    defining Unicode char U+00A2 (decimal 162)
    defining Unicode char U+00A3 (decimal 163)
    defining Unicode char U+00A4 (decimal 164)
@@ -499,100 +648,42 @@ Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
 Package: fancybox 2010/05/15 1.4
 
 Style option: `fancybox' v1.4 <2010/05/15> (tvz)
-\@fancybox=\box30
-\shadowsize=\dimen105
-\@Sbox=\box31
-\do@VerbBox=\toks17
-\the@fancyput=\toks18
-\this@fancyput=\toks19
-\EndVerbatimTokens=\toks20
+\@fancybox=\box32
+\shadowsize=\dimen114
+\@Sbox=\box33
+\do@VerbBox=\toks22
+\the@fancyput=\toks23
+\this@fancyput=\toks24
+\EndVerbatimTokens=\toks25
 \Verbatim@Outfile=\write3
 \Verbatim@Infile=\read1
 ) (C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titlesec.sty
 Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
-\ttl@box=\box32
-\beforetitleunit=\skip63
-\aftertitleunit=\skip64
-\ttl@plus=\dimen106
-\ttl@minus=\dimen107
-\ttl@toksa=\toks21
-\titlewidth=\dimen108
-\titlewidthlast=\dimen109
-\titlewidthfirst=\dimen110
+\ttl@box=\box34
+\beforetitleunit=\skip66
+\aftertitleunit=\skip67
+\ttl@plus=\dimen115
+\ttl@minus=\dimen116
+\ttl@toksa=\toks26
+\titlewidth=\dimen117
+\titlewidthlast=\dimen118
+\titlewidthfirst=\dimen119
 )
 (tabulary.sty
 Package: tabulary 2008/12/01 v0.9 tabulary package (DPC)
  ("C:\Program Files\MiKTeX 2.9\tex\latex\tools\array.sty"
 Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
-\col@sep=\dimen111
-\extrarowheight=\dimen112
-\NC@list=\toks22
-\extratabsurround=\skip65
-\backup@length=\skip66
+\col@sep=\dimen120
+\extrarowheight=\dimen121
+\NC@list=\toks27
+\extratabsurround=\skip68
+\backup@length=\skip69
 )
-\TY@count=\count96
-\TY@linewidth=\dimen113
-\tymin=\dimen114
-\tymax=\dimen115
-\TY@tablewidth=\dimen116
-)
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
-Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip67
-
-For additional information on amsmath, use the `?' option.
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
-Package: amstext 2000/06/29 v2.01
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
-File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks23
-\ex@=\dimen117
-))
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
-Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen118
-)
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
-Package: amsopn 1999/12/14 v2.01 operator names
-)
-\inf@bad=\count97
-LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count98
-\leftroot@=\count99
-LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count100
-\DOTSCASE@=\count101
-LaTeX Info: Redefining \ldots on input line 378.
-LaTeX Info: Redefining \dots on input line 381.
-LaTeX Info: Redefining \cdots on input line 466.
-\Mathstrutbox@=\box33
-\strutbox@=\box34
-\big@size=\dimen119
-LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count102
-\c@MaxMatrixCols=\count103
-\dotsspace@=\muskip10
-\c@parentequation=\count104
-\dspbrk@lvl=\count105
-\tag@help=\toks24
-\row@=\count106
-\column@=\count107
-\maxfields@=\count108
-\andhelp@=\toks25
-\eqnshift@=\dimen120
-\alignsep@=\dimen121
-\tagshift@=\dimen122
-\tagwidth@=\dimen123
-\totwidth@=\dimen124
-\lineht@=\dimen125
-\@envbody=\toks26
-\multlinegap=\skip68
-\multlinetaggap=\skip69
-\mathdisplay@stack=\toks27
-LaTeX Info: Redefining \[ on input line 2665.
-LaTeX Info: Redefining \] on input line 2666.
+\TY@count=\count108
+\TY@linewidth=\dimen122
+\tymin=\dimen123
+\tymax=\dimen124
+\TY@tablewidth=\dimen125
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\makeidx.sty"
 Package: makeidx 2014/09/29 v1.0m Standard LaTeX package
@@ -608,25 +699,35 @@ Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ifthen.sty"
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\color.sty"
-Package: color 2014/10/28 v1.1a Standard LaTeX Color (DPC)
+(C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\xcolor\xcolor.sty
+Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
-File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
-Package color Info: Driver file: pdftex.def on input line 142.
+Package xcolor Info: Driver file: pdftex.def on input line 225.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
-Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count109
-))
+)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
+Package xcolor Info: Model `RGB' extended on input line 1353.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1357.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
+)
 (C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\fancyvrb\fancyvrb.sty
 Package: fancyvrb 2008/02/07
 
@@ -670,169 +771,203 @@ Package: alltt 1997/06/16 v2.0g defines alltt environment
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 )
+("C:\Program Files\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count114
+\float@exts=\toks30
+\float@box=\box39
+\@float@everytoks=\toks31
+\@floatcapt=\box40
+)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
 Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
-Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+Package: graphics 2016/05/09 v1.0r Standard LaTeX Graphics (DPC,SPQR)
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
-Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
-File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+File: graphics.cfg 2016/01/02 v1.10 sample graphics configuration
 )
-Package graphics Info: Driver file: pdftex.def on input line 94.
+Package graphics Info: Driver file: pdftex.def on input line 96.
 )
 \Gin@req@height=\dimen133
 \Gin@req@width=\dimen134
 )
 ("C:\Program Files\MiKTeX 2.9\tex\plain\misc\pdfcolor.tex")
-\distancetoright=\skip71
-\py@argswidth=\skip72
-\py@noticelength=\skip73
-\lineblockindentation=\skip74
-\image@box=\box39
-\image@width=\dimen135
+\sphinxcontinuationbox=\box41
+\sphinxvisiblespacebox=\box42
+\sphinxshadowsep=\skip71
+\sphinxshadowsize=\skip72
+\sphinxshadowrule=\skip73
+\py@argswidth=\skip74
+\lineblockindentation=\skip75
+\spx@image@box=\box43
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hyperref.sty"
-Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
+Package: hyperref 2016/05/21 v6.83p Hypertext links for LaTeX
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\hobsub-hyperref.sty"
-Package: hobsub-hyperref 2012/04/25 v1.12 Bundle oberdiek, subset hyperref (HO)
+Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\hobsub-generic.sty"
-Package: hobsub-generic 2012/04/25 v1.12 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2012/04/25 v1.12 Construct package bundles (HO)
+Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
+Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package hobsub Info: Skipping package `infwarerr' (already loaded).
 Package hobsub Info: Skipping package `ltxcmds' (already loaded).
-Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
-Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
-Package: intcalc 2007/09/27 v1.1 Expandable calculations with integers (HO)
-Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
-Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
+Package: ifpdf 2016/05/14 v3.1 Provides the ifpdf switch
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
 Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
 (etexcmds)             that some package has redefined \expanded.
 (etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
-Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
-Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+Package: pdftexcmds 2016/05/21 v0.22 Utility functions of pdfTeX for LuaTeX (HO
 )
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
+Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
+Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
 )
-Package: bitset 2011/01/30 v1.1 Handle bit-vector datatype (HO)
-Package: uniquecounter 2011/01/30 v1.2 Provide unlimited unique counter (HO)
+Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
+Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
 )
 Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2010/09/02 v1.4 Let assignment for LaTeX macros (HO)
-Package: hopatch 2011/06/24 v1.1 Wrapper for package hooks (HO)
-Package: xcolor-patch 2011/01/30 xcolor patch
-Package: atveryend 2011/06/30 v1.8 Hooks at the very end of document (HO)
+Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
+Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
+Package: xcolor-patch 2016/05/16 xcolor patch
+Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
 Package atveryend Info: \enddocument detected (standard20110627).
-Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
-Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
-Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
+Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
+Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
+Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
 )
 ("C:\Program Files\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\auxhook.sty"
-Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
+Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
-Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
-\@linkdim=\dimen136
-\Hy@linkcounter=\count114
-\Hy@pagecounter=\count115
+\@linkdim=\dimen135
+\Hy@linkcounter=\count115
+\Hy@pagecounter=\count116
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\pd1enc.def"
-File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2016/05/21 v6.83p Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
-\Hy@SavedSpaceFactor=\count116
+\Hy@SavedSpaceFactor=\count117
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\hyperref.cfg"
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 4319.
-Package hyperref Info: Option `breaklinks' set `true' on input line 4319.
-Package hyperref Info: Hyper figures OFF on input line 4443.
-Package hyperref Info: Link nesting OFF on input line 4448.
-Package hyperref Info: Hyper index ON on input line 4451.
-Package hyperref Info: Plain pages OFF on input line 4458.
-Package hyperref Info: Backreferencing OFF on input line 4463.
+Package hyperref Info: Option `unicode' set `true' on input line 4362.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\puenc.def"
+File: puenc.def 2016/05/21 v6.83p Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 4362.
+Package hyperref Info: Option `breaklinks' set `true' on input line 4362.
+Package hyperref Info: Hyper figures OFF on input line 4486.
+Package hyperref Info: Link nesting OFF on input line 4491.
+Package hyperref Info: Hyper index ON on input line 4494.
+Package hyperref Info: Plain pages OFF on input line 4501.
+Package hyperref Info: Backreferencing OFF on input line 4506.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4688.
-\c@Hy@tempcnt=\count117
+Package hyperref Info: Bookmarks ON on input line 4735.
+\c@Hy@tempcnt=\count118
 
 (C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\url\url.sty
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 5041.
-\XeTeXLinkMargin=\dimen137
-\Fld@menulength=\count118
-\Field@Width=\dimen138
-\Fld@charsize=\dimen139
-Package hyperref Info: Hyper figures OFF on input line 6295.
-Package hyperref Info: Link nesting OFF on input line 6300.
-Package hyperref Info: Hyper index ON on input line 6303.
-Package hyperref Info: backreferencing OFF on input line 6310.
-Package hyperref Info: Link coloring ON on input line 6313.
-Package hyperref Info: Link coloring with OCG OFF on input line 6320.
-Package hyperref Info: PDF/A mode OFF on input line 6325.
-LaTeX Info: Redefining \ref on input line 6365.
-LaTeX Info: Redefining \pageref on input line 6369.
-\Hy@abspage=\count119
-\c@Item=\count120
-\c@Hfootnote=\count121
+LaTeX Info: Redefining \url on input line 5088.
+\XeTeXLinkMargin=\dimen136
+\Fld@menulength=\count119
+\Field@Width=\dimen137
+\Fld@charsize=\dimen138
+Package hyperref Info: Hyper figures OFF on input line 6342.
+Package hyperref Info: Link nesting OFF on input line 6347.
+Package hyperref Info: Hyper index ON on input line 6350.
+Package hyperref Info: backreferencing OFF on input line 6357.
+Package hyperref Info: Link coloring ON on input line 6360.
+Package hyperref Info: Link coloring with OCG OFF on input line 6367.
+Package hyperref Info: PDF/A mode OFF on input line 6372.
+LaTeX Info: Redefining \ref on input line 6412.
+LaTeX Info: Redefining \pageref on input line 6416.
+\Hy@abspage=\count120
+\c@Item=\count121
+\c@Hfootnote=\count122
 )
 
 Package hyperref Message: Driver (autodetected): hpdftex.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hpdftex.def"
-File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
-\Fld@listcount=\count122
-\c@bookmark@seq@number=\count123
+File: hpdftex.def 2016/05/21 v6.83p Hyperref driver for pdfTeX
+\Fld@listcount=\count123
+\c@bookmark@seq@number=\count124
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\rerunfilecheck.sty"
-Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
+Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
-\Hy@SectionHShift=\skip75
+\Hy@SectionHShift=\skip76
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\hypcap.sty"
-Package: hypcap 2011/02/16 v1.11 Adjusting the anchors of captions (HO)
+Package: hypcap 2016/05/16 v1.12 Adjusting the anchors of captions (HO)
 )
-\DUlineblockindent=\skip76
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\float\float.sty"
-Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count124
-\float@exts=\toks30
-\float@box=\box40
-\@float@everytoks=\toks31
-\@floatcapt=\box41
+\DUlineblockindent=\skip77
+ (newfloat.sty
+Package: newfloat 2015/09/17 v1.1-109 Defining new floating environments (AR)
 )
-\@float@every@literal-block=\toks32
+Package newfloat Info: New float `literal-block' with options `' on input line 
+871.
 \c@literal-block=\count125
+Package newfloat Info: float type `literal-block'=4 on input line 871.
+
+(C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\capt-of\capt-of.sty
+Package: capt-of 2009/12/29 v0.2 standard captions outside of floats
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
-\bigstrutjot=\dimen140
+(needspace.sty
+Package: needspace 2010/09/12 v1.3d reserve vertical space
 )
+** (sphinx) defining (legacy) text style macros without \sphinx prefix
+** if clashes with packages, set latex_keep_old_macro_names=False in conf.py
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
+\bigstrutjot=\dimen139
+)
+(C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\eqparbox\eqparbox.sty
+Package: eqparbox 2013/03/15 v4.0 Create equal-widthed boxes
+\eqp@tempdima=\skip78
+\eqp@tempdimb=\skip79
+\eqp@tabular@box=\box44
+\eqp@list@box=\box45
+\eqp@list@indent=\skip80
+
+(C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\environ\environ.sty
+Package: environ 2014/05/04 v0.3 A new way to define environments
+
+(C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\latex\trimspaces\trimspaces.sty
+Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
+)))
 \@indexfile=\write5
 \openout5 = `cbmpy.idx'.
 
@@ -841,28 +976,30 @@ Writing index file cbmpy.idx
 (cbmpy.aux)
 \openout1 = `cbmpy.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 125.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 125.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 140.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 140.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ts1cmr.fd"
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 125.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 140.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\t1ptm.fd"
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
@@ -870,79 +1007,101 @@ File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 (C:\Users\bgoli\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count126
-\scratchdimen=\dimen141
-\scratchbox=\box42
+\scratchdimen=\dimen140
+\scratchbox=\box46
 \nofMPsegments=\count127
 \nofMParguments=\count128
-\everyMPshowfont=\toks33
+\everyMPshowfont=\toks32
 \MPscratchCnt=\count129
-\MPscratchDim=\dimen142
+\MPscratchDim=\dimen141
 \MPnumerator=\count130
 \makeMPintoPDFobject=\count131
-\everyMPtoPDFconversion=\toks34
+\everyMPtoPDFconversion=\toks33
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\grfext.sty"
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
 )
-\AtBeginShipoutBox=\box43
-Package hyperref Info: Link coloring ON on input line 125.
- ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
-Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+\AtBeginShipoutBox=\box47
+Package hyperref Info: Link coloring ON on input line 140.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
+Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
-Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
+Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count132
 )
-LaTeX Info: Redefining \ref on input line 125.
-LaTeX Info: Redefining \pageref on input line 125.
-LaTeX Info: Redefining \nameref on input line 125.
+LaTeX Info: Redefining \ref on input line 140.
+LaTeX Info: Redefining \pageref on input line 140.
+LaTeX Info: Redefining \nameref on input line 140.
 
 (cbmpy.out) (cbmpy.out)
 \@outlinefile=\write6
 \openout6 = `cbmpy.out'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 128--128
 
- []
-
-
-
-pdfTeX warning: pdflatex.exe (file ./pysces_cbm1_head.pdf): PDF inclusion: foun
-d PDF version <1.6>, but at most version <1.5> allowed
+pdfTeX warning: pdflatex (file ./pysces_cbm1_head.pdf): PDF inclusion: found PD
+F version <1.6>, but at most version <1.5> allowed
 <pysces_cbm1_head.pdf, id=152, 570.13pt x 134.5025pt>
 File: pysces_cbm1_head.pdf Graphic file (type pdf)
 
 <use pysces_cbm1_head.pdf>
-Package pdftex.def Info: pysces_cbm1_head.pdf used on input line 128.
+Package pdftex.def Info: pysces_cbm1_head.pdf used on input line 143.
 (pdftex.def)             Requested size: 570.12862pt x 134.50215pt.
 File: pysces_cbm1_head.pdf Graphic file (type pdf)
  <use pysces_cbm1_head.pdf>
-Package pdftex.def Info: pysces_cbm1_head.pdf used on input line 128.
+Package pdftex.def Info: pysces_cbm1_head.pdf used on input line 143.
 (pdftex.def)             Requested size: 452.96788pt x 106.86124pt.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 128.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 143.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd"
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 143.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 128.
-LaTeX Font Info:    Font shape `T1/phv/m/it' in size <17.28> not available
-(Font)              Font shape `T1/phv/m/sl' tried instead on input line 128.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 143.
+LaTeX Font Info:    Font shape `T1/phv/bx/it' in size <10.95> not available
+(Font)              Font shape `T1/phv/b/it' tried instead on input line 143.
+LaTeX Font Info:    Font shape `T1/phv/b/it' in size <10.95> not available
+(Font)              Font shape `T1/phv/b/sl' tried instead on input line 143.
 LaTeX Font Info:    Font shape `T1/phv/bx/it' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/it' tried instead on input line 128.
+(Font)              Font shape `T1/phv/b/it' tried instead on input line 143.
 LaTeX Font Info:    Font shape `T1/phv/b/it' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/sl' tried instead on input line 128.
+(Font)              Font shape `T1/phv/b/sl' tried instead on input line 143.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 128.
-<<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>> [1
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 143.
+<<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>>
+LaTeX Font Info:    Try loading font information for U+msa on input line 143.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 143.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 143.
+ [1
 
 {C:/Users/bgoli/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./pysces_cb
-m1_head.pdf>] [2
+m1_head.pdf>]
+[2
 
 ] (cbmpy.toc
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 2.
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 58.
  [1
 
 ])
@@ -963,845 +1122,995 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 ]
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 135.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 150.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 135.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 150.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 135.
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 151.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 150.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 172.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\t1pcr.fd"
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-LaTeX Font Info:    Try loading font information for TS1+pcr on input line 152.
+LaTeX Font Info:    Try loading font information for TS1+pcr on input line 173.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ts1pcr.fd"
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
-)
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 175.
-LaTeX Font Info:    Try loading font information for TS1+ptm on input line 177.
+) [3]
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 214.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ts1ptm.fd"
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [3] [4]
-Underfull \hbox (badness 10000) in paragraph at lines 332--333
-[][][]\T1/ptm/m/n/10.95 http://sourceforge.net/projects/sbml/files/libsbml/5.10
-.0/stable/Windows/32-bit/libSBML-
+) [4] [5]
+LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 358.
+ [6]
+Underfull \hbox (badness 10000) in paragraph at lines 484--485
+[][][]$\T1/ptm/m/n/10.95 http : / / sourceforge . net / projects / sbml / les 
+/ libsbml / 5 . 10 . 0 / stable / Windows / 32-[]bit /
  []
 
-[5] [6] [7] [8] [9] [10] [11] [12]
-Underfull \hbox (badness 10000) in paragraph at lines 949--950
+[7] [8] [9]
+LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 734.
+ [10] [11] [12] [13] [14]
+Underfull \hbox (badness 10000) in paragraph at lines 1101--1102
 []\T1/ptm/m/n/10.95 Change di-rec-tory to sup-plied PySCeS-CBM Mariner tests e.
 g. \T1/pcr/m/n/10.95 cd
  []
 
-[13] [14
-
-]
+[15] [16]
 Chapter 2.
-[15] [16
+[17
+
+] [18
 
 ]
 Chapter 3.
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 1038.
-[17]
-Underfull \hbox (badness 10000) in paragraph at lines 1119--1119
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 1.
+[19]
+Underfull \hbox (badness 10000) in paragraph at lines 1274--1274
 []\T1/ptm/m/it/10.95 s\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 get-From-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1119--1119
+Underfull \hbox (badness 10000) in paragraph at lines 1274--1274
 \T1/ptm/m/it/10.95 Name=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1119--1119
+Underfull \hbox (badness 10000) in paragraph at lines 1274--1274
 \T1/ptm/m/it/10.95 over-writeChem-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1119--1119
+Underfull \hbox (badness 10000) in paragraph at lines 1274--1274
 \T1/ptm/m/it/10.95 For-mula=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1119--1119
+Underfull \hbox (badness 10000) in paragraph at lines 1274--1274
 \T1/ptm/m/it/10.95 over-
  []
 
 
-Overfull \hbox (8.36505pt too wide) in paragraph at lines 1119--1119
+Overfull \hbox (8.36505pt too wide) in paragraph at lines 1274--1274
 \T1/ptm/m/it/10.95 writeCharge=False\T1/pcr/m/n/10.95 ) 
  []
 
-[18]
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1203
+[20]
+Underfull \hbox (badness 10000) in paragraph at lines 1358--1358
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 se-lected_reacti
 ons=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1203
+Underfull \hbox (badness 10000) in paragraph at lines 1358--1358
 \T1/ptm/m/it/10.95 pre_opt=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 tol=None\
 T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1203
+Underfull \hbox (badness 10000) in paragraph at lines 1358--1358
 \T1/ptm/m/it/10.95 objF2constr=True\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1203
+Underfull \hbox (badness 10000) in paragraph at lines 1358--1358
 \T1/ptm/m/it/10.95 age=100.0\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 work_dir=Non
 e\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1203
+Underfull \hbox (badness 10000) in paragraph at lines 1358--1358
 \T1/ptm/m/it/10.95 de-fault_on_fail=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95
  round-
  []
 
-[19]
-Underfull \hbox (badness 10000) in paragraph at lines 1281--1281
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 1436--1436
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 se-lected_reacti
 ons=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1281--1281
+Underfull \hbox (badness 10000) in paragraph at lines 1436--1436
 \T1/ptm/m/it/10.95 pre_opt=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 tol=None\
 T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1281--1281
+Underfull \hbox (badness 10000) in paragraph at lines 1436--1436
 \T1/ptm/m/it/10.95 objF2constr=True\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1281--1281
+Underfull \hbox (badness 10000) in paragraph at lines 1436--1436
 \T1/ptm/m/it/10.95 age=100.0\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 work_dir=Non
 e\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1281--1281
+Underfull \hbox (badness 10000) in paragraph at lines 1436--1436
 \T1/ptm/m/it/10.95 quiet=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 de-bug=Fal
 se\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1281--1281
+Underfull \hbox (badness 10000) in paragraph at lines 1436--1436
 \T1/ptm/m/it/10.95 ob-jec-tive_coefficients=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1281--1281
+Underfull \hbox (badness 10000) in paragraph at lines 1436--1436
 \T1/ptm/m/it/10.95 re-turn_lp_obj=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 p
 op-u-
  []
 
-[20]
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+[22]
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 se-lected_reacti
 ons=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 \T1/ptm/m/it/10.95 pre_opt=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 tol=None\
 T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 \T1/ptm/m/it/10.95 objF2constr=True\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 \T1/ptm/m/it/10.95 rhs_sense='lower'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 opt-
 Per-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 \T1/ptm/m/it/10.95 quiet=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 de-bug=Fal
 se\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 \T1/ptm/m/it/10.95 ob-jec-tive_coefficients=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 \T1/ptm/m/it/10.95 re-turn_lp_obj=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 \T1/ptm/m/it/10.95 oldlp-gen=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1374--1374
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
 \T1/ptm/m/it/10.95 with_reduced_costs=None\T1/ptm/m/n/10.95 ,
  []
 
-[21]
-Underfull \hbox (badness 10000) in paragraph at lines 1474--1474
+[23]
+Underfull \hbox (badness 10000) in paragraph at lines 1629--1629
 []\T1/ptm/m/it/10.95 lp\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 se-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1474--1474
+Underfull \hbox (badness 10000) in paragraph at lines 1629--1629
 \T1/ptm/m/it/10.95 lected_reactions=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1474--1474
+Underfull \hbox (badness 10000) in paragraph at lines 1629--1629
 \T1/ptm/m/it/10.95 tol=1e-10\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1474--1474
+Underfull \hbox (badness 10000) in paragraph at lines 1629--1629
 \T1/ptm/m/it/10.95 rhs_sense='lower'\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1474--1474
+Underfull \hbox (badness 10000) in paragraph at lines 1629--1629
 \T1/ptm/m/it/10.95 opt-Per-cent-age=100.0\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1474--1474
+Underfull \hbox (badness 10000) in paragraph at lines 1629--1629
 \T1/ptm/m/it/10.95 work_dir=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 de-
  []
 
-[22]
-Underfull \hbox (badness 10000) in paragraph at lines 1558--1558
+[24]
+Underfull \hbox (badness 10000) in paragraph at lines 1713--1713
 []\T1/ptm/m/it/10.95 f\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 lpF-name=None\T1/p
 tm/m/n/10.95 , \T1/ptm/m/it/10.95 re-turn_lp_obj=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1558--1558
+Underfull \hbox (badness 10000) in paragraph at lines 1713--1713
 \T1/ptm/m/it/10.95 with_reduced_costs='unscaled'\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1558--1558
+Underfull \hbox (badness 10000) in paragraph at lines 1713--1713
 \T1/ptm/m/it/10.95 build_n=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 quiet=Fal
 se\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 oldlp-gen=False\T1/ptm/m/n/10.95 ,
  []
 
-[23]
-Underfull \hbox (badness 6842) in paragraph at lines 1584--1585
+[25]
+Underfull \hbox (badness 6842) in paragraph at lines 1739--1740
 []\T1/ptm/m/it/10.95 build_n \T1/ptm/m/n/10.95 [de-fault=True] gen-er-ate sto-i
 -chiom-e-try from the re-ac-tion net-work (re-ac-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1645--1645
+Underfull \hbox (badness 10000) in paragraph at lines 1800--1800
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 pre_opt\T1/ptm/m
 /n/10.95 , \T1/ptm/m/it/10.95 objF2constr\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1645--1645
+Underfull \hbox (badness 10000) in paragraph at lines 1800--1800
 \T1/ptm/m/it/10.95 quiet=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 oldlp-gen=
 False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1645--1645
+Underfull \hbox (badness 10000) in paragraph at lines 1800--1800
 \T1/ptm/m/it/10.95 with_reduced_costs='unscaled'\T1/ptm/m/n/10.95 ,
  []
 
-[24]
-Underfull \hbox (badness 10000) in paragraph at lines 1699--1699
+[26]
+Underfull \hbox (badness 10000) in paragraph at lines 1854--1854
 []\T1/ptm/m/it/10.95 cpx\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1699--1699
+Underfull \hbox (badness 10000) in paragraph at lines 1854--1854
 \T1/ptm/m/it/10.95 rhs_sense\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1699--1699
+Underfull \hbox (badness 10000) in paragraph at lines 1854--1854
 \T1/ptm/m/it/10.95 oval\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 tol\T1/ptm/m/n/10
 .95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1699--1699
+Underfull \hbox (badness 10000) in paragraph at lines 1854--1854
 \T1/ptm/m/it/10.95 opt-Per-cent-
  []
 
-[25]
-Underfull \hbox (badness 10000) in paragraph at lines 1891--1891
+[27]
+Underfull \hbox (badness 10000) in paragraph at lines 2046--2046
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 lp\T1/ptm/m/n/10
 .95 ,
  []
 
-[26]
-Underfull \hbox (badness 6316) in paragraph at lines 1919--1919
+[28]
+Underfull \hbox (badness 6316) in paragraph at lines 2074--2074
 []\T1/ptm/m/it/10.95 c\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 pid\T1/ptm/m/n/10.
 95 , \T1/ptm/m/it/10.95 expr=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 sense='
 maximize'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1963--1964
+Underfull \hbox (badness 10000) in paragraph at lines 2118--2119
 []\T1/ptm/m/it/10.95 `file' \T1/ptm/m/n/10.95 set solver to silent and out-put 
 logs to \T1/ptm/m/it/10.95 CPLX_RESULT_STREAM_FILE
  []
 
-[27] [28] [29] [30]
-Underfull \hbox (badness 6001) in paragraph at lines 2434--2434
-[]\T1/ptm/m/it/10.95 cid\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 name=None\T1/ptm
-/m/n/10.95 , \T1/ptm/m/it/10.95 size=1\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 di
--men-sions=3\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 vol-
- []
-
-[31] [32]
-LaTeX Font Info:    Font shape `T1/ptm/bx/it' in size <10.95> not available
-(Font)              Font shape `T1/ptm/b/it' tried instead on input line 2686.
- [33] [34] [35] [36] [37] [38]
-Underfull \hbox (badness 10000) in paragraph at lines 3667--3667
-[]\T1/ptm/m/it/10.95 protein\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 as-soc\T1/pt
-m/m/n/10.95 , \T1/ptm/m/it/10.95 gid=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95
- name=None\T1/ptm/m/n/10.95 ,
- []
-
-[39] [40] [41] [42] [43] [44]
-Overfull \hbox (39.0023pt too wide) in paragraph at lines 4510--4511
-\T1/ptm/m/n/10.95 Resets all re-ac-tion bounds mod-i-fied by the \T1/pcr/m/n/10
-.95 cmod.setAllInactiveGeneReactionBounds()
- []
-
-[45] [46] [47] [48] [49] [50] [51] [52]
-Underfull \hbox (badness 10000) in paragraph at lines 5637--5637
+[29] [30] [31]
+Underfull \hbox (badness 10000) in paragraph at lines 2530--2530
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 se-lected_reacti
 ons=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 5637--5637
+Underfull \hbox (badness 10000) in paragraph at lines 2530--2530
+\T1/ptm/m/it/10.95 pre_opt=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 tol=None\
+T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2530--2530
+\T1/ptm/m/it/10.95 objF2constr=True\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2530--2530
+\T1/ptm/m/it/10.95 rhs_sense='lower'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 opt-
+Per-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2530--2530
+\T1/ptm/m/it/10.95 de-fault_on_fail=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95
+ round-
+ []
+
+[32]
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+[]\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 se-lected_reacti
+ons=None\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 pre_opt=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 tol=None\
+T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 objF2constr=True\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 rhs_sense='lower'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 opt-
+Per-cent-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 age=100.0\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 work_dir=Non
+e\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 quiet=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 de-bug=Fal
+se\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 ob-jec-tive_coefficients={}\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 re-turn_lp_obj=False\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 oldlp-gen=False\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2596--2596
+\T1/ptm/m/it/10.95 with_reduced_costs=None\T1/ptm/m/n/10.95 ,
+ []
+
+[33] [34]
+Underfull \hbox (badness 10000) in paragraph at lines 2699--2699
+[]\T1/ptm/m/it/10.95 f\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 lpF-name=None\T1/p
+tm/m/n/10.95 , \T1/ptm/m/it/10.95 re-turn_lp_obj=False\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2699--2699
+\T1/ptm/m/it/10.95 with_reduced_costs='unscaled'\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2699--2699
+\T1/ptm/m/it/10.95 with_sensitivity=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95
+ del_intermediate=False\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2699--2699
+\T1/ptm/m/it/10.95 build_n=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 quiet=Fal
+se\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 oldlp-gen=False\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 6842) in paragraph at lines 2725--2726
+[]\T1/ptm/m/it/10.95 build_n \T1/ptm/m/n/10.95 [de-fault=True] gen-er-ate sto-i
+-chiom-e-try from the re-ac-tion net-work (re-ac-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2761--2761
+[]\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 pre_opt\T1/ptm/m
+/n/10.95 , \T1/ptm/m/it/10.95 objF2constr\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2761--2761
+\T1/ptm/m/it/10.95 quiet=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 oldlp-gen=
+True\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2761--2761
+\T1/ptm/m/it/10.95 with_reduced_costs='unscaled'\T1/ptm/m/n/10.95 ,
+ []
+
+[35]
+Underfull \hbox (badness 10000) in paragraph at lines 2803--2803
+[]\T1/ptm/m/it/10.95 cpx\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2803--2803
+\T1/ptm/m/it/10.95 rhs_sense\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2803--2803
+\T1/ptm/m/it/10.95 oval\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 tol\T1/ptm/m/n/10
+.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2803--2803
+\T1/ptm/m/it/10.95 opt-Per-cent-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2881--2881
+[]\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 lp\T1/ptm/m/n/10
+.95 ,
+ []
+
+[36]
+Underfull \hbox (badness 10000) in paragraph at lines 2901--2901
+[]\T1/ptm/m/it/10.95 c\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 oid\T1/ptm/m/n/10.
+95 , \T1/ptm/m/it/10.95 expr=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 sense='
+maximize'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re-
+ []
+
+[37]
+Underfull \hbox (badness 6001) in paragraph at lines 3045--3045
+[]\T1/ptm/m/it/10.95 cid\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 name=None\T1/ptm
+/m/n/10.95 , \T1/ptm/m/it/10.95 size=1\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 di
+-men-sions=3\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 vol-
+ []
+
+[38] [39]
+LaTeX Font Info:    Font shape `T1/ptm/bx/it' in size <10.95> not available
+(Font)              Font shape `T1/ptm/b/it' tried instead on input line 3297.
+ [40] [41] [42] [43] [44] [45] [46]
+Underfull \hbox (badness 10000) in paragraph at lines 4313--4313
+[]\T1/ptm/m/it/10.95 protein\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 as-soc\T1/pt
+m/m/n/10.95 , \T1/ptm/m/it/10.95 gid=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95
+ name=None\T1/ptm/m/n/10.95 ,
+ []
+
+[47] [48] [49] [50] [51] [52] [53]
+Overfull \hbox (39.0023pt too wide) in paragraph at lines 5249--5250
+\T1/ptm/m/n/10.95 Resets all re-ac-tion bounds mod-i-fied by the \T1/pcr/m/n/10
+.95 cmod.setAllInactiveGeneReactionBounds()
+ []
+
+[54] [55] [56] [57] [58] [59] [60] [61]
+Underfull \hbox (badness 10000) in paragraph at lines 6417--6417
+[]\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 se-lected_reacti
+ons=None\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 6417--6417
 \T1/ptm/m/it/10.95 rhs_sense='lower'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 opt-
 Per-cent-age=100.0\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 5637--5637
+Underfull \hbox (badness 10000) in paragraph at lines 6417--6417
 \T1/ptm/m/it/10.95 oldlp-gen=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 markup
 -model=True\T1/ptm/m/n/10.95 ,
  []
 
-[53]
-Underfull \hbox (badness 10000) in paragraph at lines 5653--5653
-[]\T1/ptm/m/it/10.95 lp\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 se-lected_reactio
-ns=None\T1/ptm/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5653--5653
-\T1/ptm/m/it/10.95 tol=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 rhs_sense='lo
-wer'\T1/ptm/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5653--5653
-\T1/ptm/m/it/10.95 opt-Per-cent-age=100.0\T1/ptm/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5653--5653
-\T1/ptm/m/it/10.95 work_dir=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 de-bug=F
-alse\T1/ptm/m/n/10.95 ,
- []
-
-[54]
-Overfull \hbox (179.70256pt too wide) in paragraph at lines 5824--5824
+[62] [63]
+Overfull \hbox (24.61972pt too wide) in paragraph at lines 6673--6673
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 5824--5824
+Underfull \hbox (badness 10000) in paragraph at lines 6673--6673
 
  []
 
-[55] [56]
-Underfull \hbox (badness 10000) in paragraph at lines 6053--6053
+[64] [65]
+Underfull \hbox (badness 10000) in paragraph at lines 6899--6899
 \T1/ptm/m/it/10.95 max-Height=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 rounde
 c=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 au-to-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6054--6055
+Underfull \hbox (badness 10000) in paragraph at lines 6900--6901
 \T1/ptm/m/n/10.95 Plots and saves as an im-age the flux vari-abil-ity re-sults 
 as gen-er-ated by CB-
  []
 
-[57]
-Underfull \hbox (badness 10000) in paragraph at lines 6158--6158
+[66]
+Underfull \hbox (badness 10000) in paragraph at lines 7004--7004
 []\T1/ptm/m/it/10.95 fname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 work_dir=None\
 T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6158--6158
+Underfull \hbox (badness 10000) in paragraph at lines 7004--7004
 \T1/ptm/m/it/10.95 turn_sbml_model=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 
 delete_intermediate=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6158--6158
-\T1/ptm/m/it/10.95 fake_boundary_species_search=False\T1/ptm/m/n/10.95 , \T1/pt
-m/m/it/10.95 out-
+Underfull \hbox (badness 10000) in paragraph at lines 7004--7004
+\T1/ptm/m/it/10.95 fake_boundary_species_search=False\T1/ptm/m/n/10.95 ,
  []
 
-[58]
-Underfull \hbox (badness 10000) in paragraph at lines 6187--6187
+
+Underfull \hbox (badness 10000) in paragraph at lines 7004--7004
+\T1/ptm/m/it/10.95 out-put_dir=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 skip_
+genes=False\T1/ptm/m/n/10.95 ,
+ []
+
+[67]
+Underfull \hbox (badness 10000) in paragraph at lines 7036--7036
 []\T1/ptm/m/it/10.95 xlname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 write_sbml=Tr
 ue\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 sbml_level=3\T1/ptm/m/n/10.95 , \T1/pt
 m/m/it/10.95 re-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6214--6214
+Underfull \hbox (badness 10000) in paragraph at lines 7063--7063
 []\T1/ptm/m/it/10.95 fname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 work_dir=None\
 T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re-turn_sbml_model=False\T1/ptm/m/n/10.95
  ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6270--6270
+Underfull \hbox (badness 10000) in paragraph at lines 7063--7063
+\T1/ptm/m/it/10.95 fake_boundary_species_search=False\T1/ptm/m/n/10.95 ,
+ []
+
+[68]
+Underfull \hbox (badness 10000) in paragraph at lines 7123--7124
+[]\T1/ptm/m/it/10.95 scan_notes_gpr \T1/ptm/m/n/10.95 [de-fault=True] if the mo
+del is loaded and no genes
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 7140--7140
 []\T1/ptm/m/it/10.95 fname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 big-file=True\
 T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fast_rational=False\T1/ptm/m/n/10.95 , \T
 1/ptm/m/it/10.95 nfor-
  []
 
-[59] [60]
-Underfull \hbox (badness 10000) in paragraph at lines 6357--6357
+[69]
+Underfull \hbox (badness 10000) in paragraph at lines 7227--7227
 []\T1/ptm/m/it/10.95 model_file\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 bounds_fi
 le=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 biomass_flux=None\T1/ptm/m/n/10.9
 5 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6357--6357
+Underfull \hbox (badness 10000) in paragraph at lines 7227--7227
 \T1/ptm/m/it/10.95 model_id='FBAModel'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re
 -ac-tion_prefix='R_'\T1/ptm/m/n/10.95 ,
  []
 
-[61]
-Overfull \hbox (22.71379pt too wide) in paragraph at lines 6439--6440
+[70]
+Overfull \hbox (22.71379pt too wide) in paragraph at lines 7309--7310
 \T1/ptm/m/n/10.95 THIS METHOD IS DER-PRE-CATED PLEASE USE cmod.createGeneAssoci
 ationsFromAnnotations() 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 6507--6508
+[71]
+Underfull \hbox (badness 10000) in paragraph at lines 7377--7378
 \T1/ptm/m/n/10.95 Build sto-i-chiom-e-try: this method has been refac-tored int
 o the model class -
  []
 
-[62]
-Underfull \hbox (badness 10000) in paragraph at lines 6586--6586
+
+Underfull \hbox (badness 10000) in paragraph at lines 7456--7456
 []\T1/ptm/m/it/10.95 mod\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 metabo-lites=Non
 e\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6586--6586
+Underfull \hbox (badness 10000) in paragraph at lines 7456--7456
 \T1/ptm/m/it/10.95 re-tOn-lyZe-roEntr=False\T1/ptm/m/n/10.95 ,
  []
 
-[63]
-Overfull \hbox (72.63716pt too wide) in paragraph at lines 6654--6655
-[]\T1/ptm/m/n/10.95 This func-tion is de-rived from the code found here: [][]ht
-tp://pyparsing.wikispaces.com/file/view/chemicalFormulas.py[][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6678--6678
+[72]
+Underfull \hbox (badness 10000) in paragraph at lines 7548--7548
 []\T1/ptm/m/it/10.95 zipname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 files\T1/ptm
 /m/n/10.95 , \T1/ptm/m/it/10.95 move=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.9
 5 com-pres-
  []
 
-[64]
-Underfull \hbox (badness 10000) in paragraph at lines 6809--6809
+[73]
+Underfull \hbox (badness 10000) in paragraph at lines 7687--7687
 []\T1/ptm/m/it/10.95 arr\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname\T1/ptm/m/n
 /10.95 , \T1/ptm/m/it/10.95 names=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6809--6809
+Underfull \hbox (badness 10000) in paragraph at lines 7687--7687
 \T1/ptm/m/it/10.95 header=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 sep='\T1/p
 tm/m/n/10.95 , \T1/ptm/m/it/10.95 `\T1/ptm/m/n/10.95 ,
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 6840--6840
+[74]
+Underfull \hbox (badness 10000) in paragraph at lines 7718--7718
 []\T1/ptm/m/it/10.95 arr\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname\T1/ptm/m/n
 /10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6840--6840
+Underfull \hbox (badness 10000) in paragraph at lines 7718--7718
 \T1/ptm/m/it/10.95 names=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6862--6862
+Underfull \hbox (badness 10000) in paragraph at lines 7740--7740
 []\T1/ptm/m/it/10.95 arr\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname\T1/ptm/m/n
 /10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6862--6862
+Underfull \hbox (badness 10000) in paragraph at lines 7740--7740
 \T1/ptm/m/it/10.95 names=None\T1/ptm/m/n/10.95 ,
  []
 
-[65]
-Underfull \hbox (badness 10000) in paragraph at lines 6965--6965
+[75]
+Underfull \hbox (badness 10000) in paragraph at lines 7843--7843
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 gene_pattern=Non
 e\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 6965--6965
+Underfull \hbox (badness 10000) in paragraph at lines 7843--7843
 \T1/ptm/m/it/10.95 gene_annotation_key='GENE AS-
  []
 
-[66]
-Underfull \hbox (badness 10000) in paragraph at lines 7092--7093
+[76]
+Underfull \hbox (badness 10000) in paragraph at lines 7970--7971
 []\T1/ptm/m/it/10.95 annotation_key \T1/ptm/m/n/10.95 [de-fault='note'] which c
 on-tains a HTML/XHTML frag-ment in
  []
 
-[67]
-Underfull \hbox (badness 10000) in paragraph at lines 7166--7166
+
+Underfull \hbox (badness 10000) in paragraph at lines 8044--8044
 []\T1/ptm/m/it/10.95 fbam\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 over-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7166--7166
+Underfull \hbox (badness 10000) in paragraph at lines 8044--8044
 \T1/ptm/m/it/10.95 writeCharge=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7166--7166
+Underfull \hbox (badness 10000) in paragraph at lines 8044--8044
 \T1/ptm/m/it/10.95 over-writeChem-For-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 7205--7205
+[77]
+Underfull \hbox (badness 10000) in paragraph at lines 8083--8083
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 rid\T1/ptm/m/n/1
 0.95 , \T1/ptm/m/it/10.95 fwd_id=None\T1/ptm/m/n/10.95 ,
  []
 
-[68]
-Underfull \hbox (badness 10000) in paragraph at lines 7299--7299
+[78]
+Underfull \hbox (badness 10000) in paragraph at lines 8177--8177
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 in-fin-ity_repla
 ce=None\T1/ptm/m/n/10.95 ,
  []
 
-[69]
-Underfull \hbox (badness 10000) in paragraph at lines 7400--7400
+
+Underfull \hbox (badness 10000) in paragraph at lines 8278--8278
 \T1/ptm/m/it/10.95 ful-lLP=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 for-mat='
 %s'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 in-fin-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7408--7408
+Underfull \hbox (badness 10000) in paragraph at lines 8286--8286
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname=None\T1/pt
 m/m/n/10.95 , \T1/ptm/m/it/10.95 work_dir=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7408--7408
+Underfull \hbox (badness 10000) in paragraph at lines 8286--8286
 \T1/ptm/m/it/10.95 use_rational=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 ful
 -lLP=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 for-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 7469--7469
+[79]
+Underfull \hbox (badness 10000) in paragraph at lines 8347--8347
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname=None\T1/pt
 m/m/n/10.95 , \T1/ptm/m/it/10.95 fmt='lp'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95
  work_dir=None\T1/ptm/m/n/10.95 ,
  []
 
-[70]
-Overfull \hbox (65.3738pt too wide) in paragraph at lines 7494--7494
+
+Overfull \hbox (65.3738pt too wide) in paragraph at lines 8372--8372
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7494--7494
+Underfull \hbox (badness 10000) in paragraph at lines 8372--8372
 
  []
 
-[71]
-Underfull \hbox (badness 10000) in paragraph at lines 7607--7607
+[80]
+Underfull \hbox (badness 10000) in paragraph at lines 8485--8485
 []\T1/ptm/m/it/10.95 fname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fbas\T1/ptm/m/
 n/10.95 , \T1/ptm/m/it/10.95 work_dir=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7607--7607
+Underfull \hbox (badness 10000) in paragraph at lines 8485--8485
 \T1/ptm/m/it/10.95 ig-nore-Dis-tance=[]\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 c
 on-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7615--7615
+Underfull \hbox (badness 10000) in paragraph at lines 8493--8493
 \T1/ptm/m/it/10.95 ful-lLP=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 for-mat='
 %s'\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 in-fin-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 7644--7644
+[81]
+Underfull \hbox (badness 10000) in paragraph at lines 8522--8522
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname=None\T1/pt
 m/m/n/10.95 , \T1/ptm/m/it/10.95 work_dir=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7644--7644
+Underfull \hbox (badness 10000) in paragraph at lines 8522--8522
 \T1/ptm/m/it/10.95 use_rational=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 ful
 -lLP=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 for-
  []
 
-[72]
-Underfull \hbox (badness 10000) in paragraph at lines 7773--7773
+[82]
+Underfull \hbox (badness 10000) in paragraph at lines 8651--8651
 []\T1/ptm/m/it/10.95 mod\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname=None\T1/pt
 m/m/n/10.95 , \T1/ptm/m/it/10.95 di-rec-
  []
 
 
-Underfull \hbox (badness 5802) in paragraph at lines 7773--7773
+Underfull \hbox (badness 5802) in paragraph at lines 8651--8651
 \T1/ptm/m/it/10.95 Ex-cel=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 vc_given='
 CBMPy'\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7773--7773
+Underfull \hbox (badness 10000) in paragraph at lines 8651--8651
 \T1/ptm/m/it/10.95 vc_family='Software'\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7773--7773
+Underfull \hbox (badness 10000) in paragraph at lines 8651--8651
 \T1/ptm/m/it/10.95 vc_email='None'\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7773--7773
+Underfull \hbox (badness 10000) in paragraph at lines 8651--8651
 \T1/ptm/m/it/10.95 vc_org='cbmpy.sourceforge.net'\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7773--7773
+Underfull \hbox (badness 10000) in paragraph at lines 8651--8651
 \T1/ptm/m/it/10.95 add_cbmpy_annot=True\T1/ptm/m/n/10.95 ,
  []
 
-[73]
-Underfull \hbox (badness 10000) in paragraph at lines 7901--7901
+[83]
+Underfull \hbox (badness 10000) in paragraph at lines 8779--8779
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname\T1/ptm/m/n
 /10.95 , \T1/ptm/m/it/10.95 di-rec-tory=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7923--7923
-\T1/ptm/m/it/10.95 1)\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 aut-ofix=True\T1/pt
-m/m/n/10.95 , \T1/ptm/m/it/10.95 gpr_from_annot=False\T1/ptm/m/n/10.95 ,
+Underfull \hbox (badness 10000) in paragraph at lines 8801--8801
+\T1/ptm/m/it/10.95 add_groups=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 add_cb
+mpy_annot=True\T1/ptm/m/n/10.95 ,
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 7923--7923
-\T1/ptm/m/it/10.95 add_groups=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 add_c
-bmpy_annot=True\T1/ptm/m/n/10.95 ,
- []
-
-[74]
-Underfull \hbox (badness 10000) in paragraph at lines 7972--7972
+[84]
+Underfull \hbox (badness 10000) in paragraph at lines 8853--8853
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname\T1/ptm/m/n
 /10.95 , \T1/ptm/m/it/10.95 di-rec-tory=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7972--7972
+Underfull \hbox (badness 10000) in paragraph at lines 8853--8853
 \T1/ptm/m/it/10.95 gpr_from_annot=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 a
-dd_groups=False\T1/ptm/m/n/10.95 ,
+dd_groups=True\T1/ptm/m/n/10.95 ,
  []
 
-[75]
-Underfull \hbox (badness 7963) in paragraph at lines 8041--8041
+
+Underfull \hbox (badness 10000) in paragraph at lines 8853--8853
+\T1/ptm/m/it/10.95 val-i-date=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 com-p
+ress_bounds=True\T1/ptm/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 7963) in paragraph at lines 8928--8928
 []\T1/ptm/m/it/10.95 fname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 sols=[]\T1/ptm
 /m/n/10.95 , \T1/ptm/m/it/10.95 sep='\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 `\T
 1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 ex-tra_output=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8048--8049
+Underfull \hbox (badness 10000) in paragraph at lines 8935--8936
 []\T1/ptm/m/it/10.95 sols \T1/ptm/m/n/10.95 a list of dic-tio-nar-ies con-tain-
 ing flux:value pairs (e.g. out-put by
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 8091--8091
+[85]
+Underfull \hbox (badness 10000) in paragraph at lines 8978--8978
 \T1/ptm/m/it/10.95 use_rational=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 ful
 -
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8091--8091
+Underfull \hbox (badness 10000) in paragraph at lines 8978--8978
 \T1/ptm/m/it/10.95 lLP=True\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 for-mat='%s'\
 T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 in-fin-
  []
 
-[76]
-Underfull \hbox (badness 10000) in paragraph at lines 8180--8182
-[]\T1/ptm/m/n/10.95 This code has been adapted from the Flash ex-am-ple that ca
-n be found here:
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 8212--8214
-\T1/ptm/m/n/10.95 Class for strip-ping a string of HTML/XML used from:
- []
-
-[77]
-Underfull \hbox (badness 10000) in paragraph at lines 8220--8220
+[86] [87]
+Underfull \hbox (badness 10000) in paragraph at lines 9132--9132
 []\T1/ptm/m/it/10.95 fname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 out-name=None\
 T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8246--8246
+Underfull \hbox (badness 10000) in paragraph at lines 9158--9158
 []\T1/ptm/m/it/10.95 fname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 out-name=None\
 T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8316--8316
+Underfull \hbox (badness 10000) in paragraph at lines 9228--9228
 []\T1/ptm/m/it/10.95 document\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 file-name\T
 1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 di-rec-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8316--8316
+Underfull \hbox (badness 10000) in paragraph at lines 9228--9228
 \T1/ptm/m/it/10.95 tory=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re-turn_doc=
 False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re-
  []
 
-[78]
-Underfull \hbox (badness 10000) in paragraph at lines 8375--8375
+[88]
+Underfull \hbox (badness 10000) in paragraph at lines 9329--9329
 []\T1/ptm/m/it/10.95 fname\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 work_dir=None\
 T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8375--8375
+Underfull \hbox (badness 10000) in paragraph at lines 9329--9329
 \T1/ptm/m/it/10.95 turn_sbml_model=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8375--8375
+Underfull \hbox (badness 10000) in paragraph at lines 9329--9329
 \T1/ptm/m/it/10.95 delete_intermediate=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8375--8375
+Underfull \hbox (badness 10000) in paragraph at lines 9329--9329
 \T1/ptm/m/it/10.95 fake_boundary_species_search=False\T1/ptm/m/n/10.95 , \T1/pt
 m/m/it/10.95 out-
  []
 
-[79]
-Underfull \hbox (badness 10000) in paragraph at lines 8566--8566
-[]\T1/ptm/m/it/10.95 fbcmod\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fba\T1/ptm/m/
-n/10.95 , \T1/ptm/m/it/10.95 re-turn_dict=False\T1/ptm/m/n/10.95 ,
+
+Underfull \hbox (badness 10000) in paragraph at lines 9329--9329
+\T1/ptm/m/it/10.95 put_dir=None\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 speciesAn
+-no-ta-tion-Fix=True\T1/ptm/m/n/10.95 ,
+ []
+
+[89] [90]
+Underfull \hbox (badness 10000) in paragraph at lines 9563--9563
+[]\T1/ptm/m/it/10.95 fbcmod\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 re-turn_dict=
+False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8566--8566
+Underfull \hbox (badness 10000) in paragraph at lines 9563--9563
 \T1/ptm/m/it/10.95 add_cobra_anno=False\T1/ptm/m/n/10.95 ,
  []
 
-[80]
-Underfull \hbox (badness 10000) in paragraph at lines 8620--8620
+[91]
+Underfull \hbox (badness 10000) in paragraph at lines 9614--9614
 []\T1/ptm/m/it/10.95 model\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fba\T1/ptm/m/n
 /10.95 , \T1/ptm/m/it/10.95 re-turn_dicts=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8620--8620
+Underfull \hbox (badness 10000) in paragraph at lines 9614--9614
 \T1/ptm/m/it/10.95 add_cobra_anno=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 a
 dd_cbmpy_anno=True\T1/ptm/m/n/10.95 ,
  []
 
-[81]
-Underfull \hbox (badness 10000) in paragraph at lines 8747--8748
+[92]
+Underfull \hbox (badness 10000) in paragraph at lines 9741--9742
 \T1/ptm/m/n/10.95 Writes the key:value an-no-ta-tions as a Key-Val-ue-Data an-n
 o-ta-tion
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8754--8754
+Underfull \hbox (badness 10000) in paragraph at lines 9748--9748
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname\T1/ptm/m/n
 /10.95 , \T1/ptm/m/it/10.95 di-rec-tory=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8776--8776
+Underfull \hbox (badness 10000) in paragraph at lines 9770--9770
 []\T1/ptm/m/it/10.95 fba\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 fname\T1/ptm/m/n
 /10.95 , \T1/ptm/m/it/10.95 di-rec-tory=None\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8776--8776
+Underfull \hbox (badness 10000) in paragraph at lines 9770--9770
 \T1/ptm/m/it/10.95 sbml_level_version=(3\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 
 1)\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 aut-ofix=True\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8776--8776
+Underfull \hbox (badness 10000) in paragraph at lines 9770--9770
 \T1/ptm/m/it/10.95 re-turn_fbc=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 gpr_
 from_annot=False\T1/ptm/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8776--8776
+Underfull \hbox (badness 10000) in paragraph at lines 9770--9770
 \T1/ptm/m/it/10.95 add_groups=False\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 add_c
 bmpy_annot=True\T1/ptm/m/n/10.95 ,
  []
 
-[82]
-Underfull \hbox (badness 10000) in paragraph at lines 8844--8844
+[93]
+Underfull \hbox (badness 10000) in paragraph at lines 9844--9844
 []\T1/ptm/m/it/10.95 document\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.95 rid\T1/ptm/
 m/n/10.95 , \T1/ptm/m/it/10.95 op-er-a-tor\T1/ptm/m/n/10.95 , \T1/ptm/m/it/10.9
 5 value\T1/ptm/m/n/10.95 ,
  []
 
-[83] [84] [85] [86] [87] [88] [89] [90
+[94] [95] [96] [97] [98] [99] [100
 
 ]
 Chapter 4.
-[91] [92
+[101] [102
 
-] [93
+] [103
 
 
-] (cbmpy.ind [94
+] (cbmpy.ind [104
 
 
 ]
@@ -1974,7 +2283,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 65--67
 []\T1/ptm/m/n/10.95 BuildHformatFluxBounds() (in mod-ule
  []
 
-[95
+[105
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 67--68
@@ -2022,48 +2331,38 @@ Underfull \hbox (badness 10000) in paragraph at lines 82--84
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 107--109
+Underfull \hbox (badness 10000) in paragraph at lines 108--110
 []\T1/ptm/m/n/10.95 changeAllFluxBoundsWithValue()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 107--109
+Underfull \hbox (badness 10000) in paragraph at lines 108--110
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 110--112
-[]\T1/ptm/m/n/10.95 changeReagentCoefficientForSpecies()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 110--112
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Reaction method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 112--113
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
 []\T1/ptm/m/n/10.95 checkChemFormula() (in mod-ule
  []
 
 
-Overfull \hbox (27.94333pt too wide) in paragraph at lines 113--115
+Overfull \hbox (27.94333pt too wide) in paragraph at lines 112--114
 []\T1/ptm/m/n/10.95 checkEntity() (cbmpy.CBDataStruct.MIRIAMannotation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 115--117
+Underfull \hbox (badness 10000) in paragraph at lines 114--116
 []\T1/ptm/m/n/10.95 checkEntityPattern()
  []
 
 
-Overfull \hbox (6.26268pt too wide) in paragraph at lines 115--117
+Overfull \hbox (6.26268pt too wide) in paragraph at lines 114--116
 \T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.MIRIAMannotation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 117--118
-[]\T1/ptm/m/n/10.95 checkEntry() (cbmpy.CBNetDB.DBTools
+Underfull \hbox (badness 10000) in paragraph at lines 116--118
+[]\T1/ptm/m/n/10.95 checkEntryInColumn()
  []
 
 
@@ -2097,1721 +2396,1846 @@ Underfull \hbox (badness 10000) in paragraph at lines 131--133
  []
 
 
-Overfull \hbox (14.28923pt too wide) in paragraph at lines 140--142
+Overfull \hbox (14.28923pt too wide) in paragraph at lines 141--143
 []\T1/ptm/m/n/10.95 commonType() (cbmpy.PyscesStoich.MathArrayFunc
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 143--144
+Underfull \hbox (badness 10000) in paragraph at lines 144--145
 []\T1/ptm/m/n/10.95 Connect() (cbmpy.CBNetDB.RESTClient
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 144--146
+Underfull \hbox (badness 10000) in paragraph at lines 145--147
 []\T1/ptm/m/n/10.95 connectSQLiteDB() (cbmpy.CBNetDB.DBTools
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--148
+Underfull \hbox (badness 10000) in paragraph at lines 147--149
 []\T1/ptm/m/n/10.95 containsReactions()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--148
+Underfull \hbox (badness 10000) in paragraph at lines 147--149
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Compartment
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 150--151
+Underfull \hbox (badness 10000) in paragraph at lines 151--152
 []\T1/ptm/m/n/10.95 convertExcelToFloat() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 151--152
+Underfull \hbox (badness 10000) in paragraph at lines 152--153
 []\T1/ptm/m/n/10.95 convertFloatToExcel() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 152--153
+Underfull \hbox (badness 10000) in paragraph at lines 153--154
 []\T1/ptm/m/n/10.95 cplx_analyzeModel() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 153--155
+Underfull \hbox (badness 10000) in paragraph at lines 154--156
 []\T1/ptm/m/n/10.95 cplx_constructLPfromFBA() (in mod-ule
  []
 
-[96]
-Underfull \hbox (badness 10000) in paragraph at lines 155--156
+[106]
+Underfull \hbox (badness 10000) in paragraph at lines 156--157
 []\T1/ptm/m/n/10.95 cplx_fixConSense() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 156--158
+Underfull \hbox (badness 10000) in paragraph at lines 157--159
 []\T1/ptm/m/n/10.95 cplx_FluxVariabilityAnalysis() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 158--160
+Underfull \hbox (badness 10000) in paragraph at lines 159--161
 []\T1/ptm/m/n/10.95 cplx_func_GetCPXandPresolve() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 160--162
+Underfull \hbox (badness 10000) in paragraph at lines 161--163
 []\T1/ptm/m/n/10.95 cplx_func_SetObjectiveFunctionAsConstraint()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 162--164
+Underfull \hbox (badness 10000) in paragraph at lines 163--165
 []\T1/ptm/m/n/10.95 cplx_getCPLEXModelFromLP() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 164--165
+Underfull \hbox (badness 10000) in paragraph at lines 165--166
 []\T1/ptm/m/n/10.95 cplx_getDualValues() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 165--167
+Underfull \hbox (badness 10000) in paragraph at lines 166--168
 []\T1/ptm/m/n/10.95 cplx_getModelFromLP() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 167--169
+Underfull \hbox (badness 10000) in paragraph at lines 168--170
 []\T1/ptm/m/n/10.95 cplx_getModelFromObj() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 169--171
+Underfull \hbox (badness 10000) in paragraph at lines 170--172
 []\T1/ptm/m/n/10.95 cplx_getOptimalSolution() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 171--173
+Underfull \hbox (badness 10000) in paragraph at lines 172--174
 []\T1/ptm/m/n/10.95 cplx_getOptimalSolution2() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 173--175
+Underfull \hbox (badness 10000) in paragraph at lines 174--176
 []\T1/ptm/m/n/10.95 cplx_getReducedCosts() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 175--177
+Underfull \hbox (badness 10000) in paragraph at lines 176--178
 []\T1/ptm/m/n/10.95 cplx_getSensitivities() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 177--179
+Underfull \hbox (badness 10000) in paragraph at lines 178--180
 []\T1/ptm/m/n/10.95 cplx_getShadowPrices() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 179--181
+Underfull \hbox (badness 10000) in paragraph at lines 180--182
 []\T1/ptm/m/n/10.95 cplx_getSolutionStatus() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 181--183
+Underfull \hbox (badness 10000) in paragraph at lines 182--184
 []\T1/ptm/m/n/10.95 cplx_MinimizeNumActiveFluxes() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 183--185
+Underfull \hbox (badness 10000) in paragraph at lines 184--186
 []\T1/ptm/m/n/10.95 cplx_MinimizeSumOfAbsFluxes() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 187--188
+Underfull \hbox (badness 10000) in paragraph at lines 188--189
 []\T1/ptm/m/n/10.95 cplx_runInputScan() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 188--190
+Underfull \hbox (badness 10000) in paragraph at lines 189--191
 []\T1/ptm/m/n/10.95 cplx_setFBAsolutionToModel() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 190--192
+Underfull \hbox (badness 10000) in paragraph at lines 191--193
 []\T1/ptm/m/n/10.95 cplx_setMIPGapTolerance() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 192--193
+Underfull \hbox (badness 10000) in paragraph at lines 193--194
 []\T1/ptm/m/n/10.95 cplx_setObjective() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 193--194
+Underfull \hbox (badness 10000) in paragraph at lines 194--195
 []\T1/ptm/m/n/10.95 cplx_setObjective2() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 194--196
+Underfull \hbox (badness 10000) in paragraph at lines 195--197
 []\T1/ptm/m/n/10.95 cplx_setOutputStreams() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 196--198
+Underfull \hbox (badness 10000) in paragraph at lines 197--199
+[]\T1/ptm/m/n/10.95 cplx_setSolutionStatusToModel() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 199--201
 []\T1/ptm/m/n/10.95 cplx_singleGeneScan() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 199--200
+Underfull \hbox (badness 10000) in paragraph at lines 202--203
 []\T1/ptm/m/n/10.95 cplx_WriteFVAtoCSV() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 200--202
+Underfull \hbox (badness 10000) in paragraph at lines 203--205
 []\T1/ptm/m/n/10.95 cplx_writeLPsolution() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 202--204
+Underfull \hbox (badness 10000) in paragraph at lines 205--207
 []\T1/ptm/m/n/10.95 cplx_writeLPtoLPTfile() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 204--206
+Underfull \hbox (badness 10000) in paragraph at lines 207--209
 []\T1/ptm/m/n/10.95 createAssociationAndGeneRefs()
  []
 
 
-Overfull \hbox (6.26265pt too wide) in paragraph at lines 204--206
+Overfull \hbox (6.26265pt too wide) in paragraph at lines 207--209
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.GeneProteinAssociation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 206--208
-[]\T1/ptm/m/n/10.95 createCompartment() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 208--209
-[]\T1/ptm/m/n/10.95 createDBTable() (cbmpy.CBNetDB.DBTools
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 209--211
+[]\T1/ptm/m/n/10.95 createCompartment() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 211--212
+[]\T1/ptm/m/n/10.95 createDBTable() (cbmpy.CBNetDB.DBTools
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 212--214
 []\T1/ptm/m/n/10.95 createFluxObjectives()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 211--213
+Underfull \hbox (badness 10000) in paragraph at lines 214--216
 []\T1/ptm/m/n/10.95 createGeneAssociationsFromAnnotations()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 213--215
+Underfull \hbox (badness 10000) in paragraph at lines 216--218
 []\T1/ptm/m/n/10.95 createGeneProteinAssociation()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 213--215
+Underfull \hbox (badness 10000) in paragraph at lines 216--218
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 216--218
+Underfull \hbox (badness 10000) in paragraph at lines 219--221
 []\T1/ptm/m/n/10.95 createObjectiveFunction()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 216--218
+Underfull \hbox (badness 10000) in paragraph at lines 219--221
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 218--219
+Underfull \hbox (badness 10000) in paragraph at lines 221--222
 []\T1/ptm/m/n/10.95 createReaction() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 223--225
+Underfull \hbox (badness 10000) in paragraph at lines 225--227
 []\T1/ptm/m/n/10.95 createReactionLowerBound()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 223--225
+Underfull \hbox (badness 10000) in paragraph at lines 225--227
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 227--229
+Underfull \hbox (badness 10000) in paragraph at lines 229--231
 []\T1/ptm/m/n/10.95 createReactionUpperBound()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 227--229
+Underfull \hbox (badness 10000) in paragraph at lines 229--231
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--230
+Underfull \hbox (badness 10000) in paragraph at lines 231--232
 []\T1/ptm/m/n/10.95 createReagent() (cbmpy.CBModel.Reaction
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 230--232
+Underfull \hbox (badness 10000) in paragraph at lines 232--234
 []\T1/ptm/m/n/10.95 createSingleGeneEffectMap()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 230--232
+Underfull \hbox (badness 10000) in paragraph at lines 232--234
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 233--234
+Underfull \hbox (badness 10000) in paragraph at lines 235--236
 []\T1/ptm/m/n/10.95 createTempFileName() (in mod-ule
  []
 
-[97]
-Underfull \hbox (badness 10000) in paragraph at lines 236--238
+[107]
+Underfull \hbox (badness 10000) in paragraph at lines 238--240
 []\T1/ptm/m/n/10.95 current_version_tuple() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 242--244
+Underfull \hbox (badness 10000) in paragraph at lines 244--246
 []\T1/ptm/m/n/10.95 deactivateReaction() (cbmpy.CBModel.Reaction
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 244--246
+Underfull \hbox (badness 10000) in paragraph at lines 246--248
 []\T1/ptm/m/n/10.95 deleteAllFluxBoundsWithValue()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 244--246
+Underfull \hbox (badness 10000) in paragraph at lines 246--248
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 246--248
+Underfull \hbox (badness 10000) in paragraph at lines 248--250
 []\T1/ptm/m/n/10.95 deleteAllFluxObjectives()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 248--249
+Underfull \hbox (badness 10000) in paragraph at lines 250--251
 []\T1/ptm/m/n/10.95 deleteAnnotation() (cbmpy.CBModel.Fbase
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 249--251
+Underfull \hbox (badness 10000) in paragraph at lines 251--253
 []\T1/ptm/m/n/10.95 deleteAssociation() (cbmpy.CBModel.Parameter
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 251--253
+Underfull \hbox (badness 10000) in paragraph at lines 253--255
 []\T1/ptm/m/n/10.95 deleteBoundsForReactionId()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 251--253
+Underfull \hbox (badness 10000) in paragraph at lines 253--255
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Overfull \hbox (37.04253pt too wide) in paragraph at lines 253--255
+Overfull \hbox (37.04253pt too wide) in paragraph at lines 255--257
 []\T1/ptm/m/n/10.95 deleteGeneref() (cbmpy.CBModel.GeneProteinAssociation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 256--257
+Underfull \hbox (badness 10000) in paragraph at lines 258--259
 []\T1/ptm/m/n/10.95 deleteMember() (cbmpy.CBModel.Group
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 257--259
+Underfull \hbox (badness 10000) in paragraph at lines 259--261
 []\T1/ptm/m/n/10.95 deleteMIRIAMannotation()
  []
 
 
-Overfull \hbox (6.26268pt too wide) in paragraph at lines 257--259
+Overfull \hbox (6.26268pt too wide) in paragraph at lines 259--261
 \T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.MIRIAMannotation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 259--261
+Underfull \hbox (badness 10000) in paragraph at lines 261--263
 []\T1/ptm/m/n/10.95 deleteMIRIAMannotation()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 259--261
+Underfull \hbox (badness 10000) in paragraph at lines 261--263
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Fbase method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 261--263
+Underfull \hbox (badness 10000) in paragraph at lines 263--265
 []\T1/ptm/m/n/10.95 deleteNonReactingSpecies()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 261--263
+Underfull \hbox (badness 10000) in paragraph at lines 263--265
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 263--264
+Underfull \hbox (badness 10000) in paragraph at lines 265--266
 []\T1/ptm/m/n/10.95 deleteObjective() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 264--266
+Underfull \hbox (badness 10000) in paragraph at lines 266--268
 []\T1/ptm/m/n/10.95 deleteReactionAndBounds()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 264--266
+Underfull \hbox (badness 10000) in paragraph at lines 266--268
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 266--268
+Underfull \hbox (badness 10000) in paragraph at lines 268--270
 []\T1/ptm/m/n/10.95 deleteReagentWithSpeciesRef()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 266--268
+Underfull \hbox (badness 10000) in paragraph at lines 268--270
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Reaction method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 270--271
+Underfull \hbox (badness 10000) in paragraph at lines 272--273
+[]\T1/ptm/m/n/10.95 deSerializeFromDisk() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 7256) in paragraph at lines 273--274
+[]\T1/ptm/m/n/10.95 dumpTableToCSV() (cbmpy.CBNetDB.DBTools
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 274--275
 []\T1/ptm/m/n/10.95 dumpTableToTxt() (cbmpy.CBNetDB.DBTools
  []
 
 
-Overfull \hbox (45.03578pt too wide) in paragraph at lines 274--276
+Underfull \hbox (badness 10000) in paragraph at lines 278--279
+[]\T1/ptm/m/n/10.95 emptyUndelete() (cbmpy.CBModel.Model
+ []
+
+
+Overfull \hbox (45.03578pt too wide) in paragraph at lines 279--281
 []\T1/ptm/m/n/10.95 evalAssociation() (cbmpy.CBModel.GeneProteinAssociation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 276--277
+Underfull \hbox (badness 10000) in paragraph at lines 281--282
 []\T1/ptm/m/n/10.95 executeSQL() (cbmpy.CBNetDB.DBTools
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 279--280
+Underfull \hbox (badness 10000) in paragraph at lines 284--285
 []\T1/ptm/m/n/10.95 exportFVAdata() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 280--281
+Underfull \hbox (badness 10000) in paragraph at lines 285--286
 []\T1/ptm/m/n/10.95 exportLabelledArray() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 281--283
+Underfull \hbox (badness 10000) in paragraph at lines 286--288
 []\T1/ptm/m/n/10.95 exportLabelledArray2CSV() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 283--285
+Underfull \hbox (badness 10000) in paragraph at lines 288--290
 []\T1/ptm/m/n/10.95 exportLabelledArray2TXT() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 285--287
+Underfull \hbox (badness 10000) in paragraph at lines 290--292
 []\T1/ptm/m/n/10.95 exportLabelledArrayWithHeader() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 291--293
+Underfull \hbox (badness 10000) in paragraph at lines 296--298
 []\T1/ptm/m/n/10.95 exportLabelledLinkedList() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 294--296
+Underfull \hbox (badness 10000) in paragraph at lines 299--301
 []\T1/ptm/m/n/10.95 extractGeneIdsFromString() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 301--303
+Underfull \hbox (badness 10000) in paragraph at lines 306--308
 []\T1/ptm/m/n/10.95 fetchSeqfromKeGG()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 303--305
+Underfull \hbox (badness 10000) in paragraph at lines 308--310
 []\T1/ptm/m/n/10.95 findDeadEndMetabolites() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 305--307
+Underfull \hbox (badness 10000) in paragraph at lines 310--312
 []\T1/ptm/m/n/10.95 findDeadEndReactions() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 307--309
+Underfull \hbox (badness 10000) in paragraph at lines 312--314
 []\T1/ptm/m/n/10.95 findFluxesForConnectedSpecies()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 307--309
+Underfull \hbox (badness 10000) in paragraph at lines 312--314
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 317--318
+Underfull \hbox (badness 10000) in paragraph at lines 322--323
 []\T1/ptm/m/n/10.95 GeneProteinAssociation (class in
  []
 
-
-Overfull \hbox (45.13455pt too wide) in paragraph at lines 320--322
+[108]
+Overfull \hbox (45.13455pt too wide) in paragraph at lines 325--327
 []\T1/ptm/m/n/10.95 getActiveGenes() (cbmpy.CBModel.GeneProteinAssociation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 322--324
+Underfull \hbox (badness 10000) in paragraph at lines 327--329
 []\T1/ptm/m/n/10.95 getActiveObjective() (cbmpy.CBModel.Model
- []
-
-[98]
-Underfull \hbox (badness 10000) in paragraph at lines 324--325
-[]\T1/ptm/m/n/10.95 getAllFluxBounds() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 325--327
-[]\T1/ptm/m/n/10.95 getAllGeneActivities() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 327--329
-[]\T1/ptm/m/n/10.95 getAllGeneProteinAssociations()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 327--329
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 329--331
+[]\T1/ptm/m/n/10.95 getActiveObjectiveReactionIds()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 329--331
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 331--333
+[]\T1/ptm/m/n/10.95 getActiveObjectiveStoichiometry()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 331--333
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 333--334
+[]\T1/ptm/m/n/10.95 getAllFluxBounds() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 334--336
+[]\T1/ptm/m/n/10.95 getAllGeneActivities() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 336--338
+[]\T1/ptm/m/n/10.95 getAllGeneProteinAssociations()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 336--338
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 338--340
 []\T1/ptm/m/n/10.95 getAllMIRIAMUris()
  []
 
 
-Overfull \hbox (6.26268pt too wide) in paragraph at lines 329--331
+Overfull \hbox (6.26268pt too wide) in paragraph at lines 338--340
 \T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.MIRIAMannotation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--335
+Underfull \hbox (badness 10000) in paragraph at lines 342--344
 []\T1/ptm/m/n/10.95 getAllProteinGeneAssociations()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--335
+Underfull \hbox (badness 10000) in paragraph at lines 342--344
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 335--337
+Underfull \hbox (badness 10000) in paragraph at lines 344--346
 []\T1/ptm/m/n/10.95 getAndViewUrisForQualifier()
  []
 
 
-Overfull \hbox (6.26268pt too wide) in paragraph at lines 335--337
+Overfull \hbox (6.26268pt too wide) in paragraph at lines 344--346
 \T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.MIRIAMannotation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 338--339
-[]\T1/ptm/m/n/10.95 getAnnotations() (cbmpy.CBModel.Fbase
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 339--341
-[]\T1/ptm/m/n/10.95 getAssociations() (cbmpy.CBModel.Parameter
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 341--343
-[]\T1/ptm/m/n/10.95 getAssociationStr()
- []
-
-
-Overfull \hbox (6.26265pt too wide) in paragraph at lines 341--343
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.GeneProteinAssociation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 343--345
-[]\T1/ptm/m/n/10.95 getBoundarySpeciesIds()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 343--345
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 347--348
-[]\T1/ptm/m/n/10.95 getChemFormula() (cbmpy.CBModel.Species
+[]\T1/ptm/m/n/10.95 getAnnotations() (cbmpy.CBModel.Fbase
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 348--349
-[]\T1/ptm/m/n/10.95 getCoefficient() (cbmpy.CBModel.Reagent
+Underfull \hbox (badness 10000) in paragraph at lines 348--350
+[]\T1/ptm/m/n/10.95 getAssociations() (cbmpy.CBModel.Parameter
  []
 
 
-Overfull \hbox (4.23659pt too wide) in paragraph at lines 349--351
-[]\T1/ptm/m/n/10.95 getColsByIdx() (cbmpy.CBDataStruct.StructMatrix
+Underfull \hbox (badness 10000) in paragraph at lines 350--352
+[]\T1/ptm/m/n/10.95 getAssociationStr()
  []
 
 
-Overfull \hbox (0.59029pt too wide) in paragraph at lines 351--353
-[]\T1/ptm/m/n/10.95 getColsByIdx() (cbmpy.PyscesStoich.StructMatrix
+Overfull \hbox (6.26265pt too wide) in paragraph at lines 350--352
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.GeneProteinAssociation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 353--355
-[]\T1/ptm/m/n/10.95 getColsByName()
+Underfull \hbox (badness 10000) in paragraph at lines 352--354
+[]\T1/ptm/m/n/10.95 getBoundarySpeciesIds()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 353--355
-\T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 355--357
-[]\T1/ptm/m/n/10.95 getColsByName()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 355--357
-\T1/ptm/m/n/10.95 (cbmpy.PyscesStoich.StructMatrix
+Underfull \hbox (badness 10000) in paragraph at lines 352--354
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 357--358
-[]\T1/ptm/m/n/10.95 getCompartment() (cbmpy.CBModel.Model
+[]\T1/ptm/m/n/10.95 getChemFormula() (cbmpy.CBModel.Species
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 358--359
-[]\T1/ptm/m/n/10.95 getCompartmentId() (cbmpy.CBModel.Fbase
+[]\T1/ptm/m/n/10.95 getCoefficient() (cbmpy.CBModel.Reagent
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 359--361
-[]\T1/ptm/m/n/10.95 getCompartmentIds() (cbmpy.CBModel.Model
+Overfull \hbox (4.23659pt too wide) in paragraph at lines 359--361
+[]\T1/ptm/m/n/10.95 getColsByIdx() (cbmpy.CBDataStruct.StructMatrix
  []
 
 
-Underfull \hbox (badness 5274) in paragraph at lines 361--363
-[]\T1/ptm/m/n/10.95 getCopy() (cbmpy.CBDataStruct.StructMatrixLP
+Overfull \hbox (0.59029pt too wide) in paragraph at lines 361--363
+[]\T1/ptm/m/n/10.95 getColsByIdx() (cbmpy.PyscesStoich.StructMatrix
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 363--364
-[]\T1/ptm/m/n/10.95 getDescription() (cbmpy.CBModel.Model
+Underfull \hbox (badness 10000) in paragraph at lines 363--365
+[]\T1/ptm/m/n/10.95 getColsByName()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 366--367
-[]\T1/ptm/m/n/10.95 getEquation() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 367--369
-[]\T1/ptm/m/n/10.95 getExchangeReactionIds()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 367--369
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 371--372
-[]\T1/ptm/m/n/10.95 getExchBoundsDict() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 372--373
-[]\T1/ptm/m/n/10.95 getFluxBoundByID() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 373--375
-[]\T1/ptm/m/n/10.95 getFluxBoundByReactionID()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 373--375
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 375--376
-[]\T1/ptm/m/n/10.95 getFluxBoundIds() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--378
-[]\T1/ptm/m/n/10.95 getFluxBoundsByReactionID()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--378
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 378--380
-[]\T1/ptm/m/n/10.95 getFluxesAssociatedWithSpecies()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 378--380
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 380--382
-[]\T1/ptm/m/n/10.95 getFluxObjective() (cbmpy.CBModel.Objective
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 382--384
-[]\T1/ptm/m/n/10.95 getFluxObjectiveData()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 384--386
-[]\T1/ptm/m/n/10.95 getFluxObjectiveForReaction()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 386--388
-[]\T1/ptm/m/n/10.95 getFluxObjectiveIDs()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--390
-[]\T1/ptm/m/n/10.95 getFluxObjectiveReactions()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 390--392
-[]\T1/ptm/m/n/10.95 getFluxObjectives() (cbmpy.CBModel.Objective
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 392--393
-[]\T1/ptm/m/n/10.95 getFVAdata() (cbmpy.CBModel.Reaction
- []
-
-
-Overfull \hbox (12.12076pt too wide) in paragraph at lines 393--395
-[]\T1/ptm/m/n/10.95 getGene() (cbmpy.CBModel.GeneProteinAssociation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 396--398
-[]\T1/ptm/m/n/10.95 getGeneIdFromLabel() (cbmpy.CBModel.Model
- []
-
-
-Overfull \hbox (25.50148pt too wide) in paragraph at lines 398--400
-[]\T1/ptm/m/n/10.95 getGeneIds() (cbmpy.CBModel.GeneProteinAssociation
- []
-
-[99]
-Overfull \hbox (16.38019pt too wide) in paragraph at lines 401--403
-[]\T1/ptm/m/n/10.95 getGenes() (cbmpy.CBModel.GeneProteinAssociation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 403--405
-[]\T1/ptm/m/n/10.95 getGPRassociation() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 405--407
-[]\T1/ptm/m/n/10.95 getGPRforReaction() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 410--412
-[]\T1/ptm/m/n/10.95 getIndexes() (cbmpy.CBDataStruct.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 412--414
-[]\T1/ptm/m/n/10.95 getIndexes() (cbmpy.PyscesStoich.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 414--416
-[]\T1/ptm/m/n/10.95 getIrreversibleReactionIds()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 414--416
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 418--420
-[]\T1/ptm/m/n/10.95 getLabels() (cbmpy.CBDataStruct.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 420--422
-[]\T1/ptm/m/n/10.95 getLabels() (cbmpy.PyscesStoich.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 423--424
-[]\T1/ptm/m/n/10.95 getLowerBound() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 424--425
-[]\T1/ptm/m/n/10.95 getMemberIDs() (cbmpy.CBModel.Group
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 427--429
-[]\T1/ptm/m/n/10.95 getMIRIAMannotations()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 427--429
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Fbase method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 429--431
-[]\T1/ptm/m/n/10.95 getMIRIAMUrisForQualifier()
- []
-
-
-Overfull \hbox (6.26268pt too wide) in paragraph at lines 429--431
-\T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.MIRIAMannotation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 431--432
-[]\T1/ptm/m/n/10.95 getModelCreators() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 432--434
-[]\T1/ptm/m/n/10.95 getModelGenesPerReaction() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 436--437
-[]\T1/ptm/m/n/10.95 getObjectiveIds() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 437--438
-[]\T1/ptm/m/n/10.95 getObjFuncValue() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 438--439
-[]\T1/ptm/m/n/10.95 getOperation() (cbmpy.CBModel.Objective
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 440--441
-[]\T1/ptm/m/n/10.95 getProductIds() (cbmpy.CBModel.Reaction
- []
-
-
-Overfull \hbox (20.65057pt too wide) in paragraph at lines 441--443
-[]\T1/ptm/m/n/10.95 getProtein() (cbmpy.CBModel.GeneProteinAssociation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 445--447
-[]\T1/ptm/m/n/10.95 getReactionActivity() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 447--449
-[]\T1/ptm/m/n/10.95 getReactionBounds() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 449--450
-[]\T1/ptm/m/n/10.95 getReactionIds() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 450--452
-[]\T1/ptm/m/n/10.95 getReactionLowerBound()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 450--452
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 452--453
-[]\T1/ptm/m/n/10.95 getReactionNames() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 453--455
-[]\T1/ptm/m/n/10.95 getReactionUpperBound()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 453--455
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 455--457
-[]\T1/ptm/m/n/10.95 getReactionValues() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 458--460
-[]\T1/ptm/m/n/10.95 getReagentObjIds() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 460--461
-[]\T1/ptm/m/n/10.95 getReagentOf() (cbmpy.CBModel.Species
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 461--463
-[]\T1/ptm/m/n/10.95 getReagentRefs() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 463--465
-[]\T1/ptm/m/n/10.95 getReagentWithSpeciesRef()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 463--465
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Reaction method),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 465--466
-[]\T1/ptm/m/n/10.95 getReducedCosts() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 466--468
-[]\T1/ptm/m/n/10.95 getReversibleReactionIds()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 466--468
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
- []
-
-
-Overfull \hbox (8.82469pt too wide) in paragraph at lines 469--471
-[]\T1/ptm/m/n/10.95 getRowsByIdx() (cbmpy.CBDataStruct.StructMatrix
- []
-
-
-Overfull \hbox (5.17839pt too wide) in paragraph at lines 471--473
-[]\T1/ptm/m/n/10.95 getRowsByIdx() (cbmpy.PyscesStoich.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--475
-[]\T1/ptm/m/n/10.95 getRowsByName()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--475
+Underfull \hbox (badness 10000) in paragraph at lines 363--365
 \T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.StructMatrix
  []
 
-[100]
-Underfull \hbox (badness 10000) in paragraph at lines 475--477
-[]\T1/ptm/m/n/10.95 getRowsByName()
+
+Underfull \hbox (badness 10000) in paragraph at lines 365--367
+[]\T1/ptm/m/n/10.95 getColsByName()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 475--477
+Underfull \hbox (badness 10000) in paragraph at lines 365--367
 \T1/ptm/m/n/10.95 (cbmpy.PyscesStoich.StructMatrix
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 480--482
-[]\T1/ptm/m/n/10.95 getSharedMIRIAMannotations()
+Underfull \hbox (badness 10000) in paragraph at lines 367--368
+[]\T1/ptm/m/n/10.95 getColumns() (cbmpy.CBNetDB.DBTools
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 480--482
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Group method),
+Underfull \hbox (badness 10000) in paragraph at lines 368--369
+[]\T1/ptm/m/n/10.95 getCompartment() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 482--483
-[]\T1/ptm/m/n/10.95 getSharedNotes() (cbmpy.CBModel.Group
+Underfull \hbox (badness 10000) in paragraph at lines 369--370
+[]\T1/ptm/m/n/10.95 getCompartmentId() (cbmpy.CBModel.Fbase
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 483--484
-[]\T1/ptm/m/n/10.95 getSharedSBOterm() (cbmpy.CBModel.Group
+Underfull \hbox (badness 10000) in paragraph at lines 370--372
+[]\T1/ptm/m/n/10.95 getCompartmentIds() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 484--485
-[]\T1/ptm/m/n/10.95 getSize() (cbmpy.CBModel.Compartment
+Underfull \hbox (badness 5274) in paragraph at lines 372--374
+[]\T1/ptm/m/n/10.95 getCopy() (cbmpy.CBDataStruct.StructMatrixLP
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 485--487
-[]\T1/ptm/m/n/10.95 getSolutionVector() (cbmpy.CBModel.Model
+Underfull \hbox (badness 10000) in paragraph at lines 374--375
+[]\T1/ptm/m/n/10.95 getDescription() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 490--491
-[]\T1/ptm/m/n/10.95 getSpeciesIds() (cbmpy.CBModel.Reaction
+Underfull \hbox (badness 10000) in paragraph at lines 377--378
+[]\T1/ptm/m/n/10.95 getEquation() (cbmpy.CBModel.Reaction
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 491--492
-[]\T1/ptm/m/n/10.95 getSpeciesObj() (cbmpy.CBModel.Reaction
+Underfull \hbox (badness 10000) in paragraph at lines 378--380
+[]\T1/ptm/m/n/10.95 getExchangeReactionIds()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 492--494
-[]\T1/ptm/m/n/10.95 getStoichiometry() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 494--496
-[]\T1/ptm/m/n/10.95 getSubstrateIds() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 498--499
-[]\T1/ptm/m/n/10.95 getUpperBound() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 499--501
-[]\T1/ptm/m/n/10.95 GetUpperMatrix() (cbmpy.PyscesStoich.Stoich
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 501--503
-[]\T1/ptm/m/n/10.95 GetUpperMatrixUsingQR()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 510--511
-[]\T1/ptm/m/n/10.95 GroupMemberAttributes (class in
- []
-
-
-Overfull \hbox (43.32765pt too wide) in paragraph at lines 521--523
-[]\T1/ptm/m/n/10.95 isProteinActive() (cbmpy.CBModel.GeneProteinAssociation
- []
-
-
-Overfull \hbox (21.26372pt too wide) in paragraph at lines 543--545
-[]\T1/ptm/m/n/10.95 MatrixFloatFix() (cbmpy.PyscesStoich.MathArrayFunc
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 545--547
-[]\T1/ptm/m/n/10.95 MatrixValueCompare()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 545--547
-\T1/ptm/m/n/10.95 (cbmpy.PyscesStoich.MathArrayFunc
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 548--549
-[]\T1/ptm/m/n/10.95 MIRIAMannotation (class in
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 561--563
-[]\T1/ptm/m/n/10.95 parseGeneAssociation() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 563--565
-[]\T1/ptm/m/n/10.95 parseXMLtoText()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 563--565
-\T1/ptm/m/n/10.95 (cbmpy.CBNetDB.SemanticSBML
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 566--568
-[]\T1/ptm/m/n/10.95 PivotSort_initial() (cbmpy.PyscesStoich.Stoich
- []
-
-[101]
-Underfull \hbox (badness 10000) in paragraph at lines 569--571
-[]\T1/ptm/m/n/10.95 PLUfactorize() (cbmpy.PyscesStoich.Stoich
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 572--574
-[]\T1/ptm/m/n/10.95 processBiGGannotationNote() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 574--576
-[]\T1/ptm/m/n/10.95 processBiGGchemFormula() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 576--578
-[]\T1/ptm/m/n/10.95 processExchangeReactions() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 578--580
-[]\T1/ptm/m/n/10.95 processSBMLAnnotationNotes() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 580--582
-[]\T1/ptm/m/n/10.95 processSpeciesChargeChemFormulaAnnot() (in
- []
-
-
-Overfull \hbox (0.59096pt too wide) in paragraph at lines 585--587
-[]\T1/ptm/m/n/10.95 quickLookup() (cbmpy.CBNetDB.SemanticSBML
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 591--593
-[]\T1/ptm/m/n/10.95 reactivateReaction() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 602--604
-[]\T1/ptm/m/n/10.95 removeFixedSpeciesReactions() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 604--605
-[]\T1/ptm/m/n/10.95 renameObjectIds() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 606--607
-[]\T1/ptm/m/n/10.95 resetAllGenes() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 607--609
-[]\T1/ptm/m/n/10.95 resetAllInactiveGPRBounds()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 607--609
+Underfull \hbox (badness 10000) in paragraph at lines 378--380
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 610--611
-[]\T1/ptm/m/n/10.95 roundOffWithSense() (in mod-ule
+Underfull \hbox (badness 10000) in paragraph at lines 382--383
+[]\T1/ptm/m/n/10.95 getExchBoundsDict() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 611--612
-[]\T1/ptm/m/n/10.95 runMultiCoreFVA() (in mod-ule
+Underfull \hbox (badness 10000) in paragraph at lines 383--384
+[]\T1/ptm/m/n/10.95 getFluxBoundByID() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 612--614
-[]\T1/ptm/m/n/10.95 runMultiCoreMultiEnvFVA() (in mod-ule
+Underfull \hbox (badness 10000) in paragraph at lines 384--386
+[]\T1/ptm/m/n/10.95 getFluxBoundByReactionID()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 622--624
-[]\T1/ptm/m/n/10.95 sbml_createAssociationFromAST() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 624--625
-[]\T1/ptm/m/n/10.95 sbml_createModelL2() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 625--627
-[]\T1/ptm/m/n/10.95 sbml_exportSBML2FBAModel() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 629--630
-[]\T1/ptm/m/n/10.95 sbml_readCOBRANote() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 630--631
-[]\T1/ptm/m/n/10.95 sbml_readCOBRASBML() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 633--634
-[]\T1/ptm/m/n/10.95 sbml_readSBML2FBA() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 634--635
-[]\T1/ptm/m/n/10.95 sbml_readSBML3FBC() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 635--637
-[]\T1/ptm/m/n/10.95 sbml_setCompartmentsL3() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 638--639
-[]\T1/ptm/m/n/10.95 sbml_setDescription() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 641--642
-[]\T1/ptm/m/n/10.95 sbml_setReactionsL2() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 642--644
-[]\T1/ptm/m/n/10.95 sbml_setReactionsL3Fbc() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 647--649
-[]\T1/ptm/m/n/10.95 sbml_setValidationOptions() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 649--651
-[]\T1/ptm/m/n/10.95 sbml_validateDocument() (in mod-ule
- []
-
-[102]
-Underfull \hbox (badness 10000) in paragraph at lines 653--654
-[]\T1/ptm/m/n/10.95 sbml_writeCOBRASBML() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 656--657
-[]\T1/ptm/m/n/10.95 sbml_writeSBML2FBA() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 657--658
-[]\T1/ptm/m/n/10.95 sbml_writeSBML3FBC() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 658--660
-[]\T1/ptm/m/n/10.95 ScalePivots() (cbmpy.PyscesStoich.Stoich
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 660--662
-[]\T1/ptm/m/n/10.95 scanForReactionDuplicates() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 662--664
-[]\T1/ptm/m/n/10.95 scanForUnbalancedReactions() (in mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 666--667
-[]\T1/ptm/m/n/10.95 serializeToDisk() (cbmpy.CBModel.Fbase
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 668--669
-[]\T1/ptm/m/n/10.95 setAllFluxBounds() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 669--671
-[]\T1/ptm/m/n/10.95 setAllGenesActive()
- []
-
-
-Overfull \hbox (6.26265pt too wide) in paragraph at lines 669--671
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.GeneProteinAssociation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 671--673
-[]\T1/ptm/m/n/10.95 setAllGenesInactive()
- []
-
-
-Overfull \hbox (6.26265pt too wide) in paragraph at lines 671--673
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.GeneProteinAssociation
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 673--675
-[]\T1/ptm/m/n/10.95 setAllInactiveGPRBounds()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 673--675
+Underfull \hbox (badness 10000) in paragraph at lines 384--386
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 679--681
-[]\T1/ptm/m/n/10.95 setBoundValueByName()
+Underfull \hbox (badness 10000) in paragraph at lines 386--387
+[]\T1/ptm/m/n/10.95 getFluxBoundIds() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 679--681
+Underfull \hbox (badness 10000) in paragraph at lines 387--389
+[]\T1/ptm/m/n/10.95 getFluxBoundsByReactionID()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 387--389
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 683--684
-[]\T1/ptm/m/n/10.95 setChemFormula() (cbmpy.CBModel.Species
+Underfull \hbox (badness 10000) in paragraph at lines 389--391
+[]\T1/ptm/m/n/10.95 getFluxesAssociatedWithSpecies()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 684--685
-[]\T1/ptm/m/n/10.95 setCoefficient() (cbmpy.CBModel.Reagent
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 685--687
-[]\T1/ptm/m/n/10.95 setCol() (cbmpy.CBDataStruct.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 687--689
-[]\T1/ptm/m/n/10.95 setCol() (cbmpy.PyscesStoich.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 689--690
-[]\T1/ptm/m/n/10.95 setCompartmentId() (cbmpy.CBModel.Fbase
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 690--691
-[]\T1/ptm/m/n/10.95 setCreatedDate() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 691--692
-[]\T1/ptm/m/n/10.95 setDescription() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 694--696
-[]\T1/ptm/m/n/10.95 setFluxBoundsFromDict()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 694--696
+Underfull \hbox (badness 10000) in paragraph at lines 389--391
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Overfull \hbox (39.65956pt too wide) in paragraph at lines 696--698
-[]\T1/ptm/m/n/10.95 setGeneActive() (cbmpy.CBModel.GeneProteinAssociation
+Underfull \hbox (badness 10000) in paragraph at lines 391--393
+[]\T1/ptm/m/n/10.95 getFluxObjective() (cbmpy.CBModel.Objective
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 698--699
-[]\T1/ptm/m/n/10.95 setGeneActive() (cbmpy.CBModel.Model
+Underfull \hbox (badness 10000) in paragraph at lines 393--395
+[]\T1/ptm/m/n/10.95 getFluxObjectiveData()
  []
 
 
-Overfull \hbox (45.73672pt too wide) in paragraph at lines 699--701
-[]\T1/ptm/m/n/10.95 setGeneInactive() (cbmpy.CBModel.GeneProteinAssociation
+Underfull \hbox (badness 10000) in paragraph at lines 395--397
+[]\T1/ptm/m/n/10.95 getFluxObjectiveForReaction()
+ []
+
+[109]
+Underfull \hbox (badness 10000) in paragraph at lines 397--399
+[]\T1/ptm/m/n/10.95 getFluxObjectiveIDs()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 701--702
-[]\T1/ptm/m/n/10.95 setGeneInactive() (cbmpy.CBModel.Model
+Underfull \hbox (badness 10000) in paragraph at lines 399--401
+[]\T1/ptm/m/n/10.95 getFluxObjectiveReactions()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 706--707
-[]\T1/ptm/m/n/10.95 setLowerBound() (cbmpy.CBModel.Reaction
+Underfull \hbox (badness 10000) in paragraph at lines 401--403
+[]\T1/ptm/m/n/10.95 getFluxObjectives() (cbmpy.CBModel.Objective
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 708--709
-[]\T1/ptm/m/n/10.95 setModifiedDate() (cbmpy.CBModel.Model
+Underfull \hbox (badness 10000) in paragraph at lines 403--404
+[]\T1/ptm/m/n/10.95 getFVAdata() (cbmpy.CBModel.Reaction
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 711--712
-[]\T1/ptm/m/n/10.95 setObjectiveFlux() (cbmpy.CBModel.Model
+Overfull \hbox (12.12076pt too wide) in paragraph at lines 404--406
+[]\T1/ptm/m/n/10.95 getGene() (cbmpy.CBModel.GeneProteinAssociation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 712--713
-[]\T1/ptm/m/n/10.95 setOperation() (cbmpy.CBModel.Objective
+Underfull \hbox (badness 10000) in paragraph at lines 407--408
+[]\T1/ptm/m/n/10.95 getGeneByLabel() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 715--716
-[]\T1/ptm/m/n/10.95 setReactionBound() (cbmpy.CBModel.Model
+Underfull \hbox (badness 10000) in paragraph at lines 408--410
+[]\T1/ptm/m/n/10.95 getGeneIdFromLabel() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 716--718
-[]\T1/ptm/m/n/10.95 setReactionBounds() (cbmpy.CBModel.Model
+Overfull \hbox (25.50148pt too wide) in paragraph at lines 410--412
+[]\T1/ptm/m/n/10.95 getGeneIds() (cbmpy.CBModel.GeneProteinAssociation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 718--720
-[]\T1/ptm/m/n/10.95 setReactionId() (cbmpy.CBModel.FluxBound
+Overfull \hbox (41.31305pt too wide) in paragraph at lines 413--415
+[]\T1/ptm/m/n/10.95 getGeneLabels() (cbmpy.CBModel.GeneProteinAssociation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 720--722
-[]\T1/ptm/m/n/10.95 setReactionLowerBound()
+Underfull \hbox (badness 10000) in paragraph at lines 415--416
+[]\T1/ptm/m/n/10.95 getGeneLabels() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 720--722
+Overfull \hbox (16.38019pt too wide) in paragraph at lines 416--418
+[]\T1/ptm/m/n/10.95 getGenes() (cbmpy.CBModel.GeneProteinAssociation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 418--420
+[]\T1/ptm/m/n/10.95 getGPRassociation() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 420--422
+[]\T1/ptm/m/n/10.95 getGPRforReaction() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 425--427
+[]\T1/ptm/m/n/10.95 getIndexes() (cbmpy.CBDataStruct.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 427--429
+[]\T1/ptm/m/n/10.95 getIndexes() (cbmpy.PyscesStoich.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 429--431
+[]\T1/ptm/m/n/10.95 getIrreversibleReactionIds()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 429--431
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 722--724
-[]\T1/ptm/m/n/10.95 setReactionUpperBound()
+Underfull \hbox (badness 10000) in paragraph at lines 433--435
+[]\T1/ptm/m/n/10.95 getLabels() (cbmpy.CBDataStruct.StructMatrix
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 722--724
+Underfull \hbox (badness 10000) in paragraph at lines 435--437
+[]\T1/ptm/m/n/10.95 getLabels() (cbmpy.PyscesStoich.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 438--439
+[]\T1/ptm/m/n/10.95 getLowerBound() (cbmpy.CBModel.Reaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 439--440
+[]\T1/ptm/m/n/10.95 getMemberIDs() (cbmpy.CBModel.Group
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 442--444
+[]\T1/ptm/m/n/10.95 getMIRIAMannotations()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 442--444
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Fbase method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 444--446
+[]\T1/ptm/m/n/10.95 getMIRIAMUrisForQualifier()
+ []
+
+
+Overfull \hbox (6.26268pt too wide) in paragraph at lines 444--446
+\T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.MIRIAMannotation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 446--447
+[]\T1/ptm/m/n/10.95 getModelCreators() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 447--449
+[]\T1/ptm/m/n/10.95 getModelGenesPerReaction() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 451--452
+[]\T1/ptm/m/n/10.95 getObjectiveIds() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 452--453
+[]\T1/ptm/m/n/10.95 getObjFuncValue() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 453--454
+[]\T1/ptm/m/n/10.95 getOperation() (cbmpy.CBModel.Objective
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 456--457
+[]\T1/ptm/m/n/10.95 getProductIds() (cbmpy.CBModel.Reaction
+ []
+
+
+Overfull \hbox (20.65057pt too wide) in paragraph at lines 457--459
+[]\T1/ptm/m/n/10.95 getProtein() (cbmpy.CBModel.GeneProteinAssociation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 461--463
+[]\T1/ptm/m/n/10.95 getReactionActivity() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 463--465
+[]\T1/ptm/m/n/10.95 getReactionBounds() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 465--466
+[]\T1/ptm/m/n/10.95 getReactionIds() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 466--468
+[]\T1/ptm/m/n/10.95 getReactionIdsAssociatedWithSpecies()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 466--468
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 724--725
-[]\T1/ptm/m/n/10.95 setReagentOf() (cbmpy.CBModel.Species
- []
-
-[103]
-Underfull \hbox (badness 10000) in paragraph at lines 726--728
-[]\T1/ptm/m/n/10.95 setRow() (cbmpy.CBDataStruct.StructMatrix
+Underfull \hbox (badness 10000) in paragraph at lines 468--470
+[]\T1/ptm/m/n/10.95 getReactionLowerBound()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 728--730
-[]\T1/ptm/m/n/10.95 setRow() (cbmpy.PyscesStoich.StructMatrix
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 731--733
-[]\T1/ptm/m/n/10.95 setSharedAnnotation() (cbmpy.CBModel.Group
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 733--734
-[]\T1/ptm/m/n/10.95 setSharedNotes() (cbmpy.CBModel.Group
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 734--735
-[]\T1/ptm/m/n/10.95 setSharedSBOterm() (cbmpy.CBModel.Group
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 735--736
-[]\T1/ptm/m/n/10.95 setSize() (cbmpy.CBModel.Compartment
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 742--743
-[]\T1/ptm/m/n/10.95 setUpperBound() (cbmpy.CBModel.Reaction
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 748--750
-[]\T1/ptm/m/n/10.95 sortReactionsById() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 750--751
-[]\T1/ptm/m/n/10.95 sortSpeciesById() (cbmpy.CBModel.Model
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 752--754
-[]\T1/ptm/m/n/10.95 splitEqualityFluxBounds()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 752--754
+Underfull \hbox (badness 10000) in paragraph at lines 468--470
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 755--757
-[]\T1/ptm/m/n/10.95 splitReversibleReactions() (in mod-ule
+Underfull \hbox (badness 10000) in paragraph at lines 470--471
+[]\T1/ptm/m/n/10.95 getReactionNames() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 757--759
-[]\T1/ptm/m/n/10.95 splitSingleReversibleReaction() (in mod-ule
+Underfull \hbox (badness 10000) in paragraph at lines 471--473
+[]\T1/ptm/m/n/10.95 getReactionUpperBound()
  []
 
 
-Overfull \hbox (1.6747pt too wide) in paragraph at lines 773--775
-[]\T1/ptm/m/n/10.95 SwapElem() (cbmpy.PyscesStoich.MathArrayFunc
- []
-
-
-Overfull \hbox (4.4452pt too wide) in paragraph at lines 777--779
-[]\T1/ptm/m/n/10.95 SwapRowd() (cbmpy.PyscesStoich.MathArrayFunc
- []
-
-
-Overfull \hbox (3.83194pt too wide) in paragraph at lines 779--781
-[]\T1/ptm/m/n/10.95 SwapRowz() (cbmpy.PyscesStoich.MathArrayFunc
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 784--786
-[]\T1/ptm/m/n/10.95 testGeneProteinAssociations()
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 784--786
+Underfull \hbox (badness 10000) in paragraph at lines 471--473
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 789--791
-[]\T1/ptm/m/n/10.95 undeleteObjective() (cbmpy.CBModel.Model
+[110]
+Underfull \hbox (badness 10000) in paragraph at lines 473--475
+[]\T1/ptm/m/n/10.95 getReactionValues() (cbmpy.CBModel.Model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 791--793
-[]\T1/ptm/m/n/10.95 undeleteReactionAndBounds()
+Underfull \hbox (badness 10000) in paragraph at lines 476--478
+[]\T1/ptm/m/n/10.95 getReagentObjIds() (cbmpy.CBModel.Reaction
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 791--793
-\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+Underfull \hbox (badness 10000) in paragraph at lines 478--479
+[]\T1/ptm/m/n/10.95 getReagentOf() (cbmpy.CBModel.Species
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 793--795
-[]\T1/ptm/m/n/10.95 undeleteReagentWithSpeciesRef()
+Underfull \hbox (badness 10000) in paragraph at lines 479--481
+[]\T1/ptm/m/n/10.95 getReagentRefs() (cbmpy.CBModel.Reaction
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 793--795
+Underfull \hbox (badness 10000) in paragraph at lines 481--483
+[]\T1/ptm/m/n/10.95 getReagentWithSpeciesRef()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 481--483
 \T1/ptm/m/n/10.95 (cbmpy.CBModel.Reaction method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 795--796
-[]\T1/ptm/m/n/10.95 unsetBoundary() (cbmpy.CBModel.Species
+Underfull \hbox (badness 10000) in paragraph at lines 483--484
+[]\T1/ptm/m/n/10.95 getReducedCosts() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 796--797
-[]\T1/ptm/m/n/10.95 updateData() (cbmpy.CBNetDB.DBTools
+Underfull \hbox (badness 10000) in paragraph at lines 485--487
+[]\T1/ptm/m/n/10.95 getReversibleReactionIds()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 797--798
-[]\T1/ptm/m/n/10.95 updateNetwork() (cbmpy.CBModel.Model
+Underfull \hbox (badness 10000) in paragraph at lines 485--487
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 798--799
-[]\T1/ptm/m/n/10.95 URLDecode() (cbmpy.CBNetDB.RESTClient
+Overfull \hbox (8.82469pt too wide) in paragraph at lines 489--491
+[]\T1/ptm/m/n/10.95 getRowsByIdx() (cbmpy.CBDataStruct.StructMatrix
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 799--800
-[]\T1/ptm/m/n/10.95 URLEncode() (cbmpy.CBNetDB.RESTClient
+Overfull \hbox (5.17839pt too wide) in paragraph at lines 491--493
+[]\T1/ptm/m/n/10.95 getRowsByIdx() (cbmpy.PyscesStoich.StructMatrix
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 803--805
-[]\T1/ptm/m/n/10.95 viewDataInWebrowser()
+Underfull \hbox (badness 10000) in paragraph at lines 493--495
+[]\T1/ptm/m/n/10.95 getRowsByName()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 803--805
+Underfull \hbox (badness 10000) in paragraph at lines 493--495
+\T1/ptm/m/n/10.95 (cbmpy.CBDataStruct.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 495--497
+[]\T1/ptm/m/n/10.95 getRowsByName()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 495--497
+\T1/ptm/m/n/10.95 (cbmpy.PyscesStoich.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 500--502
+[]\T1/ptm/m/n/10.95 getSharedMIRIAMannotations()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 500--502
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Group method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 502--503
+[]\T1/ptm/m/n/10.95 getSharedNotes() (cbmpy.CBModel.Group
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 503--504
+[]\T1/ptm/m/n/10.95 getSharedSBOterm() (cbmpy.CBModel.Group
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 504--505
+[]\T1/ptm/m/n/10.95 getSize() (cbmpy.CBModel.Compartment
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 505--507
+[]\T1/ptm/m/n/10.95 getSolutionVector() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 510--511
+[]\T1/ptm/m/n/10.95 getSpeciesIds() (cbmpy.CBModel.Reaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 511--512
+[]\T1/ptm/m/n/10.95 getSpeciesObj() (cbmpy.CBModel.Reaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--514
+[]\T1/ptm/m/n/10.95 getStoichiometry() (cbmpy.CBModel.Reaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 514--516
+[]\T1/ptm/m/n/10.95 getSubstrateIds() (cbmpy.CBModel.Reaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 518--519
+[]\T1/ptm/m/n/10.95 getUpperBound() (cbmpy.CBModel.Reaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 519--521
+[]\T1/ptm/m/n/10.95 GetUpperMatrix() (cbmpy.PyscesStoich.Stoich
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 521--523
+[]\T1/ptm/m/n/10.95 GetUpperMatrixUsingQR()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 528--529
+[]\T1/ptm/m/n/10.95 glpk_analyzeModel() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 529--531
+[]\T1/ptm/m/n/10.95 glpk_constructLPfromFBA() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 531--533
+[]\T1/ptm/m/n/10.95 glpk_FluxVariabilityAnalysis() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 533--535
+[]\T1/ptm/m/n/10.95 glpk_func_GetCPXandPresolve() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 535--537
+[]\T1/ptm/m/n/10.95 glpk_func_SetObjectiveFunctionAsConstraint()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 537--539
+[]\T1/ptm/m/n/10.95 glpk_getOptimalSolution() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 539--541
+[]\T1/ptm/m/n/10.95 glpk_getReducedCosts() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 541--543
+[]\T1/ptm/m/n/10.95 glpk_getSolutionStatus() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 543--545
+[]\T1/ptm/m/n/10.95 glpk_MinimizeSumOfAbsFluxes() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 545--547
+[]\T1/ptm/m/n/10.95 glpk_setFBAsolutionToModel() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 548--550
+[]\T1/ptm/m/n/10.95 glpk_setSingleConstraint() (in mod-ule
+ []
+
+[111]
+Underfull \hbox (badness 10000) in paragraph at lines 550--552
+[]\T1/ptm/m/n/10.95 glpk_setSolutionStatusToModel() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 553--555
+[]\T1/ptm/m/n/10.95 glpk_writeLPtoLPTfile() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 557--558
+[]\T1/ptm/m/n/10.95 GroupMemberAttributes (class in
+ []
+
+
+Overfull \hbox (43.32765pt too wide) in paragraph at lines 568--570
+[]\T1/ptm/m/n/10.95 isProteinActive() (cbmpy.CBModel.GeneProteinAssociation
+ []
+
+
+Overfull \hbox (21.26372pt too wide) in paragraph at lines 590--592
+[]\T1/ptm/m/n/10.95 MatrixFloatFix() (cbmpy.PyscesStoich.MathArrayFunc
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 592--594
+[]\T1/ptm/m/n/10.95 MatrixValueCompare()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 592--594
+\T1/ptm/m/n/10.95 (cbmpy.PyscesStoich.MathArrayFunc
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 595--596
+[]\T1/ptm/m/n/10.95 MIRIAMannotation (class in
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 607--609
+[]\T1/ptm/m/n/10.95 parseGeneAssociation() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 609--611
+[]\T1/ptm/m/n/10.95 parseXMLtoText()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 609--611
 \T1/ptm/m/n/10.95 (cbmpy.CBNetDB.SemanticSBML
  []
 
 
-Overfull \hbox (18.54843pt too wide) in paragraph at lines 805--807
+Underfull \hbox (badness 10000) in paragraph at lines 612--614
+[]\T1/ptm/m/n/10.95 PivotSort_initial() (cbmpy.PyscesStoich.Stoich
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 615--617
+[]\T1/ptm/m/n/10.95 PLUfactorize() (cbmpy.PyscesStoich.Stoich
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 618--620
+[]\T1/ptm/m/n/10.95 processBiGGannotationNote() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 620--622
+[]\T1/ptm/m/n/10.95 processBiGGchemFormula() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 622--624
+[]\T1/ptm/m/n/10.95 processExchangeReactions() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 624--626
+[]\T1/ptm/m/n/10.95 processSBMLAnnotationNotes() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 626--628
+[]\T1/ptm/m/n/10.95 processSpeciesChargeChemFormulaAnnot() (in
+ []
+
+
+Overfull \hbox (0.59096pt too wide) in paragraph at lines 631--633
+[]\T1/ptm/m/n/10.95 quickLookup() (cbmpy.CBNetDB.SemanticSBML
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 637--639
+[]\T1/ptm/m/n/10.95 reactivateReaction() (cbmpy.CBModel.Reaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 648--650
+[]\T1/ptm/m/n/10.95 removeFixedSpeciesReactions() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 651--652
+[]\T1/ptm/m/n/10.95 renameObjectIds() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 653--654
+[]\T1/ptm/m/n/10.95 resetAllGenes() (cbmpy.CBModel.Model
+ []
+
+[112]
+Underfull \hbox (badness 10000) in paragraph at lines 654--656
+[]\T1/ptm/m/n/10.95 resetAllInactiveGPRBounds()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 654--656
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 657--658
+[]\T1/ptm/m/n/10.95 roundOffWithSense() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 658--659
+[]\T1/ptm/m/n/10.95 runMultiCoreFVA() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 666--668
+[]\T1/ptm/m/n/10.95 sbml_createAssociationFromAST() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 668--669
+[]\T1/ptm/m/n/10.95 sbml_createModelL2() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 669--671
+[]\T1/ptm/m/n/10.95 sbml_exportSBML2FBAModel() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 671--672
+[]\T1/ptm/m/n/10.95 sbml_fileFindVersion() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 677--678
+[]\T1/ptm/m/n/10.95 sbml_readCOBRANote() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 678--679
+[]\T1/ptm/m/n/10.95 sbml_readCOBRASBML() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 681--682
+[]\T1/ptm/m/n/10.95 sbml_readSBML2FBA() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 682--683
+[]\T1/ptm/m/n/10.95 sbml_readSBML3FBC() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 683--685
+[]\T1/ptm/m/n/10.95 sbml_setAnnotationsL3Fbc() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 685--687
+[]\T1/ptm/m/n/10.95 sbml_setCompartmentsL3() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--689
+[]\T1/ptm/m/n/10.95 sbml_setDescription() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 691--693
+[]\T1/ptm/m/n/10.95 sbml_setParametersL3Fbc() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 693--694
+[]\T1/ptm/m/n/10.95 sbml_setReactionsL2() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 694--696
+[]\T1/ptm/m/n/10.95 sbml_setReactionsL3Fbc() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 699--701
+[]\T1/ptm/m/n/10.95 sbml_setValidationOptions() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 701--703
+[]\T1/ptm/m/n/10.95 sbml_validateDocument() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 705--706
+[]\T1/ptm/m/n/10.95 sbml_writeCOBRASBML() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 708--709
+[]\T1/ptm/m/n/10.95 sbml_writeSBML2FBA() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 709--710
+[]\T1/ptm/m/n/10.95 sbml_writeSBML3FBC() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 710--712
+[]\T1/ptm/m/n/10.95 ScalePivots() (cbmpy.PyscesStoich.Stoich
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 712--714
+[]\T1/ptm/m/n/10.95 scanForReactionDuplicates() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 714--716
+[]\T1/ptm/m/n/10.95 scanForUnbalancedReactions() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 719--720
+[]\T1/ptm/m/n/10.95 serializeToDisk() (cbmpy.CBModel.Fbase
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 720--721
+[]\T1/ptm/m/n/10.95 serializeToDisk() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 722--723
+[]\T1/ptm/m/n/10.95 setAllFluxBounds() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 723--725
+[]\T1/ptm/m/n/10.95 setAllGenesActive()
+ []
+
+
+Overfull \hbox (6.26265pt too wide) in paragraph at lines 723--725
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.GeneProteinAssociation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 725--727
+[]\T1/ptm/m/n/10.95 setAllGenesInactive()
+ []
+
+
+Overfull \hbox (6.26265pt too wide) in paragraph at lines 725--727
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.GeneProteinAssociation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 727--729
+[]\T1/ptm/m/n/10.95 setAllInactiveGPRBounds()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 727--729
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+[113]
+Underfull \hbox (badness 10000) in paragraph at lines 733--735
+[]\T1/ptm/m/n/10.95 setBoundValueByName()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 733--735
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 737--738
+[]\T1/ptm/m/n/10.95 setChemFormula() (cbmpy.CBModel.Species
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 738--739
+[]\T1/ptm/m/n/10.95 setCoefficient() (cbmpy.CBModel.Reagent
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 739--741
+[]\T1/ptm/m/n/10.95 setCol() (cbmpy.CBDataStruct.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 741--743
+[]\T1/ptm/m/n/10.95 setCol() (cbmpy.PyscesStoich.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 743--744
+[]\T1/ptm/m/n/10.95 setCompartmentId() (cbmpy.CBModel.Fbase
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 744--745
+[]\T1/ptm/m/n/10.95 setCreatedDate() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 745--746
+[]\T1/ptm/m/n/10.95 setDescription() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 748--750
+[]\T1/ptm/m/n/10.95 setFluxBoundsFromDict()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 748--750
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Overfull \hbox (39.65956pt too wide) in paragraph at lines 750--752
+[]\T1/ptm/m/n/10.95 setGeneActive() (cbmpy.CBModel.GeneProteinAssociation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 752--753
+[]\T1/ptm/m/n/10.95 setGeneActive() (cbmpy.CBModel.Model
+ []
+
+
+Overfull \hbox (45.73672pt too wide) in paragraph at lines 753--755
+[]\T1/ptm/m/n/10.95 setGeneInactive() (cbmpy.CBModel.GeneProteinAssociation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 755--756
+[]\T1/ptm/m/n/10.95 setGeneInactive() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 762--763
+[]\T1/ptm/m/n/10.95 setLowerBound() (cbmpy.CBModel.Reaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 764--765
+[]\T1/ptm/m/n/10.95 setModifiedDate() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 767--768
+[]\T1/ptm/m/n/10.95 setObjectiveFlux() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 768--769
+[]\T1/ptm/m/n/10.95 setOperation() (cbmpy.CBModel.Objective
+ []
+
+
+Overfull \hbox (19.43501pt too wide) in paragraph at lines 771--773
+[]\T1/ptm/m/n/10.95 setProtein() (cbmpy.CBModel.GeneProteinAssociation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 773--774
+[]\T1/ptm/m/n/10.95 setReactionBound() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 774--776
+[]\T1/ptm/m/n/10.95 setReactionBounds() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 776--778
+[]\T1/ptm/m/n/10.95 setReactionId() (cbmpy.CBModel.FluxBound
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 778--780
+[]\T1/ptm/m/n/10.95 setReactionLowerBound()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 778--780
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 780--782
+[]\T1/ptm/m/n/10.95 setReactionUpperBound()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 780--782
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 782--783
+[]\T1/ptm/m/n/10.95 setReagentOf() (cbmpy.CBModel.Species
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 785--787
+[]\T1/ptm/m/n/10.95 setRow() (cbmpy.CBDataStruct.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 787--789
+[]\T1/ptm/m/n/10.95 setRow() (cbmpy.PyscesStoich.StructMatrix
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 790--792
+[]\T1/ptm/m/n/10.95 setSharedAnnotation() (cbmpy.CBModel.Group
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 792--793
+[]\T1/ptm/m/n/10.95 setSharedNotes() (cbmpy.CBModel.Group
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 793--794
+[]\T1/ptm/m/n/10.95 setSharedSBOterm() (cbmpy.CBModel.Group
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 794--795
+[]\T1/ptm/m/n/10.95 setSize() (cbmpy.CBModel.Compartment
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 801--802
+[]\T1/ptm/m/n/10.95 setUpperBound() (cbmpy.CBModel.Reaction
+ []
+
+[114]
+Underfull \hbox (badness 10000) in paragraph at lines 807--809
+[]\T1/ptm/m/n/10.95 sortReactionsById() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 809--810
+[]\T1/ptm/m/n/10.95 sortSpeciesById() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 811--813
+[]\T1/ptm/m/n/10.95 splitEqualityFluxBounds()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 811--813
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 814--816
+[]\T1/ptm/m/n/10.95 splitReversibleReactions() (in mod-ule
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 816--818
+[]\T1/ptm/m/n/10.95 splitSingleReversibleReaction() (in mod-ule
+ []
+
+
+Overfull \hbox (1.6747pt too wide) in paragraph at lines 832--834
+[]\T1/ptm/m/n/10.95 SwapElem() (cbmpy.PyscesStoich.MathArrayFunc
+ []
+
+
+Overfull \hbox (4.4452pt too wide) in paragraph at lines 836--838
+[]\T1/ptm/m/n/10.95 SwapRowd() (cbmpy.PyscesStoich.MathArrayFunc
+ []
+
+
+Overfull \hbox (3.83194pt too wide) in paragraph at lines 838--840
+[]\T1/ptm/m/n/10.95 SwapRowz() (cbmpy.PyscesStoich.MathArrayFunc
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 843--845
+[]\T1/ptm/m/n/10.95 testGeneProteinAssociations()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 843--845
+\T1/ptm/m/n/10.95 (cbmpy.CBModel.Model method),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 848--849
+[]\T1/ptm/m/n/10.95 unsetBoundary() (cbmpy.CBModel.Species
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 849--850
+[]\T1/ptm/m/n/10.95 updateData() (cbmpy.CBNetDB.DBTools
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 850--851
+[]\T1/ptm/m/n/10.95 updateNetwork() (cbmpy.CBModel.Model
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 854--856
+[]\T1/ptm/m/n/10.95 viewDataInWebrowser()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 854--856
+\T1/ptm/m/n/10.95 (cbmpy.CBNetDB.SemanticSBML
+ []
+
+
+Overfull \hbox (18.54843pt too wide) in paragraph at lines 856--858
 []\T1/ptm/m/n/10.95 viewURL() (cbmpy.CBDataStruct.MIRIAMannotation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 810--811
+Underfull \hbox (badness 10000) in paragraph at lines 861--862
 []\T1/ptm/m/n/10.95 writeCOBRASBML() (in mod-ule
  []
 
-[104]
-Underfull \hbox (badness 10000) in paragraph at lines 815--817
+
+Underfull \hbox (badness 10000) in paragraph at lines 866--868
 []\T1/ptm/m/n/10.95 writeMinDistanceLPwithCost() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 817--819
+Underfull \hbox (badness 10000) in paragraph at lines 868--870
 []\T1/ptm/m/n/10.95 WriteModelHFormatFBA() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 819--821
+Underfull \hbox (badness 10000) in paragraph at lines 870--872
 []\T1/ptm/m/n/10.95 writeModelHFormatFBA() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 821--823
+Underfull \hbox (badness 10000) in paragraph at lines 872--874
 []\T1/ptm/m/n/10.95 WriteModelHFormatFBA2() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 823--825
+Underfull \hbox (badness 10000) in paragraph at lines 874--876
 []\T1/ptm/m/n/10.95 writeModelHFormatFBA2() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 825--827
+Underfull \hbox (badness 10000) in paragraph at lines 876--878
 []\T1/ptm/m/n/10.95 writeModelInfoToFile() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 833--835
+Underfull \hbox (badness 10000) in paragraph at lines 884--886
 []\T1/ptm/m/n/10.95 writeModelToCOMBINEarchive() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 835--836
+Underfull \hbox (badness 10000) in paragraph at lines 886--887
 []\T1/ptm/m/n/10.95 writeModelToExcel97() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 836--838
+Underfull \hbox (badness 10000) in paragraph at lines 887--889
 []\T1/ptm/m/n/10.95 writeOptimalSolution() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 838--840
+Underfull \hbox (badness 10000) in paragraph at lines 889--891
 []\T1/ptm/m/n/10.95 writeProteinCostToCSV() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 840--842
+Underfull \hbox (badness 10000) in paragraph at lines 891--893
 []\T1/ptm/m/n/10.95 writeReactionInfoToFile() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 844--845
+Underfull \hbox (badness 10000) in paragraph at lines 895--896
 []\T1/ptm/m/n/10.95 writeSBML3FBCV2() (in mod-ule
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 845--847
+[115]
+Underfull \hbox (badness 10000) in paragraph at lines 896--898
 []\T1/ptm/m/n/10.95 writeSensitivitiesToCSV() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 848--850
+Underfull \hbox (badness 10000) in paragraph at lines 899--901
 []\T1/ptm/m/n/10.95 writeSpeciesInfoToFile() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 850--852
+Underfull \hbox (badness 10000) in paragraph at lines 901--903
 []\T1/ptm/m/n/10.95 writeStoichiometricMatrix() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 855--857
+Underfull \hbox (badness 10000) in paragraph at lines 906--908
 []\T1/ptm/m/n/10.95 xml_addSBML2FBAFluxBound() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 857--859
+Underfull \hbox (badness 10000) in paragraph at lines 908--910
 []\T1/ptm/m/n/10.95 xml_addSBML2FBAObjective() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 859--861
+Underfull \hbox (badness 10000) in paragraph at lines 910--912
 []\T1/ptm/m/n/10.95 xml_createListOfFluxObjectives() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 861--863
+Underfull \hbox (badness 10000) in paragraph at lines 912--914
 []\T1/ptm/m/n/10.95 xml_createSBML2FBADoc() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 863--865
+Underfull \hbox (badness 10000) in paragraph at lines 914--916
 []\T1/ptm/m/n/10.95 xml_createSBML2FBAObjective() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 865--867
+Underfull \hbox (badness 10000) in paragraph at lines 916--918
 []\T1/ptm/m/n/10.95 xml_getSBML2FBAannotation() (in mod-ule
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 868--869
+Underfull \hbox (badness 10000) in paragraph at lines 919--920
 []\T1/ptm/m/n/10.95 xml_viewSBML2FBAXML() (in mod-ule
  []
 
-[105])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 9527.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 9527.
- (cbmpy.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 9527.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 9527.
+[116
 
+])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 10528.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 10528.
+ (cbmpy.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 10528.
+
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 10528
+.
 Package rerunfilecheck Info: File `cbmpy.out' has not changed.
-(rerunfilecheck)             Checksum: C621EE759B87B98CE0F0226ED7A9D964;2566.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 9527.
+(rerunfilecheck)             Checksum: 3E62AA45D84BA391A0C13D59592DF598;6168.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 10528.
  ) 
 Here is how much of TeX's memory you used:
- 10477 strings out of 493634
- 163712 string characters out of 3143744
- 260297 words of memory out of 3000000
- 12875 multiletter control sequences out of 15000+200000
- 66249 words of font info for 79 fonts, out of 3000000 for 9000
- 1026 hyphenation exceptions out of 8191
- 36i,12n,48p,628b,525s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 14904 strings out of 493335
+ 222472 string characters out of 3139260
+ 342744 words of memory out of 3000000
+ 17327 multiletter control sequences out of 15000+200000
+ 66375 words of font info for 96 fonts, out of 3000000 for 9000
+ 1142 hyphenation exceptions out of 8191
+ 36i,12n,49p,708b,580s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program File
-s/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 2.9/fo
-nts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/h
-elvetic/uhvb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvbo8
-a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Prog
-ram Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 
-2.9/fonts/type1/urw/times/utmbi8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
-urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a
-.pfb>
-Output written on cbmpy.pdf (109 pages, 624156 bytes).
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts
+/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/cour
+ier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrro8a.pfb
+><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Program F
+iles/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvbo8a.pfb><C:/Program Files/MiKTeX 2
+.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
+/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmbi8
+a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on cbmpy.pdf (120 pages, 701000 bytes).
 PDF statistics:
- 2088 PDF objects out of 2487 (max. 8388607)
- 718 named destinations out of 1000 (max. 500000)
+ 2242 PDF objects out of 2487 (max. 8388607)
+ 774 named destinations out of 1000 (max. 500000)
  322 words of extra memory for PDF output out of 10000 (max. 10000000)
 

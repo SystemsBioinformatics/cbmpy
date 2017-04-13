@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CBMPy Reference Guide &mdash; CBMPy User Guide v0.7</title>
+    <title>CBMPy Reference Guide &#8212; CBMPy User Guide v0.7</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -30,11 +30,14 @@
     <link rel="top" title="CBMPy User Guide v0.7" href="#" />
     <link rel="next" title="CBMPy: Installation Guide" href="install_doc.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -47,11 +50,10 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="install_doc.html">CBMPy: Installation Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="install_doc.html#support">Support</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_doc.html#python-standard-library-modules">Python standard library modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_doc.html#required-libraries-python-bindings">Required libraries (Python bindings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_doc.html#installation-types-quick-reference">Installation types: quick reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_doc.html#generic-installation-windows-xp-7-8-1">Generic installation Windows (XP, 7, 8.1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_doc.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_doc.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_doc.html#installing-on-ubuntu-linux">Installing on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_doc.html#installing-on-microsoft-windows">Installing on Microsoft Windows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_doc.html#linux-ubuntu">Linux: Ubuntu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_doc.html#linux-ubuntu-14-04">Linux: Ubuntu 14.04</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_doc.html#apple-macintosh-os-x">Apple Macintosh: OS X</a></li>
@@ -64,6 +66,7 @@
 <li class="toctree-l2"><a class="reference internal" href="modules_doc.html#cbmpy-cbconfig-module">CBMPy: CBConfig module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules_doc.html#cbmpy-cbcplex-module">CBMPy: CBCPLEX module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules_doc.html#cbmpy-cbdatastruct-module">CBMPy: CBDataStruct module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules_doc.html#cbmpy-cbglpk-module">CBMPy: CBGLPK module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules_doc.html#cbmpy-cbgui-module">CBMPy: CBGUI module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules_doc.html#cbmpy-cbmodel-module">CBMPy: CBModel module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules_doc.html#cbmpy-cbmodeltools-module">CBMPy: CBModelTools module</a></li>
@@ -90,9 +93,9 @@
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 
@@ -128,14 +131,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -146,8 +146,8 @@
       &copy;2010-2016, Brett G. Olivier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/cbmpy.txt"

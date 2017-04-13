@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CBMPy Module Reference &mdash; CBMPy User Guide v0.7</title>
+    <title>CBMPy Module Reference &#8212; CBMPy User Guide v0.7</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -30,11 +30,14 @@
     <link rel="top" title="CBMPy User Guide v0.7" href="cbmpy.html" />
     <link rel="prev" title="Introduction" href="manual_doc.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -46,7 +49,7 @@
 <div class="section" id="cbmpy-cbcommon-module">
 <h2>CBMPy: CBCommon module<a class="headerlink" href="#cbmpy-cbcommon-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -59,7 +62,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 346 2015-08-03 14:09:32Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="class">
 <dt id="cbmpy.CBCommon.ComboGen">
 <em class="property">class </em><code class="descclassname">cbmpy.CBCommon.</code><code class="descname">ComboGen</code><a class="reference internal" href="_modules/cbmpy/CBCommon.html#ComboGen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBCommon.ComboGen" title="Permalink to this definition">¶</a></dt>
@@ -90,10 +93,11 @@ Level 3 specification and <a class="reference external" href="http://wikipedia.o
 
 <dl class="function">
 <dt id="cbmpy.CBCommon.extractGeneIdsFromString">
-<code class="descclassname">cbmpy.CBCommon.</code><code class="descname">extractGeneIdsFromString</code><span class="sig-paren">(</span><em>g</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBCommon.html#extractGeneIdsFromString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBCommon.extractGeneIdsFromString" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cbmpy.CBCommon.</code><code class="descname">extractGeneIdsFromString</code><span class="sig-paren">(</span><em>g</em>, <em>return_clean_gpr=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBCommon.html#extractGeneIdsFromString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBCommon.extractGeneIdsFromString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract and return a list of gene names from a gene association string formulation</p>
 <ul class="simple">
 <li><em>g</em> a COBRA style gene association string</li>
+<li><em>return_clean_gpr</em> [default=False] in addition to the list returns the &#8220;cleaned&#8221; GPR string</li>
 </ul>
 </dd></dl>
 
@@ -137,7 +141,7 @@ the rest should be alphanumeric or underscore.</p>
 <span class="target" id="module-cbmpy.CBConfig"></span><div class="section" id="cbmpy-cbconfig-module">
 <h2>CBMPy: CBConfig module<a class="headerlink" href="#cbmpy-cbconfig-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -150,7 +154,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBConfig.py 404 2016-01-05 15:24:35Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBConfig.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBConfig.current_version">
 <code class="descclassname">cbmpy.CBConfig.</code><code class="descname">current_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBConfig.html#current_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBConfig.current_version" title="Permalink to this definition">¶</a></dt>
@@ -167,7 +171,7 @@ Last edit: $Author: bgoli $ ($Id: CBConfig.py 404 2016-01-05 15:24:35Z bgoli $)<
 <span class="target" id="module-cbmpy.CBCPLEX"></span><div class="section" id="cbmpy-cbcplex-module">
 <h2>CBMPy: CBCPLEX module<a class="headerlink" href="#cbmpy-cbcplex-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -180,7 +184,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 390 2015-10-05 13:44:45Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBCPLEX.cplx_FluxVariabilityAnalysis">
 <code class="descclassname">cbmpy.CBCPLEX.</code><code class="descname">cplx_FluxVariabilityAnalysis</code><span class="sig-paren">(</span><em>fba</em>, <em>selected_reactions=None</em>, <em>pre_opt=True</em>, <em>tol=None</em>, <em>objF2constr=True</em>, <em>rhs_sense='lower'</em>, <em>optPercentage=100.0</em>, <em>work_dir=None</em>, <em>quiet=True</em>, <em>debug=False</em>, <em>oldlpgen=False</em>, <em>markupmodel=True</em>, <em>default_on_fail=False</em>, <em>roundoff_span=10</em>, <em>method='o'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBCPLEX.html#cplx_FluxVariabilityAnalysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBCPLEX.cplx_FluxVariabilityAnalysis" title="Permalink to this definition">¶</a></dt>
@@ -340,7 +344,7 @@ this is True with pre_opt=False then the id/value of the active objective is use
 </ul>
 </div></blockquote>
 <p>and returns an array with columns:</p>
-<div class="highlight-python"><div class="highlight"><pre>Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Reaction</span><span class="p">,</span> <span class="n">Reduced</span> <span class="n">Costs</span><span class="p">,</span> <span class="n">Variability</span> <span class="n">Min</span><span class="p">,</span> <span class="n">Variability</span> <span class="n">Max</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Max</span><span class="o">-</span><span class="n">Min</span><span class="p">),</span> <span class="n">MinStatus</span><span class="p">,</span> <span class="n">MaxStatus</span>
 </pre></div>
 </div>
 <p>and a list containing the row names.</p>
@@ -542,14 +546,14 @@ empty objects if pre_opt == False</p>
 </div></blockquote>
 <p>Output is a tuple of bound and objective sensitivities where the objective
 sensitivity is described in the CPLEX reference manual as:</p>
-<div class="highlight-python"><div class="highlight"><pre>... the objective sensitivity shows each variable, its reduced cost and the range over
-which its objective function coefficient can vary without forcing a change
-in the optimal basis. The current value of each objective coefficient is
-also displayed for reference.
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...</span> <span class="n">the</span> <span class="n">objective</span> <span class="n">sensitivity</span> <span class="n">shows</span> <span class="n">each</span> <span class="n">variable</span><span class="p">,</span> <span class="n">its</span> <span class="n">reduced</span> <span class="n">cost</span> <span class="ow">and</span> <span class="n">the</span> <span class="nb">range</span> <span class="n">over</span>
+<span class="n">which</span> <span class="n">its</span> <span class="n">objective</span> <span class="n">function</span> <span class="n">coefficient</span> <span class="n">can</span> <span class="n">vary</span> <span class="n">without</span> <span class="n">forcing</span> <span class="n">a</span> <span class="n">change</span>
+<span class="ow">in</span> <span class="n">the</span> <span class="n">optimal</span> <span class="n">basis</span><span class="o">.</span> <span class="n">The</span> <span class="n">current</span> <span class="n">value</span> <span class="n">of</span> <span class="n">each</span> <span class="n">objective</span> <span class="n">coefficient</span> <span class="ow">is</span>
+<span class="n">also</span> <span class="n">displayed</span> <span class="k">for</span> <span class="n">reference</span><span class="o">.</span>
 
-- *objective coefficient sensitivity* {flux : (reduced_cost, lower_obj_sensitivity, coeff_value, upper_obj_sensitivity)}
-- *rhs sensitivity* {constraint : (low, value, high)}
-- *bound sensitivity ranges* {flux : (lb_low, lb_high, ub_low, ub_high)}
+<span class="o">-</span> <span class="o">*</span><span class="n">objective</span> <span class="n">coefficient</span> <span class="n">sensitivity</span><span class="o">*</span> <span class="p">{</span><span class="n">flux</span> <span class="p">:</span> <span class="p">(</span><span class="n">reduced_cost</span><span class="p">,</span> <span class="n">lower_obj_sensitivity</span><span class="p">,</span> <span class="n">coeff_value</span><span class="p">,</span> <span class="n">upper_obj_sensitivity</span><span class="p">)}</span>
+<span class="o">-</span> <span class="o">*</span><span class="n">rhs</span> <span class="n">sensitivity</span><span class="o">*</span> <span class="p">{</span><span class="n">constraint</span> <span class="p">:</span> <span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">high</span><span class="p">)}</span>
+<span class="o">-</span> <span class="o">*</span><span class="n">bound</span> <span class="n">sensitivity</span> <span class="n">ranges</span><span class="o">*</span> <span class="p">{</span><span class="n">flux</span> <span class="p">:</span> <span class="p">(</span><span class="n">lb_low</span><span class="p">,</span> <span class="n">lb_high</span><span class="p">,</span> <span class="n">ub_low</span><span class="p">,</span> <span class="n">ub_high</span><span class="p">)}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -648,6 +652,12 @@ in cplx_setObjective()  when reset=True.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="cbmpy.CBCPLEX.cplx_setSolutionStatusToModel">
+<code class="descclassname">cbmpy.CBCPLEX.</code><code class="descname">cplx_setSolutionStatusToModel</code><span class="sig-paren">(</span><em>m</em>, <em>lp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBCPLEX.html#cplx_setSolutionStatusToModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBCPLEX.cplx_setSolutionStatusToModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the lp solutions status to the CBMPy model</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="cbmpy.CBCPLEX.cplx_singleGeneScan">
 <code class="descclassname">cbmpy.CBCPLEX.</code><code class="descname">cplx_singleGeneScan</code><span class="sig-paren">(</span><em>fba</em>, <em>r_off_low=0.0</em>, <em>r_off_upp=0.0</em>, <em>optrnd=8</em>, <em>altout=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBCPLEX.html#cplx_singleGeneScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBCPLEX.cplx_singleGeneScan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a single gene deletion scan</p>
@@ -706,7 +716,7 @@ reduced costs</p>
 <span class="target" id="module-cbmpy.CBDataStruct"></span><div class="section" id="cbmpy-cbdatastruct-module">
 <h2>CBMPy: CBDataStruct module<a class="headerlink" href="#cbmpy-cbdatastruct-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -719,7 +729,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBDataStruct.py 331 2015-07-01 14:36:41Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBDataStruct.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="class">
 <dt id="cbmpy.CBDataStruct.MIRIAMannotation">
 <em class="property">class </em><code class="descclassname">cbmpy.CBDataStruct.</code><code class="descname">MIRIAMannotation</code><a class="reference internal" href="_modules/cbmpy/CBDataStruct.html#MIRIAMannotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBDataStruct.MIRIAMannotation" title="Permalink to this definition">¶</a></dt>
@@ -913,10 +923,10 @@ maps the row labels to ridx and creates self.row (row label list)</p>
 </dd></dl>
 
 </div>
-<span class="target" id="module-cbmpy.CBGUI"></span><div class="section" id="cbmpy-cbgui-module">
-<h2>CBMPy: CBGUI module<a class="headerlink" href="#cbmpy-cbgui-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-cbmpy.CBGLPK"></span><div class="section" id="cbmpy-cbglpk-module">
+<h2>CBMPy: CBGLPK module<a class="headerlink" href="#cbmpy-cbglpk-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -929,18 +939,303 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBGUI.py 305 2015-04-23 15:18:31Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBGLPK.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
-<dt id="cbmpy.CBGUI.createReaction">
-<code class="descclassname">cbmpy.CBGUI.</code><code class="descname">createReaction</code><span class="sig-paren">(</span><em>mod</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGUI.html#createReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGUI.createReaction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the QT4 reaction creator widget</p>
+<dt id="cbmpy.CBGLPK.getReducedCosts">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">getReducedCosts</code><span class="sig-paren">(</span><em>fba</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#getReducedCosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.getReducedCosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dictionary of reduced costs for each reaction/flux</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_FluxVariabilityAnalysis">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_FluxVariabilityAnalysis</code><span class="sig-paren">(</span><em>fba</em>, <em>selected_reactions=None</em>, <em>pre_opt=True</em>, <em>tol=None</em>, <em>objF2constr=True</em>, <em>rhs_sense='lower'</em>, <em>optPercentage=100.0</em>, <em>work_dir=None</em>, <em>quiet=True</em>, <em>debug=False</em>, <em>oldlpgen=False</em>, <em>markupmodel=True</em>, <em>default_on_fail=False</em>, <em>roundoff_span=10</em>, <em>method='s'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_FluxVariabilityAnalysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_FluxVariabilityAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a flux variability analysis on an fba model:</p>
 <blockquote>
 <div><ul class="simple">
-<li><em>mod</em> a PySCeS CBMPy model instance</li>
+<li><em>fba</em> an FBA model object</li>
+<li><em>selected reactions</em> [default=None] means use all reactions otherwise use the reactions listed here</li>
+<li><em>pre_opt</em> [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and <em>objF2constr</em> is True then the vid/value of the current active objective is used</li>
+<li><em>tol</em>  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to <em>tol</em></li>
+<li><em>rhs_sense</em> [default=&#8217;lower&#8217;] means objC &gt;= objVal the inequality to use for the objective constraint can also be <em>upper</em> or <em>equal</em></li>
+<li><em>optPercentage</em> [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)</li>
+<li><em>work_dir</em> [default=None] the FVA working directory for temporary files default = cwd+fva</li>
+<li><em>debug</em> [default=False] if True write out all the intermediate FVA LP&#8217;s into work_dir</li>
+<li><em>quiet</em> [default=False] if enabled supress CPLEX output</li>
+<li><em>objF2constr</em> [default=True] add the model objective function as a constraint using rhs_sense etc. If
+this is True with pre_opt=False then the id/value of the active objective is used to form the constraint</li>
+<li><em>markupmodel</em> [default=True] add the values returned by the fva to the reaction.fva_min and reaction.fva_max</li>
+<li><em>default_on_fail</em> [default=False] if <em>pre_opt</em> is enabled replace a failed minimum/maximum with the solution value</li>
+<li><em>roundoff_span</em> [default=10] number of digits is round off (not individual min/max values)</li>
+<li><em>method</em> [default=&#8217;s&#8217;] select the GLPK solver method, see the GLPK documentation for details<ul>
+<li>&#8216;s&#8217;: simplex</li>
+<li>&#8216;i&#8217;: interior</li>
+<li>&#8216;e&#8217;: exact</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>Returns an array with columns Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus and a list containing the row names.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_MinimizeSumOfAbsFluxes">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_MinimizeSumOfAbsFluxes</code><span class="sig-paren">(</span><em>fba</em>, <em>selected_reactions=None</em>, <em>pre_opt=True</em>, <em>tol=None</em>, <em>objF2constr=True</em>, <em>rhs_sense='lower'</em>, <em>optPercentage=100.0</em>, <em>work_dir=None</em>, <em>quiet=False</em>, <em>debug=False</em>, <em>objective_coefficients={}</em>, <em>return_lp_obj=False</em>, <em>oldlpgen=False</em>, <em>with_reduced_costs=None</em>, <em>method='s'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_MinimizeSumOfAbsFluxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_MinimizeSumOfAbsFluxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimize the sum of absolute fluxes sum(abs(J1) + abs(J2) + abs(J3) ... abs(Jn)) by adding two constraints per flux
+and a variable representing the absolute value:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Min: Ci abs_Ji</dt>
+<dd>Ji - abs_Ji &lt;= 0
+Ji + abs_Ji &gt;= 0</dd>
+<dt>Such that:</dt>
+<dd>NJi = 0
+Jopt = opt</dd>
+</dl>
+</div></blockquote>
+<p>returns the value of the flux minimization objective function (not the model objective function which remains unchanged from)</p>
+<p>Arguments:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>fba</em> an FBA model object</li>
+<li><em>selected reactions</em> [default=None] means use all reactions otherwise use the reactions listed here</li>
+<li><em>pre_opt</em> [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and <em>objF2constr</em> is True then the vid/value of the current active objective is used</li>
+<li><em>tol</em>  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to <em>tol</em></li>
+<li><em>rhs_sense</em> [default=&#8217;lower&#8217;] means objC &gt;= objVal the inequality to use for the objective constraint can also be <em>upper</em> or <em>equal</em></li>
+<li><em>optPercentage</em> [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)</li>
+<li><em>work_dir</em> [default=None] the MSAF working directory for temporary files default = cwd+fva</li>
+<li><em>debug</em> [default=False] if True write out all the intermediate MSAF LP&#8217;s into work_dir</li>
+<li><em>quiet</em> [default=False] if enabled supress CPLEX output</li>
+<li><em>objF2constr</em> [default=True] add the model objective function as a constraint using rhs_sense etc. If
+this is True with pre_opt=False then the id/value of the active objective is used to form the constraint</li>
+<li><em>objective_coefficients</em> [default={}] a dictionary of (reaction_id : float) pairs that provide the are introduced as objective coefficients to the absolute flux value. Note that the default value of the coefficient (non-specified) is +1.</li>
+<li><em>return_lp_obj</em> [default=False] off by default when enabled it returns the CPLEX LP object</li>
+<li><em>with_reduced_costs</em> [default=None] if not None should be &#8216;scaled&#8217; or &#8216;unscaled&#8217;</li>
+<li><em>method</em> [default=&#8217;s&#8217;] select the GLPK solver method, see the GLPK documentation for details<ul>
+<li>&#8216;s&#8217;: simplex</li>
+<li>&#8216;i&#8217;: interior</li>
+<li>&#8216;e&#8217;: exact</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>With outputs:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>fba</em> an update instance of a CBModel. Note that the FBA model objective function value is the original value set as a constraint</li>
 </ul>
 </div></blockquote>
 </dd></dl>
 
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_Solve">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_Solve</code><span class="sig-paren">(</span><em>lp</em>, <em>method='s'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_Solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_Solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the LP and create a status attribute with the solution status</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>method</em> [default=&#8217;s&#8217;] &#8216;s&#8217; = simplex, &#8216;i&#8217; = interior, &#8216;e&#8217; = exact</li>
+</ul>
+</div></blockquote>
+<p>GLPK solver options can be set in the dictionary GLPK_CFG</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_analyzeModel">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_analyzeModel</code><span class="sig-paren">(</span><em>f</em>, <em>lpFname=None</em>, <em>return_lp_obj=False</em>, <em>with_reduced_costs='unscaled'</em>, <em>with_sensitivity=False</em>, <em>del_intermediate=False</em>, <em>build_n=True</em>, <em>quiet=False</em>, <em>oldlpgen=False</em>, <em>method='s'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_analyzeModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_analyzeModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimize a model and add the result of the optimization to the model object
+(e.g. <cite>reaction.value</cite>, <cite>objectiveFunction.value</cite>). The stoichiometric
+matrix is automatically generated. This is a common function available in all
+solver interfaces. By default returns the objective function value</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>f</em> an instantiated PySCeSCBM model object</li>
+<li><em>lpFname</em> [default=None] the name of the intermediate LP file saved when this has a string value.</li>
+<li><em>return_lp_obj</em> [default=False] off by default when enabled it returns the PyGLPK LP object</li>
+<li><em>with_reduced_costs</em> [default=&#8217;unscaled&#8217;] calculate and add reduced cost information to mode this can be: &#8216;unscaled&#8217; or &#8216;scaled&#8217;
+or anything else which is interpreted as &#8216;None&#8217;. Scaled means s_rcost = (r.reduced_cost*rval)/obj_value</li>
+<li><em>with_sensitivity</em> [default=False] add solution sensitivity information (not yet implemented)</li>
+<li><em>del_intermediate</em> [default=False] delete the intermediary files after updating model object, useful for server applications</li>
+<li><em>build_n</em> [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)</li>
+<li><em>quiet</em> [default=False] suppress glpk output</li>
+<li><em>method</em> [default=&#8217;s&#8217;] select the GLPK solver method, see the GLPK documentation for details<ul>
+<li>&#8216;s&#8217;: simplex</li>
+<li>&#8216;i&#8217;: interior</li>
+<li>&#8216;e&#8217;: exact</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_constructLPfromFBA">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_constructLPfromFBA</code><span class="sig-paren">(</span><em>fba</em>, <em>fname=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_constructLPfromFBA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_constructLPfromFBA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a GLPK LP in memory.
+- <em>fba</em> an FBA object
+- <em>fname</em> optional filename if defined writes out the constructed lp</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_func_GetCPXandPresolve">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_func_GetCPXandPresolve</code><span class="sig-paren">(</span><em>fba</em>, <em>pre_opt</em>, <em>objF2constr</em>, <em>quiet=False</em>, <em>oldlpgen=True</em>, <em>with_reduced_costs='unscaled'</em>, <em>method='s'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_func_GetCPXandPresolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_func_GetCPXandPresolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a utility function that does a presolve for FVA, MSAF etc. Generates properly formatted
+empty objects if pre_opt == False</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>pre_opt</em> a boolean</li>
+<li><em>fba</em> a CBModel object</li>
+<li><em>objF2constr</em> add objective function as constraint</li>
+<li><em>quiet</em> [default=False] supress cplex output</li>
+<li><em>with_reduced_costs</em> [default=&#8217;unscaled&#8217;] can be &#8216;scaled&#8217; or &#8216;unscaled&#8217;</li>
+<li><em>method</em> [default=&#8217;s&#8217;] select the GLPK solver method, see the GLPK documentation for details<ul>
+<li>&#8216;s&#8217;: simplex</li>
+<li>&#8216;i&#8217;: interior</li>
+<li>&#8216;e&#8217;: exact</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>Returns: pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_func_SetObjectiveFunctionAsConstraint">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_func_SetObjectiveFunctionAsConstraint</code><span class="sig-paren">(</span><em>cpx</em>, <em>rhs_sense</em>, <em>oval</em>, <em>tol</em>, <em>optPercentage</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_func_SetObjectiveFunctionAsConstraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_func_SetObjectiveFunctionAsConstraint" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Take the objective function and &#8220;optimum&#8221; value and add it as a constraint</dt>
+<dd><ul class="first last simple">
+<li><em>cpx</em> a cplex object</li>
+<li><em>oval</em> the objective value</li>
+<li><em>tol</em>  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to <em>tol</em></li>
+<li><em>rhs_sense</em> [default=&#8217;lower&#8217;] means objC &gt;= objVal the inequality to use for the objective constraint can also be <em>upper</em> or <em>equal</em></li>
+<li><em>optPercentage</em> [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_getOptimalSolution">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_getOptimalSolution</code><span class="sig-paren">(</span><em>c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_getOptimalSolution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_getOptimalSolution" title="Permalink to this definition">¶</a></dt>
+<dd><p>From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_getReducedCosts">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_getReducedCosts</code><span class="sig-paren">(</span><em>c</em>, <em>scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_getReducedCosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_getReducedCosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract ReducedCosts from LP and return as a dictionary &#8216;Rid&#8217; : reduced cost</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>c</em> a GLPK LP object</li>
+<li><em>scaled</em> scale the reduced cost by the optimal flux value</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_getSolutionStatus">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_getSolutionStatus</code><span class="sig-paren">(</span><em>lp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_getSolutionStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_getSolutionStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>LPS_OPT</em>: solution is optimal;</li>
+<li><em>LPS_FEAS</em>: solution is feasible;</li>
+<li><em>LPS_INFEAS</em>: solution is infeasible;</li>
+<li><em>LPS_NOFEAS</em>: problem has no feasible solution;</li>
+<li><em>LPS_UNBND</em>: problem has unbounded solution;</li>
+<li><em>LPS_UNDEF</em>: solution is undefined.</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_setFBAsolutionToModel">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_setFBAsolutionToModel</code><span class="sig-paren">(</span><em>fba</em>, <em>lp</em>, <em>with_reduced_costs='unscaled'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_setFBAsolutionToModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_setFBAsolutionToModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the FBA solution from a CPLEX solution to an FBA object</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>fba</em> and fba object</li>
+<li><em>lp</em> a CPLEX LP object</li>
+<li><em>with_reduced_costs</em> [default=&#8217;unscaled&#8217;] calculate and add reduced cost information to mode this can be: &#8216;unscaled&#8217; or &#8216;scaled&#8217;
+or anything else which is interpreted as None. Scaled is: s_rcost = (r.reduced_cost*rval)/obj_value</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_setObjective">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_setObjective</code><span class="sig-paren">(</span><em>c</em>, <em>oid</em>, <em>expr=None</em>, <em>sense='maximize'</em>, <em>reset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_setObjective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_setObjective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a new objective function note that there is a major memory leak in
+<cite>c.variables.get_names()</cite> whch is used when reset=True. If this is a problem
+use cplx_setObjective2 which takes <em>names</em> as an input:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>c</em> a GLPK LP object</li>
+<li><em>oid</em> the r_id of the flux to be optimized</li>
+<li><em>expr</em> a list of (coefficient, flux) pairs</li>
+<li><em>sense</em> &#8216;maximize&#8217;/&#8217;minimize&#8217;</li>
+<li><em>reset</em> [default=True] reset all objective function coefficients to zero</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_setSingleConstraint">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_setSingleConstraint</code><span class="sig-paren">(</span><em>c</em>, <em>cid</em>, <em>expr=[]</em>, <em>sense='E'</em>, <em>rhs=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_setSingleConstraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_setSingleConstraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a new sigle constraint to a GLPK model</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>c</em> a GLPK instance</li>
+<li><em>cid</em> the constraint id</li>
+<li><em>expr</em> a list of (coefficient, name) pairs</li>
+<li><em>sense</em> [default=&#8217;G&#8217;] LGE</li>
+<li><em>rhs</em> [default=0.0] the right hand side</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_setSolutionStatusToModel">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_setSolutionStatusToModel</code><span class="sig-paren">(</span><em>m</em>, <em>lp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_setSolutionStatusToModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_setSolutionStatusToModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the lp solutions status to the CBMPy model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.glpk_writeLPtoLPTfile">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">glpk_writeLPtoLPTfile</code><span class="sig-paren">(</span><em>c</em>, <em>filename</em>, <em>title=None</em>, <em>Dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#glpk_writeLPtoLPTfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_writeLPtoLPTfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out a GLPK model as an LP format file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBGLPK.setReducedCosts">
+<code class="descclassname">cbmpy.CBGLPK.</code><code class="descname">setReducedCosts</code><span class="sig-paren">(</span><em>fba</em>, <em>reduced_costs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGLPK.html#setReducedCosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGLPK.setReducedCosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each reaction/flux, sets the attribute &#8220;reduced_cost&#8221; from a dictionary of
+reduced costs</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>fba</em> an fba object</li>
+<li><em>reduced_costs</em> a dictionary of {reaction : value} pairs</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<span class="target" id="module-cbmpy.CBGUI"></span><div class="section" id="cbmpy-cbgui-module">
+<h2>CBMPy: CBGUI module<a class="headerlink" href="#cbmpy-cbgui-module" title="Permalink to this headline">¶</a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier
+Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
+Last edit: $Author: bgoli $ ($Id: CBGUI.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBGUI.loadCBGUI">
 <code class="descclassname">cbmpy.CBGUI.</code><code class="descname">loadCBGUI</code><span class="sig-paren">(</span><em>mod</em>, <em>version=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGUI.html#loadCBGUI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGUI.loadCBGUI" title="Permalink to this definition">¶</a></dt>
@@ -952,33 +1247,11 @@ Last edit: $Author: bgoli $ ($Id: CBGUI.py 305 2015-04-23 15:18:31Z bgoli $)</p>
 </div></blockquote>
 </dd></dl>
 
-<dl class="function">
-<dt id="cbmpy.CBGUI.openFileName">
-<code class="descclassname">cbmpy.CBGUI.</code><code class="descname">openFileName</code><span class="sig-paren">(</span><em>work_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGUI.html#openFileName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGUI.openFileName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the QT4 file open selection dialogue</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>work_dir</em> the optional initial directory</li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
-<dl class="function">
-<dt id="cbmpy.CBGUI.saveFileName">
-<code class="descclassname">cbmpy.CBGUI.</code><code class="descname">saveFileName</code><span class="sig-paren">(</span><em>work_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBGUI.html#saveFileName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBGUI.saveFileName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the QT4 file save selection dialogue</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>work_dir</em> the optional initial directory</li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
 </div>
 <span class="target" id="module-cbmpy.CBModel"></span><div class="section" id="cbmpy-cbmodel-module">
 <h2>CBMPy: CBModel module<a class="headerlink" href="#cbmpy-cbmodel-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2014 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -991,7 +1264,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBModel.py 416 2016-02-23 16:12:23Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBModel.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="class">
 <dt id="cbmpy.CBModel.Compartment">
 <em class="property">class </em><code class="descclassname">cbmpy.CBModel.</code><code class="descname">Compartment</code><span class="sig-paren">(</span><em>cid</em>, <em>name=None</em>, <em>size=1</em>, <em>dimensions=3</em>, <em>volume=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Compartment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Compartment" title="Permalink to this definition">¶</a></dt>
@@ -1197,24 +1470,26 @@ or None of there are none defined.</p>
 </li>
 </ul>
 </div></blockquote>
+<p># Reimplemented in Model</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Fbase.serializeToDisk">
-<code class="descname">serializeToDisk</code><span class="sig-paren">(</span><em>filename</em>, <em>protocol=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Fbase.serializeToDisk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Fbase.serializeToDisk" title="Permalink to this definition">¶</a></dt>
+<code class="descname">serializeToDisk</code><span class="sig-paren">(</span><em>filename</em>, <em>protocol=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Fbase.serializeToDisk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Fbase.serializeToDisk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serialize to disk using pickle protocol:</p>
 <blockquote>
 <div><ul>
 <li><p class="first"><em>filename</em> the name of the output file</p>
 </li>
 <li><dl class="first docutils">
-<dt><em>protocol</em> [default=0] serialize to a string or binary if required,</dt>
+<dt><em>protocol</em> [default=2] serialize to a string or binary if required,</dt>
 <dd><p class="first last">see pickle module documentation for details</p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
+<p># Reimplemented in Model</p>
 </dd></dl>
 
 <dl class="method">
@@ -1243,6 +1518,7 @@ or None of there are none defined.</p>
 <div><ul class="simple">
 <li><em>fid</em> a valid c variable style id string</li>
 </ul>
+<p>Reimplemented by &#64;Reaction, &#64;Species</p>
 </div></blockquote>
 </dd></dl>
 
@@ -1408,7 +1684,7 @@ TODO: I will change the whole Gene/GPR structure to a dictionary data structure 
 <dl class="method">
 <dt id="cbmpy.CBModel.GeneProteinAssociation.buildEvalFunc">
 <code class="descname">buildEvalFunc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#GeneProteinAssociation.buildEvalFunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.GeneProteinAssociation.buildEvalFunc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Builds a function which evaluates the gene expressions and evaluates to an integer uisng
+<dd><p>Builds a function which evaluates the gene expressions and evaluates to an integer using
 the following rules:</p>
 <blockquote>
 <div><ul class="simple">
@@ -1456,8 +1732,11 @@ Note that this GPR should be added to a model with cmod.addGPRAssociation() befo
 
 <dl class="method">
 <dt id="cbmpy.CBModel.GeneProteinAssociation.getAssociationStr">
-<code class="descname">getAssociationStr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#GeneProteinAssociation.getAssociationStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.GeneProteinAssociation.getAssociationStr" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the gene association string</p>
+<code class="descname">getAssociationStr</code><span class="sig-paren">(</span><em>use_labels=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#GeneProteinAssociation.getAssociationStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.GeneProteinAssociation.getAssociationStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the gene association string, alternatively return string with labels</p>
+<ul class="simple">
+<li><em>use_lablels</em> [default=False] return the gene association string with labels rather than geneId&#8217;s (FBCv2 issue)</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1470,6 +1749,12 @@ Note that this GPR should be added to a model with cmod.addGPRAssociation() befo
 <dt id="cbmpy.CBModel.GeneProteinAssociation.getGeneIds">
 <code class="descname">getGeneIds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#GeneProteinAssociation.getGeneIds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.GeneProteinAssociation.getGeneIds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of gene id&#8217;s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.GeneProteinAssociation.getGeneLabels">
+<code class="descname">getGeneLabels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#GeneProteinAssociation.getGeneLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.GeneProteinAssociation.getGeneLabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of gene labels associated with this GPRass</p>
 </dd></dl>
 
 <dl class="method">
@@ -1514,6 +1799,12 @@ the protein is not expressed and  <em>False</em> is returned.</p>
 <dt id="cbmpy.CBModel.GeneProteinAssociation.setGeneInactive">
 <code class="descname">setGeneInactive</code><span class="sig-paren">(</span><em>gid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#GeneProteinAssociation.setGeneInactive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.GeneProteinAssociation.setGeneInactive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a gene to be inactive</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.GeneProteinAssociation.setProtein">
+<code class="descname">setProtein</code><span class="sig-paren">(</span><em>protein</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#GeneProteinAssociation.setProtein"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.GeneProteinAssociation.setProtein" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the protein associated with this set of genes</p>
 </dd></dl>
 
 </dd></dl>
@@ -1827,10 +2118,12 @@ objects themselves are not cloned only the group (and attributes)</p>
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Model.addReaction">
-<code class="descname">addReaction</code><span class="sig-paren">(</span><em>reaction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.addReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.addReaction" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addReaction</code><span class="sig-paren">(</span><em>reaction</em>, <em>create_default_bounds=False</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.addReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.addReaction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a reaction object to the model</p>
 <ul class="simple">
 <li><em>reaction</em> an instance of the Reaction class</li>
+<li><em>create_default_bounds</em> create default reaction bounds, irreversible 0 &lt;= J &lt;= INF, reversable -INF &lt;= J &lt;= INF</li>
+<li><em>silent</em> [default=False] if enabled this disables the printing of information messages</li>
 </ul>
 </dd></dl>
 
@@ -1970,10 +2263,11 @@ keys: GENE ASSOCIATION, GENE_ASSOCIATION, gene_association, gene association.</p
 <dd><p>Create a new blank reaction and add it to the model:</p>
 <blockquote>
 <div><ul class="simple">
-<li><strong>id</strong> the unique reaction ID</li>
-<li><strong>name</strong> the reaction name</li>
-<li><strong>reversible</strong> [default=True] the reaction reversibility. True is reversible, False is irreversible</li>
-<li><strong>create_default_bounds</strong> create default reaction bounds, irreversible 0 &lt;= J &lt;= INF, reversable -INF &lt;= J &lt;= INF</li>
+<li><em>id</em> the unique reaction ID</li>
+<li><em>name</em> the reaction name</li>
+<li><em>reversible</em> [default=True] the reaction reversibility. True is reversible, False is irreversible</li>
+<li><em>create_default_bounds</em> create default reaction bounds, irreversible 0 &lt;= J &lt;= INF, reversable -INF &lt;= J &lt;= INF</li>
+<li><em>silent</em> [default=False] if enabled this disables the printing of information messages</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -2124,11 +2418,20 @@ the gene associations themselves or order of reactions (stored as the special en
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Model.deleteSpecies">
-<code class="descname">deleteSpecies</code><span class="sig-paren">(</span><em>sid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.deleteSpecies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.deleteSpecies" title="Permalink to this definition">¶</a></dt>
+<code class="descname">deleteSpecies</code><span class="sig-paren">(</span><em>sid</em>, <em>also_delete=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.deleteSpecies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.deleteSpecies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes a species object with id</p>
 <ul class="simple">
 <li><em>sid</em> the species id</li>
+<li><em>also_delete</em> [default=None] only delete the species</li>
 </ul>
+<p>&#8211; &#8216;reagents&#8217; delete the species from the reactions it participates in as a <strong>reagent</strong>
+&#8211; &#8216;reactions&#8217; deletes the <strong>reactions</strong> that the species participates in</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.Model.emptyUndelete">
+<code class="descname">emptyUndelete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.emptyUndelete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.emptyUndelete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empties the undelete cache</p>
 </dd></dl>
 
 <dl class="method">
@@ -2155,6 +2458,18 @@ the gene associations themselves or order of reactions (stored as the special en
 </dd></dl>
 
 <dl class="method">
+<dt id="cbmpy.CBModel.Model.getActiveObjectiveReactionIds">
+<code class="descname">getActiveObjectiveReactionIds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getActiveObjectiveReactionIds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getActiveObjectiveReactionIds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the active objective flux objective reaction id&#8217;s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.Model.getActiveObjectiveStoichiometry">
+<code class="descname">getActiveObjectiveStoichiometry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getActiveObjectiveStoichiometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getActiveObjectiveStoichiometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of (coefficient, flux_objective) tuples</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="cbmpy.CBModel.Model.getAllFluxBounds">
 <code class="descname">getAllFluxBounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getAllFluxBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getAllFluxBounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a dictionary of all flux bounds [id:value]</p>
@@ -2168,8 +2483,13 @@ the gene associations themselves or order of reactions (stored as the special en
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Model.getAllGeneProteinAssociations">
-<code class="descname">getAllGeneProteinAssociations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getAllGeneProteinAssociations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getAllGeneProteinAssociations" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getAllGeneProteinAssociations</code><span class="sig-paren">(</span><em>use_labels=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getAllGeneProteinAssociations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getAllGeneProteinAssociations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a dictionary of genes associated with each protein</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>use_labels</em> use V2 gene labels rather than ID&#8217;s</li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -2180,8 +2500,13 @@ the gene associations themselves or order of reactions (stored as the special en
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Model.getAllProteinGeneAssociations">
-<code class="descname">getAllProteinGeneAssociations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getAllProteinGeneAssociations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getAllProteinGeneAssociations" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getAllProteinGeneAssociations</code><span class="sig-paren">(</span><em>use_labels=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getAllProteinGeneAssociations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getAllProteinGeneAssociations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a dictionary of the proteins associated with each gene</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>use_labels</em> use V2 gene labels rather than ID&#8217;s</li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -2329,6 +2654,17 @@ reactions that contain a boundary species.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="cbmpy.CBModel.Model.getGeneByLabel">
+<code class="descname">getGeneByLabel</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getGeneByLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getGeneByLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a gene label return the corresponding Gene object</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>label</em></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
 <dt id="cbmpy.CBModel.Model.getGeneIdFromLabel">
 <code class="descname">getGeneIdFromLabel</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getGeneIdFromLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getGeneIdFromLabel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a gene label it returns the corresponding Gene id or None</p>
@@ -2343,6 +2679,17 @@ reactions that contain a boundary species.</p>
 <dt id="cbmpy.CBModel.Model.getGeneIds">
 <code class="descname">getGeneIds</code><span class="sig-paren">(</span><em>substring=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getGeneIds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getGeneIds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of gene Ids, applies a substring search if substring is defined</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>substring</em> search for this pattern anywhere in the id</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.Model.getGeneLabels">
+<code class="descname">getGeneLabels</code><span class="sig-paren">(</span><em>substring=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getGeneLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getGeneLabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of gene labels (locus tags), applies a substring search if substring is defined</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>substring</em> search for this pattern anywhere in the id</li>
@@ -2397,6 +2744,12 @@ reactions that contain a boundary species.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="cbmpy.CBModel.Model.getParameter">
+<code class="descname">getParameter</code><span class="sig-paren">(</span><em>pid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getParameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a parameter object with pid</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="cbmpy.CBModel.Model.getReaction">
 <code class="descname">getReaction</code><span class="sig-paren">(</span><em>rid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getReaction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a reaction object with <em>id</em></p>
@@ -2437,6 +2790,17 @@ Note if there is no gene associated information then this will return active.</p
 <blockquote>
 <div><ul class="simple">
 <li><em>substring</em> search for this pattern anywhere in the id</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.Model.getReactionIdsAssociatedWithSpecies">
+<code class="descname">getReactionIdsAssociatedWithSpecies</code><span class="sig-paren">(</span><em>metab</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getReactionIdsAssociatedWithSpecies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getReactionIdsAssociatedWithSpecies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of (reaction, flux value) pairs that this metabolite appears as a reagent in</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>metab</em> the metabolite name</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -2515,11 +2879,12 @@ Note if there is no gene associated information then this will return active.</p
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Model.getSpeciesIds">
-<code class="descname">getSpeciesIds</code><span class="sig-paren">(</span><em>substring=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getSpeciesIds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getSpeciesIds" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getSpeciesIds</code><span class="sig-paren">(</span><em>substring=None</em>, <em>non_boundary=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.getSpeciesIds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.getSpeciesIds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of species Ids, applies a substring search if substring is defined</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>substring</em> search for this pattern anywhere in the id</li>
+<li><em>non_boundary</em> [default=False] return only non-boundary species, i.e., variable metabolites that appear in the stoichiometric matrix. The default is to return all metabolites boundary and variable.</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -2562,6 +2927,42 @@ Note if there is no gene associated information then this will return active.</p
 <dt id="cbmpy.CBModel.Model.resetAllInactiveGPRBounds">
 <code class="descname">resetAllInactiveGPRBounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.resetAllInactiveGPRBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.resetAllInactiveGPRBounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets all reaction bounds modified by the <code class="docutils literal"><span class="pre">cmod.setAllInactiveGeneReactionBounds()</span></code> method to their previous values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.Model.serialize">
+<code class="descname">serialize</code><span class="sig-paren">(</span><em>protocol=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize object, returns a string by default</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt><em>protocol</em> [default=0] serialize to a string or binary if required,</dt>
+<dd><p class="first last">see pickle module documentation for details</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p># overloaded in CBModel</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.Model.serializeToDisk">
+<code class="descname">serializeToDisk</code><span class="sig-paren">(</span><em>filename</em>, <em>protocol=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.serializeToDisk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.serializeToDisk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize to disk using pickle protocol:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><em>filename</em> the name of the output file</p>
+</li>
+<li><dl class="first docutils">
+<dt><em>protocol</em> [default=2] serialize to a string or binary if required,</dt>
+<dd><p class="first last">see pickle module documentation for details</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p># overloaded in CBModel</p>
 </dd></dl>
 
 <dl class="method">
@@ -2799,29 +3200,6 @@ Note if there is no gene associated information then this will return active.</p
 </dd></dl>
 
 <dl class="method">
-<dt id="cbmpy.CBModel.Model.undeleteObjective">
-<code class="descname">undeleteObjective</code><span class="sig-paren">(</span><em>objective_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.undeleteObjective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.undeleteObjective" title="Permalink to this definition">¶</a></dt>
-<dd><p>Undeltes a deleted objective function:</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>objective_id</em> the id of an objeective function</li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
-<dl class="method">
-<dt id="cbmpy.CBModel.Model.undeleteReactionAndBounds">
-<code class="descname">undeleteReactionAndBounds</code><span class="sig-paren">(</span><em>rid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.undeleteReactionAndBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.undeleteReactionAndBounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Undelete a reaction and bounds deleted with the <strong>deleteReactionAndBounds</strong> method</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>rid</em> a deleted reaction id</li>
-</ul>
-</div></blockquote>
-<p>Please note this method is still experimental ;-)</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="cbmpy.CBModel.Model.updateNetwork">
 <code class="descname">updateNetwork</code><span class="sig-paren">(</span><em>lower=0.0</em>, <em>upper=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Model.updateNetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Model.updateNetwork" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the reaction network based on gene activity. If reaction is deactivated then lower and upper bounds are used</p>
@@ -2841,8 +3219,14 @@ Note if there is no gene associated information then this will return active.</p
 <dd><p>An objective function</p>
 <dl class="method">
 <dt id="cbmpy.CBModel.Objective.addFluxObjective">
-<code class="descname">addFluxObjective</code><span class="sig-paren">(</span><em>fobj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Objective.addFluxObjective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Objective.addFluxObjective" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addFluxObjective</code><span class="sig-paren">(</span><em>fobj</em>, <em>override=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Objective.addFluxObjective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Objective.addFluxObjective" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a FluxObjective instance to the Objective</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>fobj</em> the FluxObjective object</li>
+<li><em>override</em> [default=False] override pushing the global id map, this should never be used</li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -2945,19 +3329,19 @@ or for coefficient, fluxobjective pairs use <em>getFluxObjectiveData()</em></p>
 <dl class="method">
 <dt id="cbmpy.CBModel.Parameter.addAssociation">
 <code class="descname">addAssociation</code><span class="sig-paren">(</span><em>assoc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Parameter.addAssociation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Parameter.addAssociation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a fluxbound ID&#8217;s to associate with this object</p>
+<dd><p>Add an object ID to associate with this object</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Parameter.deleteAssociation">
 <code class="descname">deleteAssociation</code><span class="sig-paren">(</span><em>assoc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Parameter.deleteAssociation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Parameter.deleteAssociation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete the fluxbound id associated with this object</p>
+<dd><p>Delete the object id associated with this object</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Parameter.getAssociations">
 <code class="descname">getAssociations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Parameter.getAssociations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Parameter.getAssociations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the FluxBounds ID&#8217;s associated with this object</p>
+<dd><p>Return the Object ID&#8217;s associated with this parameter</p>
 </dd></dl>
 
 <dl class="method">
@@ -2991,19 +3375,6 @@ or for coefficient, fluxobjective pairs use <em>getFluxObjectiveData()</em></p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cbmpy.CBModel.Reaction.changeReagentCoefficientForSpecies">
-<code class="descname">changeReagentCoefficientForSpecies</code><span class="sig-paren">(</span><em>s_id</em>, <em>coefficient</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.changeReagentCoefficientForSpecies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.changeReagentCoefficientForSpecies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Change the coefficient of reagent which refers to s_id. If there is more than one reagent that refers
-to this species return a warning and a list of reagents otherwise None.</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>s_id</em> a species/metabolite id</li>
-<li><em>coefficient</em> the new coefficient</li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
-<dl class="method">
 <dt id="cbmpy.CBModel.Reaction.createReagent">
 <code class="descname">createReagent</code><span class="sig-paren">(</span><em>metabolite</em>, <em>coefficient</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.createReagent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.createReagent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new reagent and add it to the reaction:</p>
@@ -3032,11 +3403,11 @@ to this species return a warning and a list of reagents otherwise None.</p>
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Reaction.deleteReagentWithSpeciesRef">
-<code class="descname">deleteReagentWithSpeciesRef</code><span class="sig-paren">(</span><em>species</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.deleteReagentWithSpeciesRef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.deleteReagentWithSpeciesRef" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete a reagent that refers to the species id:</p>
+<code class="descname">deleteReagentWithSpeciesRef</code><span class="sig-paren">(</span><em>sid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.deleteReagentWithSpeciesRef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.deleteReagentWithSpeciesRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a reagent (or reagents) that refers to the species id:</p>
 <blockquote>
 <div><ul class="simple">
-<li><em>species</em> a species/metabolite id</li>
+<li><em>sid</em> a species/metabolite id</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -3079,7 +3450,7 @@ to that particular optimization (infeasible).</p>
 <code class="descname">getProductIds</code><span class="sig-paren">(</span><em>use_names=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.getProductIds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.getProductIds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of the reaction products, species identifiers</p>
 <ul class="simple">
-<li><em>use_names</em> [defualt = False] use species names rather than id&#8217;s</li>
+<li><em>use_names</em> [default = False] use species names rather than id&#8217;s</li>
 </ul>
 </dd></dl>
 
@@ -3108,11 +3479,12 @@ to that particular optimization (infeasible).</p>
 
 <dl class="method">
 <dt id="cbmpy.CBModel.Reaction.getReagentWithSpeciesRef">
-<code class="descname">getReagentWithSpeciesRef</code><span class="sig-paren">(</span><em>species</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.getReagentWithSpeciesRef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.getReagentWithSpeciesRef" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the reagent object which refers to the <em>species</em> id:</p>
+<code class="descname">getReagentWithSpeciesRef</code><span class="sig-paren">(</span><em>sid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.getReagentWithSpeciesRef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.getReagentWithSpeciesRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the reagent object which refers to the <em>species</em> id. If there are multiple reagents that
+refer to the same species a list is returned.</p>
 <blockquote>
 <div><ul class="simple">
-<li><em>species</em> the species/metabolite id</li>
+<li><em>sid</em> the species/metabolite id</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -3135,7 +3507,7 @@ to that particular optimization (infeasible).</p>
 <dd><p>Returns a list of (coefficient, species) pairs for this reaction</p>
 <ul class="simple">
 <li><em>use_names</em> [default = False] use species names rather than id&#8217;s</li>
-<li><em>altout</em> [default = False] returns a dictionary</li>
+<li><em>altout</em> [default = False] returns a dictionary [DEPRECATED]</li>
 </ul>
 </dd></dl>
 
@@ -3164,6 +3536,18 @@ to that particular optimization (infeasible).</p>
 <dt id="cbmpy.CBModel.Reaction.reactivateReaction">
 <code class="descname">reactivateReaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.reactivateReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.reactivateReaction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Activates a reaction deactivated with deactivateReaction</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.Reaction.setId">
+<code class="descname">setId</code><span class="sig-paren">(</span><em>fid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.setId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.setId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the object Id</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>fid</em> a valid c variable style id string</li>
+</ul>
+<p>Reimplements &#64;FBase.setId()</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -3203,17 +3587,6 @@ while <em>positive</em> ones are <em>products</em>. At this point zero coefficie
 <dt id="cbmpy.CBModel.Reaction.setValue">
 <code class="descname">setValue</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.setValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.setValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the attribute <em>value</em> in this case the flux.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cbmpy.CBModel.Reaction.undeleteReagentWithSpeciesRef">
-<code class="descname">undeleteReagentWithSpeciesRef</code><span class="sig-paren">(</span><em>species</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Reaction.undeleteReagentWithSpeciesRef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Reaction.undeleteReagentWithSpeciesRef" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attempts to unDelete reagent deleted with deleteReagent() that refers to the species id:</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>species</em> a species/metabolite id</li>
-</ul>
-</div></blockquote>
 </dd></dl>
 
 </dd></dl>
@@ -3302,6 +3675,19 @@ while <em>positive</em> ones are <em>products</em>. At this point zero coefficie
 </dd></dl>
 
 <dl class="method">
+<dt id="cbmpy.CBModel.Species.rename">
+<code class="descname">rename</code><span class="sig-paren">(</span><em>newid</em>, <em>overwrite=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Species.rename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Species.rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the species id and updates all reagents in the model reactions. Note that existing species with id == newid
+will be overwritten/deleted.</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>newid</em> the new species id.</li>
+<li><em>overwrite</em> [default=True] overwrite species objects (highly recommended)</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
 <dt id="cbmpy.CBModel.Species.setBoundary">
 <code class="descname">setBoundary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Species.setBoundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Species.setBoundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the species so it is a boundary metabolite or fixed which does not occur in the stoichiometric matrix N</p>
@@ -3326,6 +3712,18 @@ while <em>positive</em> ones are <em>products</em>. At this point zero coefficie
 <div><ul class="simple">
 <li><em>cf</em> a chemical formula e.g. CH3NO2</li>
 </ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBModel.Species.setId">
+<code class="descname">setId</code><span class="sig-paren">(</span><em>fid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBModel.html#Species.setId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBModel.Species.setId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the object Id</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>fid</em> a valid c variable style id string</li>
+</ul>
+<p>Reimplements &#64;FBase.setId()</p>
 </div></blockquote>
 </dd></dl>
 
@@ -3358,7 +3756,7 @@ while <em>positive</em> ones are <em>products</em>. At this point zero coefficie
 <span class="target" id="module-cbmpy.CBModelTools"></span><div class="section" id="cbmpy-cbmodeltools-module">
 <h2>CBMPy: CBModelTools module<a class="headerlink" href="#cbmpy-cbmodeltools-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3371,12 +3769,12 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBModelTools.py 305 2015-04-23 15:18:31Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBModelTools.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 </div>
 <span class="target" id="module-cbmpy.CBMultiCore"></span><div class="section" id="cbmpy-cbmulticore-module">
 <h2>CBMPy: CBMultiCore module<a class="headerlink" href="#cbmpy-cbmulticore-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3389,7 +3787,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 305 2015-04-23 15:18:31Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBMultiCore.grouper">
 <code class="descclassname">cbmpy.CBMultiCore.</code><code class="descname">grouper</code><span class="sig-paren">(</span><em>3</em>, <em>'abcdefg'</em>, <em>'x') --&gt; ('a'</em>, <em>'b'</em>, <em>'c')</em>, <em>('d'</em>, <em>'e'</em>, <em>'f')</em>, <em>('g'</em>, <em>'x'</em>, <em>'x'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBMultiCore.html#grouper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBMultiCore.grouper" title="Permalink to this definition">¶</a></dt>
@@ -3407,23 +3805,11 @@ Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 305 2015-04-23 15:18:31Z bgoli 
 </div></blockquote>
 </dd></dl>
 
-<dl class="function">
-<dt id="cbmpy.CBMultiCore.runMultiCoreMultiEnvFVA">
-<code class="descclassname">cbmpy.CBMultiCore.</code><code class="descname">runMultiCoreMultiEnvFVA</code><span class="sig-paren">(</span><em>lp</em>, <em>selected_reactions=None</em>, <em>tol=None</em>, <em>rhs_sense='lower'</em>, <em>optPercentage=100.0</em>, <em>work_dir=None</em>, <em>debug=False</em>, <em>procs=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBMultiCore.html#runMultiCoreMultiEnvFVA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBMultiCore.runMultiCoreMultiEnvFVA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run a multicore FVA where:</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>lp</em> is a multienvironment lp model instance</li>
-<li><em>procs</em> [default=2] number of processing threads (optimum seems to be about the number of physical cores)</li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
 </div>
 <span class="target" id="module-cbmpy.CBMultiEnv"></span><div class="section" id="cbmpy-cbmultienv-module">
 <h2>CBMPy: CBMultiEnv module<a class="headerlink" href="#cbmpy-cbmultienv-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3436,12 +3822,12 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBMultiEnv.py 305 2015-04-23 15:18:31Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBMultiEnv.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 </div>
 <span class="target" id="module-cbmpy.CBNetDB"></span><div class="section" id="cbmpy-cbnetdb-module">
 <h2>CBMPy: CBNetDB module<a class="headerlink" href="#cbmpy-cbnetdb-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3454,19 +3840,26 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 375 2015-09-04 15:44:42Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="class">
 <dt id="cbmpy.CBNetDB.DBTools">
 <em class="property">class </em><code class="descclassname">cbmpy.CBNetDB.</code><code class="descname">DBTools</code><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools" title="Permalink to this definition">¶</a></dt>
-<dd><p>Some user friendly tools to work with SQLite2 DB&#8217;s</p>
+<dd><p>Tools to work with SQLite DB&#8217;s (optimized, no SQL required).</p>
 <dl class="method">
-<dt id="cbmpy.CBNetDB.DBTools.checkEntry">
-<code class="descname">checkEntry</code><span class="sig-paren">(</span><em>table</em>, <em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.checkEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.checkEntry" title="Permalink to this definition">¶</a></dt>
+<dt id="cbmpy.CBNetDB.DBTools.checkEntryInColumn">
+<code class="descname">checkEntryInColumn</code><span class="sig-paren">(</span><em>table</em>, <em>col</em>, <em>rid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.checkEntryInColumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.checkEntryInColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if an entry exists in a table</p>
 <ul class="simple">
 <li><em>table</em> the table name</li>
-<li><em>id</em> the table row to search for</li>
+<li><em>col</em> the column name</li>
+<li><em>rid</em> the row to search for</li>
 </ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBNetDB.DBTools.closeDB">
+<code class="descname">closeDB</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.closeDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.closeDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the DB connection and reset the DBTools instance (can be reconnected)</p>
 </dd></dl>
 
 <dl class="method">
@@ -3486,10 +3879,22 @@ Last edit: $Author: bgoli $ ($Id: CBNetDB.py 375 2015-09-04 15:44:42Z bgoli $)</
 <blockquote>
 <div><ul class="simple">
 <li><em>table</em> the table name</li>
-<li><em>sqlcols</em> a list containing the SQL definitions of the table columns: &lt;id&gt; &lt;type&gt; for examepl <cite>[&#8216;gene TEXT PRIMARY KEY&#8217;, &#8216;aa_seq TEXT&#8217;, &#8216;nuc_seq TEXT&#8217;, &#8216;aa_len INT&#8217;, &#8216;nuc_len INT&#8217;]</cite></li>
+<li><em>sqlcols</em> a list containing the SQL definitions of the table columns: &lt;id&gt; &lt;type&gt; for example <cite>[&#8216;gene TEXT PRIMARY KEY&#8217;, &#8216;aa_seq TEXT&#8217;, &#8216;nuc_seq TEXT&#8217;, &#8216;aa_len INT&#8217;, &#8216;nuc_len INT&#8217;]</cite></li>
 </ul>
 </div></blockquote>
 <p>Effectively writes CREATE TABLE &#8220;table&#8221; (&lt;id&gt; &lt;type&gt;, gene TEXT PRIMARY KEY, aa_seq TEXT, nuc_seq TEXT, aa_len INT, nuc_len INT) % table</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBNetDB.DBTools.dumpTableToCSV">
+<code class="descname">dumpTableToCSV</code><span class="sig-paren">(</span><em>table</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.dumpTableToCSV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.dumpTableToCSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a table as tab separated txt file</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>table</em> the table to export</li>
+<li><em>filename</em> the filename of the table dump</li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -3518,7 +3923,47 @@ Last edit: $Author: bgoli $ ($Id: CBNetDB.py 375 2015-09-04 15:44:42Z bgoli $)</
 <dl class="method">
 <dt id="cbmpy.CBNetDB.DBTools.fetchAll">
 <code class="descname">fetchAll</code><span class="sig-paren">(</span><em>sql</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.fetchAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.fetchAll" title="Permalink to this definition">¶</a></dt>
-<dd><p>E.g. SELECT aa_len FROM gene_data WHERE gene=&#8221;G&#8221;&#8217;</p>
+<dd><p>Raw SQL query e.g. &#8216;SELECT id FROM gene WHERE gene=&#8221;G&#8221;&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBNetDB.DBTools.getCell">
+<code class="descname">getCell</code><span class="sig-paren">(</span><em>table</em>, <em>col</em>, <em>rid</em>, <em>cell</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.getCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.getCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the table cell which correspond to rid in column. Returns the value or None</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>table</em> the database table</li>
+<li><em>col</em> the column id</li>
+<li><em>rid</em> the row index id</li>
+<li><em>cell</em> the column of the cell you want tp extract</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBNetDB.DBTools.getColumns">
+<code class="descname">getColumns</code><span class="sig-paren">(</span><em>table</em>, <em>cols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.getColumns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.getColumns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the contents of one or more columns of data in a table</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>table</em> the database table</li>
+<li><em>cols</em> a list of one or more column id&#8217;s</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cbmpy.CBNetDB.DBTools.getRow">
+<code class="descname">getRow</code><span class="sig-paren">(</span><em>table</em>, <em>col</em>, <em>rid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.getRow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.getRow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the table row(s) which correspond to rid in column. Returns the row(s) as a list, if the column is the primary key
+this is always a single entry.</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>table</em> the database table</li>
+<li><em>col</em> the column id</li>
+<li><em>rid</em> the row index id</li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -3537,12 +3982,12 @@ Last edit: $Author: bgoli $ ($Id: CBNetDB.py 375 2015-09-04 15:44:42Z bgoli $)</
 <dt id="cbmpy.CBNetDB.DBTools.insertData">
 <code class="descname">insertData</code><span class="sig-paren">(</span><em>table</em>, <em>data</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.insertData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.insertData" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>Insert data into a table: &#8220;INSERT INTO %s (gene, aa_seq, nuc_seq, aa_len, nuc_len) VALUES (?, ?, ?, ?, ?)&#8221; % tablename,</dt>
+<dt>Insert data into a table: &#8220;INSERT INTO %s (?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?)&#8221; % table,</dt>
 <dd><blockquote class="first">
-<div>(str(ecg), str(prot2), str(gene2), int(len(prot2)), int(len(gene2))) )</div></blockquote>
+<div>(?, ?, ?, ?, ?)) )</div></blockquote>
 <ul class="last simple">
 <li><em>table</em> the DB table name</li>
-<li><em>data</em> a list of (column_id, value) pairs</li>
+<li><em>data</em> a dictionary of {id:value} pairs</li>
 <li><em>commit</em> whether to commit the data insertions</li>
 </ul>
 </dd>
@@ -3551,13 +3996,17 @@ Last edit: $Author: bgoli $ ($Id: CBNetDB.py 375 2015-09-04 15:44:42Z bgoli $)</
 
 <dl class="method">
 <dt id="cbmpy.CBNetDB.DBTools.updateData">
-<code class="descname">updateData</code><span class="sig-paren">(</span><em>table</em>, <em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.updateData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.updateData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update already defined data (primary key)</p>
+<code class="descname">updateData</code><span class="sig-paren">(</span><em>table</em>, <em>col</em>, <em>rid</em>, <em>data</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#DBTools.updateData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.updateData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update already defined data</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>table</em> the table name</li>
-<li><em>id</em> the table row to search for</li>
+<li><em>col</em> the column name</li>
+<li><em>rid</em> the row id to update</li>
+<li><em>data</em> a dictionary of {id:value} pairs</li>
+<li><em>commit</em> whether to commit the data updates</li>
 </ul>
+<p>UPDATE COMPANY SET ADDRESS = &#8216;Texas&#8217; WHERE ID = 6;</p>
 </div></blockquote>
 </dd></dl>
 
@@ -3638,18 +4087,6 @@ Last edit: $Author: bgoli $ ($Id: CBNetDB.py 375 2015-09-04 15:44:42Z bgoli $)</
 </div></blockquote>
 </dd></dl>
 
-<dl class="method">
-<dt id="cbmpy.CBNetDB.RESTClient.URLDecode">
-<code class="descname">URLDecode</code><span class="sig-paren">(</span><em>txt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#RESTClient.URLDecode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.URLDecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decodes a URL encoded string</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cbmpy.CBNetDB.RESTClient.URLEncode">
-<code class="descname">URLEncode</code><span class="sig-paren">(</span><em>txt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBNetDB.html#RESTClient.URLEncode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.URLEncode" title="Permalink to this definition">¶</a></dt>
-<dd><p>URL encodes a string.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -3696,7 +4133,7 @@ a list of identifiers.org id&#8217;s in descending priority (as return)</p>
 <span class="target" id="module-cbmpy.CBPlot"></span><div class="section" id="cbmpy-cbplot-module">
 <h2>CBMPy: CBPlot module<a class="headerlink" href="#cbmpy-cbplot-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3709,7 +4146,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBPlot.py 305 2015-04-23 15:18:31Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBPlot.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBPlot.plotFluxVariability">
 <code class="descclassname">cbmpy.CBPlot.</code><code class="descname">plotFluxVariability</code><span class="sig-paren">(</span><em>fva_data</em>, <em>fva_names</em>, <em>fname</em>, <em>work_dir=None</em>, <em>title=None</em>, <em>ySlice=None</em>, <em>minHeight=None</em>, <em>maxHeight=None</em>, <em>roundec=None</em>, <em>autoclose=True</em>, <em>fluxval=True</em>, <em>type='png'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBPlot.html#plotFluxVariability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBPlot.plotFluxVariability" title="Permalink to this definition">¶</a></dt>
@@ -3736,7 +4173,7 @@ Last edit: $Author: bgoli $ ($Id: CBPlot.py 305 2015-04-23 15:18:31Z bgoli $)</p
 <span class="target" id="module-cbmpy.CBQt4"></span><div class="section" id="cbmpy-cbqt4-module">
 <h2>CBMPy: CBQt4 module<a class="headerlink" href="#cbmpy-cbqt4-module" title="Permalink to this headline">¶</a></h2>
 <p>Constraint Based Modelling in Python (<a class="reference external" href="http://pysces.sourceforge.net/getNewReaction">http://pysces.sourceforge.net/getNewReaction</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3749,7 +4186,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBQt4.py 305 2015-04-23 15:18:31Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBQt4.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBQt4.createReaction">
 <code class="descclassname">cbmpy.CBQt4.</code><code class="descname">createReaction</code><span class="sig-paren">(</span><em>mod</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBQt4.html#createReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBQt4.createReaction" title="Permalink to this definition">¶</a></dt>
@@ -3765,7 +4202,7 @@ Last edit: $Author: bgoli $ ($Id: CBQt4.py 305 2015-04-23 15:18:31Z bgoli $)</p>
 <span class="target" id="module-cbmpy.CBRead"></span><div class="section" id="cbmpy-cbread-module">
 <h2>CBMPy: CBRead module<a class="headerlink" href="#cbmpy-cbread-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3778,20 +4215,21 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBRead.py 416 2016-02-23 16:12:23Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBRead.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBRead.readCOBRASBML">
-<code class="descclassname">cbmpy.CBRead.</code><code class="descname">readCOBRASBML</code><span class="sig-paren">(</span><em>fname</em>, <em>work_dir=None</em>, <em>return_sbml_model=False</em>, <em>delete_intermediate=False</em>, <em>fake_boundary_species_search=False</em>, <em>output_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBRead.html#readCOBRASBML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBRead.readCOBRASBML" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cbmpy.CBRead.</code><code class="descname">readCOBRASBML</code><span class="sig-paren">(</span><em>fname</em>, <em>work_dir=None</em>, <em>return_sbml_model=False</em>, <em>delete_intermediate=False</em>, <em>fake_boundary_species_search=False</em>, <em>output_dir=None</em>, <em>skip_genes=False</em>, <em>scan_notes_gpr=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBRead.html#readCOBRASBML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBRead.readCOBRASBML" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
 or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>fname</em> is the filename</li>
 <li><em>work_dir</em> is the working directory</li>
-<li><em>return_sbml_model</em> [default=False] return a a (cbm_mod, sbml_mod) pair</li>
 <li><em>delete_intermediate</em> [default=False] delete the intermediate SBML Level 3 FBC file</li>
 <li><em>fake_boundary_species_search</em> [default=False] after looking for the boundary_condition of a species search for overloaded id&#8217;s &lt;id&gt;_b</li>
 <li><em>output_dir</em> [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory</li>
+<li><em>skip_genes</em> [default=False] do not load GPR data</li>
+<li><em>scan_notes_gpr</em> [default=True] if the model is loaded and no genes are detected the scan the &lt;notes&gt; field for GPR associationa</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -3815,7 +4253,7 @@ and <em>network_react</em> sheets to be included in the model.</p>
 
 <dl class="function">
 <dt id="cbmpy.CBRead.readSBML2FBA">
-<code class="descclassname">cbmpy.CBRead.</code><code class="descname">readSBML2FBA</code><span class="sig-paren">(</span><em>fname</em>, <em>work_dir=None</em>, <em>return_sbml_model=False</em>, <em>fake_boundary_species_search=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBRead.html#readSBML2FBA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBRead.readSBML2FBA" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cbmpy.CBRead.</code><code class="descname">readSBML2FBA</code><span class="sig-paren">(</span><em>fname</em>, <em>work_dir=None</em>, <em>return_sbml_model=False</em>, <em>fake_boundary_species_search=False</em>, <em>scan_notes_gpr=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBRead.html#readSBML2FBA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBRead.readSBML2FBA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read in an SBML Level 2 file with FBA annotation where:</p>
 <blockquote>
 <div><ul class="simple">
@@ -3823,26 +4261,33 @@ and <em>network_react</em> sheets to be included in the model.</p>
 <li><em>work_dir</em> is the working directory if None then only fname is used</li>
 <li><em>return_sbml_model</em> [default=False] return a a (cbm_mod, sbml_mod) pair</li>
 <li><em>fake_boundary_species_search</em> [default=False] after looking for the boundary_condition of a species search for overloaded id&#8217;s &lt;id&gt;_b</li>
+<li><em>scan_notes_gpr</em> [default=True] if the model is loaded and no genes are detected the scan the &lt;notes&gt; field for GPR associationa</li>
 </ul>
 </div></blockquote>
 </dd></dl>
 
 <dl class="function">
 <dt id="cbmpy.CBRead.readSBML3FBC">
-<code class="descclassname">cbmpy.CBRead.</code><code class="descname">readSBML3FBC</code><span class="sig-paren">(</span><em>fname</em>, <em>work_dir=None</em>, <em>return_sbml_model=False</em>, <em>xoptions={'validate': False}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBRead.html#readSBML3FBC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBRead.readSBML3FBC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read in an SBML Level 3 file with FBC annotation where and return either a CBM model object
-or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
+<code class="descclassname">cbmpy.CBRead.</code><code class="descname">readSBML3FBC</code><span class="sig-paren">(</span><em>fname</em>, <em>work_dir=None</em>, <em>return_sbml_model=False</em>, <em>xoptions={'validate': False}</em>, <em>scan_notes_gpr=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBRead.html#readSBML3FBC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBRead.readSBML3FBC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in an SBML Level 3 file with FBC annotation where and return either a CBM model object</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>fname</em> is the filename</li>
 <li><em>work_dir</em> is the working directory</li>
-<li><em>return_sbml_model</em> [default=False] return a a (cbm_mod, sbml_mod) pair</li>
-<li><em>xoptions</em> special load options enable with option = True
-- <em>nogenes</em> do not load/process genes
-- <em>noannot</em> do not load/process any annotations
-- <em>validate</em> validate model and display errors and warnings before loading</li>
+<li><em>return_sbml_model</em> deprecated and ignored please update code</li>
+<li><em>xoptions</em> special load options enable with option = True<ul>
+<li><em>nogenes</em> do not load/process genes</li>
+<li><em>noannot</em> do not load/process any annotations</li>
+<li><em>validate</em> validate model and display errors and warnings before loading</li>
+<li><em>readcobra</em> read the cobra annotation</li>
+<li><em>read_model_string</em> [default=False] read the model from a string (instead of a filename) containing an SBML document</li>
+</ul>
+</li>
 </ul>
 </div></blockquote>
+<ul class="simple">
+<li><em>scan_notes_gpr</em> [default=True] if the model is loaded and no genes are__example_models__can the &lt;notes&gt; field for GPR associationa</li>
+</ul>
 </dd></dl>
 
 <dl class="function">
@@ -3894,7 +4339,7 @@ or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
 <span class="target" id="module-cbmpy.CBReadtxt"></span><div class="section" id="cbmpy-cbreadtxt-module">
 <h2>CBMPy: CBReadtxt module<a class="headerlink" href="#cbmpy-cbreadtxt-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3907,16 +4352,16 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 386 2015-09-28 14:05:35Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBReadtxt.readCSV">
 <code class="descclassname">cbmpy.CBReadtxt.</code><code class="descname">readCSV</code><span class="sig-paren">(</span><em>model_file</em>, <em>bounds_file=None</em>, <em>biomass_flux=None</em>, <em>model_id='FBAModel'</em>, <em>reaction_prefix='R_'</em>, <em>has_header=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBReadtxt.html#readCSV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBReadtxt.readCSV" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function loads a CSV file and translates it into a Python object:</p>
-<div class="highlight-python"><div class="highlight"><pre>- *model_file* the name of the CSV file that contains the model
-- *bounds_file* the name of the CSV file that contains the flux bounds
-- *biomass_flux* the name of the reaction that is the objective function
-- *reaction_prefix* [default=&#39;R _&#39;] the prefix to add to input reaction ID&#39;s
-- *has_header* [default=False] if there is a header row in the csv file
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="o">*</span><span class="n">model_file</span><span class="o">*</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">CSV</span> <span class="n">file</span> <span class="n">that</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">model</span>
+<span class="o">-</span> <span class="o">*</span><span class="n">bounds_file</span><span class="o">*</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">CSV</span> <span class="n">file</span> <span class="n">that</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">flux</span> <span class="n">bounds</span>
+<span class="o">-</span> <span class="o">*</span><span class="n">biomass_flux</span><span class="o">*</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">reaction</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">objective</span> <span class="n">function</span>
+<span class="o">-</span> <span class="o">*</span><span class="n">reaction_prefix</span><span class="o">*</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;R _&#39;</span><span class="p">]</span> <span class="n">the</span> <span class="n">prefix</span> <span class="n">to</span> <span class="n">add</span> <span class="n">to</span> <span class="nb">input</span> <span class="n">reaction</span> <span class="n">ID</span><span class="s1">&#39;s</span>
+<span class="o">-</span> <span class="o">*</span><span class="n">has_header</span><span class="o">*</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]</span> <span class="k">if</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">header</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">csv</span> <span class="n">file</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3925,7 +4370,7 @@ Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 386 2015-09-28 14:05:35Z bgoli $)
 <span class="target" id="module-cbmpy.CBSolver"></span><div class="section" id="cbmpy-cbsolver-module">
 <h2>CBMPy: CBSolver module<a class="headerlink" href="#cbmpy-cbsolver-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3938,12 +4383,12 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBSolver.py 305 2015-04-23 15:18:31Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBSolver.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 </div>
 <span class="target" id="module-cbmpy.CBTools"></span><div class="section" id="cbmpy-cbtools-module">
 <h2>CBMPy: CBTools module<a class="headerlink" href="#cbmpy-cbtools-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -3956,7 +4401,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBTools.py 414 2016-02-17 08:21:03Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBTools.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBTools.addFluxAsActiveObjective">
 <code class="descclassname">cbmpy.CBTools.</code><code class="descname">addFluxAsActiveObjective</code><span class="sig-paren">(</span><em>f</em>, <em>reaction_id</em>, <em>osense</em>, <em>coefficient=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBTools.html#addFluxAsActiveObjective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBTools.addFluxAsActiveObjective" title="Permalink to this definition">¶</a></dt>
@@ -4146,6 +4591,12 @@ used in the function getReaByMetSuf</p>
 <dt id="cbmpy.CBTools.deSerialize">
 <code class="descclassname">cbmpy.CBTools.</code><code class="descname">deSerialize</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBTools.html#deSerialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBTools.deSerialize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deserializes a serialised object contained in a string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBTools.deSerializeFromDisk">
+<code class="descclassname">cbmpy.CBTools.</code><code class="descname">deSerializeFromDisk</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBTools.html#deSerializeFromDisk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBTools.deSerializeFromDisk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a serialised Python pickle from <em>filename</em> returns the Python object(s)</p>
 </dd></dl>
 
 <dl class="function">
@@ -4538,7 +4989,7 @@ R1_rev: B -&gt; A</p>
 <span class="target" id="module-cbmpy.CBWrite"></span><div class="section" id="cbmpy-cbwrite-module">
 <h2>CBMPy: CBWrite module<a class="headerlink" href="#cbmpy-cbwrite-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -4551,7 +5002,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 411 2016-01-27 12:32:01Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="function">
 <dt id="cbmpy.CBWrite.BuildHformatFluxBounds">
 <code class="descclassname">cbmpy.CBWrite.</code><code class="descname">BuildHformatFluxBounds</code><span class="sig-paren">(</span><em>fba</em>, <em>infinity_replace=None</em>, <em>use_rational=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBWrite.html#BuildHformatFluxBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBWrite.BuildHformatFluxBounds" title="Permalink to this definition">¶</a></dt>
@@ -4689,12 +5140,12 @@ the StoichiometeryLP object</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>fba</em> the FBA model</li>
-<li><em>fname</em> [default=None] the exported filename if None then <cite>fba.getPid()</cite> is used</li>
+<li><em>fname</em> [default=None] the exported filename if None then <cite>fba.getId()</cite> is used</li>
 <li><em>fmt</em> [default=&#8217;lp&#8217;] the export format can be one of: &#8216;lp&#8217; (CPLEX), &#8216;hformat&#8217; (Polyhedra), &#8216;all&#8217; (both)</li>
 <li><em>use_rational</em> [default=&#8217;both&#8217;] if <em>all</em> or <em>hformat</em> is specified should hformat files be written using rational math or not. The default <em>both</em> is the legacy behaviour and writes both.</li>
 </ul>
 </div></blockquote>
-<p>Note that &#8216;hformat&#8217; ignores &#8216;fname&#8217; and only uses fba.getPid() this is a legacy behaviour</p>
+<p>Note that &#8216;hformat&#8217; ignores &#8216;fname&#8217; and only uses fba.getId() this is a legacy behaviour</p>
 </dd></dl>
 
 <dl class="function">
@@ -4802,7 +5253,7 @@ which it replaces. Note that if a SymPy matrix is used as input then use_rationa
 <blockquote>
 <div><ul class="simple">
 <li><em>fba</em> a PySCeS-CBM FBA object</li>
-<li><em>fname</em> [default=None] the output filename, fba.getPid() if not defined</li>
+<li><em>fname</em> [default=None] the output filename, fba.getId() if not defined</li>
 <li><em>Work_dir</em> [default=None] the output directory</li>
 <li><em>use_rational</em> [default=false] use rational numbers in output (requires sympy)</li>
 <li><em>fullLP</em> [default=True] include the default objective function as a maximization target</li>
@@ -4836,7 +5287,7 @@ which it replaces. Note that if a SymPy matrix is used as input then use_rationa
 <div><ul class="simple">
 <li><em>fba</em> an instantiated FBAmodel instance</li>
 <li><em>work_dir</em> directory designated for output</li>
-<li><em>fname</em> the file name [default=fba.getPid()]</li>
+<li><em>fname</em> the file name [default=fba.getId()]</li>
 <li><em>multisymb</em> the multiplication symbol (default: &lt;space&gt;)</li>
 <li><em>format</em> the number format of the output</li>
 <li><em>use_rational</em> output rational numbers [default=False]</li>
@@ -4962,23 +5413,24 @@ Note if you want to write BiGG/FAME style annotations then you must use <em>sbml
 
 <dl class="function">
 <dt id="cbmpy.CBWrite.writeSBML3FBC">
-<code class="descclassname">cbmpy.CBWrite.</code><code class="descname">writeSBML3FBC</code><span class="sig-paren">(</span><em>fba</em>, <em>fname</em>, <em>directory=None</em>, <em>sbml_level_version=(3</em>, <em>1)</em>, <em>autofix=True</em>, <em>gpr_from_annot=False</em>, <em>add_groups=False</em>, <em>add_cbmpy_annot=True</em>, <em>add_cobra_annot=False</em>, <em>xoptions={'fbc_version': 1</em>, <em>'validate': False</em>, <em>'compress_bounds': True}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBWrite.html#writeSBML3FBC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBWrite.writeSBML3FBC" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cbmpy.CBWrite.</code><code class="descname">writeSBML3FBC</code><span class="sig-paren">(</span><em>fba</em>, <em>fname</em>, <em>directory=None</em>, <em>gpr_from_annot=False</em>, <em>add_groups=True</em>, <em>add_cbmpy_annot=True</em>, <em>add_cobra_annot=False</em>, <em>xoptions={'fbc_version': 1</em>, <em>'validate': False</em>, <em>'compress_bounds': True}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBWrite.html#writeSBML3FBC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBWrite.writeSBML3FBC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes an FBA model object and writes it to file as SBML L3 FBC:</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>fba</em> an fba model object</li>
 <li><em>fname</em> the model will be written as XML to <em>fname</em></li>
 <li><em>directory</em> [default=None] if defined it is prepended to fname</li>
-<li><em>sbml_level_version</em> [default=(3,1)] a tuple containing the SBML level and version e.g. (3,1)</li>
-<li><em>autofix</em> convert &lt;&gt; to &lt;=&gt;=</li>
 <li><em>gpr_from_annot</em> [default=True] if enabled will attempt to add the gene protein associations from the annotations
 if no gene protein association objects exist</li>
+<li><em>add_groups</em> [default=True] add SBML3 groups (if supported by libSBML)</li>
 <li><em>add_cbmpy_annot</em> [default=True] add CBMPy KeyValueData annotation. Replaces &lt;notes&gt;</li>
 <li><em>add_cobra_annot</em> [default=True] add COBRA &lt;notes&gt; annotation</li>
 <li><em>xoptions</em> extended options<ul>
 <li><em>fbc_version</em> [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)</li>
 <li><em>validate</em> [default=False] validate the output SBML file</li>
 <li><em>compress_bounds</em> [default=False] try compress output flux bound parameters</li>
+<li><em>zip_model</em> [default=False] compress the model using PKZIP encoding</li>
+<li><em>return_model_string</em> [default=False] return the SBML XML file as a string</li>
 </ul>
 </li>
 </ul>
@@ -4987,19 +5439,21 @@ if no gene protein association objects exist</li>
 
 <dl class="function">
 <dt id="cbmpy.CBWrite.writeSBML3FBCV2">
-<code class="descclassname">cbmpy.CBWrite.</code><code class="descname">writeSBML3FBCV2</code><span class="sig-paren">(</span><em>fba</em>, <em>fname</em>, <em>directory=None</em>, <em>gpr_from_annot=False</em>, <em>add_groups=False</em>, <em>add_cbmpy_annot=True</em>, <em>add_cobra_annot=False</em>, <em>validate=False</em>, <em>compress_bounds=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBWrite.html#writeSBML3FBCV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBWrite.writeSBML3FBCV2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes an FBA model object and writes it to file as SBML L3 FBC:</p>
+<code class="descclassname">cbmpy.CBWrite.</code><code class="descname">writeSBML3FBCV2</code><span class="sig-paren">(</span><em>fba</em>, <em>fname</em>, <em>directory=None</em>, <em>gpr_from_annot=False</em>, <em>add_groups=True</em>, <em>add_cbmpy_annot=True</em>, <em>add_cobra_annot=False</em>, <em>validate=False</em>, <em>compress_bounds=True</em>, <em>zip_model=False</em>, <em>return_model_string=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBWrite.html#writeSBML3FBCV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBWrite.writeSBML3FBCV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes an FBA model object and writes it to file as SBML L3 FBCv2 :</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>fba</em> an fba model object</li>
 <li><em>fname</em> the model will be written as XML to <em>fname</em></li>
 <li><em>directory</em> [default=None] if defined it is prepended to fname</li>
 <li><em>gpr_from_annot</em> [default=False] if enabled will attempt to add the gene protein associations from the annotations</li>
-<li><em>add_groups</em> [default=False] add SBML3 groups (if supported by libSBML)</li>
+<li><em>add_groups</em> [default=True] add SBML3 groups (if supported by libSBML)</li>
 <li><em>add_cbmpy_annot</em> [default=True] add CBMPy KeyValueData annotation. Replaces &lt;notes&gt;</li>
 <li><em>add_cobra_annot</em> [default=False] add COBRA &lt;notes&gt; annotation</li>
 <li><em>validate</em> [default=False] validate the output SBML file</li>
 <li><em>compress_bounds</em> [default=True] try compress output flux bound parameters</li>
+<li><em>zip_model</em> [default=False] compress the model using ZIP encoding</li>
+<li><em>return_model_string</em> [default=False] return the SBML XML file as a string</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -5064,7 +5518,7 @@ which it replaces but is kept for backwards compatability.</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>fba</em> a PySCeS-CBM FBA object</li>
-<li><em>fname</em> [default=None] the output filename, fba.getPid() if not defined</li>
+<li><em>fname</em> [default=None] the output filename, fba.getId() if not defined</li>
 <li><em>Work_dir</em> [default=None] the output directory</li>
 <li><em>use_rational</em> [default=false] use rational numbers in output (requires sympy)</li>
 <li><em>fullLP</em> [default=True] include the default objective function as a maximization target</li>
@@ -5078,7 +5532,7 @@ which it replaces but is kept for backwards compatability.</p>
 <span class="target" id="module-cbmpy.CBWx"></span><div class="section" id="cbmpy-cbwx-module">
 <h2>CBMPy: CBWx module<a class="headerlink" href="#cbmpy-cbwx-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -5091,7 +5545,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBWx.py 378 2015-09-14 16:32:38Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBWx.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="class">
 <dt id="cbmpy.CBWx.HtmlWindowMod">
 <em class="property">class </em><code class="descclassname">cbmpy.CBWx.</code><code class="descname">HtmlWindowMod</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBWx.html#HtmlWindowMod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBWx.HtmlWindowMod" title="Permalink to this definition">¶</a></dt>
@@ -5121,7 +5575,7 @@ Last edit: $Author: bgoli $ ($Id: CBWx.py 378 2015-09-14 16:32:38Z bgoli $)</p>
 <span class="target" id="module-cbmpy.CBXML"></span><div class="section" id="cbmpy-cbxml-module">
 <h2>CBMPy: CBXML module<a class="headerlink" href="#cbmpy-cbxml-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -5134,12 +5588,34 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: CBXML.py 416 2016-02-23 16:12:23Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: CBXML.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 <dl class="class">
 <dt id="cbmpy.CBXML.MLStripper">
 <em class="property">class </em><code class="descclassname">cbmpy.CBXML.</code><code class="descname">MLStripper</code><a class="reference internal" href="_modules/cbmpy/CBXML.html#MLStripper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.MLStripper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for stripping a string of HTML/XML used from:
 <a class="reference external" href="http://stackoverflow.com/questions/753052/strip-html-from-strings-in-python">http://stackoverflow.com/questions/753052/strip-html-from-strings-in-python</a></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="cbmpy.CBXML.SBML_NS">
+<code class="descclassname">cbmpy.CBXML.</code><code class="descname">SBML_NS</code><em class="property"> = [('http://www.sbml.org/sbml/level3/version1/fbc/version2', 'L3V1FBC2'), ('http://www.sbml.org/sbml/level3/version1/fbc/version1', 'L3V1FBC1'), ('http://www.sbml.org/sbml/level3/version2/fbc/version2', 'L3V2FBC2'), ('http://www.sbml.org/sbml/level3/version2/fbc/version1', 'L3V2FBC1'), ('http://www.sbml.org/sbml/level3/version2/core', 'L3V2core'), ('http://www.sbml.org/sbml/level3/version1/core', 'L3V1core'), ('http://www.sbml.org/sbml/level2/version4', 'L2'), ('http://www.sbml.org/sbml/level2', 'L2')]</em><a class="headerlink" href="#cbmpy.CBXML.SBML_NS" title="Permalink to this definition">¶</a></dt>
+<dd><p>print libsbml.BQB_ENCODES            , 8  # &#8220;encodes&#8221;,
+print libsbml.BQB_HAS_PART           , 1  # &#8220;hasPart&#8221;,
+print libsbml.BQB_HAS_PROPERTY       , 10 # &#8220;hasProperty&#8221;,
+print libsbml.BQB_HAS_VERSION        , 4  # &#8220;hasVersion&#8221;,
+print libsbml.BQB_IS                 , 0  # &#8220;isA&#8221;,
+print libsbml.BQB_IS_DESCRIBED_BY    , 6  # &#8220;isDescribedBy&#8221;,
+print libsbml.BQB_IS_ENCODED_BY      , 7  # &#8220;isEncodedBy&#8221;,
+print libsbml.BQB_IS_HOMOLOG_TO      , 5  # &#8220;isHomologTo&#8221;,
+print libsbml.BQB_IS_PART_OF         , 2  # &#8220;isPartOf&#8221;,
+print libsbml.BQB_IS_PROPERTY_OF     , 11 # &#8220;isPropertyOf&#8221;,
+print libsbml.BQB_IS_VERSION_OF      , 3  # &#8220;isVersionOf&#8221;,
+print libsbml.BQB_OCCURS_IN          , 9  # &#8220;occursIn&#8221;,
+print libsbml.BQB_UNKNOWN            , 12 # None</p>
+<p>print libsbml.BQM_IS                 , 0 # None
+print libsbml.BQM_IS_DERIVED_FROM    , 2 # None
+print libsbml.BQM_IS_DESCRIBED_BY    , 1 # None
+print libsbml.BQM_UNKNOWN            , 3 # None</p>
 </dd></dl>
 
 <dl class="function">
@@ -5224,6 +5700,29 @@ and AST&#8217;s.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="cbmpy.CBXML.sbml_fileFindVersion">
+<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_fileFindVersion</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_fileFindVersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_fileFindVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try and find the SBML version and FBC support</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>f</em> the SBML file</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBXML.sbml_fileValidate">
+<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_fileValidate</code><span class="sig-paren">(</span><em>f</em>, <em>level='normal'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_fileValidate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_fileValidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate an SBML file and model</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>f</em> the SBML file</li>
+<li><em>level</em> [default=&#8217;normal&#8217;] the level of validation &#8220;normal&#8221; or &#8220;full&#8221;</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
 <dt id="cbmpy.CBXML.sbml_getCVterms">
 <code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_getCVterms</code><span class="sig-paren">(</span><em>sb</em>, <em>model=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_getCVterms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_getCVterms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the MIRIAM compliant CV terms and return a MIRIAMAnnotation or None</p>
@@ -5242,6 +5741,15 @@ and AST&#8217;s.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="cbmpy.CBXML.sbml_getNotes">
+<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_getNotes</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_getNotes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_getNotes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the SBML objects notes</p>
+<ul class="simple">
+<li><em>obj</em> an SBML object</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
 <dt id="cbmpy.CBXML.sbml_readCOBRANote">
 <code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_readCOBRANote</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_readCOBRANote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_readCOBRANote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses a COBRA style note from a XML string</p>
@@ -5254,7 +5762,7 @@ and AST&#8217;s.</p>
 
 <dl class="function">
 <dt id="cbmpy.CBXML.sbml_readCOBRASBML">
-<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_readCOBRASBML</code><span class="sig-paren">(</span><em>fname</em>, <em>work_dir=None</em>, <em>return_sbml_model=False</em>, <em>delete_intermediate=False</em>, <em>fake_boundary_species_search=False</em>, <em>output_dir=None</em>, <em>speciesAnnotationFix=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_readCOBRASBML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_readCOBRASBML" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_readCOBRASBML</code><span class="sig-paren">(</span><em>fname</em>, <em>work_dir=None</em>, <em>return_sbml_model=False</em>, <em>delete_intermediate=False</em>, <em>fake_boundary_species_search=False</em>, <em>output_dir=None</em>, <em>speciesAnnotationFix=True</em>, <em>skip_genes=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_readCOBRASBML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_readCOBRASBML" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
 or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
 <blockquote>
@@ -5266,6 +5774,7 @@ or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
 <li><em>fake_boundary_species_search</em> [default=False] after looking for the boundary_condition of a species search for overloaded id&#8217;s &lt;id&gt;_b</li>
 <li><em>output_dir</em> [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory</li>
 <li><em>speciesAnnotationFix</em> [default=True]</li>
+<li><em>skip_genes</em> [default=False] convert GPR associations</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -5304,8 +5813,25 @@ or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
 <li><em>xoptions</em> special load options enable with option = True
 - <em>nogenes</em> do not load/process genes
 - <em>noannot</em> do not load/process any annotations
-- <em>validate</em> validate model and display errors and warnings before loading</li>
+- <em>validate</em> validate model and display errors and warnings before loading
+- <em>readcobra</em> read the cobra annotation
+- <em>read_model_string</em> [default=False] read the model from a string (instead of a filename) containing an SBML document</li>
 </ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cbmpy.CBXML.sbml_setAnnotationsL3Fbc">
+<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_setAnnotationsL3Fbc</code><span class="sig-paren">(</span><em>cbmo</em>, <em>sbmlo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_setAnnotationsL3Fbc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_setAnnotationsL3Fbc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add CBMPy Fbase annotations to an SBML object, MIRIAM, SBO, Notes. Should
+be called last when creating SBML objects.</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>cbmo</em> the CBMPy object</li>
+<li><em>sbmlo</em> SBML object</li>
+</ul>
+<p>Note: this function should be used for new code, old code still needs to be
+refactored.</p>
 </div></blockquote>
 </dd></dl>
 
@@ -5371,6 +5897,18 @@ or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="cbmpy.CBXML.sbml_setParametersL3Fbc">
+<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_setParametersL3Fbc</code><span class="sig-paren">(</span><em>fbcmod</em>, <em>add_cbmpy_anno=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_setParametersL3Fbc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_setParametersL3Fbc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add non fluxbound related parameters to the model</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>fbcmod</em> a CBM2SBML instance</li>
+<li><em>add_cbmpy_anno</em> [default=True] add CBMPy KeyValueData annotation.</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
 <dt id="cbmpy.CBXML.sbml_setReactionsL2">
 <code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_setReactionsL2</code><span class="sig-paren">(</span><em>model</em>, <em>fba</em>, <em>return_dict=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_setReactionsL2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_setReactionsL2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add the FBA instance reactions to the SBML model</p>
@@ -5385,12 +5923,11 @@ or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
 
 <dl class="function">
 <dt id="cbmpy.CBXML.sbml_setReactionsL3Fbc">
-<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_setReactionsL3Fbc</code><span class="sig-paren">(</span><em>fbcmod</em>, <em>fba</em>, <em>return_dict=False</em>, <em>add_cobra_anno=False</em>, <em>add_cbmpy_anno=True</em>, <em>fbc_version=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_setReactionsL3Fbc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_setReactionsL3Fbc" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cbmpy.CBXML.</code><code class="descname">sbml_setReactionsL3Fbc</code><span class="sig-paren">(</span><em>fbcmod</em>, <em>return_dict=False</em>, <em>add_cobra_anno=False</em>, <em>add_cbmpy_anno=True</em>, <em>fbc_version=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbmpy/CBXML.html#sbml_setReactionsL3Fbc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cbmpy.CBXML.sbml_setReactionsL3Fbc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add the FBA instance reactions to the SBML model</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>fbcmod</em> a CBM2SBML instance</li>
-<li><em>fba</em> a PySCeSCBM model instance</li>
 <li><em>return_dict</em> [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions</li>
 <li><em>add_cbmpy_anno</em> [default=True] add CBMPy KeyValueData annotation. Replaces &lt;notes&gt;</li>
 <li><em>add_cobra_anno</em> [default=False] add COBRA &lt;notes&gt; annotation</li>
@@ -5533,7 +6070,7 @@ or a (cbm_mod, sbml_mod) pair if return_sbml_model=True</p>
 <li><em>sbml_level_version</em> [default=(3,1)] a tuple containing the SBML level and version e.g. (3,1)</li>
 <li><em>autofix</em> convert &lt;&gt; to &lt;=&gt;=</li>
 <li><em>return_fbc</em> return the FBC converter instance</li>
-<li><em>gpr_from_annot</em> [default=True] if enabled will attempt to add the gene protein associations from the annotations
+<li><em>gpr_from_annot</em> [default=False] if enabled will attempt to add the gene protein associations from the annotations
 if no gene protein association objects exist</li>
 <li><em>add_cbmpy_annot</em> [default=True] add CBMPy KeyValueData annotation. Replaces &lt;notes&gt;</li>
 <li><em>add_cobra_annot</em> [default=True] add COBRA &lt;notes&gt; annotation</li>
@@ -5541,6 +6078,8 @@ if no gene protein association objects exist</li>
 <li><em>fbc_version</em> [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)</li>
 <li><em>validate</em> [default=False] validate the output SBML file</li>
 <li><em>compress_bounds</em> [default=False] try compress output flux bound parameters</li>
+<li><em>zip_model</em> [default=False] compress the model using ZIP encoding</li>
+<li><em>return_model_string</em> [default=False] return the SBML XML file as a string</li>
 </ul>
 </li>
 </ul>
@@ -5994,7 +6533,7 @@ maps the row labels to ridx and creates self.row (row label list)</p>
 <span class="target" id="module-cbmpy._multicorefva"></span><div class="section" id="cbmpy-multicorefva-module">
 <h2>CBMPy: MultiCoreFVA module<a class="headerlink" href="#cbmpy-multicorefva-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -6007,12 +6546,12 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: _multicorefva.py 378 2015-09-14 16:32:38Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: _multicorefva.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 </div>
 <span class="target" id="module-cbmpy._multicoreenvfva"></span><div class="section" id="cbmpy-multicoreenvfva-module">
 <h2>CBMPy: MultiCoreEnvFVA module<a class="headerlink" href="#cbmpy-multicoreenvfva-module" title="Permalink to this headline">¶</a></h2>
 <p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
-Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
 <p>This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -6025,7 +6564,7 @@ GNU General Public License for more details.</p>
 along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
 <p>Author: Brett G. Olivier
 Contact email: <a class="reference external" href="mailto:bgoli&#37;&#52;&#48;users&#46;sourceforge&#46;net">bgoli<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
-Last edit: $Author: bgoli $ ($Id: _multicoreenvfva.py 378 2015-09-14 16:32:38Z bgoli $)</p>
+Last edit: $Author: bgoli $ ($Id: _multicoreenvfva.py 575 2017-04-13 12:18:44Z bgoli $)</p>
 </div>
 <span class="target" id="module-cbmpy.miriamids"></span></div>
 
@@ -6045,6 +6584,7 @@ Last edit: $Author: bgoli $ ($Id: _multicoreenvfva.py 378 2015-09-14 16:32:38Z b
 <li><a class="reference internal" href="#cbmpy-cbconfig-module">CBMPy: CBConfig module</a></li>
 <li><a class="reference internal" href="#cbmpy-cbcplex-module">CBMPy: CBCPLEX module</a></li>
 <li><a class="reference internal" href="#cbmpy-cbdatastruct-module">CBMPy: CBDataStruct module</a></li>
+<li><a class="reference internal" href="#cbmpy-cbglpk-module">CBMPy: CBGLPK module</a></li>
 <li><a class="reference internal" href="#cbmpy-cbgui-module">CBMPy: CBGUI module</a></li>
 <li><a class="reference internal" href="#cbmpy-cbmodel-module">CBMPy: CBModel module</a></li>
 <li><a class="reference internal" href="#cbmpy-cbmodeltools-module">CBMPy: CBModelTools module</a></li>
@@ -6084,14 +6624,11 @@ Last edit: $Author: bgoli $ ($Id: _multicoreenvfva.py 378 2015-09-14 16:32:38Z b
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -6102,8 +6639,8 @@ Last edit: $Author: bgoli $ ($Id: _multicoreenvfva.py 378 2015-09-14 16:32:38Z b
       &copy;2010-2016, Brett G. Olivier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/modules_doc.txt"

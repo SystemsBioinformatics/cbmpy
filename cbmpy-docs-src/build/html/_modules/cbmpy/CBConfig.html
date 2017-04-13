@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cbmpy.CBConfig &mdash; CBMPy User Guide v0.7</title>
+    <title>cbmpy.CBConfig &#8212; CBMPy User Guide v0.7</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,11 +30,14 @@
     <link rel="top" title="CBMPy User Guide v0.7" href="../../cbmpy.html" />
     <link rel="up" title="Module code" href="../index.html" />
    
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -42,11 +45,11 @@
           <div class="body" role="main">
             
   <h1>Source code for cbmpy.CBConfig</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">CBMPy: CBConfig module</span>
 <span class="sd">======================</span>
 <span class="sd">PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)</span>
-<span class="sd">Copyright (C) 2009-2015 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</span>
+<span class="sd">Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</span>
 
 <span class="sd">This program is free software: you can redistribute it and/or modify</span>
 <span class="sd">it under the terms of the GNU General Public License as published by</span>
@@ -63,45 +66,45 @@
 
 <span class="sd">Author: Brett G. Olivier</span>
 <span class="sd">Contact email: bgoli@users.sourceforge.net</span>
-<span class="sd">Last edit: $Author: bgoli $ ($Id: CBConfig.py 404 2016-01-05 15:24:35Z bgoli $)</span>
+<span class="sd">Last edit: $Author: bgoli $ ($Id: CBConfig.py 575 2017-04-13 12:18:44Z bgoli $)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="c">## gets rid of &quot;invalid variable name&quot; info</span>
-<span class="c"># pylint: disable=C0103</span>
-<span class="c">## gets rid of &quot;line to long&quot; info</span>
-<span class="c"># pylint: disable=C0301</span>
-<span class="c">## use with caution: gets rid of module xxx has no member errors (run once enabled)</span>
-<span class="c"># pylint: disable=E1101</span>
+<span class="c1">## gets rid of &quot;invalid variable name&quot; info</span>
+<span class="c1"># pylint: disable=C0103</span>
+<span class="c1">## gets rid of &quot;line to long&quot; info</span>
+<span class="c1"># pylint: disable=C0301</span>
+<span class="c1">## use with caution: gets rid of module xxx has no member errors (run once enabled)</span>
+<span class="c1"># pylint: disable=E1101</span>
 
 
-<span class="c"># preparing for Python 3 port</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-<span class="c">#from __future__ import unicode_literals</span>
+<span class="c1"># preparing for Python 3 port</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="c1">#from __future__ import unicode_literals</span>
 
-<span class="c"># release</span>
+<span class="c1"># release</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">STATUS</span> <span class="o">=</span> <span class="s">&#39;$Rev: 404 $&#39;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Rev: &#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;$&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">STATUS</span> <span class="o">=</span> <span class="s1">&#39;$Rev: 575 $&#39;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Rev: &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-    <span class="n">STATUS</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">STATUS</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
-<span class="n">__CBCONFIG__</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;VERSION_MAJOR&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s">&#39;VERSION_MINOR&#39;</span> <span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-                <span class="s">&#39;VERSION_MICRO&#39;</span> <span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-                <span class="s">&#39;VERSION_STATUS&#39;</span> <span class="p">:</span> <span class="n">STATUS</span><span class="p">,</span>
-                <span class="s">&#39;VERSION&#39;</span> <span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;DEBUG&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&#39;SOLVER_PREF&#39;</span> <span class="p">:</span> <span class="s">&#39;CPLEX&#39;</span><span class="p">,</span>
-                <span class="c">#&#39;SOLVER_PREF&#39; : &#39;GLPK&#39;,</span>
-                <span class="s">&#39;SOLVER_ACTIVE&#39;</span> <span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;REVERSIBLE_SYMBOL&#39;</span> <span class="p">:</span> <span class="s">&#39;&lt;==&gt;&#39;</span><span class="p">,</span>
-                <span class="s">&#39;IRREVERSIBLE_SYMBOL&#39;</span> <span class="p">:</span> <span class="s">&#39;--&gt;&#39;</span><span class="p">,</span>
-                <span class="s">&#39;HAVE_SBML2&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&#39;HAVE_SBML3&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&#39;CBMPY_DIR&#39;</span> <span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;CBMPY_CGLPK_VER&#39;</span> <span class="p">:</span> <span class="s">&#39;w452&#39;</span><span class="p">,</span>
-                <span class="s">&#39;SYMPY_DENOM_LIMIT&#39;</span> <span class="p">:</span> <span class="mi">10</span><span class="o">**</span><span class="mi">32</span>
+<span class="n">__CBCONFIG__</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;VERSION_MAJOR&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s1">&#39;VERSION_MINOR&#39;</span> <span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+                <span class="s1">&#39;VERSION_MICRO&#39;</span> <span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+                <span class="s1">&#39;VERSION_STATUS&#39;</span> <span class="p">:</span> <span class="n">STATUS</span><span class="p">,</span>
+                <span class="s1">&#39;VERSION&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;DEBUG&#39;</span> <span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;SOLVER_PREF&#39;</span> <span class="p">:</span> <span class="s1">&#39;CPLEX&#39;</span><span class="p">,</span>
+                <span class="c1">#&#39;SOLVER_PREF&#39; : &#39;GLPK&#39;,</span>
+                <span class="s1">&#39;SOLVER_ACTIVE&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;REVERSIBLE_SYMBOL&#39;</span> <span class="p">:</span> <span class="s1">&#39;&lt;==&gt;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;IRREVERSIBLE_SYMBOL&#39;</span> <span class="p">:</span> <span class="s1">&#39;--&gt;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;HAVE_SBML2&#39;</span> <span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;HAVE_SBML3&#39;</span> <span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;CBMPY_DIR&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;CBMPY_CGLPK_VER&#39;</span> <span class="p">:</span> <span class="s1">&#39;w452&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;SYMPY_DENOM_LIMIT&#39;</span> <span class="p">:</span> <span class="mi">10</span><span class="o">**</span><span class="mi">32</span>
                <span class="p">}</span>
 
 <div class="viewcode-block" id="current_version"><a class="viewcode-back" href="../../modules_doc.html#cbmpy.CBConfig.current_version">[docs]</a><span class="k">def</span> <span class="nf">current_version</span><span class="p">():</span>
@@ -109,20 +112,22 @@
 <span class="sd">    Return the current CBMPy version as a string</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c">#return &#39;%s.%s.%s [r%s]&#39; % (__CBCONFIG__[&#39;VERSION_MAJOR&#39;], __CBCONFIG__[&#39;VERSION_MINOR&#39;], __CBCONFIG__[&#39;VERSION_MICRO&#39;], __CBCONFIG__[&#39;VERSION_STATUS&#39;])</span>
-    <span class="k">if</span> <span class="n">STATUS</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;{}.{}.{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MAJOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MINOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MICRO&#39;</span><span class="p">])</span>
+    <span class="c1">#return &#39;%s.%s.%s [r%s]&#39; % (__CBCONFIG__[&#39;VERSION_MAJOR&#39;], __CBCONFIG__[&#39;VERSION_MINOR&#39;], __CBCONFIG__[&#39;VERSION_MICRO&#39;], __CBCONFIG__[&#39;VERSION_STATUS&#39;])</span>
+    <span class="k">if</span> <span class="n">STATUS</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MAJOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MINOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MICRO&#39;</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;{}.{}.{}.{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MAJOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MINOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MICRO&#39;</span><span class="p">],</span> <span class="n">STATUS</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MAJOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MINOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MICRO&#39;</span><span class="p">],</span> <span class="n">STATUS</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="current_version_tuple"><a class="viewcode-back" href="../../modules_doc.html#cbmpy.CBConfig.current_version_tuple">[docs]</a><span class="k">def</span> <span class="nf">current_version_tuple</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the current CBMPy version as a tuple (x, y, z)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MAJOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MINOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION_MICRO&#39;</span><span class="p">])</span>
-</div>
-<span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s">&#39;VERSION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_version</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MAJOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MINOR&#39;</span><span class="p">],</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION_MICRO&#39;</span><span class="p">])</span></div>
+
+<span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_version</span><span class="p">()</span>
+
+
 </pre></div>
 
           </div>
@@ -144,14 +149,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -162,8 +164,8 @@
       &copy;2010-2016, Brett G. Olivier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
     </div>
 

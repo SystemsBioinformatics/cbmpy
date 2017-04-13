@@ -9,84 +9,84 @@
     <dc:publisher>Brett G. Olivier</dc:publisher>
     <dc:rights>2010-2016, Brett G. Olivier</dc:rights>
     <dc:identifier id="unknown" opf:scheme="unknown">unknown</dc:identifier>
-    <dc:date>2016-02-25</dc:date>
+    <dc:date>2017-04-13</dc:date>
   </metadata>
   <manifest>
     <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />
     <item id="epub-0"
-          href="cbmpy.html"
+          href="cbmpy.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-1"
-          href="genindex.html"
+          href="genindex.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-2"
-          href="install_doc.html"
+          href="install_doc.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-3"
-          href="manual_doc.html"
+          href="manual_doc.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-4"
-          href="modules_doc.html"
+          href="modules_doc.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-5"
-          href="py-modindex.html"
+          href="py-modindex.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-6"
-          href="search.html"
+          href="_modules/index.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-7"
-          href="_modules/index.html"
+          href="_modules/cbmpy/CBCommon.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-8"
-          href="_modules/cbmpy/CBCommon.html"
+          href="_modules/cbmpy/CBConfig.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-9"
-          href="_modules/cbmpy/CBConfig.html"
+          href="_modules/cbmpy/CBCPLEX.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-10"
-          href="_modules/cbmpy/CBCPLEX.html"
+          href="_modules/cbmpy/CBDataStruct.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-11"
-          href="_modules/cbmpy/CBDataStruct.html"
+          href="_modules/cbmpy/CBGLPK.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-12"
-          href="_modules/cbmpy/CBGUI.html"
+          href="_modules/cbmpy/CBGUI.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-13"
-          href="_modules/cbmpy/CBModel.html"
+          href="_modules/cbmpy/CBModel.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-14"
-          href="_modules/cbmpy/CBMultiCore.html"
+          href="_modules/cbmpy/CBMultiCore.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-15"
-          href="_modules/cbmpy/CBNetDB.html"
+          href="_modules/cbmpy/CBNetDB.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-16"
-          href="_modules/cbmpy/CBPlot.html"
+          href="_modules/cbmpy/CBPlot.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-17"
-          href="_modules/cbmpy/CBQt4.html"
+          href="_modules/cbmpy/CBQt4.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-18"
-          href="_modules/cbmpy/CBRead.html"
+          href="_modules/cbmpy/CBRead.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-19"
-          href="_modules/cbmpy/CBReadtxt.html"
+          href="_modules/cbmpy/CBReadtxt.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-20"
-          href="_modules/cbmpy/CBTools.html"
+          href="_modules/cbmpy/CBTools.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-21"
-          href="_modules/cbmpy/CBWrite.html"
+          href="_modules/cbmpy/CBWrite.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-22"
-          href="_modules/cbmpy/CBWx.html"
+          href="_modules/cbmpy/CBWx.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-23"
-          href="_modules/cbmpy/CBXML.html"
+          href="_modules/cbmpy/CBXML.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-24"
-          href="_modules/cbmpy/PyscesStoich.html"
+          href="_modules/cbmpy/PyscesStoich.xhtml"
           media-type="application/xhtml+xml" />
     <item id="epub-25"
           href="_static/ajax-loader.gif"
@@ -149,6 +149,6 @@
     <itemref idref="epub-1" />
   </spine>
   <guide>
-    <reference type="toc" title="Table of Contents" href="cbmpy.html" />
+    <reference type="toc" title="Table of Contents" href="cbmpy.xhtml" />
   </guide>
 </package>
