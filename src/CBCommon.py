@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 587 2017-05-03 12:54:25Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -34,6 +34,8 @@ Last edit: $Author: bgoli $ ($Id: CBCommon.py 575 2017-04-13 12:18:44Z bgoli $)
 from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
+
+import weakref, ast
 
 # this is a hack that needs to be streamlined a bit
 #try:
@@ -220,7 +222,56 @@ def extractGeneIdsFromString(g, return_clean_gpr=False):
     else:
         return names, g2
 
+def createAssociationDictFromNode(node, out, model, useweakref=True, cntr=0):
+    """
+    Converts a GPR string '((g1 and g2) or g3)' to a dictionary via a Python AST.
+    In future I will get rid of all the string elements and work only with AST's.
 
+     - *node* a Python AST node (e.g. body)
+     - *out* a gpr dictionary
+     - *model* a CBMPy model instance
+     - *useweakref* [default=True] use a weakref as the gene object or alternatively the label
+
+    """
+    if isinstance(node, ast.Name):
+        gene = model.getGene(node.id)
+        if gene is not None:
+            if useweakref:
+                out[node.id] = weakref.ref(gene)
+            else:
+                out[node.id] = gene.getLabel()
+        del gene
+
+    elif isinstance(node, ast.BinOp):
+        left = node.left.id
+        right = node.right.id
+        gref = '{}-{}'.format(left, right)
+        print(gref)
+        #ref.setGeneProduct(formatSbmlId(gref))
+    else:
+        if isinstance(node, ast.Expr):
+            children = [node.value]
+        else:
+            children = node.values
+        for v in children:
+            if isinstance(v, ast.BoolOp) and isinstance(v.op, ast.And):
+                key = '_AND_{}'.format(cntr)
+                out[key] = {}
+                newex = out[key]
+                cntr += 1
+                #print('And', v)
+                #walk(v, newand)
+            elif isinstance(v, ast.BoolOp) and isinstance(v.op, ast.Or):
+                key = '_OR_{}'.format(cntr)
+                out[key] = {}
+                newex = out[key]
+                cntr += 1
+                #print('Or', v)
+                #walk(v, newor)
+            else:
+                #print('-->', v)
+                newex = out
+            createAssociationDictFromNode(v, newex, model, useweakref=useweakref, cntr=cntr)
 
 class ComboGen(object):
     """

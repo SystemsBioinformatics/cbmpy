@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 588 2017-05-12 09:01:12Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -976,14 +976,10 @@ def sbml_setDescription(model, fba):
     ##  except: UseR = ''
     notes = ''
     if fba.notes.strip() in ['', None, ' ']:
-        notes += '<html:p><html:br/><html:span size="small">Model \"<html:strong>%s</html:strong>\" (%s) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> (%s) on %s.</html:span></html:p>' % (fba.getId(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
+        notes += '<html:p><html:br/><html:span size="small">Model \"<html:strong>{}</html:strong>\" ({}) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> ({}) on {}.</html:span></html:p>'.format(fba.getId(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
     else:
-        notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">%s</html:span></html:p>\n' % fba.notes
-    #if fba._SBML_LEVEL_ == 2:
-        #notes = '<body xmlns:html="http://www.w3.org/1999/xhtml">\n%s</body>' % notes
-    #else:
-    notes = '%s' % notes
-    model.setNotes(notes, True)
+        notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">{}</html:span></html:p>\n'.format(fba.notes.strip())
+    model.setNotes(str(notes), True)
 
     if len(fba.getAnnotations()) > 0:
         annoSTRnew = sbml_writeKeyValueDataAnnotation(fba.getAnnotations())
@@ -3793,7 +3789,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     print('SBML3 load time: {}\n'.format(round(time.time() - time00, 3)))
 
     del SPEC, GENE_D, REAC, PARAM, PARAM_D
-    del M, D
+    #del M, D
 
     if not return_sbml_model:
         return fm

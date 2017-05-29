@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with PySCeS CBM (0.6.3 [r1171]) on Wed, 19 Dec 2012 12:59:46 by bgoli -->
+<sbml xmlns="http://www.sbml.org/sbml/level2" xmlns:html="http://www.w3.org/1999/xhtml" level="2" version="1">
+  <model metaid="meta_core_memesa_model" id="core_memesa_model" name="SBML_CB_MODEL">
+    <notes>
+      <body xmlns:html="http://www.w3.org/1999/xhtml">
+        <html:p>
+          <html:span style="font-family: Courier New,Courier,monospace;">Model core_memesa_model (None) generated with PySCeS CBM (0.4.2 [r973]) on Thu, 02 Feb 2012 12:06:35.</html:span>
+        </html:p>
+      </body>
+    </notes>
+    <annotation>
+      <fba:fluxBalance xmlns:fba="http://www.sbml.org/sbml/level3/version1/fba/version1">
+        <fba:listOfConstraints>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R16" fba:value="0.0" id="c0"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R16" fba:value="1000.0" id="c1"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R03" fba:value="-1000.0" id="c2"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R03" fba:value="1000.0" id="c3"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R02" fba:value="-1000.0" id="c4"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R02" fba:value="1000.0" id="c5"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R05" fba:value="0.0" id="c6"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R05" fba:value="1000.0" id="c7"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R07" fba:value="0.0" id="c8"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R07" fba:value="1000.0" id="c9"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R04" fba:value="-1000.0" id="c10"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R04" fba:value="1000.0" id="c11"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R01" fba:value="0.0" id="c12"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R01" fba:value="1.0" id="c13"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R17" fba:value="0.0" id="c14"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R17" fba:value="1000.0" id="c15"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R14" fba:value="-1000.0" id="c16"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R14" fba:value="1000.0" id="c17"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R15" fba:value="0.0" id="c18"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R15" fba:value="1000.0" id="c19"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R12" fba:value="0.0" id="c20"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R12" fba:value="1000.0" id="c21"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R13" fba:value="0.0" id="c22"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R13" fba:value="1000.0" id="c23"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R10" fba:value="0.0" id="c24"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R10" fba:value="1000.0" id="c25"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R11" fba:value="0.0" id="c26"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R11" fba:value="1000.0" id="c27"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R09" fba:value="0.0" id="c28"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R09" fba:value="1000.0" id="c29"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R08" fba:value="0.0" id="c30"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R08" fba:value="1000.0" id="c31"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R06" fba:value="0.0" id="c32"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R06" fba:value="1000.0" id="c33"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R18" fba:value="0.0" id="c34"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R18" fba:value="1000.0" id="c35"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R19" fba:value="-1000.0" id="c36"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R19" fba:value="1000.0" id="c37"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R26" fba:value="0.0" id="c38"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R26" fba:value="1000.0" id="c39"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R25" fba:value="0.0" id="c40"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R25" fba:value="1000.0" id="c41"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R24" fba:value="0.0" id="c42"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R24" fba:value="1000.0" id="c43"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R23" fba:value="-1000.0" id="c44"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R23" fba:value="1000.0" id="c45"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R22" fba:value="0.0" id="c46"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R22" fba:value="1000.0" id="c47"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R21" fba:value="-1000.0" id="c48"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R21" fba:value="1000.0" id="c49"/>
+          <fba:constraint fba:operation="greaterEqual" fba:reaction="R20" fba:value="-1000.0" id="c50"/>
+          <fba:constraint fba:operation="lessEqual" fba:reaction="R20" fba:value="1000.0" id="c51"/>
+        </fba:listOfConstraints>
+        <fba:listOfObjectives fba:activeObjective="objMaxJ25">
+          <fba:objective fba:type="maximize" id="objMaxJ25">
+            <fba:listOfFluxes>
+              <fba:fluxObjective fba:coefficient="1.0" fba:reaction="R26"/>
+            </fba:listOfFluxes>
+          </fba:objective>
+        </fba:listOfObjectives>
+      </fba:fluxBalance>
+    </annotation>
+    <listOfUnitDefinitions>
+      <unitDefinition id="substance" name="substance">
+        <listOfUnits>
+          <unit kind="mole" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="area" name="area">
+        <listOfUnits>
+          <unit kind="metre" exponent="2" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="volume" name="volume">
+        <listOfUnits>
+          <unit kind="litre" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="length" name="length">
+        <listOfUnits>
+          <unit kind="metre" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="time" name="time">
+        <listOfUnits>
+          <unit kind="second" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="mmol_per_gDW_per_hr" name="mmol_per_gDW_per_hr">
+        <listOfUnits>
+          <unit kind="mole" exponent="1" scale="-3" multiplier="1" offset="0"/>
+          <unit kind="gram" exponent="-1" scale="0" multiplier="1" offset="0"/>
+          <unit kind="second" exponent="-1" scale="0" multiplier="0.00027777" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="Cell" name="Cell" size="1" constant="false"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species metaid="meta_A" id="A" name="A" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C1</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_B" id="B" name="B" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C1</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_C" id="C" name="C" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C1</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_D" id="D" name="D" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_E" id="E" name="E" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_F" id="F" name="F" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_G" id="G" name="G" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_H" id="H" name="H" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_I" id="I" name="I" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_J" id="J" name="J" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_K" id="K" name="K" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_L" id="L" name="L" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_M" id="M" name="M" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_N" id="N" name="N" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_O" id="O" name="O" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_P" id="P" name="P" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_Q" id="Q" name="Q" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_R" id="R" name="R" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C4</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_S" id="S" name="S" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C4</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_T" id="T" name="T" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_U" id="U" name="U" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_X" id="X" name="X" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+      </species>
+      <species metaid="meta_Y" id="Y" name="Y" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" charge="0">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+      </species>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction metaid="meta_R16" id="R16" name="R16" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="J" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="M" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R14" id="R14" name="R14" reversible="true">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="K" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="L" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R15" id="R15" name="R15" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="L" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Q" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R12" id="R12" name="R12" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="L"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="I" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="J" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R07" id="R07" name="R07" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C2"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="E" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="F" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R13" id="R13" name="R13" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="J" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="K" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R01" id="R01" name="R01" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="L"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="X" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="A" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R17" id="R17" name="R17" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="M" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="N" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R03" id="R03" name="R03" reversible="true">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C1</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C1"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="C" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R02" id="R02" name="R02" reversible="true">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C1</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C1"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="B" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R05" id="R05" name="R05" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="L"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="B" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R04" id="R04" name="R04" reversible="true">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C1</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C1"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="C" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="B" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R10" id="R10" name="R10" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C2"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="G" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="H" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R06" id="R06" name="R06" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C2"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="E" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R09" id="R09" name="R09" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C2"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="G" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R08" id="R08" name="R08" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C2"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="F" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="I" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R11" id="R11" name="R11" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C2"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="H" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="I" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R18" id="R18" name="R18" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="N" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Q" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R19" id="R19" name="R19" reversible="true">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="K" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="O" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R26" id="R26" name="R26" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="L"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="S" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Y" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R25" id="R25" name="R25" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="L"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1"/>
+          <speciesReference species="T" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S" stoichiometry="0.5"/>
+          <speciesReference species="U" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R24" id="R24" name="R24" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C4</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C4"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="R" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R23" id="R23" name="R23" reversible="true">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C4</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C4"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="R" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R22" id="R22" name="R22" reversible="false">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: L</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="L"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="Q" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="R" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R21" id="R21" name="R21" reversible="true">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="P" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="L" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R20" id="R20" name="R20" reversible="true">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
+            <data id="SUBSYSTEM" type="string" value="C3"/>
+          </listOfKeyValueData>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="O" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

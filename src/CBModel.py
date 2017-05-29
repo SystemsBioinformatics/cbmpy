@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 592 2017-05-22 16:49:43Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -34,7 +34,7 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import numpy, re, time, weakref, copy, json, urllib2
+import numpy, re, time, weakref, copy, json, urllib2, ast
 
 try:
     import cPickle as pickle
@@ -67,7 +67,7 @@ except ImportError:
 
 #from .CBDataStruct import (StructMatrixLP, MIRIAMannotation, MIRIAMModelAnnotation)
 from .CBDataStruct import (StructMatrixLP, MIRIAMannotation)
-from .CBCommon import (checkChemFormula, extractGeneIdsFromString, binHash, fixId, checkId)
+from .CBCommon import (checkChemFormula, extractGeneIdsFromString, binHash, fixId, checkId, createAssociationDictFromNode)
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
@@ -213,7 +213,8 @@ class Fbase(object):
          - *notes* the note string, should preferably be (X)HTML for SBML
 
         """
-        self.notes = self.__urlEncode(notes)
+        #self.notes = self.__urlEncode(notes)
+        self.notes = notes.decode(errors='ignore')
 
     def setAnnotation(self, key, value):
         """
@@ -434,9 +435,9 @@ class Fbase(object):
 
         """
         try:
-            txt = urllib2.quote(str(txt).encode(self.__text_encoding__, errors='replace'), safe='')
+            txt = urllib2.quote(txt.encode(self.__text_encoding__, errors='replace'), safe='')
         except UnicodeDecodeError as why:
-            print(why)
+            pass
             #print(txt)
         return txt
 
@@ -497,6 +498,7 @@ class Model(Fbase):
     __FBC_STRICT__ = True
     #__objref__ = None
     __global_id__ = None
+    __modified__ = False
 
 
     def __init__(self, pid):
@@ -1442,6 +1444,21 @@ class Model(Fbase):
                 break
         return out
 
+    def getGPRforReactionAsDict(self, rid, useweakref=True):
+        """
+        Return the GPR associated with the reaction id as a nested dictionary structure:
+
+         - *rid* a reaction id
+
+        """
+        gprDict = {}
+        try:
+            createAssociationDictFromNode(ast.parse(self.getGPRforReaction(rid).getAssociationStr()).body[0], gprDict, self,\
+                                      useweakref=useweakref, cntr=0)
+        except SyntaxError:
+            gprDict = {}
+        return gprDict
+
     def getReactionActivity(self, rid):
         """
         If there is a GPR and genes associated with the reaction ID then return either active=True or inactive=False
@@ -2202,82 +2219,68 @@ class Model(Fbase):
 
         """
 
-        if ignore == None:
+        if ignore is None:
             ignore = []
         SUFFIX = PREFIX = False
-        if suffix == None and prefix == None:
+        if suffix is None and prefix is None:
             raise RuntimeError("Either prefix or suffix must be defined")
-        if prefix != None:
+        if prefix is not None:
             self.prefix = prefix
             PREFIX = True
-        if suffix != None:
+        if suffix is not None:
             self.suffix = suffix
             SUFFIX = True
 
         ##  self.id = self.id+suffix
         if target == 'species' or target == 'all':
             for s in self.species:
-                if s.id not in ignore:
+                if s.getId() not in ignore:
                     if PREFIX:
                         #s.id = prefix+s.id
-                        s.setId(prefix+s.id)
+                        s.setId(prefix+s.getId())
                     if SUFFIX:
                         #s.id = s.id+suffix
-                        s.setId(s.id+suffix)
+                        s.setId(s.getId()+suffix)
 
         if target == 'reactions' or target == 'all':
             for s in self.reactions:
-                if s.id not in ignore:
+                if s.getId() not in ignore:
                     if PREFIX:
-                        #s.id = prefix+s.id
-                        s.setId(prefix+s.id)
+                        s.setId(prefix+s.getId())
                     if SUFFIX:
-                        #s.id = s.id+suffix
-                        s.setId(s.id+suffix)
-                for r in s.reagents:
-                    if PREFIX:
-                        #r.id = prefix+r.id
-                        r.setId(prefix+r.id)
-                        if r.species_ref not in ignore:
-                            r.species_ref = prefix+r.species_ref
-                    if SUFFIX:
-                        #r.id = r.id+suffix
-                        r.setId(r.id+suffix)
-                        if r.species_ref not in ignore:
-                            r.species_ref = r.species_ref+suffix
+                        s.setId(s.getId()+suffix)
+                #for r in s.reagents:
+                    #if PREFIX:
+                        #r.setId(prefix+r.getId())
+                        #if r.species_ref not in ignore:
+                            #r.species_ref = prefix+r.species_ref
+                    #if SUFFIX:
+                        #r.setId(r.getId()+suffix)
+                        #if r.species_ref not in ignore:
+                            #r.species_ref = r.species_ref+suffix
 
         if target == 'bounds' or target == 'all':
             for s in self.flux_bounds:
                 if PREFIX:
-                    #s.id = prefix+s.id
-                    s.setId(prefix+s.id)
-                    if s.reaction not in ignore:
-                        s.reaction = prefix+s.reaction
+                    s.setId(prefix+s.getId())
                 if SUFFIX:
-                    #s.id = s.id+suffix
-                    s.setId(s.id+suffix)
-                    if s.reaction not in ignore:
-                        s.reaction = s.reaction+suffix
+                    s.setId(s.getId()+suffix)
 
         if target == 'objectives' or target == 'all':
             for s in self.objectives:
                 if PREFIX:
-                    #s.id = prefix+s.id
-                    s.setId(prefix+s.id)
+                    s.setId(prefix+s.getId())
                 if SUFFIX:
-                    #s.id = s.id+suffix
-                    s.setId(s.id+suffix)
+                    s.setId(s.getId()+suffix)
                 for f in s.fluxObjectives:
                     if PREFIX:
-                        #f.id = prefix+f.id
-                        f.setId(prefix+f.id)
-                        if f.reaction not in ignore:
-                            f.reaction = prefix+f.reaction
+                        f.setId(prefix+f.getId())
+                        #if f.reaction not in ignore:
+                            #f.reaction = prefix+f.reaction
                     if SUFFIX:
-                        f.id = f.id+suffix
-                        f.setId(f.id+suffix)
-                        if f.reaction not in ignore:
-                            f.reaction = f.reaction+suffix
+                        f.setId(f.getId()+suffix)
+                        #if f.reaction not in ignore:
+                            #f.reaction = f.reaction+suffix
         self.buildStoichMatrix()
 
     def setPrefix(self, prefix, target):
@@ -2337,7 +2340,7 @@ class Model(Fbase):
             osense = osense.replace('se', 'ze')
         assert osense in ['maximize', 'minimize'], "\nosense must be ['maximize', 'minimize'] not %s" % osense
         if delete_objflx:
-            self.objectives[self.activeObjIdx].fluxObjectives = []
+            self.objectives[self.activeObjIdx].deleteAllFluxObjectives()
         FO = FluxObjective('{}_{}_fluxobj'.format(self.objectives[self.activeObjIdx].getId(), rid), rid, coefficient)
         self.objectives[self.activeObjIdx].addFluxObjective(FO)
         self.objectives[self.activeObjIdx].operation = osense
@@ -3726,7 +3729,8 @@ class Reaction(Fbase):
                 print('Deleting reagent: {}'.format(rg.getId()))
                 #removed until I have a more secure way of doing this
                 #self.__TRASH__.update({rg.getId() : rg.clone()})
-                self.__objref__().__popGlobalId__(rg.getId())
+                if self.__objref__ is not None:
+                    self.__objref__().__popGlobalId__(rg.getId())
         del rg
 
     #removed until I have a more secure way of doing this
