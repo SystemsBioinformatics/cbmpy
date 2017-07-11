@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 595 2017-06-15 14:48:42Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 596 2017-07-11 10:04:17Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3926,7 +3926,7 @@ class Species(Fbase):
         self.reagent_of = []
         self.annotation = {}
 
-    def setId(self, fid):
+    def setId(self, fid, allow_rename=False):
         """
         Sets the object Id
 
@@ -3936,12 +3936,17 @@ class Species(Fbase):
 
         """
 
+        NEWID = False
         oldId = self.getId()
         if self.__objref__ is not None:
             if fid not in self.__objref__().__global_id__:
+                NEWID = True
+
+            if NEWID or allow_rename:
                 rids = [a[0] for a in self.__objref__().getFluxesAssociatedWithSpecies(oldId)]
                 self.id = fid
-                self.__objref__().__changeGlobalId__(oldId, self.id, self)
+                if NEWID:
+                    self.__objref__().__changeGlobalId__(oldId, self.id, self)
                 for r_ in self.__objref__().reactions:
                     if r_.getId() in rids:
                         rr = r_.getReagentWithSpeciesRef(oldId)
