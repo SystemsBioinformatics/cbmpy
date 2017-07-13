@@ -1,6 +1,6 @@
 include LICENCE_GPLv3.txt
 include README.txt
-include docs/*
+include cbmpy-docs/*
 include tests/sbml_test_suite/*
 include src/*
 include src/models/*
