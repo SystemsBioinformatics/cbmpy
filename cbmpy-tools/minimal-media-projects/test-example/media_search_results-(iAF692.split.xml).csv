@@ -1,7 +1,0 @@
-MODEL,iAF692.split.xml
-CONSTRAINTS,conset1.csv
-MINSET,minset1.csv
-REQUIRED,R_EXi_4abz_e,R_EXi_cobalt2_e,R_EXi_nac_e,R_EXi_ni2_e,R_EXi_pi_e,R_EXi_so3_e
-FILTERED
-ALT1,R_EXi_cys__L_e,R_EXi_h2s_e
-ALT2,R_EXi_dma_e,R_EXi_ala__L_e,R_EXi_mma_e,R_EXi_pyr_e,R_EXi_dms_e,R_EXi_meoh_e,R_EXi_n2_e,R_EXi_dms_e,R_EXi_nh4_e
