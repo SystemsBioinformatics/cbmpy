@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 588 2017-05-12 09:01:12Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 601 2017-07-14 13:45:15Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2207,7 +2207,9 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
                 sbgpr.setId(GPR.getId())
                 if GPR.getName() != None:
                     sbgpr.setName(GPR.getName())
+                # TODO: once I have switched FBCV1 to trees then this can go into operation
                 sbml_createAssociationFromAST(ast.parse(GPR.getAssociationStr()).body[0], sbgpr)
+                #sbml_createAssociationFromTreeV2(GPR.getTree(), sbgpr)
 
                 if len(GPR.annotation) > 0:
                     if add_cbmpy_anno:
@@ -2331,6 +2333,30 @@ def sbml_getGeneRefs(association, out):
         for i in range(association.getNumAssociations()):
             sbml_getGeneRefs(association.getAssociation(i), out)
 
+def sbml_getGPRasDictFBCv2(association, out, cntr):
+    """
+    Walk through an SBML L3FBCV2 gene protein association and return a dictionary/tree representation
+
+    """
+    key = cntr
+    #print(association)
+    if isinstance(association, libsbml.GeneProductRef):
+        ref = association.getGeneProduct()
+        if ref is not None and ref != 'None':
+            out[ref] = ref
+    elif isinstance(association, libsbml.FbcAnd):
+        out['_AND_{}'.format(key)] = {}
+        for i in range(association.getNumAssociations()):
+            out['_AND_{}'.format(key)].update(sbml_getGPRasDictFBCv2(association.getAssociation(i), out['_AND_{}'.format(key)], cntr))
+            cntr += 1
+    elif isinstance(association, libsbml.FbcOr):
+        out['_OR_{}'.format(key)] = {}
+        for i in range(association.getNumAssociations()):
+            out['_OR_{}'.format(key)].update(sbml_getGPRasDictFBCv2(association.getAssociation(i), out['_OR_{}'.format(key)], cntr))
+            cntr += 1
+    return out
+
+
 def sbml_createAssociationFromAST(node, out):
     """
     Converts a GPR string '((g1 and g2) or g3)' to an association via a Python AST.
@@ -2369,6 +2395,31 @@ def sbml_createAssociationFromAST(node, out):
                 #print('-->', v)
                 newex = out
             sbml_createAssociationFromAST(v, newex)
+
+def sbml_createAssociationFromTreeV2(tree, out):
+    """
+    Converts a GPR tree to an association
+
+     - *tree* a GPR dict tree
+     - *out* a new shiny FBC V2 GeneProductAssociation
+
+    """
+    for c in tree:
+        if c.startswith('_AND_'):
+            newex = out.createAnd()
+            sbml_createAssociationFromTreeV2(tree[c], newex)
+        elif c.startswith('_OR_'):
+            newex = out.createOr()
+            sbml_createAssociationFromTreeV2(tree[c], newex)
+        else:
+            ref = out.createGeneProductRef()
+            ref.setGeneProduct(c)
+    return out
+
+
+
+
+
 
 def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), autofix=True, return_fbc=False, gpr_from_annot=False,\
                        add_groups=False, add_cbmpy_annot=True, add_cobra_annot=False, xoptions={}):
@@ -3215,7 +3266,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             SBgpr = RFBCplg.getGeneProductAssociation()
             if SBgpr != None:
                 GPR_id = SBgpr.getId()
-                if GPR_id == '' or GPR_id == None:
+                if GPR_id == '' or GPR_id is None:
                     GPR_id = '{}_gpr'.format(R_id)
                 ass = SBgpr.getAssociation()
                 if ass != None:
@@ -3226,8 +3277,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
                 GPR_D[GPR_id]['gene_ids'] = []
                 ## the smart way
-                if SBgpr.getAssociation() != None:
+                if SBgpr.getAssociation() is not None:
                     sbml_getGeneRefs(SBgpr.getAssociation(), GPR_D[GPR_id]['gene_ids'])
+                    GPR_D[GPR_id]['gpr_tree'] = sbml_getGPRasDictFBCv2(SBgpr.getAssociation(), {}, 0)
 
                 gene_ids_sorted = sorted(GPR_D[GPR_id]['gene_ids'], key=len)
                 gene_ids_sorted.reverse()
@@ -3629,12 +3681,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         # note we may want to add branches here for using indexes etc etc
         non_gpr_genes = []
         for g_ in GPR_D:
-            fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_, update_idx=False, altlabels=gene_labels)
-            gpr = fm.getGPRassociation(g_)
-            if gpr != None:
-                gpr.annotation = GPR_D[g_]['annotation']
-                gpr.miriam = GPR_D[g_]['miriam']
-                gpr.__sbo_term__ = GPR_D[g_]['sbo']
+            if GPR_D[g_]['gpr_tree'] is not None and len(GPR_D[g_]['gpr_tree']) > 0:
+                print(GPR_D[g_]['gpr_tree'])
+                fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_, update_idx=False, altlabels=gene_labels)
+                gpr = fm.getGPRassociation(g_)
+                if gpr != None:
+                    gpr.annotation = GPR_D[g_]['annotation']
+                    gpr.miriam = GPR_D[g_]['miriam']
+                    gpr.__sbo_term__ = GPR_D[g_]['sbo']
+                    gpr.setTree(GPR_D[g_]['gpr_tree'])
         fm.__updateGeneIdx__()
         for g_ in GENE_D:
             G = fm.getGene(g_)
@@ -3646,8 +3701,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 G.miriam = GENE_D[g_]['miriam']
                 G.setNotes(GENE_D[g_]['notes'])
             else:
-                print('Gene {} is not part of a GPR association. Will create anyway!'.format(g_))
-                non_gpr_genes.append(g_)
+                if g_ is not None and g_ != 'None':
+                    print('Gene {} is not part of a GPR association. Will create anyway!'.format(g_))
+                    non_gpr_genes.append(g_)
 
         for ng_ in non_gpr_genes:
             G = CBModel.Gene(ng_, label=GENE_D[ng_]['label'], active=False)

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 596 2017-07-11 10:04:17Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 601 2017-07-14 13:45:15Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -4281,6 +4281,7 @@ class GeneProteinAssociation(Fbase):
     __evalass_names__ = 'None'
     _gene_id_ucntr_ = 0
     generefs = None
+    tree = None
 
     def __init__(self, gpid, protein):
         """
@@ -4551,3 +4552,19 @@ class GeneProteinAssociation(Fbase):
             return False
         else:
             return True
+
+    def setTree(self, tree):
+        """
+        Add a GPR dictionary/tree representation to the GPR.
+
+         - *tree* a dictionary representation of a GPR.
+
+        """
+        self.tree = tree
+
+    def getTree(self):
+        """
+        Return the dictionary/tree representation of the GPR
+
+        """
+        return self.tree
