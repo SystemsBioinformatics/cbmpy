@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 601 2017-07-14 13:45:15Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 605 2017-07-17 14:44:00Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -54,7 +54,7 @@ try:
         print('\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
 except ImportError:
     HAVE_SYMPY = False
-    print('\nERROR: SymPy import error (required for symbolic matrix support only).')
+    print('SymPy not install (only required for optional, symbolic matrix support).')
 
 HAVE_SCIPY = False
 try:
@@ -2546,22 +2546,31 @@ class Model(Fbase):
 
         sym_dlim = __CBCONFIG__['SYMPY_DENOM_LIMIT']
         if __DEBUG__: print('N-dimension = (%s, %s)' % (num_row, num_col))
-        if matrix_type == 'scipy_csr' and not HAVE_SCIPY:
-            raise RuntimeError('\nSciPy required for scipy_csr matrices')
-        if matrix_type == 'sympy':
+        SYMGO = False
+        SCIGO = False
+        if matrix_type == 'scipy_csr':
+            if HAVE_SCIPY:
+                spsrc = {}
+                spcol = []
+                sprow = []
+                spdata = []
+                RHS = numpy.zeros(num_row)
+                SCIGO = True
+                print('\nINFO: using SciPy sparse for N')
+            else:
+                raise RuntimeError('\nSciPy required for scipy_csr matrices')
+        elif matrix_type == 'sympy':
             if HAVE_SYMPY:
                 N = sympy.zeros(num_row, num_col)
                 RHS = [sympy.numbers.Zero() for i in range(num_row)]
-                print('\nINFO: using SymPy for N')
+                SYMGO = True
+                print('\nINFO: using SymPy symbolic for N')
             else:
                 raise RuntimeError('\nSymPy required for SymPy matrices')
         else:
             N = numpy.zeros((num_row, num_col))
             RHS = numpy.zeros(num_row)
 
-        SGO = False
-        if matrix_type == 'sympy':
-            SGO = True
         for c in range(num_col):
             if __DEBUG__: print(self.reactions[c].getId())
             if __DEBUG__: print(self.reactions[c].getStoichiometry())
@@ -2569,19 +2578,33 @@ class Model(Fbase):
                 if reag[1] in var_spec_id:
                     if __DEBUG__: print('{}: setting reagent {} to {} (idx={},{})'.format(self.reactions[c].getId(), reag[1], reag[0], var_spec_id.index(reag[1]), c))
                     r = var_spec_id.index(reag[1])
-                    if SGO:
+                    if SYMGO:
                         if N[r, c] == 0.0:
                             N[r, c] = sympy.Rational(reag[0]).limit_denominator(sym_dlim)
                         else:
                             N[r, c] = N[r, c] + sympy.Rational(reag[0]).limit_denominator(sym_dlim)
+                    elif SCIGO:
+                        # we can consider using a threshold here, but let's be strict for now
+                        if (r, c) in spsrc:
+                            if spsrc[(r, c)] == 0.0 and reag[0] == 0.0:
+                                pass
+                            else:
+                                spsrc[(r, c)] = spsrc[(r, c)] + reag[0]
+                        else:
+                            spsrc[(r, c)] = reag[0]
                     elif N[r, c] == 0.0:
                         N[r, c] = reag[0]
                     else:
                         N[r, c] = N[r, c] + reag[0]
-        if matrix_type == 'scipy_csr':
-            N2 = csr_matrix(N)
-            del N
-            N = StructMatrixLP(N2, list(range(num_row)), list(range(num_col)), row=var_spec_id, col=reac_id, rhs=RHS)
+        if SCIGO:
+            rck = list(spsrc.keys())
+            rck.sort()
+            for r, c in rck:
+                sprow.append(r)
+                spcol.append(c)
+                spdata.append(spsrc[(r,c)])
+            N = csr_matrix((spdata, (sprow, spcol)), shape=(num_row, num_col), dtype='d')
+            N = StructMatrixLP(N, list(range(num_row)), list(range(num_col)), row=var_spec_id, col=reac_id, rhs=RHS)
             N.array.eliminate_zeros()
         else:
             N = StructMatrixLP(N, list(range(num_row)), list(range(num_col)), row=var_spec_id, col=reac_id, rhs=RHS)
@@ -2596,38 +2619,49 @@ class Model(Fbase):
             cnum_row = len(crows)
             Coperators = ['E']*cnum_row
 
-            if matrix_type == 'sympy':
-                if HAVE_SYMPY:
-                    CM = sympy.zeros(cnum_row, cnum_col)
-                    CRHS = [sympy.numbers.Zero() for i in range(cnum_row)]
-                    print('INFO: using SymPy for CM')
-                else:
-                    raise RuntimeError('\nSymPy not available')
-
-            else:
-                CM = numpy.zeros((cnum_row,cnum_col))
+            if SCIGO:
+                spcol = []
+                sprow = []
+                spdata = []
                 CRHS = numpy.zeros(cnum_row)
-            SGO = False
-            if matrix_type == 'sympy':
-                SGO = True
+                print('\nINFO: using SciPy sparse for CM')
+            elif SYMGO:
+                CM = sympy.zeros(cnum_row, cnum_col)
+                CRHS = [sympy.numbers.Zero() for i in range(cnum_row)]
+                print('INFO: using SymPy for CM')
+            else:
+                CM = numpy.zeros((cnum_row, cnum_col))
+                CRHS = numpy.zeros(cnum_row)
             for cs in range(cnum_row):
                 for flx in self.user_constraints[crows[cs]]['fluxes']:
-                    if not SGO:
-                        CM[cs,ccols.index(flx[1])] = float(flx[0])
+                    tcol = ccols.index(flx[1])
+                    if SYMGO:
+                        CM[cs, tcol] = sympy.Rational(flx[0]).limit_denominator(sym_dlim)
+                    elif SCIGO:
+                        # we can consider using a threshold here, but let's be strict for now
+                        if float(flx[0]) == 0.0:
+                            pass
+                        else:
+                            sprow.append(cs)
+                            spcol.append(tcol)
+                            spdata.append(float(flx[0]))
                     else:
-                        CM[cs,ccols.index(flx[1])] = sympy.Rational(flx[0]).limit_denominator(sym_dlim)
+                        CM[cs, tcol] = float(flx[0])
 
                     Coperators[cs] = self.user_constraints[crows[cs]]['operator']
-                    if not SGO:
-                        CRHS[cs] = float(self.user_constraints[crows[cs]]['rhs'])
-                    else:
+                    if SYMGO:
                         CRHS[cs] = sympy.Rational(self.user_constraints[crows[cs]]['rhs']).limit_denominator(sym_dlim)
+                    else:
+                        CRHS[cs] = float(self.user_constraints[crows[cs]]['rhs'])
+
             if matrix_type == 'scipy_csr':
-                CM2 = csr_matrix(CM)
-                del CM
-                CM = StructMatrixLP(CM2, list(range(cnum_row)), list(range(cnum_col)), row=crows, col=ccols,\
-                            rhs=CRHS, operators=Coperators)
+                CM = csr_matrix((spdata, (sprow, spcol)), shape=(cnum_row, cnum_col), dtype='d')
+                CM = StructMatrixLP(CM, list(range(cnum_row)), list(range(cnum_col)), row=crows, col=ccols,\
+                                    rhs=CRHS, operators=Coperators)
                 CM.array.eliminate_zeros()
+                spcol = []
+                sprow = []
+                spdata = []
             else:
                 CM = StructMatrixLP(CM, list(range(cnum_row)), list(range(cnum_col)), row=crows, col=ccols,\
                             rhs=CRHS, operators=Coperators)
