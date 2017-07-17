@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 601 2017-07-14 13:45:15Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 604 2017-07-17 12:30:08Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2208,8 +2208,8 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
                 if GPR.getName() != None:
                     sbgpr.setName(GPR.getName())
                 # TODO: once I have switched FBCV1 to trees then this can go into operation
-                sbml_createAssociationFromAST(ast.parse(GPR.getAssociationStr()).body[0], sbgpr)
-                #sbml_createAssociationFromTreeV2(GPR.getTree(), sbgpr)
+                #sbml_createAssociationFromAST(ast.parse(GPR.getAssociationStr()).body[0], sbgpr)
+                sbml_createAssociationFromTreeV2(GPR.getTree(), sbgpr)
 
                 if len(GPR.annotation) > 0:
                     if add_cbmpy_anno:
@@ -2567,6 +2567,7 @@ def sbml_setValidationOptions(D, level):
 
       - 'normal' basic id checking only
       - 'full' all checks enabled
+      - None disable all validation
 
     """
 
@@ -2588,6 +2589,17 @@ def sbml_setValidationOptions(D, level):
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_SBO_CONSISTENCY, True)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_OVERDETERMINED_MODEL, True)
         D.setConsistencyChecks(libsbml.LIBSBML_CAT_MODELING_PRACTICE, True)
+    elif level is None:
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_IDENTIFIER_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_INTERNAL_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_GENERAL_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_UNITS_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_MATHML_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_SBO_CONSISTENCY, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_OVERDETERMINED_MODEL, False)
+        D.setConsistencyChecks(libsbml.LIBSBML_CAT_MODELING_PRACTICE, False)
+
+
 
 
 def sbml_readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False, output_dir=None, speciesAnnotationFix=True, skip_genes=False):
@@ -3001,11 +3013,18 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
      - *work_dir* is the working directory
      - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
      - *xoptions* special load options enable with option = True
+
        - *nogenes* do not load/process genes
        - *noannot* do not load/process any annotations
        - *validate* validate model and display errors and warnings before loading
        - *readcobra* read the cobra annotation
        - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
+       - *nmatrix_type* [default='normal'] define the type of stoichiometrich matrix to be built
+
+         - 'numpy' dense numpy array (best performance)
+         - 'scipy_csr' scipy sparse matrix (lower performance, low memory)
+         - 'sympy' a sympy rational matrix (low performance, high memory, cast to dense to analyse)
+         - None do not build matrix
 
     """
 
@@ -3019,6 +3038,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     VALIDATE = False
     READCOBRA = False
     READ_MODEL_STRING = False
+    NMATRIX_TYPE = 'numpy'
     if 'nogenes' in xoptions and xoptions['nogenes']:
         LOADGENES = False
         print('\nGPR loading disabled!\n')
@@ -3034,6 +3054,16 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         READCOBRA = True
     if 'read_model_string' in xoptions and xoptions['read_model_string']:
         READ_MODEL_STRING = True
+
+    if 'nmatrix_type' in xoptions:
+        if xoptions['nmatrix_type'] is None or xoptions['nmatrix_type'] == 'None':
+            NMATRIX_TYPE = None
+        elif xoptions['nmatrix_type'] == 'numpy':
+            NMATRIX_TYPE = 'numpy'
+        elif xoptions['nmatrix_type'] == 'scipy_csr':
+            NMATRIX_TYPE = 'scipy_csr'
+        elif xoptions['nmatrix_type'] == 'sympy':
+            NMATRIX_TYPE = 'sympy'
 
     D = None
     if READ_MODEL_STRING:
@@ -3682,7 +3712,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         non_gpr_genes = []
         for g_ in GPR_D:
             if GPR_D[g_]['gpr_tree'] is not None and len(GPR_D[g_]['gpr_tree']) > 0:
-                print(GPR_D[g_]['gpr_tree'])
+                #print(GPR_D[g_]['gpr_tree'])
                 fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_, update_idx=False, altlabels=gene_labels)
                 gpr = fm.getGPRassociation(g_)
                 if gpr != None:
@@ -3835,8 +3865,11 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         print('INFO: No FBC objective functions were defined.')
         #time.sleep(1)
     fm._SBML_LEVEL_ = 3
+
+    del SPEC, GENE_D, REAC, PARAM, PARAM_D
     try:
-        fm.buildStoichMatrix()
+        if NMATRIX_TYPE is not None:
+            fm.buildStoichMatrix(matrix_type=NMATRIX_TYPE)
     except Exception as why:
         print(type(why))
         print('\nINFO: unable to construct stoichiometric matrix')
@@ -3844,7 +3877,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     print('SBML3 load time: {}\n'.format(round(time.time() - time00, 3)))
 
-    del SPEC, GENE_D, REAC, PARAM, PARAM_D
     #del M, D
 
     if not return_sbml_model:

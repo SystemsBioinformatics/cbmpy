@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 604 2017-07-17 12:30:08Z bgoli $)
 
 """
 
@@ -94,23 +94,28 @@ if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3
 
 def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}, scan_notes_gpr=True):
     """
-    Read in an SBML Level 3 file with FBC annotation where and return either a CBM model object
+    Read in an SBML Level 3 file with FBC annotation where and return a CBM model object
 
      - *fname* is the filename
      - *work_dir* is the working directory
      - *return_sbml_model* deprecated and ignored please update code
-     - *xoptions* special load options enable with option = True
+     - *xoptions* special load options, enable with option=True except for nmatrix_type which has a type.
 
        - *nogenes* do not load/process genes
        - *noannot* do not load/process any annotations
        - *validate* validate model and display errors and warnings before loading
        - *readcobra* read the cobra annotation
        - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
+       - *nmatrix_type* [default='normal'] define the type of stoichiometrich matrix to be built
 
-    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are__example_models__can the <notes> field for GPR associationa
+         - 'numpy' dense numpy array (best performance)
+         - 'scipy_csr' scipy sparse matrix (lower performance, low memory)
+         - 'sympy' a sympy rational matrix (low performance, high memory, cast to dense to analyse)
+         - None do not build matrix
+
+    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected scan the <notes> field for GPR associationa
 
     """
-
     if fname in __example_models__:
         fname = __example_models__[fname]
         print(fname)
