@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 587 2017-05-03 12:54:25Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 606 2017-07-18 12:00:30Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -272,6 +272,34 @@ def createAssociationDictFromNode(node, out, model, useweakref=True, cntr=0):
                 #print('-->', v)
                 newex = out
             createAssociationDictFromNode(v, newex, model, useweakref=useweakref, cntr=cntr)
+
+
+def func_getAssociationStrFromGprDict(gprd, out, parent=''):
+    """
+    Get a old school GPR association string from a CBMPy gprDict, e.g. obtained from gpr.getTree()
+
+     - *gprd* the gprDictionary
+     - *out* the output string
+     - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
+
+    """
+    out2 = '('
+    for k in gprd:
+        if k.startswith('_AND_'):
+            out2 += '{}{}'.format(func_getAssociationStrFromGprDict(gprd[k], out, ' and '), parent)
+        elif k.startswith('_OR_'):
+            out2 += '{}{}'.format(func_getAssociationStrFromGprDict(gprd[k], out, ' or '), parent)
+        else:
+            out2 += '{}{}'.format(k, parent)
+    if out2.endswith(' and '):
+        out2 = out2[:-5]
+    elif out2.endswith(' or '):
+        out2 = out2[:-4]
+    out2 += ')'
+
+    return out + out2
+
+
 
 class ComboGen(object):
     """
