@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 606 2017-07-18 12:00:30Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 607 2017-07-19 16:11:58Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -55,7 +55,7 @@ except ImportError:
 from . import CBModel
 #from .CBDataStruct import (MIRIAMannotation, MIRIAMModelAnnotation)
 from .CBDataStruct import MIRIAMannotation
-from .CBCommon import (checkChemFormula, processSpeciesChargeChemFormulaAnnot)
+from .CBCommon import (checkChemFormula, getGPRasDictFromString, processSpeciesChargeChemFormulaAnnot)
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
 __DEBUG__ = __CBCONFIG__['DEBUG']
@@ -2341,35 +2341,7 @@ def sbml_getGPRasDictFBCv1(node, out):
      - *out* a new dictionary that will be be created in place
 
     """
-
-    if isinstance(node, ast.Name):
-        #print('Gene: {}'.format(node.id))
-        out[node.id] = node.id
-    elif isinstance(node, ast.BinOp):
-        left = node.left.id
-        right = node.right.id
-        gref = '{}-{}'.format(left, right)
-        print('BinOp: {}'.format(gref))
-    else:
-        if isinstance(node, ast.Expr):
-            children = [node.value]
-        else:
-            children = node.values
-        cntr2 = 0
-        for v in children:
-            if isinstance(v, ast.BoolOp) and isinstance(v.op, ast.And):
-                out['_AND_{}'.format(cntr2)] = {}
-                #print('And', v)
-                sbml_getGPRasDictFBCv1(v, out['_AND_{}'.format(cntr2)])
-            elif isinstance(v, ast.BoolOp) and isinstance(v.op, ast.Or):
-                out['_OR_{}'.format(cntr2)] = {}
-                #print('Or', v)
-                sbml_getGPRasDictFBCv1(v, out['_OR_{}'.format(cntr2)])
-            else:
-                #print('-->', v)
-                sbml_getGPRasDictFBCv1(v, out)
-            cntr2 += 1
-    return out
+    return getGPRasDictFromString(node, out)
 
 
 
@@ -3614,22 +3586,22 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('Parameter process: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
 
-    GPRASSOC = {}
+    #GPRASSOC = {}
     if HAVE_FBC and LOADGENES:
         if FBCver == 1 and __HAVE_FBA_ANOT_GENEASS__:
             SBGPR = FBCplg.getListOfGeneAssociations()
             for g_ in SBGPR:
                 gprid = g_.getId()
                 rid = g_.getReaction()
-                GPRASSOC[gprid] = {}
+                GPR_D[gprid] = {}
                 if g_.getAssociation() != None:
                     assoc = g_.getAssociation().toInfix()
                     if assoc == '' or assoc is None:
                         pass
                     else:
-                        GPRASSOC[gprid]['reaction'] = rid
-                        GPRASSOC[gprid]['gpr_by_id'] =  assoc
-                        GPRASSOC[gprid]['gpr_tree'] =  sbml_getGPRasDictFBCv1(\
+                        GPR_D[gprid]['reaction'] = rid
+                        GPR_D[gprid]['gpr_by_id'] =  assoc
+                        GPR_D[gprid]['gpr_tree'] =  sbml_getGPRasDictFBCv1(\
                             ast.parse(assoc).body[0], {})
 
 
@@ -3741,13 +3713,17 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         gene_labels[GENE_D[g_]['id']] = GENE_D[g_]['label']
 
     if FBCver == 1 and LOADGENES:
-        for g_ in GPRASSOC:
-            if 'reaction' in GPRASSOC[g_] and GPRASSOC[g_]['gpr_by_id'] is not None and GPRASSOC[g_]['gpr_by_id'] != 'None':
-                fm.createGeneProteinAssociation(GPRASSOC[g_]['reaction'], GPRASSOC[g_]['gpr_by_id'], gid=g_,\
+        for g_ in GPR_D:
+            if 'reaction' in GPR_D[g_] and GPR_D[g_]['gpr_tree'] is not None:
+
+                #fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_,\
+                                                            #update_idx=False, altlabels=gene_labels)
+
+                fm.createGeneProteinAssociationFromTree(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_tree'], gid=g_,\
                                                 update_idx=False, altlabels=gene_labels)
                 gpr = fm.getGPRassociation(g_)
                 if gpr is not None:
-                    gpr.setTree(GPRASSOC[g_]['gpr_tree'])
+                    gpr.setTree(GPR_D[g_]['gpr_tree'])
         fm.__updateGeneIdx__()
     elif FBCver == 2 and LOADGENES:
         # note we may want to add branches here for using indexes etc etc
@@ -3755,7 +3731,11 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         for g_ in GPR_D:
             if GPR_D[g_]['gpr_tree'] is not None and len(GPR_D[g_]['gpr_tree']) > 0:
                 #print(GPR_D[g_]['gpr_tree'])
-                fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_, update_idx=False, altlabels=gene_labels)
+                #fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_, update_idx=False, altlabels=gene_labels)
+
+                fm.createGeneProteinAssociationFromTree(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_tree'], gid=g_,\
+                                                        update_idx=False, altlabels=gene_labels)
+
                 gpr = fm.getGPRassociation(g_)
                 if gpr is not None:
                     gpr.annotation = GPR_D[g_]['annotation']

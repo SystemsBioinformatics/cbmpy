@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 606 2017-07-18 12:00:30Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 607 2017-07-19 16:11:58Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -296,9 +296,49 @@ def func_getAssociationStrFromGprDict(gprd, out, parent=''):
     elif out2.endswith(' or '):
         out2 = out2[:-4]
     out2 += ')'
+    out = out + out2
+    if ' and ' not in out and ' or ' not in out:
+        out = out[1:-1]
+    return out
 
-    return out + out2
 
+def getGPRasDictFromString(node, out):
+    """
+    Converts a GPR string '((g1 and g2) or g3)' to a gprDict which is returned
+
+     - *node* a Python AST note (e.g. `ast.parse(gprstring).body[0]`)
+     - *out* a new dictionary that will be be created in place
+
+    """
+
+    if isinstance(node, ast.Name):
+        #print('Gene: {}'.format(node.id))
+        out[node.id] = node.id
+    elif isinstance(node, ast.BinOp):
+        left = node.left.id
+        right = node.right.id
+        gref = '{}-{}'.format(left, right)
+        print('BinOp: {}'.format(gref))
+    else:
+        if isinstance(node, ast.Expr):
+            children = [node.value]
+        else:
+            children = node.values
+        cntr2 = 0
+        for v in children:
+            if isinstance(v, ast.BoolOp) and isinstance(v.op, ast.And):
+                out['_AND_{}'.format(cntr2)] = {}
+                #print('And', v)
+                getGPRasDictFromString(v, out['_AND_{}'.format(cntr2)])
+            elif isinstance(v, ast.BoolOp) and isinstance(v.op, ast.Or):
+                out['_OR_{}'.format(cntr2)] = {}
+                #print('Or', v)
+                getGPRasDictFromString(v, out['_OR_{}'.format(cntr2)])
+            else:
+                #print('-->', v)
+                getGPRasDictFromString(v, out)
+            cntr2 += 1
+    return out
 
 
 class ComboGen(object):

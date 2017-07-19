@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 605 2017-07-17 14:44:00Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 607 2017-07-19 16:11:58Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -67,7 +67,8 @@ except ImportError:
 
 #from .CBDataStruct import (StructMatrixLP, MIRIAMannotation, MIRIAMModelAnnotation)
 from .CBDataStruct import (StructMatrixLP, MIRIAMannotation)
-from .CBCommon import (checkChemFormula, extractGeneIdsFromString, binHash, fixId, checkId, createAssociationDictFromNode)
+from .CBCommon import (checkChemFormula, extractGeneIdsFromString, getGPRasDictFromString,\
+                       binHash, fixId, checkId, createAssociationDictFromNode)
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
@@ -1343,7 +1344,7 @@ class Model(Fbase):
         """
         if altlabels is None:
             altlabels = {}
-        if assoc != '' and assoc != None:
+        if assoc != '' and assoc is not None:
             if gid == None:
                 gid = '%s_assoc' % protein
             gpr = GeneProteinAssociation(gid, protein)
@@ -1351,7 +1352,32 @@ class Model(Fbase):
             if name == None:
                 name = gid
             gpr.setName(name)
-            gpr.createAssociationAndGeneRefs(assoc, altlabels)
+            gpr.createAssociationAndGeneRefsFromString(assoc, altlabels)
+
+    def createGeneProteinAssociationFromTree(self, protein, gprtree, gid=None, name=None, gene_pattern=None, update_idx=True, altlabels=None):
+        """
+        Create and add a gene protein relationship to the model, note genes are mapped on protein objects which may or may not be reactions
+
+         - *protein* in this case the reaction
+         - *gprtree* the CBMPy GPR dictionary tree
+         - *gid* the unique id
+         - *name* the optional name
+         - *gene_pattern* deprecated, not needed anymore
+         - *update_idx* update the model gene index, not used
+         - *altlabels* [default=None] alternative labels for genes, default uses geneIds
+
+        """
+        if altlabels is None:
+            altlabels = {}
+        if gprtree != '' and gprtree is not None:
+            if gid == None:
+                gid = '%s_assoc' % protein
+            gpr = GeneProteinAssociation(gid, protein)
+            self.addGPRAssociation(gpr)
+            if name == None:
+                name = gid
+            gpr.setName(name)
+            gpr.createAssociationAndGeneRefsFromTree(gprtree, altlabels)
 
     def __updateGeneIdx__(self):
         """
@@ -4311,8 +4337,6 @@ class GeneProteinAssociation(Fbase):
     #assoc0 = None
     protein = None
     __evalass__ = 'None'
-    __evalass_ids__ = 'None'
-    __evalass_names__ = 'None'
     _gene_id_ucntr_ = 0
     generefs = None
     tree = None
@@ -4330,19 +4354,32 @@ class GeneProteinAssociation(Fbase):
         self.protein = protein
         self.annotation = {}
 
+    #def evalAssociation(self):
+        #"""
+        #Returns an integer value representing the logical associations or None.
+
+        #"""
+        #out = None
+        #_model_ = self.__objref__()
+        #try:
+            #out = eval(self.__evalass__)
+        #except SyntaxError:
+            #raise RuntimeWarning('\nError in GPR associated with reaction: %s\n%s' % (self.protein, self.assoc))
+        #del _model_
+        #return out
+
     def evalAssociation(self):
         """
         Returns an integer value representing the logical associations or None.
 
         """
         out = None
-        _model_ = self.__objref__()
         try:
             out = eval(self.__evalass__)
         except SyntaxError:
             raise RuntimeWarning('\nError in GPR associated with reaction: %s\n%s' % (self.protein, self.assoc))
-        del _model_
         return out
+
 
     def addGeneref(self, geneid):
         """
@@ -4369,9 +4406,68 @@ class GeneProteinAssociation(Fbase):
         Add a gene/protein association expression
 
         """
-        self.assoc = assoc
+        #self.assoc = assoc
+        raise RuntimeError, '\nThis method has ceased to exist'
 
-    def createAssociationAndGeneRefs(self, assoc, altlabels=None):
+
+    def createAssociationAndGeneRefsFromTree(self, gprtree, altlabels=None):
+        """
+        Evaluate the GPR tree and add the genes necessary to evaluate it
+        Note that this GPR should be added to a model with cmod.addGPRAssociation() before calling this method
+
+         - *gprtree* the CBMPy GPR tree data structure
+         - *altlabels* [default=None] a dictionary containing a label<-->id mapping
+
+        """
+        if self.__objref__() == None:
+            raise RuntimeError("\nPlease add this GeneAssociation to a model with cmod.addGPRAssociation() before calling this method!")
+        if altlabels is None:
+            altlabels = {}
+        genelist = self.__objref__().genes
+        mod_genes = [g.getId() for g in genelist]
+        react_gene = {}
+        self.generefs = []
+        self.setTree(gprtree)
+        assoc = self.getAssociationStr()
+        if assoc != None and assoc != '':
+            genes = self.__getGeneRefsfromGPRDict__(self.getTree(), [])
+            if len(genes) == 0:
+                self.generefs = []
+            else:
+                for gid in genes:
+                    if gid in altlabels:
+                        label = altlabels[gid]
+                    else:
+                        label = gid
+                    newgid = fixId(gid, replace='_')
+                    if gid != newgid:
+                        # This needs to be tested
+                        newgid = fixId(gid, replace='_{}_'.format(self._gene_id_ucntr_))
+                        self._gene_id_ucntr_ += 1
+                        print('INFO: geneLabel is not Sid compatible, replacing \"{}\" with {} in geneId'.format(gid, newgid))
+                        #assoc = self.assoc.replace(gid, newgid)
+                        self.__renameGeneIdRefsInGPRTree__(self.getTree(), gid, newgid)
+                        self._MODIFIED_ASSOCIATION_ = True
+                        gid = newgid
+                    if gid in self.generefs:
+                        #print('gid in generef')
+                        pass
+                    elif gid in mod_genes:
+                        self.addGeneref(gid)
+                        #print('addGeneRef')
+                    else:
+                        #print('createAssociationAndGeneRefs\n', gid, label, assoc, self.assoc)
+                        self.__objref__().addGene(Gene(gid, label, active=True))
+                        self.addGeneref(gid)
+        else:
+            self.generefs = []
+        self.buildEvalFunc()
+
+    def createAssociationAndGeneRefs(self):
+        raise RuntimeError, "\n\nDEPRECATED CHANGE NOW!"
+
+
+    def createAssociationAndGeneRefsFromString(self, assoc, altlabels=None):
         """
         Evaluate the gene/protein association and add the genes necessary to evaluate it
         Note that this GPR should be added to a model with cmod.addGPRAssociation() before calling this method
@@ -4395,7 +4491,10 @@ class GeneProteinAssociation(Fbase):
         if assoc != None and assoc != '':
             #print(self.id)
             #print(self.assoc)
+            ## HEEEEEEEEEEEEEEEEEEEEEEEEEELP
             genes, self.assoc = extractGeneIdsFromString(assoc, return_clean_gpr=True)
+            #################################
+            self.setTree(getGPRasDictFromString(ast.parse(self.assoc).body[0], {}))
             #print(self.assoc)
             #print(genes)
 
@@ -4434,34 +4533,34 @@ class GeneProteinAssociation(Fbase):
         self.__objref__().__updateGeneIdx__()
         self.buildEvalFunc()
 
-    def buildEvalFunc(self):
-        """
-        Builds a function which evaluates the gene expressions and evaluates to an integer using
-        the following rules:
+    #def buildEvalFunc(self):
+        #"""
+        #Builds a function which evaluates the gene expressions and evaluates to an integer using
+        #the following rules:
 
-         - True --> 1
-         - False --> 0
-         - and --> *
-         - or --> +
+         #- True --> 1
+         #- False --> 0
+         #- and --> *
+         #- or --> +
 
-        """
-        gids = self.getGeneIds()
-        ##  print gids
-        if len(gids) > 0:
-            self.__evalass__ = self.assoc
-            _model_ = self.__objref__()
-            # this is to avoid substring replacements
-            gids = sorted(gids, key=len)
-            gids.reverse()
-            for g in gids:
-                self.__evalass__ = self.__evalass__.replace(g, "_model_.genes[{}].isActive()".format(_model_.__genes_idx__.index(g)))
-            self.__evalass__ = self.__evalass__.replace(' or ', ' + ')
-            self.__evalass__ = self.__evalass__.replace(' OR ', ' + ')
-            self.__evalass__ = self.__evalass__.replace(' and ', ' * ')
-            self.__evalass__ = self.__evalass__.replace(' AND ', ' * ')
-            self.__evalass__ = 'int(%s)' % self.__evalass__
-            del _model_
-            #self.__evalass__ = compile(self.__evalass__, 'GeneAss', 'exec')
+        #"""
+        #gids = self.getGeneIds()
+        ###  print gids
+        #if len(gids) > 0:
+            #self.__evalass__ = self.assoc
+            #_model_ = self.__objref__()
+            ## this is to avoid substring replacements
+            #gids = sorted(gids, key=len)
+            #gids.reverse()
+            #for g in gids:
+                #self.__evalass__ = self.__evalass__.replace(g, "_model_.genes[{}].isActive()".format(_model_.__genes_idx__.index(g)))
+            #self.__evalass__ = self.__evalass__.replace(' or ', ' + ')
+            #self.__evalass__ = self.__evalass__.replace(' OR ', ' + ')
+            #self.__evalass__ = self.__evalass__.replace(' and ', ' * ')
+            #self.__evalass__ = self.__evalass__.replace(' AND ', ' * ')
+            #self.__evalass__ = 'int(%s)' % self.__evalass__
+            #del _model_
+            ##self.__evalass__ = compile(self.__evalass__, 'GeneAss', 'exec')
 
     def getGenes(self):
         """
@@ -4493,11 +4592,8 @@ class GeneProteinAssociation(Fbase):
         - *use_lablels* [default=False] return the gene association string with labels rather than geneId's (FBCv2 issue)
 
         """
-        #if self._MODIFIED_ASSOCIATION_:
-            #print('NOTE: this association string has been modified to be evaluable:\n{} --> {}'.format(self.assoc0, self.assoc))
-        out = self.assoc
+        out = self.__getAssociationStrFromGprDict__(self.getTree(), '', parent='')
         if use_labels:
-            out = self.assoc
             keymap = {}
             for g in self.generefs:
                 keymap[g] = self.__objref__().getGene(g).getLabel()
@@ -4506,6 +4602,68 @@ class GeneProteinAssociation(Fbase):
             for k in keys:
                 out = out.replace(k, keymap[k])
         return out
+
+    def __getAssociationStrFromGprDict__(self, gprd, out, parent=''):
+        """
+        Get a old school GPR association string from a CBMPy gprDict, e.g. obtained from gpr.getTree()
+
+         - *gprd* the gprDictionary
+         - *out* the output string
+         - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
+
+        """
+        out2 = '('
+        for k in gprd:
+            if k.startswith('_AND_'):
+                out2 += '{}{}'.format(self.__getAssociationStrFromGprDict__(gprd[k], out, ' and '), parent)
+            elif k.startswith('_OR_'):
+                out2 += '{}{}'.format(self.__getAssociationStrFromGprDict__(gprd[k], out, ' or '), parent)
+            else:
+                out2 += '{}{}'.format(k, parent)
+        if out2.endswith(' and '):
+            out2 = out2[:-5]
+        elif out2.endswith(' or '):
+            out2 = out2[:-4]
+        out2 += ')'
+        out = out + out2
+        if ' and ' not in out and ' or ' not in out:
+            out = out[1:-1]
+        return out
+
+    def __getGeneRefsfromGPRDict__(self, gprd, out):
+        """
+        Extract the gene id references from the GPR tree
+
+        - *gprd* the gprTree
+         - *out* the output list
+
+        """
+        for k in gprd:
+            if k.startswith('_AND_'):
+                self.__getGeneRefsfromGPRDict__(gprd[k], out)
+            elif k.startswith('_OR_'):
+                self.__getGeneRefsfromGPRDict__(gprd[k], out)
+            else:
+                out.append(k)
+        return out
+
+    def __renameGeneIdRefsInGPRTree__(self, gprd, old, new):
+        """
+        Rename gene ids in the gpr Tree, works inplace
+
+        - *gprd* the gprTree
+        - *old* the old gene id
+        - *new* the new gene id
+
+        """
+        for k in gprd:
+            if k.startswith('_AND_'):
+                self.__renameGeneIdRefsInGPRTree__(gprd[k], old, new)
+            elif k.startswith('_OR_'):
+                self.__renameGeneIdRefsInGPRTree__(gprd[k], old, new)
+            elif k == old:
+                gprd.pop(k)
+                gprd[new] = new
 
     def getGeneIds(self):
         """
@@ -4602,3 +4760,65 @@ class GeneProteinAssociation(Fbase):
 
         """
         return self.tree
+
+    def buildEvalFunc(self):
+        #print(self.getTree())
+        self.__evalass__ = 'int({})'.format(self.__getAssociationEvalFromGprDict__(
+            self.getTree(), '', ''))
+
+    def __getAssociationEvalFromGprDict__(self, gprd, out, parent=''):
+        """
+        Get a GPR evaluation string from a CBMPy gprDict, e.g. obtained from gpr.getTree()
+
+         - *gprd* the gprDictionary
+         - *out* the output string
+         - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
+         - *model* an FBA model with gene information
+
+        """
+
+        out2 = '('
+        for k in gprd:
+            if k.startswith('_AND_'):
+                out2 += '{}{}'.format(self.__getAssociationEvalFromGprDict__(gprd[k], out, ' * '), parent)
+            elif k.startswith('_OR_'):
+                out2 += '{}{}'.format(self.__getAssociationEvalFromGprDict__(gprd[k], out, ' + '), parent)
+            else:
+                out2 += 'self.__objref__().getGene(\'{}\').isActive(){}'.format(k, parent)
+        if out2.endswith(' + '):
+            out2 = out2[:-3]
+        elif out2.endswith(' * '):
+            out2 = out2[:-3]
+        out2 += ')'
+        out = out + out2
+        if ' + ' not in out and ' * ' not in out:
+            out = out[1:-1]
+        return out
+
+    def deleteGeneFromAssociation(self, gid):
+        """
+        Deletes a gene id from the gene association. *WARNING* this process is irreversible!!
+
+        - *gid* a valid gene identifier (not label)
+
+        """
+        if gid in self.generefs:
+            self.deleteGeneref(gid)
+            self.__deleteGeneFromTree__(self.getTree(), gid)
+        else:
+            print('Gene Id {} is not part of GPR {}'.format(gid, self.getId()))
+
+
+    def __deleteGeneFromTree__(self, D, delid):
+        """
+        Recursively delete a gene Id from a gprTree.
+
+        """
+        for k in list(D):
+            if k == delid:
+                D.pop(k)
+            elif k.startswith('_AND_') or k.startswith('_OR_'):
+                self.__deleteGeneFromTree__(D[k], delid)
+            else:
+                pass
+        return D
