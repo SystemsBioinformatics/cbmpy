@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 607 2017-07-19 16:11:58Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 608 2017-07-19 22:20:12Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -4337,22 +4337,28 @@ class GeneProteinAssociation(Fbase):
     #assoc0 = None
     protein = None
     __evalass__ = 'None'
+    __evalass_compiled__ = None
+    __evalass_result__ = None
+    use_compiled = False
     _gene_id_ucntr_ = 0
     generefs = None
     tree = None
 
-    def __init__(self, gpid, protein):
+    def __init__(self, gpid, protein, use_compiled=False):
         """
         Create a GeneProteinAssociation
 
          - *gpid* a unique id
          - *protein* the protein the gene association referes to, in most cases this should be a reaction id
+         - *use_compiled* [default=False] used compiled expressions for evaluation, potentially less portable
 
         """
         self.setPid(gpid)
         self.generefs = []
         self.protein = protein
         self.annotation = {}
+        if use_compiled:
+            self.use_compiled = True
 
     #def evalAssociation(self):
         #"""
@@ -4374,12 +4380,25 @@ class GeneProteinAssociation(Fbase):
 
         """
         out = None
-        try:
-            out = eval(self.__evalass__)
-        except SyntaxError:
-            raise RuntimeWarning('\nError in GPR associated with reaction: %s\n%s' % (self.protein, self.assoc))
+        if not self.use_compiled:
+            try:
+                out = eval(self.__evalass__)
+            except SyntaxError:
+                raise RuntimeWarning('\nError in GPR associated with reaction: %s\n%s' % (self.protein, self.assoc))
+        else:
+            try:
+                eval(self.__evalass_compiled__)
+                out = self.__evalass_result__
+            except:
+                raise RuntimeWarning('\nError in compiled GPR associated with reaction: %s\n%s' % (self.protein, self.assoc))
         return out
 
+    def buildEvalFunc(self):
+        #print(self.getTree())
+        self.__evalass__ = 'int({})'.format(self.__getAssociationEvalFromGprDict__(
+            self.getTree(), '', ''))
+        if self.use_compiled:
+            self.__evalass_compiled__ = compile('self.__evalass_result__ = {}'.format(self.__evalass__), '<inline>', 'single')
 
     def addGeneref(self, geneid):
         """
@@ -4408,7 +4427,6 @@ class GeneProteinAssociation(Fbase):
         """
         #self.assoc = assoc
         raise RuntimeError, '\nThis method has ceased to exist'
-
 
     def createAssociationAndGeneRefsFromTree(self, gprtree, altlabels=None):
         """
@@ -4466,7 +4484,6 @@ class GeneProteinAssociation(Fbase):
     def createAssociationAndGeneRefs(self):
         raise RuntimeError, "\n\nDEPRECATED CHANGE NOW!"
 
-
     def createAssociationAndGeneRefsFromString(self, assoc, altlabels=None):
         """
         Evaluate the gene/protein association and add the genes necessary to evaluate it
@@ -4482,26 +4499,14 @@ class GeneProteinAssociation(Fbase):
             altlabels = {}
         genelist = self.__objref__().genes
         mod_genes = [g.getId() for g in genelist]
-        #self.assoc = self.assoc0 = assoc
-        self.assoc = assoc
         react_gene = {}
-        #gene_re = re.compile(gene_pattern)
-        ##  print 'assoc\n', assoc
         self.generefs = []
         if assoc != None and assoc != '':
-            #print(self.id)
-            #print(self.assoc)
-            ## HEEEEEEEEEEEEEEEEEEEEEEEEEELP
-            genes, self.assoc = extractGeneIdsFromString(assoc, return_clean_gpr=True)
-            #################################
-            self.setTree(getGPRasDictFromString(ast.parse(self.assoc).body[0], {}))
-            #print(self.assoc)
-            #print(genes)
-
-            #print(genes)
-            #geneLabels = []
-            #for g_ in genes:
-                #if not checkId(s)
+            #genes, self.assoc = extractGeneIdsFromString(assoc, return_clean_gpr=True)
+            newtree = getGPRasDictFromString(ast.parse(assoc).body[0], {})
+            self.setTree(newtree)
+            genes = self.__getGeneRefsfromGPRDict__(newtree, [])
+            genes.sort()
             if len(genes) == 0:
                 self.generefs = []
             else:
@@ -4515,7 +4520,8 @@ class GeneProteinAssociation(Fbase):
                         newgid = fixId(gid, replace='_{}_'.format(self._gene_id_ucntr_))
                         self._gene_id_ucntr_ += 1
                         print('INFO: geneLabel is not Sid compatible, replacing \"{}\" with {} in geneId'.format(gid, newgid))
-                        self.assoc = self.assoc.replace(gid, newgid)
+                        #assoc = self.assoc.replace(gid, newgid)
+                        self.__renameGeneIdRefsInGPRTree__(self.getTree(), gid, newgid)
                         self._MODIFIED_ASSOCIATION_ = True
                         gid = newgid
                     if gid in self.generefs:
@@ -4644,7 +4650,8 @@ class GeneProteinAssociation(Fbase):
             elif k.startswith('_OR_'):
                 self.__getGeneRefsfromGPRDict__(gprd[k], out)
             else:
-                out.append(k)
+                if k not in out:
+                    out.append(k)
         return out
 
     def __renameGeneIdRefsInGPRTree__(self, gprd, old, new):
@@ -4760,11 +4767,6 @@ class GeneProteinAssociation(Fbase):
 
         """
         return self.tree
-
-    def buildEvalFunc(self):
-        #print(self.getTree())
-        self.__evalass__ = 'int({})'.format(self.__getAssociationEvalFromGprDict__(
-            self.getTree(), '', ''))
 
     def __getAssociationEvalFromGprDict__(self, gprd, out, parent=''):
         """
