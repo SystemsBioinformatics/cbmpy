@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 607 2017-07-19 16:11:58Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 609 2017-07-31 10:20:05Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2186,10 +2186,15 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
                         print(nres, annoSTR)
             elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] is not None:
                 sbml_setNotes3(r, reactions[rxn]['notes'])
+
         if reactions[rxn]['reversible']:
             r.setReversible(True)
         else:
             r.setReversible(False)
+
+        if reactions[rxn]['compartment'] is not None and reactions[rxn]['compartment'] != '':
+            r.setCompartment(reactions[rxn]['compartment'])
+
 
         if reactions[rxn]['sboterm'] is not None and reactions[rxn]['sboterm'] != '':
             r.setSBOTerm(str(reactions[rxn]['sboterm']))

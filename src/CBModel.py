@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 608 2017-07-19 22:20:12Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 610 2017-08-04 14:31:29Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -282,7 +282,7 @@ class Fbase(object):
          - *fid* a valid c variable style id string
 
 
-         Reimplemented by @Reaction, @Species
+         Reimplemented by @Reaction, @Species, @Compartment
 
         """
         if self.__objref__ is not None:
@@ -3076,6 +3076,32 @@ class Compartment(Fbase):
         self.dimensions = dimensions
         self.annotation = {}
 
+
+    def setId(self, fid):
+        """
+        Sets the object Id
+
+         - *fid* a valid c variable style id string
+
+         Reimplements @FBase.setId()
+
+        """
+        if self.__objref__ is not None:
+            if fid not in self.__objref__().__global_id__:
+                self.__objref__().__changeGlobalId__(self.id, fid, self)
+                oldid = self.id
+                self.id = fid
+                for s in self.__objref__().species:
+                    if s.compartment == oldid:
+                        s.setCompartmentId(fid)
+                for r in self.__objref__().reactions:
+                    if r.compartment == oldid:
+                        r.setCompartmentId(fid)
+            else:
+                print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
+        else:
+            self.id = fid
+
     def containsSpecies(self):
         """
         Lists the species contained in this compartment
@@ -4004,8 +4030,8 @@ class Species(Fbase):
 
             if NEWID or allow_rename:
                 rids = [a[0] for a in self.__objref__().getFluxesAssociatedWithSpecies(oldId)]
-                self.id = fid
                 if NEWID:
+                    self.id = fid
                     self.__objref__().__changeGlobalId__(oldId, self.id, self)
                 for r_ in self.__objref__().reactions:
                     if r_.getId() in rids:
@@ -4019,6 +4045,10 @@ class Species(Fbase):
                 print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
         else:
             self.id = fid
+
+        if allow_rename and not NEWID:
+            self.__objref__().species.pop(self.__objref__().species.index(self))
+
 
     def getValue(self):
         """
