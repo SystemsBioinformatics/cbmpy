@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 610 2017-08-04 14:31:29Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 611 2017-08-07 15:51:26Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -4048,7 +4048,6 @@ class Species(Fbase):
 
         if allow_rename and not NEWID:
             self.__objref__().species.pop(self.__objref__().species.index(self))
-
 
     def getValue(self):
         """
