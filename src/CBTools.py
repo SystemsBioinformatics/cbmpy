@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 614 2017-08-16 14:20:20Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -708,13 +708,13 @@ def processBiGGannotationNote(fba, annotation_key='note'):
             r.annotation.update(new_ann)
         if __DEBUG__: print(r.annotation)
 
-def processSBMLAnnotationNotes(fba, annotation_key='note'):
+def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
     """
     Parse the HTML formatted reaction information stored in the SBML notes field currently
     processes BiGG and PySCeSCBM style annotations it looks for the the annotation indexed
     with the *annotation_key*
 
-     - *annotation_key* [default='note'] which contains a HTML/XHTML fragment in BiGG/PySCeSCBM format
+     - *annotation_key* [default='note'] which contains a HTML/XHTML fragment in BiGG/PySCeSCBM format (ignored in L3)
 
     """
 
@@ -728,66 +728,68 @@ def processSBMLAnnotationNotes(fba, annotation_key='note'):
     html_span = re.compile("<span>.*?</span>")
     html_bigg_p = re.compile("<html:p>.*?</html:p>")
     for r in fba.reactions:
-        if annotation_key in r.annotation:
+        if level >= 3 or annotation_key in r.annotation:
             new_ann = {}
-            if '<span xmlns="http://www.w3.org/1999/xhtml">' in r.annotation[annotation_key]:
-                hPs = re.findall(html_p, r.annotation.pop(annotation_key).replace('\n',''))
+            notes = ''
+            if level >= 3:
+                notes = r.getNotes()
+            else:
+                notes = r.annotation.pop(annotation_key)
+            if '<span xmlns="http://www.w3.org/1999/xhtml">' in notes:
+                hPs = re.findall(html_p, notes.replace('\n',''))
                 if __DEBUG__: print(hPs)
                 for p in hPs:
                     ps = re.findall(html_span, p)
                     ps = [p.replace('<span>','').replace('</span>','').replace('&lt;','<').replace('&gt;','>').strip() for p in ps]
-                    if len(ps) == 2:
+                    if len(ps) == 2 and ps[0] not in r.annotation:
                         new_ann.update({ps[0] : ps[1]})
             else:
-                annoKey = r.annotation.pop(annotation_key)
-                hPs = re.findall(html_bigg_p, annoKey)
+                hPs = re.findall(html_bigg_p, notes)
                 if len(hPs) > 0:
                     if __DEBUG__: print(hPs)
                     for p in hPs:
                         ps = p.replace('<html:p>','').replace('</html:p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
-                        if len(ps) == 2:
+                        if len(ps) == 2 and ps[0].strip() not in r.annotation:
                             new_ann.update({ps[0].strip() : ps[1].strip()})
                 else:
-                    hPs = re.findall(html_p, annoKey)
+                    hPs = re.findall(html_p, notes)
                     if __DEBUG__: print(hPs)
                     for p in hPs:
                         ps = p.replace('<p>','').replace('</p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
-                        if len(ps) == 2:
+                        if len(ps) == 2 and ps[0].strip() not in r.annotation:
                             new_ann.update({ps[0].strip() : ps[1].strip()})
-                #hPs = re.findall(html_bigg_p, r.annotation.pop(annotation_key))
-                #if __DEBUG__: print hPs
-                #for p in hPs:
-                    #ps = p.replace('<html:p>','').replace('</html:p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
-                    #if len(ps) == 2:
-                        #new_ann.update({ps[0].strip() : ps[1].strip()})
             r.annotation.update(new_ann)
             if __DEBUG__: print(r.annotation)
     for s in fba.species:
-        if annotation_key in s.annotation:
+        if level >= 3 or annotation_key in s.annotation:
+            notes = ''
+            if level >= 3:
+                notes = s.getNotes()
+            else:
+                notes = s.annotation.pop(annotation_key)
             new_ann = {}
-            if '<span xmlns="http://www.w3.org/1999/xhtml">' in s.annotation[annotation_key]:
-                hPs = re.findall(html_p, s.annotation.pop(annotation_key).replace('\n',''))
+            if '<span xmlns="http://www.w3.org/1999/xhtml">' in notes:
+                hPs = re.findall(html_p, notes.replace('\n',''))
                 if __DEBUG__: print(hPs)
                 for p in hPs:
                     ps = re.findall(html_span, p)
                     ps = [p.replace('<span>','').replace('</span>','').replace('&lt;','<').replace('&gt;','>').strip() for p in ps]
-                    if len(ps) == 2:
+                    if len(ps) == 2 and ps[0].strip() not in s.annotation:
                         new_ann.update({ps[0] : ps[1]})
             else:
-                annoKey = s.annotation.pop(annotation_key)
-                hPs = re.findall(html_bigg_p, annoKey)
+                hPs = re.findall(html_bigg_p, notes)
                 if len(hPs) > 0:
                     if __DEBUG__: print(hPs)
                     for p in hPs:
                         ps = p.replace('<html:p>','').replace('</html:p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
-                        if len(ps) == 2:
+                        if len(ps) == 2 and ps[0].strip() not in s.annotation:
                             new_ann.update({ps[0].strip() : ps[1].strip()})
                 else:
-                    hPs = re.findall(html_p, annoKey)
+                    hPs = re.findall(html_p, notes)
                     if __DEBUG__: print(hPs)
                     for p in hPs:
                         ps = p.replace('<p>','').replace('</p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
-                        if len(ps) == 2:
+                        if len(ps) == 2 and ps[0].strip() not in s.annotation:
                             new_ann.update({ps[0].strip() : ps[1].strip()})
             s.annotation.update(new_ann)
 

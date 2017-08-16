@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 609 2017-07-31 10:20:05Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 614 2017-08-16 14:20:20Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1015,7 +1015,9 @@ def sbml_getNotes(obj):
     try:
         notes = libsbml.XMLNode_convertXMLNodeToString(obj.getNotes())
         if notes != '' and notes is not None:
-            notes = xml_stripTags(notes).strip()
+            # too aggressive but efficient behaviour removed
+            #notes = xml_stripTags(notes).strip()
+            notes = notes.replace('<html:body>', '').replace('</html:body>','')
     except Exception as why:
         print(why)
     return notes
