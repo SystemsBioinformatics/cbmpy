@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 611 2017-08-07 15:51:26Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 615 2017-08-21 12:58:31Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -4532,7 +4532,13 @@ class GeneProteinAssociation(Fbase):
         self.generefs = []
         if assoc != None and assoc != '':
             #genes, self.assoc = extractGeneIdsFromString(assoc, return_clean_gpr=True)
-            newtree = getGPRasDictFromString(ast.parse(assoc).body[0], {})
+            assoc = assoc.replace(' OR ', ' or ').replace(' AND ',' and ')
+            try:
+                newtree = getGPRasDictFromString(ast.parse(assoc).body[0], {})
+            except SyntaxError:
+                err = 'Error in Gene Association String: {}'.format(assoc)
+                #print(err)
+                raise SyntaxError, err
             self.setTree(newtree)
             genes = self.__getGeneRefsfromGPRDict__(newtree, [])
             genes.sort()

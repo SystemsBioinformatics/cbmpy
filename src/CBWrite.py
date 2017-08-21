@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 615 2017-08-21 12:58:31Z bgoli $)
 
 """
 
@@ -2778,12 +2778,13 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         #wsMet.write(s, Mcols.index('bgid'), Mlist[s_]['bgid'])
         for ud_ in Mlist[s_]['data']:
             try:
-                if len(Mlist[s_]['data'][ud_]) < 30000:
-                    wsMet.write(s, len(Mcols)+MUcols.index(ud_), Mlist[s_]['data'][ud_])
-                else:
-                    wsMet.write(s, len(Mcols)+MUcols.index(ud_),'Data too long (more than 30000 characters)', styleBold)
+                if Mlist[s_]['data'][ud_] is not None:
+                    if len(Mlist[s_]['data'][ud_]) < 30000:
+                        wsMet.write(s, len(Mcols)+MUcols.index(ud_), str(Mlist[s_]['data'][ud_]))
+                    else:
+                        wsMet.write(s, len(Mcols)+MUcols.index(ud_),'Data too long (more than 30000 characters)', styleBold)
             except TypeError:
-                print('\nAnnotation write error: TypeError')
+                print('Annotation write error (TypeError) {} : {}'.format(ud_, Mlist[s_]['data'][ud_]))
 
         wsStR.write(stridx, 0, Mlist[s_]['id'], styleBold)
         cidx = 0
@@ -2902,7 +2903,7 @@ def writeModelToCOMBINEarchive(mod, fname=None, directory=None, sbmlname=None, w
     MFstr += ' <content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>\n'
 
     # SBML
-    writeSBML3FBC(mod, sbmlf, ptmp, add_cbmpy_annot=add_cbmpy_annot, add_cobra_annot=add_cobra_annot)
+    writeSBML3FBCV2(mod, sbmlf, ptmp, add_cbmpy_annot=add_cbmpy_annot, add_cobra_annot=add_cobra_annot)
     zf.write(os.path.join(ptmp, sbmlf), arcname=sbmlf)
     MFstr += ' <content location="./{}" format="http://identifiers.org/combine.specifications/sbml.level-3.version-1"/>\n'.format(sbmlf)
 
@@ -2956,5 +2957,8 @@ def writeModelToCOMBINEarchive(mod, fname=None, directory=None, sbmlname=None, w
 
     for f_ in os.listdir(ptmp):
         os.remove(os.path.join(ptmp, f_))
-    os.removedirs(ptmp)
+    try:
+        os.removedirs(ptmp)
+    except WindowsError:
+        pass
     print('COMBINE archive created: {}'.format(fname+'.zip'))
