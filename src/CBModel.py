@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 615 2017-08-21 12:58:31Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 616 2017-08-23 11:47:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -35,6 +35,9 @@ from __future__ import absolute_import
 #from __future__ import unicode_literals
 
 import numpy, re, time, weakref, copy, json, urllib2, ast
+
+global GENE_CNTR
+GENE_CNTR = 0
 
 try:
     import cPickle as pickle
@@ -4534,9 +4537,25 @@ class GeneProteinAssociation(Fbase):
             #genes, self.assoc = extractGeneIdsFromString(assoc, return_clean_gpr=True)
             assoc = assoc.replace(' OR ', ' or ').replace(' AND ',' and ')
             try:
-                newtree = getGPRasDictFromString(ast.parse(assoc).body[0], {})
+                ast.parse(assoc)
             except SyntaxError:
                 err = 'Error in Gene Association String: {}'.format(assoc)
+                old_gids, assoc2 = extractGeneIdsFromString(assoc, return_clean_gpr=True)
+                old_gids.sort()
+                old_gids.reverse()
+                tempids = ['{:04d}'.format(i+1) for i in range(len(old_gids))]
+                rep_map = {}
+                for g_ in range(len(old_gids)):
+                    rep_map[tempids[g_]] = '\"{}\"'.format(old_gids[g_])
+                    assoc2 = assoc2.replace(old_gids[g_], tempids[g_])
+                for id_ in tempids:
+                    assoc2 = assoc2.replace(id_, rep_map[id_])
+                assoc = assoc2
+                del assoc2
+            try:
+                newtree = getGPRasDictFromString(ast.parse(assoc).body[0], {})
+            except SyntaxError:
+                err = '\nError in Gene Association String: {}\n'.format(assoc)
                 #print(err)
                 raise SyntaxError, err
             self.setTree(newtree)

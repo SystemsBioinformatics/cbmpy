@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 607 2017-07-19 16:11:58Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 616 2017-08-23 11:47:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -314,6 +314,10 @@ def getGPRasDictFromString(node, out):
     if isinstance(node, ast.Name):
         #print('Gene: {}'.format(node.id))
         out[node.id] = node.id
+    elif isinstance(node, str):
+        out[node] = node
+    elif isinstance(node, ast.Str):
+        out[node.s] = node.s
     elif isinstance(node, ast.BinOp):
         left = node.left.id
         right = node.right.id
