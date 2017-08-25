@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 616 2017-08-23 11:47:47Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 618 2017-08-25 15:34:29Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -208,7 +208,7 @@ class Fbase(object):
          - *name* the name string
 
         """
-        self.name = name
+        self.name = str(name)
 
     def setNotes(self, notes):
         """
@@ -288,6 +288,7 @@ class Fbase(object):
          Reimplemented by @Reaction, @Species, @Compartment
 
         """
+        fid = str(fid)
         if self.__objref__ is not None:
             if fid not in self.__objref__().__global_id__:
                 self.__objref__().__changeGlobalId__(self.id, fid, self)
@@ -307,7 +308,7 @@ class Fbase(object):
         if mid == None:
             self.__metaid__ = 'meta_{}'.format(self.id)
         else:
-            self.__metaid__ = mid
+            self.__metaid__ = str(mid)
 
     def clone(self):
         """
@@ -4527,10 +4528,12 @@ class GeneProteinAssociation(Fbase):
         """
         if self.__objref__() == None:
             raise RuntimeError("\nPlease add this GeneAssociation to a model with cmod.addGPRAssociation() before calling this method!")
-        if altlabels is None:
-            altlabels = {}
         genelist = self.__objref__().genes
         mod_genes = [g.getId() for g in genelist]
+        if altlabels is None:
+            altlabels = {}
+        gene_label_id_map = {g.label:g.getId() for g in genelist}
+
         react_gene = {}
         self.generefs = []
         if assoc != None and assoc != '':
@@ -4539,19 +4542,29 @@ class GeneProteinAssociation(Fbase):
             try:
                 ast.parse(assoc)
             except SyntaxError:
-                err = 'Error in Gene Association String: {}'.format(assoc)
+                #err = 'Error in Gene Association String: {}'.format(assoc)
                 old_gids, assoc2 = extractGeneIdsFromString(assoc, return_clean_gpr=True)
+
                 old_gids.sort()
                 old_gids.reverse()
+                dupidhack = []
+                for gid in range(len(old_gids)):
+                    if old_gids[gid] in gene_label_id_map:
+                        dupidhack.append(gene_label_id_map[old_gids[gid]])
+                    else:
+                        dupidhack.append(old_gids[gid])
+                #print(old_gids)
+                #print(dupidhack)
+
                 tempids = ['{:04d}'.format(i+1) for i in range(len(old_gids))]
                 rep_map = {}
                 for g_ in range(len(old_gids)):
-                    rep_map[tempids[g_]] = '\"{}\"'.format(old_gids[g_])
+                    rep_map[tempids[g_]] = '\"{}\"'.format(dupidhack[g_])
                     assoc2 = assoc2.replace(old_gids[g_], tempids[g_])
                 for id_ in tempids:
                     assoc2 = assoc2.replace(id_, rep_map[id_])
                 assoc = assoc2
-                del assoc2
+                del assoc2, old_gids, tempids, rep_map
             try:
                 newtree = getGPRasDictFromString(ast.parse(assoc).body[0], {})
             except SyntaxError:
