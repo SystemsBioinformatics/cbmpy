@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 618 2017-08-25 15:34:29Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 619 2017-08-30 15:17:05Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1327,6 +1327,13 @@ class Model(Fbase):
 
         """
         assert gpr.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(gpr.__objref__).split('to')[1][1:-1])
+
+        if gpr.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate gpr ID detected: {}'.format(gpr.getId()))
+        else:
+            self.__pushGlobalId__(gpr.getId(), gpr)
+
+        # will soon be terminated
         if update_idx:
             self.__updateGeneIdx__()
 
@@ -1488,6 +1495,37 @@ class Model(Fbase):
         except SyntaxError:
             gprDict = {}
         return gprDict
+
+    def getGPRIdAssociatedWithGeneId(self, gid):
+        """
+        Return the GPR(s) associated with the gene id:
+
+         - *gid* a gene id
+
+        """
+        if self.getGene(gid) is None:
+            print('INFO: invalid gene id: {}'.format(gid))
+            return None
+        out = []
+        for gpr_ in self.gpr:
+            if gid in gpr_.getGeneIds():
+                out.append(gpr_.getId())
+        if len(out) == 0:
+            out = None
+        return out
+
+    def getGPRIdAssociatedWithGeneLabel(self, label):
+        """
+        Return the GPR Id's associated with the gene label:
+
+         - *label* a gene label
+
+        """
+        gl = self.getGeneByLabel(label)
+        if gl is None:
+            print('INFO: invalid gene label: {}'.format(label))
+            return None
+        return self.getGPRIdAssociatedWithGeneId(gl.getId())
 
     def getReactionActivity(self, rid):
         """
@@ -1658,6 +1696,60 @@ class Model(Fbase):
 
         #assert sid in self.__TRASH__, '\nNo deleted object of with this id'
         #self.addSpecies(self.__TRASH__[sid])
+
+    def deleteGene(self, gid, also_delete_gpr=True):
+        """
+        Deletes the gene object with gid. Note if you want to delete a gene by label (locus tag etc)
+        use the deleteGeneByLabel() function.
+
+        - *gid* the gene Id
+        - *also_delete_gpr* [default=True] automatically delete GPR's that contain no gene references
+
+        """
+        G = self.getGene(gid)
+        if G is not None:
+            assoc_gpr = self.getGPRIdAssociatedWithGeneId(gid)
+            if assoc_gpr is not None:
+                for gpr in assoc_gpr:
+                    GPR = self.getGPRassociation(gpr)
+                    GPR.deleteGeneFromAssociation(gid)
+                    if len(GPR.getGeneIds()) == 0 and also_delete_gpr:
+                        self.deleteGPRAssociation(gpr)
+            self.__popGlobalId__(gid)
+            self.genes.pop(self.genes.index(G))
+            print('Gene: {}'.format(self.getGene(gid)))
+        else:
+            print('INFO: Gene Id \"{}\" does not exist'.format(gid))
+
+
+    def deleteGeneByLabel(self, label, also_delete_gpr=True):
+        """
+        Deletes the gene object with label (b2003 etc).
+
+        - *label* the gene with label to be deleted
+        - *also_delete_gpr* [default=True] automatically delete GPR's that contain no gene references
+
+        """
+
+        gid = self.getGeneIdFromLabel(label)
+        if gid is not None:
+            self.deleteGene(gid, also_delete_gpr=also_delete_gpr)
+        else:
+            print('INFO: Gene label \"{}\" does not exist'.format(label))
+
+    def deleteGPRAssociation(self, gprid):
+        """
+        Delete a GPR association with id
+
+        - *gprid* the GPR association id
+
+        """
+        GPR = self.getGPRassociation(gprid)
+        if GPR is not None:
+            self.__popGlobalId__(gprid)
+            self.gpr.pop(self.gpr.index(GPR))
+        else:
+            print('INFO: GPR Id \"{}\" does not exist'.format(gprid))
 
     def __pushGlobalId__(self, sid, obj):
         if not self.__ENABLE_GLOBAL_WEAKREF__:
@@ -4362,7 +4454,6 @@ class Gene(Fbase):
 class GeneProteinAssociation(Fbase):
     """
     This class associates genes to proteins.
-    TODO: I will change the whole Gene/GPR structure to a dictionary data structure on the model which should simplify this all significantly.
 
     """
     #_MODIFIED_ASSOCIATION_ = False
@@ -4874,6 +4965,7 @@ class GeneProteinAssociation(Fbase):
         if gid in self.generefs:
             self.deleteGeneref(gid)
             self.__deleteGeneFromTree__(self.getTree(), gid)
+            self.buildEvalFunc()
         else:
             print('Gene Id {} is not part of GPR {}'.format(gid, self.getId()))
 
