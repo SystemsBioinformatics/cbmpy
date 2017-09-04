@@ -1,0 +1,101 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+td {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+}
+
+th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+}
+
+.bodystyle {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+}
+.bodystyle_bold {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.smallest {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.smaller {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.small {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+.big {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+}
+
+.bigger {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 20px;
+}
+
+.biggest {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 22px;
+}
+
+.expanded {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+	letter-spacing: 2px;
+}
+
+.footer {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 14px;
+	color: #999999;
+}
+
+.box1 {
+	padding: 3px;
+	border-width: medium;
+	border-style: solid;
+	border-color: #CCCCCC #666666 #666666 #CCCCCC;
+}
+
+.box2 {
+	font-style: italic;
+	word-spacing: 2pt;
+	padding: 3px;
+	border: 1px solid;
+}
+
+.yellow {
+	color: #FFFF00;
+}
+
+.times {
+	font-family: Times New Roman, Times, serif;
+	font-size: 16px;
+}
+
+.times_small {
+	font-family: Times New Roman, Times, serif;
+	font-size: 14px;
+}
+.red {
+	color: #FF0000;
+}
+.blue {
+	color: #0000FF;
+}
