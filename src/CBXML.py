@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 614 2017-08-16 14:20:20Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 620 2017-09-06 13:43:01Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -976,6 +976,7 @@ def sbml_setDescription(model, fba):
     ##  except: UseR = ''
     notes = ''
     if fba.notes.strip() in ['', None, ' ']:
+        notes = notes.replace('<notes>', '').replace('</notes>','')
         notes += '<html:p><html:br/><html:span size="small">Model \"<html:strong>{}</html:strong>\" ({}) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> ({}) on {}.</html:span></html:p>'.format(fba.getId(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
     else:
         notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">{}</html:span></html:p>\n'.format(fba.notes.strip())
@@ -996,7 +997,9 @@ def sbml_setNotes3(obj, s):
      - *s* a string that should be added as a note
 
     """
+    s = s.replace('<notes>', '').replace('</notes>','')
     s = '<html:body>{}</html:body>'.format(s)
+
     res = obj.setNotes(s)
     if res != 0:
         print(res, s)
@@ -1018,6 +1021,7 @@ def sbml_getNotes(obj):
             # too aggressive but efficient behaviour removed
             #notes = xml_stripTags(notes).strip()
             notes = notes.replace('<html:body>', '').replace('</html:body>','')
+            notes = notes.replace('<notes>', '').replace('</notes>','')
     except Exception as why:
         print(why)
     return notes
