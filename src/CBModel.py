@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 623 2017-10-13 14:40:39Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 624 2017-10-13 15:09:30Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -4458,6 +4458,8 @@ class Gene(Fbase):
                 print('ERROR: setLabel() - gene with label \"{}\" already exists ... label *not* set.'.format(label))
             else:
                 self.label = label
+        else:
+            self.label = label
 
     def setActive(self):
         """
