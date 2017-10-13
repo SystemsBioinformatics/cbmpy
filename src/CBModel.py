@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 619 2017-08-30 15:17:05Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 623 2017-10-13 14:40:39Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -285,7 +285,7 @@ class Fbase(object):
          - *fid* a valid c variable style id string
 
 
-         Reimplemented by @Reaction, @Species, @Compartment
+         Reimplemented by @Reaction, @Species, @Compartment, @Gene
 
         """
         fid = str(fid)
@@ -1357,7 +1357,7 @@ class Model(Fbase):
             altlabels = {}
         if assoc != '' and assoc is not None:
             if gid == None:
-                gid = '%s_assoc' % protein
+                gid = '{}_assoc'.format(protein)
             gpr = GeneProteinAssociation(gid, protein)
             self.addGPRAssociation(gpr)
             if name == None:
@@ -1548,7 +1548,7 @@ class Model(Fbase):
          - *substring* search for this pattern anywhere in the id
 
         """
-        if substring == None:
+        if substring is None:
             return [g.getId() for g in self.genes]
         else:
             return [g.getId() for g in self.genes if substring in g.getId()]
@@ -1706,18 +1706,21 @@ class Model(Fbase):
         - *also_delete_gpr* [default=True] automatically delete GPR's that contain no gene references
 
         """
+        print('DeleteGene is processing gene: {} ...'.format(gid))
         G = self.getGene(gid)
         if G is not None:
             assoc_gpr = self.getGPRIdAssociatedWithGeneId(gid)
+            #print('DeleteGene associated GPRs: {}'.format(assoc_gpr))
             if assoc_gpr is not None:
                 for gpr in assoc_gpr:
+                    #print('DeleteGene is processing GPR: {}'.format(gpr))
                     GPR = self.getGPRassociation(gpr)
                     GPR.deleteGeneFromAssociation(gid)
                     if len(GPR.getGeneIds()) == 0 and also_delete_gpr:
                         self.deleteGPRAssociation(gpr)
             self.__popGlobalId__(gid)
             self.genes.pop(self.genes.index(G))
-            print('Gene: {}'.format(self.getGene(gid)))
+            #print('Gene: {}'.format(self.getGene(gid)))
         else:
             print('INFO: Gene Id \"{}\" does not exist'.format(gid))
 
@@ -4387,8 +4390,6 @@ class Gene(Fbase):
     """
     Contains all the information about a gene (or gene+protein construct depending on your philosophy)
 
-    TODO: I will change the whole Gene/GPR structure to a dictionary data structure on the model which should simplify this all significantly.
-
     """
     active0 = False
     active = False
@@ -4412,6 +4413,34 @@ class Gene(Fbase):
         self.active = active
         self.annotation = {}
 
+    def setId(self, fid):
+        """
+        Sets the object Id
+
+         - *fid* a valid c variable style id string
+
+         Reimplements Fbase method
+
+        """
+        fid = str(fid)
+        if self.__objref__ is not None:
+            print('Running gene.setId() experimental')
+            if fid not in self.__objref__().__global_id__:
+                mod = self.__objref__()
+                gprs = mod.getGPRIdAssociatedWithGeneId(self.id)
+                old_id = self.id
+                mod.__changeGlobalId__(self.id, fid, self)
+                self.id = fid
+                if gprs is not None:
+                    for gp in gprs:
+                        GPR = mod.getGPRassociation(gp)
+                        GPR.__renameGeneIdRefsInGPRTree__(GPR.tree, old_id, fid)
+                        GPR.generefs = GPR.__getGeneRefsfromGPRDict__(GPR.tree, [])
+            else:
+                print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
+        else:
+            self.id = fid
+
     def getLabel(self):
         """
         Returns the gene label
@@ -4421,10 +4450,14 @@ class Gene(Fbase):
 
     def setLabel(self, label):
         """
-        Sets the gene label
+        Sets the gene label, checks that the new label is unique
 
         """
-        self.label = label
+        if self.__objref__ is not None:
+            if label in [g.getLabel() for g in self.__objref__().genes]:
+                print('ERROR: setLabel() - gene with label \"{}\" already exists ... label *not* set.'.format(label))
+            else:
+                self.label = label
 
     def setActive(self):
         """
@@ -4570,39 +4603,32 @@ class GeneProteinAssociation(Fbase):
         react_gene = {}
         self.generefs = []
         self.setTree(gprtree)
-        assoc = self.getAssociationStr()
-        if assoc != None and assoc != '':
-            genes = self.__getGeneRefsfromGPRDict__(self.getTree(), [])
-            if len(genes) == 0:
-                self.generefs = []
+        genes = self.__getGeneRefsfromGPRDict__(self.getTree(), [])
+        for gid in genes:
+            if gid in altlabels:
+                label = altlabels[gid]
             else:
-                for gid in genes:
-                    if gid in altlabels:
-                        label = altlabels[gid]
-                    else:
-                        label = gid
-                    newgid = fixId(gid, replace='_')
-                    if gid != newgid:
-                        # This needs to be tested
-                        newgid = fixId(gid, replace='_{}_'.format(self._gene_id_ucntr_))
-                        self._gene_id_ucntr_ += 1
-                        print('INFO: geneLabel is not Sid compatible, replacing \"{}\" with {} in geneId'.format(gid, newgid))
-                        #assoc = self.assoc.replace(gid, newgid)
-                        self.__renameGeneIdRefsInGPRTree__(self.getTree(), gid, newgid)
-                        self._MODIFIED_ASSOCIATION_ = True
-                        gid = newgid
-                    if gid in self.generefs:
-                        #print('gid in generef')
-                        pass
-                    elif gid in mod_genes:
-                        self.addGeneref(gid)
-                        #print('addGeneRef')
-                    else:
-                        #print('createAssociationAndGeneRefs\n', gid, label, assoc, self.assoc)
-                        self.__objref__().addGene(Gene(gid, label, active=True))
-                        self.addGeneref(gid)
-        else:
-            self.generefs = []
+                label = gid
+            newgid = fixId(gid, replace='_')
+            if gid != newgid:
+                # This needs to be tested
+                newgid = fixId(gid, replace='_{}_'.format(self._gene_id_ucntr_))
+                self._gene_id_ucntr_ += 1
+                print('INFO: geneLabel is not Sid compatible, replacing \"{}\" with {} in geneId'.format(gid, newgid))
+                #assoc = self.assoc.replace(gid, newgid)
+                self.__renameGeneIdRefsInGPRTree__(self.getTree(), gid, newgid)
+                self._MODIFIED_ASSOCIATION_ = True
+                gid = newgid
+            if gid in self.generefs:
+                #print('gid in generef')
+                pass
+            elif gid in mod_genes:
+                self.addGeneref(gid)
+                #print('addGeneRef')
+            else:
+                #print('createAssociationAndGeneRefs\n', gid, label, assoc, self.assoc)
+                self.__objref__().addGene(Gene(gid, label, active=True))
+                self.addGeneref(gid)
         self.buildEvalFunc()
 
     def createAssociationAndGeneRefs(self):
@@ -4799,7 +4825,7 @@ class GeneProteinAssociation(Fbase):
         Extract the gene id references from the GPR tree
 
         - *gprd* the gprTree
-         - *out* the output list
+        - *out* the output list
 
         """
         for k in gprd:
@@ -4821,7 +4847,7 @@ class GeneProteinAssociation(Fbase):
         - *new* the new gene id
 
         """
-        for k in gprd:
+        for k in list(gprd):
             if k.startswith('_AND_'):
                 self.__renameGeneIdRefsInGPRTree__(gprd[k], old, new)
             elif k.startswith('_OR_'):
@@ -4962,9 +4988,13 @@ class GeneProteinAssociation(Fbase):
         - *gid* a valid gene identifier (not label)
 
         """
+        #print('DeleteGene is processing gene: {}'.format(gid))
         if gid in self.generefs:
+            #print('DeleteGene is deleting: {} ...'.format(gid))
+            #print(self.tree)
             self.deleteGeneref(gid)
-            self.__deleteGeneFromTree__(self.getTree(), gid)
+            self.tree = self.__deleteGeneFromTree__(self.tree, gid)
+            #print(self.tree)
             self.buildEvalFunc()
         else:
             print('Gene Id {} is not part of GPR {}'.format(gid, self.getId()))
@@ -4978,8 +5008,14 @@ class GeneProteinAssociation(Fbase):
         for k in list(D):
             if k == delid:
                 D.pop(k)
+            elif len(k) == 0:
+                D.pop(k)
+            elif len(D[k]) == 1:
+                D.update(D.pop(k))
             elif k.startswith('_AND_') or k.startswith('_OR_'):
-                self.__deleteGeneFromTree__(D[k], delid)
-            else:
-                pass
+                D[k] = self.__deleteGeneFromTree__(D[k], delid)
+                if len(D[k]) == 0:
+                    D.pop(k)
+                elif len(D[k]) == 1:
+                    D.update(D.pop(k))
         return D

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 620 2017-09-06 13:43:01Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 623 2017-10-13 14:40:39Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1786,6 +1786,7 @@ class CBMtoSBML3(FBCconnect):
 
         """
         if len(self.fba.gpr) == 0 and parse_from_annotation:
+            print('addGeneProteinAssociationsV1 is generating gpr\'s from annotation strings')
             self.fba.createGeneAssociationsFromAnnotations(annotation_key)
 
         for g_ in self.fba.gpr:
@@ -2508,10 +2509,10 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
     cs3.addObjectives()
 
     if fbc_version == 1:
-        cs3.addGeneProteinAssociationsV1(parse_from_annotation=gpr_from_annot, annotation_key='GENE ASSOCIATION',\
+        cs3.addGeneProteinAssociationsV1(parse_from_annotation=gpr_from_annot, annotation_key='GENE_ASSOCIATION',\
                                          add_cbmpy_anno=add_cbmpy_annot)
     elif fbc_version == 2:
-        cs3.addGenesV2(parse_from_annotation=gpr_from_annot, annotation_key='GENE ASSOCIATION',\
+        cs3.addGenesV2(parse_from_annotation=gpr_from_annot, annotation_key='GENE_ASSOCIATION',\
                        add_cbmpy_anno=add_cbmpy_annot)
 
     # create a model
