@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 623 2017-10-13 14:40:39Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 625 2017-10-20 12:00:53Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3758,7 +3758,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         for g_ in GENE_D:
             G = fm.getGene(g_)
             if G is not None:
-                G.setLabel(GENE_D[g_]['label'])
+                if G.getLabel() != GENE_D[g_]['label']:
+                    print(G.getLabel(), GENE_D[g_]['label'])
+                    G.setLabel(GENE_D[g_]['label'])
                 G.name = GENE_D[g_]['name']
                 G.annotation = GENE_D[g_]['annotation']
                 G.__sbo_term__ = GENE_D[g_]['sbo']

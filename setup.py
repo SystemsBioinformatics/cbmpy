@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 593 2017-05-29 07:09:52Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 628 2017-10-20 12:33:26Z bgoli $)
 
 """
 
@@ -55,7 +55,7 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 593 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 628 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -67,8 +67,8 @@ setup(
  data_files = mydata_files,
  name = "cbmpy",
  summary = "CBMPy: Constraint Based Modelling in Python",
- #version = "0.7.14.{}".format(STATUS),
- version = "0.7.15",
+ #version = "0.7.19.{}".format(STATUS),
+ version = "0.7.18",
  maintainer = 'Brett G. Olivier',
  author = 'Brett G. Olivier',
  maintainer_email = 'bgoli@users.sourceforge.net',
@@ -140,8 +140,14 @@ setup(
 
   https://github.com/bgoli/cbmpy-build.git
 
- Manual dependency configuration is provided below. For Windows users most of these utilities are included in
- Python distributions like Anaconda (recomended)
+ Manual dependency configuration is provided below although for almost all users the "batteries included"
+ Python distribution Anaconda (http://www.anaconda.io) is recommended. Using conda installing CBMPy
+ is then as easy as:
+
+  conda install -c bgoli -c sbmlteam cbmpy
+
+ If you would like to roll your own installation on Linux using the native Python this is also relatively
+ easy.
 
  Python2
  -------
@@ -211,7 +217,7 @@ setup(
 
   sudo pip install cbmpy
 
- or try the new experimental CONDA support::
+ or try the new CONDA support::
 
   conda install -c bgoli -c sbmlteam cbmpy
 
