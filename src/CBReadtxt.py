@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 629 2017-10-24 22:01:14Z bgoli $)
 
 """
 
@@ -124,7 +124,7 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
     rF.close()
 
     if save_rpt:
-        F = file('csv_read_rpt.txt','w')
+        F = open('csv_read_rpt.txt','w')
         F.write('\nCSV Read Report\n********************\n')
         F.write('\nDuplicate entries ignored:\n')
         for d in real_duplicates:
@@ -200,7 +200,7 @@ def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_
     rF.close()
 
     if save_rpt:
-        F = file('csv_read_rpt.txt','w')
+        F = open('csv_read_rpt.txt','w')
         F.write('\nCSV Read Report\n********************\n')
         F.write('\nDuplicate entries ignored:\n')
         for d in real_duplicates:

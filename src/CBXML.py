@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 625 2017-10-20 12:00:53Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 629 2017-10-24 22:01:14Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -311,7 +311,7 @@ def sbml_readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_bounda
         ANOT = ANOT.replace('<annotation>', '<annotation xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:fba="http://www.sbml.org/sbml/level3/version1/fba/version1">')
         #_TEMP_XML_FILE_ = createTempFileName()
         #_TEMP_XML_FILE_ = os.path.join(work_dir, _TEMP_XML_FILE_)
-        #F = file(_TEMP_XML_FILE_,'w')
+        #F = open(_TEMP_XML_FILE_,'w')
         F.write(ANOT)
         F.seek(0)
         #F.flush()
@@ -667,7 +667,7 @@ def xml_viewSBML2FBAXML(document, fname=None):
     ##  print DOC.toxml('UTF-8')
     ##  print document.toprettyxml(indent=' ',newl='\n',encoding='UTF-8')
     if fname != None:
-        FO = file(fname, 'w')
+        FO = open(fname, 'w')
         document.writexml(FO, indent='', addindent='    ', newl='\n', encoding='UTF-8')
         FO.flush()
         FO.close()
@@ -1299,7 +1299,7 @@ def sbml_exportSBML2FBAModel(document, filename, directory=None, return_doc=Fals
         SBMLDoc = SBMLDoc.replace('<body xmlns:html="http://www.w3.org/1999/xhtml">','')
         SBMLDoc = SBMLDoc.replace('</body>','')
 
-    F = file(filename, 'w')
+    F = open(filename, 'w')
     F.write(h1 + SBMLDoc)
     F.flush()
     F.close()
@@ -2547,7 +2547,7 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
         print('Model exported as: {}'.format(fname+'.zip'))
     else:
         #raw_input('L%sV%s' % (document.getLevel(),document.getVersion()))
-        F = file(fname, 'w')
+        F = open(fname, 'w')
         F.write(h1 + cs3.doc.toSBML())
         F.flush()
         F.close()

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBNetDB.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 629 2017-10-24 22:01:14Z bgoli $)
 
 """
 
@@ -29,7 +29,12 @@ from __future__ import absolute_import
 #from __future__ import unicode_literals
 
 import os, time, re, webbrowser, csv
-import urllib2
+try:
+    from urllib2 import quote as urlquote
+    from urllib2 import unquote as urlunquote
+except ImportError:
+    from urllib.parse import quote as urlquote
+    from urllib.parse import unquote as urlunquote
 
 HAVE_SQLITE2 = False
 HAVE_SQLITE3 = False
@@ -51,7 +56,6 @@ __version__ = __CBCONFIG__['VERSION']
 
 
 class NetDBbase(object):
-    urllib2 = urllib2
     text_encoding = 'utf8'
 
     def URLEncode(self, txt):
@@ -59,14 +63,14 @@ class NetDBbase(object):
         URL encodes a string.
 
         """
-        return self.urllib2.quote(txt.encode(self.text_encoding))
+        return urlquote(txt.encode(self.text_encoding))
 
     def URLDecode(self, txt):
         """
         Decodes a URL encoded string
 
         """
-        return self.urllib2.unquote(txt)
+        return urlunquote(txt)
 
 class DBTools(NetDBbase):
     """
@@ -88,7 +92,7 @@ class DBTools(NetDBbase):
             self.sqlite = sqlite2
             self.sqlite_version = 2
         else:
-            raise RuntimeError, "\nSQLite not installed"
+            raise RuntimeError("\nSQLite not installed")
 
         self.db_tables = []
 

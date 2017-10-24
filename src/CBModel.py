@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 625 2017-10-20 12:00:53Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 629 2017-10-24 22:01:14Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -34,7 +34,14 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import numpy, re, time, weakref, copy, json, urllib2, ast
+import numpy, re, time, weakref, copy, json, ast
+
+try:
+    from urllib2 import quote as urlquote
+    from urllib2 import unquote as urlunquote
+except ImportError:
+    from urllib.parse import quote as urlquote
+    from urllib.parse import unquote as urlunquote
 
 global GENE_CNTR
 GENE_CNTR = 0
@@ -218,7 +225,10 @@ class Fbase(object):
 
         """
         #self.notes = self.__urlEncode(notes)
-        self.notes = notes.decode(errors='ignore')
+        try:
+            self.notes = notes.decode(errors='ignore')
+        except AttributeError:
+            self.notes=notes
 
     def setAnnotation(self, key, value):
         """
@@ -347,7 +357,7 @@ class Fbase(object):
         # Reimplemented in Model
 
         """
-        F = file(filename, 'wb')
+        F = open(filename, 'wb')
         pickle.dump(self, F, protocol=protocol)
         F.close()
 
@@ -440,7 +450,7 @@ class Fbase(object):
 
         """
         try:
-            txt = urllib2.quote(txt.encode(self.__text_encoding__, errors='replace'), safe='')
+            txt = urlquote(txt.encode(self.__text_encoding__, errors='replace'), safe='')
         except UnicodeDecodeError as why:
             pass
             #print(txt)
@@ -451,7 +461,7 @@ class Fbase(object):
         Decodes a URL encoded string
 
         """
-        return urllib2.unquote(txt)
+        return urlunquote(txt)
 
 class Model(Fbase):
     """
@@ -716,7 +726,7 @@ class Model(Fbase):
         # overloaded in CBModel
 
         """
-        F = file(filename, 'wb')
+        F = open(filename, 'wb')
         pickle.dump(self, F, protocol=protocol)
         F.close()
         self.__setGlobalIdStore__()
@@ -4584,7 +4594,7 @@ class GeneProteinAssociation(Fbase):
 
         """
         #self.assoc = assoc
-        raise RuntimeError, '\nThis method has ceased to exist'
+        raise RuntimeError('\nThis method has ceased to exist')
 
     def createAssociationAndGeneRefsFromTree(self, gprtree, altlabels=None):
         """
@@ -4633,7 +4643,7 @@ class GeneProteinAssociation(Fbase):
         self.buildEvalFunc()
 
     def createAssociationAndGeneRefs(self):
-        raise RuntimeError, "\n\nDEPRECATED CHANGE NOW!"
+        raise RuntimeError("\n\nDEPRECATED CHANGE NOW!")
 
     def createAssociationAndGeneRefsFromString(self, assoc, altlabels=None):
         """
@@ -4688,7 +4698,7 @@ class GeneProteinAssociation(Fbase):
             except SyntaxError:
                 err = '\nError in Gene Association String: {}\n'.format(assoc)
                 #print(err)
-                raise SyntaxError, err
+                raise SyntaxError(err)
             self.setTree(newtree)
             genes = self.__getGeneRefsfromGPRDict__(newtree, [])
             genes.sort()
@@ -4788,7 +4798,7 @@ class GeneProteinAssociation(Fbase):
             keymap = {}
             for g in self.generefs:
                 keymap[g] = self.__objref__().getGene(g).getLabel()
-            keys = keymap.keys()
+            keys = list(keymap.keys())
             keys.sort(reverse=True)
             for k in keys:
                 out = out.replace(k, keymap[k])

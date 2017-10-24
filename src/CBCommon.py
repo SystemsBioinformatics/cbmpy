@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 616 2017-08-23 11:47:47Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 629 2017-10-24 22:01:14Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -98,9 +98,9 @@ ptElements = ('H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 
         #except Exception as ex:
             #print(ex)
 
-#def flushLogToFile(fname):
+#def flushLogToopen(fname):
     #global CBMPYLOG
-    #F = file(fname, 'w')
+    #F = open(fname, 'w')
     #CBMPYLOG.seek(0)
     #F.write(CBMPYLOG.read())
     #F.flush()
@@ -327,7 +327,8 @@ def getGPRasDictFromString(node, out):
         if isinstance(node, ast.Expr):
             children = [node.value]
         else:
-            children = node.values
+            #children = node.values
+            children = []
         cntr2 = 0
         for v in children:
             if isinstance(v, ast.BoolOp) and isinstance(v.op, ast.And):

@@ -105,7 +105,7 @@ class LPBase(object):
         if self.linear_constraints is None:
             self.linear_constraints = {}
         if cid in self.linear_constraints and not overwrite:
-            raise RuntimeWarning, '\nConstraint id {} already exists.'.format(cid)
+            raise RuntimeWarning('\nConstraint id {} already exists.'.format(cid))
         else:
             self.linear_constraints[cid] = (arr, sense, rhs)
 

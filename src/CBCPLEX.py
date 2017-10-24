@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 629 2017-10-24 22:01:14Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -485,7 +485,7 @@ def cplx_setOutputStreams(lp, mode='default'):
         CPLX_SILENT_MODE = True
     elif CPLX_RESULT_STREAM == 'file':
         if CPLX_RESULT_STREAM_FILE == None:
-            CPLX_RESULT_STREAM_FILE = file('cplex_output.log', 'w')
+            CPLX_RESULT_STREAM_FILE = open('cplex_output.log', 'w')
         lp.set_log_stream(CPLX_RESULT_STREAM_FILE)
         lp.set_results_stream(CPLX_RESULT_STREAM_FILE)
         CPLX_SILENT_MODE = True

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 615 2017-08-21 12:58:31Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 629 2017-10-24 22:01:14Z bgoli $)
 
 """
 
@@ -171,7 +171,7 @@ def writeSensitivitiesToCSV(sensitivities, fname):
     obj_sens = sensitivities[0]
     rhs_sens = sensitivities[1]
     bound_sens = sensitivities[2]
-    F = file(fname+'_flux_sensitivity.csv', 'w')
+    F = open(fname+'_flux_sensitivity.csv', 'w')
     head = "Flux,Reduced cost,OCS low,OC value,OCS high,LB low,LB high,UB low,UB high"
     F.write(head+'\n')
     for j in obj_sens:
@@ -205,7 +205,7 @@ def writeSensitivitiesToCSV(sensitivities, fname):
     F.flush()
     F.close()
 
-    F = file(fname+'_constraint_sensitivity.csv', 'w')
+    F = open(fname+'_constraint_sensitivity.csv', 'w')
     F.write('Constraint,RHS low,RHS,RHS high\n')
     for c in rhs_sens:
         F.write('%s,%s,%s,%s\n' % (c, rhs_sens[c][0], rhs_sens[c][1], rhs_sens[c][2]))
@@ -230,7 +230,7 @@ def writeModelRaw(fba, work_dir=cDir):
     """
     if work_dir == None:
         work_dir = os.getcwd()
-    FF = file(os.path.join(work_dir,'WriteModelRawOutput.txt'), 'w')
+    FF = open(os.path.join(work_dir,'WriteModelRawOutput.txt'), 'w')
     FF.write('Species information:\n\n')
     for s in fba.species:
         FF.write('%s: value=%f, is_boundary=%s, name=%s\n' % (s.getId(), s.value, int(s.is_boundary), s.name))
@@ -658,11 +658,11 @@ def writeModelLPOld(fba, work_dir=None, multisymb=' ', lpt=True, constraint_mode
         FnameTmp = FnameTmp+'.rat'
     if not lpt:
         FNAME = FnameTmp+'.lp'
-        FF = file(FNAME, 'w')
+        FF = open(FNAME, 'w')
         FF.write('Problem\n %s\n\n' % FnameTmp)
     else:
         FNAME = FnameTmp+'.lp'
-        FF = file(FNAME, 'w')
+        FF = open(FNAME, 'w')
         FF.write('\\\\ %s \n\n' % FnameTmp)
     objO = fba.objectives[fba.activeObjIdx].operation.lower()
     objO = objO[0].upper() + objO[1:]
@@ -749,7 +749,7 @@ def writeModelLP(fba, work_dir=None, fname=None, multisymb=' ', format='%s', use
         FnameTmp = fname
 
     FNAME = FnameTmp+'.lp'
-    FF = file(FNAME, 'w')
+    FF = open(FNAME, 'w')
     FF.write('\\\\ %s \n\n' % FnameTmp)
     if len(fba.objectives) > 0:
         ##  print fba.objectives
@@ -1006,7 +1006,7 @@ def writeModelHFormatFBA(fba, work_dir=None, use_rational=False, fullLP=True, fo
         assert os.path.exists(work_dir), '\nJanee ...'
         Fname = os.path.join(work_dir, name)
 
-    F = file(Fname, 'w')
+    F = open(Fname, 'w')
     F.write('* %s\n\n' % name)
     F.write('H-representation\n\nbegin\n')
     NUM_TYPE = 'real'
@@ -1037,7 +1037,7 @@ def writeModelHFormatFBA(fba, work_dir=None, use_rational=False, fullLP=True, fo
         F.write('end\n')
     F.write('\n')
     F.close()
-    F = file(Fname.replace('.ine','')+'.columns.txt', 'w')
+    F = open(Fname.replace('.ine','')+'.columns.txt', 'w')
     for j in range(M.N.array.shape[1]):
         F.write('%s,%s\n' % (j, M.N.col[j]))
     F.write('\n')
@@ -1139,7 +1139,7 @@ def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fu
     else:
         fname += '_r.ine'
 
-    F = file(fname, 'w')
+    F = open(fname, 'w')
     F.write('* %s\n' % os.path.split(fname)[-1])
     F.write('H-representation\nbegin\n')
     NUM_TYPE = 'real'
@@ -1194,7 +1194,7 @@ def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fu
         F.write('end\n')
     F.write('\n')
     F.close()
-    F = file(fname.replace('.ine','')+'.columns.txt', 'w')
+    F = open(fname.replace('.ine','')+'.columns.txt', 'w')
     for j in range(M.N.array.shape[1]):
         F.write('%s,%s\n' % (j, M.N.col[j]))
     F.write('\n')
@@ -1277,7 +1277,7 @@ def writeStoichiometricMatrix(fba, fname=None, work_dir=None, use_rational=False
     else:
         fname += '_r.ine'
 
-    F = file(fname, 'w')
+    F = open(fname, 'w')
     #F.write('* %s\n' % os.path.split(fname)[-1])
     #F.write('H-representation\nbegin\n')
     #NUM_TYPE = 'real'
@@ -1324,7 +1324,7 @@ def writeStoichiometricMatrix(fba, fname=None, work_dir=None, use_rational=False
         #F.write('end\n')
     #F.write('\n')
     F.close()
-    F = file(fname.replace('.ine','')+'.columns.txt', 'w')
+    F = open(fname.replace('.ine','')+'.columns.txt', 'w')
     for j in range(M.N.array.shape[1]):
         F.write('%s,%s\n' % (j, M.N.col[j]))
     F.write('\n')
@@ -1335,7 +1335,7 @@ def writeStoichiometricMatrix(fba, fname=None, work_dir=None, use_rational=False
 def writeListToLP(fname, obj=None, const=None, bnds=None, work_dir=None, objtype='maximize'):
     if work_dir == None:
         work_dir = os.getcwd()
-    F = file(os.path.join(work_dir, fname+'.lp'), 'w')
+    F = open(os.path.join(work_dir, fname+'.lp'), 'w')
     F.write("\\\\ %s\n" % fname)
     objtype = objtype.lower()
     if objtype == 'max': objtype = 'maximize'
@@ -1518,7 +1518,7 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
         for b in bndL:
             print(b)
 
-    F = file(os.path.join(work_dir, fname+'.lp'), 'w')
+    F = open(os.path.join(work_dir, fname+'.lp'), 'w')
     header = '\\\\ MultiInputMinimization: '
     for f in fbas:
         header += '%s, ' % f.getId()
@@ -1736,7 +1736,7 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
         for b in bndL:
             print(b)
 
-    F = file(os.path.join(work_dir, fname+'.lp'), 'w')
+    F = open(os.path.join(work_dir, fname+'.lp'), 'w')
     header = '\\\\ MultiInputMinimization: '
     for f in fbas:
         header += '%s, ' % f.getId()
@@ -1907,7 +1907,7 @@ def writeMinDistanceLPwithCost(fname, fbas, work_dir=None, ignoreDistance=[], co
         for b in bndL:
             print b
 
-    F = file(os.path.join(work_dir, fname+'.lp'), 'w')
+    F = open(os.path.join(work_dir, fname+'.lp'), 'w')
     header = '\\\\ MultiInputMinimization: '
     for f in fbas:
         header += '%s, ' % f.getId()
@@ -1953,7 +1953,7 @@ def writeOptimalSolution(fba, fname, Dir=None, separator=',', only_exchange=Fals
     else:
         objName = fba.objectives[fba.activeObjIdx].getFluxObjectiveReactions()[0]
     try:
-        F = file(fname_r, 'w')
+        F = open(fname_r, 'w')
     except IOError:
         print('\nCSV file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(fname_r))
         return
@@ -2025,7 +2025,7 @@ def writeReactionInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=F
     else:
         objName = fba.objectives[fba.activeObjIdx].getFluxObjectiveReactions()[0]
     try:
-        F = file(fname_r, 'w')
+        F = open(fname_r, 'w')
     except IOError:
         print('\nOutput file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(fname_r))
         return
@@ -2100,8 +2100,8 @@ def writeSpeciesInfoToFile(fba, fname, Dir=None, separator=',', met_type='all'):
         met_type = 'all'
 
     try:
-        F2 = file(fname_s, 'w')
-        F3 = file(fname_sr, 'w')
+        F2 = open(fname_s, 'w')
+        F3 = open(fname_sr, 'w')
     except IOError:
         print('\nOutput file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(fname_s))
         return
@@ -2200,7 +2200,7 @@ def writeProteinCostToCSV(fba, fname):
      - *fname* the exported file name
 
     """
-    F = file(fname+'.costs.csv','w')
+    F = open(fname+'.costs.csv','w')
     F.write('rid,minL,maxL,avgL,cost\n')
     for R in fba.reactions:
         rid = R.getId()
@@ -2258,7 +2258,7 @@ def writeFVAtoCSV(fvadata, names, fname, Dir=None, fbaObj=None):
         Dir = os.path.join(Dir, fname+'.fva.csv')
     else:
         Dir = fname+'.fva.csv'
-    F = file(Dir, 'w')
+    F = open(Dir, 'w')
     if fbaObj == None:
         F.write('name,optval,min,max,diff,red cost,minstat,maxstat\n')
     else:
@@ -2318,9 +2318,9 @@ def writeFVAdata(fvadata, names, fname, work_dir=None, roundec=None, scale_min=F
     else:
         work_dir = fname+'.fvadata.csv'
     if not appendfile:
-        F = file(work_dir, 'w')
+        F = open(work_dir, 'w')
     else:
-        F = file(work_dir, 'a')
+        F = open(work_dir, 'a')
     if info == None:
         F.write('%s,%s,%s,%s,%s\n' % ('Jid', 'min', 'max', 'optval', 'span'))
     else:
@@ -2386,7 +2386,7 @@ def writeSolutions(fname, sols=[], sep=',', extra_output=None, fba=None):
             reac_names.append(fba.getReaction(r).getName())
             ##  reac_bnds.append(fba.getReactionBounds(r.getId()))
 
-    F = file(fname+'.csv', 'w')
+    F = open(fname+'.csv', 'w')
     for r in range(len(reac_ids)):
         row = '%s%s' % (reac_ids[r], sep)
         s_str = ''
@@ -2473,7 +2473,7 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         print('\nERROR: Cannot create Excel file, XLWT package not available (http://pypi.python.org/pypi/xlwt)')
         return
     try:
-        F = file('{}.xls'.format(filename), 'wb')
+        F = open('{}.xls'.format(filename), 'wb')
         F.close()
     except:
         print('\nERROR: cannot open file "{}"! Please close workbook before writing!\n'.format('{}.xls'.format(filename)))
@@ -2913,12 +2913,12 @@ def writeModelToCOMBINEarchive(mod, fname=None, directory=None, sbmlname=None, w
         xlf += '.xls'
         zf.write(os.path.join(ptmp, xlf), arcname=xlf)
         MFstr += ' <content location="./{}" format="http://mediatypes.appspot.com/application/vnd.ms-excel"/>'.format(xlf)
-    MF = file(os.path.join(ptmp, 'manifest.xml'), 'w')
+    MF = open(os.path.join(ptmp, 'manifest.xml'), 'w')
     MF.write('<?xml version="1.0" encoding="utf-8"?>\n{}\n</omexManifest>\n'.format(MFstr))
     MF.close()
 
 
-    MD = file(os.path.join(ptmp, 'metadata.rdf'), 'w')
+    MD = open(os.path.join(ptmp, 'metadata.rdf'), 'w')
     MD.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     MD.write('<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n')
     MD.write('    xmlns:dcterms="http://purl.org/dc/terms/"\n')

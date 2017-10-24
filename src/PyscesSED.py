@@ -15,8 +15,17 @@ NO WARRANTY IS EXPRESSED OR IMPLIED.  USE AT YOUR OWN RISK.
 Brett G. Olivier
 """
 
-import os, time, numpy, itertools, cStringIO, subprocess, zipfile, cPickle
-#import pysces
+import os, time, numpy, itertools, subprocess, zipfile
+
+try:
+    import cStringIO as csio
+except ImportError:
+    import io as csio
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 class SBWSEDMLWebApps:
     """
@@ -65,9 +74,9 @@ class SBWSEDMLWebApps:
             print('Connecting ...')
             g = self.Kclient.service.GetVersion()
             print('done.')
-        except Exception, ex:
+        except Exception as ex:
             print('\nERROR: GetVersion() exception\n')
-            print ex
+            print(ex)
         return g
 
     def ConvertScriptToSedML(self, sedscript):
@@ -85,9 +94,9 @@ class SBWSEDMLWebApps:
             print('Connecting ...')
             g = self.Kclient.service.ConvertScriptToSedML(sedscript)
             print('done.')
-        except Exception, ex:
+        except Exception as ex:
             print('\nERROR: ConvertScriptToSedML() exception\n')
-            print ex
+            print(ex)
         return g
 
 class SED(object):
@@ -202,7 +211,7 @@ class SED(object):
 
     def addTaskDataGenerators(self, taskId):
         assert self.tasks.has_key(taskId), '\nBad taskId'
-        print self.tasks
+        print(self.tasks)
         for o_ in self.sims[self.tasks[taskId]['sim']]['output']:
             self.addDataGenerator(o_, taskId)
 
@@ -238,7 +247,7 @@ class SED(object):
         self.__pysces__.interface.writeMod2SBML(mod, mfile)
 
     def writeSedScript(self, sedx=False):
-        sedscr = cStringIO.StringIO()
+        sedscr = csio.StringIO()
         if not os.path.exists(self.sedpath):
             os.makedirs(self.sedpath)
         for m_ in self.models:
@@ -294,20 +303,20 @@ class SED(object):
             sedscr.write("AddReport('%s', '%s', [%s])" % (r_, R['name'], cstr[:-2]))
         sedscr.write('\n')
 
-        print '\nThe SED\n++++++\n'
+        print('\nThe SED\n++++++\n')
         sedscr.seek(0)
-        print sedscr.read()
+        print(sedscr.read())
         sedscr.seek(0)
         if not sedx:
             sf = os.path.join(self.sedpath, '%s.txt' % (self.id))
         else:
             sf = os.path.join(self.sedpath, 'sedxtmp', '%s.txt' % (self.id))
-        F = file(sf, 'w')
+        F = open(sf, 'w')
         F.write(sedscr.read())
         F.flush()
         F.close()
         self.__sedscript__ = sf
-        print '\nSED-ML script files written to:', sf
+        print('\nSED-ML script files written to:', sf)
 
     def writeSedXML(self, sedx=False):
         sedname = '%s.sed.xml' % (self.id)
@@ -318,7 +327,7 @@ class SED(object):
             sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
 
         if self._SED_CURRENT_:
-            print '\nBypass active: SED-ML files written to: %s' % self.sedpath
+            print('\nBypass active: SED-ML files written to: %s' % self.sedpath)
         elif self.HAVE_LIBSEDML:
             assert os.path.exists(self.libSEDMLpath)
             #sedname = '%s.sed.xml' % (self.id)
@@ -328,17 +337,16 @@ class SED(object):
             #else:
                 #sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
             cmd = ['%s' % str(self.libSEDMLpath), '--fromScript', '%s' % str(self.__sedscript__), '%s' % str(sf)]
-            print cmd
             try:
                 a = subprocess.call(cmd)
-            except Exception, ex:
-                print '\nOops no SED: %s' % ex
+            except Exception as ex:
+                print('\nOops no SED: %s' % ex)
             self.__sedxml__ = sf
-            F = file(sf, 'r')
+            F = open(sf, 'r')
             self._SED_XML_ = F.read()
             F.close()
             del F
-            print 'SED-ML files written to: %s' % self.sedpath
+            print('SED-ML files written to: %s' % self.sedpath)
             self.__sedarchive__ = None
         elif self.HAVE_SBWSEDSOAP:
             print('\nINFO: PySCeS will now try to connect via internet to: http://sysbioapps.dyndns.org ...\n(press <ctrl>+<c> to abort)')
@@ -350,22 +358,22 @@ class SED(object):
             #else:
                 #sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
 
-            F = file(self.__sedscript__, 'r')
+            F = open(self.__sedscript__, 'r')
             sedscr = F.read()
             F.close()
             self._SED_XML_ = self.sbwsedclient.ConvertScriptToSedML(sedscr)
-            F = file(sf, 'w')
+            F = open(sf, 'w')
             F.write(self._SED_XML_)
             F.flush()
             F.close()
 
             self.__sedxml__ = sf
-            print 'SED-ML files written to: %s' % self.sedpath
+            print('SED-ML files written to: %s' % self.sedpath)
             self.__sedarchive__ = None
         else:
-            raise RuntimeError, '\n'
+            raise(RuntimeError)
         if self._SED_CURRENT_:
-            F = file(self.__sedxml__, 'w')
+            F = open(self.__sedxml__, 'w')
             F.write(self._SED_XML_)
             F.flush()
             F.close()
@@ -391,7 +399,7 @@ class SED(object):
         if not self._SED_CURRENT_:
             self.__sedxml__ = None
         self.__sedscript__ = None
-        print 'SED-ML archive created: %s' % sf
+        print('SED-ML archive created: %s' % sf)
 
     def writeCOMBINEArchive(self, vc_given='PySCeS', vc_family='Software', vc_email='', vc_org='pysces.sourceforge.net'):
         """
@@ -425,11 +433,11 @@ class SED(object):
             MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sbml"/>\n' % modname
         MFstr += ' <content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>'
 
-        MF = file(os.path.join(ptmp, 'manifest.xml'), 'w')
+        MF = open(os.path.join(ptmp, 'manifest.xml'), 'w')
         MF.write('<?xml version="1.0" encoding="utf-8"?>\n%s\n</omexManifest>\n' % MFstr)
         MF.close()
 
-        MD = file(os.path.join(ptmp, 'metadata.rdf'), 'w')
+        MD = open(os.path.join(ptmp, 'metadata.rdf'), 'w')
         MD.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         MD.write('<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n')
         MD.write('    xmlns:dcterms="http://purl.org/dc/terms/"\n')
@@ -472,7 +480,7 @@ class SED(object):
         if not self._SED_CURRENT_:
             self.__sedxml__ = None
         self.__sedscript__ = None
-        print 'COMBINE archive created: %s' % sf
+        print('COMBINE archive created: %s' % sf)
 
 class SEDCBMPY(SED):
     __cbmpy__ = None
@@ -547,7 +555,7 @@ class SEDCBMPY(SED):
 
 
     def writeSedScript(self, sedx=False, excel=True):
-        sedscr = cStringIO.StringIO()
+        sedscr = csio.StringIO()
         if not os.path.exists(self.sedpath):
             os.makedirs(self.sedpath)
         for m_ in self.models:
@@ -608,20 +616,20 @@ class SEDCBMPY(SED):
             sedscr.write("AddReport('%s', '%s', [%s])" % (r_, R['name'], cstr[:-2]))
         sedscr.write('\n')
 
-        print '\nThe SED\n++++++\n'
+        print('\nThe SED\n++++++\n')
         sedscr.seek(0)
-        print sedscr.read()
+        print(sedscr.read())
         sedscr.seek(0)
         if not sedx:
             sf = os.path.join(self.sedpath, '%s.txt' % (self.id))
         else:
             sf = os.path.join(self.sedpath, 'sedxtmp', '%s.txt' % (self.id))
-        F = file(sf, 'w')
+        F = open(sf, 'w')
         F.write(sedscr.read())
         F.flush()
         F.close()
         self.__sedscript__ = sf
-        print '\nSED-ML script files written to:', sf
+        print('\nSED-ML script files written to:', sf)
 
 
     def writeCOMBINEArchive(self, vc_given='PySCeS', vc_family='Software', vc_email='', vc_org='pysces.sourceforge.net'):
@@ -664,11 +672,11 @@ class SEDCBMPY(SED):
             zf.write(xl, arcname=xlf)
             MFstr += ' <content location="./{}" format="http://mediatypes.appspot.com/application/vnd.ms-excel"/>'.format(xlf)
 
-        MF = file(os.path.join(ptmp, 'manifest.xml'), 'w')
+        MF = open(os.path.join(ptmp, 'manifest.xml'), 'w')
         MF.write('<?xml version="1.0" encoding="utf-8"?>\n%s\n</omexManifest>\n' % MFstr)
         MF.close()
 
-        MD = file(os.path.join(ptmp, 'metadata.rdf'), 'w')
+        MD = open(os.path.join(ptmp, 'metadata.rdf'), 'w')
         MD.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         MD.write('<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n')
         MD.write('    xmlns:dcterms="http://purl.org/dc/terms/"\n')
@@ -711,7 +719,7 @@ class SEDCBMPY(SED):
         if not self._SED_CURRENT_:
             self.__sedxml__ = None
         self.__sedscript__ = None
-        print 'COMBINE archive created: %s' % sf
+        print('COMBINE archive created: %s' % sf)
 
 
 def storeObj(obj, filename):
@@ -720,18 +728,18 @@ def storeObj(obj, filename):
 
     """
     filename = filename+'.dat'
-    F = file(filename, 'wb')
-    cPickle.dump(obj, F, protocol=2)
-    print 'Object serialised as %s' % filename
+    F = open(filename, 'wb')
+    pickle.dump(obj, F, protocol=2)
+    print('Object serialised as %s' % filename)
     F.close()
 
 def loadObj(filename):
     """
-    Loads a serialised Python cPickle from *filename* returns the Python object(s)
+    Loads a serialised Python pickle from *filename* returns the Python object(s)
 
     """
     assert os.path.exists(filename), '\nTry again mate!'
-    F = file(filename, 'rb')
-    obj = cPickle.load(F)
+    F = open(filename, 'rb')
+    obj = pickle.load(F)
     F.close()
     return obj
