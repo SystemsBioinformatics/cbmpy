@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 631 2017-11-03 16:09:23Z bgoli $)
 
 """
 #
@@ -124,7 +124,7 @@ if not __SILENT_START__:
     #print 'pysces.output_dir = ' + output_dir
 
     print('\n\n***********************************************************************')
-    print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling        *'.format(__version__.replace('.{}'.format(rev),'')))
+    print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling       *'.format(__version__.replace('.{}'.format(rev),'')))
     print('*                http://cbmpy.sourceforge.net                         *')
     print('* Copyright(C) Brett G. Olivier 2014 - 2017                           *')
     print('* Dept. of Systems Bioinformatics                                     *')

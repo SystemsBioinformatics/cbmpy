@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBConfig.py 629 2017-10-24 22:01:14Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBConfig.py 631 2017-11-03 16:09:23Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -29,7 +29,6 @@ Last edit: $Author: bgoli $ ($Id: CBConfig.py 629 2017-10-24 22:01:14Z bgoli $)
 ## use with caution: gets rid of module xxx has no member errors (run once enabled)
 # pylint: disable=E1101
 
-
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
@@ -38,7 +37,7 @@ from __future__ import absolute_import
 # release
 
 try:
-    STATUS = '$Rev: 629 $'.replace('Rev: ', '').replace('$', '').strip()
+    STATUS = '$Rev: 631 $'.replace('Rev: ', '').replace('$', '').strip()
 except Exception:
     STATUS = ''
 

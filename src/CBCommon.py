@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 629 2017-10-24 22:01:14Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 630 2017-11-03 16:06:50Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -301,7 +301,7 @@ def func_getAssociationStrFromGprDict(gprd, out, parent=''):
         out = out[1:-1]
     return out
 
-
+# '( llmg_1896  and  llmg_1897  and  llmg_1898  and  llmg_1899  and  llmg_1900  and  llmg_1901 )'
 def getGPRasDictFromString(node, out):
     """
     Converts a GPR string '((g1 and g2) or g3)' to a gprDict which is returned
@@ -322,12 +322,14 @@ def getGPRasDictFromString(node, out):
         left = node.left.id
         right = node.right.id
         gref = '{}-{}'.format(left, right)
-        print('BinOp: {}'.format(gref))
+        #print('BinOp: {}'.format(gref))
     else:
         if isinstance(node, ast.Expr):
             children = [node.value]
+        elif isinstance(node, ast.BoolOp):
+            children = node.values
         else:
-            #children = node.values
+            print('Childless node: ', type(node))
             children = []
         cntr2 = 0
         for v in children:

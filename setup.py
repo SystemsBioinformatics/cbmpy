@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 628 2017-10-20 12:33:26Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 632 2017-11-03 16:11:03Z bgoli $)
 
 """
 
@@ -55,7 +55,7 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 628 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 632 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -67,8 +67,8 @@ setup(
  data_files = mydata_files,
  name = "cbmpy",
  summary = "CBMPy: Constraint Based Modelling in Python",
- #version = "0.7.19.{}".format(STATUS),
- version = "0.7.18",
+ #version = "0.7.20.{}".format(STATUS),
+ version = "0.7.19",
  maintainer = 'Brett G. Olivier',
  author = 'Brett G. Olivier',
  maintainer_email = 'bgoli@users.sourceforge.net',
