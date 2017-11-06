@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 631 2017-11-03 16:09:23Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 633 2017-11-06 09:57:54Z bgoli $)
 
 """
 #
@@ -64,10 +64,10 @@ else:
     print('\nWARNING: No SBML support, top-level SBML read/write functions disabled.\n')
 
 # CBMPy GUI development has ended with WxGUI, download Metatoolkit instead
-try:
-    from .CBWx import runModelEditor as loadCBGUI
-except ImportError as ex:
-    print('GUI module not available')
+## try:
+    ## from .CBWx import runModelEditor as loadCBGUI
+## except ImportError as ex:
+    ## print('GUI module not available')
 
 ##import CBMultiEnv to be deprecated
 #try:

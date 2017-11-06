@@ -26,22 +26,11 @@ Last edit: $Author: bgoli $ ($Id: setup.py 632 2017-11-03 16:11:03Z bgoli $)
 import os
 local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 
-USE_SETUPTOOLS = False
-
-if USE_SETUPTOOLS:
-    # setuptools
+try:
     from setuptools import setup
-else:
-    # distutils
+except:
     from distutils.core import setup
 
-# new more elegant hack implemented to get rid of evil hack and allow pip install
-"""
-# I suspect this is a distutils specific evil hack to get the data into the install directory
-from distutils.command.install import INSTALL_SCHEMES
-for scheme in INSTALL_SCHEMES.values():
-    scheme['data'] = scheme['purelib']
-"""
 mydata_files = []
 # new hack should get rid of the need for this
 #mydata_files.append((os.path.join('cbmpy', 'models'),\
@@ -92,6 +81,16 @@ setup(
     'Topic :: Scientific/Engineering :: Chemistry'
      ],
  description =\
+ """
+ CBMPy (http://cbmpy.sourceforge.net) is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods developed specifically for the ecosystem modelling
+ """
+)
+try:
+    import cbmpy
+except ImportError:
+    pass
+
+readme =\
  """ PySCeS-CBMPy
  ============
 
@@ -226,8 +225,4 @@ setup(
   python setup.py build sdist
   sudo python setup.py install
 
-""")
-try:
-    import cbmpy
-except ImportError:
-    pass
+"""
