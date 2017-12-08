@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 632 2017-11-03 16:11:03Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 634 2017-11-06 10:25:37Z bgoli $)
 
 """
 
@@ -44,7 +44,7 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 632 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 634 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -56,10 +56,11 @@ setup(
  data_files = mydata_files,
  name = "cbmpy",
  summary = "CBMPy: Constraint Based Modelling in Python",
- #version = "0.7.20.{}".format(STATUS),
- version = "0.7.19",
+ version = "0.7.20.{}".format(STATUS),
+ #version = "0.7.20",
  maintainer = 'Brett G. Olivier',
  author = 'Brett G. Olivier',
+ author_email = 'b.g.olivier@vu.nl',
  maintainer_email = 'bgoli@users.sourceforge.net',
     url = "http://cbmpy.sourceforge.net",
     download_url = "http://sourceforge.net/projects/cbmpy/files/release/0.7/",
@@ -81,9 +82,7 @@ setup(
     'Topic :: Scientific/Engineering :: Chemistry'
      ],
  description =\
- """
- CBMPy (http://cbmpy.sourceforge.net) is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods developed specifically for the ecosystem modelling
- """
+ """ CBMPy (http://cbmpy.sourceforge.net) is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods developed specifically for the ecosystem modelling."""
 )
 try:
     import cbmpy
