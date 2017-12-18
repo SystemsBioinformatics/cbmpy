@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 636 2017-12-13 20:05:01Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 640 2017-12-18 18:13:40Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -34,7 +34,7 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import numpy, re, time, weakref, copy, json, ast
+import numpy, re, time, weakref, copy, json, ast, os
 
 try:
     from urllib2 import quote as urlquote
@@ -2885,6 +2885,33 @@ class Model(Fbase):
 
         # investigate the use of numpy index arrays here
         raise NotImplementedError
+
+    def importUserConstraints(self, filename):
+        """
+        Exports user constraints in json
+
+        """
+        F = open(filename, 'r')
+        #din = json.load(F)
+        self.user_constraints = json.load(F)
+        #key = os.path.split(self.sourcefile)[-1]
+        #F.close()
+        #if key in din:
+            #self.user_constraints = din[key]
+        #else:
+            #print('ERROR: constraints refers to file \"{}\" whereas this is file \"{}\"'.format(list(din.keys())[0], key))
+            #return False
+        return True
+
+    def exportUserConstraints(self, filename):
+        """
+        Exports user constraints in json
+
+        """
+        F = open(filename, 'w')
+        #json.dump({os.path.split(self.sourcefile)[-1] : self.user_constraints}, F, indent=2)
+        json.dump(self.user_constraints, F, indent=2)
+        F.close()
 
     def createGroup(self, gid):
         """

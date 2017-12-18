@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 633 2017-11-06 09:57:54Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 640 2017-12-18 18:13:40Z bgoli $)
 
 """
 #
@@ -94,7 +94,6 @@ from . import PyscesSED
 SED = PyscesSED.SEDCBMPY
 
 try:
-    from . import nosetests
     __test_dir__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'nosetests')
     test_set = 1
     test_bundle = os.path.join(__test_dir__, 'cbmpy_test_bundle_v{}.zip.py'.format(test_set))
@@ -107,6 +106,7 @@ try:
         zfile.close()
         #os.remove(test_bundle)
         del zipfile, zfile
+    from . import nosetests
     test = nosetests.run
     del nosetests, test_bundle, test_file, test_set
 except ImportError:

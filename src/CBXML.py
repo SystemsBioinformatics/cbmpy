@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 629 2017-10-24 22:01:14Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 640 2017-12-18 18:13:40Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2552,6 +2552,11 @@ def sbml_writeSBML3FBC(fba, fname, directory=None, sbml_level_version=(3,1), aut
         F.flush()
         F.close()
         print('Model exported as: {}'.format(fname))
+
+
+    # bgoli: temporary (until incorporated into FBC stadard) solution to store the constraints in a separate json file
+    if fba.user_constraints is not None and len(fba.user_constraints) >= 1:
+        fba.exportUserConstraints(fname+'.user_constraints.json')
 
     if VALIDATE:
         sbml_setValidationOptions(cs3.doc, level='full')
