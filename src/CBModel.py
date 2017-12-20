@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 640 2017-12-18 18:13:40Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 641 2017-12-20 15:00:55Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2891,6 +2891,8 @@ class Model(Fbase):
         Exports user constraints in json
 
         """
+        if filename is None:
+            return False
         F = open(filename, 'r')
         #din = json.load(F)
         self.user_constraints = json.load(F)
