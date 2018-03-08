@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 640 2017-12-18 18:13:40Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 643 2018-03-08 23:17:53Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3746,7 +3746,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         # note we may want to add branches here for using indexes etc etc
         non_gpr_genes = []
         for g_ in GPR_D:
-            if GPR_D[g_]['gpr_tree'] is not None and len(GPR_D[g_]['gpr_tree']) > 0:
+            if 'gpr_tree' in GPR_D[g_] and GPR_D[g_]['gpr_tree'] is not None and len(GPR_D[g_]['gpr_tree']) > 0:
                 #print(GPR_D[g_]['gpr_tree'])
                 #fm.createGeneProteinAssociation(GPR_D[g_]['reaction'], GPR_D[g_]['gpr_by_id'], gid=g_, update_idx=False, altlabels=gene_labels)
 
