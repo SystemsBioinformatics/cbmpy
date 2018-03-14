@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCommon.py 630 2017-11-03 16:06:50Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 644 2018-03-14 21:40:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -150,7 +150,6 @@ def checkChemFormula(cf, quiet=False):
             print('WARNING: \"{}\" is not a valid chemical formula.'.format(cf))
         return False
 
-    #print(R2)
     cf2 = ''
     for l_ in R2:
         if l_[0] not in ptElements:
@@ -165,8 +164,9 @@ def checkChemFormula(cf, quiet=False):
 
     if cf != cf2:
         if not quiet:
+            print(R2)
             print('INFO: \"{}\" check formula.'.format(cf))
-        return True
+        return False
     else:
         return True
 

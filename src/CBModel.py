@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 641 2017-12-20 15:00:55Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 644 2018-03-14 21:40:47Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -4228,8 +4228,6 @@ class Species(Fbase):
 
         """
         raise RuntimeError('\nINFO: The static .setReagentOf() method is deprecated, please update your code to use: \".isReagentOf()\"')
-        #if rid not in self.reagent_of:
-            #self.reagent_of.append(rid)
 
     def setChemFormula(self, cf):
         """
@@ -4238,12 +4236,9 @@ class Species(Fbase):
          - *cf* a chemical formula e.g. CH3NO2
 
         """
-        assert cf == '' or checkChemFormula(cf)
+        if cf != '' and not checkChemFormula(cf, quiet=True):
+            print('ERROR: invalid chemFormula \"{}\" being set on Species \"{}\"'.format(cf, self.getId()))
         self.chemFormula = cf
-        #if checkChemFormula(cf):
-            #self.chemFormula = cf
-        #else:
-            #self.chemFormula = ''
 
     def getChemFormula(self):
         """
