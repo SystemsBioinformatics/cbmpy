@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBGLPK.py 575 2017-04-13 12:18:44Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBGLPK.py 645 2018-04-23 22:38:14Z bgoli $)
 
 """
 
@@ -164,7 +164,7 @@ def glpk_constructLPfromFBA(fba, fname=None):
             raise RuntimeError('INFO: invalid operator: %s' % fba.N.operators[n])
 
     # add user defined constraints
-    if fba.CM != None:
+    if fba.CM != None and fba.CM.shape[0] > 0:
         baseRows = len(lp.rows)
         lp.rows.add(CMmat.shape[0])
         for r_ in range(CMmat.shape[0]):

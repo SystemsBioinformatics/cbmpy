@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 634 2017-11-06 10:25:37Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 638 2017-12-15 11:38:40Z bgoli $)
 
 """
 
@@ -44,7 +44,7 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 634 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 638 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
