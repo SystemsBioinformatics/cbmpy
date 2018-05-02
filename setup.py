@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 638 2017-12-15 11:38:40Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 646 2018-05-02 13:55:59Z bgoli $)
 
 """
 
@@ -44,11 +44,11 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 638 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 646 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
-mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.models', 'cbmpy.nosetests', 'cbmpy.solver']
+mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.models', 'cbmpy.nosetests']#, 'cbmpy.solver']
 
 setup(
  package_dir = {'cbmpy' : 'src'},
