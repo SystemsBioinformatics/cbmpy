@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 604 2017-07-17 12:30:08Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 648 2018-05-23 20:01:54Z bgoli $)
 
 """
 
@@ -90,6 +90,37 @@ if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3
     zfile.extractall(path=__example_model_path__)
     zfile.close()
     del zipfile, zfile
+
+def loadModel(sbmlfile):
+    """
+    Loads any SBML model in COBRA, FAME (SBML2FBA), SBML3FBCv1, SBML3FBCv2 format.
+    
+     - *sbmlfile* an SBML model file
+     
+    """
+    mod = res = None
+    print('Attempting to load SBML file: {}'.format(sbmlfile))
+    try:
+        res = CBXML.sbml_fileFindVersion(sbmlfile)[0]
+    except Exception as ex:
+        print(ex)
+        print('\nERROR: cannot determine SBML model type for file {}'.format(sbmlfile))
+        return None
+            
+    try:
+        if res == 'L3V1FBC2':
+            mod = readSBML3FBC(sbmlfile)
+        elif res == 'L3V1FBC1':
+            mod = readSBML3FBC(sbmlfile)
+        elif res == 'COBRA':
+            mod = readCOBRASBML(sbmlfile, delete_intermediate=True)
+        elif res == 'L2FBA':
+            mod = readSBML2FBA(sbmlfile)
+    except Exception as ex:
+        print(ex)
+        print('\nERROR: model load failed for SBML file: {}'.format(sbmlfile))
+        return None
+    return mod
 
 
 def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}, scan_notes_gpr=True):

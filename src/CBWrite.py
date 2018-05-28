@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 629 2017-10-24 22:01:14Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 648 2018-05-23 20:01:54Z bgoli $)
 
 """
 
@@ -66,6 +66,21 @@ try:
     _HAVE_XLWT_ = True
 except ImportError:
     print('\nINFO: No xlwt module available, Excel spreadsheet creation disabled')
+
+
+def saveModel(model, filename, compress=False):
+    """
+    Saves the model to an SBML file using the lates SBML3 FBC version.
+    
+    - *model* the CBMPy model
+    - *filename* the filename to write
+    
+    """
+    
+    writeSBML3FBCV2(model, filename, directory=None, gpr_from_annot=False, add_groups=True,\
+                    add_cbmpy_annot=True, add_cobra_annot=False, validate=False, compress_bounds=True,\
+                    zip_model=compress, return_model_string=False)
+    
 
 def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
                        add_groups=True, add_cbmpy_annot=True, add_cobra_annot=False,\

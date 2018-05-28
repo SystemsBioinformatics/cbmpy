@@ -62,6 +62,7 @@ class TestRunFBA(object):
         """This method is run once for each class before any tests are run"""
         klass.m = {}
         for m in DATA:
+            cmod = None
             if m.startswith('L2CBR_'):
                 cmod = cbmpy.readCOBRASBML(m, work_dir=MDIR,\
                                            output_dir=self.CDIR, delete_intermediate=True)
@@ -69,7 +70,10 @@ class TestRunFBA(object):
                 cmod = cbmpy.readSBML2FBA(os.path.join(MDIR, m))
             elif m.startswith('L3FBCV1_') or m.startswith('L3FBCV2_'):
                 cmod = cbmpy.readSBML3FBC(os.path.join(MDIR, m))
-            klass.m[m] = cmod
+            else:
+                cmod = None
+            if cmod is not None:
+                klass.m[m] = cmod
         if 'HOME' in os.environ:
             klass.CDIR = os.environ['HOME']
         else:

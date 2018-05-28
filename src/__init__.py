@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 640 2017-12-18 18:13:40Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 648 2018-05-23 20:01:54Z bgoli $)
 
 """
 #
@@ -58,8 +58,8 @@ from .CBWrite import writeFVAtoCSV, writeModelToExcel97
 from .CBXML import _HAVE_SBML_
 if _HAVE_SBML_:
     from .CBXML import sbml_fileFindVersion, sbml_fileValidate
-    from .CBRead import readSBML3FBC, readSBML2FBA, readCOBRASBML
-    from .CBWrite import writeSBML3FBC, writeModelToExcel97, writeModelToCOMBINEarchive, writeCOBRASBML, writeSBML3FBCV2
+    from .CBRead import loadModel, readSBML3FBC, readSBML2FBA, readCOBRASBML
+    from .CBWrite import saveModel, writeSBML3FBC, writeModelToExcel97, writeModelToCOMBINEarchive, writeCOBRASBML, writeSBML3FBCV2
 else:
     print('\nWARNING: No SBML support, top-level SBML read/write functions disabled.\n')
 
