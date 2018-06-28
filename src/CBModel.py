@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 644 2018-03-14 21:40:47Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 650 2018-06-28 16:14:26Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -261,22 +261,34 @@ class Fbase(object):
         assert key != self.annotation, '\nAnnotation key {} does not exist'.format(key)
         self.annotation.pop(key)
 
-    def __checkId__(self):
+    def __checkId__(self, cid=None):
         """
-        Checks the validity of the object id, raises a Runtime warning if not.
+        Checks the validity of the object id unless cid is provided, in which case it checks the provided id
+
+         - *cid* [default=None] an optional Id to test for validity, if None then the object id is used
 
         """
-        cntr = 0
-        for c in self.id:
-            if cntr == 0 and c.isalpha() or c == '_':
-                pass
-            elif cntr > 0 and c.isalnum() or c == '_':
-                pass
-            else:
-                print('\"{}\" is an invalid character in id: \"{}\"'.format(c, self.id))
-                #raise RuntimeWarning('\n\"{}\" is an invalid character in id: \"{}\"'.format(c, self.id))
-                return False
-            cntr += 1
+        if cid is None:
+            cid = self.id
+
+        try:
+            exec('{} = 0'.format(cid))
+        except SyntaxError:
+            #print('ERROR: Syntax error, \"{}\" is an invalid object identifier'.format(cid))
+            return False
+
+        ## this was the old way of doing it
+        #cntr = 0
+        #for c in cid:
+            #if cntr == 0 and c.isalpha() or c == '_':
+                #pass
+            #elif cntr > 0 and c.isalnum() or c == '_':
+                #pass
+            #else:
+                #print('\"{}\" is an invalid character in id: \"{}\"'.format(c, cid))
+                ##raise RuntimeWarning('\n\"{}\" is an invalid character in id: \"{}\"'.format(c, cid))
+                #return False
+            #cntr += 1
         return True
 
     def setPid(self, fid):
@@ -299,6 +311,9 @@ class Fbase(object):
 
         """
         fid = str(fid)
+        if not self.__checkId__(fid):
+            raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
+
         if self.__objref__ is not None:
             if fid not in self.__objref__().__global_id__:
                 self.__objref__().__changeGlobalId__(self.id, fid, self)
@@ -1562,6 +1577,18 @@ class Model(Fbase):
             return [g.getId() for g in self.genes]
         else:
             return [g.getId() for g in self.genes if substring in g.getId()]
+
+    def getGPRIds(self, substring=None):
+        """
+        Returns a list of GPR Id's, applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the id
+
+        """
+        if substring is None:
+            return [g.getId() for g in self.gpr]
+        else:
+            return [g.getId() for g in self.gpr if substring in g.getId()]
 
     def getGeneLabels(self, substring=None):
         """
@@ -3224,6 +3251,11 @@ class Compartment(Fbase):
          Reimplements @FBase.setId()
 
         """
+
+        fid = str(fid)
+        if not self.__checkId__(fid):
+            raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
+
         if self.__objref__ is not None:
             if fid not in self.__objref__().__global_id__:
                 self.__objref__().__changeGlobalId__(self.id, fid, self)
@@ -3846,6 +3878,10 @@ class Reaction(Fbase):
 
         """
 
+        fid = str(fid)
+        if not self.__checkId__(fid):
+            raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
+
         oldId = self.getId()
         if self.__objref__ is not None:
             if fid not in self.__objref__().__global_id__:
@@ -4160,6 +4196,10 @@ class Species(Fbase):
 
         """
 
+        fid = str(fid)
+        if not self.__checkId__(fid):
+            raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
+
         NEWID = False
         oldId = self.getId()
         if fid == oldId:
@@ -4459,6 +4499,9 @@ class Gene(Fbase):
 
         """
         fid = str(fid)
+        if not self.__checkId__(fid):
+            raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
+
         if self.__objref__ is not None:
             if fid not in self.__objref__().__global_id__:
                 mod = self.__objref__()
