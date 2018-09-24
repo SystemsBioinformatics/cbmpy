@@ -2,7 +2,7 @@ CBMPy
 =====
 
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ Installation
 
 PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
 based modelling and analysis. It has been designed using principles developed
-in the PySCeS simulation software project: usability, flexibility and accessibility. 
-Its architecture is both extensible and flexible using data structures that are intuitive 
-to  the biologist (metabolites, reactions, compartments) while transparently translating 
+in the PySCeS simulation software project: usability, flexibility and accessibility.
+Its architecture is both extensible and flexible using data structures that are intuitive
+to  the biologist (metabolites, reactions, compartments) while transparently translating
 these into the underlying mathematical structures used in advanced analysis (LP's, MILP's).
 
 PySCeS CBMPy implements popular analyses such as FBA, FVA, element/charge
@@ -43,7 +43,7 @@ needs PySCeS CBMPy supports user interaction via:
 
 For more information on the development and use of PySCeS CBMPy feel free to contact me:
 
-PySCeS-CBMPy has been tested on Windows 7 and 8.1, Mac OSX and Ubuntu Linux 12.04, 14.04, 16.04. 
+PySCeS-CBMPy has been tested on Windows 7 and 8.1, Mac OSX and Ubuntu Linux 12.04, 14.04, 16.04.
 It is compatible with both Python 2.7+ and includes experimental support for Python 3.4+ It is highly recommend to use
 Python 2.7 as not all Python package dependencies (extended functionality) are available for Python 3.
 
@@ -64,7 +64,7 @@ CBMPy is now available as a crosss platform Anaconda package available for Win32
 major release using the conda platform and all feedback is welcomed. If you have Anaconda installed (tested with 4.2.0) simply try the following::
 
  conda install -c bgoli -c SBMLTeam cbmpy
- 
+
 which should install CBMPy, libSBML and all the required (non-solver) dependencies. If you do not use Anaconda or would
 like to try install things in a semi-automated way carry on reading.
 
@@ -76,25 +76,25 @@ please see the online documentation http://cbmpy.sourceforge.net/reference/insta
 Auto-dependency configuration
 -----------------------------
 
-I am in the process of creating automated dependency checking and building tools for CBMPy. 
+I am in the process of creating automated dependency checking and building tools for CBMPy.
 
 Ubuntu support is complete with cross platform conda support now available for testing (https://github.com/bgoli/cbmpy-build.git)::
 
 To start with download the install script that will run the system test::
 
- curl --remote-name https://raw.githubusercontent.com/bgoli/cbmpy-build/master/ubuntu/1_install_cbmpy_dependencies.py 
+ curl --remote-name https://raw.githubusercontent.com/bgoli/cbmpy-build/master/ubuntu/1_install_cbmpy_dependencies.py
 
 This script will analyse your Python distribution for missing dependencies and generate a shell script that will auto-install them.
 
 For an installation using the native Python supplied with Ubuntu run::
 
  python 1_install_cbmpy_dependencies.py UBUNTU
- 
+
 For a local user installation of Anaconda try the following. This is not strictly necessary if only CBMPy is going to be installed (see above)::
 
  python 1_install_cbmpy_dependencies.py CONDA
 
-in both cases a shell script `metatoolkit_install_dependencies.sh` is generated and printed to the screen. Run this script 
+in both cases a shell script `metatoolkit_install_dependencies.sh` is generated and printed to the screen. Run this script
 or install the relevant packages by hand.
 
 Installing or upgrading CBMPy

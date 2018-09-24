@@ -2,7 +2,7 @@
 CBMPy: CBConfig module
 ======================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBConfig.py 637 2017-12-15 11:34:59Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBConfig.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -37,13 +37,13 @@ from __future__ import absolute_import
 # release
 
 try:
-    STATUS = '$Rev: 637 $'.replace('Rev: ', '').replace('$', '').strip()
+    STATUS = '$Rev: 660 $'.replace('Rev: ', '').replace('$', '').strip()
 except Exception:
     STATUS = ''
 
 __CBCONFIG__ = {'VERSION_MAJOR' : 0,
                 'VERSION_MINOR' : 7,
-                'VERSION_MICRO' : 20,
+                'VERSION_MICRO' : 21,
                 'VERSION_STATUS' : STATUS,
                 'VERSION' : None,
                 'DEBUG' : False,

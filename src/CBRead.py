@@ -2,7 +2,7 @@
 CBMPy: CBRead module
 ====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 648 2018-05-23 20:01:54Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 
@@ -94,9 +94,9 @@ if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3
 def loadModel(sbmlfile):
     """
     Loads any SBML model in COBRA, FAME (SBML2FBA), SBML3FBCv1, SBML3FBCv2 format.
-    
+
      - *sbmlfile* an SBML model file
-     
+
     """
     mod = res = None
     print('Attempting to load SBML file: {}'.format(sbmlfile))
@@ -106,7 +106,7 @@ def loadModel(sbmlfile):
         print(ex)
         print('\nERROR: cannot determine SBML model type for file {}'.format(sbmlfile))
         return None
-            
+
     try:
         if res == 'L3V1FBC2':
             mod = readSBML3FBC(sbmlfile)

@@ -2,7 +2,7 @@
 CBMPy: CBCPLEX module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 629 2017-10-24 22:01:14Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -837,8 +837,11 @@ def cplx_getSolutionStatus(c):
     """
     # solution.get_status() returns an integer code
     if c.solution.get_solution_type() == c.solution.type.none:
-        print("\nNo solution available\n")
+        print("No solution available (status={}) type: {}".format(c.solution.get_status_string(), c.solution.get_solution_type()))
         return 'LPS_NONE'
+    else:
+        print("Solution available (status={}) type: {}".format(c.solution.get_status_string(), c.solution.get_solution_type()))
+
     status = c.solution.get_status()
     if status == c.solution.status.optimal:
         if not CPLX_SILENT_MODE:
@@ -859,13 +862,14 @@ def cplx_getSolutionStatus(c):
     elif status == c.solution.status.MIP_optimal:
         print('MILP optimal')
         return 'MILP_OPT'
-    elif status == c.solution.status.MIP_optimal:
-        print('MILP optimal')
-        return 'MILP_OPT'
+    #elif status == c.solution.status.MIP_optimal:
+        #print('MILP optimal')
+        #return 'MILP_OPT'
     elif status == c.solution.status.optimal_tolerance:
         print('MILP optimal within gap tolerance')
         return 'MILP_OPTTOL'
     else:
+        print('Unknown solution status ({}): \"{}\"'.format(c.solution.get_status(), c.solution.get_status_string()))
         return 'LPS_NONE'
 
 def cplx_setObjective(c, pid, expr=None, sense='maximize', reset=True):
@@ -1100,10 +1104,12 @@ def cplx_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
     Returns: pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS
 
     """
+    # debug write out lp file
+    fname = None
     if oldlpgen:
         cpx = cplx_getModelFromObj(fba)
     else:
-        cpx = cplx_constructLPfromFBA(fba, fname=None)
+        cpx = cplx_constructLPfromFBA(fba, fname=fname)
     if quiet:
         cplx_setOutputStreams(cpx, mode=None)
     OPTIMAL_PRESOLUTION = None
@@ -1353,7 +1359,11 @@ def cplx_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
         cplx_writeLPtoLPTfile(cpx, 'MSAF_base_(%s)' % time.time(), title=None, Dir=debug_dir)
         ##  cplx_writeLPtoLPTfile(cpx, 'MSAF_base_%s' % time.time() , title=None, Dir=debug_dir)
 
+    # debug write out lp file
+    #cpx.write('debug_minabssum_{}.lp'.format(str(time.time()).split('.')[0]), filetype='lp')
+
     cplx_Solve(cpx, method=method)
+
     cplx_setFBAsolutionToModel(fba, cpx, with_reduced_costs=with_reduced_costs)
     cplx_setSolutionStatusToModel(fba, cpx)
 

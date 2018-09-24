@@ -2,7 +2,7 @@
 CBMPy: __init__.py
 ==================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 648 2018-05-23 20:01:54Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 #
@@ -126,7 +126,7 @@ if not __SILENT_START__:
     print('\n\n***********************************************************************')
     print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling       *'.format(__version__.replace('.{}'.format(rev),'')))
     print('*                http://cbmpy.sourceforge.net                         *')
-    print('* Copyright(C) Brett G. Olivier 2014 - 2017                           *')
+    print('* Copyright(C) Brett G. Olivier 2014 - 2018                           *')
     print('* Dept. of Systems Bioinformatics                                     *')
     print('* Vrije Universiteit Amsterdam, Amsterdam, The Netherlands            *')
     print('* CBMPy is developed as part of the BeBasic MetaToolKit Project       *')

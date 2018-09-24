@@ -8,3 +8,4 @@ def run():
     os.chdir(cDir)
     if res:
         print('\nAll tests passed.\n')
+

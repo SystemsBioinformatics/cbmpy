@@ -1,7 +1,7 @@
 """
 CBMPy: Constraint Based Modelling in Python (http://pysces.sourceforge.net/cbm)
 ============
-Copyright (C) 2010-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setupegg.py 574 2017-04-13 12:18:15Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setupegg.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 

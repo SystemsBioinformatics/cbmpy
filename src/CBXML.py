@@ -2,7 +2,7 @@
 CBMPy: CBXML module
 ===================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 648 2018-05-23 20:01:54Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -2217,11 +2217,15 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
                 GPR = fba.getGPRassociation(gpr_reaction_map[reactions[rxn]['id']])
                 sbgpr = FB.createGeneProductAssociation()
                 sbgpr.setId(GPR.getId())
-                if GPR.getName() != None:
+                if GPR.getName() is not None:
                     sbgpr.setName(GPR.getName())
                 # TODO: once I have switched FBCV1 to trees then this can go into operation
                 #sbml_createAssociationFromAST(ast.parse(GPR.getAssociationStr()).body[0], sbgpr)
-                sbml_createAssociationFromTreeV2(GPR.getTree(), sbgpr)
+                if GPR.getTree() is not None:
+                    sbml_createAssociationFromTreeV2(GPR.getTree(), sbgpr)
+                else:
+                    pass
+                    # print('WARNING: {} cannot create association from tree: {}'.format(GPR.getId(), GPR.getTree()))
 
                 if len(GPR.annotation) > 0:
                     if add_cbmpy_anno:
@@ -2229,7 +2233,7 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
                         annores = sbgpr.appendAnnotation(annoSTRnew)
                         if annores == -3:
                             print('Invalid annotation in reaction GPR association', reactions[rxn]['id'])
-                if GPR.miriam != None:
+                if GPR.miriam is not None:
                     sbml_setCVterms(sbgpr, GPR.miriam.getAllMIRIAMUris(), model=False)
 
         if len(reactions[rxn]['miriam']) > 0:
@@ -2850,7 +2854,7 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
     del sbmldoc
     return newfname
 
-def sbml_validateDocument(D, fullmsg=False):
+def sbml_validateDocument(D, fullmsg=False, docread=False):
     """
     Validates and SBML document returns three dictionaries, errors, warnings, other and a boolean indicating an invalid document:
 
@@ -2865,7 +2869,12 @@ def sbml_validateDocument(D, fullmsg=False):
     DOCUMENT_VALID = True
     MODEL_VALID = True
     e = None
-    for e_ in range(D.validateSBML()):
+    if docread and D.getNumErrors() > 0:
+        sbmlerrors = D.getNumErrors()
+    else:
+        sbmlerrors = D.validateSBML()
+
+    for e_ in range(sbmlerrors):
         e = D.getError(e_)
         eid = e.getErrorId()
         msg = {'line': [e.getLine()],
@@ -3100,6 +3109,16 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         else:
             D = libsbml.readSBMLFromFile(str(fname))
 
+    # check for file read errors
+    if D.getNumErrors() > 0:
+        print('***\nDANGER: libSBML reports *{}* read errors, this indicates that this is an invalid SBML file. I will try to load it but cannot guarantee it\'s accuracy.\n***\n'.format(D.getNumErrors()))
+        errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = sbml_validateDocument(D, docread=True)
+        if not DOCUMENT_VALID:
+            raise RuntimeError("\nERROR: Validation has detected an invalid SBML document This is a fatal error.\n")
+        if not MODEL_VALID:
+            print('\n***\nERROR: SBML model contains errors but I will try to load it anyway. Depending on the severity of the error I cannot guarantee it\'s accuracy or consistency!!.\n***\n')
+        if not DOCUMENT_VALID or not MODEL_VALID:
+            time.sleep(5)
     # set consistency checking level for document
 
     if VALIDATE:
@@ -3162,6 +3181,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             print('FBC.getNumGeneProducts: {}'.format(FBCplg.getNumGeneProducts()))
 
     model_id = M.getId()
+    if model_id in [None, '']:
+        model_id = 'sbml_model'
     model_name = M.getName()
     model_description = sbml_getNotes(M)
     model_description = xml_stripTags(model_description).strip()

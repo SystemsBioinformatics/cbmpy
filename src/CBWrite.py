@@ -2,7 +2,7 @@
 CBMPy: CBWrite module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBWrite.py 648 2018-05-23 20:01:54Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBWrite.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 
@@ -71,16 +71,16 @@ except ImportError:
 def saveModel(model, filename, compress=False):
     """
     Saves the model to an SBML file using the lates SBML3 FBC version.
-    
+
     - *model* the CBMPy model
     - *filename* the filename to write
-    
+
     """
-    
+
     writeSBML3FBCV2(model, filename, directory=None, gpr_from_annot=False, add_groups=True,\
                     add_cbmpy_annot=True, add_cobra_annot=False, validate=False, compress_bounds=True,\
                     zip_model=compress, return_model_string=False)
-    
+
 
 def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
                        add_groups=True, add_cbmpy_annot=True, add_cobra_annot=False,\

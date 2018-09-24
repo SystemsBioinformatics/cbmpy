@@ -2,7 +2,7 @@
 CBMPy: setup.py
 ===============
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 646 2018-05-02 13:55:59Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 
@@ -44,7 +44,7 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 646 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 660 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -56,8 +56,8 @@ setup(
  data_files = mydata_files,
  name = "cbmpy",
  summary = "CBMPy: Constraint Based Modelling in Python",
- version = "0.7.20.{}".format(STATUS),
- #version = "0.7.20",
+ #version = "0.7.22.{}".format(STATUS),
+ version = "0.7.21",
  maintainer = 'Brett G. Olivier',
  author = 'Brett G. Olivier',
  author_email = 'b.g.olivier@vu.nl',

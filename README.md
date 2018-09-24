@@ -2,7 +2,7 @@ CBMPy
 =====
 
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -204,4 +204,4 @@ sudo apt-get install python-sip python-sip-dev build-essential
 
 More information in the docs/ directory.
 
-(c) Brett G. Olivier, Amsterdam, 2014-2017
+(c) Brett G. Olivier, Amsterdam, 2014-2018

@@ -2,7 +2,7 @@
 CBMPy: CBModel module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 650 2018-06-28 16:14:26Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 661 2018-09-24 15:20:05Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1070,8 +1070,10 @@ class Model(Fbase):
         assert gene.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(gene.__objref__).split('to')[1][1:-1])
         if __DEBUG__: print('Adding Gene: {}'.format(gene.id))
         if gene.getId() in self.__global_id__:
-            if gene.getId() in self.__genes_idx__:
-                raise RuntimeError('Duplicate gene ID detected: {}'.format(gene.getId()))
+            raise RuntimeError('Duplicate gene ID detected: {}'.format(gene.getId()))
+        # Kill me
+        elif gene.getId() in self.__genes_idx__:
+            raise RuntimeError('Duplicate gene ID detected in index: {}'.format(gene.getId()))
         else:
             self.__pushGlobalId__(gene.getId(), gene)
         gene.__objref__ = weakref.ref(self)
@@ -2992,11 +2994,17 @@ class Model(Fbase):
 
     def getGroupIds(self):
         """
-        Delete all group ids
+        Get all group ids
 
         """
         return [g.getId() for g in self.groups]
 
+    def getGroupNames(self):
+        """
+        Get all group names
+
+        """
+        return [g.getName() for g in self.groups]
 
     def getGroupMembership(self):
         """
@@ -4706,7 +4714,10 @@ class GeneProteinAssociation(Fbase):
                 self.addGeneref(gid)
                 #print('addGeneRef')
             else:
-                #print('createAssociationAndGeneRefs\n', gid, label, assoc, self.assoc)
+                #print('createAssociationAndGeneRefs', gid, label)
+                if gid is None or gid is 'None':
+                    print(self.getTree(), genes, gid, label)
+                    continue
                 self.__objref__().addGene(Gene(gid, label, active=True))
                 self.addGeneref(gid)
         self.buildEvalFunc()
@@ -5032,6 +5043,14 @@ class GeneProteinAssociation(Fbase):
 
         """
         return self.tree
+
+    def getTreeCopy(self):
+        """
+        Return a copy of the dictionary/tree representation of the GPR
+
+        """
+        return copy.deepcopy(self.tree)
+
 
     def __getAssociationEvalFromGprDict__(self, gprd, out, parent=''):
         """

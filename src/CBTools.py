@@ -2,7 +2,7 @@
 CBMPy: CBTools module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2017 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBTools.py 622 2017-09-13 12:56:30Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBTools.py 660 2018-09-24 14:57:04Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1456,6 +1456,61 @@ def roundOffWithSense(val, osense='max', tol=1e-8):
     else:
         val = numpy.floor(val/tol)*tol
     return val
+
+def mergeGroups(m, groups, new_id, new_name='', auto_delete=False):
+    """
+    Merge a list of groups into a new group. Note, annotations are not merged!
+
+     - *m* the model containing the source groups
+     - *groups* a list of groups
+     - *new_id* the new, merged, group id
+     - *new_name* [default=''] the new group name, the default behaviour is to merge the old names
+     - *auto_delete* [default=False] delete the source groups
+
+    """
+    if type(groups) == list and len(groups) > 1:
+        badgid = []
+        m_gids = m.getGroupIds()
+        for gnew in groups:
+            if gnew not in m_gids:
+                badgid.append(gnew)
+        if len(badgid) > 0:
+            print('ERROR: groups contains invalid group ids: {}'.format(str(badgid)))
+            return False
+    else:
+        print('ERROR: groups must be a list with more than one element.')
+        return False
+
+    if m.getGroup(new_id) is not None:
+        print('ERROR: new_id {} already exists'.format(new_id))
+        return False
+
+    m.createGroup(new_id)
+    gnew = m.getGroup(new_id)
+
+    make_name = False
+    if new_name == '':
+        make_name = True
+
+    for gid in groups:
+        gobj = m.getGroup(gid)
+        if make_name:
+            new_name = '{}+{}'.format(new_name, gobj.getName())
+        for gm in gobj.members:
+            if gm not in gnew.members:
+                gnew.addMember(gm)
+        if auto_delete:
+            m.deleteGroup(gid)
+    if make_name:
+        new_name = new_name[1:]
+    gnew.setName(new_name)
+
+    return True
+
+
+
+
+
 
 def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
     """
