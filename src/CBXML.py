@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 660 2018-09-24 14:57:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 663 2018-09-25 13:04:39Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3111,7 +3111,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     # check for file read errors
     if D.getNumErrors() > 0:
-        print('***\nDANGER: libSBML reports *{}* read errors, this indicates that this is an invalid SBML file. I will try to load it but cannot guarantee it\'s accuracy.\n***\n'.format(D.getNumErrors()))
+        print('***\nDANGER: libSBML reports *{}* read errors, this indicates that this is an invalid SBML file. I will try to load it but cannot guarantee its accuracy.\n***\n'.format(D.getNumErrors()))
         errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = sbml_validateDocument(D, docread=True)
         if not DOCUMENT_VALID:
             raise RuntimeError("\nERROR: Validation has detected an invalid SBML document This is a fatal error.\n")
