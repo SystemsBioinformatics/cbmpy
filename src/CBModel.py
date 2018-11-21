@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 661 2018-09-24 15:20:05Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 665 2018-11-07 14:27:31Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1150,13 +1150,13 @@ class Model(Fbase):
                 if not silent:
                     print('\nReaction \"{}\" bounds set to: 0 <= {} <= INF'.format(rid, rid))
 
-    def addUserConstraint(self, pid, fluxes=None, operator='=', rhs=0.0):
+    def addUserConstraint(self, pid, fluxes=None, operator='>=', rhs=0.0):
         """
         Add a user defined constraint to FBA model, this is additional to the automatically determined Stoichiometric constraints.
 
          - *pid* user constraint name/id, use `None` for auto-assign
          - *fluxes* a list of (coefficient, reaction id) pairs where coefficient is a float
-         - *operator* is one of = > < >= <=
+         - *operator* is one of '=', '>=' or '<=' (< and > will be interpreted as >= or <=)
          - *rhs* a float
 
         """

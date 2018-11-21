@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: _multicorefva.py 660 2018-09-24 14:57:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: _multicorefva.py 666 2018-11-21 22:02:35Z bgoli $)
 
 """
 
@@ -86,14 +86,14 @@ if __name__ == '__main__':
     print(os.sys.argv)
 
     cores = int(os.sys.argv[1])
-    F = file(os.sys.argv[2],'rb')
+    F = open(os.sys.argv[2],'rb')
     cmod = pickle.load(F)
     F.close()
 
     cbmpy.CBSolver.analyzeModel(cmod, oldlpgen=False)
     res = multiCoreFVA(cmod, procs=cores)
 
-    F = file(os.sys.argv[2], 'wb')
+    F = open(os.sys.argv[2], 'wb')
     pickle.dump(res, F, protocol=-1)
     F.flush()
     F.close()

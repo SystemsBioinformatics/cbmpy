@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 660 2018-09-24 14:57:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 666 2018-11-21 22:02:35Z bgoli $)
 
 """
 
@@ -52,9 +52,16 @@ del _multicorefva
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
-def grouper(n, iterable, padvalue=None):
-    "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
-    return itertools.izip_longest(*[iter(iterable)]*n, fillvalue=padvalue)
+# this is to deal with itertools 2/3 differences
+try:
+    itertools.__getattribute__('izip_longest')
+    def grouper(n, iterable, padvalue=None):
+        "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
+        return itertools.izip_longest(*[iter(iterable)]*n, fillvalue=padvalue)
+except AttributeError:
+    def grouper(n, iterable, padvalue=None):
+        "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
+        return itertools.zip_longest(*[iter(iterable)]*n, fillvalue=padvalue)
 
 def runMultiCoreFVA(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower',\
                     optPercentage=100.0, work_dir=None, quiet=True, debug=False, oldlpgen=False, markupmodel=True, procs=2):
@@ -73,7 +80,7 @@ def runMultiCoreFVA(fba, selected_reactions=None, pre_opt=True, tol=None, objF2c
     fba.serializeToDisk(fN, protocol=-1)
     fN = os.path.abspath(fN)
     subprocess.call(['python', MULTIFVAFILE, str(procs), fN])
-    F = file(fN, 'rb')
+    F = open(fN, 'rb')
     res = pickle.load(F)
     F.close()
     os.remove(fN)
@@ -115,11 +122,11 @@ def runMultiCoreFVA(fba, selected_reactions=None, pre_opt=True, tol=None, objF2c
         #MEargs = [fN+'.lp', selected_reactions, tol, rhs_sense, optPercentage, work_dir, debug]
         #print(MEargs)
         #print(fN)
-        #F = file(fN, 'wb')
+        #F = open(fN, 'wb')
         #pickle.dump(MEargs, F, protocol=-1)
         #F.close()
         #subprocess.call(['python', MULTIENVFVAFILE, str(procs), fN])
-        #F = file(fN, 'rb')
+        #F = open(fN, 'rb')
         #res = pickle.load(F)
         #F.close()
         #os.remove(fN)
