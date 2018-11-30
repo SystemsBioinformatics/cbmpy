@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBGLPK.py 660 2018-09-24 14:57:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBGLPK.py 667 2018-11-30 16:44:13Z bgoli $)
 
 """
 
@@ -312,8 +312,12 @@ def glpk_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='
 
     if build_n:
         f.buildStoichMatrix()
-        #CBTools.addStoichToFBAModel(f)
+
+    if f.__check_gene_activity__:
+        f.updateNetwork(lower=0.0, upper=0.0)
+
     fid = f.id
+
 
     if with_reduced_costs == 'scaled':
         f.SCALED_REDUCED_COSTS = True

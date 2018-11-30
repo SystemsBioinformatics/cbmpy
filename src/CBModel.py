@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 665 2018-11-07 14:27:31Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 667 2018-11-30 16:44:13Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -529,6 +529,7 @@ class Model(Fbase):
     #__objref__ = None
     __global_id__ = None
     __modified__ = False
+    __check_gene_activity__ = False
 
 
     def __init__(self, pid):
@@ -2217,6 +2218,8 @@ class Model(Fbase):
             g.setInactive()
             if update_reactions:
                 self.updateNetwork(lower, upper)
+            #else:
+                #self.__check_gene_activity__ = True
             return True
         else:
             return False
@@ -2234,11 +2237,13 @@ class Model(Fbase):
             g.setActive()
             if update_reactions:
                 self.updateNetwork()
+            #else:
+                #self.__check_gene_activity__ = True
             return True
         else:
             return False
 
-    def updateNetwork(self, lower=0.0, upper=0.0):
+    def updateNetwork(self, lower=0.0, upper=0.0, silent=False):
         """
         Update the reaction network based on gene activity. If reaction is deactivated then lower and upper bounds are used
 
@@ -2253,6 +2258,9 @@ class Model(Fbase):
                 R.deactivateReaction(lower, upper)
             elif active and not R.__is_active__:
                 R.reactivateReaction()
+        if not silent:
+            print('Updating gene activity network ... done.')
+        self.__check_gene_activity__ = False
 
     def resetAllGenes(self, update_reactions=False):
         """
@@ -4085,8 +4093,7 @@ class Reaction(Fbase):
         except AttributeError as why:
             print('WARNING: This function requires that this reaction object be added to a CBMPy instance to work.')
 
-
-    def deactivateReaction(self, lower=0.0, upper=0.0):
+    def deactivateReaction(self, lower=0.0, upper=0.0, silent=True):
         """
         Deactivates a reaction by setting its bounds to lower and upper. Restore with reactivateReaction()
 
@@ -4101,9 +4108,10 @@ class Reaction(Fbase):
         self.setLowerBound(lower)
         self.setUpperBound(upper)
         self.__is_active__ = False
-        print('Reaction {} bounds set to [{} : {}]'.format(self.id, lower, upper))
+        if not silent:
+            print('Reaction {} bounds set to [{} : {}]'.format(self.id, lower, upper))
 
-    def reactivateReaction(self):
+    def reactivateReaction(self, silent=True):
         """
         Activates a reaction deactivated with deactivateReaction
 
@@ -4111,9 +4119,10 @@ class Reaction(Fbase):
         if self.__bound_history__ != None:
             self.setLowerBound(self.__bound_history__[0])
             self.setUpperBound(self.__bound_history__[1])
-            print('Reaction {} bounds set to [{} : {}]'.format(self.id, self.__bound_history__[0], self.__bound_history__[1]))
             self.__bound_history__ = None
             self.__is_active__ = True
+            if not silent:
+                print('Reaction {} bounds set to [{} : {}]'.format(self.id, self.__bound_history__[0], self.__bound_history__[1]))
 
     def getEquation(self, reverse_symb='=', irreverse_symb='>', use_names=False):
         """
@@ -4157,6 +4166,7 @@ class Reaction(Fbase):
         else:
             eq = '{} {} {}'.format(sub[:-3], irreverse_symb, prod[:-2])
         return eq
+
 
 class Species(Fbase):
     """
@@ -4469,7 +4479,6 @@ class Reagent(Fbase):
         #return x
 
 
-
 class Gene(Fbase):
     """
     Contains all the information about a gene (or gene+protein construct depending on your philosophy)
@@ -4552,12 +4561,14 @@ class Gene(Fbase):
         Set the gene to be active
         """
         self.active = True
+        self.__objref__().__check_gene_activity__ = True
 
     def setInactive(self):
         """
         Set the gene to be inactive
         """
         self.active = False
+        self.__objref__().__check_gene_activity__ = True
 
     def isActive(self):
         """
@@ -4570,6 +4581,7 @@ class Gene(Fbase):
         Reset the gene to its default activity state
         """
         self.active = self.active0
+        self.__objref__().__check_gene_activity__ = True
 
 
 class GeneProteinAssociation(Fbase):
