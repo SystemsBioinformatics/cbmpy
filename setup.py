@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 660 2018-09-24 14:57:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 671 2019-02-18 23:03:12Z bgoli $)
 
 """
 
@@ -32,23 +32,14 @@ except:
     from distutils.core import setup
 
 mydata_files = []
-# new hack should get rid of the need for this
-#mydata_files.append((os.path.join('cbmpy', 'models'),\
-#[os.path.join(local_path,'src','models',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','models'))\
-#if examplefile.endswith('.xml')]))
-
-# new hack should get rid of the need for this
-#mydata_files.append((os.path.join('cbmpy', 'nosetests'),\
-#[os.path.join(local_path,'src','nosetests',examplefile) for examplefile in os.listdir(os.path.join(local_path,'src','nosetests'))\
-#if examplefile.endswith('.xml') or examplefile.endswith('.json')]))
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 660 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 671 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
-mypackages= ['cbmpy', 'cbmpy.fluxmodules', 'cbmpy.models', 'cbmpy.nosetests']#, 'cbmpy.solver']
+mypackages= ['cbmpy', 'cbmpy.fluxmodules']
 
 setup(
  package_dir = {'cbmpy' : 'src'},
@@ -56,8 +47,8 @@ setup(
  data_files = mydata_files,
  name = "cbmpy",
  summary = "CBMPy: Constraint Based Modelling in Python",
- #version = "0.7.22.{}".format(STATUS),
- version = "0.7.21",
+ #version = "0.7.23.{}".format(STATUS),
+ version = "0.7.23",
  maintainer = 'Brett G. Olivier',
  author = 'Brett G. Olivier',
  author_email = 'b.g.olivier@vu.nl',
