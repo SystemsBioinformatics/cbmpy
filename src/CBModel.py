@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 667 2018-11-30 16:44:13Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 672 2019-02-18 23:34:12Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -4014,6 +4014,23 @@ class Reaction(Fbase):
             return [r.species_ref for r in self.reagents if r.getCoefficient() > 0.0]
         else:
             return [self.__objref__().getSpecies(r.species_ref).getName() for r in self.reagents if r.getCoefficient() > 0.0]
+
+    def getGPRassociationString(self, use_labels=True):
+        """
+        Return the GPR string associated with this reaction (assuming it exists) or None.
+
+        - *use_labels* [default=True] return string with lab
+
+        """
+        out = None
+        try:
+            out = self.__objref__().getGPRforReaction(self.getId())
+            if out is not None:
+                out = out.getAssociationStr(use_labels=use_labels)
+        except Exception as ex:
+            print(ex)
+            out = None
+        return out
 
     def deleteReagentWithSpeciesRef(self, sid):
         """
