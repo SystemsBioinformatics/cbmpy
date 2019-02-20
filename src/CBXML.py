@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 676 2019-02-20 00:03:34Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 677 2019-02-20 17:07:49Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -977,11 +977,11 @@ def sbml_setDescription(model, fba):
     notes = ''
     if fba.getNotes().strip() in ['', None, ' ']:
         #notes = notes.replace('<notes>', '').replace('</notes>','')
-        notes = '<html:p><html:br/><html:span size="small">Model \"<html:strong>{}</html:strong>\" ({}) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> ({}) on {}.</html:span></html:p>'.format(fba.getId(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
+        notes = '<p xmlns="http://www.w3.org/1999/xhtml"><br/><span size="small">Model \"<strong>{}</strong>\" ({}) generated with <a href="http://cbmpy.sourceforge.net">CBMPy</a> ({}) on {}.</span></p>'.format(fba.getId(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
     else:
-        notes = '<html:p><html:span style="font-family: Courier New,Courier,monospace;">{}</html:span></html:p>\n'.format(fba.getNotes().strip())
+        notes = fba.getNotes().strip()
+        #notes = '<p xmlns="http://www.w3.org/1999/xhtml"><span style="font-family: Courier New,Courier,monospace;">{}</span></p>\n'.format(fba.getNotes().strip())
     sbml_setNotes3(model, notes)
-    #model.setNotes(str(notes), True)
 
     if len(fba.getAnnotations()) > 0:
         annoSTRnew = sbml_writeKeyValueDataAnnotation(fba.getAnnotations())
@@ -999,15 +999,15 @@ def sbml_setNotes3(obj, s):
 
     """
     s = s.replace('<notes>', '').replace('</notes>','')
-    s = '<html:body>{}</html:body>'.format(s)
+    if '</html:body>' not in s and '</body>' not in s:
+        s = '<body xmlns="http://www.w3.org/1999/xhtml">{}</body>'.format(s)
 
-    # this makes sure that whatever is there is encoded into utf-8
-    #if os.sys.version_info[0] < 3:
-        #s = s.encode(encoding='ascii', errors='ignore')
-        #s = s.decode("UTF-8", errors='ignore')
-    #else:
-        #s = s.encode(encoding='UTF-8', errors='ignore')
-        #s = s.decode("UTF-8")
+    # this makes sure that whatever is there is encoded into ASCII
+    # this is a workaround to #15 until I work out wtf is going on
+    if os.sys.version_info[0] == 3:# and libsbml.LIBSBML_VERSION == 51700:
+        s = s.encode(encoding='ascii', errors='replace')
+        s = s.decode('utf-8', errors='ignore')
+
     res = obj.setNotes(s)
     if res != 0:
         print(res, s)
@@ -1028,8 +1028,10 @@ def sbml_getNotes(obj):
         if notes != '' and notes is not None:
             # too aggressive but efficient behaviour removed
             #notes = xml_stripTags(notes).strip()
-            notes = notes.replace('<html:body>', '').replace('</html:body>','')
+            #notes = notes.replace('<html:body>', '').replace('</html:body>','')cmod.getDescription().replace('\xa0', ' ')
             notes = notes.replace('<notes>', '').replace('</notes>','')
+            # this removes urlencoded &nbsp; in xhtml (\xa0 don't ^%&*() ask!!!) which mistranslates when mapped through python unicode
+            # notes = notes.replace('\xa0', ' ')
     except Exception as why:
         print(why)
     return notes
@@ -3142,10 +3144,11 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         if not DOCUMENT_VALID:
             raise RuntimeError("\nValidation has detected an invalid SBML document")
         elif not MODEL_VALID:
-            print('\nERROR: SBML document is valid but the model contains errors, I will try to load it anyway\n')
-            time.sleep(2)
             for e in errors:
                 print(errors[e])
+            print('\nERROR: SBML document is valid but the model may contain errors\n')
+            time.sleep(2)
+
     else:
         sbml_setValidationOptions(D, level='normal')
 
@@ -3199,7 +3202,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         model_id = 'sbml_model'
     model_name = M.getName()
     model_description = sbml_getNotes(M)
-    model_description = xml_stripTags(model_description).strip()
+    # this has been labelled as too agressive and temporarily removed
+    # model_description = xml_stripTags(model_description).strip()
+    model_description = model_description.strip()
 
     __HAVE_FBA_ANOT_OBJ__ = True
     __HAVE_FBA_ANOT_BNDS__ = True
