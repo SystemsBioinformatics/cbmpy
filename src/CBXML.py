@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 663 2018-09-25 13:04:39Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 676 2019-02-20 00:03:34Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -975,12 +975,13 @@ def sbml_setDescription(model, fba):
     ##  try: UseR = getuser()
     ##  except: UseR = ''
     notes = ''
-    if fba.notes.strip() in ['', None, ' ']:
-        notes = notes.replace('<notes>', '').replace('</notes>','')
-        notes += '<html:p><html:br/><html:span size="small">Model \"<html:strong>{}</html:strong>\" ({}) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> ({}) on {}.</html:span></html:p>'.format(fba.getId(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
+    if fba.getNotes().strip() in ['', None, ' ']:
+        #notes = notes.replace('<notes>', '').replace('</notes>','')
+        notes = '<html:p><html:br/><html:span size="small">Model \"<html:strong>{}</html:strong>\" ({}) generated with <html:a href="http://cbmpy.sourceforge.net">CBMPy</html:a> ({}) on {}.</html:span></html:p>'.format(fba.getId(), fba.getName(), __version__,time.strftime("%a, %d %b %Y %H:%M:%S"))
     else:
-        notes += '<html:p><html:span style="font-family: Courier New,Courier,monospace;">{}</html:span></html:p>\n'.format(fba.notes.strip())
-    model.setNotes(str(notes), True)
+        notes = '<html:p><html:span style="font-family: Courier New,Courier,monospace;">{}</html:span></html:p>\n'.format(fba.getNotes().strip())
+    sbml_setNotes3(model, notes)
+    #model.setNotes(str(notes), True)
 
     if len(fba.getAnnotations()) > 0:
         annoSTRnew = sbml_writeKeyValueDataAnnotation(fba.getAnnotations())
@@ -1000,6 +1001,13 @@ def sbml_setNotes3(obj, s):
     s = s.replace('<notes>', '').replace('</notes>','')
     s = '<html:body>{}</html:body>'.format(s)
 
+    # this makes sure that whatever is there is encoded into utf-8
+    #if os.sys.version_info[0] < 3:
+        #s = s.encode(encoding='ascii', errors='ignore')
+        #s = s.decode("UTF-8", errors='ignore')
+    #else:
+        #s = s.encode(encoding='UTF-8', errors='ignore')
+        #s = s.decode("UTF-8")
     res = obj.setNotes(s)
     if res != 0:
         print(res, s)
@@ -1370,11 +1378,11 @@ class FBCconnect(object):
     groups = None
     groupList = None
 
-    def __init__(self, fbc_version=1, fbc_strict=True, enable_groups=False):
+    def __init__(self, fbc_version=2, fbc_strict=True, enable_groups=False):
         """
         Connect SBML Packages
 
-         - *fbc_version* [default=1] fbc version
+         - *fbc_version* [default=2] fbc version
          - *fbc_strict* [default=True] if using FBC V2 set the strict flag
          - *enable_groups* [default=False] use the Groups package if possible
 
@@ -1426,10 +1434,6 @@ class FBCconnect(object):
 
         """
         raise NotImplementedError
-
-
-
-
 
 
     def createGroupLegacy(self, gid, group, name=None):
@@ -2178,22 +2182,6 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
             pref.setStoichiometry(abs(float(reactions[rxn]['products'][p][0])))
             pref.setSpecies(reactions[rxn]['products'][p][1])
 
-        if len(reactions[rxn]['annotation']) > 0:
-            if add_cbmpy_anno:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(reactions[rxn]['annotation'])
-                annores = r.appendAnnotation(annoSTRnew)
-                if annores == -3:
-                    print('Invalid annotation in reaction', reactions[rxn]['id'])
-                    print(reactions[rxn]['annotation'], '\n')
-            if add_cobra_anno:
-                annoSTR = sbml_writeAnnotationsAsCOBRANote(reactions[rxn]['annotation']) #GOOD RIDDANCE
-                if annoSTR != None:
-                    nres = r.setNotes(annoSTR)
-                    if nres != 0:
-                        print(nres, annoSTR)
-            elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] is not None:
-                sbml_setNotes3(r, reactions[rxn]['notes'])
-
         if reactions[rxn]['reversible']:
             r.setReversible(True)
         else:
@@ -2201,10 +2189,6 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
 
         if reactions[rxn]['compartment'] is not None and reactions[rxn]['compartment'] != '':
             r.setCompartment(reactions[rxn]['compartment'])
-
-
-        if reactions[rxn]['sboterm'] is not None and reactions[rxn]['sboterm'] != '':
-            r.setSBOTerm(str(reactions[rxn]['sboterm']))
 
         if len(reactions[rxn]['modifiers']) > 0:
             for mo_ in reactions[rxn]['modifiers']:
@@ -2236,8 +2220,38 @@ def sbml_setReactionsL3Fbc(fbcmod, return_dict=False, add_cobra_anno=False, add_
                 if GPR.miriam is not None:
                     sbml_setCVterms(sbgpr, GPR.miriam.getAllMIRIAMUris(), model=False)
 
+        if len(reactions[rxn]['annotation']) > 0:
+            if add_cbmpy_anno:
+                annoSTRnew = sbml_writeKeyValueDataAnnotation(reactions[rxn]['annotation'])
+                annores = r.appendAnnotation(annoSTRnew)
+                if annores == -3:
+                    print('Invalid annotation in reaction', reactions[rxn]['id'])
+                    print(reactions[rxn]['annotation'], '\n')
+
+
         if len(reactions[rxn]['miriam']) > 0:
             sbml_setCVterms(r, reactions[rxn]['miriam'], model=False)
+
+        if reactions[rxn]['sboterm'] is not None and reactions[rxn]['sboterm'] != '':
+            r.setSBOTerm(str(reactions[rxn]['sboterm']))
+
+        if len(reactions[rxn]['annotation']) > 0:
+            if add_cbmpy_anno:
+                annoSTRnew = sbml_writeKeyValueDataAnnotation(reactions[rxn]['annotation'])
+                annores = r.appendAnnotation(annoSTRnew)
+                if annores == -3:
+                    print('Invalid annotation in reaction', reactions[rxn]['id'])
+                    print(reactions[rxn]['annotation'], '\n')
+
+        if add_cobra_anno:
+            annoSTR = sbml_writeAnnotationsAsCOBRANote(reactions[rxn]['annotation']) #GOOD RIDDANCE
+            if reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] is not None:
+                annoSTR = '{}\n<br/>\n{}'.format(annoSTR, reactions[rxn]['notes'])
+            if annoSTR is not None:
+                sbml_setNotes3(r, annoSTR)
+        elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] is not None:
+            sbml_setNotes3(r, reactions[rxn]['notes'])
+
 
 
 def sbml_setGroupsL3(cs, fba):

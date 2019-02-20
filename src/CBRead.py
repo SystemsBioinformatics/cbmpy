@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBRead.py 660 2018-09-24 14:57:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBRead.py 669 2019-02-18 22:58:19Z bgoli $)
 
 """
 
@@ -75,21 +75,20 @@ try:
 except ImportError:
     print('\nINFO: No xlrd module available, Excel spreadsheet reading disabled')
 
-
-
 __example_models__ = {'cbmpy_test_core' : 'core_memesa_model.l3.xml',
-                   'cbmpy_test_ecoli' : 'Ecoli_iJR904.glc.l3.xml',
-                   }
-__example_model_path__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'models')
+                      'cbmpy_test_ecoli' : 'Ecoli_iJR904.glc.l3.xml',
+                     }
 
-if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3.xml')) or\
-   not os.path.exists(os.path.join(__example_model_path__, 'Ecoli_iJR904.glc.l3.xml')):
-    import zipfile
-    print('Installing default models ...')
-    zfile = zipfile.ZipFile(os.path.join(__example_model_path__, 'default_models.zip.py'), allowZip64=True)
-    zfile.extractall(path=__example_model_path__)
-    zfile.close()
-    del zipfile, zfile
+## this is now obsolete with the new CBDefaultModels module
+#__example_model_path__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'models')
+#if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3.xml')) or\
+   #not os.path.exists(os.path.join(__example_model_path__, 'Ecoli_iJR904.glc.l3.xml')):
+    #import zipfile
+    #print('Installing default models ...')
+    #zfile = zipfile.ZipFile(os.path.join(__example_model_path__, 'default_models.zip.py'), allowZip64=True)
+    #zfile.extractall(path=__example_model_path__)
+    #zfile.close()
+    #del zipfile, zfile
 
 def loadModel(sbmlfile):
     """
@@ -148,11 +147,12 @@ def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'valid
 
     """
     if fname in __example_models__:
-        fname = __example_models__[fname]
+        from . import CBDefaultModels
         print(fname)
-        fname = os.path.join(__example_model_path__, fname)
-
-    xmod = CBXML.sbml_readSBML3FBC(fname, work_dir, return_sbml_model, xoptions)
+        xoptions['read_model_string'] = True
+        xmod = CBXML.sbml_readSBML3FBC(getattr(CBDefaultModels, fname), work_dir, False, xoptions)
+    else:
+        xmod = CBXML.sbml_readSBML3FBC(fname, work_dir, False, xoptions)
     if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
         print('INFO: no standard gene encoding detected, attempting to load from annotations.')
         xmod.createGeneAssociationsFromAnnotations()

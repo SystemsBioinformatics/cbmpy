@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 672 2019-02-18 23:34:12Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 673 2019-02-19 23:51:04Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -175,7 +175,8 @@ class Fbase(object):
         Return the object's notes
 
         """
-        return self.__urlDecode(self.notes)
+        #return self.__urlDecode(self.notes)
+        return self.notes
 
     def getAnnotations(self):
         """
@@ -225,10 +226,12 @@ class Fbase(object):
 
         """
         #self.notes = self.__urlEncode(notes)
-        try:
-            self.notes = notes.decode(errors='ignore')
-        except AttributeError:
-            self.notes=notes
+        #try:
+            ##self.notes = notes.decode(errors='ignore')
+            #self.notes = notes
+        #except AttributeError:
+            #self.notes=notes
+        self.notes = notes
 
     def setAnnotation(self, key, value):
         """
@@ -769,7 +772,7 @@ class Model(Fbase):
 
         """
         self.description = html
-        self.notes = self.__urlEncode(html)
+        #self.notes = self.__urlEncode(html)
 
     def getDescription(self):
         """
@@ -777,7 +780,8 @@ class Model(Fbase):
 
         """
 
-        return self.__urlDecode(self.notes)
+        #return self.__urlDecode(self.notes)
+        return self.notes
 
     def setCreatedDate(self, date=None):
         """

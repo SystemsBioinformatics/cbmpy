@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: __init__.py 660 2018-09-24 14:57:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: __init__.py 669 2019-02-18 22:58:19Z bgoli $)
 
 """
 #
@@ -63,20 +63,6 @@ if _HAVE_SBML_:
 else:
     print('\nWARNING: No SBML support, top-level SBML read/write functions disabled.\n')
 
-# CBMPy GUI development has ended with WxGUI, download Metatoolkit instead
-## try:
-    ## from .CBWx import runModelEditor as loadCBGUI
-## except ImportError as ex:
-    ## print('GUI module not available')
-
-##import CBMultiEnv to be deprecated
-#try:
-    #from . import CBMultiEnv
-#except ImportError as ex:
-    #print(ex)
-    #print('MultiEnvironment module not available')
-    #CBMultiEnv = None
-#import CBMultiCore
 try:
     from . import CBMultiCore
 except ImportError as ex:
@@ -93,25 +79,29 @@ from .CBTools import deSerialize, deSerializeFromDisk
 from . import PyscesSED
 SED = PyscesSED.SEDCBMPY
 
-try:
-    __test_dir__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'nosetests')
-    test_set = 1
-    test_bundle = os.path.join(__test_dir__, 'cbmpy_test_bundle_v{}.zip.py'.format(test_set))
-    test_file = os.path.join(__test_dir__, 'installed.v{}'.format(test_set))
-    if not os.path.exists(test_file):
-        import zipfile
-        print('Installing test files (v{})...'.format(test_set))
-        zfile = zipfile.ZipFile(test_bundle, allowZip64=True)
-        zfile.extractall(path=__test_dir__)
-        zfile.close()
-        #os.remove(test_bundle)
-        del zipfile, zfile
-    from . import nosetests
-    test = nosetests.run
-    del nosetests, test_bundle, test_file, test_set
-except ImportError:
-    def test():
-        print("ERROR: Tests not installed")
+## this is now obsolete witht unit tests moved to the cbmpy-tests branch
+#try:
+    #__test_dir__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'nosetests')
+    #test_set = 1
+    #test_bundle = os.path.join(__test_dir__, 'cbmpy_test_bundle_v{}.zip.py'.format(test_set))
+    #test_file = os.path.join(__test_dir__, 'installed.v{}'.format(test_set))
+    #if not os.path.exists(test_file):
+        #import zipfile
+        #print('Installing test files (v{})...'.format(test_set))
+        #zfile = zipfile.ZipFile(test_bundle, allowZip64=True)
+        #zfile.extractall(path=__test_dir__)
+        #zfile.close()
+        ##os.remove(test_bundle)
+        #del zipfile, zfile
+    #from . import nosetests
+    #test = nosetests.run
+    #del nosetests, test_bundle, test_file, test_set
+#except ImportError:
+    #def test():
+        #print("ERROR: Tests not installed")
+
+def test():
+    print('\nCBMPy test suite is now separate from CMBPy source, see https://github.com/SystemsBioinformatics/cbmpy for details.\n')
 
 del os
 
@@ -126,7 +116,7 @@ if not __SILENT_START__:
     print('\n\n***********************************************************************')
     print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling       *'.format(__version__.replace('.{}'.format(rev),'')))
     print('*                http://cbmpy.sourceforge.net                         *')
-    print('* Copyright(C) Brett G. Olivier 2014 - 2018                           *')
+    print('* Copyright(C) Brett G. Olivier 2014 - 2019                           *')
     print('* Dept. of Systems Bioinformatics                                     *')
     print('* Vrije Universiteit Amsterdam, Amsterdam, The Netherlands            *')
     print('* CBMPy is developed as part of the BeBasic MetaToolKit Project       *')
