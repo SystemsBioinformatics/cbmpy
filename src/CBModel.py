@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 673 2019-02-19 23:51:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 678 2019-02-25 16:30:43Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1585,6 +1585,30 @@ class Model(Fbase):
         else:
             return [g.getId() for g in self.genes if substring in g.getId()]
 
+    def getGeneObjects(self, substring=None):
+        """
+        Returns a list of gene objects, applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the id
+
+        """
+        if substring is None:
+            return [g for g in self.genes]
+        else:
+            return [g for g in self.genes if substring in g.getId()]
+
+    def getGeneObjectsByLabel(self, substring=None):
+        """
+        Returns a list of gene objects, applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the label
+
+        """
+        if substring == None:
+            return [g for g in self.genes]
+        else:
+            return [g for g in self.genes if substring in g.getLabel()]
+
     def getGPRIds(self, substring=None):
         """
         Returns a list of GPR Id's, applies a substring search if substring is defined
@@ -1597,17 +1621,29 @@ class Model(Fbase):
         else:
             return [g.getId() for g in self.gpr if substring in g.getId()]
 
+    def getGPRObjects(self, substring=None):
+        """
+        Returns a list of GPR objects, applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the id
+
+        """
+        if substring is None:
+            return [g for g in self.gpr]
+        else:
+            return [g for g in self.gpr if substring in g.getId()]
+
     def getGeneLabels(self, substring=None):
         """
         Returns a list of gene labels (locus tags), applies a substring search if substring is defined
 
-         - *substring* search for this pattern anywhere in the id
+         - *substring* search for this pattern anywhere in the label
 
         """
         if substring == None:
             return [g.getLabel() for g in self.genes]
         else:
-            return [g.getLabel() for g in self.genes if substring in g.getId()]
+            return [g.getLabel() for g in self.genes if substring in g.getLabel()]
 
     def getAllGeneActivities(self):
         """
@@ -2054,18 +2090,42 @@ class Model(Fbase):
         else:
             return [c.getId() for c in self.compartments if substring in c.getId()]
 
-    def getSpeciesIds(self, substring=None, non_boundary=False):
+    def getCompartmentObjects(self, substring=None):
+        """
+        Returns a list of compartment objects, applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the id
+
+        """
+        if substring == None:
+            return [c for c in self.compartments]
+        else:
+            return [c for c in self.compartments if substring in c.getId()]
+
+
+    def getSpeciesIds(self, substring=None):
         """
         Returns a list of species Ids, applies a substring search if substring is defined
 
          - *substring* search for this pattern anywhere in the id
-         - *non_boundary* [default=False] return only non-boundary species, i.e., variable metabolites that appear in the stoichiometric matrix. The default is to return all metabolites boundary and variable.
 
         """
-        if substring == None:
+        if substring is None:
             return [s.getId() for s in self.species]
         else:
             return [s.getId() for s in self.species if substring in s.getId()]
+
+    def getSpeciesObjects(self, substring=None):
+        """
+        Returns a list of species objects, applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the id
+
+        """
+        if substring is None:
+            return [s for s in self.species]
+        else:
+            return [s for s in self.species if substring in s.getId()]
 
     def getReactionIds(self, substring=None):
         """
@@ -2078,6 +2138,18 @@ class Model(Fbase):
             return [r.getId() for r in self.reactions]
         else:
             return [r.getId() for r in self.reactions if substring in r.getId()]
+
+    def getReactionObjects(self, substring=None):
+        """
+        Returns a list of reaction objects, applies a substring search if substring is defined
+
+         - *substring* search for this pattern anywhere in the id
+
+        """
+        if substring == None:
+            return [r for r in self.reactions]
+        else:
+            return [r for r in self.reactions if substring in r.getId()]
 
     def getReactionNames(self, substring=None):
         """
@@ -2114,6 +2186,15 @@ class Model(Fbase):
             return [s.getId() for s in self.objectives]
         else:
             return [s.getId() for s in self.objectives if substring in s.getId()]
+
+    def getOptimalValue(self):
+        """
+        Returns the optimal value of the objective function
+
+        """
+        AO = self.getActiveObjective()
+        print('Objective {}: \"{}\"'.format(AO.getId(), AO.operation))
+        return AO.getValue()
 
     def getObjFuncValue(self):
         """
@@ -2621,7 +2702,7 @@ class Model(Fbase):
          - rid [default=None] by default return all boundary species in a model, alternatively a string containing a reaction id or list of reaction id's
 
         """
-        if rid == None:
+        if rid is None:
             rid = self.getReactionIds()
         elif type(rid) == list:
             pass
