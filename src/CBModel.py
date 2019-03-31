@@ -2757,6 +2757,39 @@ class Model(Fbase):
         return output
 
 
+    def getFluxesAssociatedWithCompartments(self, compartments):
+
+        """
+        Determines all reactions and flux values associated with a list of
+        compartments. This function can be used to find all transport reactions
+        between compartments, e.g. the cytosol and mitochondria. If the
+        compartment IDs are 'cyt' and 'mit', respectively, you can call
+        "your_model.getFluxesAssociatedWithCompartments(['cyt', 'mit'])"
+        to get all fluxes between these compartments.
+
+        *compartments*: a list or set of compartment IDs.
+                        To check the existing compartment IDs in your model
+                        call "your_model.getCompartmentIds()"
+
+        :returns a dictionary with reaction IDs as keys and corresponding
+        flux values as values
+        """
+
+        # check whether provided compartment ID's are valid
+        if (not set(compartments).issubset(self.getCompartmentIds()) or
+            not isinstance(compartments, (list, set))):
+            raise ValueError("Please provide valid compartment IDs as a list or"
+                             " set!")
+
+        # check whether provided compartments are identical with the ones of
+        # the reagents of a reaction; if so, add it to dictionary along with
+        # the flux value
+        return {ri: self.getReaction(ri).getValue() for ri in
+                self.getReactionIds() if set(compartments) == 
+                set(si.getCompartmentId() for si in 
+                self.getReaction(ri).getSpeciesObj())}
+
+
     def splitEqualityFluxBounds(self):
         """
         Splits any equalit flux bounds into lower and upper bounds.
