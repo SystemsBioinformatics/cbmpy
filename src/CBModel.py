@@ -2781,11 +2781,13 @@ class Model(Fbase):
             raise ValueError("Please provide valid compartment IDs as a list or"
                              " set!")
 
+        compartments = set(compartments)
+
         # check whether provided compartments are identical with the ones of
         # the reagents of a reaction; if so, add it to dictionary along with
         # the flux value
         return {ri: self.getReaction(ri).getValue() for ri in
-                self.getReactionIds() if set(compartments) == 
+                self.getReactionIds() if compartments ==
                 set(si.getCompartmentId() for si in 
                 self.getReaction(ri).getSpeciesObj())}
 
