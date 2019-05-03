@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 678 2019-02-25 16:30:43Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 680 2019-05-03 13:53:26Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -533,6 +533,8 @@ class Model(Fbase):
     __global_id__ = None
     __modified__ = False
     __check_gene_activity__ = False
+    __CUSTOM_MODEL_EXTENSION__ = None
+    __CUSTOM_MODEL_METACLASS__ = None
 
 
     def __init__(self, pid):

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 677 2019-02-20 17:07:49Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 680 2019-05-03 13:53:26Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -51,6 +51,7 @@ except ImportError:
     #from html.parser import HTMLParser
     from html import parser
     HTMLParser = parser.HTMLParser
+
 
 from . import CBModel
 #from .CBDataStruct import (MIRIAMannotation, MIRIAMModelAnnotation)
@@ -3054,6 +3055,30 @@ def setCBSBOterm(sbo, obj):
         except AssertionError:
             print('WARNING: {} is not a valid SBO term and is being ignored.'.format(sbo))
 
+
+#class decorator, from six, that will be used to solve Python2/3 metaclass issues
+#usage is NewClass(with_metaclass(MetaClass, BaseClasses)):
+
+def with_metaclass(meta, *bases):
+    """
+    Create a base class with a metaclass.
+    Usage is: NewClass(with_metaclass(MetaClass, BaseClass*)
+    """
+
+    #This requires a bit of explanation: the basic idea is to make a dummy
+    #metaclass for one level of class instantiation that replaces itself with
+    #the actual metaclass.
+
+    class metaclass(type):
+        def __new__(cls, name, this_bases, d):
+            return meta(name, bases, d)
+
+        @classmethod
+        def __prepare__(cls, name, this_bases):
+            return meta.__prepare__(name, bases)
+    return type.__new__(metaclass, 'temporary_class', (), {})
+
+
 def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}):
     """
     Read in an SBML Level 3 file with FBC annotation where and return either a CBM model object
@@ -3070,6 +3095,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
        - *readcobra* read the cobra annotation
        - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
        - *nmatrix_type* [default='normal'] define the type of stoichiometrich matrix to be built
+       - *model_extension_class* extend CBModel class with new class (experimental, Python 3 only)
+       - *model_metaclass* add a custom metaclass to CBModel (experimental, Python 3 only)
 
          - 'numpy' dense numpy array (best performance)
          - 'scipy_csr' scipy sparse matrix (lower performance, low memory)
@@ -3089,6 +3116,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     READCOBRA = False
     READ_MODEL_STRING = False
     NMATRIX_TYPE = 'numpy'
+    CUSTOM_MODEL_EXTENSION = False
+    CUSTOM_MODEL_METACLASS = False
+
     if 'nogenes' in xoptions and xoptions['nogenes']:
         LOADGENES = False
         print('\nGPR loading disabled!\n')
@@ -3104,7 +3134,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         READCOBRA = True
     if 'read_model_string' in xoptions and xoptions['read_model_string']:
         READ_MODEL_STRING = True
-
     if 'nmatrix_type' in xoptions:
         if xoptions['nmatrix_type'] is None or xoptions['nmatrix_type'] == 'None':
             NMATRIX_TYPE = None
@@ -3114,6 +3143,27 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             NMATRIX_TYPE = 'scipy_csr'
         elif xoptions['nmatrix_type'] == 'sympy':
             NMATRIX_TYPE = 'sympy'
+    if 'model_extension_class' in xoptions:
+        if os.sys.version_info > (3, 0):
+            CUSTOM_MODEL_EXTENSION = True
+            class CBModelExtended(CBModel.Model, xoptions['model_extension_class']):
+                __CUSTOM_MODEL_EXTENSION__ = xoptions['model_extension_class'].__name__
+                def __init__(self, pid):
+                    super().__init__(pid)
+        else:
+            print('\nWARNING: Custom CBModel extension is supported in Python 3 only.\n')
+
+    if 'model_metaclass' in xoptions:
+        raise NotImplementedError
+        if os.sys.version_info > (3, 0):
+            CUSTOM_MODEL_METACLASS = True
+            class CBModelExtended(CBModel.Model, metaclass=xoptions['model_metaclass']):
+                __CUSTOM_MODEL_METACLASS__ = xoptions['model_metaclass'].__name__
+                def __init__(self, pid):
+                    super().__init__(pid)
+        else:
+            print('\nWARNING: Custom CBModel metaclass is supported in Python 3 only.\n')
+
 
     D = None
     if READ_MODEL_STRING:
@@ -3148,7 +3198,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 print(errors[e])
             print('\nERROR: SBML document is valid but the model may contain errors\n')
             time.sleep(2)
-
     else:
         sbml_setValidationOptions(D, level='normal')
 
@@ -3429,7 +3478,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 else:
                     substrates[spec] += float(stoi)
 
-
             if spec in boundary_species:
                 EXREAC = True
         for pr in range(SBRe.getNumProducts()):
@@ -3663,7 +3711,10 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
 
     # BUILD MODEL, we now need to do it here to link in the fluxobjectives defined in the objective functions
-    fm = CBModel.Model(model_id)
+    if CUSTOM_MODEL_EXTENSION or CUSTOM_MODEL_METACLASS:
+        fm = CBModelExtended(model_id)
+    else:
+        fm = CBModel.Model(model_id)
     if M.isSetMetaId():
         fm.__metaid__ = M.getMetaId()
     else:
