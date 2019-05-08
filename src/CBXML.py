@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 680 2019-05-03 13:53:26Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 681 2019-05-08 14:16:32Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3155,14 +3155,14 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     if 'model_metaclass' in xoptions:
         raise NotImplementedError
-        if os.sys.version_info > (3, 0):
-            CUSTOM_MODEL_METACLASS = True
-            class CBModelExtended(CBModel.Model, metaclass=xoptions['model_metaclass']):
-                __CUSTOM_MODEL_METACLASS__ = xoptions['model_metaclass'].__name__
-                def __init__(self, pid):
-                    super().__init__(pid)
-        else:
-            print('\nWARNING: Custom CBModel metaclass is supported in Python 3 only.\n')
+        #if os.sys.version_info > (3, 0):
+            #CUSTOM_MODEL_METACLASS = True
+            #class CBModelExtended(CBModel.Model, metaclass=xoptions['model_metaclass']):
+                #__CUSTOM_MODEL_METACLASS__ = xoptions['model_metaclass'].__name__
+                #def __init__(self, pid):
+                    #super().__init__(pid)
+        #else:
+            #print('\nWARNING: Custom CBModel metaclass is supported in Python 3 only.\n')
 
 
     D = None
