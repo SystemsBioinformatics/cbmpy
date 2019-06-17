@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 681 2019-05-08 14:16:32Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 685 2019-06-17 15:54:33Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3551,6 +3551,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             print('Zero dimension compartment detected: {}'.format(cid))
             # zero dimension compartments make no sense and are assumed to be L2 artifacts
             dimensions = 3
+
         C = CBModel.Compartment(cid, name=name, size=size, dimensions=dimensions)
 
         if LOADANNOT:

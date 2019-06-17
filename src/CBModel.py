@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 683 2019-06-17 14:16:55Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 685 2019-06-17 15:54:33Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -557,6 +557,7 @@ class Model(Fbase):
          - N a structmatrix object
 
         """
+        pid = str(pid)
         self.setId(pid)
         self.objectives = []
         self.flux_bounds = []
@@ -3174,7 +3175,9 @@ class Objective(Fbase):
     solution = None
 
     def __init__(self, pid, operation):
-        self.id = pid
+        pid = str(pid)
+        self.setId(pid)
+
         if operation.lower() in ['maximize', 'maximise', 'max']:
             self.operation = 'maximize'
         elif operation.lower() in ['minimize', 'minimise', 'min']:
@@ -3339,7 +3342,9 @@ class FluxObjective(Fbase):
     coefficient = None
 
     def __init__(self, pid, reaction, coefficient=1):
-        self.id = pid
+        pid = str(pid)
+        self.setId(pid)
+
         self.reaction = reaction
         self.coefficient = coefficient
         self.annotation = {}
@@ -3364,18 +3369,26 @@ class Compartment(Fbase):
     dimensions = None
     volume = None
 
-    def __init__(self, cid, name=None, size=1, dimensions=3, volume=None):
+    def __init__(self, pid, name=None, size=1, dimensions=3, volume=None):
         """
          - *cid* comapartment id
          - *name* optional compartment name
          - *size* compartment size, [default=1]
          - *dimensions* compartment spatial dimensions [default=3]
         """
-        self.setPid(cid)
+        pid = str(pid)
+        if pid == self.id:
+            return
+
+        if not self.__checkId__(pid):
+            raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(pid))
+
+        self.id = pid
+
         if name != None:
             self.setName(name)
         else:
-            self.setName(cid)
+            self.setName(pid)
         self.size = size
         if volume == None:
             self.volume = size
@@ -3490,6 +3503,7 @@ class Group(Fbase):
 
     def __init__(self, pid):
         #delattr(self, 'compartment') # doesn't work
+        pid = str(pid)
         self.setId(pid)
         self.members = []
         self.member_ids = []
@@ -3738,9 +3752,11 @@ class FluxBound(Fbase):
     is_bound = None
     __param__ = None
 
-    def __init__(self, fid, reaction, operation, value):
-        self.id = fid
-        self.reaction = reaction
+    def __init__(self, pid, reaction, operation, value):
+        pid = str(pid)
+        self.setId(pid)
+
+        self.reaction = str(reaction)
         self.setValue(value)
         assert operation in ['greater', 'greaterEqual', 'less', 'lessEqual', '>=', '<=', '=', 'equal', 'E', 'G', 'L', 'GE', 'LE']
         self.operation = operation
@@ -3817,7 +3833,9 @@ class Parameter(Fbase):
          - *constant* [default=True] is the paramter constant (an SBML thing)
 
         """
-        self.id = pid
+        pid = str(pid)
+        self.setId(pid)
+
         self.name = name
         self.value = value
         self.constant = constant
@@ -3889,6 +3907,9 @@ class Reaction(Fbase):
     lower_bound = -numpy.Inf
     """
     def __init__(self, pid, name=None, reversible=True):
+        pid = str(pid)
+        if not self.__checkId__(pid):
+            raise RuntimeError('ERROR: Invalid Id not set, \"{}\" is an invalid identifier.'.format(pid))
         self.id = pid
         self.name = name
         self.reagents = []
@@ -4040,7 +4061,6 @@ class Reaction(Fbase):
                 for gpr_ in self.__objref__().gpr:
                     if gpr_.getProtein() == oldId:
                         gpr_.setProtein(fid)
-
                 for obj in self.__objref__().objectives:
                     for fo in obj.fluxObjectives:
                         if fo.getReactionId() == oldId:
@@ -4342,6 +4362,9 @@ class Species(Fbase):
          - **chemFormula** [default=None] the chemical formula
 
         """
+        pid = str(pid)
+        if not self.__checkId__(pid):
+            raise RuntimeError('ERROR: Invalid Id not set, \"{}\" is an invalid identifier.'.format(pid))
         self.id = pid
         self.name = name
         self.value = value
@@ -4520,17 +4543,17 @@ class Reagent(Fbase):
     species_ref = None
     _value_is_ref_ = False
 
-    def __init__(self, reid, species_ref, coef):
+    def __init__(self, pid, species_ref, coef):
         """
         Instantiates a reagent from a metatabolite and coefficient, note that now the coefficient
         can be a Parameter object in which case a connection is made to the linked Parameter
 
-         - *reid* a unique id
+         - *pid* a unique id
          - *species_ref* a reference to a species id
          - *coefficient* the stoichiometric coefficient, a non-zero integer or Parameter
 
         """
-        self.setId(reid)
+        self.setId(pid)
         self.species_ref = species_ref
         self.setCoefficient(coef)
         self.annotation = {}
@@ -4639,19 +4662,24 @@ class Gene(Fbase):
     active = False
     label = None
 
-    def __init__(self, gid, label=None, active=True):
+    def __init__(self, pid, label=None, active=True):
         """
         A gene construct
 
-         - *gid* the gene id
+         - *pid* the gene id
          - *label* the gene label this may or may not be a legal Sid
          - *active* is the gene is active or not (boolean)
 
         """
+        pid = str(pid)
+        if not self.__checkId__(pid):
+            raise RuntimeError('ERROR: Invalid Id not set, \"{}\" is an invalid identifier.'.format(pid))
+        self.id = pid
+
         if label == None:
-            label = gid
-            gid = 'g_' + gid
-        self.setId(gid)
+            label = pid
+            pid = 'g_' + pid
+
         self.setLabel(label)
         self.active0 = active
         self.active = active
@@ -4755,16 +4783,16 @@ class GeneProteinAssociation(Fbase):
     generefs = None
     tree = None
 
-    def __init__(self, gpid, protein, use_compiled=False):
+    def __init__(self, pid, protein, use_compiled=False):
         """
         Create a GeneProteinAssociation
 
-         - *gpid* a unique id
+         - *pid* a unique id
          - *protein* the protein the gene association referes to, in most cases this should be a reaction id
          - *use_compiled* [default=False] used compiled expressions for evaluation, potentially less portable
 
         """
-        self.setPid(gpid)
+        self.setPid(pid)
         self.generefs = []
         self.protein = protein
         self.annotation = {}
