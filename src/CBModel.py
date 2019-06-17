@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 680 2019-05-03 13:53:26Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 683 2019-06-17 14:16:55Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -314,6 +314,9 @@ class Fbase(object):
 
         """
         fid = str(fid)
+        if fid == self.id:
+            return
+
         if not self.__checkId__(fid):
             raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
 
@@ -2790,7 +2793,7 @@ class Model(Fbase):
         # the flux value
         return {ri: self.getReaction(ri).getValue() for ri in
                 self.getReactionIds() if compartments ==
-                set(si.getCompartmentId() for si in 
+                set(si.getCompartmentId() for si in
                 self.getReaction(ri).getSpeciesObj())}
 
 
@@ -3391,6 +3394,9 @@ class Compartment(Fbase):
         """
 
         fid = str(fid)
+        if fid == self.id:
+            return
+
         if not self.__checkId__(fid):
             raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
 
@@ -4017,6 +4023,9 @@ class Reaction(Fbase):
         """
 
         fid = str(fid)
+        if fid == self.id:
+            return
+
         if not self.__checkId__(fid):
             raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
 
@@ -4354,6 +4363,9 @@ class Species(Fbase):
         """
 
         fid = str(fid)
+        if fid == self.id:
+            return
+
         if not self.__checkId__(fid):
             raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
 
@@ -4655,6 +4667,9 @@ class Gene(Fbase):
 
         """
         fid = str(fid)
+        if fid == self.id:
+            return
+
         if not self.__checkId__(fid):
             raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
 
