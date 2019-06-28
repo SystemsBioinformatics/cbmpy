@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 685 2019-06-17 15:54:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 688 2019-06-28 14:14:48Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -5288,28 +5288,70 @@ class GeneProteinAssociation(Fbase):
             #print(self.tree)
             self.deleteGeneref(gid)
             self.tree = self.__deleteGeneFromTree__(self.tree, gid)
+            self.tree = self.__pruneTree__(self.tree)
             #print(self.tree)
             self.buildEvalFunc()
         else:
             print('Gene Id {} is not part of GPR {}'.format(gid, self.getId()))
 
-
     def __deleteGeneFromTree__(self, D, delid):
         """
-        Recursively delete a gene Id from a gprTree.
+        Recursively delete a gene Id from a gprTree. This is a newer refactored version of the previous method
+        that requires a call to __
 
         """
         for k in list(D):
-            if k == delid:
-                D.pop(k)
-            elif len(k) == 0:
-                D.pop(k)
-            elif len(D[k]) == 1:
-                D.update(D.pop(k))
-            elif k.startswith('_AND_') or k.startswith('_OR_'):
+            if k.startswith('_AND_') or k.startswith('_OR_'):
                 D[k] = self.__deleteGeneFromTree__(D[k], delid)
                 if len(D[k]) == 0:
                     D.pop(k)
                 elif len(D[k]) == 1:
                     D.update(D.pop(k))
+            elif k == delid:
+                D.pop(k)
+            elif len(k) == 0:
+                D.pop(k)
+            elif len(D[k]) == 1:
+                D.update(D.pop(k))
         return D
+
+    # old
+    #def __deleteGeneFromTree__(self, D, delid):
+        #"""
+        #Recursively delete a gene Id from a gprTree.
+
+        #"""
+        #for k in list(D):
+            #if k == delid:
+                #D.pop(k)
+            #elif len(k) == 0:
+                #D.pop(k)
+            #elif len(D[k]) == 1:
+                #D.update(D.pop(k))
+            #elif k.startswith('_AND_') or k.startswith('_OR_'):
+                #D[k] = self.__deleteGeneFromTree__(D[k], delid)
+                #if len(D[k]) == 0:
+                    #D.pop(k)
+                #elif len(D[k]) == 1:
+                    #D.update(D.pop(k))
+        #return D
+
+    def __pruneTree__(self, D):
+        """
+        Recursively checks the tree for the correct number of children
+
+        """
+        for k in list(D):
+            if k.startswith('_AND_') and len(D[k]) == 1:
+                D.update(D.pop(k))
+                print('Pruning branch: {}'.format(D))
+            elif k.startswith('_OR_') and len(D[k]) == 1:
+                D.update(D.pop(k))
+                print('Pruning branch: {}'.format(D))
+            elif k.startswith('_AND_'):
+                self.__pruneTree__(D[k])
+            elif k.startswith('_OR_'):
+                self.__pruneTree__(D[k])
+        return D
+
+
