@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 690 2019-07-09 20:00:41Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 691 2019-07-26 12:09:03Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1020,6 +1020,17 @@ class Model(Fbase):
         Add an instantiated FluxBound object to the FBA model
 
         - *fluxbound* an instance of the FluxBound class
+        - *fbexists* [default=None] this is a list of strings which contains fluxbounds that have been added to the model, see sample code below.
+        The format of the string is 'reactionid_boundtype'
+
+        ```python
+        fbexists = []
+        for fluxbound in list_of_fluxbounds:
+            model.addFluxBound(c_, fbexists=fbexists)
+            fbexists.append("{}_{}".format(fluxbound.getReactionId(), fluxbound.getType()))
+        ```
+
+        Using the fbexists list drastically reduces the time it takes to add fluxbounds
 
         """
         assert type(fluxbound) == FluxBound, '\nERROR: requires a FluxBound object, not something of type {}'.format(type(fluxbound))
@@ -1046,7 +1057,7 @@ class Model(Fbase):
             else:
                 print('\"{}\" FluxBound for reaction {} exists, skipping'.format(fluxbound.is_bound, fluxbound.reaction))
         else:
-            if not (fluxbound.getReactionId(), fluxbound.getType()) in fbexists:
+            if "{}_{}".format(fluxbound.getReactionId(), fluxbound.getType()) not in fbexists:
                 fluxbound.__objref__ = weakref.ref(self)
                 self.flux_bounds.append(fluxbound)
             else:

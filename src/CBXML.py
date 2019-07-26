@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 685 2019-06-17 15:54:33Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 691 2019-07-26 12:09:03Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3662,6 +3662,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 ubcntr += 1
                 # print 'Added new upper bound', newId
     elif HAVE_FBC and FBCver == 2:
+        timeFBV2 = time.time()
         for bnd in FB_data:
             FB = CBModel.FluxBound(bnd['id'], bnd['reaction'], bnd['operation'], bnd['value'])
             FB.annotation = bnd['annotation']
@@ -3672,6 +3673,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             if FB.name == None or FB.name == '':
                 FB.name = bnd['parameter']
             CONSTR.append(FB)
+        print('FluxBounds process1: {}'.format(round(time.time() - timeFBV2, 3)))
 
     if DEBUG: print('FluxBounds process: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
@@ -3801,9 +3803,11 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG: print('Reaction build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
     fbexists = []
+    timeFBV2 = time.time()
     for c_ in CONSTR:
         fm.addFluxBound(c_, fbexists=fbexists)
-        fbexists.append((c_.getReactionId(), c_.getType()))
+        fbexists.append("{}_{}".format(c_.getReactionId(), c_.getType()))
+    print('FluxBounds process2: {}'.format(round(time.time() - timeFBV2, 3)))
     del fbexists
     if DEBUG: print('FluxBound build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
