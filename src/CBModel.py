@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 688 2019-06-28 14:14:48Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 690 2019-07-09 20:00:41Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1744,6 +1744,52 @@ class Model(Fbase):
                 del db
                 cntr += 1
         print('\nDeleted {} \"{}\" bounds'.format(cntr, value))
+
+    def deleteCompartment(self, sid, check_components=True):
+        """
+        Deletes a compartment object with id. Returns True if the compartment is deleted, False if not. In addition if components were checked
+        a list of id's that reference the compartment are also returned.
+
+        - *sid* the compartment id
+        - *check_components* [default=True] if  enabled check that no species or reactions makes
+        use of the compartment, fail if it does.
+
+        """
+
+        if sid not in self.getCompartmentIds():
+            print('\n\"{}\" is not a valid compartment id.\n'.format(sid))
+            return False
+        out = True
+        if check_components:
+            rc = [r.getId() for r in self.reactions if r.compartment == sid]
+            sc = [s.getId() for s in self.species if s.compartment == sid]
+            pc = [p.getId() for p in self.parameters if p.compartment == sid]
+            mc = []
+
+            if len(rc) > 0:
+                err = ','.join(rc)
+                print('Reactions: {} are located in compartment \"{}\"'.format(err, sid))
+                out = False
+            if len(sc) > 0:
+                err = ','.join(sc)
+                print('Species: {} are located in compartment \"{}\"'.format(err, sid))
+                out = False
+            if len(pc) > 0:
+                err = ','.join(pc)
+                print('Parameters: {} are located in compartment \"{}\"'.format(err, sid))
+                out = False
+            if sid == self.compartment:
+                print('The model is located in compartment: {}'.format(err, sid))
+                mc = [self.getId()]
+                out = False
+
+        if out:
+            self.compartments.remove(self.getCompartment(sid))
+            return True
+        else:
+            print('\nDeleteCompartment failed to delete compartment: {}\n'.format(sid))
+            return out, sc+mc+pc+rc
+
 
     def deleteSpecies(self, sid, also_delete=None):
         """
