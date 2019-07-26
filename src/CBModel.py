@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 691 2019-07-26 12:09:03Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 693 2019-07-26 12:25:25Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1026,11 +1026,16 @@ class Model(Fbase):
         ```python
         fbexists = []
         for fluxbound in list_of_fluxbounds:
-            model.addFluxBound(c_, fbexists=fbexists)
+            model.addFluxBound(fluxbound, fbexists=fbexists)
             fbexists.append("{}_{}".format(fluxbound.getReactionId(), fluxbound.getType()))
         ```
 
-        Using the fbexists list drastically reduces the time it takes to add fluxbounds
+        Using the fbexists list drastically reduces the time it takes to add fluxbounds but circumvents any sort of existence checking and should *only* be
+        used as shown above when constructing a model from scratch. Alternativel, you need to prepopulate fbexists with existing fluxbound component information:
+
+        ```python
+        fbexists = ["{}_{}".format(fluxbound.getReactionId(), fluxbound.getType()) for fluxbound in model.flux_bounds]
+        ```
 
         """
         assert type(fluxbound) == FluxBound, '\nERROR: requires a FluxBound object, not something of type {}'.format(type(fluxbound))
