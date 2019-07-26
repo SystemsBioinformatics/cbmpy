@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 693 2019-07-26 12:25:25Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 695 2019-07-26 15:05:45Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -1039,7 +1039,7 @@ class Model(Fbase):
 
         """
         assert type(fluxbound) == FluxBound, '\nERROR: requires a FluxBound object, not something of type {}'.format(type(fluxbound))
-        assert fluxbound.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(fluxbound.__objref__).split('to')[1][1:-1])
+        assert fluxbound.__objref__ is None, 'ERROR: object already bound to \"{}\", do you want to add a clone instead'.format(str(fluxbound.__objref__).split('to')[1][1:-1])
         if fluxbound.getId() in self.__global_id__:
             raise RuntimeError('Duplicate fluxbound ID detected: {}'.format(fluxbound.getId()))
         else:
@@ -3877,10 +3877,87 @@ class FluxBound(Fbase):
         else:
             self.value = float(value)
 
+
+class FluxBoundNew(Fbase):
+    """A refactored and streamlined FluxBound object"""
+
+    _parent = None
+    operator = None
+    value = None
+    __param__ = None
+
+    def __init__(self, pid, operator, value, parent=None):
+        """
+        - *pid* object id
+        - *operator* <> GE or LE
+        - *value* a float
+        - *parent* [default=None] the parent reaction object
+
+        """
+        pid = str(pid)
+        self.setId(pid)
+        if parent is Reaction or parent is None:
+            self._parent = parent
+        else:
+            print("Invalid parent object: " + str(parent))
+            return False
+
+        if self.operator in ['greater', 'greaterEqual', '>=', 'G', 'GE']:
+            self.operator = '>='
+        elif self.operator in ['less', 'lessEqual', '<=', 'L', 'LE']:
+            self.operator = '<='
+        else:
+            print('Invalid operator: ' + operator)
+            return False
+
+        self.setValue(value)
+
+        self.annotation = {}
+        self.compartment = None
+        #self.__delattr__('compartment')
+        return True
+
+    def getType(self):
+        """
+        Returns the *type* of FluxBound: 'lower', 'upper'
+
+        """
+        if self.operator  == '>=':
+            return 'lower'
+        else:
+            return 'upper'
+
+    def getReactionId(self):
+        if self._parent is not None:
+            return self._parent.getId()
+        else:
+            return None
+
+    def getValue(self):
+        """
+        Returns the current value of the attribute (input/solution)
+        """
+        return self.value
+
+    def setValue(self, value):
+        """
+        Sets the value attribute:
+
+        - *value* a float
+
+        """
+        if numpy.isreal(value) or numpy.isinf(value):
+            self.value = value
+        else:
+            print('Invalid value: ' + value)
+            return False
+        return True
+
+
 class Parameter(Fbase):
     """Holds parameter information"""
 
-    _association_ = None
+    _associations_ = None
     constant = True
     value = None
     _is_fluxbound_ = False
@@ -3901,7 +3978,7 @@ class Parameter(Fbase):
         self.name = name
         self.value = value
         self.constant = constant
-        self._association_ = []
+        self._associations_ = []
         self.annotation = {}
 
     def getValue(self):
@@ -3928,22 +4005,22 @@ class Parameter(Fbase):
         Return the Object ID's associated with this parameter
 
         """
-        return self._association_
+        return self._associations_
 
     def addAssociation(self, assoc):
         """
         Add an object ID to associate with this object
 
         """
-        self._association_.append(assoc)
+        self._associations_.append(assoc)
 
     def deleteAssociation(self, assoc):
         """
         Delete the object id associated with this object
 
         """
-        if assoc in self._association_:
-            self._association_.pop(self._association_.index(assoc))
+        if assoc in self._associations_:
+            self._associations_.remove(assoc)
 
 
 class Reaction(Fbase):

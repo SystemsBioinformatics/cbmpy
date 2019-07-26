@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 691 2019-07-26 12:09:03Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 695 2019-07-26 15:05:45Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3685,7 +3685,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         P.annotation = PARAM_D[p_]['annotation']
         P.miriam = PARAM_D[p_]['miriam']
         P.__sbo_term__ = PARAM_D[p_]['sbo']
-        P._association_ = PARAM_D[p_]['association']
+        P._associations_ = PARAM_D[p_]['association']
         P.setNotes(PARAM_D[p_]['notes'])
         if PARAM_D[p_]['is_fluxbound']:
             P._is_fluxbound_ = True
