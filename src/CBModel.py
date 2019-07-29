@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 695 2019-07-26 15:05:45Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 696 2019-07-29 21:59:43Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3878,8 +3878,8 @@ class FluxBound(Fbase):
             self.value = float(value)
 
 
-class FluxBoundNew(Fbase):
-    """A refactored and streamlined FluxBound object"""
+class FluxBoundBase(Fbase):
+    """A refactored and streamlined FluxBound base class that can be a generic bound, superclass to FluxBoundUpper and FluxBoundLower"""
 
     _parent = None
     operator = None
@@ -3899,23 +3899,19 @@ class FluxBoundNew(Fbase):
         if parent is Reaction or parent is None:
             self._parent = parent
         else:
-            print("Invalid parent object: " + str(parent))
-            return False
+            raise RuntimeError("Invalid parent object: " + str(parent))
 
         if self.operator in ['greater', 'greaterEqual', '>=', 'G', 'GE']:
             self.operator = '>='
         elif self.operator in ['less', 'lessEqual', '<=', 'L', 'LE']:
             self.operator = '<='
         else:
-            print('Invalid operator: ' + operator)
-            return False
+            raise RuntimeError('Invalid operator: ' + operator)
 
         self.setValue(value)
-
         self.annotation = {}
         self.compartment = None
         #self.__delattr__('compartment')
-        return True
 
     def getType(self):
         """
@@ -3952,6 +3948,41 @@ class FluxBoundNew(Fbase):
             print('Invalid value: ' + value)
             return False
         return True
+
+class FluxBoundUpper(FluxBoundBase):
+    def __init__(self, reaction, value=numpy.inf):
+        """
+        Upper Bound class, less flexible than generic superclass (no input checking) for model instantiation.
+
+        - *value* [default=inf] a float
+        - *reaction* the parent Reaction
+
+        """
+        self.setId('{}_upper_bnd'.format(reaction.getId()))
+        self.operator = '<='
+        self.setValue(value)
+        self._parent = reaction
+        self.annotation = {}
+        self.compartment = None
+        #self.__delattr__('compartment')
+
+
+class FluxBoundLower(FluxBoundBase):
+    def __init__(self, reaction, value=numpy.NINF):
+        """
+        Lower Bound Class, less flexible than generic superclass (no input checking) for model instantiation.
+
+        - *value* [default=-inf] a float
+        - *reaction* the parent Reaction
+
+        """
+        self.setId('{}_lower_bnd'.format(reaction.getId()))
+        self.operator = '>='
+        self.setValue(value)
+        self._parent = reaction
+        self.annotation = {}
+        self.compartment = None
+        #self.__delattr__('compartment')
 
 
 class Parameter(Fbase):
