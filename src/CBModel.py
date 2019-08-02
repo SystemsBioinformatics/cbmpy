@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 696 2019-07-29 21:59:43Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 700 2019-07-31 21:49:39Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3883,7 +3883,6 @@ class FluxBoundBase(Fbase):
 
     _parent = None
     operator = None
-    value = None
     __param__ = None
 
     def __init__(self, pid, operator, value, parent=None):
@@ -3896,7 +3895,8 @@ class FluxBoundBase(Fbase):
         """
         pid = str(pid)
         self.setId(pid)
-        if parent is Reaction or parent is None:
+        if parent is Reaction:
+            #self._parent = weakref.ref(parent)
             self._parent = parent
         else:
             raise RuntimeError("Invalid parent object: " + str(parent))
@@ -3913,6 +3913,9 @@ class FluxBoundBase(Fbase):
         self.compartment = None
         #self.__delattr__('compartment')
 
+    #def __call__(self):
+        #return self.value
+
     def getType(self):
         """
         Returns the *type* of FluxBound: 'lower', 'upper'
@@ -3925,6 +3928,7 @@ class FluxBoundBase(Fbase):
 
     def getReactionId(self):
         if self._parent is not None:
+            #return self._parent().getId()
             return self._parent.getId()
         else:
             return None
@@ -3933,7 +3937,7 @@ class FluxBoundBase(Fbase):
         """
         Returns the current value of the attribute (input/solution)
         """
-        return self.value
+        return self._value
 
     def setValue(self, value):
         """
@@ -3943,14 +3947,20 @@ class FluxBoundBase(Fbase):
 
         """
         if numpy.isreal(value) or numpy.isinf(value):
-            self.value = value
+            self._value = value
         else:
             print('Invalid value: ' + value)
             return False
         return True
 
+    value = property(getValue, setValue)
+
+
+# TODO
+# I need to add the addFluxBound to reaction so that I can sort out wtf happens with a clone and the parent
+
 class FluxBoundUpper(FluxBoundBase):
-    def __init__(self, reaction, value=numpy.inf):
+    def __init__(self, reaction, value=float('inf')):
         """
         Upper Bound class, less flexible than generic superclass (no input checking) for model instantiation.
 
@@ -3961,6 +3971,7 @@ class FluxBoundUpper(FluxBoundBase):
         self.setId('{}_upper_bnd'.format(reaction.getId()))
         self.operator = '<='
         self.setValue(value)
+        #self._parent = weakref.ref(reaction)
         self._parent = reaction
         self.annotation = {}
         self.compartment = None
@@ -3968,7 +3979,7 @@ class FluxBoundUpper(FluxBoundBase):
 
 
 class FluxBoundLower(FluxBoundBase):
-    def __init__(self, reaction, value=numpy.NINF):
+    def __init__(self, reaction, value=-float('inf')):
         """
         Lower Bound Class, less flexible than generic superclass (no input checking) for model instantiation.
 
@@ -3979,6 +3990,7 @@ class FluxBoundLower(FluxBoundBase):
         self.setId('{}_lower_bnd'.format(reaction.getId()))
         self.operator = '>='
         self.setValue(value)
+        #self._parent = weakref.ref(reaction)
         self._parent = reaction
         self.annotation = {}
         self.compartment = None
@@ -4504,6 +4516,144 @@ class Reaction(Fbase):
         else:
             eq = '{} {} {}'.format(sub[:-3], irreverse_symb, prod[:-2])
         return eq
+
+
+class ReactionNew(Reaction):
+    """Extended reaction class with new upper/lower bound structure"""
+    ub = None
+    lb = None
+
+    def __init__(self, pid, name=None, lb=-float('inf'), ub=float('inf'), reversible=True):
+        super(ReactionNew, self).__init__(pid, name, reversible)
+        self.ub = FluxBoundUpper(self, ub)
+        self.lb = FluxBoundLower(self, lb)
+
+    def createUpperBound(self, value):
+        if self.ub is None:
+            self.ub = FluxBoundUpper(self, value)
+        else:
+            print('UpperBound exists, try use setUpperBound')
+
+    def createLowerBound(self, value):
+        if self.lb is None:
+            self.lb = FluxBoundLower(self, value)
+        else:
+            print('LowerBound exists, try use setLowerBound')
+
+
+    def setId(self, fid):
+        """
+        Sets the object Id
+
+         - *fid* a valid c variable style id string
+
+         Reimplements @FBase.setId()
+
+        """
+
+        fid = str(fid)
+        if fid == self.id:
+            return
+
+        if not self.__checkId__(fid):
+            raise RuntimeError('ERROR: Id not set, \"{}\" is an invalid identifier.'.format(fid))
+
+        oldId = self.getId()
+        if self.__objref__ is not None:
+            if fid not in self.__objref__().__global_id__:
+                self.id = fid
+                self.__objref__().__changeGlobalId__(oldId, self.id, self)
+                #for fb in self.__objref__().getFluxBoundsByReactionID(oldId):
+                    #if fb is not None:
+                        #fb.setReactionId(fid)
+                for gpr_ in self.__objref__().gpr:
+                    if gpr_.getProtein() == oldId:
+                        gpr_.setProtein(fid)
+                for obj in self.__objref__().objectives:
+                    for fo in obj.fluxObjectives:
+                        if fo.getReactionId() == oldId:
+                            fo.setReactionId(fid)
+            else:
+                print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
+        else:
+            self.id = fid
+        # no matter if the reaction has a model ref or not setId resets reagent refs to new id
+        for reag in self.reagents:
+            reag.setId('{}_{}'.format(fid, reag.getSpecies()))
+
+    def getLowerBound(self):
+        """
+        Get the value of the reactions lower bound
+
+        """
+        return self.lb()
+
+    def getUpperBound(self):
+        """
+        Get the value of the reactions upper bound
+
+        """
+        return self.ub()
+
+    def setLowerBound(self, value):
+        """
+        Set the value of the reactions lower bound
+
+         - *value* a floating point value
+
+        """
+        self.lb.setValue(value)
+
+    def setUpperBound(self, value):
+        """
+        Set the value of the reactions upper bound
+
+         - *value* a floating point value
+
+        """
+        self.ub.setValue(value)
+
+    def deactivateReaction(self, lower=0.0, upper=0.0, silent=True):
+        """
+        Deactivates a reaction by setting its bounds to lower and upper. Restore with reactivateReaction()
+
+         - *lower* [default=0.0] bound
+         - *upper* [default=0.0] bound
+
+        """
+        self.__bound_history__ = None
+        self.__bound_history__ = (self.lb(), self.ub())
+        self.lb.setValue(lower)
+        self.ub.setValue(upper)
+        self.__is_active__ = False
+        if not silent:
+            print('Reaction {} bounds set to [{} : {}]'.format(self.id, lower, upper))
+
+    def reactivateReaction(self, silent=True):
+        """
+        Activates a reaction deactivated with deactivateReaction
+
+        """
+        if self.__bound_history__ != None:
+            self.lb.setValue(self.__bound_history__[0])
+            self.ub.setValue(self.__bound_history__[1])
+            self.__bound_history__ = None
+            self.__is_active__ = True
+            if not silent:
+                print('Reaction {} bounds set to [{} : {}]'.format(self.id, self.__bound_history__[0], self.__bound_history__[1]))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Species(Fbase):

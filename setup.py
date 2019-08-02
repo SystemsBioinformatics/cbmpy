@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: setup.py 689 2019-06-28 14:16:52Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: setup.py 698 2019-07-30 14:03:26Z bgoli $)
 
 """
 
@@ -35,7 +35,7 @@ mydata_files = []
 
 # release
 try:
-    STATUS = 'r'+'$Rev: 689 $'.replace('Rev: ','').replace('$','').strip()
+    STATUS = 'r'+'$Rev: 698 $'.replace('Rev: ','').replace('$','').strip()
 except:
     STATUS = 'beta'
 
@@ -48,13 +48,13 @@ setup(
  name = "cbmpy",
  summary = "CBMPy: Constraint Based Modelling in Python",
  #version = "0.7.25.{}".format(STATUS),
- version = "0.7.25",
+ version = "0.8.0",
  maintainer = 'Brett G. Olivier',
  author = 'Brett G. Olivier',
  author_email = 'b.g.olivier@vu.nl',
  maintainer_email = 'bgoli@users.sourceforge.net',
     url = "http://cbmpy.sourceforge.net",
-    download_url = "http://sourceforge.net/projects/cbmpy/files/release/0.7/",
+    download_url = "http://sourceforge.net/projects/cbmpy/files/release/0.8/",
     license = "GNU General Public License (GPL)",
     keywords = "computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard" ,
     #zip_safe = False,
