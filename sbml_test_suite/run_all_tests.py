@@ -18,21 +18,21 @@ if not os.path.exists(outDir):
     os.makedirs(outDir)
 
 tests = os.listdir(testDir)
-print tests
+print(tests)
 
 for T in tests:
     retcode = subprocess.call([os.sys.executable, 'run_single_fbc_test.py', testDir, T, outDir])
 
 testResults = []
 for T in tests:
-    rF = file(os.path.join(testDir, T, '%s-results.csv' % T), 'r')
+    rF = open(os.path.join(testDir, T, '%s-results.csv' % T), 'r')
     r0 = rF.read().strip()
     r0 = [a.split(',') for a in r0.split('\n')]
     r00 = {}
     for j_ in range(len(r0[0])):
         r00[r0[0][j_]] = r0[1][j_]
     rF.close()
-    rF2 = file(os.path.join(outDir, '%s.csv' % T), 'r')
+    rF2 = open(os.path.join(outDir, '%s.csv' % T), 'r')
     r1 = rF2.read().strip()
     r1 = [a.split(',') for a in r1.split('\n')]
     r11 = {}
@@ -46,6 +46,6 @@ for T in tests:
                 testRes = 'pass'
     testResults.append((T, testRes))
 
-print '\n\nFBC Test Suite Results:\n===================='
+print('\n\nFBC Test Suite Results:\n====================')
 for t_ in testResults:
-    print 'Test %s: %s' % (t_[0], t_[1])
+    print('Test %s: %s' % (t_[0], t_[1]))

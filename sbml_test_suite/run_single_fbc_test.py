@@ -2,7 +2,7 @@ import os, time, numpy
 cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 import cbmpy as cbm
 
-print os.sys.argv
+print(os.sys.argv)
 
 mBase = os.sys.argv[2]
 testDir = os.path.join(os.sys.argv[1], mBase)
@@ -16,7 +16,7 @@ cmod = cbm.CBRead.readSBML3FBC('%s-sbml-l3v1.xml' % mBase, testDir)
 ## cbm.CBSolver.glpk_analyzeModel(cmod)
 cbm.CBSolver.analyzeModel(cmod)
 
-F = file(os.path.join(testDir, '%s-settings.txt' % mBase), 'r')
+F = open(os.path.join(testDir, '%s-settings.txt' % mBase), 'r')
 variables = None
 for l_ in F:
     if l_.startswith('variables:'):
@@ -32,7 +32,7 @@ for v_ in variables:
         data.append(cmod.getReaction(v_).getValue())
 #print data
 
-F = file(os.path.join(outDir, mBase)+'.csv', 'w')
+F = open(os.path.join(outDir, mBase)+'.csv', 'w')
 out = ''
 for v_ in variables:
     out += '%s,' % v_
