@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 700 2019-07-31 21:49:39Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 703 2019-08-11 11:42:42Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -623,6 +623,7 @@ class Model(Fbase):
             self.__global_id__[r.getId()] = r
             for rr in r.reagents:
                 self.__global_id__[rr.getId()] = rr
+            # TODO consider new fluxbounds
         for s in self.species:
             self.__global_id__[s.getId()] = s
         for fb in self.flux_bounds:
@@ -652,6 +653,7 @@ class Model(Fbase):
             r.__setObjRef__(self)
             for rr in r.reagents:
                 rr.__setObjRef__(self)
+            # TODO consider new fluxbounds
         for s in self.species:
             s.__setObjRef__(self)
         for fb in self.flux_bounds:
@@ -682,6 +684,7 @@ class Model(Fbase):
             r.__unsetObjRef__()
             for rr in r.reagents:
                 rr.__unsetObjRef__()
+            # TODO consider new fluxbounds
         for s in self.species:
             s.__unsetObjRef__()
         for fb in self.flux_bounds:
@@ -3602,7 +3605,8 @@ class Group(Fbase):
                 if o_.getId() in self.member_ids:
                     print('ERROR object {} already exist in group.\n'.format(o_.getId()))
                 else:
-                    self.members.append(o_)
+                    self.members.append(weakref.ref(o_))
+                    #self.members.append(o_)
                     self.member_ids.append(o_.getId())
                     if isinstance(o_, Group):
                         self._group_member_ids_.append(o_.getId())
@@ -3619,7 +3623,8 @@ class Group(Fbase):
         if oid in self.member_ids:
             oidx = self.member_ids.index(oid)
             obj = self.members.pop(oidx)
-            self.member_ids.pop(oidx)
+            oidx = self.member_ids.pop(oidx)
+            del obj, oidx
             if isinstance(obj, Group):
                 self._group_member_ids_.remove(oid)
         else:
@@ -3642,9 +3647,24 @@ class Group(Fbase):
 
         """
         if not as_set:
-            return self.members
+            return [m() for m in self.members]
         else:
-            return set(self.members)
+            return set([m() for m in self.members])
+
+    def getMember(self, mid):
+        """
+        Returns the group member object that corresponds to mid
+
+         - *mid* the id of the requested object
+
+        """
+        if self.hasMember(mid):
+            return self.members[self.member_ids.index(mid)]()
+        else:
+            return None
+
+
+
 
     def getMemberIDs(self, as_set=False):
         """
@@ -3750,7 +3770,7 @@ class Group(Fbase):
         print('INFO: Assigning shared CBMPy annotation to members, this cannot be undone.')
         if len(self._member_attributes_.annotation) > 0:
             for m_ in self.members:
-                m_.annotation.update(self._member_attributes_.annotation)
+                m_().annotation.update(self._member_attributes_.annotation)
 
     def assignSharedMIRIAMannotationToMembers(self):
         """
@@ -3764,7 +3784,7 @@ class Group(Fbase):
                 for k_ in annot:
                     if len(annot[k_]) > 0:
                         for u_ in annot[k_]:
-                            m_.addMIRIAMuri(k_, u_)
+                            m_().addMIRIAMuri(k_, u_)
 
     def assignSharedSBOtermsToMembers(self, overwrite=False):
         """
@@ -3777,8 +3797,8 @@ class Group(Fbase):
         sbo = self._member_attributes_.getSBOterm()
         if sbo != None:
             for m_ in self.members:
-                if m_.__sbo_term__ == None or overwrite:
-                    m_.setSBOterm(sbo)
+                if m_().__sbo_term__ == None or overwrite:
+                    m_().setSBOterm(sbo)
 
     def assignSharedNotesToMembers(self, overwrite=False):
         """
@@ -3790,8 +3810,8 @@ class Group(Fbase):
         print('INFO: Assigning shared Notes to members, this cannot be undone.')
         if self._member_attributes_.notes != '':
             for m_ in self.members:
-                if m_.notes == '' or overwrite:
-                    m_.notes = self._member_attributes_.notes
+                if m_().notes == '' or overwrite:
+                    m_().notes = self._member_attributes_.notes
 
     def assignAllSharedPropertiesToMembers(self, overwrite=False):
         """
@@ -3896,8 +3916,8 @@ class FluxBoundBase(Fbase):
         pid = str(pid)
         self.setId(pid)
         if parent is Reaction:
-            #self._parent = weakref.ref(parent)
-            self._parent = parent
+            self._parent = weakref.ref(parent)
+            #self._parent = parent
         else:
             raise RuntimeError("Invalid parent object: " + str(parent))
 
@@ -3928,8 +3948,8 @@ class FluxBoundBase(Fbase):
 
     def getReactionId(self):
         if self._parent is not None:
-            #return self._parent().getId()
-            return self._parent.getId()
+            return self._parent().getId()
+            #return self._parent.getId()
         else:
             return None
 
@@ -3955,9 +3975,33 @@ class FluxBoundBase(Fbase):
 
     value = property(getValue, setValue)
 
+    def __getstate__(self):
+        """
+        Internal method that should allow our weakrefs to be 'picklable'
 
-# TODO
-# I need to add the addFluxBound to reaction so that I can sort out wtf happens with a clone and the parent
+        # overloaded by Model
+
+        """
+
+        #self.__global_id__ = None # this is the global id dictionary so not relevant to fb
+        if '__objref__' not in self.__dict__ and '_parent' not in self.__dict__:
+            return self.__dict__
+        else:
+            cpy = self.__dict__.copy()
+            cpy['__objref__'] = None
+            cpy['_parent'] = None
+            return cpy
+
+    #def __setstate__(self, dic):
+        #"""
+        #Internal method that allows our weakrefs to be 'picklable'
+
+        #"""
+        #self.__dict__ = dic
+        #self.__setModelSelf__()
+        #self.__setGlobalIdStore__()
+        #self.__populateGlobalIdStore__()
+
 
 class FluxBoundUpper(FluxBoundBase):
     def __init__(self, reaction, value=float('inf')):
@@ -3971,8 +4015,8 @@ class FluxBoundUpper(FluxBoundBase):
         self.setId('{}_upper_bnd'.format(reaction.getId()))
         self.operator = '<='
         self.setValue(value)
-        #self._parent = weakref.ref(reaction)
-        self._parent = reaction
+        self._parent = weakref.ref(reaction)
+        #self._parent = reaction
         self.annotation = {}
         self.compartment = None
         #self.__delattr__('compartment')
@@ -3990,8 +4034,8 @@ class FluxBoundLower(FluxBoundBase):
         self.setId('{}_lower_bnd'.format(reaction.getId()))
         self.operator = '>='
         self.setValue(value)
-        #self._parent = weakref.ref(reaction)
-        self._parent = reaction
+        self._parent = weakref.ref(reaction)
+        #self._parent = reaction
         self.annotation = {}
         self.compartment = None
         #self.__delattr__('compartment')
@@ -4012,14 +4056,14 @@ class Parameter(Fbase):
          - *pid* the unique parameter pid
          - *value* the value
          - *name* [default=''] the parameter name
-         - *constant* [default=True] is the paramter constant (an SBML thing)
+         - *constant* [default=True] is the paramter constant or can it be changed by a simulation/solver
 
         """
         pid = str(pid)
         self.setId(pid)
 
         self.name = name
-        self.value = value
+        self.setValue(value)
         self.constant = constant
         self._associations_ = []
         self.annotation = {}
@@ -4027,21 +4071,24 @@ class Parameter(Fbase):
     def getValue(self):
         """
         Returns the current value of the attribute (input/solution)
-
         """
-        return self.value
+        return self._value
 
     def setValue(self, value):
         """
-        Sets the attribute ''value''
+        Sets the value attribute:
+
+        - *value* a float
 
         """
-        if numpy.isreal(value):
-            self.value = value
-        elif numpy.isinf(value):
-            self.value = value
+        if numpy.isreal(value) or numpy.isinf(value):
+            self._value = value
         else:
-            self.value = float(value)
+            print('Invalid value: ' + value)
+            return False
+        return True
+
+    value = property(getValue, setValue)
 
     def getAssociations(self):
         """
@@ -4586,14 +4633,14 @@ class ReactionNew(Reaction):
         Get the value of the reactions lower bound
 
         """
-        return self.lb()
+        return self.lb.value
 
     def getUpperBound(self):
         """
         Get the value of the reactions upper bound
 
         """
-        return self.ub()
+        return self.ub.value
 
     def setLowerBound(self, value):
         """
@@ -4602,7 +4649,7 @@ class ReactionNew(Reaction):
          - *value* a floating point value
 
         """
-        self.lb.setValue(value)
+        self.lb.value = value
 
     def setUpperBound(self, value):
         """
@@ -4611,7 +4658,7 @@ class ReactionNew(Reaction):
          - *value* a floating point value
 
         """
-        self.ub.setValue(value)
+        self.ub.value = value
 
     def deactivateReaction(self, lower=0.0, upper=0.0, silent=True):
         """
@@ -4642,18 +4689,14 @@ class ReactionNew(Reaction):
             if not silent:
                 print('Reaction {} bounds set to [{} : {}]'.format(self.id, self.__bound_history__[0], self.__bound_history__[1]))
 
+    def __setstate__(self, dic):
+        """
+        Internal method that allows our weakrefs to be 'picklable'
 
-
-
-
-
-
-
-
-
-
-
-
+        """
+        self.__dict__ = dic
+        self.ub._parent = weakref.ref(self)
+        self.lb._parent = weakref.ref(self)
 
 
 class Species(Fbase):
