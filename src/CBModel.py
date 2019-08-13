@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 703 2019-08-11 11:42:42Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 704 2019-08-13 22:05:04Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -111,7 +111,7 @@ class Fbase(object):
         """
         Internal method that should allow our weakrefs to be 'picklable'
 
-        # overloaded by Model
+        # overloaded by Model, FluxBound and Group
 
         """
 
@@ -640,6 +640,9 @@ class Model(Fbase):
             self.__global_id__[g.getId()] = g
         for p in self.parameters:
             self.__global_id__[p.getId()] = p
+        for gr in self.groups:
+            self.__global_id__[gr.getId()] = gr
+
 
     def __setModelSelf__(self):
         """
@@ -670,6 +673,8 @@ class Model(Fbase):
             g.__setObjRef__(self)
         for p in self.parameters:
             p.__setObjRef__(self)
+        for gr in self.groups:
+            gr.__setObjRef__(self)
 
 
     def __unsetModelSelf__(self):
@@ -701,21 +706,32 @@ class Model(Fbase):
             g.__unsetObjRef__()
         for p in self.parameters:
             p.__unsetObjRef__()
+        for gr in self.groups:
+            gr.__unsetObjRef__()
+
 
     def __getstate__(self):
         """
         Internal method that should allow our weakrefs to be 'picklable'
 
-        # overloaded by Model
+        # overloaded by Model, FluxBound and Group
 
         """
 
         self.__global_id__ = None
-        if '__objref__' not in self.__dict__:
+        if '__objref__' not in self.__dict__ and len(self.groups) == 0:
+            print('fuck')
             return self.__dict__
         else:
             cpy = self.__dict__.copy()
             cpy['__objref__'] = None
+            _gtmp_ = {}
+            for g in self.groups:
+                _gtmp_[g.getId()] = g.getMemberIDs()
+                cpy['_gtmp_'] = _gtmp_
+                g.members = []
+                g.member_ids = []
+            print(_gtmp_)
             return cpy
 
     def __setstate__(self, dic):
@@ -727,6 +743,12 @@ class Model(Fbase):
         self.__setModelSelf__()
         self.__setGlobalIdStore__()
         self.__populateGlobalIdStore__()
+        _gtmp_ = dic.pop('_gtmp_')
+        print(_gtmp_)
+        for g in _gtmp_:
+            self.__global_id__[g].members = []
+            self.__global_id__[g].member_ids = []
+            self.__global_id__[g].addMember([self.__global_id__[m] for m in _gtmp_[g]])
 
     def serialize(self, protocol=0):
         """
@@ -3160,11 +3182,19 @@ class Model(Fbase):
 
         """
         assert obj.__objref__ is None, 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(obj.__objref__).split('to')[1][1:-1])
+        # from add species register groups with global id dict --> adapt
+        if obj.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate group ID detected: {}'.format(obj.getId()))
+        else:
+            self.__pushGlobalId__(obj.getId(), obj)
+        obj.__objref__ = weakref.ref(self)
+
         if obj.getId() not in self.getGroupIds():
             self.groups.append(obj)
         else:
             print('ERROR: Group with id \"{}\" already exists.'.format(obj.getId()))
             del obj
+
 
     def deleteGroup(self, gid):
         """
@@ -3175,7 +3205,9 @@ class Model(Fbase):
         """
         gids = self.getGroupIds()
         if gid in gids:
-            self.groups.pop(gids.index(gid))
+            self.__popGlobalId__(gid)
+            g = self.groups.pop(gids.index(gid))
+            del g
         else:
             print('ERROR: Group with id \"{}\" does not exist.'.format(gid))
 
@@ -3587,8 +3619,8 @@ class Group(Fbase):
         else:
             self.__TRASH__ = None
         cpy = copy.deepcopy(self)
-        cpy.members = []
-        cpy.members.extend(self.members[:])
+        #cpy.members = []
+        #cpy.members = [weakref.ref(o()) for o in self.members]
         return cpy
 
     def addMember(self, obj):
@@ -3662,9 +3694,6 @@ class Group(Fbase):
             return self.members[self.member_ids.index(mid)]()
         else:
             return None
-
-
-
 
     def getMemberIDs(self, as_set=False):
         """
@@ -3825,6 +3854,70 @@ class Group(Fbase):
         self.assignSharedAnnotationToMembers()
         self.assignSharedMIRIAMannotationToMembers()
 
+    def serialize(self, protocol=0):
+        """
+        Serialize object, returns a string by default
+
+         - *protocol* [default=0] serialize to a string or binary if required,
+                      see pickle module documentation for details
+
+        # Reimplemented in Model
+
+        """
+        #return pickle.dumps(self, protocol=protocol)
+        print('Group serialization disabled.')
+        return None
+
+
+    def serializeToDisk(self, filename, protocol=2):
+        """
+        Serialize to disk using pickle protocol:
+
+         - *filename* the name of the output file
+         - *protocol* [default=2] serialize to a string or binary if required,
+                      see pickle module documentation for details
+
+        # Reimplemented in Model
+
+        """
+        #F = open(filename, 'wb')
+        #pickle.dump(self, F, protocol=protocol)
+        #F.close()
+        print('Group serialization disabled.')
+        return None
+
+
+
+    # disabled for now
+    #def __getstate__(self):
+        #"""
+        #Internal method that should allow our weakrefs to be 'picklable'
+
+        ## overloaded by Model, FluxBound and Group
+
+        #"""
+
+        ##self.__global_id__ = None # this is the global id dictionary so not relevant to fb
+        #if '__objref__' not in self.__dict__ and len(self.members) == 0:
+            #return self.__dict__
+        #else:
+            #cpy = self.__dict__.copy()
+            #cpy['__objref__'] = None
+            #cpy['members'] = [a().getId() for a in self.members]
+            #return cpy
+
+    #def __setstate__(self, dic):
+        #"""
+        #Internal method that allows our weakrefs to be 'picklable'
+
+        #"""
+        #self.__dict__ = dic
+        #self.__setModelSelf__()
+        #self.__setGlobalIdStore__()
+        #self.__populateGlobalIdStore__()
+
+
+
 
 class FluxBound(Fbase):
     """A reaction fluxbound"""
@@ -3979,7 +4072,7 @@ class FluxBoundBase(Fbase):
         """
         Internal method that should allow our weakrefs to be 'picklable'
 
-        # overloaded by Model
+        # overloaded by Model, FluxBound and Group
 
         """
 
