@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 704 2019-08-13 22:05:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 705 2019-10-15 12:30:34Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -743,12 +743,12 @@ class Model(Fbase):
         self.__setModelSelf__()
         self.__setGlobalIdStore__()
         self.__populateGlobalIdStore__()
-        _gtmp_ = dic.pop('_gtmp_')
-        print(_gtmp_)
-        for g in _gtmp_:
-            self.__global_id__[g].members = []
-            self.__global_id__[g].member_ids = []
-            self.__global_id__[g].addMember([self.__global_id__[m] for m in _gtmp_[g]])
+        if '_gtmp_' in dic:
+            _gtmp_ = dic.pop('_gtmp_')
+            for g in _gtmp_:
+                self.__global_id__[g].members = []
+                self.__global_id__[g].member_ids = []
+                self.__global_id__[g].addMember([self.__global_id__[m] for m in _gtmp_[g]])
 
     def serialize(self, protocol=0):
         """
