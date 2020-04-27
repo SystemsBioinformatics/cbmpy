@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBDataStruct.py 706 2020-03-23 21:31:49Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBDataStruct.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
 

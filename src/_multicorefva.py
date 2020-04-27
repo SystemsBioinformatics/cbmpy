@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: _multicorefva.py 666 2018-11-21 22:02:35Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: _multicorefva.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
 

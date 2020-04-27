@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBXML.py 695 2019-07-26 15:05:45Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBXML.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
