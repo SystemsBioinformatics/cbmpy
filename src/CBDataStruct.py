@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBDataStruct.py 660 2018-09-24 14:57:04Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBDataStruct.py 706 2020-03-23 21:31:49Z bgoli $)
 
 """
 
@@ -52,8 +52,13 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
-
 cTime = time.time
+
+# work around Python version insanity
+if os.sys.version_info[0] >= 3 and os.sys.version_info[1] >= 7:
+    RE_PATTERN_TYPE = re.Pattern
+else:
+    RE_PATTERN_TYPE = re._pattern_type
 
 class StructMatrix:
     """
@@ -313,7 +318,8 @@ class MIRIAMannotation(object):
          - *entity* a MIRIAM resource entity
 
         """
-        if type(self.MIRIAM[entity]['pattern']) == re._pattern_type:
+
+        if type(self.MIRIAM[entity]['pattern']) == RE_PATTERN_TYPE:
             return True
         else:
             try:

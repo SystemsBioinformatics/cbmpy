@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBModel.py 705 2019-10-15 12:30:34Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBModel.py 706 2020-03-23 21:31:49Z bgoli $)
 
 """
 ## gets rid of "invalid variable name" info
@@ -3656,9 +3656,10 @@ class Group(Fbase):
             oidx = self.member_ids.index(oid)
             obj = self.members.pop(oidx)
             oidx = self.member_ids.pop(oidx)
-            del obj, oidx
             if isinstance(obj, Group):
                 self._group_member_ids_.remove(oid)
+            del obj, oidx
+
         else:
             print('\nError object {} is not a member of group.\n'.format(oid))
 
