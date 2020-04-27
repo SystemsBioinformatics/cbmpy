@@ -24,7 +24,7 @@ p.breakhere {page-break-before: always}
   <blockquote>
     <blockquote>
       <blockquote>
-        <h2 align="left" class="red">New release 0.7.21 (September 2018)</h2>
+        <h2 align="left" class="red">New release 0.7.25 (August 2019)</h2>
       </blockquote>
     </blockquote>
   </blockquote>
@@ -62,13 +62,13 @@ PySCeS CBMPy implements popular analyses such as<em> FBA, FVA, element/charge ba
 </ul>
 <p><strong>Windows 64bit</strong></p>
 <ul>
-  <li> pip install --upgrade python-libsbml cbmpy</li>
-  <li>pip install python-nose</li>
-  <li> <a href="https://sourceforge.net/projects/cbmpy/files/tools/glpk/glpk-0.3.win-amd64-py2.7.exe/download">PyGLPK 0.3</a> (open source solver)</li>
+  <li>pip install --upgrade python-libsbml cbmpy</li>
+  <li> <a href="https://sourceforge.net/projects/cbmpy/files/tools/glpk/glpk-0.3.win-amd64-py2.7.exe/download">PyGLPK 0.3 (install exe)</a> (open source solver)</li>
+  <li> <a href="https://sourceforge.net/projects/cbmpy/files/tools/glpk/glpk-0.3-cp27-cp27m-win_amd64.whl/download">PyGLPK 0.3 (Python wheel)</a> Install with "pip install glpk-0.3-cp27-cp27m-win_amd64.whl"</li>
   </ul>
 <p><em>This software is under active development, the latest code 
   can be found on the <a href="http://sourceforge.net/p/cbmpy/code/">CBMPy SVN repository</a>.or <a href="https://github.com/SystemsBioinformatics/cbmpy">GitHub.</a></em></p>
-<p><strong>Documentation:</strong> <a href="reference/cbmpy.html">reference guide 0.7.15</a> (<a href="cbmpy.sourceforge.net/reference/cbmpy.pdf">pdf</a>)</p>
+<p><strong>Documentation:</strong> <a href="reference/index.html">reference guide 0.7.25</a> (<a href="reference/cbmpy_reference_manual.pdf">pdf</a>)</p>
 <p>For more information on the development and use of PySCeS CBMPy feel free to contact me:</p>
 <div align="left">
   <table width="74%" border="0">
@@ -113,9 +113,9 @@ document.write("<a href='mailto:"+link+"'>"+link+"</a>")
 <hr />
 <h3 class="blue">Latest news</h3>
 <ul>
+  <li><strong>CBMPy 0.7.25 has been released</strong>. New features include improved model validation, GPR support, support for non-storichiometric constraints and completely refactored internal referencing system. CBMPy is now availalble for Python 3.5+ and Python 2.7 (2019-08-13) </li>
   <li><strong>CBMPy 0.7.21 has been released</strong>. New features include support for model validation, new tree representations of GPR's which allow easy editing of GPR elements. New methods for moving components between models have also been added. CBMPy is now availalble for Python 2 and Python 3 (2018-09-25) </li>
-  <li><strong>CBMPy 0.7.15 has been released.</strong> Bugfixes to the objective function and multiobject rename tools. Further refinement of global hashing and lookup methods. Added model properties for MetaToolkit integration <span class="times">(<span class="red">2017-05-29</span>)</span></li>
-</ul>
+	</ul>
 <h3 class="blue">Previous</h3>
 <ul>
   <li>(<span class="red">2016-04-29</span>) (solved in 0.7.13) An <strong>Ubuntu pip</strong> <strong>install</strong> puts data directories in wrong directory, this can be easily fixed, either use easy_install (see above) or copy the content of the following directory by hand:
@@ -123,7 +123,8 @@ document.write("<a href='mailto:"+link+"'>"+link+"</a>")
       <li>/usr/local/lib/cbmpy/nosetests/* --&gt; /usr/local/lib/python2.7/dist-utils/cbmpy/nosetests/*</li>
     </ul>
   </li>
-  <li><strong>CBMPy 0.7.4 has been released.</strong> This version adds SBML Groups support and many new utility functions, bugfixes  and a &quot;nose&quot; based unit test suite called using <span class="times">cbmpy.test() (<span class="red">2016-04-15</span>)</span></li>
+  <li><strong>CBMPy 0.7.15 has been released.</strong> Bugfixes to the objective function and multiobject rename tools. Further refinement of global hashing and lookup methods. Added model properties for MetaToolkit integration <span class="times">(<span class="red">2017-05-29</span>)</span></li>
+	<li><strong>CBMPy 0.7.4 has been released.</strong> This version adds SBML Groups support and many new utility functions, bugfixes  and a &quot;nose&quot; based unit test suite called using <span class="times">cbmpy.test() (<span class="red">2016-04-15</span>)</span></li>
   <li>CBMPy can be downloaded from SourceForge (see below) or installed from PyPI using <span class="times">pip</span> or <span class="times">easy_install</span> e.g. on windows try: <span class="times">easy_install cbmpy</span> or on Linux try <span class="times">pip install cbmpy</span> (<span class="red">2015-09-15</span>)</li>
   <li><strong>CBMPy 0.7.3 has been released.</strong> This version adds FBC Version 2 support, introduces a new module name: <span class="times"><strong>cbmpy</strong></span> that should be used from now on e.g. &quot;<span class="times">import cbmpy</span>&quot;. It also includes new network analysis tools and documentation. (<span class="red">2015-09-14</span>)</li>
   <li>CBMPy Reference <strong>Documentation and Installation guide</strong> updated (0.7.2) and available as: <a href="reference/cbmpy.html" target="_new">html</a>, <a href="reference/cbmpy.pdf" target="_new">pdf</a> or <a mimetype="application/epub+zip" href="reference/cbmpy.epub" download="download">epub</a> (<span class="red">2015-08-13</span>)</li>
@@ -144,22 +145,31 @@ document.write("<a href='mailto:"+link+"'>"+link+"</a>")
     <tr>
       <th width="26%" bgcolor="#99FFFF" scope="col">Date</th>
       <th width="15%" bgcolor="#99FFFF" scope="col">Release</th>
-      <th colspan="4" bgcolor="#99FFFF" scope="col"><a href="https://sourceforge.net/projects/cbmpy/files/">Downloads</a></th>
+      <th colspan="4" bgcolor="#99FFFF" scope="col">Downloads</th>
       </tr>
     <tr>
       <td bgcolor="#99FFFF">&nbsp;</td>
       <td bgcolor="#99FFFF">&nbsp;</td>
-      <td colspan="2" bgcolor="#99FFFF"><div align="center"><strong>Source (Linux/OS X)</strong></div></td>
+      <td bgcolor="#99FFFF"><div align="center"><strong>Source</strong></div></td>
+		<td bgcolor="#99FFFF"><div align="center"><strong>Linux/OS X</strong></div></td>
       <td width="17%" bgcolor="#99FFFF"><div align="center"><strong>Wheel</strong></div></td>
       <td width="12%" bgcolor="#99FFFF"><div align="center"><strong>Win64</strong></div></td>
     </tr>
+<tr>
+      <td align="center" bgcolor="#99FFFF" class="bodystyle"><strong>20190815</strong></td>
+      <td align="center" bgcolor="#99FFFF"><strong><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/">0.7.25</a></strong></td>
+      <td align="center" bgcolor="#99FFFF"> <a href="https://pypi.org/project/cbmpy/#files"><strong>PyPI</strong></a></td>
+      <td align="center" bgcolor="#99FFFF"><a href="https://pypi.org/project/cbmpy/#files"><strong>PyPI</strong></a></td>
+      <td align="center" bgcolor="#99FFFF"><a href="https://pypi.org/project/cbmpy/#files"><strong>PyPI</strong></a></td>
+      <td align="center" bgcolor="#99FFFF"><a href="https://pypi.org/project/cbmpy/#files"><strong>PyPI</strong></a></td>
+    </tr>	  
     <tr>
-      <td align="center" bgcolor="#99FFFF" class="bodystyle"><strong>20180925</strong></td>
-      <td align="center" bgcolor="#99FFFF"><strong><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/">0.7.21</a></strong></td>
-      <td align="center" bgcolor="#99FFFF"><strong><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21.tar.gz/download">gzip</a></strong></td>
+      <td align="center" bgcolor="#99FFFF" class="small">20180925</td>
+      <td align="center" bgcolor="#99FFFF"><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/" class="small">0.7.21</a></td>
+      <td align="center" bgcolor="#99FFFF"><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21.tar.gz/download" class="small">gzip</a></td>
       <td align="center" bgcolor="#99FFFF"><strong></strong></td>
-      <td align="center" bgcolor="#99FFFF"><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21-py2-none-any.whl/download"><strong>Py2</strong><font color="#000000">&nbsp;&nbsp;</font></a><strong><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21-py3-none-any.whl/download">Py3</a></strong>&nbsp;</td>
-      <td align="center" bgcolor="#99FFFF"><strong><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21.win-amd64.exe/download">Py2</a> <a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21.win-py3-amd64.exe/download">Py3</a><br />
+      <td align="center" bgcolor="#99FFFF"><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21-py2-none-any.whl/download" class="small">Py2<font color="#000000">&nbsp;&nbsp;</font></a><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21-py3-none-any.whl/download" class="small">Py3</a>&nbsp;</td>
+      <td align="center" bgcolor="#99FFFF"><a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21.win-amd64.exe/download" class="small">Py2</a> <a href="https://sourceforge.net/projects/cbmpy/files/release/0.7/cbmpy-0.7.21.win-py3-amd64.exe/download" class="small">Py3</a><strong><br />
       </strong></td>
     </tr>
 <tr>
@@ -317,8 +327,8 @@ document.write("<a href='mailto:"+link+"'>"+link+"</a>")
 <a href="http://www.gnu.org/copyleft/gpl.html"><img src="../images/open_source_button.gif" width="88" height="31" alt="os" /></a>
 </div>
 <div id="footer" style="position: absolute; width: 291px; height: 72px; z-index: 2; left: 267px; top: 2712px;" class="footer">
-  <p align="center"><font size="2">&copy; 2014-2017 Brett G. Olivier, Amsterdam<br />
-    Site last updated 2017-05-29</font></p>
+  <p align="center"><font size="2">&copy; 2014-2019 Brett G. Olivier, Amsterdam<br />
+    Site last updated 2019-08-30</font>&nbsp;</p>
 </div>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
