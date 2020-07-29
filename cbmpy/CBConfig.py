@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBConfig.py 710 2020-04-27 14:22:34Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBConfig.py 711 2020-04-27 14:22:34Z bgoli $)
 
 """
 # gets rid of "invalid variable name" info
@@ -37,7 +37,7 @@ from __future__ import absolute_import
 # release
 
 try:
-    STATUS = '$Rev: 710 $'.replace('Rev: ', '').replace('$', '').strip()
+    STATUS = '$Rev: 711 $'.replace('Rev: ', '').replace('$', '').strip()
 except Exception:
     STATUS = ''
 

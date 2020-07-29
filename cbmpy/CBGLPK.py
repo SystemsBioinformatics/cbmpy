@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBGLPK.py 713 2020-06-14 22:28:43Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBGLPK.py 713 2020-07-29 22:28:43Z bgoli $)
 
 """
 
