@@ -42,7 +42,7 @@ except:
 mypackages= ['cbmpy', 'cbmpy.fluxmodules']
 
 setup(
- package_dir = {'cbmpy' : 'src'},
+ package_dir = {'cbmpy' : 'cbmpy'},
  packages = mypackages,
  data_files = mydata_files,
  name = "cbmpy",
@@ -76,7 +76,11 @@ setup(
  """ CBMPy (http://cbmpy.sourceforge.net) is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods developed specifically for the ecosystem modelling."""
 )
 try:
+    os.chdir(os.path.join(local_path, 'cbmpy', 'fluxmodules'))
+    print(os.getcwd())
     import cbmpy
+    print(cbmpy.__version__)
+    os.chdir(local_path)
 except ImportError:
     pass
 
