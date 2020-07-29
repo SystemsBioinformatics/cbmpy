@@ -22,11 +22,11 @@ Contact email: bgoli@users.sourceforge.net
 Last edit: $Author: bgoli $ ($Id: CBCommon.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
-## gets rid of "invalid variable name" info
+# gets rid of "invalid variable name" info
 # pylint: disable=C0103
-## gets rid of "line to long" info
+# gets rid of "line to long" info
 # pylint: disable=C0301
-## use with caution: gets rid of module xxx has no member errors (run once enabled)
+# use with caution: gets rid of module xxx has no member errors (run once enabled)
 # pylint: disable=E1101
 
 
@@ -35,12 +35,13 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import weakref, ast
+import weakref
+import ast
 
 # this is a hack that needs to be streamlined a bit
-#try:
+# try:
     #import cStringIO as csio
-#except ImportError:
+# except ImportError:
     #import io as csio
 
 chemElementDefs = None
@@ -65,47 +66,46 @@ if HAVE_PYPARSING:
     pp_elementRef = pyparsing.Group(pp_element + pyparsing.Optional(pp_integer, default="1"))
     pp_chemicalFormula = pyparsing.OneOrMore(pp_elementRef)
 
-
     pp_gene_ass = pyparsing.Word(pyparsing.alphanums + '. ') | 'or' | 'OR' | 'and' | 'AND'
     pp_gene_unnester = pyparsing.nestedExpr(content=pp_gene_ass)
 
-ptElements = ('H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S',\
-              'Cl', 'Ar', 'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'G',\
-              'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag',\
-              'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe', 'Cs', 'Ba', 'La', 'Hf', 'Ta', 'W', 'Re', 'Os',\
-              'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra', 'Ac', 'Rf', 'Db',\
-              'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', '112', '113', '114', '115', '116', '117', '118', 'La',\
-              'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Ac',\
+ptElements = ('H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S',
+              'Cl', 'Ar', 'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'G',
+              'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag',
+              'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe', 'Cs', 'Ba', 'La', 'Hf', 'Ta', 'W', 'Re', 'Os',
+              'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra', 'Ac', 'Rf', 'Db',
+              'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', '112', '113', '114', '115', '116', '117', '118', 'La',
+              'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Ac',
               'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'X', 'R', 'Z')
 
-## too crude, need to find a better logging strategy
+# too crude, need to find a better logging strategy
 #CBMPYLOG = csio.StringIO()
-#def printl(st, scr=True, log=False):
-    #"""
-    #Updated print() function that also writes to a csio buffer
+# def printl(st, scr=True, log=False):
+    # """
+    # Updated print() function that also writes to a csio buffer
 
-    #- *st* the string
-    #- *prn* print to screen
-    #- *log* write to log buffer
+    # - *st* the string
+    # - *prn* print to screen
+    # - *log* write to log buffer
 
-    #"""
+    # """
     #global CBMPYLOG
-    #if scr:
-        #print(st)
-    #if log:
-        #try:
-            #CBMPYLOG.write(st+'\n')
-        #except Exception as ex:
-            #print(ex)
+    # if scr:
+        # print(st)
+    # if log:
+        # try:
+            # CBMPYLOG.write(st+'\n')
+        # except Exception as ex:
+            # print(ex)
 
-#def flushLogToopen(fname):
+# def flushLogToopen(fname):
     #global CBMPYLOG
     #F = open(fname, 'w')
-    #CBMPYLOG.seek(0)
-    #F.write(CBMPYLOG.read())
-    #F.flush()
-    #F.close()
-    #CBMPYLOG.close()
+    # CBMPYLOG.seek(0)
+    # F.write(CBMPYLOG.read())
+    # F.flush()
+    # F.close()
+    # CBMPYLOG.close()
     #CBMPYLOG = csio.StringIO()
 
 
@@ -117,7 +117,7 @@ def parseGeneAssociation(gs):
 
     """
     # gs = '(b0810) and ( b0811 ) or ( b1234.0) and(b0809)and ( b7643 )OR(b0812 )AND( b0876)'
-    gl = pp_gene_unnester.parseString('('+gs+')').asList()
+    gl = pp_gene_unnester.parseString('(' + gs + ')').asList()
     gl = gl[0]
 
     def f(l):
@@ -130,6 +130,7 @@ def parseGeneAssociation(gs):
     f(gl)
     print(gl)
     return gl
+
 
 def checkChemFormula(cf, quiet=False):
     """
@@ -153,7 +154,7 @@ def checkChemFormula(cf, quiet=False):
     cf2 = ''
     for l_ in R2:
         if l_[0] not in ptElements:
-            #print(R2)
+            # print(R2)
             if not quiet:
                 print('WARNING: \"{}\" is not a valid chemical formula.'.format(cf))
             return False
@@ -170,6 +171,7 @@ def checkChemFormula(cf, quiet=False):
     else:
         return True
 
+
 def extractGeneIdsFromString(g, return_clean_gpr=False):
     """
     Extract and return a list of gene names from a gene association string formulation
@@ -178,7 +180,7 @@ def extractGeneIdsFromString(g, return_clean_gpr=False):
     - *return_clean_gpr* [default=False] in addition to the list returns the "cleaned" GPR string
 
     """
-    #print('\n{}'.format(g))
+    # print('\n{}'.format(g))
     g2 = g
     if 'AND' in g2 or 'and' in g2:
         g2 = g2.replace(')AND ', ') AND ').replace(')and ', ') and ')
@@ -222,6 +224,7 @@ def extractGeneIdsFromString(g, return_clean_gpr=False):
     else:
         return names, g2
 
+
 def createAssociationDictFromNode(node, out, model, useweakref=True, cntr=0):
     """
     Converts a GPR string '((g1 and g2) or g3)' to a dictionary via a Python AST.
@@ -247,7 +250,7 @@ def createAssociationDictFromNode(node, out, model, useweakref=True, cntr=0):
         right = node.right.id
         gref = '{}-{}'.format(left, right)
         print(gref)
-        #ref.setGeneProduct(formatSbmlId(gref))
+        # ref.setGeneProduct(formatSbmlId(gref))
     else:
         if isinstance(node, ast.Expr):
             children = [node.value]
@@ -302,6 +305,8 @@ def func_getAssociationStrFromGprDict(gprd, out, parent=''):
     return out
 
 # '( llmg_1896  and  llmg_1897  and  llmg_1898  and  llmg_1899  and  llmg_1900  and  llmg_1901 )'
+
+
 def getGPRasDictFromString(node, out):
     """
     Converts a GPR string '((g1 and g2) or g3)' to a gprDict which is returned
@@ -369,7 +374,7 @@ class ComboGen(object):
             self.addCombination(temp)
         for i in range(len(data)):
             temp.append(data[i])
-            self.uniqueCombinations(data[i+1:], number-1, temp)
+            self.uniqueCombinations(data[i + 1:], number - 1, temp)
             temp.pop()
 
     def numberifyComb2Int(self):
@@ -377,6 +382,7 @@ class ComboGen(object):
         for c in self.combo:
             tmp.append(tuple([int(c) for c in c.split(',')]))
         self.combo_int = tmp
+
 
 def processSpeciesChargeChemFormulaAnnot(s, getFromName=False, overwriteChemFormula=False, overwriteCharge=False):
     """
@@ -455,6 +461,7 @@ def binHash(keys, d):
             out.append(True)
     return tuple(out)
 
+
 def fixId(s, replace=None):
     """
     Checks a string (Sid) to see if it is a valid C style variable. first letter must be an underscore or letter,
@@ -476,9 +483,10 @@ def fixId(s, replace=None):
         elif replace != None:
             s2 += replace
             #print('Replacing illegal character \"{}\": {} --> {}'.format(c, s, s2))
-        #else:
+        # else:
             #print('Skipping illegal character \"{}\": {} --> {}'.format(c, s, s2))
     return s2
+
 
 def checkId(s):
     """

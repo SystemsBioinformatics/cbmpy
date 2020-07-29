@@ -32,7 +32,6 @@ class Matrix:
     The matrix grows by demand.
     """
 
-
     def __init__(self, listRep=None):
         """" Creates empty matrix.
         """
@@ -59,17 +58,17 @@ class Matrix:
             return frozenset()
         else:
             c = self.__cols[idx]
-            for k,v in c.items():
+            for k, v in c.items():
                 if v == 0:
                     del c[k]
                 else:
-                    out.add((k,v))
+                    out.add((k, v))
             return frozenset(out)
 
     def __getitemIdx(self, source, rowidx, out):
         for c in source:
             col = {}
-            for r,v in c.items():
+            for r, v in c.items():
                 i = rowidx(r)
                 if i != None:
                     col[i] = v
@@ -86,8 +85,8 @@ class Matrix:
         for i in range(self.rows()):
             out.__cols.append({})
         for ci, c in enumerate(self.__cols):
-            for r,v in c.items():
-                out.__cols[r][ci] = v*scalar
+            for r, v in c.items():
+                out.__cols[r][ci] = v * scalar
 #        out.__cols[r] = [self.__cols[c][r] for c in range(self.cols()) if self.__cols[c].has_key(r)]
 #        [out.__cols[r][ci]=v for  ci, c in enumerate(self.__cols) for r,v in c.items()]
         out.__nrows = len(self.__cols)
@@ -122,7 +121,7 @@ class Matrix:
         if isinstance(cols, int):
             if isinstance(rows, int):
                 if cols < self.cols():
-                    return self.__cols[cols].get(rows,0)
+                    return self.__cols[cols].get(rows, 0)
                 else:
                     return 0
             else:
@@ -140,12 +139,13 @@ class Matrix:
 
         if isinstance(rows, slice):
             ind = rows.indices(self.rows())
-            idx = lambda x: revslice(x, ind)
+            def idx(x): return revslice(x, ind)
         else:
             ind = {}
-            for i,v in enumerate(rows):
+            for i, v in enumerate(rows):
                 ind[v] = i
-            idx = lambda x: ind.get(x, None)
+
+            def idx(x): return ind.get(x, None)
 
         if isinstance(cols, slice):
             subcols = self.__cols[cols]
@@ -160,9 +160,9 @@ class Matrix:
         assert self.checkRows()
         for c in source:
             for r in c.keys():
-                if (r >= rslice.start
-                        and r < rslice.stop
-                        and r - rslice.start % rslice.step == 0):
+                if (r >= rslice.start and
+                        r < rslice.stop and
+                        r - rslice.start % rslice.step == 0):
                     del c[r]
         assert self.checkRows()
 
@@ -199,10 +199,10 @@ class Matrix:
         while self.cols() < mcol:
             self.__cols.append({})
         # copy new values
-        for i,c in enumerate(other.__cols):
+        for i, c in enumerate(other.__cols):
             mycol = self.__cols[i]
-            for r,v in c.items():
-                nv = mycol.get(r,0) + v
+            for r, v in c.items():
+                nv = mycol.get(r, 0) + v
                 if nv != 0:
                     mycol[r] = nv
                 elif mycol.has_key(r):
@@ -220,10 +220,10 @@ class Matrix:
         while self.cols() < mcol:
             self.__cols.append({})
         # copy new values
-        for i,c in enumerate(other.__cols):
+        for i, c in enumerate(other.__cols):
             mycol = self.__cols[i]
-            for r,v in c.items():
-                nv = mycol.get(r,0) - v
+            for r, v in c.items():
+                nv = mycol.get(r, 0) - v
                 if nv != 0:
                     mycol[r] = nv
                 elif mycol.has_key(r):
@@ -237,7 +237,7 @@ class Matrix:
         """ /= operation """
         assert self.checkRows()
         for c in self.__cols:
-            for r,v in c.items():
+            for r, v in c.items():
                 c[r] = v / scalar
         return self
 
@@ -256,22 +256,22 @@ class Matrix:
             # we can always fill up with zeros
             out = Matrix()
             for tr in range(self.rows()):
-                for ci,c in enumerate(v.__cols):
+                for ci, c in enumerate(v.__cols):
                     x = 0
                     for ri, rv in c.items():
                         x += self[tr, ri] * rv
-                    out[tr,ci] = x
+                    out[tr, ci] = x
             # copy result to self
             self.__cols = out.__cols
             # the number of rows stays the same so no update needed
         else:
             # just mutliplication with a scalar
             if isinstance(v, Matrix):
-                scalar = v[0,0]
+                scalar = v[0, 0]
             else:
                 scalar = v
             for c in self.__cols:
-                for r,val in c.items():
+                for r, val in c.items():
                     c[r] = val * scalar
         return self
 
@@ -300,21 +300,21 @@ class Matrix:
             # we can always fill up with zeros
             out = Matrix()
             for tr in range(self.rows()):
-                for ci,c in enumerate(v.__cols):
+                for ci, c in enumerate(v.__cols):
                     x = 0
                     for ri, rv in c.items():
                         x += self[tr, ri] * rv
-                    out[tr,ci] = x
+                    out[tr, ci] = x
         else:
             # just mutliplication with a scalar
             if isinstance(v, Matrix):
-                scalar = v[0,0]
+                scalar = v[0, 0]
             else:
                 scalar = v
             out = Matrix()
             for c in self.__cols:
                 oc = {}
-                for r,val in c.items():
+                for r, val in c.items():
                     oc[r] = val * scalar
                 out.__cols.append(oc)
             out.__nrows = self.__nrows
@@ -346,12 +346,12 @@ class Matrix:
 
         c = self.__cols[col]
         oc = v.__cols[0]
-        for r,val in oc.items():
-            nv = c.get(r,0) + scalar * val
+        for r, val in oc.items():
+            nv = c.get(r, 0) + scalar * val
             if nv != 0:
                 c[r] = nv
                 if r >= self.__nrows:
-                    self.__nrows = r+1
+                    self.__nrows = r + 1
             else:
                 del c[r]
 
@@ -376,7 +376,7 @@ class Matrix:
             if rows.step == None:
                 maxrow = max(self.rows(), rstart + v.rows())
             elif rows.step > 0:
-                maxrow = max(self.rows(), rstart + v.rows()*rows.step)
+                maxrow = max(self.rows(), rstart + v.rows() * rows.step)
             else:
                 maxrow = self.rows()
             rows = xrange(*rows.indices(maxrow))
@@ -388,7 +388,7 @@ class Matrix:
             if cols.step == None:
                 maxcol = max(self.cols(), cstart + v.cols())
             elif cols.step > 0:
-                maxcol = max(self.cols(), cstart + v.cols()*cols.step)
+                maxcol = max(self.cols(), cstart + v.cols() * cols.step)
             else:
                 maxcol = self.cols()
             cols = xrange(*cols.indices(maxcol))
@@ -404,7 +404,7 @@ class Matrix:
             else:
                 while self.cols() <= col:
                     self.__cols.append({})
-                self.__nrows = max(self.__nrows, row+1)
+                self.__nrows = max(self.__nrows, row + 1)
                 if isinstance(v, Matrix):
                     assert v.cols() <= 1
                     assert v.rows() <= 1
@@ -412,11 +412,11 @@ class Matrix:
                         if self.__cols[col].has_key(row):
                             del self.__cols[col][row]
                     else:
-                        self.__cols[col][row] = v[0,0]
+                        self.__cols[col][row] = v[0, 0]
                 elif isinstance(v, Fraction):
                     self.__cols[col][row] = v
                 else:
-                    self.__cols[col][row] = Fraction(v) # make sure its a fraction
+                    self.__cols[col][row] = Fraction(v)  # make sure its a fraction
 
         else:
             assert isinstance(v, Matrix)
@@ -428,12 +428,12 @@ class Matrix:
             while self.cols() <= mcol:
                 self.__cols.append({})
             # copy new values
-            for i,c in enumerate(v.__cols):
-                for r,val in c.items():
+            for i, c in enumerate(v.__cols):
+                for r, val in c.items():
                     assert i < len(cols)
                     assert r < len(rows), "%d < %d %d" % (r, len(rows), v.rows())
                     self.__cols[cols[i]][rows[r]] = val
-                    self.__nrows = max(self.__nrows, rows[r]+1)
+                    self.__nrows = max(self.__nrows, rows[r] + 1)
         assert self.checkRows()
 
     def __neg__(self):
@@ -459,10 +459,10 @@ class Matrix:
                     # is a valid index for both matrices
                     sc = self.__cols[i]
                     oc = other.__cols[i]
-                    for k,v in sc.items():
+                    for k, v in sc.items():
                         if oc[k] != v:
                             return False
-                    for k,v in oc.items():
+                    for k, v in oc.items():
                         if sc[k] != v:
                             return False
             return True
@@ -471,7 +471,6 @@ class Matrix:
 
     def __ne__(self, other):
         return not self.__eq__(other)
-
 
     def addMetabolicNetwork(self, cmod):
         """ adds the stoichiometric matrix of a metabolic network
@@ -491,7 +490,7 @@ class Matrix:
             for reag in cmod.reactions[c].getStoichiometry():
                 if reag[1] in var_spec_id:
                     r = var_spec_id.index(reag[1])
-                    self.__cols[c][r] = self.__cols[c].get(r,0) + Fraction(reag[0])
+                    self.__cols[c][r] = self.__cols[c].get(r, 0) + Fraction(reag[0])
         self.__nrows = len(var_spec_id)
         assert self.checkRows()
         return labels, var_spec_id
@@ -505,7 +504,7 @@ class Matrix:
             for ci, v in enumerate(r):
                 if v != 0:
                     col = self.__cols[ci]
-                    col[ri] = col.get(ri,0)+Fraction(v)
+                    col[ri] = col.get(ri, 0) + Fraction(v)
 
         assert self.checkRows()
 
@@ -517,9 +516,9 @@ class Matrix:
         assert self.checkRows()
         # find max row
         out = numpy.zeros((self.rows(), self.cols()))
-        for i,c in enumerate(self.__cols):
-            for r,v in c.items():
-                out[r,i] = v
+        for i, c in enumerate(self.__cols):
+            for r, v in c.items():
+                out[r, i] = v
         return out
 
     def checkRows(self):
@@ -536,6 +535,7 @@ class Matrix:
                 if r != 0:
                     return False
         return True
+
 
 def revslice(x, sl):
     if sl[2] == 0:

@@ -28,7 +28,9 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, gc
+import os
+import time
+import gc
 import numpy
 from . import CBWrite, CBTools
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
@@ -44,6 +46,7 @@ except ImportError:
     matplotlib = None
     pyplot = None
     _HAVE_MATPLOTLIB_ = False
+
 
 def plotFluxVariability(fva_data, fva_names, fname, work_dir=None, title=None, ySlice=None, minHeight=None, maxHeight=None, roundec=None, autoclose=True, fluxval=True, type='png'):
     """
@@ -68,26 +71,26 @@ def plotFluxVariability(fva_data, fva_names, fname, work_dir=None, title=None, y
     l_cntr = 0
     c_width = 0.8
     g_bars = []
-    g_bars_lcorner =[]
-    fba_val_lines =[]
+    g_bars_lcorner = []
+    fba_val_lines = []
     vResults = {}
     PLOTLOG = False
     outputNames = []
 
     Ymagic = []
-    FIG = matplotlib.pyplot.figure(num=5, figsize=(16,9))
+    FIG = matplotlib.pyplot.figure(num=5, figsize=(16, 9))
     pyplot.hold(True)
     for r in range(fva_data.shape[0]):
         HASMIN = False
         HASMAX = False
         if roundec == None:
-            fv_min = fva_data[r,2]
-            fv_fba = fva_data[r,0]
-            fv_max = fva_data[r,3]
+            fv_min = fva_data[r, 2]
+            fv_fba = fva_data[r, 0]
+            fv_max = fva_data[r, 3]
         else:
-            fv_min = round(fva_data[r,2], roundec)
-            fv_fba = round(fva_data[r,0], roundec)
-            fv_max = round(fva_data[r,3], roundec)
+            fv_min = round(fva_data[r, 2], roundec)
+            fv_fba = round(fva_data[r, 0], roundec)
+            fv_max = round(fva_data[r, 3], roundec)
         if fv_fba != numpy.NaN:
             if fv_min != numpy.NaN:
                 if fv_min < fv_fba:
@@ -99,10 +102,10 @@ def plotFluxVariability(fva_data, fva_names, fname, work_dir=None, title=None, y
         b_height1 = 0.0
         b_height2 = 0.0
         if HASMAX:
-            b_height1 = fv_max-fv_fba
+            b_height1 = fv_max - fv_fba
         if HASMIN:
-            b_height2 = fv_fba-fv_min
-        b_height = abs(b_height1)+abs(b_height2)
+            b_height2 = fv_fba - fv_min
+        b_height = abs(b_height1) + abs(b_height2)
 
         HCheckMin = False
         HCheckMax = False
@@ -121,16 +124,16 @@ def plotFluxVariability(fva_data, fva_names, fname, work_dir=None, title=None, y
             else:
                 bottom = fv_fba
             Ymagic.append(bottom)
-            Ymagic.append(bottom+b_height)
-            ##  print 'Bar = (%s,%s)' % (bottom, bottom+b_height)
-            g_bars.append(matplotlib.pyplot.bar(left=l_cntr, height=b_height,\
-               width=c_width, bottom=bottom, log=PLOTLOG, hold=True))
+            Ymagic.append(bottom + b_height)
+            # print 'Bar = (%s,%s)' % (bottom, bottom+b_height)
+            g_bars.append(matplotlib.pyplot.bar(left=l_cntr, height=b_height,
+                                                width=c_width, bottom=bottom, log=PLOTLOG, hold=True))
             if fluxval:
-                fba_val_lines.append(matplotlib.pyplot.hlines(fv_fba, g_bars[-1][0].get_x(),\
-                    g_bars[-1][0].get_x()+g_bars[-1][0].get_width(), colors='r', linestyles='solid', lw=2))
+                fba_val_lines.append(matplotlib.pyplot.hlines(fv_fba, g_bars[-1][0].get_x(),
+                                                              g_bars[-1][0].get_x() + g_bars[-1][0].get_width(), colors='r', linestyles='solid', lw=2))
             g_bars_lcorner.append(l_cntr)
             l_cntr += c_width
-            vResults.update({fva_names[r] : fva_data[r].copy()})
+            vResults.update({fva_names[r]: fva_data[r].copy()})
         elif b_height > 0.0 and HCheckMin:
             outputNames.append(fva_names[r])
 
@@ -139,44 +142,46 @@ def plotFluxVariability(fva_data, fva_names, fname, work_dir=None, title=None, y
             else:
                 bottom = fv_fba
             if bottom < fv_fba - maxHeight:
-                bottom = fv_fba- maxHeight
+                bottom = fv_fba - maxHeight
             if bottom + b_height > fv_fba + maxHeight:
                 b_height = abs(fv_fba - bottom) + maxHeight
             Ymagic.append(bottom)
-            Ymagic.append(bottom+b_height)
-            ##  print 'Bar = (%s,%s)' % (bottom, bottom+b_height)
-            g_bars.append(matplotlib.pyplot.bar(left=l_cntr, height=b_height,\
-               width=c_width, bottom=bottom, log=PLOTLOG, hold=True, color='y', lw=0.5))
+            Ymagic.append(bottom + b_height)
+            # print 'Bar = (%s,%s)' % (bottom, bottom+b_height)
+            g_bars.append(matplotlib.pyplot.bar(left=l_cntr, height=b_height,
+                                                width=c_width, bottom=bottom, log=PLOTLOG, hold=True, color='y', lw=0.5))
             if fluxval:
-                fba_val_lines.append(matplotlib.pyplot.hlines(fv_fba, g_bars[-1][0].get_x(),\
-                    g_bars[-1][0].get_x()+g_bars[-1][0].get_width(), colors='r', linestyles='solid', lw=2))
+                fba_val_lines.append(matplotlib.pyplot.hlines(fv_fba, g_bars[-1][0].get_x(),
+                                                              g_bars[-1][0].get_x() + g_bars[-1][0].get_width(), colors='r', linestyles='solid', lw=2))
             g_bars_lcorner.append(l_cntr)
             l_cntr += c_width
-            vResults.update({fva_names[r] : fva_data[r].copy()})
+            vResults.update({fva_names[r]: fva_data[r].copy()})
 
-
-    if __DEBUG__: print('len fva_names', len(fva_names))
-    if __DEBUG__: print('len g_bars', len(g_bars))
-    ##  print 'fva_data.shape', fva_data.shape
-    outputNames = [l.replace('_LPAREN_e_RPAREN_','_e') for l in outputNames]
-    matplotlib.pyplot.xticks(numpy.array(g_bars_lcorner)+(c_width/2.0), outputNames,\
-        rotation='vertical', size='xx-small')
+    if __DEBUG__:
+        print('len fva_names', len(fva_names))
+    if __DEBUG__:
+        print('len g_bars', len(g_bars))
+    # print 'fva_data.shape', fva_data.shape
+    outputNames = [l.replace('_LPAREN_e_RPAREN_', '_e') for l in outputNames]
+    matplotlib.pyplot.xticks(numpy.array(g_bars_lcorner) + (c_width / 2.0), outputNames,
+                             rotation='vertical', size='xx-small')
     if title == None:
         matplotlib.pyplot.title('%s has %i varying fluxes' % (fname, len(g_bars)))
     else:
         matplotlib.pyplot.title('%s' % (title))
     matplotlib.pyplot.ylabel('Variability')
     if len(Ymagic) > 0:
-        yhi = max(Ymagic) + 0.01*max(Ymagic)
-        ylow = min(Ymagic) - abs(0.01*min(Ymagic))
+        yhi = max(Ymagic) + 0.01 * max(Ymagic)
+        ylow = min(Ymagic) - abs(0.01 * min(Ymagic))
         if ySlice != None:
             yhi = abs(ySlice)
             ylow = -abs(ySlice)
         matplotlib.pyplot.ylim(ylow, yhi)
-        if __DEBUG__: print('Plotting y %s --> %s' % (ylow, yhi))
+        if __DEBUG__:
+            print('Plotting y %s --> %s' % (ylow, yhi))
     if work_dir != None:
         fname = os.path.join(work_dir, fname)
-    matplotlib.pyplot.savefig(fname+'.%s' % type)
+    matplotlib.pyplot.savefig(fname + '.%s' % type)
     pyplot.hold(False)
     if autoclose:
         matplotlib.pyplot.close('all')

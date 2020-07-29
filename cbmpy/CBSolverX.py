@@ -47,14 +47,15 @@ try:
     HAVE_ECYGLPKI = True
 except ImportError as why:
     print(why)
-#try:
+# try:
     #import gurobi as _gurobi_
     #HAVE_GUROBI = True
-#except ImportError:
-    #pass
+# except ImportError:
+    # pass
 print('HAVE_ECYGLPKI:', HAVE_ECYGLPKI)
 print('HAVE_CPLEX:', HAVE_CPLEX)
 print('HAVE_GUROBI:', HAVE_GUROBI)
+
 
 class LPBase(object):
     """
@@ -109,11 +110,13 @@ class LPBase(object):
         else:
             self.linear_constraints[cid] = (arr, sense, rhs)
 
+
 class MILPBase(object):
     """
     The base of all MILP's
 
     """
+
 
 class QPbase(object):
     """
@@ -121,17 +124,20 @@ class QPbase(object):
 
     """
 
+
 class LPCPLEX(LPBase):
         """
     CPLEX LP implimentation
 
     """
 
+
 class LPECYGLPKI(LPBase):
         """
     ECYGLPKI LP implimentation
 
     """
+
 
 c = LPCPLEX()
 g = LPECYGLPKI()

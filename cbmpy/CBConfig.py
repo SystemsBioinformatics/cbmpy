@@ -22,11 +22,11 @@ Contact email: bgoli@users.sourceforge.net
 Last edit: $Author: bgoli $ ($Id: CBConfig.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
-## gets rid of "invalid variable name" info
+# gets rid of "invalid variable name" info
 # pylint: disable=C0103
-## gets rid of "line to long" info
+# gets rid of "line to long" info
 # pylint: disable=C0301
-## use with caution: gets rid of module xxx has no member errors (run once enabled)
+# use with caution: gets rid of module xxx has no member errors (run once enabled)
 # pylint: disable=E1101
 
 # preparing for Python 3 port
@@ -41,34 +41,36 @@ try:
 except Exception:
     STATUS = ''
 
-__CBCONFIG__ = {'VERSION_MAJOR' : 0,
-                'VERSION_MINOR' : 8,
-                'VERSION_MICRO' : 0,
-                'VERSION_STATUS' : STATUS,
-                'VERSION' : None,
-                'DEBUG' : False,
-                'SOLVER_PREF' : 'CPLEX',
-                #'SOLVER_PREF' : 'GLPK',
-                'SOLVER_ACTIVE' : None,
-                'REVERSIBLE_SYMBOL' : '<==>',
-                'IRREVERSIBLE_SYMBOL' : '-->',
-                'HAVE_SBML2' : False,
-                'HAVE_SBML3' : False,
-                'CBMPY_DIR' : None,
-                'CBMPY_CGLPK_VER' : 'w452',
-                'SYMPY_DENOM_LIMIT' : 10**32
-               }
+__CBCONFIG__ = {'VERSION_MAJOR': 0,
+                'VERSION_MINOR': 8,
+                'VERSION_MICRO': 0,
+                'VERSION_STATUS': STATUS,
+                'VERSION': None,
+                'DEBUG': False,
+                'SOLVER_PREF': 'CPLEX',
+                # 'SOLVER_PREF' : 'GLPK',
+                'SOLVER_ACTIVE': None,
+                'REVERSIBLE_SYMBOL': '<==>',
+                'IRREVERSIBLE_SYMBOL': '-->',
+                'HAVE_SBML2': False,
+                'HAVE_SBML3': False,
+                'CBMPY_DIR': None,
+                'CBMPY_CGLPK_VER': 'w452',
+                'SYMPY_DENOM_LIMIT': 10**32
+                }
+
 
 def current_version():
     """
     Return the current CBMPy version as a string
 
     """
-    #return '%s.%s.%s [r%s]' % (__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'], __CBCONFIG__['VERSION_STATUS'])
+    # return '%s.%s.%s [r%s]' % (__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'], __CBCONFIG__['VERSION_STATUS'])
     if STATUS == '':
         return '{}.{}.{}'.format(__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'])
     else:
         return '{}.{}.{}.{}'.format(__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'], STATUS)
+
 
 def current_version_tuple():
     """
@@ -76,6 +78,7 @@ def current_version_tuple():
 
     """
     return (__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'])
+
 
 __CBCONFIG__['VERSION'] = current_version()
 

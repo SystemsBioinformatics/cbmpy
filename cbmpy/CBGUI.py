@@ -37,16 +37,16 @@ try:
     __HAVE_WX__ = True
 except ImportError as ex:
     print('WARNING: Error importing wxpython module')
-    #print(ex)
-#try:
-    #if os.sys.platform == 'win32':
+    # print(ex)
+# try:
+    # if os.sys.platform == 'win32':
         #from . import CBQt4
         #__HAVE_QT4__ = True
-    #else:
+    # else:
         #print('\nINFO: Qt currently only available on Windows')
-#except ImportError as ex:
+# except ImportError as ex:
     #print('WARNING: Error importing CBQt4 module')
-    ##print(ex)
+    # print(ex)
 
 if __HAVE_WX__:
     def loadCBGUI(mod, version=2):

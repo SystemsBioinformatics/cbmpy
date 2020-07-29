@@ -63,7 +63,7 @@ if __CBCONFIG__['SOLVER_ACTIVE'] == None:
 if __CBCONFIG__['SOLVER_ACTIVE'] == 'GLPK+CPLEX':
     if __CBCONFIG__['SOLVER_PREF'] == None:
         __CBCONFIG__['SOLVER_ACTIVE'] = None
-        while __CBCONFIG__['SOLVER_ACTIVE'] not in ['CPLEX','GLPK']:
+        while __CBCONFIG__['SOLVER_ACTIVE'] not in ['CPLEX', 'GLPK']:
             __CBCONFIG__['SOLVER_ACTIVE'] = raw_input('\nSolver preference not set. Please select a solver [CPLEX or GLPK]: ')
 
     elif __CBCONFIG__['SOLVER_PREF'] == 'CPLEX':
@@ -82,9 +82,10 @@ for k in tuple(globals()):
 
 __COMMON_METHODS__ = ['analyzeModel', 'FluxVariabilityAnalysis', 'getOptimalSolution', 'MinimizeSumOfAbsFluxes']
 
-##  print '__GLPK_METHODS__', __GLPK_METHODS__
-##  print '__CPLEX_METHODS__', __CPLEX_METHODS__
-##  print '__PUBLIC_METHODS__', __COMMON_METHODS__
+# print '__GLPK_METHODS__', __GLPK_METHODS__
+# print '__CPLEX_METHODS__', __CPLEX_METHODS__
+# print '__PUBLIC_METHODS__', __COMMON_METHODS__
+
 
 def __setSolverInit__(slv):
     """
@@ -96,11 +97,12 @@ def __setSolverInit__(slv):
     if slv == 'GLPK':
         for k in tuple(globals()):
             if k[:5] == 'glpk_' and k[5:] in __COMMON_METHODS__:
-                globals().update({k[5:] : globals()[k]})
+                globals().update({k[5:]: globals()[k]})
     elif slv == 'CPLEX':
         for k in tuple(globals()):
             if k[:5] == 'cplx_' and k[5:] in __COMMON_METHODS__:
-                globals().update({k[5:] : globals()[k]})
+                globals().update({k[5:]: globals()[k]})
+
 
 if __CBCONFIG__['SOLVER_ACTIVE'] == 'CPLEX':
     __setSolverInit__('CPLEX')

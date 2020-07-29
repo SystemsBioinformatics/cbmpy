@@ -28,19 +28,16 @@ from fractions import Fraction
 
 class Test(unittest.TestCase):
 
-
     def setUp(self):
-        self.mat = Matrix([[-2, -1,  1,  0,  0,  0,  0,  0,  0],
-                           [ 1,  0,  0, -1,  0,  0,  0,  0,  0],
-                           [ 0,  1, -1,  1, -1, -1,  0,  0,  0],
-                           [ 1,  0,  0,  0,  1,  0, -1,  0,  0],
-                           [ 0,  0,  0,  0,  0,  1,  1, -1,  1],
-                           [ 0,  0,  0,  0,  0,  0,  0,  1, -1]])
-
+        self.mat = Matrix([[-2, -1, 1, 0, 0, 0, 0, 0, 0],
+                           [1, 0, 0, -1, 0, 0, 0, 0, 0],
+                           [0, 1, -1, 1, -1, -1, 0, 0, 0],
+                           [1, 0, 0, 0, 1, 0, -1, 0, 0],
+                           [0, 0, 0, 0, 0, 1, 1, -1, 1],
+                           [0, 0, 0, 0, 0, 0, 0, 1, -1]])
 
     def tearDown(self):
         pass
-
 
     def testPrintNumpy(self):
         self.assertEquals(self.mat.cols(), 9)
@@ -48,43 +45,43 @@ class Test(unittest.TestCase):
         print(self.mat.toNumpy())
 
     def testValueAccess(self):
-        self.assertEqual(self.mat[0,0], -2)
-        self.assertEqual(self.mat[5,3], 0)
-        self.assertEquals(self.mat[3,6], -1)
-        
+        self.assertEqual(self.mat[0, 0], -2)
+        self.assertEqual(self.mat[5, 3], 0)
+        self.assertEquals(self.mat[3, 6], -1)
+
     def testSubMatrix(self):
-        submat = self.mat[:,[2,4]]
-        self.assertEqual(submat[0,0], 1)
-        self.assertEqual(submat[1,0], 0)
-        self.assertEqual(submat[2,0], -1)
-        self.assertEqual(submat[3,0], 0)
-        self.assertEqual(submat[4,0], 0)
-        self.assertEqual(submat[5,0], 0)
-        self.assertEqual(submat[0,1], 0)
-        self.assertEqual(submat[1,1], 0)
-        self.assertEqual(submat[2,1], -1)
-        self.assertEqual(submat[3,1], 1)
-        self.assertEqual(submat[4,1], 0)
-        self.assertEqual(submat[5,1], 0)
-        
+        submat = self.mat[:, [2, 4]]
+        self.assertEqual(submat[0, 0], 1)
+        self.assertEqual(submat[1, 0], 0)
+        self.assertEqual(submat[2, 0], -1)
+        self.assertEqual(submat[3, 0], 0)
+        self.assertEqual(submat[4, 0], 0)
+        self.assertEqual(submat[5, 0], 0)
+        self.assertEqual(submat[0, 1], 0)
+        self.assertEqual(submat[1, 1], 0)
+        self.assertEqual(submat[2, 1], -1)
+        self.assertEqual(submat[3, 1], 1)
+        self.assertEqual(submat[4, 1], 0)
+        self.assertEqual(submat[5, 1], 0)
+
     def testTranspose(self):
         t = self.mat.transpose()
         tt = t.transpose()
         tt -= self.mat
         for i in range(tt.rows()):
             for j in range(tt.cols()):
-                self.assertEqual(tt[i,j], 0)
-    
+                self.assertEqual(tt[i, j], 0)
+
     def testSetItem(self):
-        submat = self.mat[[1,3],1:5]
+        submat = self.mat[[1, 3], 1:5]
         c = self.mat.copy()
         submat *= Fraction(-5)
-        c[[1,3],1:5] += submat / 5 
-        
-        for i in [1,3]:
-            for j in range(*(1,5)):
-                self.assertEqual(c[i,j], 0)
-        
+        c[[1, 3], 1:5] += submat / 5
+
+        for i in [1, 3]:
+            for j in range(*(1, 5)):
+                self.assertEqual(c[i, j], 0)
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

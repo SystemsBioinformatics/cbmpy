@@ -14,15 +14,15 @@ from .decomposition import Leaf
 from .sparserationals import Matrix
 from . import matroid
 
+
 class EFMEnumerator():
     '''
     classdocs
     '''
 
-
     def __init__(self, mnet, node, excluded):
         """Creates a new EFMEnumerator for the given network
-        
+
         We assume that all reactions in mnet are irreversible, i.e.
         that all lower flux bounds are greater or equal zero.
         """
@@ -33,19 +33,19 @@ class EFMEnumerator():
         # check if all reactions are in the module irreversible
         for r in self.module:
             assert mnet.getReactionLowerBound(r) >= 0
-        
+
         # build stoichiometric matrix
         self.matrix = Matrix()
         labels, _ = self.matrix.addMetabolicNetwork(mnet)
         labidx = [i for i in range(len(labels)) if labels[i] in self.module]
         self.matcols = [labels[i] for i in labidx]
-        self.matrix = self.matrix[:,labidx] # we only need the submatrix
+        self.matrix = self.matrix[:, labidx]  # we only need the submatrix
         self.matroid = matroid.fromMatrix(self.matrix, self.matcols)
-        
+
         self.tol = 1e-5
         self.minflux = 1e-4
         self.__buildLP()
-        
+
     def __buildLP(self):
         """ build the LP for the computations """
         self.lp = CBSolver.createSolver(self.mnet)
@@ -66,16 +66,16 @@ class EFMEnumerator():
 #                    self.lp.setUpperBounds({r.getId():None})
         # clear objective function
         self.lp.setObjective(reset=True)
-        
+
 #     def setDecomposition(self, decomposition):
 #         """ Sets the decomposition to use for enumeration"""
 #         self.decomp = decomposition
-    
+
     def isFeasible(self, face):
-        """ checks if face is a feasible face of the module 
-        
-        A face is feasible if there exists a point in the polyhedron 
-        (maybe, we generalize this a bit?) where the 
+        """ checks if face is a feasible face of the module
+
+        A face is feasible if there exists a point in the polyhedron
+        (maybe, we generalize this a bit?) where the
         reactions of the face are the only reactions used from the reactions in
         the module.
         """
@@ -94,7 +94,7 @@ class EFMEnumerator():
                 if lb > 0:
                     return False
                 bounds[r] = (lb, 0)
- 
+
         self.lp.setBounds(bounds)
         self.lp.solve()
         if self.lp.getSolutionStatus() != 'LPS_UNDEF':
@@ -107,13 +107,12 @@ class EFMEnumerator():
                 return self.lp.isFeasible()
             else:
                 print('warning: unable to solve LP')
-                return True # if we keep it, we don't miss solutions
-            
-        
+                return True  # if we keep it, we don't miss solutions
+
     def isMinimal(self, face):
         """ checks if face is a minimal face of the module """
         #var = self.getVariable(face)
-        var = face.difference(self.fixed) # this assumes that the face is feasible
+        var = face.difference(self.fixed)  # this assumes that the face is feasible
         return self.matroid.isIndependent(var)
 #         faceidx = [i for i in range(len(self.matcols)) if self.matcols[i] in var]
 #         submatrix = self.matrix[:, faceidx]
@@ -122,15 +121,15 @@ class EFMEnumerator():
 #             return True
 #         else:
 #             return False
-    
+
     def getVariable(self, face):
         """run some kind of FVA on the reactions in the face
-        
-        we remark that reactions not in the face are fixed to 0 and hence 
+
+        we remark that reactions not in the face are fixed to 0 and hence
         have no variability.
         """
-        sol = self.lp.getSolution() # fetch old solution
-        
+        sol = self.lp.getSolution()  # fetch old solution
+
         bounds = {}
         solfeasible = True
         for r in self.module:
@@ -146,9 +145,9 @@ class EFMEnumerator():
                 bounds[r] = (lb, 0)
                 if sol[r] > self.tol:
                     solfeasible = False
-        
+
         self.lp.setBounds(bounds)
-        
+
         # if sol is still feasible, use it for init
         if solfeasible:
             maxFlux = sol
@@ -163,7 +162,7 @@ class EFMEnumerator():
             if maxFlux[r] - minFlux[r] < self.tol:
                 # solve min and max problem
                 # do max first, since most lb are 0
-                self.lp.setObjective(coef={r:1}, sense='max', reset=False)
+                self.lp.setObjective(coef={r: 1}, sense='max', reset=False)
                 self.lp.solve()
                 if not self.lp.isFeasible():
                     # this should not happen, but numerical instability etc.
@@ -171,7 +170,7 @@ class EFMEnumerator():
                     # Try to solve again
                     self.__buildLP()
                     self.lp.setBounds(bounds)
-                    self.lp.setObjective(coef={r:1}, sense='max', reset=False)
+                    self.lp.setObjective(coef={r: 1}, sense='max', reset=False)
                     self.lp.solve()
                     if not self.lp.isFeasible():
                         print('warning: unable to solve FVA lp!')
@@ -181,11 +180,11 @@ class EFMEnumerator():
                         maxFlux[s] = v
                     if minFlux[s] > v:
                         minFlux[s] = v
-                        
+
                 # still not variable?
                 if maxFlux[r] - minFlux[r] < self.tol:
                     # solve minimization
-                    self.lp.setObjective(coef={r:1}, sense='min', reset=False)
+                    self.lp.setObjective(coef={r: 1}, sense='min', reset=False)
                     self.lp.solve()
                     if not self.lp.isFeasible():
                         # this should not happen, but numerical instability etc.
@@ -193,7 +192,7 @@ class EFMEnumerator():
                         # Try to solve again
                         self.__buildLP()
                         self.lp.setBounds(bounds)
-                        self.lp.setObjective(coef={r:1}, sense='min', reset=False)
+                        self.lp.setObjective(coef={r: 1}, sense='min', reset=False)
                         self.lp.solve()
                         if not self.lp.isFeasible():
                             print('warning: unable to solve FVA lp!')
@@ -204,39 +203,39 @@ class EFMEnumerator():
                         if minFlux[s] > v:
                             minFlux[s] = v
                 # fast reset objective
-                self.lp.setObjective(coef={r:0}, sense='min', reset=False)
-        
+                self.lp.setObjective(coef={r: 0}, sense='min', reset=False)
+
         variable = set()
         for r in face:
             if maxFlux[r] - minFlux[r] > self.tol:
                 variable.add(r)
         return variable
-    
+
     def enumerateVertices(self):
         """enumerate the vertices of the subnetwork reachable from node
-        
+
         The subnetwork reachable from node consists of the leaves that can be
         reached in the decomposition from node without passing through excluded.
         """
-       
+
     def test(self, face):
         face = face.intersection(self.module)
         assert self.isFeasible(face)
-        assert self.isMinimal(face), '%s' % face.__str__() 
-        
+        assert self.isMinimal(face), '%s' % face.__str__()
+
         adj = set(self.node.getAdjacent())
         for v in adj:
             if v != self.excluded:
                 enum = EFMEnumerator(self.mnet, v, self.node)
                 enum.test(face)
-                
+
         return True
-     
+
     def enumerateMinimal(self):
-        """ enumerates minimal A-faces 
-        
+        """ enumerates minimal A-faces
+
         otherwise the same as enumerateVertices.
-        
+
         Note: In contrast to the paper, we represent faces by the reactions
         that are used (not blocked)
         """
@@ -261,8 +260,8 @@ class EFMEnumerator():
                 v1 = adj.pop()
             enum1 = EFMEnumerator(self.mnet, v1, self.node)
             F1 = enum1.enumerateMinimal()
-            print('%s: %d' % (v1.__str__(), len(F1)) )
-            
+            print('%s: %d' % (v1.__str__(), len(F1)))
+
             # if we have multiple elements, just add them in arbitrary order
             # this corresponds to a caterpillar decomposition
             # when we merge the results we have to be careful what the base set
@@ -275,10 +274,10 @@ class EFMEnumerator():
                 if v2 != self.excluded:
                     enum2 = EFMEnumerator(self.mnet, v2, self.node)
                     F2 = enum2.enumerateMinimal()
-                    print('%s: %d' % (v2.__str__(), len(F2)) )
+                    print('%s: %d' % (v2.__str__(), len(F2)))
                     self.module.update(enum2.module)
-                    F = set() # result set
-                    print('combine %d * %d' % (len(F1), len(F2)) )
+                    F = set()  # result set
+                    print('combine %d * %d' % (len(F1), len(F2)))
                     i = 0
                     for f1 in F1:
                         for f2 in F2:
@@ -286,14 +285,14 @@ class EFMEnumerator():
                             if self.isFeasible(f):
                                 if self.isMinimal(f):
                                     F.add(f)
-                        i = i+1
+                        i = i + 1
                         print('%d of %d (%d per step)' % (i, len(F1), len(F2)))
-                    print('merge: %d' % len(F) )
+                    print('merge: %d' % len(F))
                     F1 = F
             # at the end we should have reached the original module
             assert self.module == fullmodule
             return F1
-            
+
             ###
             # potential, better code
             ###
@@ -325,7 +324,7 @@ class EFMEnumerator():
 #                             for f1 in F1:
 #                                 Fnew.add(f + f1)
 #                         F = Fnew
-#                         
+#
 #                     if hasEmpty:
 #                         F.add(emptyset)
 #                     return F
@@ -344,4 +343,4 @@ class EFMEnumerator():
 #                             if self.isMinimal(f):
 #                                 F.add(f)
 #                 return F
-                    
+

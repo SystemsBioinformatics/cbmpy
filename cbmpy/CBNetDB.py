@@ -28,7 +28,11 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, re, webbrowser, csv
+import os
+import time
+import re
+import webbrowser
+import csv
 try:
     from urllib2 import quote as urlquote
     from urllib2 import unquote as urlunquote
@@ -71,6 +75,7 @@ class NetDBbase(object):
 
         """
         return urlunquote(txt)
+
 
 class DBTools(NetDBbase):
     """
@@ -165,8 +170,8 @@ class DBTools(NetDBbase):
         colstr = colstr[:-2] + ')'
         valstr = valstr[:-2] + ')'
         sql = "INSERT INTO %s %s %s" % (table, colstr, valstr)
-        #print sql
-        #time.sleep(1)
+        # print sql
+        # time.sleep(1)
         try:
             self.db_cursor.execute(sql, vals)
             if commit:
@@ -191,10 +196,10 @@ class DBTools(NetDBbase):
 
         sql = 'UPDATE {} SET '.format(table)
         for d in data:
-            sql += '{}=\"{}\", '.format(d, str(data[d]).replace('\"','\''))
+            sql += '{}=\"{}\", '.format(d, str(data[d]).replace('\"', '\''))
         sql = sql[:-2] + ' WHERE {}=\"{}\"'.format(col, rid)
 
-        #print(sql)
+        # print(sql)
         try:
             self.db_cursor.execute(sql)
             if commit:
@@ -250,8 +255,8 @@ class DBTools(NetDBbase):
         sql = sql[:-2]
         sql += ' FROM {}'.format(table)
         dout = [[] for i in range(len(cols))]
-        #print(sql)
-        #print(dout)
+        # print(sql)
+        # print(dout)
         try:
             data = self.db_cursor.execute(sql).fetchall()
             for r_ in data:
@@ -274,7 +279,7 @@ class DBTools(NetDBbase):
 
         """
         sql = "SELECT * FROM {} WHERE {}=\"{}\"".format(table, col, rid)
-        #print(sql)
+        # print(sql)
         dout = []
         try:
             data = self.db_cursor.execute(sql).fetchall()
@@ -299,7 +304,7 @@ class DBTools(NetDBbase):
 
         """
         sql = "SELECT {} FROM {} WHERE {}=\"{}\"".format(cell, table, col, rid)
-        #print(sql)
+        # print(sql)
         data = None
         try:
             data = self.db_cursor.execute(sql).fetchone()
@@ -367,7 +372,7 @@ class DBTools(NetDBbase):
 
     def fetchAll(self, sql):
         """Raw SQL query e.g. 'SELECT id FROM gene WHERE gene=\"G\"' """
-        #print(sql)
+        # print(sql)
         r = None
         try:
             r = self.db_cursor.execute(sql).fetchall()
@@ -381,6 +386,7 @@ class DBTools(NetDBbase):
         self.db_conn = None
         self.db_cursor = None
         self.db_tables = []
+
 
 class KeGGTools(object):
     """
@@ -442,9 +448,9 @@ class KeGGSequenceTools(object):
             if len(testg) > 0:
                 entry_exists = True
 
-            ##  if ecg in ['eco:b1898','eco:b1899','eco:b3692','eco:b3111','eco:b4228','eco:b2978',\
-                ##  'eco:b1416','eco:b3112','eco:b1417','eco:b3768','eco:b3767','eco:b4229']:
-                ##  raw_input(testg)
+            # if ecg in ['eco:b1898','eco:b1899','eco:b3692','eco:b3111','eco:b4228','eco:b2978',\
+                # 'eco:b1416','eco:b3112','eco:b1417','eco:b3768','eco:b3767','eco:b4229']:
+                # raw_input(testg)
 
             tstart = time.time()
             if not entry_exists:
@@ -464,7 +470,7 @@ class KeGGSequenceTools(object):
             else:
                 print('\tskipping gene {}'.format(ecg), end=" ")
             tend = time.time()
-            print(' ... done ({}).'.format(tend-tstart))
+            print(' ... done ({}).'.format(tend - tstart))
             #  if cntr == 6:
                 #  break
             cntr += 1
@@ -480,7 +486,7 @@ class KeGGSequenceTools(object):
             ##  Glen = self.cursor.execute('SELECT aa_len FROM gene_data WHERE gene="%s"' % G).fetchall()[0][0]
             Glen = self.DB.fetchAll('SELECT aa_len FROM gene_data WHERE gene="%s"' % G)[0][0]
             print(Glen)
-            gene_peplen.update({G.replace(keg_prefix, '') : Glen})
+            gene_peplen.update({G.replace(keg_prefix, ''): Glen})
         return gene_peplen
 
 
@@ -544,7 +550,7 @@ class RESTClient(NetDBbase):
         if self.CONNECTED:
             try:
                 print(query)
-                HTMLhead = {'User-Agent' : self.USER_AGENT}
+                HTMLhead = {'User-Agent': self.USER_AGENT}
                 self.conn.request("GET", query, headers=HTMLhead)
                 r1 = self.conn.getresponse()
                 print(r1.status, r1.reason)
@@ -568,6 +574,7 @@ class RESTClient(NetDBbase):
             self.Log('%s - connection closed' % self.site_root)
             self.site_root = None
 
+
 class MIRIAMTools(object):
     """
     Tools dealing with MIRIAM annotations
@@ -578,6 +585,7 @@ class MIRIAMTools(object):
         urn = 'http://identifiers.org/%s/%s' % (urn[0].strip(), urn[1].strip())
         print(urn)
         return urn
+
 
 class SemanticSBML(RESTClient, MIRIAMTools):
     """

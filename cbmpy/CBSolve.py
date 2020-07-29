@@ -22,11 +22,11 @@ Contact email: bgoli@users.sourceforge.net
 Last edit: $Author: bgoli $ ($Id: CBModel.py 706 2020-03-23 21:31:49Z bgoli $)
 
 """
-## gets rid of "invalid variable name" info
+# gets rid of "invalid variable name" info
 # pylint: disable=C0103
-## gets rid of "line to long" info
+# gets rid of "line to long" info
 # pylint: disable=C0301
-## use with caution: gets rid of module xxx has no member errors (run once enabled)
+# use with caution: gets rid of module xxx has no member errors (run once enabled)
 # pylint: disable=E1101
 
 # preparing for Python 3 port
@@ -34,7 +34,9 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, gc
+import os
+import time
+import gc
 # this is a hack that needs to be streamlined a bit
 try:
     import cStringIO as csio
@@ -105,7 +107,6 @@ class LPbase(LPproperties):
         self.id = pid
 
 
-
 class LPcplex(LPbase):
     """CPLEX interface"""
 
@@ -113,13 +114,11 @@ class LPcplex(LPbase):
         super().__init__(pid)
 
 
-
 class LPglpk(LPbase):
     """GLPK interface"""
 
     def __init__(self, pid):
         super().__init__(pid)
-
 
 
 if __name__ == '__main__':

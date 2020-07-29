@@ -28,7 +28,11 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, math, copy, multiprocessing
+import os
+import time
+import math
+import copy
+import multiprocessing
 try:
     import pickle
 except ImportError:
@@ -36,7 +40,8 @@ except ImportError:
 
 import cbmpy
 
-def funcFVA(x,r):
+
+def funcFVA(x, r):
     try:
         Args = x.FVAARGS
         del x.FVAARGS
@@ -49,10 +54,11 @@ def funcFVA(x,r):
         raise RuntimeError(ex)
     return fva, fvan
 
+
 def multiCoreFVA(fvamod, procs=2, timeout=None):
     #assert procs >= 2, '\nMinimum 2 processes required'
     rid = fvamod.getReactionIds()
-    PRs = [d_[0] for d_ in list(cbmpy.CBMultiCore.grouper(int(math.ceil(len(rid)/float(procs))), range(len(rid))))]
+    PRs = [d_[0] for d_ in list(cbmpy.CBMultiCore.grouper(int(math.ceil(len(rid) / float(procs))), range(len(rid))))]
     print(procs, len(PRs), PRs)
 
     s2time = time.time()
@@ -61,12 +67,12 @@ def multiCoreFVA(fvamod, procs=2, timeout=None):
     if procs == 1:
         results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid)))
     else:
-        for p_ in range(len(PRs)-1):
-            print('{} -> {}'.format(PRs[p_], PRs[p_+1]))
-            print('{} -> {}'.format(rid[PRs[p_]], rid[PRs[p_+1]]))
+        for p_ in range(len(PRs) - 1):
+            print('{} -> {}'.format(PRs[p_], PRs[p_ + 1]))
+            print('{} -> {}'.format(rid[PRs[p_]], rid[PRs[p_ + 1]]))
             # investigate using without clone
             #results.append(TP.apply_async(funcFVA, (fvamod, rid[PRs[p_]:PRs[p_+1]])))
-            results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[p_]:PRs[p_+1]])))
+            results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[p_]:PRs[p_ + 1]])))
         results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[-1]:])))
     fva = []
     fvan = []
@@ -77,7 +83,7 @@ def multiCoreFVA(fvamod, procs=2, timeout=None):
     e2time = time.time()
     del results
 
-    print('\nMulticore FVA took: {} min ({} processes)'.format((e2time-s2time)/60., procs))
+    print('\nMulticore FVA took: {} min ({} processes)'.format((e2time - s2time) / 60., procs))
     return fva, fvan
 
 
@@ -86,7 +92,7 @@ if __name__ == '__main__':
     print(os.sys.argv)
 
     cores = int(os.sys.argv[1])
-    F = open(os.sys.argv[2],'rb')
+    F = open(os.sys.argv[2], 'rb')
     cmod = pickle.load(F)
     F.close()
 

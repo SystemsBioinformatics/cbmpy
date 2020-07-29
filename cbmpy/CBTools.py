@@ -22,11 +22,11 @@ Contact email: bgoli@users.sourceforge.net
 Last edit: $Author: bgoli $ ($Id: CBTools.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
-## gets rid of "invalid variable name" info
+# gets rid of "invalid variable name" info
 # pylint: disable=C0103
-## gets rid of "line to long" info
+# gets rid of "line to long" info
 # pylint: disable=C0301
-## use with caution: gets rid of module xxx has no member errors (run once enabled)
+# use with caution: gets rid of module xxx has no member errors (run once enabled)
 # pylint: disable=E1101
 
 
@@ -35,7 +35,12 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, re, pprint, gzip, zipfile
+import os
+import time
+import re
+import pprint
+import gzip
+import zipfile
 try:
     import pickle
 except ImportError:
@@ -44,7 +49,7 @@ cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 import numpy
 
 from . import CBModel
-#from .CBDataStruct import StructMatrixLP # legacy
+# from .CBDataStruct import StructMatrixLP # legacy
 from .CBCommon import HAVE_PYPARSING, checkChemFormula, pp_chemicalFormula, extractGeneIdsFromString
 from .CBCommon import processSpeciesChargeChemFormulaAnnot, pyparsing
 
@@ -55,13 +60,16 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
+
 def createTempFileName():
     """
     Return a temporary filename
     """
     return str(time.time()).split('.')[0]
 
-#TODO comrpess
+# TODO comrpess
+
+
 def storeObj(obj, filename, compress=False):
     """
     Stores a Python *obj* as a serialised binary object in *filename*.dat
@@ -72,11 +80,12 @@ def storeObj(obj, filename, compress=False):
 
     """
     if filename[-4:] != '.dat':
-        filename = filename+'.dat'
+        filename = filename + '.dat'
     F = file(filename, 'wb')
     pickle.dump(obj, F, protocol=2)
     print('Object serialised as {}'.format(filename))
     F.close()
+
 
 def loadObj(filename):
     """
@@ -84,12 +93,13 @@ def loadObj(filename):
 
     """
     if filename[-4:] != '.dat':
-        filename = filename+'.dat'
+        filename = filename + '.dat'
     assert os.path.exists(filename), '\nFile \"{}\" does not exist'.format(filename)
     F = file(filename, 'rb')
     obj = pickle.load(F)
     F.close()
     return obj
+
 
 def deSerialize(s):
     """
@@ -97,6 +107,7 @@ def deSerialize(s):
 
     """
     return pickle.loads(s)
+
 
 def deSerializeFromDisk(filename):
     """
@@ -109,11 +120,13 @@ def deSerializeFromDisk(filename):
     F.close()
     return obj
 
+
 def addStoichToFBAModel(fm):
     """
     Build stoichiometry: this method has been refactored into the model class - cmod.buildStoichMatrix()
     """
     fm.buildStoichMatrix()
+
 
 def addSinkReaction(fbam, species, lb=0.0, ub=1000.0):
     """
@@ -130,14 +143,14 @@ def addSinkReaction(fbam, species, lb=0.0, ub=1000.0):
         reversible = True
     else:
         reversible = False
-    Rname = species+'_sink'
+    Rname = species + '_sink'
     R = CBModel.Reaction(Rname, name='%s sink reaction' % species, reversible=reversible)
-    Su = CBModel.Reagent(Rname+species, species, -1.0)
+    Su = CBModel.Reagent(Rname + species, species, -1.0)
     R.addReagent(Su)
     R.is_exchange = True
 
-    clb = CBModel.FluxBound(Rname+'_lb', Rname, 'greaterEqual', lb)
-    cub = CBModel.FluxBound(Rname+'_ub', Rname, 'lessEqual', ub)
+    clb = CBModel.FluxBound(Rname + '_lb', Rname, 'greaterEqual', lb)
+    cub = CBModel.FluxBound(Rname + '_ub', Rname, 'lessEqual', ub)
 
     fbam.addReaction(R, create_default_bounds=False)
     fbam.addFluxBound(clb)
@@ -165,20 +178,21 @@ def addSourceReaction(fbam, species, lb=0.0, ub=1000.0):
         reversible = True
     else:
         reversible = False
-    Rname = species+'_src'
+    Rname = species + '_src'
     R = CBModel.Reaction(Rname, name='%s source reaction' % species, reversible=reversible)
-    Su = CBModel.Reagent(Rname+species, species, 1.0)
+    Su = CBModel.Reagent(Rname + species, species, 1.0)
     R.addReagent(Su)
     R.is_exchange = True
 
-    clb = CBModel.FluxBound(Rname+'_lb', Rname, 'greaterEqual', lb)
-    cub = CBModel.FluxBound(Rname+'_ub', Rname, 'lessEqual', ub)
+    clb = CBModel.FluxBound(Rname + '_lb', Rname, 'greaterEqual', lb)
+    cub = CBModel.FluxBound(Rname + '_ub', Rname, 'lessEqual', ub)
 
     fbam.addReaction(R, create_default_bounds=False)
     fbam.addFluxBound(clb)
     fbam.addFluxBound(cub)
 
     print('\n***\nCreated new reaction {} with bounds ({} : {})\n***\n'.format(Rname, lb, ub))
+
 
 def findDeadEndMetabolites(fbam):
     """
@@ -189,12 +203,15 @@ def findDeadEndMetabolites(fbam):
     orphaned_list = []
     for rr in range(fbam.N.array.shape[0]):
         if (fbam.N.array[rr, :] != 0.0).sum() == 1:
-            if __DEBUG__: print(fbam.N.array[rr,:])
-            if __DEBUG__: print(fbam.N.row[rr])
+            if __DEBUG__:
+                print(fbam.N.array[rr, :])
+            if __DEBUG__:
+                print(fbam.N.row[rr])
             for c in range(fbam.N.array.shape[1]):
-                if fbam.N.array[rr,c] != 0.0:
-                    orphaned_list.append((fbam.N.row[rr],fbam.N.col[c]))
+                if fbam.N.array[rr, c] != 0.0:
+                    orphaned_list.append((fbam.N.row[rr], fbam.N.col[c]))
     return orphaned_list
+
 
 def findDeadEndReactions(fbam):
     """
@@ -205,12 +222,15 @@ def findDeadEndReactions(fbam):
     orphaned_list = []
     for cc in range(fbam.N.array.shape[1]):
         if (fbam.N.array[:, cc] != 0.0).sum() == 1:
-            if __DEBUG__: print(fbam.N.array[:, cc])
-            if __DEBUG__: print(fbam.N.col[cc])
+            if __DEBUG__:
+                print(fbam.N.array[:, cc])
+            if __DEBUG__:
+                print(fbam.N.col[cc])
             for r in range(fbam.N.array.shape[0]):
-                if fbam.N.array[r,cc] != 0.0:
+                if fbam.N.array[r, cc] != 0.0:
                     orphaned_list.append((fbam.N.row[r], fbam.N.col[cc]))
     return orphaned_list
+
 
 def setSpeciesPropertiesFromAnnotations(fbam, overwriteCharge=False, overwriteChemFormula=False):
     """
@@ -229,6 +249,7 @@ def setSpeciesPropertiesFromAnnotations(fbam, overwriteCharge=False, overwriteCh
         except Exception:
             print('processSpeciesChargeChemFormulaAnnot failed for species with id: {}'.format(s_.getId()))
 
+
 def fixReversibility(fbam, auto_correct=False):
     """
     Set fluxbound lower bound from reactions reversibility information.
@@ -239,14 +260,14 @@ def fixReversibility(fbam, auto_correct=False):
     """
     for c in fbam.flux_bounds:
         R = c.reaction
-        ##  print R
+        # print R
         O = c.operation
-        ##  print O
+        # print O
         V = c.value
-        ##  print V
+        # print V
         R_obj = fbam.reactions[fbam.getReactionIds().index(c.reaction)]
         RE = R_obj.reversible
-        ##  print RE
+        # print RE
         if O in ['greater', 'greaterEqual']:
             if not RE and float(V) < 0.0:
                 print('Warning {} is not reversible and lower bound is {}.'.format(R, V))
@@ -281,6 +302,7 @@ def splitReversibleReactions(fba, selected_reactions=None):
         else:
             pass
     return M
+
 
 def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
     """
@@ -317,18 +339,18 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
         EB = fba.getFluxBoundByReactionID(rid, 'equality')
     fba.deleteReactionAndBounds(rid)
     if fwd_id is None:
-        fwd_id = Rf.getId()+'_fwd'
+        fwd_id = Rf.getId() + '_fwd'
     Rf.setPid(fwd_id)
     if rev_id is None:
-        rev_id = Rb.getId()+'_rev'
+        rev_id = Rb.getId() + '_rev'
     Rb.setPid(rev_id)
     Rf.reversible = False
     Rb.reversible = False
     for rr_ in Rf.reagents:
-        rr_.setPid(rr_.getId()+'_fwd')
+        rr_.setPid(rr_.getId() + '_fwd')
     for rr_ in Rb.reagents:
-        rr_.setCoefficient(-1.0*rr_.getCoefficient())
-        rr_.setPid(rr_.getId()+'_rev')
+        rr_.setCoefficient(-1.0 * rr_.getCoefficient())
+        rr_.setPid(rr_.getId() + '_rev')
     fba.addReaction(Rf, create_default_bounds=False)
     fba.addReaction(Rb, create_default_bounds=False)
 
@@ -383,7 +405,8 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
 
     return (R, LB, UB, EB)
 
-def exportLabelledArray(arr, fname, names=None,  sep=',', fmt='%f'):
+
+def exportLabelledArray(arr, fname, names=None, sep=',', fmt='%f'):
     """
     Write a 2D array type object to file
 
@@ -400,12 +423,12 @@ def exportLabelledArray(arr, fname, names=None,  sep=',', fmt='%f'):
     cntr = 0
     for r in range(arr.shape[0]):
         if names != None:
-            F.write(('%s'+sep) % names[r])
+            F.write(('%s' + sep) % names[r])
         for c in range(arr.shape[1]):
-            if c < arr.shape[1]-1:
-                F.write((fmt+sep) % arr[r,c])
+            if c < arr.shape[1] - 1:
+                F.write((fmt + sep) % arr[r, c])
             else:
-                F.write((fmt+'\n') % arr[r,c])
+                F.write((fmt + '\n') % arr[r, c])
         cntr += 1
         if cntr >= 250:
             F.flush()
@@ -414,6 +437,7 @@ def exportLabelledArray(arr, fname, names=None,  sep=',', fmt='%f'):
     F.flush()
     F.close()
     print('exported to {}'.format(fname))
+
 
 def exportLabelledArrayWithHeader(arr, fname, names=None, header=None, sep=',', fmt='%f'):
     """
@@ -437,22 +461,22 @@ def exportLabelledArrayWithHeader(arr, fname, names=None, header=None, sep=',', 
     cntr = 0
     if header != None:
         if names != None:
-            hstr = ' '+sep
+            hstr = ' ' + sep
         else:
             hstr = ''
         for h in header:
-            hstr += str(h)+sep
-        hstr = hstr[:-1]+'\n'
+            hstr += str(h) + sep
+        hstr = hstr[:-1] + '\n'
         F.write(hstr)
         del hstr
     for r in range(arr.shape[0]):
         if names != None:
-            F.write(('%s'+sep) % names[r])
+            F.write(('%s' + sep) % names[r])
         for c in range(arr.shape[1]):
-            if c < arr.shape[1]-1:
-                F.write((fmt+sep) % arr[r,c])
+            if c < arr.shape[1] - 1:
+                F.write((fmt + sep) % arr[r, c])
             else:
-                F.write((fmt+'\n') % arr[r,c])
+                F.write((fmt + '\n') % arr[r, c])
         cntr += 1
         if cntr >= 250:
             F.flush()
@@ -461,6 +485,7 @@ def exportLabelledArrayWithHeader(arr, fname, names=None, header=None, sep=',', 
     F.flush()
     F.close()
     print('exported to {}'.format(fname))
+
 
 def exportLabelledLinkedList(arr, fname, names=None, sep=',', fmt='%s', appendlist=False):
     """
@@ -483,35 +508,36 @@ def exportLabelledLinkedList(arr, fname, names=None, sep=',', fmt='%s', appendli
     cntr = 0
     for r in range(len(arr)):
         if names != None:
-            F.write(('%s'+sep) % names[r])
+            F.write(('%s' + sep) % names[r])
         col_l = len(arr[0])
         for c in range(col_l):
-            if c < col_l-1:
+            if c < col_l - 1:
                 if arr[r][c] == 0.0:
-                    F.write('0.0'+sep)
+                    F.write('0.0' + sep)
                 else:
                     try:
-                        F.write((fmt+sep) % arr[r][c])
+                        F.write((fmt + sep) % arr[r][c])
                     except UnicodeEncodeError:
-                        F.write((fmt+sep) % 'uError')
+                        F.write((fmt + sep) % 'uError')
             else:
                 if arr[r][c] == 0.0:
                     F.write('0.0\n')
                 else:
                     try:
-                        F.write((fmt+'\n') % arr[r][c])
+                        F.write((fmt + '\n') % arr[r][c])
                     except UnicodeEncodeError:
-                        F.write((fmt+'\n') % 'uError')
+                        F.write((fmt + '\n') % 'uError')
         cntr += 1
         if cntr >= 250:
             F.flush()
             cntr = 1
-    ##  F.write('\n')
+    # F.write('\n')
     F.flush()
     F.close()
     del arr
     if not appendlist:
         print('exported to {}'.format(fname))
+
 
 def exportLabelledArrayWithHeader2CSV(arr, fname, names=None, header=None):
     """
@@ -524,7 +550,8 @@ def exportLabelledArrayWithHeader2CSV(arr, fname, names=None, header=None):
 
     """
     fname += '.csv'
-    exportLabelledArrayWithHeader(arr, fname, names, header,  sep=',', fmt='%f')
+    exportLabelledArrayWithHeader(arr, fname, names, header, sep=',', fmt='%f')
+
 
 def exportLabelledArray2CSV(arr, fname, names=None):
     """
@@ -565,6 +592,7 @@ def exportLabelledArrayWithHeader2TXT(arr, fname, names=None, header=None):
     fname += '.txt'
     exportLabelledArrayWithHeader(arr, fname, names, header, sep='\t', fmt='%f')
 
+
 def exportLabelledArray2TXT(arr, fname, names=None):
     """
     Export an array with row names to fname.txt
@@ -577,6 +605,7 @@ def exportLabelledArray2TXT(arr, fname, names=None):
     fname += '.txt'
     exportLabelledArray(arr, fname, names, sep='\t', fmt='%f')
 
+
 def exportArray2TXT(arr, fname):
     """
     Export an array to fname.txt
@@ -588,6 +617,7 @@ def exportArray2TXT(arr, fname):
     """
     fname += '.txt'
     exportLabelledArray(arr, fname, None, sep='\t', fmt='%f')
+
 
 def stringReplace(fbamod, old, new, target):
     """
@@ -622,6 +652,7 @@ def stringReplace(fbamod, old, new, target):
                 f.reaction = f.reaction.replace(old, new)
     return fbamod
 
+
 def getBoundsDict(fbamod, substring=None):
     """
     Return a dictionary of reactions&bounds
@@ -629,12 +660,13 @@ def getBoundsDict(fbamod, substring=None):
     rBdic = {}
     for r in fbamod.getReactionIds(substring=substring):
         name, lb, ub, eq = fbamod.getReactionBounds(r)
-        rBdic.update({name : {'lb' : lb,
-                              'ub' : ub,
-                              'eq' : eq
+        rBdic.update({name: {'lb': lb,
+                             'ub': ub,
+                             'eq': eq
                              }
-                    })
+                      })
     return rBdic
+
 
 def getExchBoundsDict(fbamod):
     """
@@ -646,15 +678,16 @@ def getExchBoundsDict(fbamod):
     rBdic = {}
     for r in fbamod.getReactionIds(substring=None):
         name, lb, ub, eq = fbamod.getReactionBounds(r)
-        rBdic.update({name : {'lb' : lb,
-                              'ub' : ub,
-                              'eq' : eq
+        rBdic.update({name: {'lb': lb,
+                             'ub': ub,
+                             'eq': eq
                              }
-                    })
+                      })
     for r in fbamod.reactions:
         if not r.is_exchange:
             rBdic.pop(r.getId())
     return rBdic
+
 
 def processBiGGchemFormula(fba):
     """
@@ -665,7 +698,7 @@ def processBiGGchemFormula(fba):
 
     """
     for s in fba.species:
-        #print s.name
+        # print s.name
         tmp = s.name
         tmp2 = tmp.split('_')
         if len(tmp2) >= 2:
@@ -685,6 +718,7 @@ def processBiGGchemFormula(fba):
             s.chemFormula = CF.strip()
             s.name = NM.strip()
 
+
 def processBiGGannotationNote(fba, annotation_key='note'):
     """
     Parse the HTML formatted reaction information stored in the BiGG notes field.
@@ -700,13 +734,16 @@ def processBiGGannotationNote(fba, annotation_key='note'):
         new_ann = {}
         if annotation_key in r.annotation:
             hPs = re.findall(html_p, r.annotation.pop(annotation_key))
-            if __DEBUG__: print(hPs)
+            if __DEBUG__:
+                print(hPs)
             for p in hPs:
-                ps = p.replace('<html:p>','').replace('</html:p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
+                ps = p.replace('<html:p>', '').replace('</html:p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
                 if len(ps) == 2:
-                    new_ann.update({ps[0].strip() : ps[1].strip()})
+                    new_ann.update({ps[0].strip(): ps[1].strip()})
             r.annotation.update(new_ann)
-        if __DEBUG__: print(r.annotation)
+        if __DEBUG__:
+            print(r.annotation)
+
 
 def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
     """
@@ -718,11 +755,11 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
 
     """
 
-    #if hasattr(fba, '_SBML_LEVEL_') and fba._SBML_LEVEL_ != None:
+    # if hasattr(fba, '_SBML_LEVEL_') and fba._SBML_LEVEL_ != None:
         #print('\n==================================\nINFO \"CBTools.processSBMLAnnotationNotes()\":\n')
         #print('This function is now called automatically\nduring model load and can be ignored.')
-        #print('==================================\n')
-        #return
+        # print('==================================\n')
+        # return
 
     html_p = re.compile("<p>.*?</p>")
     html_span = re.compile("<span>.*?</span>")
@@ -736,30 +773,34 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
             else:
                 notes = r.annotation.pop(annotation_key)
             if '<span xmlns="http://www.w3.org/1999/xhtml">' in notes:
-                hPs = re.findall(html_p, notes.replace('\n',''))
-                if __DEBUG__: print(hPs)
+                hPs = re.findall(html_p, notes.replace('\n', ''))
+                if __DEBUG__:
+                    print(hPs)
                 for p in hPs:
                     ps = re.findall(html_span, p)
-                    ps = [p.replace('<span>','').replace('</span>','').replace('&lt;','<').replace('&gt;','>').strip() for p in ps]
+                    ps = [p.replace('<span>', '').replace('</span>', '').replace('&lt;', '<').replace('&gt;', '>').strip() for p in ps]
                     if len(ps) == 2 and ps[0] not in r.annotation:
-                        new_ann.update({ps[0] : ps[1]})
+                        new_ann.update({ps[0]: ps[1]})
             else:
                 hPs = re.findall(html_bigg_p, notes)
                 if len(hPs) > 0:
-                    if __DEBUG__: print(hPs)
+                    if __DEBUG__:
+                        print(hPs)
                     for p in hPs:
-                        ps = p.replace('<html:p>','').replace('</html:p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
+                        ps = p.replace('<html:p>', '').replace('</html:p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
                         if len(ps) == 2 and ps[0].strip() not in r.annotation:
-                            new_ann.update({ps[0].strip() : ps[1].strip()})
+                            new_ann.update({ps[0].strip(): ps[1].strip()})
                 else:
                     hPs = re.findall(html_p, notes)
-                    if __DEBUG__: print(hPs)
+                    if __DEBUG__:
+                        print(hPs)
                     for p in hPs:
-                        ps = p.replace('<p>','').replace('</p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
+                        ps = p.replace('<p>', '').replace('</p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
                         if len(ps) == 2 and ps[0].strip() not in r.annotation:
-                            new_ann.update({ps[0].strip() : ps[1].strip()})
+                            new_ann.update({ps[0].strip(): ps[1].strip()})
             r.annotation.update(new_ann)
-            if __DEBUG__: print(r.annotation)
+            if __DEBUG__:
+                print(r.annotation)
     for s in fba.species:
         if level >= 3 or annotation_key in s.annotation:
             notes = ''
@@ -769,33 +810,37 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
                 notes = s.annotation.pop(annotation_key)
             new_ann = {}
             if '<span xmlns="http://www.w3.org/1999/xhtml">' in notes:
-                hPs = re.findall(html_p, notes.replace('\n',''))
-                if __DEBUG__: print(hPs)
+                hPs = re.findall(html_p, notes.replace('\n', ''))
+                if __DEBUG__:
+                    print(hPs)
                 for p in hPs:
                     ps = re.findall(html_span, p)
-                    ps = [p.replace('<span>','').replace('</span>','').replace('&lt;','<').replace('&gt;','>').strip() for p in ps]
+                    ps = [p.replace('<span>', '').replace('</span>', '').replace('&lt;', '<').replace('&gt;', '>').strip() for p in ps]
                     if len(ps) == 2 and ps[0].strip() not in s.annotation:
-                        new_ann.update({ps[0] : ps[1]})
+                        new_ann.update({ps[0]: ps[1]})
             else:
                 hPs = re.findall(html_bigg_p, notes)
                 if len(hPs) > 0:
-                    if __DEBUG__: print(hPs)
+                    if __DEBUG__:
+                        print(hPs)
                     for p in hPs:
-                        ps = p.replace('<html:p>','').replace('</html:p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
+                        ps = p.replace('<html:p>', '').replace('</html:p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
                         if len(ps) == 2 and ps[0].strip() not in s.annotation:
-                            new_ann.update({ps[0].strip() : ps[1].strip()})
+                            new_ann.update({ps[0].strip(): ps[1].strip()})
                 else:
                     hPs = re.findall(html_p, notes)
-                    if __DEBUG__: print(hPs)
+                    if __DEBUG__:
+                        print(hPs)
                     for p in hPs:
-                        ps = p.replace('<p>','').replace('</p>','').replace('&lt;','<').replace('&gt;','>').split(':',1)
+                        ps = p.replace('<p>', '').replace('</p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
                         if len(ps) == 2 and ps[0].strip() not in s.annotation:
-                            new_ann.update({ps[0].strip() : ps[1].strip()})
+                            new_ann.update({ps[0].strip(): ps[1].strip()})
             s.annotation.update(new_ann)
 
         if 'chemFormula' in s.annotation and (s.chemFormula is None or s.chemFormula == ''):
             s.chemFormula = s.annotation.pop('chemFormula')
-            if __DEBUG__: print(s.annotation)
+            if __DEBUG__:
+                print(s.annotation)
         elif 'FORMULA' in s.annotation and (s.chemFormula is None or s.chemFormula == ''):
             s.chemFormula = s.annotation.pop('FORMULA')
 
@@ -809,7 +854,8 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
             except ValueError:
                 s.charge = None
                 print('Invalid charge: {} defined for species {}'.format(chrg, s.getId()))
-            if __DEBUG__: print(s.annotation)
+            if __DEBUG__:
+                print(s.annotation)
         elif (s.charge is None or s.charge == '' or s.charge == 0) and 'CHARGE' in s.annotation and s.annotation['CHARGE'] != '':
             chrg = s.annotation.pop('CHARGE')
             try:
@@ -817,7 +863,9 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
             except ValueError:
                 print('Invalid charge: {} defined for species {}'.format(chrg, s.getId()))
                 s.charge = None
-            if __DEBUG__: print(s.annotation)
+            if __DEBUG__:
+                print(s.annotation)
+
 
 def processExchangeReactions(fba, key):
     """
@@ -833,7 +881,6 @@ def processExchangeReactions(fba, key):
     else:
         fexDic = getBoundsDict(fba, substring=key)
 
-
     # extract the medium (exchange fluxes that allow uptake)
     MediumAll = []
     Medium = []
@@ -841,11 +888,12 @@ def processExchangeReactions(fba, key):
         if fexDic[r]['lb'] < 0.0:
             MediumAll.append((r, fexDic[r]['lb'], fexDic[r]['ub']))
             Medium.append(r)
-        if __DEBUG__: print(r, fexDic[r])
+        if __DEBUG__:
+            print(r, fexDic[r])
     # remove medium from bounds dictionary and place in medium dict
     mediumDic = {}
     for m in Medium:
-        mediumDic.update({m : fexDic.pop(m)})
+        mediumDic.update({m: fexDic.pop(m)})
     if __DEBUG__:
         print('\nMedium')
         for m in MediumAll:
@@ -856,6 +904,7 @@ def processExchangeReactions(fba, key):
         for r in mediumDic:
             print(r, r in fexDic)
     return fexDic, mediumDic
+
 
 def generateInputScanReports(fba, exDict, mediumDict, optimal_growth_rates, wDir, tag=''):
     modName = fba.sourcefile
@@ -889,6 +938,7 @@ def generateInputScanReports(fba, exDict, mediumDict, optimal_growth_rates, wDir
     F.write('\n')
     F.close()
 
+
 def getAllReactionsAssociatedWithGene(fba, gene, gene_annotation_key='GENE ASSOCIATION'):
     out = []
     for r in fba.reactions:
@@ -903,6 +953,7 @@ def getAllReactionsAssociatedWithGene(fba, gene, gene_annotation_key='GENE ASSOC
             if gene in r.annotation[GA]:
                 out.append(r.getId())
     return out
+
 
 def scanForReactionDuplicates(f, ignore_coefficients=False):
     """
@@ -928,15 +979,15 @@ def scanForReactionDuplicates(f, ignore_coefficients=False):
                             go = False
                             break
                     if go:
-                        dup = [r.id, r2.id,]
+                        dup = [r.id, r2.id, ]
                         dup.sort()
-                        dup = dup+[refspecies, f.getReaction(dup[0]).getName(), f.getReaction(dup[1]).getName()]
+                        dup = dup + [refspecies, f.getReaction(dup[0]).getName(), f.getReaction(dup[1]).getName()]
                         if dup not in duplicates:
                             duplicates.append(dup)
                 else:
-                    dup = [r.id, r2.id,]
+                    dup = [r.id, r2.id, ]
                     dup.sort()
-                    dup = dup+[refspecies, f.getReaction(dup[0]).getName(), f.getReaction(dup[1]).getName()]
+                    dup = dup + [refspecies, f.getReaction(dup[0]).getName(), f.getReaction(dup[1]).getName()]
                     if dup not in duplicates:
                         duplicates.append(dup)
     for d in duplicates:
@@ -944,9 +995,10 @@ def scanForReactionDuplicates(f, ignore_coefficients=False):
     print('\nFound %s pairs of duplicate reactions' % len(duplicates))
     return duplicates
 
+
 def countedPause(Tsec):
     print('\nPausing ...   ',)
-    for t in range(Tsec,-1,-1):
+    for t in range(Tsec, -1, -1):
         print('\b\b\b{}'.format(t), end=" ")
         time.sleep(1)
     print('\b\b{}'.format('done.'))
@@ -984,7 +1036,7 @@ def getModelGenesPerReaction(fba, gene_pattern=None, gene_annotation_key='GENE A
 
     for r in fba.reactions:
         GA = None
-        ##  print r.annotation
+        # print r.annotation
         if gene_annotation_key in r.annotation:
             GA = gene_annotation_key
         elif 'GENE ASSOCIATION' in r.annotation:
@@ -999,19 +1051,20 @@ def getModelGenesPerReaction(fba, gene_pattern=None, gene_annotation_key='GENE A
             genes = extractGeneIdsFromString(r.annotation[GA])
             #genes = re.findall(gene_re, r.annotation[GA])
             #genes = [g.replace('(','').replace(')','').strip() for g in genes]
-            ##  print r.annotation['GENE ASSOCIATION']
+            # print r.annotation['GENE ASSOCIATION']
             if len(genes) == 0:
-                ##  print '\n'
-                ##  print 'GA:', r.annotation['GENE ASSOCIATION']
-                ##  print r.getId(), genes
-                ##  raw_input('x')
+                # print '\n'
+                # print 'GA:', r.annotation['GENE ASSOCIATION']
+                # print r.getId(), genes
+                # raw_input('x')
                 genes = None
-            ##  print r.getId(), genes
-            ##  raw_input()
-            react_gene.update({r.getId() : genes})
+            # print r.getId(), genes
+            # raw_input()
+            react_gene.update({r.getId(): genes})
         else:
-            react_gene.update({r.getId() : None})
+            react_gene.update({r.getId(): None})
     return react_gene
+
 
 def getReactionsPerGene(react_gene):
     gene_react = {}
@@ -1028,9 +1081,10 @@ def getReactionsPerGene(react_gene):
                     gene_react[G].append(R)
                 else:
                     print('Adding gene {} to gene_react'.format(G))
-                    gene_react.update({G : [R]})
+                    gene_react.update({G: [R]})
     genes = list(gene_react)
     return gene_react, genes, no_gene
+
 
 def removeFixedSpeciesReactions(f):
     """
@@ -1049,6 +1103,7 @@ def removeFixedSpeciesReactions(f):
     for r in c_react:
         f.deleteReactionAndBounds(r)
 
+
 def addFluxAsActiveObjective(f, reaction_id, osense, coefficient=1):
     """
     Adds a flux as an active objective function
@@ -1059,15 +1114,17 @@ def addFluxAsActiveObjective(f, reaction_id, osense, coefficient=1):
 
     """
     osense = osense.lower()
-    if osense == 'max': osense = 'maximize'
-    if osense == 'min': osense = 'minimize'
+    if osense == 'max':
+        osense = 'maximize'
+    if osense == 'min':
+        osense = 'minimize'
     if osense in ['maximise', 'minimise']:
-        osense = osense.replace('se','ze')
+        osense = osense.replace('se', 'ze')
     assert osense in ['maximize', 'minimize'], "\nosense must be ['maximize', 'minimize'] not %s" % osense
     assert reaction_id in [r.getId() for r in f.reactions], '\n%s is not avalid reaction' % reaction_id
-    n_obj = CBModel.Objective(reaction_id+'_objf',osense)
+    n_obj = CBModel.Objective(reaction_id + '_objf', osense)
     f.addObjective(n_obj, active=True)
-    n_flux_obj = CBModel.FluxObjective(reaction_id+'_fluxobj', reaction_id, coefficient)
+    n_flux_obj = CBModel.FluxObjective(reaction_id + '_fluxobj', reaction_id, coefficient)
     n_obj.addFluxObjective(n_flux_obj)
 
 
@@ -1099,11 +1156,11 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
             CF = f.getSpecies(rr.species_ref).chemFormula
             chrg = f.getSpecies(rr.species_ref).charge
             if CF not in [None, '']:
-                #print rid, rr.getId(), CF
+                # print rid, rr.getId(), CF
                 try:
                     CFP = pp_chemicalFormula.parseString(CF)
                     R2 = [(r[0], int(r[1])) for r in CFP]
-                    #print R2
+                    # print R2
                     # note this uses a net stoichiometry approach with signed coefficients
                     reagents.append([rr.species_ref, rr.coefficient, CF, R2])
                 except pyparsing.ParseException:
@@ -1114,9 +1171,9 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
                 reagents.append([rr.species_ref, rr.coefficient, CF, None])
             if chrg not in [None, '']:
                 if netcharge is None:
-                    netcharge = float(chrg)*rr.coefficient
+                    netcharge = float(chrg) * rr.coefficient
                 else:
-                    netcharge += float(chrg)*rr.coefficient
+                    netcharge += float(chrg) * rr.coefficient
         # if after all this we still do not have a charge make it all zero
         RCHARGE[rid] = netcharge
         ROUT[rid] = reagents
@@ -1127,11 +1184,11 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
             if rr[3] != None:
                 for s in rr[3]:
                     if s[0] in Ed:
-                        Ed.update({s[0] : Ed[s[0]] + rr[1]*s[1]})
+                        Ed.update({s[0]: Ed[s[0]] + rr[1] * s[1]})
                     else:
-                        Ed.update({s[0] : rr[1]*s[1]})
+                        Ed.update({s[0]: rr[1] * s[1]})
             else:
-                pass# print('Invalid or no chemical formula defined for reagent: {}'.format(rr[0]))
+                pass  # print('Invalid or no chemical formula defined for reagent: {}'.format(rr[0]))
 
         if len(Ed) > 0:
             CBAL = True
@@ -1145,17 +1202,18 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
                 EBAL = False
             if RCHARGE[R] is None or abs(RCHARGE[R]) >= zero_tol:
                 CBAL = False
-        Rres.update({ R : {'id' : R,
-                            'charge_balanced' : CBAL,
-                            'element_balanced' : EBAL,
-                            'elements' : Ed.copy(),
-                            'charge' : RCHARGE[R],
-                            'stuff' : ROUT[R]}})
+        Rres.update({R: {'id': R,
+                         'charge_balanced': CBAL,
+                         'element_balanced': EBAL,
+                         'elements': Ed.copy(),
+                         'charge': RCHARGE[R],
+                         'stuff': ROUT[R]}})
         if CBAL and EBAL:
             f.getReaction(R).is_balanced = True
         else:
             f.getReaction(R).is_balanced = False
     return Rres
+
 
 def scanForUnbalancedReactions(f, output='all'):
     """
@@ -1175,11 +1233,11 @@ def scanForUnbalancedReactions(f, output='all'):
     element_balanced = {}
     for b in bcheck:
         if bcheck[b]['charge_balanced'] and bcheck[b]['element_balanced']:
-            all_balanced.update({b : badD.pop(b)})
+            all_balanced.update({b: badD.pop(b)})
         elif bcheck[b]['charge_balanced']:
-            charge_balanced.update({b : badD.pop(b)})
+            charge_balanced.update({b: badD.pop(b)})
         elif bcheck[b]['element_balanced']:
-            element_balanced.update({b : badD.pop(b)})
+            element_balanced.update({b: badD.pop(b)})
     if output == 'charge':
         out.update(element_balanced)
     elif output == 'element':
@@ -1189,6 +1247,7 @@ def scanForUnbalancedReactions(f, output='all'):
         out.update(charge_balanced)
     print(len(bcheck), len(badD))
     return out
+
 
 def createZipArchive(zipname, files, move=False, compression='normal'):
     """
@@ -1224,6 +1283,7 @@ def createZipArchive(zipname, files, move=False, compression='normal'):
         print('\nINFO: {} input file(s) moved to archive \"{}\".'.format(len(files), zipname))
     else:
         print('\nINFO: zip-archive \"{}\" created.'.format(zipname))
+
 
 def checkExchangeReactions(fba, autocorrect=True):
     """
@@ -1269,8 +1329,7 @@ def checkIds(fba, items='all'):
     else:
         items = [a.strip() for a in items.split(',')]
 
-
-    for i_ in range(len(items)-1,-1,-1):
+    for i_ in range(len(items) - 1, -1, -1):
         if not hasattr(fba, items[i_]):
             print('ERROR: bad descriptor \"{}\" removing from input list'.format(items.pop(i_)))
 
@@ -1327,9 +1386,9 @@ def checkFluxBoundConsistency(fba):
     LB = {}
     UB = {}
     EB = {}
-    eMB = {'lower' : {},
-           'upper' : {},
-           'equality' : {}
+    eMB = {'lower': {},
+           'upper': {},
+           'equality': {}
            }
 
     noreaction = []
@@ -1340,7 +1399,7 @@ def checkFluxBoundConsistency(fba):
         if raw_type != get_type:
             print('WARNING: incorrect bound type for operation: \"{}\" old \"{}\" --> \"{}\"'.format(fb.operation, raw_type, get_type))
 
-        if  get_type == 'lower':
+        if get_type == 'lower':
             if RID in LB:
                 print('ERROR multiple LOWER bounds defined for reaction: \"{}\"'.format(RID))
             if RID in eMB['lower']:
@@ -1348,7 +1407,7 @@ def checkFluxBoundConsistency(fba):
             else:
                 eMB['lower'][RID] = [fb]
             LB[RID] = fb
-        if  get_type == 'upper':
+        if get_type == 'upper':
             if RID in UB:
                 print('ERROR multiple UPPER bounds defined for reaction: \"{}\"'.format(RID))
             if RID in eMB['upper']:
@@ -1356,7 +1415,7 @@ def checkFluxBoundConsistency(fba):
             else:
                 eMB['upper'][RID] = [fb]
             UB[RID] = fb
-        if  get_type == 'equality':
+        if get_type == 'equality':
             if RID in EB:
                 print('ERROR multiple EQUAL bounds defined for reaction: \"{}\"'.format(RID))
             if RID in eMB['equality']:
@@ -1378,9 +1437,9 @@ def checkFluxBoundConsistency(fba):
         if len(eMB['equality'][mb_]) == 1:
             eMB['equality'].pop(mb_)
 
-    undefined = {'no_upper' : [],
-                 'no_lower' : [],
-                 'no_upper_lower' : []
+    undefined = {'no_upper': [],
+                 'no_lower': [],
+                 'no_upper_lower': []
                  }
 
     for r_ in fba.getReactionIds():
@@ -1402,14 +1461,14 @@ def checkFluxBoundConsistency(fba):
                 print('WARNING: No UPPER BOUND defined for reaction: \"{}\"'.format(r_))
                 undefined['no_upper'].append(r_)
 
-    errors = {'eq+lb' : [],
-              'eq+ub' : [],
-              'duplicate_ids' : dupIDs,
-              'multiple_defines' : eMB,
-              'lb>ub' : [],
-              'undefined' : undefined,
-              'rev_contradict' : [],
-              'no_reaction' : noreaction
+    errors = {'eq+lb': [],
+              'eq+ub': [],
+              'duplicate_ids': dupIDs,
+              'multiple_defines': eMB,
+              'lb>ub': [],
+              'undefined': undefined,
+              'rev_contradict': [],
+              'no_reaction': noreaction
               }
 
     for k_ in EB:
@@ -1442,6 +1501,7 @@ def checkFluxBoundConsistency(fba):
 
     return errors
 
+
 def roundOffWithSense(val, osense='max', tol=1e-8):
     """
     Round of a value in a way that takes into consideration the sense of the operation that generated it
@@ -1452,10 +1512,11 @@ def roundOffWithSense(val, osense='max', tol=1e-8):
 
     """
     if osense.lower() in ['min', 'minimize', 'minimise']:
-        val = numpy.ceil(val/tol)*tol
+        val = numpy.ceil(val / tol) * tol
     else:
-        val = numpy.floor(val/tol)*tol
+        val = numpy.floor(val / tol) * tol
     return val
+
 
 def mergeGroups(m, groups, new_id, new_name='', auto_delete=False):
     """
@@ -1508,10 +1569,6 @@ def mergeGroups(m, groups, new_id, new_name='', auto_delete=False):
     return True
 
 
-
-
-
-
 def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
     """
     Merge 2 models, this method does a raw merge of model 2 into model 1 without any model checking.
@@ -1537,14 +1594,14 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
     out.createCompartment('OuterMerge', size=1.0, dimensions=3)
 
     idstore = []
-    for x_ in m1.compartments+m2.compartments:
+    for x_ in m1.compartments + m2.compartments:
         sid = x_.getId()
         if sid not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
                 idstore.append(sid)
                 out.addCompartment(x_.clone())
 
-    for s_ in m1.species+m2.species:
+    for s_ in m1.species + m2.species:
         sid = s_.getId()
         if sid not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
@@ -1554,7 +1611,7 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
                 print('Skipping duplicate id: \"{}\"'.format(sid))
         else:
             print('Skipping ignored id: \"{}\"'.format(sid))
-    for r_ in m1.reactions+m2.reactions:
+    for r_ in m1.reactions + m2.reactions:
         sid = r_.getId()
         if r_.getId() not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
@@ -1564,7 +1621,7 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
                 print('Skipping duplicate id: \"{}\"'.format(sid))
         else:
             print('Skipping ignored id: \"{}\"'.format(sid))
-    for f_ in m1.flux_bounds+m2.flux_bounds:
+    for f_ in m1.flux_bounds + m2.flux_bounds:
         sid = f_.getId()
         if f_.getId() not in ignore:
             if ignore_duplicate_ids or sid not in idstore:
@@ -1575,7 +1632,7 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
         else:
             print('Skipping ignored id: \"{}\"'.format(sid))
     GO = True
-    for o_ in m1.objectives+m2.objectives:
+    for o_ in m1.objectives + m2.objectives:
         sid = o_.getId()
         if o_.getId() not in ignore:
             if ignore_duplicate_ids or sid not in idstore:

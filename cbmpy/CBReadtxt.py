@@ -33,41 +33,45 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
-import os, time, re
+import os
+import time
+import re
 import numpy
 from . import CBModel
 
 
 # userspace
 SYMB_SPLIT = ';'
-COMPARTMENTS = ['[c]','[e]','[p]']
-REPLACE_COMPARTMENTS = ['_c','_e','_p']
+COMPARTMENTS = ['[c]', '[e]', '[p]']
+REPLACE_COMPARTMENTS = ['_c', '_e', '_p']
 SYMB_IRR = '-->'
 SYMB_REV = '<==>'
 BIG_BOUND = 999999.0
 # userspace
 
+
 def getBounds(fname, reaction_prefix='R_', has_header=False):
-    bndsF = file(fname,'r')
+    bndsF = file(fname, 'r')
     bndsLst = []
     bndsOut = {}
     for L in bndsF:
         L = [e.strip() for e in L.split(SYMB_SPLIT)]
         # general replacements '\"' --> '' and '(e)' --> '_e'
-        L = [e.replace('\"','').replace('(e)','__e') for e in L]
-        ##  print L
+        L = [e.replace('\"', '').replace('(e)', '__e') for e in L]
+        # print L
         bndsLst.append(L)
     if has_header:
         print(bndsLst.pop(0))
     for b in bndsLst:
         # note the '-' --> '_' and '.' --> '_' replacement in the id
-        bndsOut.update({reaction_prefix+b[0].replace('-','_').replace('.','_') : {'min' : float(b[1].replace(',','.')), 'max' : float(b[2].replace(',','.'))}})
+        bndsOut.update({reaction_prefix + b[0].replace('-', '_').replace('.', '_'): {'min': float(b[1].replace(',', '.')), 'max': float(b[2].replace(',', '.'))}})
     bndsF.close()
     return bndsOut
 
+
 def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, ignore_duplicates=False):
     assert os.path.exists(fname), '\n%s is not a valid file!'
-    rF = file(fname,'r')
+    rF = file(fname, 'r')
     rxnLst = []
     Reac = {}
     dupcntr = {}
@@ -75,20 +79,20 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
     gene_ors = []
     for L in rF:
         L = [e.strip() for e in L.split(SYMB_SPLIT)]
-        L = [e.replace('\"','').replace('(e)','__e') for e in L]
+        L = [e.replace('\"', '').replace('(e)', '__e') for e in L]
         rxnLst.append(L)
     if has_header:
         print('Deleting header row:', rxnLst.pop(0))
         time.sleep(2)
     for r in rxnLst:
         assert r[0] != '', '\nReaction with no name: %s' % r
-        ##  print r
+        # print r
         # note the '-' --> '_' and '.' --> '_' replacement in the id
         if len(r) >= 4:
             gene = r[3]
         else:
             gene = 'unknown'
-        R_id = reaction_prefix+r[0].replace('-','_').replace('.','_')
+        R_id = reaction_prefix + r[0].replace('-', '_').replace('.', '_')
         ADD_REACTION = True
         if R_id in tuple(Reac):
             if r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name'] and gene == Reac[R_id]['gene']:
@@ -96,7 +100,7 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
                 if R_id not in real_duplicates:
                     real_duplicates.append(R_id)
                 ADD_REACTION = False
-            ##  elif r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name']:
+            # elif r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name']:
             elif r[1] == Reac[R_id]['eqn']:
                 Reac[R_id]['gene'] = Reac[R_id]['gene'] + ' OR %s' % gene.strip()
                 print('Reaction differs only by gene association adding OR association', R_id, Reac[R_id]['gene'])
@@ -104,7 +108,7 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
                 if R_id not in gene_ors:
                     gene_ors.append(R_id)
                 if r[2] not in Reac[R_id]['name']:
-                    Reac[R_id]['name'] = '%s OR %s' % (Reac[R_id]['name'],r[2])
+                    Reac[R_id]['name'] = '%s OR %s' % (Reac[R_id]['name'], r[2])
             else:
                 if ignore_duplicates:
                     ADD_REACTION = False
@@ -113,25 +117,25 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
                     if R_id in dupcntr:
                         dupcntr[R_id] = dupcntr[R_id] + 1
                     else:
-                        dupcntr.update({R_id : 1})
+                        dupcntr.update({R_id: 1})
                     R_id = '%s_%i' % (R_id, dupcntr[R_id])
                     ADD_REACTION = True
                     print('Duplicate reaction creating new reaction:', R_id)
 
         if ADD_REACTION:
             ##  Reac.update({R_id : {'id' : R_id, 'name' : r[1], 'eqn' : r[2], 'gene' : gene} })
-            Reac.update({R_id : {'id' : R_id, 'name' : r[2], 'eqn' : r[1], 'gene' : gene} })
+            Reac.update({R_id: {'id': R_id, 'name': r[2], 'eqn': r[1], 'gene': gene}})
     rF.close()
 
     if save_rpt:
-        F = open('csv_read_rpt.txt','w')
+        F = open('csv_read_rpt.txt', 'w')
         F.write('\nCSV Read Report\n********************\n')
         F.write('\nDuplicate entries ignored:\n')
         for d in real_duplicates:
             F.write('\t%s\n' % d)
         F.write('\nDuplicate reactions renamed (instances):\n')
         for d in dupcntr:
-            F.write('\t%s : %i\n' % (d, dupcntr[d]+1))
+            F.write('\t%s : %i\n' % (d, dupcntr[d] + 1))
         if len(dupcntr) < 1:
             F.write('\tNone\n')
         F.write('\nDuplicate reactions used for gene association:\n')
@@ -141,9 +145,10 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
 
     return Reac
 
+
 def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_rpt=False, ignore_duplicates=False):
     assert os.path.exists(fname), '\n%s is not a valid file!'
-    rF = file(fname,'r')
+    rF = file(fname, 'r')
     rxnLst = []
     Reac = {}
     dupcntr = {}
@@ -151,20 +156,20 @@ def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_
     gene_ors = []
     for L in rF:
         L = [e.strip() for e in L.split(SYMB_SPLIT)]
-        L = [e.replace('\"','').replace('(e)','__e') for e in L]
+        L = [e.replace('\"', '').replace('(e)', '__e') for e in L]
         rxnLst.append(L)
     if has_header:
         print('Deleting header row:', rxnLst.pop(0))
         time.sleep(2)
     for r in rxnLst:
         assert r[0] != '', '\nReaction with no name: %s' % r
-        ##  print r
+        # print r
         # note the '-' --> '_' and '.' --> '_' replacement in the id
         if len(r) >= 4:
             gene = r[3]
         else:
             gene = 'unknown'
-        R_id = reaction_prefix+r[0].replace('-','_').replace('.','_')
+        R_id = reaction_prefix + r[0].replace('-', '_').replace('.', '_')
         ADD_REACTION = True
         if R_id in tuple(Reac):
             if r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name'] and gene == Reac[R_id]['gene']:
@@ -172,7 +177,7 @@ def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_
                 if R_id not in real_duplicates:
                     real_duplicates.append(R_id)
                 ADD_REACTION = False
-            ##  elif r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name']:
+            # elif r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name']:
             elif r[1] == Reac[R_id]['eqn']:
                 Reac[R_id]['gene'] = Reac[R_id]['gene'] + ' OR %s' % gene.strip()
                 print('Reaction differs only by gene association adding OR association', R_id, Reac[R_id]['gene'])
@@ -180,7 +185,7 @@ def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_
                 if R_id not in gene_ors:
                     gene_ors.append(R_id)
                 if r[2] not in Reac[R_id]['name']:
-                    Reac[R_id]['name'] = '%s OR %s' % (Reac[R_id]['name'],r[2])
+                    Reac[R_id]['name'] = '%s OR %s' % (Reac[R_id]['name'], r[2])
             else:
                 if ignore_duplicates:
                     ADD_REACTION = False
@@ -189,25 +194,25 @@ def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_
                     if R_id in dupcntr:
                         dupcntr[R_id] = dupcntr[R_id] + 1
                     else:
-                        dupcntr.update({R_id : 1})
+                        dupcntr.update({R_id: 1})
                     R_id = '%s_%i' % (R_id, dupcntr[R_id])
                     ADD_REACTION = True
                     print('Duplicate reaction, creating new reaction:', R_id)
 
         if ADD_REACTION:
             ##  Reac.update({R_id : {'id' : R_id, 'name' : r[1], 'eqn' : r[2], 'gene' : gene} })
-            Reac.update({R_id : {'id' : R_id, 'name' : r[1], 'eqn' : r[2], 'gene' : gene} })
+            Reac.update({R_id: {'id': R_id, 'name': r[1], 'eqn': r[2], 'gene': gene}})
     rF.close()
 
     if save_rpt:
-        F = open('csv_read_rpt.txt','w')
+        F = open('csv_read_rpt.txt', 'w')
         F.write('\nCSV Read Report\n********************\n')
         F.write('\nDuplicate entries ignored:\n')
         for d in real_duplicates:
             F.write('\t%s\n' % d)
         F.write('\nDuplicate reactions renamed (instances):\n')
         for d in dupcntr:
-            F.write('\t%s : %i\n' % (d, dupcntr[d]+1))
+            F.write('\t%s : %i\n' % (d, dupcntr[d] + 1))
         if len(dupcntr) < 1:
             F.write('\tNone\n')
         F.write('\nDuplicate reactions used for gene association:\n')
@@ -242,14 +247,14 @@ def parseReactions(sRxns):
             cmp, LHS = [i.strip() for i in LHS.split(':')]
 
             if len(LHS) > 0:
-                LHS = [i.strip().replace('-','_') for i in LHS.split('+')]
-                LHS = [i+REPLACE_COMPARTMENTS[COMPARTMENTS.index(cmp)] for i in LHS]
+                LHS = [i.strip().replace('-', '_') for i in LHS.split('+')]
+                LHS = [i + REPLACE_COMPARTMENTS[COMPARTMENTS.index(cmp)] for i in LHS]
             if len(RHS) > 0:
-                RHS = [i.strip().replace('-','_') for i in RHS.split('+')]
-                RHS = [i+REPLACE_COMPARTMENTS[COMPARTMENTS.index(cmp)] for i in RHS]
+                RHS = [i.strip().replace('-', '_') for i in RHS.split('+')]
+                RHS = [i + REPLACE_COMPARTMENTS[COMPARTMENTS.index(cmp)] for i in RHS]
         else:
-            LHS = [r.strip().replace('-','_') for r in LHS.split('+')]
-            RHS = [r.strip().replace('-','_') for r in RHS.split('+')]
+            LHS = [r.strip().replace('-', '_') for r in LHS.split('+')]
+            RHS = [r.strip().replace('-', '_') for r in RHS.split('+')]
             for c in range(len(COMPARTMENTS)):
                 LHS = [r.replace(COMPARTMENTS[c], REPLACE_COMPARTMENTS[c]) for r in LHS]
                 RHS = [r.replace(COMPARTMENTS[c], REPLACE_COMPARTMENTS[c]) for r in RHS]
@@ -263,10 +268,10 @@ def parseReactions(sRxns):
                 raw_input('Ooops1', LHS)
             if len(LHS[l][0]) == 0:
                 LHS[l][0] = 1.0
-                LHS[l][1] = 'M_'+LHS[l][1].replace('.','_')
+                LHS[l][1] = 'M_' + LHS[l][1].replace('.', '_')
             else:
-                LHS[l][1] = 'M_'+LHS[l][1].replace(LHS[l][0][0], '').strip().replace('.','_')
-                LHS[l][0] = float(LHS[l][0][0].replace('(','').replace(')',''))
+                LHS[l][1] = 'M_' + LHS[l][1].replace(LHS[l][0][0], '').strip().replace('.', '_')
+                LHS[l][0] = float(LHS[l][0][0].replace('(', '').replace(')', ''))
             LHS[l] = tuple(LHS[l])
 
         for r in range(len(RHS)):
@@ -274,39 +279,41 @@ def parseReactions(sRxns):
                 raw_input('Ooops2', RHS)
             if len(RHS[r][0]) == 0:
                 RHS[r][0] = 1.0
-                RHS[r][1] = 'M_'+RHS[r][1].replace('.','_')
+                RHS[r][1] = 'M_' + RHS[r][1].replace('.', '_')
             else:
-                RHS[r][1] = 'M_'+RHS[r][1].replace(RHS[r][0][0], '').strip().replace('.','_')
-                RHS[r][0] = float(RHS[r][0][0].replace('(','').replace(')',''))
+                RHS[r][1] = 'M_' + RHS[r][1].replace(RHS[r][0][0], '').strip().replace('.', '_')
+                RHS[r][0] = float(RHS[r][0][0].replace('(', '').replace(')', ''))
             RHS[r] = tuple(RHS[r])
         geneAss = 'unknown'
         if 'gene' in sRxns[RXN]:
             geneAss = sRxns[RXN]['gene']
-        Reactions.update({RXN :{'id' : RXN,
-                                 'reversible' : Reversible,
-                                 'exchange' : Exchange,
-                                 'substrates' : LHS,
-                                 'products' : RHS,
-                                 'name' : sRxns[RXN]['name'],
-                                 'gene' : geneAss
+        Reactions.update({RXN: {'id': RXN,
+                                'reversible': Reversible,
+                                'exchange': Exchange,
+                                'substrates': LHS,
+                                'products': RHS,
+                                'name': sRxns[RXN]['name'],
+                                'gene': geneAss
                                 }
-                        })
+                          })
     return Reactions
+
 
 def addBoundsToReactions(Reactions, Bounds, default=1111.0):
     default = abs(default)
     for r in Reactions:
         if r in Bounds:
-            Reactions[r].update({'min' : Bounds[r]['min'], 'max' : Bounds[r]['max']})
+            Reactions[r].update({'min': Bounds[r]['min'], 'max': Bounds[r]['max']})
         else:
-            ##  print '\t:'
+            # print '\t:'
             if Reactions[r]['reversible']:
-                Reactions[r].update({'min' : -default, 'max' : default})
+                Reactions[r].update({'min': -default, 'max': default})
             else:
-                Reactions[r].update({'min' : 0.0, 'max' : default})
+                Reactions[r].update({'min': 0.0, 'max': default})
+
 
 def dumpReactionsToTxt(Reactions, fname):
-    dF = file(fname,'w')
+    dF = file(fname, 'w')
     for rx in Reactions:
         dF.write('\n%s\n' % Reactions[rx]['id'])
         dF.write('Name: %s\n' % Reactions[rx]['name'])
@@ -330,22 +337,25 @@ def dumpReactionsToTxt(Reactions, fname):
     dF.flush()
     dF.close()
 
+
 def getSpecies(reactions):
     species = {}
     for r in reactions:
         for s in reactions[r]['substrates']:
-            species.update({s[1] : {'compartment' : s[1][-1]}})
+            species.update({s[1]: {'compartment': s[1][-1]}})
         for p in reactions[r]['products']:
-            species.update({p[1] : {'compartment' : p[1][-1]}})
+            species.update({p[1]: {'compartment': p[1][-1]}})
     return species
 
+
 def dumpSpeciesToTxt(species, fname):
-    dF = file(fname,'w')
+    dF = file(fname, 'w')
     for s in species:
         dF.write('\n%s\n' % s)
         dF.write('Compartment: %s\n' % species[s]['compartment'])
     dF.flush()
     dF.close()
+
 
 def buildFBAobj(reactions, species, objfname, modname='model'):
     fm = CBModel
@@ -353,27 +363,27 @@ def buildFBAobj(reactions, species, objfname, modname='model'):
     M.setName(modname)
     M.description = modname
     for s in species:
-        S = fm.Species(s, compartment = species[s]['compartment'])
+        S = fm.Species(s, compartment=species[s]['compartment'])
         S.value = 0.0
         S.setName(s)
         M.addSpecies(S)
     for r in reactions:
         R = fm.Reaction(r, name=reactions[r]['name'], reversible=reactions[r]['reversible'])
         for su in reactions[r]['substrates']:
-            SU = fm.Reagent(r+su[1], su[1], -su[0])
+            SU = fm.Reagent(r + su[1], su[1], -su[0])
             R.addReagent(SU)
             spx = M.getSpecies(su[1])
             if su[1] not in spx.isReagentOf():
                 spx.reagent_of.append(R.getId())
         for pr in reactions[r]['products']:
-            PR = fm.Reagent(r+pr[1], pr[1], pr[0])
+            PR = fm.Reagent(r + pr[1], pr[1], pr[0])
             R.addReagent(PR)
             spx = M.getSpecies(pr[1])
             if pr[1] not in spx.isReagentOf():
                 spx.reagent_of.append(R.getId())
         R.is_exchange = reactions[r]['exchange']
-        LB = fm.FluxBound(r+'min', r, 'greaterEqual', reactions[r]['min'])
-        UB = fm.FluxBound(r+'max', r, 'lessEqual', reactions[r]['max'])
+        LB = fm.FluxBound(r + 'min', r, 'greaterEqual', reactions[r]['min'])
+        UB = fm.FluxBound(r + 'max', r, 'lessEqual', reactions[r]['max'])
         R.value = 0.0
         if 'gene' in reactions[r]:
             R.setAnnotation('GENE ASSOCIATION', reactions[r]['gene'])
@@ -382,11 +392,10 @@ def buildFBAobj(reactions, species, objfname, modname='model'):
         M.addFluxBound(UB)
     if objfname != None:
         OB = fm.Objective('objective1', 'maximize')
-        FO = fm.FluxObjective(objfname+'_obj', objfname)
+        FO = fm.FluxObjective(objfname + '_obj', objfname)
         OB.addFluxObjective(FO)
         M.addObjective(OB, active=True)
     return M
-
 
 
 def readCSV(model_file, bounds_file=None, biomass_flux=None, model_id='FBAModel', reaction_prefix='R_', has_header=False):
@@ -402,7 +411,7 @@ def readCSV(model_file, bounds_file=None, biomass_flux=None, model_id='FBAModel'
     """
 
     assert os.path.exists(model_file), '\nPlease supply a file name that exists.'
-    Rdict = getReactions(model_file, reaction_prefix=reaction_prefix, has_header=has_header,save_rpt=True)
+    Rdict = getReactions(model_file, reaction_prefix=reaction_prefix, has_header=has_header, save_rpt=True)
     R = parseReactions(Rdict)
     del Rdict
     if bounds_file != None and os.path.exists(bounds_file):
@@ -418,6 +427,7 @@ def readCSV(model_file, bounds_file=None, biomass_flux=None, model_id='FBAModel'
 
     fba = buildFBAobj(reactions=R, species=S, objfname=biomass_flux, modname=model_id)
     return fba
+
 
 """
 if __name__ == '__main__':

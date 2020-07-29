@@ -28,7 +28,10 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, copy, re
+import os
+import time
+import copy
+import re
 import numpy
 
 import webbrowser
@@ -36,12 +39,12 @@ from . import miriamids
 
 MIRIAM = miriamids.miriamids
 
-#MIRIAM.update({'EC' : {'data_entry': 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&amp;ec=$id',
-                       #'example': '1.1.1.1',
-                       #'name': 'Enzyme Nomenclature',
-                       #'pattern': re.compile(r'^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$'),
-                       #'url': 'http://identifiers.org/ec-code/'}
-               #})
+# MIRIAM.update({'EC' : {'data_entry': 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&amp;ec=$id',
+                       # 'example': '1.1.1.1',
+                       # 'name': 'Enzyme Nomenclature',
+                       # 'pattern': re.compile(r'^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$'),
+                       # 'url': 'http://identifiers.org/ec-code/'}
+               # })
 MIRIAM_KEYS = list(MIRIAM)
 MIRIAM_KEYS.sort()
 MIRIAM_KEYS = tuple(MIRIAM_KEYS)
@@ -59,6 +62,7 @@ if os.sys.version_info[0] >= 3 and os.sys.version_info[1] >= 7:
     RE_PATTERN_TYPE = re.Pattern
 else:
     RE_PATTERN_TYPE = re._pattern_type
+
 
 class StructMatrix:
     """
@@ -135,15 +139,21 @@ class StructMatrix:
 
     def getLabels(self, axis='all'):
         """Return the matrix labels ([rows],[cols]) where axis='row'/'col'/'all'"""
-        if axis == 'row': return self.row
-        elif axis == 'col': return self.col
-        else: return self.row, self.col
+        if axis == 'row':
+            return self.row
+        elif axis == 'col':
+            return self.col
+        else:
+            return self.row, self.col
 
     def getIndexes(self, axis='all'):
         """Return the matrix indexes ([rows],[cols]) where axis='row'/'col'/'all'"""
-        if axis == 'row': return self.ridx
-        elif axis == 'col': return self.cidx
-        else: return self.ridx, self.cidx
+        if axis == 'row':
+            return self.ridx
+        elif axis == 'col':
+            return self.cidx
+        else:
+            return self.ridx, self.cidx
 
     def getByIdx(self, row, col):
         assert row in self.ridx, '\n%s is an invalid index' % row
@@ -164,6 +174,7 @@ class StructMatrix:
         assert row in self.row, '\n%s is an invalid name' % row
         assert col in self.col, '\n%s is an invalid name' % col
         self.array[self.row.index(row), self.col.index(col)] = val
+
 
 class StructMatrixLP(StructMatrix):
     """Adds some stuff to StructMatrix that makes it LP friendly"""
@@ -194,7 +205,7 @@ class StructMatrixLP(StructMatrix):
                 rhs = numpy.array(rhs)
             self.RHS = rhs
         if operators == None:
-            self.operators = ['E']*len(self.RHS)
+            self.operators = ['E'] * len(self.RHS)
         else:
             assert len(operators) == len(self.RHS), "\nOperator length mismatch"
             self.operators = operators
@@ -230,13 +241,13 @@ class StructMatrixLP(StructMatrix):
     def setOperatorbyName(self, name, value):
         assert name in self.row, '\n%s is an invalid name' % name
         value = value.strip()
-        assert value in ['G','L','E'], '\n%s is not a valid operator' % value
+        assert value in ['G', 'L', 'E'], '\n%s is not a valid operator' % value
         self.operators[self.row.index(name)] = value
 
     def setOperatorbyIdx(self, idx, value):
         assert idx in self.ridx, '\n%s is an invalid index' % idx
         value = value.strip()
-        assert value in ['G','L','E'], '\n%s is not a valid operator' % value
+        assert value in ['G', 'L', 'E'], '\n%s is not a valid operator' % value
         self.operators[idx] = value
 
     def getRHSbyName(self, name):
@@ -255,7 +266,8 @@ class StructMatrixLP(StructMatrix):
         assert idx in self.ridx, '\n%s is an invalid index' % idx
         return self.operators[idx]
 
-#TODO: this all needs to be redone to allow for nested qualifiers and model/biol qualifers
+# TODO: this all needs to be redone to allow for nested qualifiers and model/biol qualifers
+
 
 class MIRIAMannotation(object):
     """
@@ -287,8 +299,8 @@ class MIRIAMannotation(object):
         self.MIRIAM = MIRIAM
         self.MIDS = MIRIAM_KEYS
         self.MIDSlc = MIRIAM_KEYSlc
-        self.QUALIFIERS = ("isA","isEncodedBy","encodes","hasPart","hasProperty","hasTaxon","hasVersion","isDescribedBy",\
-                           "isHomologTo","isPartOf","isPropertyOf","isVersionOf","occursIn",\
+        self.QUALIFIERS = ("isA", "isEncodedBy", "encodes", "hasPart", "hasProperty", "hasTaxon", "hasVersion", "isDescribedBy",
+                           "isHomologTo", "isPartOf", "isPropertyOf", "isVersionOf", "occursIn",
                            "isDerivedFrom")
 
     def addIDorgURI(self, qual, uri):
@@ -309,7 +321,7 @@ class MIRIAMannotation(object):
             self.__setattr__(qual, Q)
         else:
             print('INFO: Invalid qualifier: \"{}\" uri NOT set'.format(qual))
-        #print(self.getAllMIRIAMUris())
+        # print(self.getAllMIRIAMUris())
 
     def checkEntityPattern(self, entity):
         """
@@ -384,7 +396,7 @@ class MIRIAMannotation(object):
             E = self.checkEntity(entity)
             if E != None:
                 if self.checkId(E, mid):
-                    Q.append(self.MIRIAM[E]['url']+mid)
+                    Q.append(self.MIRIAM[E]['url'] + mid)
                     self.__setattr__(qual, Q)
             else:
                 print('INFO: Invalid entity: \"{}\" MIRIAM entity NOT set'.format(entity))
@@ -408,7 +420,7 @@ class MIRIAMannotation(object):
                 E = self.checkEntity(entity)
                 if E != None:
                     if self.checkId(E, mid):
-                        annot = self.MIRIAM[E]['url']+mid
+                        annot = self.MIRIAM[E]['url'] + mid
                         if annot in Q:
                             idx = Q.index(annot)
                             print('Deleted annotation {}'.format(Q.pop(idx)))
@@ -478,53 +490,51 @@ class MIRIAMannotation(object):
         """
         webbrowser.open_new_tab(url)
 
-#class MIRIAMModelAnnotation(MIRIAMannotation):
-    #"""
-    #Derived class with qualifiers for BQmodel
-    #"""
+# class MIRIAMModelAnnotation(MIRIAMannotation):
+    # """
+    # Derived class with qualifiers for BQmodel
+    # """
     #isDerivedFrom = None
 
-
-    #def __init__(self):
+    # def __init__(self):
         #self.MIRIAM = MIRIAM
         #self.MIDS = MIRIAM_KEYS
         #self.MIDSlc = MIRIAM_KEYSlc
         #self.QUALIFIERS = ("isA", "isDerivedFrom", "isDescribedBy")
 
 
+# class SensitivityReaction(object):
+    # """
+    # Pseudo reaction class holding sensitivity data
+    # """
 
-##  class SensitivityReaction(object):
-    ##  """
-    ##  Pseudo reaction class holding sensitivity data
-    ##  """
+    # def __init__(self):
+        # pass
 
-    ##  def __init__(self):
-        ##  pass
+# class SensitivitySpecies(object):
+    # """
+    # Pseudo species class holding sensitivity data
+    # """
 
-##  class SensitivitySpecies(object):
-    ##  """
-    ##  Pseudo species class holding sensitivity data
-    ##  """
+    # def __init__(self):
+        # pass
 
-    ##  def __init__(self):
-        ##  pass
+# class SensitivityData(object):
+    # """
+    # A class that holds sensitivity analysis data of an LP object
+    # """
 
-##  class SensitivityData(object):
-    ##  """
-    ##  A class that holds sensitivity analysis data of an LP object
-    ##  """
+    # def __init__(self, sense_obj, sense_rhs, sense_bnd):
+        # pass
 
-    ##  def __init__(self, sense_obj, sense_rhs, sense_bnd):
-        ##  pass
+    # def getListOfReactions(self):
+        # """
+        # Returns a list of sensitivity reaction objects
+        # """
+        # return []
 
-    ##  def getListOfReactions(self):
-        ##  """
-        ##  Returns a list of sensitivity reaction objects
-        ##  """
-        ##  return []
-
-    ##  def getListOfConstraints(self):
-        ##  """
-        ##  Returns a list of sensitivity constraint objects
-        ##  """
-        ##  return []
+    # def getListOfConstraints(self):
+        # """
+        # Returns a list of sensitivity constraint objects
+        # """
+        # return []

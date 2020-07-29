@@ -28,7 +28,13 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, random, math, re, webbrowser, urllib2
+import os
+import time
+import random
+import math
+import re
+import webbrowser
+import urllib2
 from .CBCommon import pp_chemicalFormula
 from .CBModel import Reaction as CBMReaction
 
@@ -79,9 +85,9 @@ class ReactionCreator(QtGui.QWidget):
         self._ccdict = ccdict
         self._newSubs = []
         self._newProds = []
-        self._fixColour = QtGui.QColor(0,0,153,alpha=255)
-        self._errColour = QtGui.QColor(255,0,0,alpha=255)
-        self._goodColour = QtGui.QColor(0,100,0,alpha=255)
+        self._fixColour = QtGui.QColor(0, 0, 153, alpha=255)
+        self._errColour = QtGui.QColor(255, 0, 0, alpha=255)
+        self._goodColour = QtGui.QColor(0, 100, 0, alpha=255)
         self.initUI()
 
     def addSubstrate(self, coeff, sid):
@@ -101,7 +107,7 @@ class ReactionCreator(QtGui.QWidget):
         self.IGNORECHECK = True
         items = [str(it_.text()) for it_ in self.lstSub.selectedItems()]
         self.setFocus(PyQt4.QtCore.Qt.OtherFocusReason)
-        #print(items)
+        # print(items)
         for i_ in items:
             if i_ not in self._newSubs:
                 self.addSubstrate(1, i_)
@@ -127,7 +133,7 @@ class ReactionCreator(QtGui.QWidget):
         self.IGNORECHECK = True
         items = [str(it_.text()) for it_ in self.lstProd.selectedItems()]
         self.setFocus(PyQt4.QtCore.Qt.OtherFocusReason)
-        #print(items)
+        # print(items)
         for i_ in items:
             if i_ not in self._newProds:
                 self.addProduct(1, i_)
@@ -136,9 +142,9 @@ class ReactionCreator(QtGui.QWidget):
         self.statusBar.showMessage('Product(s) added')
         self.checkBalance()
 
-    #def keyPressEvent(self, event):
+    # def keyPressEvent(self, event):
         #print('KeyPress key: {}'.format(str(event.key())))
-        #if event.key() == 16777223:
+        # if event.key() == 16777223:
             #print('You pressed the delete key')
 
     def deleteSubstrates(self):
@@ -149,14 +155,14 @@ class ReactionCreator(QtGui.QWidget):
 
     def deleteAllSubstrates(self):
         self.tblSub.clear()
-        for r_ in range(self.tblSubRow-1,-1,-1):
+        for r_ in range(self.tblSubRow - 1, -1, -1):
             self.tblSub.removeRow(r_)
         self.tblSubRow = 0
         self.checkBalance()
 
     def deleteAllProducts(self):
         self.tblProd.clear()
-        for r_ in range(self.tblProdRow-1,-1,-1):
+        for r_ in range(self.tblProdRow - 1, -1, -1):
             self.tblProd.removeRow(r_)
         self.tblProdRow = 0
         self.checkBalance()
@@ -177,22 +183,22 @@ class ReactionCreator(QtGui.QWidget):
             deleteRow = []
             if len(selected) == 2:
                 if selected[0][0] == selected[1][0]:
-                    if selected[0][1]+1 == selected[1][1]:
+                    if selected[0][1] + 1 == selected[1][1]:
                         deleteRow.append(selected[0][0])
             elif len(selected) > 2:
                 for it_ in range(0, len(selected), 2):
-                    if selected[it_][1] == selected[it_+1][1]:
-                        if selected[it_][0]+1 == selected[it_+1][0]:
+                    if selected[it_][1] == selected[it_ + 1][1]:
+                        if selected[it_][0] + 1 == selected[it_ + 1][0]:
                             if selected[it_][0] not in deleteRow:
                                 deleteRow.append(selected[it_][0])
-                            if selected[it_][0]+1 not in deleteRow:
-                                deleteRow.append(selected[it_][0]+1)
+                            if selected[it_][0] + 1 not in deleteRow:
+                                deleteRow.append(selected[it_][0] + 1)
             deleteRow.sort()
-            for d_ in range(len(deleteRow)-1,-1,-1):
+            for d_ in range(len(deleteRow) - 1, -1, -1):
                 if SUBACTIVE:
                     print('Deleting Sub table row: {}'.format(deleteRow[d_]))
                     self.statusBar.showMessage('Substrate(s) deleted')
-                    #print(self._newSubs)
+                    # print(self._newSubs)
                     #print(str(self.tblSub.item(d_, 1).text()))
                     self._newSubs.pop(self._newSubs.index(str(self.tblSub.item(d_, 1).text())))
                     self.tblSub.removeRow(deleteRow[d_])
@@ -200,7 +206,7 @@ class ReactionCreator(QtGui.QWidget):
                 elif PRODACTIVE:
                     print('Deleting Prod table row: {}'.format(deleteRow[d_]))
                     self.statusBar.showMessage('Product(s) deleted')
-                    #print(self._newProds)
+                    # print(self._newProds)
                     #print(str(self.tblProd.item(d_, 1).text()))
                     self._newProds.pop(self._newProds.index(str(self.tblProd.item(d_, 1).text())))
                     self.tblProd.removeRow(deleteRow[d_])
@@ -217,58 +223,58 @@ class ReactionCreator(QtGui.QWidget):
         for r_ in range(self.tblSubRow):
             sid = str(self.tblSub.item(r_, 1).text())
             scoef = float(str(self.tblSub.item(r_, 0).text()))
-            #print scoef
+            # print scoef
             if sid in self._cfdict:
                 cf = self._cfdict[sid]
                 if cf not in [None, 'None', '', ' ']:
                     cfl = pp_chemicalFormula.parseString(cf).asList()
                 else:
                     cfl = []
-                #print sid, cf, cfl
+                # print sid, cf, cfl
                 for e_ in cfl:
                     if e_[0] in output:
-                        output[e_[0]] = output[e_[0]] + -scoef*float(e_[1])
-                        #print scoef*float(e_[1])
+                        output[e_[0]] = output[e_[0]] + -scoef * float(e_[1])
+                        # print scoef*float(e_[1])
                     else:
-                        output[e_[0]] = -scoef*float(e_[1])
-                        #print scoef*float(e_[1])
+                        output[e_[0]] = -scoef * float(e_[1])
+                        # print scoef*float(e_[1])
                     if e_[0] in left:
-                        left[e_[0]] = left[e_[0]] + scoef*float(e_[1])
+                        left[e_[0]] = left[e_[0]] + scoef * float(e_[1])
                     else:
-                        left[e_[0]] = scoef*float(e_[1])
+                        left[e_[0]] = scoef * float(e_[1])
         for r_ in range(self.tblProdRow):
             sid = str(self.tblProd.item(r_, 1).text())
             pcoef = float(str(self.tblProd.item(r_, 0).text()))
-            #print pcoef, type(pcoef)
+            # print pcoef, type(pcoef)
             if sid in self._cfdict:
                 cf = self._cfdict[sid]
                 if cf not in [None, 'None', '', ' ']:
                     cfl = pp_chemicalFormula.parseString(cf).asList()
                 else:
                     cfl = []
-                #print sid, cf, cfl
+                # print sid, cf, cfl
                 for e_ in cfl:
                     if e_[0] in output:
                         #print -pcoef*float(e_[1])
-                        output[e_[0]] = output[e_[0]] + pcoef*float(e_[1])
+                        output[e_[0]] = output[e_[0]] + pcoef * float(e_[1])
                     else:
                         #print -pcoef*float(e_[1])
-                        output[e_[0]] = pcoef*float(e_[1])
+                        output[e_[0]] = pcoef * float(e_[1])
                     if e_[0] in right:
                         #print -pcoef*float(e_[1])
-                        right[e_[0]] = right[e_[0]] + pcoef*float(e_[1])
+                        right[e_[0]] = right[e_[0]] + pcoef * float(e_[1])
                     else:
                         #print -pcoef*float(e_[1])
-                        right[e_[0]] = pcoef*float(e_[1])
-        #print output
+                        right[e_[0]] = pcoef * float(e_[1])
+        # print output
         self.updateBalance(output, left, right)
-        #self.txtBal.setText(str(output))
+        # self.txtBal.setText(str(output))
 
     def updateBalance(self, bdict, left, right):
         colHead = []
         keys = list(bdict)
         if self.tblBalCol > 0:
-            for c_ in range(self.tblBalCol-1,-1,-1):
+            for c_ in range(self.tblBalCol - 1, -1, -1):
                 self.tblBal.removeColumn(c_)
         self.tblBalCol = 0
         self.ISBALANCED = True
@@ -296,11 +302,10 @@ class ReactionCreator(QtGui.QWidget):
                 self.tblBal.item(0, k_).setForeground(self._goodColour)
         self.tblBal.setHorizontalHeaderLabels(QtCore.QStringList(keys))
 
-
     def showErrorMessage(self, errorMsg, title="Reaction Creator"):
-        QtGui.QMessageBox.critical(None, title,\
-                                   errorMsg,\
-                                   QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default,\
+        QtGui.QMessageBox.critical(None, title,
+                                   errorMsg,
+                                   QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default,
                                    QtGui.QMessageBox.NoButton)
         self.statusBar.showMessage(errorMsg)
 
@@ -328,8 +333,8 @@ class ReactionCreator(QtGui.QWidget):
             return None
 
         #print('\nid=\"{}\"\nname=\"{}\"'.format(Id, Name))
-        #print self.tblSub.rowCount(), self.tblSubRow
-        #print self.tblProd.rowCount(), self.tblProdRow
+        # print self.tblSub.rowCount(), self.tblSubRow
+        # print self.tblProd.rowCount(), self.tblProdRow
         Reag = {}
         exReac = False
         for s_ in range(self.tblSub.rowCount()):
@@ -352,16 +357,15 @@ class ReactionCreator(QtGui.QWidget):
             if Reag[r_] == 0.0:
                 Reag.pop(r_)
                 print('removing zero coefficient reagent: {}'.format(r_))
-        self.NewReaction = {'reversible' : reversible,
-                           'id' : Id,
-                           'name' : Name,
-                           'is_exchange' : exReac,
-                           'is_balanced'  : self.ISBALANCED,
-                           'reagents' : Reag,
-                           'upper_bound' : self._Bupper,
-                           'lower_bound' : self._Blower
-                           }
-
+        self.NewReaction = {'reversible': reversible,
+                            'id': Id,
+                            'name': Name,
+                            'is_exchange': exReac,
+                            'is_balanced': self.ISBALANCED,
+                            'reagents': Reag,
+                            'upper_bound': self._Bupper,
+                            'lower_bound': self._Blower
+                            }
 
         sub = ''
         prod = ''
@@ -436,7 +440,7 @@ class ReactionCreator(QtGui.QWidget):
                 item.setForeground(self._fixColour)
             self.lstSub.addItem(item.clone())
             self.lstProd.addItem(item)
-            #if cntr == 20: break
+            # if cntr == 20: break
 
         # create buttons
         self.btAddSub = QtGui.QPushButton('Add substrate(s)')
@@ -452,7 +456,7 @@ class ReactionCreator(QtGui.QWidget):
         self.tblSub.setSortingEnabled(True)
         self.tblSub.insertColumn(0)
         self.tblSub.insertColumn(1)
-        self.tblSub.setHorizontalHeaderLabels(QtCore.QStringList(('Coefficient','Metabolite')))
+        self.tblSub.setHorizontalHeaderLabels(QtCore.QStringList(('Coefficient', 'Metabolite')))
         self.tblSub.verticalHeader().setVisible(False)
         QtCore.QObject.connect(self.tblSub, QtCore.SIGNAL('cellChanged(int,int)'), self.checkBalance)
         self.tblSubRow = 0
@@ -460,19 +464,18 @@ class ReactionCreator(QtGui.QWidget):
         self.tblProd.setSortingEnabled(True)
         self.tblProd.insertColumn(0)
         self.tblProd.insertColumn(1)
-        self.tblProd.setHorizontalHeaderLabels(QtCore.QStringList(('Coefficient','Metabolite')))
+        self.tblProd.setHorizontalHeaderLabels(QtCore.QStringList(('Coefficient', 'Metabolite')))
         self.tblProd.verticalHeader().setVisible(False)
         self.tblProdRow = 0
         QtCore.QObject.connect(self.tblProd, QtCore.SIGNAL('cellChanged(int,int)'), self.checkBalance)
 
-        self.tblBal  = QtGui.QTableWidget()
+        self.tblBal = QtGui.QTableWidget()
         self.tblBal.setMaximumHeight(150)
         self.tblBal.insertRow(0)
         self.tblBal.insertRow(1)
         self.tblBal.insertRow(2)
         self.tblBal.verticalHeader().setVisible(False)
         self.tblBalCol = 0
-
 
         # set up menu and status bar
         menuBar = QtGui.QMenuBar()
@@ -537,9 +540,10 @@ class ReactionCreator(QtGui.QWidget):
         grid.addWidget(self.tblBal, 6, 0, 1, 4)
 
         self.setLayout(grid)
-        self.setGeometry(self.mousePos.x()-75, self.mousePos.y()-75, 500, 640)
+        self.setGeometry(self.mousePos.x() - 75, self.mousePos.y() - 75, 500, 640)
         self.setWindowTitle('Reaction Creator')
         self.show()
+
 
 def createReaction(mod):
     """
@@ -574,6 +578,7 @@ def createReaction(mod):
         mod.createReactionUpperBound(newR['id'], newR['upper_bound'])
         return R
 
+
 class CBFileDialogue(QtGui.QWidget):
     _appTitle = 'Open file'
     work_dir = None
@@ -591,7 +596,7 @@ class CBFileDialogue(QtGui.QWidget):
 
     def initUI(self):
         #self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
-        #self.setHidden(True)
+        # self.setHidden(True)
         self.__dlg__ = QtGui.QFileDialog(self)
         if self.mode == 'open':
             #self.model_file = str(self.__dlg__.getOpenFileName(self, 'Open file', self.work_dir, options=QtGui.QFileDialog.DontUseNativeDialog))
@@ -616,6 +621,7 @@ def fileDialogue(work_dir=None, mode='open', filters=None):
         else:
             return True
 
+
 class ViewSVG(QtGui.QWidget):
     _fixColour = None
     _errColour = None
@@ -625,13 +631,12 @@ class ViewSVG(QtGui.QWidget):
     def __init__(self, filename):
         super(ViewSVG, self).__init__()
         self.mousePos = self.cursor().pos()
-        self._fixColour = QtGui.QColor(0,0,153,alpha=255)
-        self._errColour = QtGui.QColor(255,0,0,alpha=255)
-        self._goodColour = QtGui.QColor(0,100,0,alpha=255)
+        self._fixColour = QtGui.QColor(0, 0, 153, alpha=255)
+        self._errColour = QtGui.QColor(255, 0, 0, alpha=255)
+        self._goodColour = QtGui.QColor(0, 100, 0, alpha=255)
         self.filename = os.path.abspath(filename)
         print('\nViewing file: {}'.format(filename))
         self.initUI()
-
 
     def initUI(self):
         # create panels
@@ -658,16 +663,15 @@ class ViewSVG(QtGui.QWidget):
         br = QtSvg.QGraphicsSvgItem(self.filename).boundingRect()
 
         webview = QGraphicsWebView()
-        #webview.load(QtCore.QUrl("C:\your_interactive_svg.svg"))
+        # webview.load(QtCore.QUrl("C:\your_interactive_svg.svg"))
         webview.load(QtCore.QUrl(QtCore.QUrl.fromLocalFile(self.filename)))
         webview.setFlags(QtGui.QGraphicsItem.ItemClipsToShape)
         webview.setCacheMode(QtGui.QGraphicsItem.NoCache)
         webview.resize(br.width(), br.height())
 
         scene.addItem(webview)
-        view.resize(br.width()+10, br.height()+10)
-        #view.show()
-
+        view.resize(br.width() + 10, br.height() + 10)
+        # view.show()
 
         # do layout
         grid = QtGui.QGridLayout()
@@ -679,9 +683,10 @@ class ViewSVG(QtGui.QWidget):
         grid.addWidget(self.statusBar, 5, 0, 1, 4)
 
         self.setLayout(grid)
-        self.setGeometry(self.mousePos.x()-75, self.mousePos.y()-75, 500, 640)
+        self.setGeometry(self.mousePos.x() - 75, self.mousePos.y() - 75, 500, 640)
         self.setWindowTitle(self._appTitle)
         self.show()
+
 
 def loadViewSVG(filename):
     app = QtGui.QApplication([])
@@ -698,11 +703,10 @@ class ValueSlider(QtGui.QWidget):
     def __init__(self):
         super(ValueSlider, self).__init__()
         self.mousePos = self.cursor().pos()
-        self._fixColour = QtGui.QColor(0,0,153,alpha=255)
-        self._errColour = QtGui.QColor(255,0,0,alpha=255)
-        self._goodColour = QtGui.QColor(0,100,0,alpha=255)
+        self._fixColour = QtGui.QColor(0, 0, 153, alpha=255)
+        self._errColour = QtGui.QColor(255, 0, 0, alpha=255)
+        self._goodColour = QtGui.QColor(0, 100, 0, alpha=255)
         self.initUI()
-
 
     def initUI(self):
 
@@ -719,7 +723,7 @@ class ValueSlider(QtGui.QWidget):
 
         sld1.setMinimum(sld1_min)
         sld1.setMaximum(sld1_max)
-        sld1.setTickInterval((sld1_min-sld1_max)/10.0)
+        sld1.setTickInterval((sld1_min - sld1_max) / 10.0)
         sld1.setSingleStep(0.1)
 
         sld1.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -735,19 +739,18 @@ class ValueSlider(QtGui.QWidget):
         grid.addWidget(self.l1b, 0, 1, 1, 1)
         grid.addWidget(sld1, 0, 2, 1, 5)
 
-
         #grid.addWidget(self.txtId, 1, 0, 1, 2)
         #grid.addWidget(menuBar, 0, 0)
         #grid.addWidget(self.statusBar, 0, 1)
 
         self.setLayout(grid)
-        self.setGeometry(self.mousePos.x()-75, self.mousePos.y()-75, 280, 170)
+        self.setGeometry(self.mousePos.x() - 75, self.mousePos.y() - 75, 280, 170)
         self.setWindowTitle(self._appTitle)
         self.show()
 
-
     def changeValue(self, value):
         getattr(self, 'l1b').setText('{}'.format(value))
+
 
 def loadSlider():
     app = QtGui.QApplication([])

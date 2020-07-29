@@ -23,34 +23,32 @@ class TestEnumerateToy(unittest.TestCase):
 
     def setUp(self):
         cDir = os.path.dirname(__file__)
-        model_dir = os.path.join(cDir,'../models')
+        model_dir = os.path.join(cDir, '../models')
         model_file = "toy_model_maarleveld2014.l3.xml"
-          
+
         self.cmod = CBRead.readSBML3FBC(model_file, model_dir)
         self.cmod = CBTools.splitReversibleReactions(self.cmod)
-        
+
         r = self.cmod.getReaction('R01')
         print(r.getUpperBound())
         print(r.getLowerBound())
         r.setLowerBound(2.0)
-        
+
         for r in self.cmod.reactions:
             r.setUpperBound(min(1000, r.getUpperBound()))
-        
+
         self.cmod.buildStoichMatrix()
-        
+
         matrix = Matrix()
         labels, _ = matrix.addMetabolicNetwork(self.cmod)
         self.matroid = matroid.fromMatrix(matrix, labels)
-        
+
         self.decomp = Decomposition(self.matroid)
         sim = self.matroid.similarityMatrix("combined")
         self.decomp.poolmanMethod(self.decomp.root, sim)
 
-
     def tearDown(self):
         pass
-
 
     def testEnumerate(self):
         CBSolver.FluxVariabilityAnalysis(self.cmod, objF2constr=False)
@@ -58,48 +56,49 @@ class TestEnumerateToy(unittest.TestCase):
         F = enum.enumerateMinimal()
         print(F)
         self.assertEquals(F, set(
-            [frozenset(['R01', 'R17', 'R05', 'R10', 'R11', 'R09', 'R18', 'R03_fwd', 'R13_fwd', 'R12', 'R16', 'R14_fwd', 'R04_fwd']), 
-             frozenset(['R01', 'R17', 'R05', 'R10', 'R11', 'R09', 'R18', 'R02_fwd', 'R12', 'R16', 'R14_fwd', 'R13_fwd']), 
-             frozenset(['R01', 'R17', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R03_fwd', 'R13_fwd', 'R12', 'R16', 'R14_fwd', 'R04_fwd']), 
-             frozenset(['R01', 'R17', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R02_fwd', 'R12', 'R16', 'R14_fwd', 'R13_fwd']), 
-             frozenset(['R01', 'R17', 'R15', 'R05', 'R10', 'R11', 'R09', 'R18', 'R03_fwd', 'R12', 'R16', 'R04_fwd']), 
-             frozenset(['R01', 'R17', 'R15', 'R05', 'R10', 'R11', 'R09', 'R18', 'R03_fwd', 'R14_rev', 'R13_rev', 'R16', 'R04_fwd']), 
-             frozenset(['R01', 'R17', 'R15', 'R05', 'R10', 'R11', 'R09', 'R18', 'R02_fwd', 'R12', 'R16']), 
-             frozenset(['R01', 'R17', 'R15', 'R05', 'R10', 'R11', 'R09', 'R18', 'R02_fwd', 'R14_rev', 'R16', 'R13_rev']), 
-             frozenset(['R01', 'R17', 'R15', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R03_fwd', 'R12', 'R16', 'R04_fwd']), 
-             frozenset(['R01', 'R17', 'R15', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R03_fwd', 'R14_rev', 'R13_rev', 'R16', 'R04_fwd']), 
-             frozenset(['R01', 'R17', 'R15', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R02_fwd', 'R14_rev', 'R16', 'R13_rev']), 
+            [frozenset(['R01', 'R17', 'R05', 'R10', 'R11', 'R09', 'R18', 'R03_fwd', 'R13_fwd', 'R12', 'R16', 'R14_fwd', 'R04_fwd']),
+             frozenset(['R01', 'R17', 'R05', 'R10', 'R11', 'R09', 'R18', 'R02_fwd', 'R12', 'R16', 'R14_fwd', 'R13_fwd']),
+             frozenset(['R01', 'R17', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R03_fwd', 'R13_fwd', 'R12', 'R16', 'R14_fwd', 'R04_fwd']),
+             frozenset(['R01', 'R17', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R02_fwd', 'R12', 'R16', 'R14_fwd', 'R13_fwd']),
+             frozenset(['R01', 'R17', 'R15', 'R05', 'R10', 'R11', 'R09', 'R18', 'R03_fwd', 'R12', 'R16', 'R04_fwd']),
+             frozenset(['R01', 'R17', 'R15', 'R05', 'R10', 'R11', 'R09', 'R18', 'R03_fwd', 'R14_rev', 'R13_rev', 'R16', 'R04_fwd']),
+             frozenset(['R01', 'R17', 'R15', 'R05', 'R10', 'R11', 'R09', 'R18', 'R02_fwd', 'R12', 'R16']),
+             frozenset(['R01', 'R17', 'R15', 'R05', 'R10', 'R11', 'R09', 'R18', 'R02_fwd', 'R14_rev', 'R16', 'R13_rev']),
+             frozenset(['R01', 'R17', 'R15', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R03_fwd', 'R12', 'R16', 'R04_fwd']),
+             frozenset(['R01', 'R17', 'R15', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R03_fwd', 'R14_rev', 'R13_rev', 'R16', 'R04_fwd']),
+             frozenset(['R01', 'R17', 'R15', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R02_fwd', 'R14_rev', 'R16', 'R13_rev']),
              frozenset(['R01', 'R17', 'R15', 'R05', 'R07', 'R11', 'R08', 'R06', 'R18', 'R02_fwd', 'R12', 'R16'])]
-                                 )
-                          )
+        )
+        )
         evaluateReuse(F, self.decomp.root, None)
+
 
 @unittest.skip("takes quite long")
 class TestEnumerateECore(unittest.TestCase):
 
     def setUp(self):
         cDir = os.path.dirname(__file__)
-        model_dir = os.path.join(cDir,'../models')
+        model_dir = os.path.join(cDir, '../models')
         model_file = "ecoli_core_COBRA.xml"
-          
+
         self.cmod = CBRead.readCOBRASBML(model_file, model_dir)
         self.cmod = CBTools.splitReversibleReactions(self.cmod)
         for r in self.cmod.reactions:
             r.setUpperBound(min(1000, r.getUpperBound()))
             r.setLowerBound(0)
-        
+
         r = self.cmod.getReaction('R_Biomass_Ecoli_core_w_GAM')
         print(r.getUpperBound())
         print(r.getLowerBound())
         r.setLowerBound(0.1)
         r.setUpperBound(0.1)
-        
+
         self.cmod.buildStoichMatrix()
-        
+
         matrix = Matrix()
         labels, _ = matrix.addMetabolicNetwork(self.cmod)
         self.matroid = matroid.fromMatrix(matrix, labels)
-        
+
         self.decomp = Decomposition(self.matroid)
         self.decomp.splitSimple()
         for v in self.decomp.listNonLeaves():
@@ -107,14 +106,13 @@ class TestEnumerateECore(unittest.TestCase):
                 sim = v.matroid.similarityMatrix("combined")
                 self.decomp.poolmanMethod(v, sim)
 
-        write(self.decomp.makeGraphViz(cmod=self.cmod),"ecoli_core_split_poolman_combined.gv")
-        #self.assertTrue(self.decomp.verifyFullyBranched())
-        #self.assertTrue(self.decomp.verifyEdgeWidth())
+        write(self.decomp.makeGraphViz(cmod=self.cmod), "ecoli_core_split_poolman_combined.gv")
+        # self.assertTrue(self.decomp.verifyFullyBranched())
+        # self.assertTrue(self.decomp.verifyEdgeWidth())
         print("width = %d" % self.decomp.getWidth())
 
     def tearDown(self):
         pass
-
 
     def testEnumerate(self):
         CBSolver.FluxVariabilityAnalysis(self.cmod, objF2constr=False)
@@ -129,11 +127,12 @@ class TestEnumerateECore(unittest.TestCase):
         for r in self.cmod.reactions:
             if r.getValue() > 1e-5:
                 face.add(r.getId())
-                print('%s: %g' % (r.getId(), r.getValue()) )
+                print('%s: %g' % (r.getId(), r.getValue()))
         self.assertTrue(enum.test(face))
         F = enum.enumerateMinimal()
         print(F)
-        
+
+
 def evaluateReuse(F, node, parent):
     mod = node.getLeaves(parent)
     Fmod = {}
@@ -150,35 +149,35 @@ def evaluateReuse(F, node, parent):
         for a in adj:
             if a != parent:
                 evaluateReuse(F, a, node)
-            
+
 
 @unittest.skip("takes quite long")
 class TestEnumerateEcoliTextbookBigg(unittest.TestCase):
 
     def setUp(self):
         cDir = os.path.dirname(__file__)
-        model_dir = os.path.join(cDir,'../models')
+        model_dir = os.path.join(cDir, '../models')
         model_file = "bigg_textbook.xml.l3fbc.xml"
-          
+
         self.cmod = CBRead.readSBML3FBC(model_file, model_dir)
         self.cmod = CBTools.splitReversibleReactions(self.cmod)
         for r in self.cmod.reactions:
             if r.getUpperBound() != r.getLowerBound():
                 r.setUpperBound(min(1000, r.getUpperBound()))
                 r.setLowerBound(0)
-        
+
         r = self.cmod.getReaction('R_Biomass_Ecoli_core_N_LPAREN_w_FSLASH_GAM_RPAREN__Nmet2')
         print(r.getUpperBound())
         print(r.getLowerBound())
         r.setLowerBound(0.8)
         r.setUpperBound(0.8)
-                
+
         self.cmod.buildStoichMatrix()
-        
+
         matrix = Matrix()
         labels, _ = matrix.addMetabolicNetwork(self.cmod)
         self.matroid = matroid.fromMatrix(matrix, labels)
-        
+
         self.decomp = Decomposition(self.matroid)
         self.decomp.splitSimple()
         for v in self.decomp.listNonLeaves():
@@ -186,9 +185,9 @@ class TestEnumerateEcoliTextbookBigg(unittest.TestCase):
                 sim = v.matroid.similarityMatrix("combined")
                 self.decomp.poolmanMethod(v, sim)
 
-        write(self.decomp.makeGraphViz(cmod=self.cmod),"ecoli_textbook_bigg_split_poolman_combined.gv")
-        #self.assertTrue(self.decomp.verifyFullyBranched())
-        #self.assertTrue(self.decomp.verifyEdgeWidth())
+        write(self.decomp.makeGraphViz(cmod=self.cmod), "ecoli_textbook_bigg_split_poolman_combined.gv")
+        # self.assertTrue(self.decomp.verifyFullyBranched())
+        # self.assertTrue(self.decomp.verifyEdgeWidth())
         print("width = %d" % self.decomp.getWidth())
 
     def tearDown(self):
@@ -204,8 +203,8 @@ class TestEnumerateEcoliTextbookBigg(unittest.TestCase):
         lps = self.buildStrictLP(enum)
         #lpw = self.buildWeakLP(enum)
         modmatroid = self.matroid.contract([r for r in self.matroid.elems if r not in enum.module and r not in enum.fixed])
-        #print(modmatroid.basis)
-        #print(modmatroid.nbasis)
+        # print(modmatroid.basis)
+        # print(modmatroid.nbasis)
         print(enum.fixed)
         res = []
         for f in F:
@@ -220,19 +219,19 @@ class TestEnumerateEcoliTextbookBigg(unittest.TestCase):
                         interface = col * sol[r]
                     else:
                         interface += col * sol[r]
-                        
+
                 # check strict feasibility
-                res.append( (interface, self.isFeasible(enum, lps, f)) )
+                res.append((interface, self.isFeasible(enum, lps, f)))
                 print(f)
                 for m in range(len(interface)):
                     v = interface[m]
                     if abs(v) > 1e-4:
                         print('%s: %g' % (self.cmod.N.row[m], v))
-        #print(res)
-            
+        # print(res)
+
     def isVertex(self, modmatroid, face):
         return modmatroid.isIndependent(face)
-    
+
     def isFeasible(self, enum, lp, face):
         bounds = {}
         for r in enum.module:
@@ -249,16 +248,16 @@ class TestEnumerateEcoliTextbookBigg(unittest.TestCase):
                 if lb > 0:
                     return False
                 bounds[r] = (lb, 0)
- 
+
         lp.setBounds(bounds)
         lp.solve()
-        
+
         if lp.getSolutionStatus() != 'LPS_UNDEF':
             return lp.isFeasible()
         else:
             print('warning: unable to solve LP')
-            return True # if we keep it, we don't miss solutions
-    
+            return True  # if we keep it, we don't miss solutions
+
     def buildWeakLP(self, enum):
         lp = CBSolver.createSolver(self.cmod)
         for r in self.mnet.reactions:
@@ -268,8 +267,8 @@ class TestEnumerateEcoliTextbookBigg(unittest.TestCase):
                 span = r.getFVAdata()[3]
                 if (span > self.tol or isnan(span)):
                     # remove flux bounds
-                    lp.setLowerBounds({r.getId():None})
-                    lp.setUpperBounds({r.getId():None})
+                    lp.setLowerBounds({r.getId(): None})
+                    lp.setUpperBounds({r.getId(): None})
         # clear objective function
         lp.setObjective(reset=True)
         return lp
@@ -294,14 +293,15 @@ class TestEnumerateEcoliTextbookBigg(unittest.TestCase):
         for r in self.cmod.reactions:
             if r.getValue() > 1e-5:
                 face.add(r.getId())
-                print('%s: %g' % (r.getId(), r.getValue()) )
+                print('%s: %g' % (r.getId(), r.getValue()))
         self.assertTrue(enum.test(face))
         F = enum.enumerateMinimal()
         print(F)
 
+
 def write(result, filename):
     cDir = os.path.dirname(__file__)
-    result_dir = os.path.join(cDir,'../../results')
+    result_dir = os.path.join(cDir, '../../results')
     result_file = os.path.join(result_dir, filename)
     fo = open(result_file, mode='w')
     fo.write(result)

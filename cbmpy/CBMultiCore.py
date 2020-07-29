@@ -28,7 +28,12 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, subprocess, itertools, shutil, numpy
+import os
+import time
+import subprocess
+import itertools
+import shutil
+import numpy
 
 try:
     import pickle
@@ -41,13 +46,13 @@ from . import _multicorefva
 MULTIFVAFILE = __file__.replace('CBMultiCore', '_multicorefva')
 del _multicorefva
 
-#try:
+# try:
     #from . import _multicoreenvfva
     #MULTIENVFVAFILE = __file__.replace('CBMultiCore','_multicoreenvfva')
     #del _multicoreenvfva
     #HAVE_MULTIENV = True
-#except ImportError as ex:
-    #print(ex)
+# except ImportError as ex:
+    # print(ex)
     #HAVE_MULTIENV = False
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
@@ -55,15 +60,17 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 # this is to deal with itertools 2/3 differences
 try:
     itertools.__getattribute__('izip_longest')
+
     def grouper(n, iterable, padvalue=None):
         "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
-        return itertools.izip_longest(*[iter(iterable)]*n, fillvalue=padvalue)
+        return itertools.izip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
 except AttributeError:
     def grouper(n, iterable, padvalue=None):
         "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
-        return itertools.zip_longest(*[iter(iterable)]*n, fillvalue=padvalue)
+        return itertools.zip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
 
-def runMultiCoreFVA(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower',\
+
+def runMultiCoreFVA(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower',
                     optPercentage=100.0, work_dir=None, quiet=True, debug=False, oldlpgen=False, markupmodel=True, procs=2):
     """
     Run a multicore FVA where:
@@ -108,45 +115,45 @@ def runMultiCoreFVA(fba, selected_reactions=None, pre_opt=True, tol=None, objF2c
             REAC.reduced_costs = fva[R][1]
     return fva, fvan
 
-#if HAVE_MULTIENV:
-    #def runMultiCoreMultiEnvFVA(lp, selected_reactions=None, tol=None, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False, procs=2):
-        #"""
-        #Run a multicore FVA where:
+# if HAVE_MULTIENV:
+    # def runMultiCoreMultiEnvFVA(lp, selected_reactions=None, tol=None, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False, procs=2):
+        # """
+        # Run a multicore FVA where:
 
-         #- *lp* is a multienvironment lp model instance
-         #- *procs* [default=2] number of processing threads (optimum seems to be about the number of physical cores)
+         # - *lp* is a multienvironment lp model instance
+         # - *procs* [default=2] number of processing threads (optimum seems to be about the number of physical cores)
 
-        #"""
+        # """
         #fN = os.path.join(work_dir, str(time.time()).split('.')[0])
         #lp.write(fN+'.lp', filetype='lp')
         #MEargs = [fN+'.lp', selected_reactions, tol, rhs_sense, optPercentage, work_dir, debug]
-        #print(MEargs)
-        #print(fN)
+        # print(MEargs)
+        # print(fN)
         #F = open(fN, 'wb')
         #pickle.dump(MEargs, F, protocol=-1)
-        #F.close()
+        # F.close()
         #subprocess.call(['python', MULTIENVFVAFILE, str(procs), fN])
         #F = open(fN, 'rb')
         #res = pickle.load(F)
-        #F.close()
-        #os.remove(fN)
+        # F.close()
+        # os.remove(fN)
 
         #fva = res[0]
         #fvan = res[1]
 
-        #if len(fva) == 1:
+        # if len(fva) == 1:
             #fva = fva[0]
             #fvan = fvan[0]
-        #elif len(fva) > 1:
+        # elif len(fva) > 1:
             #fva = numpy.vstack(fva)
             #fvan2 = []
-            #for n_ in fvan:
+            # for n_ in fvan:
                 #fvan2 += n_
             #fvan = fvan2
 
-        #return fva, fvan
-#else:
-    #def runMultiCoreMultiEnvFVA(lp, selected_reactions=None, tol=None, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False, procs=2):
+        # return fva, fvan
+# else:
+    # def runMultiCoreMultiEnvFVA(lp, selected_reactions=None, tol=None, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False, procs=2):
         #raise RuntimeError('\nMultiCore module not present')
 
 

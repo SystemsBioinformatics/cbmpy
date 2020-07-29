@@ -15,7 +15,12 @@ NO WARRANTY IS EXPRESSED OR IMPLIED.  USE AT YOUR OWN RISK.
 Brett G. Olivier
 """
 
-import os, time, numpy, itertools, subprocess, zipfile
+import os
+import time
+import numpy
+import itertools
+import subprocess
+import zipfile
 
 try:
     import cStringIO as csio
@@ -27,6 +32,7 @@ try:
 except ImportError:
     import pickle
 
+
 class SBWSEDMLWebApps:
     """
     Class that holds useful methods for using SBW Webapps via a SUDS provided soap client
@@ -37,7 +43,6 @@ class SBWSEDMLWebApps:
     SBWSEDMLURI = "http://sysbioapps.dyndns.org/SED-ML%20Web%20Tools/Services/SedMLService.asmx?WSDL"
     HAVE_SUDS = False
     _SED_CURRENT_ = False
-
 
     def __init__(self, url=None):
         """
@@ -99,6 +104,7 @@ class SBWSEDMLWebApps:
             print(ex)
         return g
 
+
 class SED(object):
     script = None
     xml = None
@@ -110,7 +116,7 @@ class SED(object):
     tasks = None
     datagens = None
     plots2d = None
-    reports= None
+    reports = None
     libSEDMLpath = None
     __sedscript__ = None
     __sedxml__ = None
@@ -171,35 +177,35 @@ class SED(object):
         mid = str(time.time()).split('.')[0]
         storeObj(model, os.path.join(self.sedpath, mid))
         del model
-        model = loadObj(os.path.join(self.sedpath, mid)+'.dat')
+        model = loadObj(os.path.join(self.sedpath, mid) + '.dat')
         if not self.models.has_key(id):
             self.models[id] = model
         else:
             self.models[id] = model
-        os.remove(os.path.join(self.sedpath, mid)+'.dat')
+        os.remove(os.path.join(self.sedpath, mid) + '.dat')
 
     def addSimulation(self, id, start, end, steps, output, initial=None, algorithm='KISAO:0000019'):
         if initial == None:
             initial = start
-        S = {'start' : start,
-             'initial' : initial,
-             'end' : end,
-             'steps' : steps,
-             'algorithm' : algorithm,
-             'output' : output,
-             'type' : 'sim'}
+        S = {'start': start,
+             'initial': initial,
+             'end': end,
+             'steps': steps,
+             'algorithm': algorithm,
+             'output': output,
+             'type': 'sim'}
         self.sims[id] = S
 
     def addSteadyState(self, id, output, algorithm='KISAO:0000437'):
-        self.sims[id] = {'algorithm' : algorithm,
-                           'output' : output,
-                           'type' : 'state'
-                           }
+        self.sims[id] = {'algorithm': algorithm,
+                         'output': output,
+                         'type': 'state'
+                         }
 
     def addTask(self, id, sim_id, model_id):
         assert self.sims.has_key(sim_id), '\nBad simId'
         assert self.models.has_key(model_id), '\nBad modelId'
-        self.tasks[id] = {'sim' : sim_id, 'model' : model_id}
+        self.tasks[id] = {'sim': sim_id, 'model': model_id}
 
     def addDataGenerator(self, var, task_id):
         if var.lower() == 'time':
@@ -207,7 +213,7 @@ class SED(object):
         dgId = 'dg_%s_%s' % (task_id, var)
         # dgId = '%s' % (var)
         varId = '%s_%s' % (var, self.cntr.next())
-        self.datagens[dgId] = {'varId' : varId, 'taskId' : task_id, 'var' : var}
+        self.datagens[dgId] = {'varId': varId, 'taskId': task_id, 'var': var}
 
     def addTaskDataGenerators(self, taskId):
         assert self.tasks.has_key(taskId), '\nBad taskId'
@@ -216,23 +222,23 @@ class SED(object):
             self.addDataGenerator(o_, taskId)
 
     def addPlot(self, plotId, plotName, listOfCurves):
-        self.plots2d[plotId] = {'name' : plotName,
-                                'curves' : listOfCurves}
+        self.plots2d[plotId] = {'name': plotName,
+                                'curves': listOfCurves}
 
     def addReport(self, id, name, columns):
-        self.reports[id] = {'name' : name,
-                            'columns' : columns
+        self.reports[id] = {'name': name,
+                            'columns': columns
                             }
+
     def addTaskPlot(self, taskId):
         plotId = '%s_plot' % taskId
         name = 'Plot generated for Task: %s' % taskId
         curves = []
         for o_ in self.sims[self.tasks[taskId]['sim']]['output']:
-            if o_ not in ['Time','TIME', 'time']:
+            if o_ not in ['Time', 'TIME', 'time']:
 
                 curves.append(('dg_%s_time' % (taskId), 'dg_%s_%s' % (taskId, o_)))
         self.addPlot(plotId, name, curves)
-
 
     def addTaskReport(self, taskId):
         repId = '%s_report' % taskId
@@ -253,7 +259,7 @@ class SED(object):
         for m_ in self.models:
             if not sedx:
                 mf = os.path.join(self.sedpath, '%s-%s.xml' % (self.id, m_))
-                tmp = (m_, str(os.path.join(self.sedpath,'%s-%s.xml' % (self.id, m_))))
+                tmp = (m_, str(os.path.join(self.sedpath, '%s-%s.xml' % (self.id, m_))))
             else:
                 if not os.path.exists(os.path.join(self.sedpath, 'sedxtmp')):
                     os.makedirs(os.path.join(self.sedpath, 'sedxtmp'))
@@ -266,10 +272,10 @@ class SED(object):
         for s_ in self.sims:
             if self.sims[s_]['type'] == 'sim':
                 S = self.sims[s_]
-                sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" %  (s_,\
-                        S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
+                sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" % (s_,
+                                                                                        S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
             elif self.sims[s_]['type'] == 'state':
-                sedscr.write("AddSteadyState('%s', '%s')\n" %  (s_, self.sims[s_]['algorithm']))
+                sedscr.write("AddSteadyState('%s', '%s')\n" % (s_, self.sims[s_]['algorithm']))
         sedscr.write('\n')
 
         for t_ in self.tasks:
@@ -282,7 +288,7 @@ class SED(object):
         for dg_ in self.datagens:
             D = self.datagens[dg_]
             sedscr.write("AddColumn('%s', [['%s', '%s', '%s']])\n" % (dg_, D['varId'], D['taskId'], D['var']))
-            dgMap.update({D['var'] : dg_})
+            dgMap.update({D['var']: dg_})
         sedscr.write('\n')
 
         for p_ in self.plots2d:
@@ -331,10 +337,10 @@ class SED(object):
         elif self.HAVE_LIBSEDML:
             assert os.path.exists(self.libSEDMLpath)
             #sedname = '%s.sed.xml' % (self.id)
-            #self.writeSedScript(sedx=sedx)
-            #if not sedx:
+            # self.writeSedScript(sedx=sedx)
+            # if not sedx:
                 #sf = os.path.join(self.sedpath, sedname)
-            #else:
+            # else:
                 #sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
             cmd = ['%s' % str(self.libSEDMLpath), '--fromScript', '%s' % str(self.__sedscript__), '%s' % str(sf)]
             try:
@@ -352,10 +358,10 @@ class SED(object):
             print('\nINFO: PySCeS will now try to connect via internet to: http://sysbioapps.dyndns.org ...\n(press <ctrl>+<c> to abort)')
             time.sleep(5)
             #sedname = '%s.sed.xml' % (self.id)
-            #self.writeSedScript(sedx=sedx)
-            #if not sedx:
+            # self.writeSedScript(sedx=sedx)
+            # if not sedx:
                 #sf = os.path.join(self.sedpath, sedname)
-            #else:
+            # else:
                 #sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
 
             F = open(self.__sedscript__, 'r')
@@ -411,7 +417,7 @@ class SED(object):
         - vc_org
 
         """
-        scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone/60/60)
+        scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone / 60 / 60)
         self.writeSedXML(sedx=True)
         sedxname = '%s.sed.omex' % (self.id)
         #sedxname = '%s.sed.omex.zip' % (self.id)
@@ -482,6 +488,7 @@ class SED(object):
         self.__sedscript__ = None
         print('COMBINE archive created: %s' % sf)
 
+
 class SEDCBMPY(SED):
     __cbmpy__ = None
     __excel_file__ = None
@@ -495,7 +502,6 @@ class SEDCBMPY(SED):
 
     def __init__(self, id, sedpath):
         super(SEDCBMPY, self).__init__(id, sedpath, libSEDMLpath=None, sbwsedmluri=None)
-
 
     def writeModelToCOMBINEarchive(self, mod, fname=None, directory=None, sbmlname=None, withExcel=True, vc_given='CBMPy', vc_family='Software', vc_email='None', vc_org='cbmpy.sourceforge.net', add_cbmpy_annot=True, add_cobra_annot=False, display_reactions=None):
         """
@@ -524,7 +530,7 @@ class SEDCBMPY(SED):
         self.cbm_sbml_name = sbmlname
         self.CBM_WITH_EXCEL = withExcel
         self.cbm_add_cbmpy_annot = add_cbmpy_annot
-        self.cbm_add_cobra_annot  = add_cobra_annot
+        self.cbm_add_cobra_annot = add_cobra_annot
 
         #sed = cbmpy.SED('test_model_1', cDir)
 
@@ -540,7 +546,6 @@ class SEDCBMPY(SED):
 
         self.writeCOMBINEArchive(vc_given, vc_family, vc_email, vc_org)
 
-
     def writeSBML(self, mod, mfile):
         if self.__cbmpy__ == None:
             import cbmpy
@@ -553,7 +558,6 @@ class SEDCBMPY(SED):
             self.__cbmpy__ = cbmpy
         self.__cbmpy__.writeModelToExcel97(mod, mfile)
 
-
     def writeSedScript(self, sedx=False, excel=True):
         sedscr = csio.StringIO()
         if not os.path.exists(self.sedpath):
@@ -561,7 +565,7 @@ class SEDCBMPY(SED):
         for m_ in self.models:
             if not sedx:
                 mf = os.path.join(self.sedpath, '%s-%s.xml' % (self.id, m_))
-                tmp = (m_, str(os.path.join(self.sedpath,'%s-%s.xml' % (self.id, m_))))
+                tmp = (m_, str(os.path.join(self.sedpath, '%s-%s.xml' % (self.id, m_))))
             else:
                 if not os.path.exists(os.path.join(self.sedpath, 'sedxtmp')):
                     os.makedirs(os.path.join(self.sedpath, 'sedxtmp'))
@@ -569,7 +573,7 @@ class SEDCBMPY(SED):
                 tmp = (m_, str('%s-%s.xml' % (self.id, m_)))
             self.writeSBML(self.models[m_], mf)
             if self.CBM_WITH_EXCEL:
-                mf2 = mf.replace('.xml','')
+                mf2 = mf.replace('.xml', '')
                 self.__excel_file__ = mf2
                 self.writeExcel(self.models[m_], mf2)
 
@@ -579,10 +583,10 @@ class SEDCBMPY(SED):
         for s_ in self.sims:
             if self.sims[s_]['type'] == 'sim':
                 S = self.sims[s_]
-                sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" %  (s_,\
-                        S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
+                sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" % (s_,
+                                                                                        S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
             elif self.sims[s_]['type'] == 'state':
-                sedscr.write("AddSteadyState('%s', '%s')\n" %  (s_, self.sims[s_]['algorithm']))
+                sedscr.write("AddSteadyState('%s', '%s')\n" % (s_, self.sims[s_]['algorithm']))
         sedscr.write('\n')
 
         for t_ in self.tasks:
@@ -595,7 +599,7 @@ class SEDCBMPY(SED):
         for dg_ in self.datagens:
             D = self.datagens[dg_]
             sedscr.write("AddColumn('%s', [['%s', '%s', '%s']])\n" % (dg_, D['varId'], D['taskId'], D['var']))
-            dgMap.update({D['var'] : dg_})
+            dgMap.update({D['var']: dg_})
         sedscr.write('\n')
 
         for p_ in self.plots2d:
@@ -631,7 +635,6 @@ class SEDCBMPY(SED):
         self.__sedscript__ = sf
         print('\nSED-ML script files written to:', sf)
 
-
     def writeCOMBINEArchive(self, vc_given='PySCeS', vc_family='Software', vc_email='', vc_org='pysces.sourceforge.net'):
         """
         Write a COMBINE archive using the following information:
@@ -642,7 +645,7 @@ class SEDCBMPY(SED):
         - vc_org
 
         """
-        scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone/60/60)
+        scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone / 60 / 60)
         self.writeSedXML(sedx=True)
         sedxname = '%s.sed.omex' % (self.id)
         #sedxname = '%s.sed.omex.zip' % (self.id)
@@ -727,11 +730,12 @@ def storeObj(obj, filename):
     Stores a Python *obj* as a serialised binary object in *filename*.dat
 
     """
-    filename = filename+'.dat'
+    filename = filename + '.dat'
     F = open(filename, 'wb')
     pickle.dump(obj, F, protocol=2)
     print('Object serialised as %s' % filename)
     F.close()
+
 
 def loadObj(filename):
     """

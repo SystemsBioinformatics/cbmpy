@@ -79,29 +79,31 @@ from .CBTools import deSerialize, deSerializeFromDisk
 from . import PyscesSED
 SED = PyscesSED.SEDCBMPY
 
-## this is now obsolete witht unit tests moved to the cbmpy-tests branch
-#try:
+# this is now obsolete witht unit tests moved to the cbmpy-tests branch
+# try:
     #__test_dir__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'nosetests')
     #test_set = 1
     #test_bundle = os.path.join(__test_dir__, 'cbmpy_test_bundle_v{}.zip.py'.format(test_set))
     #test_file = os.path.join(__test_dir__, 'installed.v{}'.format(test_set))
-    #if not os.path.exists(test_file):
+    # if not os.path.exists(test_file):
         #import zipfile
         #print('Installing test files (v{})...'.format(test_set))
         #zfile = zipfile.ZipFile(test_bundle, allowZip64=True)
-        #zfile.extractall(path=__test_dir__)
-        #zfile.close()
-        ##os.remove(test_bundle)
+        # zfile.extractall(path=__test_dir__)
+        # zfile.close()
+        # os.remove(test_bundle)
         #del zipfile, zfile
     #from . import nosetests
     #test = nosetests.run
     #del nosetests, test_bundle, test_file, test_set
-#except ImportError:
-    #def test():
+# except ImportError:
+    # def test():
         #print("ERROR: Tests not installed")
+
 
 def test():
     print('\nCBMPy test suite is now separate from CMBPy source, see https://github.com/SystemsBioinformatics/cbmpy for details.\n')
+
 
 del os
 
@@ -110,11 +112,11 @@ if not __SILENT_START__:
     rev = CBConfig.__CBCONFIG__['VERSION_STATUS']
     #print('Release: {}'.format(__version__.replace('.{}'.format(rev),'')))
     print('Revision: r{}'.format(CBConfig.__CBCONFIG__['VERSION_STATUS']))
-    #print 'pysces.model_dir = ' + model_dir
-    #print 'pysces.output_dir = ' + output_dir
+    # print 'pysces.model_dir = ' + model_dir
+    # print 'pysces.output_dir = ' + output_dir
 
     print('\n\n***********************************************************************')
-    print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling       *'.format(__version__.replace('.{}'.format(rev),'')))
+    print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling       *'.format(__version__.replace('.{}'.format(rev), '')))
     print('*                http://cbmpy.sourceforge.net                         *')
     print('* Copyright(C) Brett G. Olivier 2014 - 2019                           *')
     print('* Dept. of Systems Bioinformatics                                     *')

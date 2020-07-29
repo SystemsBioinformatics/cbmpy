@@ -22,11 +22,11 @@ Contact email: bgoli@users.sourceforge.net
 Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
-## gets rid of "invalid variable name" info
+# gets rid of "invalid variable name" info
 # pylint: disable=C0103
-## gets rid of "line to long" info
+# gets rid of "line to long" info
 # pylint: disable=C0301
-## use with caution: gets rid of module xxx has no member errors (run once enabled)
+# use with caution: gets rid of module xxx has no member errors (run once enabled)
 # pylint: disable=E1101
 
 # preparing for Python 3 port
@@ -34,7 +34,9 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-import os, time, gc
+import os
+import time
+import gc
 # this is a hack that needs to be streamlined a bit
 try:
     import cStringIO as csio
@@ -67,10 +69,10 @@ __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
 
-##  class FluxSensitivity(object):
-    ##  """
-    ##  Contains variable (Flux) sensitivities and reduced cost
-    ##  """
+# class FluxSensitivity(object):
+    # """
+    # Contains variable (Flux) sensitivities and reduced cost
+    # """
     ##  flux = None
     ##  lower_bound_low = None
     ##  lower_bound_high = None
@@ -83,57 +85,57 @@ __version__ = __CBCONFIG__['VERSION']
     ##  objective_coefficient_high = None
     ##  reduced_cost = None
 
-    ##  def getUpperBoundRange(self):
-        ##  """
-        ##  Returns the absolute range of the upper bound.
-        ##  """
-        ##  return abs(self.upper_bound_high-self.upper_bound_low)
+    # def getUpperBoundRange(self):
+        # """
+        # Returns the absolute range of the upper bound.
+        # """
+        # return abs(self.upper_bound_high-self.upper_bound_low)
 
-    ##  def getLowerBoundRange(self):
-        ##  """
-        ##  Returns the absolute range of the lower bound.
-        ##  """
-        ##  return abs(self.lower_bound_high-self.lower_bound_low)
+    # def getLowerBoundRange(self):
+        # """
+        # Returns the absolute range of the lower bound.
+        # """
+        # return abs(self.lower_bound_high-self.lower_bound_low)
 
-    ##  def getObjectiveCoefficientRange(self):
-        ##  """
-        ##  Returns the absolute range of the objective flux coefficient.
-        ##  """
-        ##  return abs(self.objective_coefficient_high-objective_coefficient_low)
+    # def getObjectiveCoefficientRange(self):
+        # """
+        # Returns the absolute range of the objective flux coefficient.
+        # """
+        # return abs(self.objective_coefficient_high-objective_coefficient_low)
 
-##  class RHSsensitivity(object):
-    ##  """
-    ##  Class containing RHS sensitivities
-    ##  """
+# class RHSsensitivity(object):
+    # """
+    # Class containing RHS sensitivities
+    # """
     ##  species = None
     ##  rhs_low = None
     ##  rhs_high = None
     ##  rhs_value = None
 
-    ##  def getRHSRange(self):
-        ##  """
-        ##  Returns the absolute range of the objective flux coefficient.
-        ##  """
-        ##  return abs(self.rhs_high-rhs_low)
+    # def getRHSRange(self):
+        # """
+        # Returns the absolute range of the objective flux coefficient.
+        # """
+        # return abs(self.rhs_high-rhs_low)
 
-##  class Sensitivities(object):
-    ##  """
-    ##  Container class that holds sensitivities
-    ##  """
+# class Sensitivities(object):
+    # """
+    # Container class that holds sensitivities
+    # """
     ##  flux_ids = None
     ##  species_ids = None
 
-    ##  def __init__(self):
+    # def __init__(self):
         ##  self.flux_ids = []
         ##  self.species_ids = []
 
-    ##  def addFluxSensitivity(self, fsense):
+    # def addFluxSensitivity(self, fsense):
         ##  self.__setattr__(fsense.flux, fsense)
-        ##  self.flux_ids.append(fsense.flux)
+        # self.flux_ids.append(fsense.flux)
 
-    ##  def addRHSsensitivity(self, rhsense):
+    # def addRHSsensitivity(self, rhsense):
         ##  self.__setattr__(rhsense.species, rhsense)
-        ##  self.species_ids.append(rhsense.species)
+        # self.species_ids.append(rhsense.species)
 
 
 """
@@ -151,9 +153,9 @@ CPLX_RESULT_STREAM_IO = None
 CPLX_SILENT_MODE = True
 
 CPLX_LP_PARAMETERS = {
-    'simplex.tolerances.optimality' : 1e-6,
-    'simplex.tolerances.feasibility' : 1e-6
-    }
+    'simplex.tolerances.optimality': 1e-6,
+    'simplex.tolerances.feasibility': 1e-6
+}
 
 
 def cplx_fixConSense(operator):
@@ -164,9 +166,9 @@ def cplx_fixConSense(operator):
 
     """
 
-    if operator in ['<=', '<','L']:
+    if operator in ['<=', '<', 'L']:
         oPr = 'L'
-    elif operator in ['>=', '>','G']:
+    elif operator in ['>=', '>', 'G']:
         oPr = 'G'
     elif operator in ['=', 'E']:
         oPr = 'E'
@@ -184,14 +186,14 @@ def cplx_constructLPfromFBA(fba, fname=None):
     '''
     _Stime = time.time()
     # defines
-    #csense = 'E' # constraint sense
+    # csense = 'E' # constraint sense
 
     # define model and add variables
     lp = cplex.Cplex()
     # define simplex tolerances for the model
     lp.parameters.simplex.tolerances.optimality.set(CPLX_LP_PARAMETERS['simplex.tolerances.optimality'])
     lp.parameters.simplex.tolerances.feasibility.set(CPLX_LP_PARAMETERS['simplex.tolerances.feasibility'])
-    #print(lp.parameters.simplex.get_changed())
+    # print(lp.parameters.simplex.get_changed())
     lp.set_problem_name('%s' % (fba.getId()))
     lp.variables.add(names=fba.N.col)
     try:
@@ -208,27 +210,27 @@ def cplx_constructLPfromFBA(fba, fname=None):
     except AttributeError:
         print('\nWARNING(CPLEX create LP): no objective function defined')
 
-    ## old fashioned way
+    # old fashioned way
     #told = time.time()
     #lin_expr = []
     #rhs =[]
     #names = []
     #senses = []
-    #for lc_ in range(fba.N.shape[0]):
+    # for lc_ in range(fba.N.shape[0]):
         #ids = []
         #val = []
-        #for c_ in range(len(fba.N.array[lc_])):
-            #if fba.N.array[lc_, c_] != 0.0:
-                #ids.append(fba.N.col[c_])
+        # for c_ in range(len(fba.N.array[lc_])):
+            # if fba.N.array[lc_, c_] != 0.0:
+                # ids.append(fba.N.col[c_])
                 #val.append(fba.N.array[lc_, c_])
         #lin_expr.append(cplex.SparsePair(ids, val))
-        #rhs.append(fba.N.RHS[lc_])
-        #senses.append(fba.N.operators[lc_])
-        #names.append(fba.N.row[lc_])
+        # rhs.append(fba.N.RHS[lc_])
+        # senses.append(fba.N.operators[lc_])
+        # names.append(fba.N.row[lc_])
     #lp.linear_constraints.add(lin_expr=lin_expr, senses=senses, rhs=rhs, names=names)
-    #print 'Old style lc:', time.time() - told
+    # print 'Old style lc:', time.time() - told
 
-    ## the numpy way
+    # the numpy way
     #tnew = time.time()
     lin_expr = []
     rhs = []
@@ -261,13 +263,13 @@ def cplx_constructLPfromFBA(fba, fname=None):
         rhs.append(RHSmat[n])
         senses.append(cplx_fixConSense(fba.N.operators[n]))
         names.append(fba.N.row[n])
-    #print senses
+    # print senses
     lp.linear_constraints.add(lin_expr=lin_expr, senses=senses, rhs=rhs, names=names)
-    #print 'New style lc:', time.time() - tnew
+    # print 'New style lc:', time.time() - tnew
 
     # add user defined constraints
     if fba.CM != None:
-        ## the numpy way
+        # the numpy way
         #t2new = time.time()
         lin_expr = []
         rhs = []
@@ -283,7 +285,7 @@ def cplx_constructLPfromFBA(fba, fname=None):
             senses.append(cplx_fixConSense(fba.CM.operators[n]))
             names.append(fba.CM.row[n])
         lp.linear_constraints.add(lin_expr=lin_expr, senses=senses, rhs=rhs, names=names)
-        #print 'New style lc:', time.time() - t2new
+        # print 'New style lc:', time.time() - t2new
 
     # add bounds
     lb = []
@@ -314,10 +316,11 @@ def cplx_constructLPfromFBA(fba, fname=None):
 
     print('\ncplx_constructLPfromFBA time: {}\n'.format(time.time() - _Stime))
     if fname != None:
-        lp.write(fname+'.lp', filetype='lp')
+        lp.write(fname + '.lp', filetype='lp')
     return lp
 
-def cplx_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='unscaled', with_sensitivity=False,\
+
+def cplx_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='unscaled', with_sensitivity=False,
                       del_intermediate=False, build_n=True, quiet=False, oldlpgen=False, method='o'):
     """
     Optimize a model and add the result of the optimization to the model object
@@ -399,6 +402,7 @@ def cplx_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='
         del flp
         return objv
 
+
 def cplx_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     """
     Sets the FBA solution from a CPLEX solution to an FBA object
@@ -438,6 +442,7 @@ def cplx_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     else:
         setReducedCosts(fba, {})
 
+
 def getReducedCosts(fba):
     """
     Get a dictionary of reduced costs for each reaction/flux
@@ -445,8 +450,9 @@ def getReducedCosts(fba):
     """
     output = {}
     for r in fba.reactions:
-        output.update({r.getId() : r.reduced_cost})
+        output.update({r.getId(): r.reduced_cost})
     return output
+
 
 def setReducedCosts(fba, reduced_costs):
     """
@@ -465,6 +471,7 @@ def setReducedCosts(fba, reduced_costs):
                 r.reduced_cost = reduced_costs[r.getId()]
             else:
                 r.reduced_cost = None
+
 
 def cplx_setOutputStreams(lp, mode='default'):
     """
@@ -515,6 +522,7 @@ def cplx_setOutputStreams(lp, mode='default'):
         lp.set_log_stream(os.sys.stdout)
         lp.set_results_stream(os.sys.stdout)
 
+
 def cplx_getModelFromLP(lptFile, Dir=None):
     """
     Load a LPT (CPLEX format) file and return a CPLX LP model
@@ -531,6 +539,7 @@ def cplx_getModelFromLP(lptFile, Dir=None):
     lp.parameters.simplex.tolerances.optimality.set(CPLX_LP_PARAMETERS['simplex.tolerances.optimality'])
     lp.parameters.simplex.tolerances.feasibility.set(CPLX_LP_PARAMETERS['simplex.tolerances.feasibility'])
     return lp
+
 
 def cplx_getCPLEXModelFromLP(lptFile, Dir=None):
     """
@@ -556,6 +565,7 @@ def cplx_getModelFromObj(fba):
     x = cplx_getModelFromLP(LPF)
     print('\ncplx_getModelFromObj time: {}\n'.format(time.time() - _Stime))
     return x
+
 
 def cplx_Solve(c, method='o'):
     alg = c.parameters.lpmethod.values
@@ -618,6 +628,7 @@ def cplx_Solve(c, method='o'):
             print("Objective value = ", c.solution.get_objective_value())
         return status
 
+
 def cplx_setMIPGapTolerance(c, tol):
     """
     Sets the the relative MIP gap tolerance
@@ -626,8 +637,9 @@ def cplx_setMIPGapTolerance(c, tol):
     print('New MIP gap tolerance', c.parameters.mip.tolerances.mipgap.get())
 
 # TODO
-#def cplx_setSolverParameters(c, parset):
-    #pass
+# def cplx_setSolverParameters(c, parset):
+    # pass
+
 
 def cplx_SolveMILP(c, auto_mipgap=False):
     """
@@ -641,7 +653,7 @@ def cplx_SolveMILP(c, auto_mipgap=False):
         if c.solution.get_status() == c.solution.status.optimal_tolerance:
             if auto_mipgap:
                 while c.parameters.mip.tolerances.mipgap.get() >= c.parameters.mip.tolerances.absmipgap.get():
-                    c.parameters.mip.tolerances.mipgap.set(c.parameters.mip.tolerances.mipgap.get()/10.0)
+                    c.parameters.mip.tolerances.mipgap.set(c.parameters.mip.tolerances.mipgap.get() / 10.0)
                     c.solve()
                     if c.solution.get_status() == c.solution.status.MIP_optimal:
                         break
@@ -653,6 +665,7 @@ def cplx_SolveMILP(c, auto_mipgap=False):
     except cplex.exceptions.CplexSolverError as ex:
         print("\nException raised during solve\n")
         print(ex)
+
 
 def cplx_getOptimalSolution(c):
     """
@@ -669,7 +682,7 @@ def cplx_getOptimalSolution(c):
         s_val = c.solution.get_values()
         s_name = c.variables.get_names()
         for n in range(len(s_name)):
-            fba_sol.update({s_name[n] : s_val[n]})
+            fba_sol.update({s_name[n]: s_val[n]})
     except Exception as ex:
         print(ex)
         print('WARNING: No solution to get')
@@ -679,6 +692,7 @@ def cplx_getOptimalSolution(c):
         objf_val = None
     del s_name, s_val
     return fba_sol, objf_name, objf_val
+
 
 def cplx_getOptimalSolution2(c, names):
     """
@@ -698,9 +712,10 @@ def cplx_getOptimalSolution2(c, names):
         print('No solution attribute on CPLEX object')
     fba_sol = {}
     for n in range(len(s_name)):
-        fba_sol.update({s_name[n] : s_val[n]})
+        fba_sol.update({s_name[n]: s_val[n]})
     del names, s_val
     return fba_sol, objf_name, objf_val
+
 
 def cplx_writeLPsolution(fba_sol, objf_name, fname, Dir=None, separator=','):
     """
@@ -725,6 +740,7 @@ def cplx_writeLPsolution(fba_sol, objf_name, fname, Dir=None, separator=','):
     F.close()
     print('CSV exported to {}'.format(fname))
 
+
 def cplx_getShadowPrices(c):
     """
     Returns a dictionary of shadow prices containing 'Rid' : (lb, rhs, ub)
@@ -737,8 +753,9 @@ def cplx_getShadowPrices(c):
     rhs_val = c.linear_constraints.get_rhs()
     output = {}
     for s in range(c.linear_constraints.get_num()):
-        output.update({c_names[s] : (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})
+        output.update({c_names[s]: (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})
     return output
+
 
 def cplx_getReducedCosts(c, scaled=False):
     """
@@ -758,14 +775,15 @@ def cplx_getReducedCosts(c, scaled=False):
     for v in range(len(s_name)):
         if scaled:
             try:
-                r_val = r_costs[v]*s_val[v]/objf_val
+                r_val = r_costs[v] * s_val[v] / objf_val
             except Exception:
                 r_val = 0.0
         else:
             r_val = r_costs[v]
-        output.update({s_name[v] : r_val})
+        output.update({s_name[v]: r_val})
     del s_name, r_costs, s_val
     return output
+
 
 def cplx_getSensitivities(c):
     """
@@ -800,13 +818,14 @@ def cplx_getSensitivities(c):
     red_cost = c.solution.get_reduced_costs()
 
     for r in range(c.variables.get_num()):
-        SENSE_BND.update({j_names[r] : (bnd_sense[r][0], bnd_sense[r][1], bnd_sense[r][2], bnd_sense[r][3])})
-        SENSE_OBJ.update({j_names[r] : (red_cost[r], obj_sense[r][0], obj_coeff[r], obj_sense[r][1])})
+        SENSE_BND.update({j_names[r]: (bnd_sense[r][0], bnd_sense[r][1], bnd_sense[r][2], bnd_sense[r][3])})
+        SENSE_OBJ.update({j_names[r]: (red_cost[r], obj_sense[r][0], obj_coeff[r], obj_sense[r][1])})
 
     for s in range(c.linear_constraints.get_num()):
-        SENSE_RHS.update({c_names[s] : (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})
+        SENSE_RHS.update({c_names[s]: (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})
 
     return (SENSE_OBJ, SENSE_RHS, SENSE_BND)
+
 
 def cplx_getDualValues(c):
     """
@@ -821,7 +840,7 @@ def cplx_getDualValues(c):
     d_values = c.solution.get_dual_values()
     output = {}
     for j in range(len(d_names)):
-        output.update({d_names[j] : d_values[j]})
+        output.update({d_names[j]: d_values[j]})
     return output
 
 
@@ -865,15 +884,16 @@ def cplx_getSolutionStatus(c):
     elif status == c.solution.status.MIP_optimal:
         print('MILP optimal')
         return 'MILP_OPT'
-    #elif status == c.solution.status.MIP_optimal:
+    # elif status == c.solution.status.MIP_optimal:
         #print('MILP optimal')
-        #return 'MILP_OPT'
+        # return 'MILP_OPT'
     elif status == c.solution.status.optimal_tolerance:
         print('MILP optimal within gap tolerance')
         return 'MILP_OPTTOL'
     else:
         print('Unknown solution status ({}): \"{}\"'.format(c.solution.get_status(), c.solution.get_status_string()))
         return 'LPS_NONE'
+
 
 def cplx_setObjective(c, pid, expr=None, sense='maximize', reset=True):
     """
@@ -889,8 +909,10 @@ def cplx_setObjective(c, pid, expr=None, sense='maximize', reset=True):
 
     """
     sense = sense.lower()
-    if sense == 'max': sense = 'maximize'
-    if sense == 'min': sense = 'minimize'
+    if sense == 'max':
+        sense = 'maximize'
+    if sense == 'min':
+        sense = 'minimize'
     if sense in ['maximise', 'minimise']:
         sense = sense.replace('se', 'ze')
     assert sense in ['maximize', 'minimize'], "\nsense must be ['maximize', 'minimize'] not %s" % sense
@@ -904,17 +926,21 @@ def cplx_setObjective(c, pid, expr=None, sense='maximize', reset=True):
         del new_obj, vartemp
     if expr != None:
         expr = [(e[1], e[0]) for e in expr]
-        if __DEBUG__: print(expr)
-        #print expr
+        if __DEBUG__:
+            print(expr)
+        # print expr
         c.objective.set_linear(expr)
         del expr
 
     if sense == 'minimize':
         c.objective.set_sense(c.objective.sense.minimize)
-        if __DEBUG__: print('Set minimizing')
+        if __DEBUG__:
+            print('Set minimizing')
     else:
         c.objective.set_sense(c.objective.sense.maximize)
-        if __DEBUG__: print('Set maximizing')
+        if __DEBUG__:
+            print('Set maximizing')
+
 
 def cplx_setObjective2(c, pid, names, expr=None, sense='maximize', reset=True):
     """
@@ -924,8 +950,10 @@ def cplx_setObjective2(c, pid, names, expr=None, sense='maximize', reset=True):
 
     """
     sense = sense.lower()
-    if sense == 'max': sense = 'maximize'
-    if sense == 'min': sense = 'minimize'
+    if sense == 'max':
+        sense = 'maximize'
+    if sense == 'min':
+        sense = 'minimize'
     if sense in ['maximise', 'minimise']:
         sense = sense.replace('se', 'ze')
     assert sense in ['maximize', 'minimize'], "\nsense must be ['maximize', 'minimize'] not %s" % sense
@@ -940,15 +968,18 @@ def cplx_setObjective2(c, pid, names, expr=None, sense='maximize', reset=True):
         del new_obj, names
     if expr != None:
         expr = [(e[1], e[0]) for e in expr]
-        if __DEBUG__: print(expr)
+        if __DEBUG__:
+            print(expr)
         c.objective.set_linear(expr)
         del expr
     if sense == 'minimize':
         c.objective.set_sense(c.objective.sense.minimize)
-        if __DEBUG__: print('Set minimizing')
+        if __DEBUG__:
+            print('Set minimizing')
     else:
         c.objective.set_sense(c.objective.sense.maximize)
-        if __DEBUG__: print('Set maximizing')
+        if __DEBUG__:
+            print('Set maximizing')
 
 
 def cplx_setSingleConstraint(c, pid, expr, sense='E', rhs=0.0):
@@ -961,11 +992,13 @@ def cplx_setSingleConstraint(c, pid, expr, sense='E', rhs=0.0):
     c.linear_constraints.add(lin_expr=[lexp], senses=sense, rhs=[rhs], names=[pid])
     del ind, val, lexp
 
+
 def cplx_setBounds(c, pid, lb=None, ub=None):
     if lb != None:
         c.variables.set_lower_bounds(pid, lb)
     if ub != None:
         c.variables.set_upper_bounds(pid, ub)
+
 
 def cplx_writeLPtoLPTfile(c, filename, title=None, Dir=None):
     """
@@ -976,8 +1009,9 @@ def cplx_writeLPtoLPTfile(c, filename, title=None, Dir=None):
         filename = os.path.join(Dir, filename)
     if title != None:
         c.set_problem_name(title)
-    c.write(filename+'.lp', filetype='lp')
-    print('LP output as {}'.format(filename+'.lp'))
+    c.write(filename + '.lp', filetype='lp')
+    print('LP output as {}'.format(filename + '.lp'))
+
 
 def cplx_runInputScan(fba, exDict, wDir, input_lb=-10.0, input_ub=0.0, writeHformat=False, rationalLPout=False):
     """
@@ -1010,8 +1044,9 @@ def cplx_runInputScan(fba, exDict, wDir, input_lb=-10.0, input_ub=0.0, writeHfor
         cplx_Solve(fbalp)
         if cplx_getSolutionStatus(fbalp) == 'LPS_OPT':
             opt = cplx_getOptimalSolution(fbalp)[2]
-            if __DEBUG__: print('Optimal growth rate %s(%s) = %s' % (modname, inpt, opt))
-            optimal_growth_rates.update({inpt : opt})
+            if __DEBUG__:
+                print('Optimal growth rate %s(%s) = %s' % (modname, inpt, opt))
+            optimal_growth_rates.update({inpt: opt})
             if writeHformat:
                 CBWrite.WriteModelHFormatFBA(fba, ine_dir, use_rational=False)
                 CBWrite.WriteModelHFormatFBA(fba, ine_dir, use_rational=True)
@@ -1026,30 +1061,30 @@ def cplx_runInputScan(fba, exDict, wDir, input_lb=-10.0, input_ub=0.0, writeHfor
     fba.id = fbaid0
     return optimal_growth_rates, infeasible_inputs
 
-##'''
-##def cplx_runInputScanWithFVA(fba, exDict, wDir, input_lb=-10.0, input_ub=0.0, writeHformat=False, rationalLPout=False, NaNonFail=False):
-    ##"""
-    ##scans all inputs
+# '''
+# def cplx_runInputScanWithFVA(fba, exDict, wDir, input_lb=-10.0, input_ub=0.0, writeHformat=False, rationalLPout=False, NaNonFail=False):
+    # """
+    # scans all inputs
 
-    ##"""
+    # """
     ##raise NotImplementedError('Not yet anyway')
 
     ##debug_dir = os.path.join(wDir, 'lpt')
     ##ine_dir = os.path.join(wDir, 'ine')
     ##rat_dir = os.path.join(wDir, 'eslv')
-    ##if not os.path.exists(debug_dir):
-        ##os.mkdir(debug_dir)
-    ##if writeHformat and not os.path.exists(ine_dir):
-        ##os.mkdir(ine_dir)
-    ##if rationalLPout and not os.path.exists(rat_dir):
-        ##os.mkdir(rat_dir)
+    # if not os.path.exists(debug_dir):
+        # os.mkdir(debug_dir)
+    # if writeHformat and not os.path.exists(ine_dir):
+        # os.mkdir(ine_dir)
+    # if rationalLPout and not os.path.exists(rat_dir):
+        # os.mkdir(rat_dir)
 
     ##optimal_growth_rates = {}
     ##infeasible_inputs = []
     ##modname = fba.sourcefile
     ##fbaid0 = fba.id
     ##fva_out = []
-    ##for inpt in exDict:
+    # for inpt in exDict:
         ##fba.id = '%s(%s)' % (modname, inpt)
         ##ilb = fba.getFluxBoundByReactionID(inpt, 'lower').value
         ##iub = fba.getFluxBoundByReactionID(inpt, 'upper').value
@@ -1057,31 +1092,32 @@ def cplx_runInputScan(fba, exDict, wDir, input_lb=-10.0, input_ub=0.0, writeHfor
         ##fba.setReactionBound(inpt, input_ub, 'upper')
         ##LPfile = CBWrite.writeModelLP(fba, work_dir=debug_dir)
         ##fbalp = PyscesGLPK.glpk_getModelFromLPT(LPfile, debug_dir)
-        ####  fbalp.solve()
-        ##PyscesGLPK.glpk_Solve(fbalp)
-        ##if fbalp.solution_status == 'LPS_OPT':
+        # fbalp.solve()
+        # PyscesGLPK.glpk_Solve(fbalp)
+        # if fbalp.solution_status == 'LPS_OPT':
             ##opt = PyscesGLPK.glpk_getOptimalSolution(fbalp)[2]
-            ##if __DEBUG__: print 'Optimal growth rate %s(%s) = %s' % (modname, inpt, opt)
+            # if __DEBUG__: print 'Optimal growth rate %s(%s) = %s' % (modname, inpt, opt)
             ##optimal_growth_rates.update({inpt : opt})
-            ##if writeHformat:
+            # if writeHformat:
                 ##CBWrite.WriteModelHFormatFBA(fba, ine_dir, realnum=False)
                 ##CBWrite.WriteModelHFormatFBA(fba, ine_dir, realnum=True)
-            ##if rationalLPout:
+            # if rationalLPout:
                 ##tmp = CBWrite.writeModelLP(fba, work_dir=rat_dir)
             ##PyscesGLPK.glpk_addOptimalSolutionAsConstraint(fbalp, tol=None, bound='lower', optPercentage=100.0, reset_of=True)
-            ##OUTPUT_ARRAY, ncol_names = doFluxVariability(fbalp, ignore_fluxes=[], write_debug_lps=False,\
-                                        ##pause_on_skip=True, model_name=fba.id, work_dir=wDir)
+            # OUTPUT_ARRAY, ncol_names = doFluxVariability(fbalp, ignore_fluxes=[], write_debug_lps=False,\
+                                        # pause_on_skip=True, model_name=fba.id, work_dir=wDir)
             ##fva_out.append((inpt,OUTPUT_ARRAY, ncol_names))
             ##del OUTPUT_ARRAY, ncol_names
-        ##else:
-            ##print 'GLPK returned an error code: %s' % fbalp.solution_status
-            ##infeasible_inputs.append(inpt)
-            ##os.remove(LPfile)
+        # else:
+            # print 'GLPK returned an error code: %s' % fbalp.solution_status
+            # infeasible_inputs.append(inpt)
+            # os.remove(LPfile)
         ##fba.setReactionBound(inpt, ilb, 'lower')
         ##fba.setReactionBound(inpt, iub, 'upper')
     ##fba.id = fbaid0
-    ##return optimal_growth_rates, infeasible_inputs, fva_out
-##'''
+    # return optimal_growth_rates, infeasible_inputs, fva_out
+# '''
+
 
 def cplx_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen=False, with_reduced_costs='unscaled', method='o'):
     """
@@ -1134,7 +1170,7 @@ def cplx_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
             OPTIMAL_PRESOLUTION = False
             pre_sol = {}
             for r in fba.reactions:
-                pre_sol.update({r.getId() : 0.0})
+                pre_sol.update({r.getId(): 0.0})
                 r.reduced_cost = 0.0
             pre_oval = 0.0
             pre_oid = 'None'
@@ -1142,7 +1178,7 @@ def cplx_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
     else:
         pre_sol = {}
         for r in fba.reactions:
-            pre_sol.update({r.getId() : 0.0})
+            pre_sol.update({r.getId(): 0.0})
         if objF2constr:
             pre_oval = fba.objectives[fba.activeObjIdx].value
             pre_oid = fba.objectives[fba.activeObjIdx].getId()
@@ -1152,6 +1188,7 @@ def cplx_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
     for r in fba.reactions:
         r.value = pre_sol[r.id]
     return cpx, pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS
+
 
 def cplx_func_SetObjectiveFunctionAsConstraint(cpx, rhs_sense, oval, tol, optPercentage):
     """
@@ -1191,16 +1228,16 @@ def cplx_func_SetObjectiveFunctionAsConstraint(cpx, rhs_sense, oval, tol, optPer
         ##  cplx_setSingleConstraint(cpx, 'ObjCstr', expr=[(1, pre_oid)], sense='E', rhs=oval)
     elif rhs_sense == 'upper':
         if tol != None:
-            ub = numpy.ceil(oval/tol)*tol*optPercentage/100.0
+            ub = numpy.ceil(oval / tol) * tol * optPercentage / 100.0
         else:
-            ub = oval*(optPercentage/100.0)
+            ub = oval * (optPercentage / 100.0)
         cplx_setSingleConstraint(cpx, 'ObjCstr', expr=new_constraint, sense='L', rhs=ub)
         ##  cplx_setSingleConstraint(cpx, 'ObjCstr', expr=[(1, pre_oid)], sense='L', rhs=ub)
     elif rhs_sense == 'lower':
         if tol != None:
-            lb = numpy.floor(oval/tol)*tol*optPercentage/100.0
+            lb = numpy.floor(oval / tol) * tol * optPercentage / 100.0
         else:
-            lb = oval*(optPercentage/100.0)
+            lb = oval * (optPercentage / 100.0)
         cplx_setSingleConstraint(cpx, 'ObjCstr', expr=new_constraint, sense='G', rhs=lb)
         ##  cplx_setSingleConstraint(cpx, 'ObjCstr', expr=[(1, pre_oid)], sense='G', rhs=lb)
     else:
@@ -1306,10 +1343,10 @@ def cplx_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
 
     # this removes the objective function
     ##  fba_obj_ids = fba.getActiveObjective().getFluxObjectiveReactions()
-    ##  print fba_obj_ids
-    ##  for R in fba_obj_ids:
-        ##  if R in selected_reactions:
-            ##  selected_reactions.pop(selected_reactions.index(R))
+    # print fba_obj_ids
+    # for R in fba_obj_ids:
+        # if R in selected_reactions:
+            # selected_reactions.pop(selected_reactions.index(R))
     ##  del R, fba_obj_ids
     NUM_FLX = len(selected_reactions)
     print('Total number of reactions: {}'.format(NUM_FLX))
@@ -1334,10 +1371,10 @@ def cplx_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
     obj_func = []
 
     for r in range(len(selected_reactions)):
-        name1 = abs_selected_reactions[r]+'_c1'
+        name1 = abs_selected_reactions[r] + '_c1'
         lin_expr1 = cplex.SparsePair(ind=[selected_reactions[r], abs_selected_reactions[r]], val=[1.0, -1.0])
         sense1 = 'L'
-        name2 = abs_selected_reactions[r]+'_c2'
+        name2 = abs_selected_reactions[r] + '_c2'
         lin_expr2 = cplex.SparsePair(ind=[selected_reactions[r], abs_selected_reactions[r]], val=[1.0, 1.0])
         sense2 = 'G'
         names.append(name1)
@@ -1350,7 +1387,7 @@ def cplx_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
         senses.append(sense2)
         rhss.append(0.0)
         range_values.append(0.0)
-        ##  print selected_reactions[r], abs_selected_reactions[r]
+        # print selected_reactions[r], abs_selected_reactions[r]
         if selected_reactions[r] in objective_coefficients:
             obj_func.append((objective_coefficients[selected_reactions[r]], abs_selected_reactions[r]))
         else:
@@ -1389,6 +1426,7 @@ def cplx_setSolutionStatusToModel(m, lp):
     """
     m.SOLUTION_STATUS_INT = lp.solution.get_status()
     m.SOLUTION_STATUS = cplx_getSolutionStatus(lp)
+
 
 def cplx_MinimizeNumActiveFluxes(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower', optPercentage=100.0, work_dir=None, quiet=False, debug=False, objective_coefficients=None, return_lp_obj=False, populate=None, oldlpgen=False):
     """
@@ -1480,21 +1518,21 @@ def cplx_MinimizeNumActiveFluxes(fba, selected_reactions=None, pre_opt=True, tol
 
     # this removes the objective function (redundant I think)
     #fba_obj_ids = fba.getActiveObjective().getFluxObjectiveReactions()
-    #print fba_obj_ids
-    #for R in fba_obj_ids:
-        #if R in selected_reactions:
-            #selected_reactions.pop(selected_reactions.index(R))
+    # print fba_obj_ids
+    # for R in fba_obj_ids:
+        # if R in selected_reactions:
+            # selected_reactions.pop(selected_reactions.index(R))
     #del R, fba_obj_ids
     NUM_FLX = len(selected_reactions)
     print('Total number of reactions: {}'.format(NUM_FLX))
     bin_selected_reactions = ['bin_%s' % r for r in selected_reactions]
-    #print bin_selected_reactions
+    # print bin_selected_reactions
     # bin_J in [0,1]
     ##  lbs = [0.0]*len(bin_selected_reactions)
     ##  ubs = [numpy.inf]*len(bin_selected_reactions)
     ##  cpx.variables.add(lb=lbs, ub=ubs, names=bin_selected_reactions)
-    #cpx.variables.add(names=bin_selected_reactions)
-    cpx.variables.add(names=bin_selected_reactions, lb=numpy.zeros(len(bin_selected_reactions)),\
+    # cpx.variables.add(names=bin_selected_reactions)
+    cpx.variables.add(names=bin_selected_reactions, lb=numpy.zeros(len(bin_selected_reactions)),
                       ub=numpy.ones(len(bin_selected_reactions)))
     ##cpx.variables.add(obj=[], lb=[], ub=[], types='', names=[], columns=[])
 
@@ -1504,8 +1542,8 @@ def cplx_MinimizeNumActiveFluxes(fba, selected_reactions=None, pre_opt=True, tol
     obj_func = []
 
     for r in range(len(selected_reactions)):
-        name1 = 'ind_'+selected_reactions[r]
-        ##  print selected_reactions[r]
+        name1 = 'ind_' + selected_reactions[r]
+        # print selected_reactions[r]
         lin_expr1 = cplex.SparsePair(ind=[selected_reactions[r]], val=[1.0])
         sense1 = 'E'
         rhs1 = 0.0
@@ -1519,18 +1557,18 @@ def cplx_MinimizeNumActiveFluxes(fba, selected_reactions=None, pre_opt=True, tol
         else:
             obj_func.append((1, bin_selected_reactions[r]))
 
-    #print obj_func
-    #cpx.write('dump.lp')
+    # print obj_func
+    # cpx.write('dump.lp')
     cplx_setObjective(cpx, 'MNAF', obj_func, 'min', reset=True)
 
     if debug:
         cplx_writeLPtoLPTfile(cpx, 'MNAF_base_(%s)' % time.time(), title=None, Dir=debug_dir)
         ##  cplx_writeLPtoLPTfile(cpx, 'MNAV_base_%s' % time.time() , title=None, Dir=debug_dir)
 
-    #cpx.write('dump.lp')
+    # cpx.write('dump.lp')
 
     if populate == None:
-        cplx_SolveMILP(cpx) #  cpx.solve()
+        cplx_SolveMILP(cpx)  # cpx.solve()
         cplx_setFBAsolutionToModel(fba, cpx, with_reduced_costs=None)
         setReducedCosts(fba, REDUCED_COSTS)
         minCnt = cpx.solution.get_objective_value()
@@ -1543,21 +1581,21 @@ def cplx_MinimizeNumActiveFluxes(fba, selected_reactions=None, pre_opt=True, tol
         else:
             return round(minCnt, 2), cpx
     else:
-        RELGAP = populate[0] #0.0 # relative gap to optimal solution
-        POPULATE_LIMIT = populate[1] #20
-        TIME_LIMIT = populate[2] #300 # seconds
+        RELGAP = populate[0]  # 0.0 # relative gap to optimal solution
+        POPULATE_LIMIT = populate[1]  # 20
+        TIME_LIMIT = populate[2]  # 300 # seconds
         INTENSITY = cpx.parameters.mip.pool.intensity.values.very_aggressive
         DIVERSITY = cpx.parameters.mip.pool.replace.values.diversity
         #DIVERSITY = cpx.parameters.mip.pool.replace.values.firstin_firstout
         #DIVERSITY = cpx.parameters.mip.pool.replace.values.worst_objective
         ABSGAP = 0.0
-        cpx.parameters.mip.pool.relgap.set(RELGAP) # Gunnar
-        cpx.parameters.mip.pool.absgap.set(ABSGAP) # check this
-        cpx.parameters.mip.pool.intensity.set(INTENSITY) # get "all" (sub)optimal solutions
+        cpx.parameters.mip.pool.relgap.set(RELGAP)  # Gunnar
+        cpx.parameters.mip.pool.absgap.set(ABSGAP)  # check this
+        cpx.parameters.mip.pool.intensity.set(INTENSITY)  # get "all" (sub)optimal solutions
         cpx.parameters.mip.limits.populate.set(POPULATE_LIMIT)
         cpx.parameters.mip.pool.replace.set(DIVERSITY)
         cpx.parameters.timelimit.set(TIME_LIMIT)
-        #cpx.solve()
+        # cpx.solve()
         cpx.populate_solution_pool()
 
         population = []
@@ -1571,12 +1609,12 @@ def cplx_MinimizeNumActiveFluxes(fba, selected_reactions=None, pre_opt=True, tol
         for p in range(pop_num):
             sol = cpx.solution.pool.get_values(p)
             binSum = 0
-            for j_ in range(len(var_names)-1,-1,-1):
+            for j_ in range(len(var_names) - 1, -1, -1):
                 if var_names[j_] not in base_reaction_names:
                     a = sol.pop(j_)
                     var_names.pop(j_)
                     binSum += round(a, 2)
-            #pop_bin.append(binSum)
+            # pop_bin.append(binSum)
             population.append(sol)
         population.insert(0, base_reaction_names)
         for j_ in range(len(population[0])):
@@ -1634,7 +1672,7 @@ def cplx_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
     else:
         assert os.path.exists(work_dir), '\nWhat did you think would happen now!'
     if debug:
-        debug_dir = os.path.join(work_dir,'DEBUG')
+        debug_dir = os.path.join(work_dir, 'DEBUG')
         if not os.path.exists(debug_dir):
             os.mkdir(debug_dir)
     s2time = time.time()
@@ -1675,36 +1713,36 @@ def cplx_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
         ##  cplx_setObjective(cpx, R, expr=None, sense='min', reset=True)
         # TODO: bgoli: see whether this also works with 'minimize'
         cplx_setObjective(cpx, 'min%s' % R, [(1, R)], 'min', reset=True)
-        ##  cplx_setBounds(c, id, min=None, max=None) # think about this
+        # cplx_setBounds(c, id, min=None, max=None) # think about this
         MIN_STAT = cplx_Solve(cpx, method=method)
-        if MIN_STAT == 1: # solved
+        if MIN_STAT == 1:  # solved
             min_oval = cpx.solution.get_objective_value()
-        elif MIN_STAT == 2: # unbound
+        elif MIN_STAT == 2:  # unbound
             min_oval = -numpy.Inf
         elif MIN_STAT == 3:
-            #min_oval = pre_sol[R] # try this as infeasible means no solution outside optimum
+            # min_oval = pre_sol[R] # try this as infeasible means no solution outside optimum
             min_oval = numpy.NaN
-        else: # other failure
+        else:  # other failure
             min_oval = numpy.NaN
         if debug:
-            cplx_writeLPtoLPTfile(cpx, '%smin' % R, title='min%s=%s' % (R,min_oval), Dir=debug_dir)
+            cplx_writeLPtoLPTfile(cpx, '%smin' % R, title='min%s=%s' % (R, min_oval), Dir=debug_dir)
 
         # MAX
         ##  cplx_setObjective(cpx, R, expr=None, sense='max', reset=True)
         cplx_setObjective(cpx, 'max%s' % R, expr=None, sense='max', reset=False)
-        ##  cplx_setBounds(c, id, min=None, max=None) # think about this
+        # cplx_setBounds(c, id, min=None, max=None) # think about this
         MAX_STAT = cplx_Solve(cpx, method=method)
-        if MAX_STAT == 1: # solved
+        if MAX_STAT == 1:  # solved
             max_oval = cpx.solution.get_objective_value()
-        elif MAX_STAT == 2: # unbound
+        elif MAX_STAT == 2:  # unbound
             max_oval = numpy.Inf
-        elif MAX_STAT == 3: # infeasible
-            #max_oval = pre_sol[R] # try this as infeasible means no solution outside optimum
+        elif MAX_STAT == 3:  # infeasible
+            # max_oval = pre_sol[R] # try this as infeasible means no solution outside optimum
             max_oval = numpy.NaN
-        else: # other fail
+        else:  # other fail
             max_oval = numpy.NaN
         if debug:
-            cplx_writeLPtoLPTfile(cpx, '%smax' % R, title='max%s=%s' % (R,max_oval), Dir=debug_dir)
+            cplx_writeLPtoLPTfile(cpx, '%smax' % R, title='max%s=%s' % (R, max_oval), Dir=debug_dir)
 
         # enables using the default value as a solution if the solver fails
         if pre_opt and default_on_fail:
@@ -1713,27 +1751,27 @@ def cplx_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
             if MIN_STAT > 1 and not MAX_STAT > 1:
                 min_oval = pre_sol[R]
 
-        OUTPUT_ARRAY[Ridx,0] = pre_sol[R]
+        OUTPUT_ARRAY[Ridx, 0] = pre_sol[R]
         if R in REDUCED_COSTS:
-            OUTPUT_ARRAY[Ridx,1] = REDUCED_COSTS[R]
-        OUTPUT_ARRAY[Ridx,2] = min_oval
-        OUTPUT_ARRAY[Ridx,3] = max_oval
-        OUTPUT_ARRAY[Ridx,4] = round(abs(max_oval - min_oval), roundoff_span)
-        OUTPUT_ARRAY[Ridx,5] = MIN_STAT
-        OUTPUT_ARRAY[Ridx,6] = MAX_STAT
+            OUTPUT_ARRAY[Ridx, 1] = REDUCED_COSTS[R]
+        OUTPUT_ARRAY[Ridx, 2] = min_oval
+        OUTPUT_ARRAY[Ridx, 3] = max_oval
+        OUTPUT_ARRAY[Ridx, 4] = round(abs(max_oval - min_oval), roundoff_span)
+        OUTPUT_ARRAY[Ridx, 5] = MIN_STAT
+        OUTPUT_ARRAY[Ridx, 6] = MAX_STAT
         if markupmodel:
             REAC = fba.getReaction(R)
             REAC.setValue(pre_sol[R])
             REAC.fva_min = min_oval
             REAC.fva_max = max_oval
             REAC.fva_status = (MIN_STAT, MAX_STAT)
-            #if MAX_STAT == 1:
+            # if MAX_STAT == 1:
                 #REAC.fva_max = max_oval
-            #else:
+            # else:
                 #REAC.fva_max = None
-            #if MIN_STAT == 1:
+            # if MIN_STAT == 1:
                 #REAC.fva_min = min_oval
-            #else:
+            # else:
                 #REAC.fva_min = None
             if R in REDUCED_COSTS:
                 REAC.reduced_costs = REDUCED_COSTS[R]
@@ -1747,11 +1785,10 @@ def cplx_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
     if quiet:
         cplx_setOutputStreams(cpx, mode='default')
     del cpx
-    print('\nSinglecore FVA took: {} min (1 process)\n'.format((time.time()-s2time)/60.))
+    print('\nSinglecore FVA took: {} min (1 process)\n'.format((time.time() - s2time) / 60.))
     print('Output array has columns:')
     print('Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus')
     return OUTPUT_ARRAY, OUTPUT_NAMES
-
 
 
 def cplx_MultiFluxVariabilityAnalysis(lp, selected_reactions=None, tol=1e-10, rhs_sense='lower', optPercentage=100.0, work_dir=None, debug=False):
@@ -1802,37 +1839,35 @@ def cplx_MultiFluxVariabilityAnalysis(lp, selected_reactions=None, tol=1e-10, rh
 
     print(pre_oid, pre_oval)
 
-
     # generate new constraint from old objective value (use non-zero coefficients)
     LCS = lp.objective.get_linear()
     LCN = lp.variables.get_names()
 
     #new_constraint = []
-    #for c in range(len(LCS)):
-        #if LCS[c] != 0.0:
-            #if 'xvar_' not in  LCN[c] and 'absL_' not in  LCN[c]:
-                ##print LCS[c], LCN[c]
+    # for c in range(len(LCS)):
+        # if LCS[c] != 0.0:
+            # if 'xvar_' not in  LCN[c] and 'absL_' not in  LCN[c]:
+                # print LCS[c], LCN[c]
                 #new_constraint.append((LCS[c], LCN[c]))
 
-    #print len(LCS), len(LCN), len(new_constraint)
+    # print len(LCS), len(LCN), len(new_constraint)
     #lp.write(os.path.join(work_dir, TFname+'_DEBUG.1.lp'),'lp')
 
-
-    ## set objective constraint
-    #if rhs_sense == 'equal':
+    # set objective constraint
+    # if rhs_sense == 'equal':
         #cplx_setSingleConstraint(lp, 'ObjCstr', expr=new_constraint, sense='E', rhs=pre_oval)
         ###  cplx_setSingleConstraint(lp, 'ObjCstr', expr=[(1, pre_oid)], sense='E', rhs=pre_oval)
-    #elif rhs_sense == 'upper':
-        #if tol != None:
+    # elif rhs_sense == 'upper':
+        # if tol != None:
             #ub =  numpy.ceil(pre_oval/tol)*tol*optPercentage/100.0
-        #else:
+        # else:
             #ub = pre_oval*(optPercentage/100.0)
         #cplx_setSingleConstraint(lp, 'ObjCstr', expr=new_constraint, sense='L', rhs=ub)
         ###  cplx_setSingleConstraint(lp, 'ObjCstr', expr=[(1, pre_oid)], sense='L', rhs=ub)
-    #elif rhs_sense == 'lower':
-        #if tol != None:
+    # elif rhs_sense == 'lower':
+        # if tol != None:
             #lb =  numpy.floor(pre_oval/tol)*tol*optPercentage/100.0
-        #else:
+        # else:
             #lb = pre_oval*(optPercentage/100.0)
         #cplx_setSingleConstraint(lp, 'ObjCstr', expr=new_constraint, sense='G', rhs=lb)
         ###  cplx_setSingleConstraint(lp, 'ObjCstr', expr=[(1, pre_oid)], sense='G', rhs=lb)
@@ -1853,7 +1888,7 @@ def cplx_MultiFluxVariabilityAnalysis(lp, selected_reactions=None, tol=1e-10, rh
     iter_cnt = 0
 
     #raw_input('\n*****\nMultiFVA ready, press <enter> to continue:')
-    Rdump = file(os.path.join(work_dir, TFname+'_resTemp.txt'),'w')
+    Rdump = file(os.path.join(work_dir, TFname + '_resTemp.txt'), 'w')
     NEW_RUN = True
     ADD_MILP_CONSTR = False
     for Ridx in range(NUM_FLX):
@@ -1869,38 +1904,37 @@ def cplx_MultiFluxVariabilityAnalysis(lp, selected_reactions=None, tol=1e-10, rh
             new_constraint = []
             for c in range(len(LCS)):
                 if LCS[c] != 0.0:
-                    if 'xvar_' not in  LCN[c] and 'absL_' not in  LCN[c] and LCN[c] == 'zvar1'+R:
+                    if 'xvar_' not in LCN[c] and 'absL_' not in LCN[c] and LCN[c] == 'zvar1' + R:
                         print('Skipping objective', R)
-                    elif 'xvar_' not in  LCN[c] and 'absL_' not in  LCN[c]:
-                        #print LCS[c], LCN[c]
+                    elif 'xvar_' not in LCN[c] and 'absL_' not in LCN[c]:
+                        # print LCS[c], LCN[c]
                         new_constraint.append((LCS[c], LCN[c]))
 
             print(len(LCS), len(LCN), len(new_constraint))
 
-            lp.write(os.path.join(work_dir, TFname+'_DEBUG.1.lp'),'lp')
+            lp.write(os.path.join(work_dir, TFname + '_DEBUG.1.lp'), 'lp')
             # set objective constraint
             if rhs_sense == 'equal':
                 cplx_setSingleConstraint(lp, 'ObjCstr', expr=new_constraint, sense='E', rhs=pre_oval)
                 ##  cplx_setSingleConstraint(lp, 'ObjCstr', expr=[(1, pre_oid)], sense='E', rhs=pre_oval)
             elif rhs_sense == 'upper':
                 if tol != None:
-                    ub =  numpy.ceil(pre_oval/tol)*tol*optPercentage/100.0
+                    ub = numpy.ceil(pre_oval / tol) * tol * optPercentage / 100.0
                 else:
-                    ub = pre_oval*(optPercentage/100.0)
+                    ub = pre_oval * (optPercentage / 100.0)
                 cplx_setSingleConstraint(lp, 'ObjCstr', expr=new_constraint, sense='L', rhs=ub)
                 ##  cplx_setSingleConstraint(lp, 'ObjCstr', expr=[(1, pre_oid)], sense='L', rhs=ub)
             elif rhs_sense == 'lower':
                 if tol != None:
-                    lb =  numpy.floor(pre_oval/tol)*tol*optPercentage/100.0
+                    lb = numpy.floor(pre_oval / tol) * tol * optPercentage / 100.0
                 else:
-                    lb = pre_oval*(optPercentage/100.0)
+                    lb = pre_oval * (optPercentage / 100.0)
                 cplx_setSingleConstraint(lp, 'ObjCstr', expr=new_constraint, sense='G', rhs=lb)
                 ##  cplx_setSingleConstraint(lp, 'ObjCstr', expr=[(1, pre_oid)], sense='G', rhs=lb)
 
-            lp.write(os.path.join(work_dir, TFname+'_DEBUG.2.lp'),'lp')
+            lp.write(os.path.join(work_dir, TFname + '_DEBUG.2.lp'), 'lp')
             print(new_constraint)
             print(R)
-
 
         Rdump.write('%s\t%s\t%2.3f\t' % (Ridx, R, pre_sol[R]))
         iter_cnt += 1
@@ -1909,13 +1943,13 @@ def cplx_MultiFluxVariabilityAnalysis(lp, selected_reactions=None, tol=1e-10, rh
         # MIN
         ##  cplx_setObjective(lp, R, expr=None, sense='min', reset=True)
         cplx_setObjective2(lp, 'min%s' % R, VARIABLE_NAMES, [(1, R)], 'min', reset=True)
-        ##  cplx_setBounds(c, id, min=None, max=None) # think about this
+        # cplx_setBounds(c, id, min=None, max=None) # think about this
 
-        lp.write(os.path.join(work_dir, TFname+'_DEBUG.3a.lp'),'lp')
+        lp.write(os.path.join(work_dir, TFname + '_DEBUG.3a.lp'), 'lp')
         cplx_SolveMILP(lp)
 
         if lp.solution.get_status() == lp.solution.status.MIP_optimal:
-            #DBG# min_sol, min_oid, min_oval = cplx_getOptimalSolution(lp)
+            # DBG# min_sol, min_oid, min_oval = cplx_getOptimalSolution(lp)
             min_sol, min_oid, min_oval = cplx_getOptimalSolution2(lp, VARIABLE_NAMES)
             ##  min_sol, min_oid, min_oval = 0.0,0.0,0.0
             MIN_STAT = 1
@@ -1925,18 +1959,18 @@ def cplx_MultiFluxVariabilityAnalysis(lp, selected_reactions=None, tol=1e-10, rh
             min_oid = None
             min_oval = numpy.NaN
         if debug:
-            cplx_writeLPtoLPTfile(lp, TFname+'%smin' % R, title='min%s=%s' % (R,min_oval), Dir=debug_dir)
-        Rdump.write('%2.3f\t' % round(min_oval,3))
+            cplx_writeLPtoLPTfile(lp, TFname + '%smin' % R, title='min%s=%s' % (R, min_oval), Dir=debug_dir)
+        Rdump.write('%2.3f\t' % round(min_oval, 3))
         # MAX
         ##  cplx_setObjective(lp, 'max%s' % R, expr=None, sense='max', reset=False)
         cplx_setObjective2(lp, 'max%s' % R, VARIABLE_NAMES, expr=None, sense='max', reset=False)
-        ##  cplx_setBounds(c, id, min=None, max=None) # think about this
+        # cplx_setBounds(c, id, min=None, max=None) # think about this
 
-        lp.write(os.path.join(work_dir, TFname+'_DEBUG.3b.lp'),'lp')
+        lp.write(os.path.join(work_dir, TFname + '_DEBUG.3b.lp'), 'lp')
         cplx_SolveMILP(lp)
 
         if lp.solution.get_status() == lp.solution.status.MIP_optimal:
-            #DBG# max_sol, max_oid, max_oval = cplx_getOptimalSolution(lp)
+            # DBG# max_sol, max_oid, max_oval = cplx_getOptimalSolution(lp)
             max_sol, max_oid, max_oval = cplx_getOptimalSolution2(lp, VARIABLE_NAMES)
             ##  max_sol, max_oid, max_oval = 0.0,0.0,0.0
             MAX_STAT = 1
@@ -1946,15 +1980,15 @@ def cplx_MultiFluxVariabilityAnalysis(lp, selected_reactions=None, tol=1e-10, rh
             max_oid = None
             max_oval = numpy.NaN
         if debug:
-            cplx_writeLPtoLPTfile(lp, TFname+'%smax' % R, title='max%s=%s' % (R,max_oval), Dir=debug_dir)
-        Rdump.write('%2.3f\t' % round(max_oval,3))
-        Rdump.write('%2.3f\n' % round(abs(max_oval - min_oval),3))
+            cplx_writeLPtoLPTfile(lp, TFname + '%smax' % R, title='max%s=%s' % (R, max_oval), Dir=debug_dir)
+        Rdump.write('%2.3f\t' % round(max_oval, 3))
+        Rdump.write('%2.3f\n' % round(abs(max_oval - min_oval), 3))
 
-        OUTPUT_ARRAY[Ridx,0] = pre_sol[R]
-        OUTPUT_ARRAY[Ridx,1] = min_oval
-        OUTPUT_ARRAY[Ridx,2] = max_oval
-        OUTPUT_ARRAY[Ridx,3] = MIN_STAT
-        OUTPUT_ARRAY[Ridx,4] = MAX_STAT
+        OUTPUT_ARRAY[Ridx, 0] = pre_sol[R]
+        OUTPUT_ARRAY[Ridx, 1] = min_oval
+        OUTPUT_ARRAY[Ridx, 2] = max_oval
+        OUTPUT_ARRAY[Ridx, 3] = MIN_STAT
+        OUTPUT_ARRAY[Ridx, 4] = MAX_STAT
         del max_sol, max_oid, max_oval, min_sol, min_oid, min_oval
         if MIN_STAT == 0 or MIN_STAT == 0:
             print('Solver fail for reaction')
@@ -1965,13 +1999,13 @@ def cplx_MultiFluxVariabilityAnalysis(lp, selected_reactions=None, tol=1e-10, rh
             ##  lp.write(mdtempFile, filetype='lp')
             ##  del lp
             gc.collect()
-            ##  reload(cplex)
+            # reload(cplex)
             print('Collecting garbage')
-            ##  time.sleep(2)
+            # time.sleep(2)
             ##  lp = cplex.Cplex(mdtempFile)
     Rdump.close()
-    #for r in OUTPUT_ARRAY:
-        #print r
+    # for r in OUTPUT_ARRAY:
+        # print r
     print('Output array has columns:')
     print('Reaction, Variability Min, Variability Max, MinStatus, MaxStatus')
     del lp
@@ -2018,7 +2052,7 @@ def cplx_singleGeneScan(fba, r_off_low=0.0, r_off_upp=0.0, optrnd=8, altout=Fals
     results = []
 
     for pr_ in range(len(Emap)):
-        ## cplex optimized method
+        # cplex optimized method
         t_x1 = time.time()
         lpx.variables.set_lower_bounds(base_lower_bounds)
         lpx.variables.set_upper_bounds(base_upper_bounds)
@@ -2034,20 +2068,20 @@ def cplx_singleGeneScan(fba, r_off_low=0.0, r_off_upp=0.0, optrnd=8, altout=Fals
             lpx.variables.set_upper_bounds(new_upper)
         lpx.solve()
         if lpx.solution.get_status() == lpx.solution.status.optimal:
-            results.append({ 'opt' : round(lpx.solution.get_objective_value(), optrnd),
-                             'deletions' : fba.__single_gene_effect_map__[Emap[pr_]],
-                             #'activities' : Emap[pr_]
-                           })
+            results.append({'opt': round(lpx.solution.get_objective_value(), optrnd),
+                            'deletions': fba.__single_gene_effect_map__[Emap[pr_]],
+                            # 'activities' : Emap[pr_]
+                            })
         else:
-            results.append({ 'opt' : float('nan'),
-                             'deletions' : fba.__single_gene_effect_map__[Emap[pr_]],
-                             #'activities' : Emap[pr_]
-                           })
+            results.append({'opt': float('nan'),
+                            'deletions': fba.__single_gene_effect_map__[Emap[pr_]],
+                            # 'activities' : Emap[pr_]
+                            })
         t_cplex += time.time() - t_x1
 
     fba.__single_gene_effect_map__['keyJ'] = Jmap
     del lpx, fba
-    print('\nSingle gene deletion scan: {} mins'.format(t_cplex/60.0))
+    print('\nSingle gene deletion scan: {} mins'.format(t_cplex / 60.0))
 
     singleRes = []
     for d in results:

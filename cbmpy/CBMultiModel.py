@@ -22,11 +22,11 @@ Contact email: bgoli@users.sourceforge.net
 Last edit: $Author: bgoli $ ($Id: CBTools.py 544 2018-01-12 16:31:50Z bgoli $)
 
 """
-## gets rid of "invalid variable name" info
+# gets rid of "invalid variable name" info
 # pylint: disable=C0103
-## gets rid of "line to long" info
+# gets rid of "line to long" info
 # pylint: disable=C0301
-## use with caution: gets rid of module xxx has no member errors (run once enabled)
+# use with caution: gets rid of module xxx has no member errors (run once enabled)
 # pylint: disable=E1101
 
 # preparing for Python 3 port
@@ -67,6 +67,7 @@ def copySpecies(m_src, m_targ, sid, is_boundary=False):
     m_targ.addSpecies(S)
     del S
     return True
+
 
 def copyReaction(m_src, m_targ, rid, altrid=None):
     """

@@ -33,30 +33,34 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
-import re, numpy
+import re
+import numpy
 from . import CBModel
+
 
 def addReversibilityBounds(reactions, bounds, infinity=numpy.inf):
     bounds = bounds.copy()
     for R in reactions:
         if not reactions[R]['id'] in bounds:
             if not reactions[R]['reversible']:
-                bounds.update({reactions[R]['id'] : {'lower' : 0, 'upper' : infinity}})
+                bounds.update({reactions[R]['id']: {'lower': 0, 'upper': infinity}})
             else:
-                bounds.update({reactions[R]['id'] : {'lower' : -infinity, 'upper' : infinity}})
+                bounds.update({reactions[R]['id']: {'lower': -infinity, 'upper': infinity}})
         else:
             print('Reaction {} already has bounds: {}'.format(reactions[R]['id'], str(reactions[R])))
     return bounds
+
 
 def addReversibilityBoundsIgnoreReversible(reactions, bounds):
     bounds = bounds.copy()
     for R in reactions:
         if not reactions[R]['id'] in bounds:
             if not reactions[R]['reversible']:
-                bounds.update({reactions[R]['id'] : {'lower' : 0}})
+                bounds.update({reactions[R]['id']: {'lower': 0}})
         else:
             print('Reaction {} already has bounds: {}'.format(reactions[R]['id'], str(reactions[R])))
     return bounds
+
 
 def addSpecies(model, species):
     skeys = list(species)
@@ -68,12 +72,13 @@ def addSpecies(model, species):
             comp = species[S].pop('compartment')
         if 'name' in species[S]:
             name = species[S].pop('name')
-        sObj = CBModel.Species(ids, boundary=species[S].pop('boundary'),\
-                            name=name, value=0, compartment=comp)
+        sObj = CBModel.Species(ids, boundary=species[S].pop('boundary'),
+                               name=name, value=0, compartment=comp)
         if len(species[S]) > 0:
             for a_ in species[S]:
-                sObj.annotation.update({a_ : species[S][a_]})
+                sObj.annotation.update({a_: species[S][a_]})
         model.addSpecies(sObj)
+
 
 def addBounds(model, bounds):
     cntr = 0
@@ -85,6 +90,7 @@ def addBounds(model, bounds):
             model.addFluxBound(CBModel.FluxBound('%s_ub' % B, B, 'lessEqual', bounds[B]['upper']))
             cntr += 1
 
+
 def addReactions(model, reactions):
     specId = model.getSpeciesIds()
     rkeys = list(reactions)
@@ -94,16 +100,16 @@ def addReactions(model, reactions):
         exchange = False
         rid = name = reactions[R]['id']
         if 'lower' in reactions[R]:
-            Bounds.update({R : {'lower' : float(reactions[R]['lower'])}})
+            Bounds.update({R: {'lower': float(reactions[R]['lower'])}})
         if 'upper' in reactions[R]:
-            Bounds.update({R : {'upper' : float(reactions[R]['upper'])}})
+            Bounds.update({R: {'upper': float(reactions[R]['upper'])}})
         if 'exchange' in reactions[R]:
-            if reactions[R]['exchange'] in ['True','true','TRUE',True]:
+            if reactions[R]['exchange'] in ['True', 'true', 'TRUE', True]:
                 exchange = True
         if 'name' in reactions[R]:
             name = reactions[R]['name']
-            ##  else:
-                ##  print 'Ignoring exchange status for reaction %s, %s is not one of [True, TRUE, true]' % (R, reactions[R]['exchange'])
+            # else:
+                # print 'Ignoring exchange status for reaction %s, %s is not one of [True, TRUE, true]' % (R, reactions[R]['exchange'])
         if len(Bounds) > 0:
             addBounds(model, Bounds)
 
@@ -113,7 +119,7 @@ def addReactions(model, reactions):
         model.addReaction(react, create_default_bounds=False)
         for RG in reactions[R]['reagents']:
             if RG[1] in specId:
-                react.addReagent(CBModel.Reagent(rid+RG[1], RG[1], RG[0]))
+                react.addReagent(CBModel.Reagent(rid + RG[1], RG[1], RG[0]))
                 ##  reagents.append(CBModel.Reagent(RG[1], RG[0]))
             else:
                 print(reactions[R]['reagents'])
@@ -122,10 +128,10 @@ def addReactions(model, reactions):
         # more generic way of doing this
         for k in reactions[R]:
             if k not in ['lower', 'upper', 'exchange', 'name', 'id', 'reversible', 'reagents']:
-                react.annotation.update({k : reactions[R][k]})
-        ##  if 'SUBSYSTEM' in reactions[R]:
+                react.annotation.update({k: reactions[R][k]})
+        # if 'SUBSYSTEM' in reactions[R]:
             ##  react.annotation.update({'SUBSYSTEM' : reactions[R]['SUBSYSTEM']})
-        ##  else:
+        # else:
             ##  react.annotation.update({'SUBSYSTEM' : 'metabolism'})
         react.is_exchange = exchange
 
@@ -140,7 +146,7 @@ def addObjectiveFunction(model, objective_function):
         active = objf['active']
         objF = CBModel.Objective(id, sense)
         model.addObjective(objF, active=active)
-        fObj = CBModel.FluxObjective(flux+'_obj', reaction=flux, coefficient=coef)
+        fObj = CBModel.FluxObjective(flux + '_obj', reaction=flux, coefficient=coef)
         objF.addFluxObjective(fObj)
 
 
@@ -153,11 +159,13 @@ def quickDefaultBuild(model_name, Reactions, Species, Bounds, Objective_function
     addBounds(fba, Bounds)
     return fba
 
+
 def printSolution(fba, wait=False):
     for R in fba.reactions:
         print(R.getId(), R.value, end=" ")
-        if 'SUBSYSTEM' in  R.annotation:
+        if 'SUBSYSTEM' in R.annotation:
             print(R.annotation['SUBSYSTEM'])
         else:
             print(' ')
-    if wait: raw_input('Press <enter> to continue ...')
+    if wait:
+        raw_input('Press <enter> to continue ...')
