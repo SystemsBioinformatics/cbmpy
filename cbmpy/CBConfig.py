@@ -34,18 +34,15 @@ from __future__ import division, print_function
 from __future__ import absolute_import
 #from __future__ import unicode_literals
 
-# release
+__VERSION_MAJOR__ = 0
+__VERSION_MINOR__ = 8
+__VERSION_MICRO__ = 0
 
-try:
-    STATUS = '$Rev: 711 $'.replace('Rev: ', '').replace('$', '').strip()
-except Exception:
-    STATUS = ''
-
-__CBCONFIG__ = {'VERSION_MAJOR': 0,
-                'VERSION_MINOR': 8,
-                'VERSION_MICRO': 0,
-                'VERSION_STATUS': STATUS,
-                'VERSION': None,
+__CBCONFIG__ = {'VERSION_MAJOR': __VERSION_MAJOR__,
+                'VERSION_MINOR': __VERSION_MINOR__,
+                'VERSION_MICRO': __VERSION_MICRO__,
+                'VERSION_STATUS': '',
+                'VERSION': '{}.{}.{}'.format(__VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__),
                 'DEBUG': False,
                 'SOLVER_PREF': 'CPLEX',
                 # 'SOLVER_PREF' : 'GLPK',
@@ -65,11 +62,7 @@ def current_version():
     Return the current CBMPy version as a string
 
     """
-    # return '%s.%s.%s [r%s]' % (__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'], __CBCONFIG__['VERSION_STATUS'])
-    if STATUS == '':
-        return '{}.{}.{}'.format(__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'])
-    else:
-        return '{}.{}.{}.{}'.format(__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'], STATUS)
+    return '{}.{}.{}'.format(__VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__)
 
 
 def current_version_tuple():
@@ -77,9 +70,6 @@ def current_version_tuple():
     Return the current CBMPy version as a tuple (x, y, z)
 
     """
-    return (__CBCONFIG__['VERSION_MAJOR'], __CBCONFIG__['VERSION_MINOR'], __CBCONFIG__['VERSION_MICRO'])
-
-
-__CBCONFIG__['VERSION'] = current_version()
+    return (__VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__)
 
 

@@ -109,14 +109,12 @@ del os
 
 if not __SILENT_START__:
     print('\nCBMPy environment\n******************')
-    rev = CBConfig.__CBCONFIG__['VERSION_STATUS']
     #print('Release: {}'.format(__version__.replace('.{}'.format(rev),'')))
-    print('Revision: r{}'.format(CBConfig.__CBCONFIG__['VERSION_STATUS']))
     # print 'pysces.model_dir = ' + model_dir
     # print 'pysces.output_dir = ' + output_dir
 
     print('\n\n***********************************************************************')
-    print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling       *'.format(__version__.replace('.{}'.format(rev), '')))
+    print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling        *'.format(CBConfig.__CBCONFIG__['VERSION']))
     print('*                http://cbmpy.sourceforge.net                         *')
     print('* Copyright(C) Brett G. Olivier 2014 - 2019                           *')
     print('* Dept. of Systems Bioinformatics                                     *')
