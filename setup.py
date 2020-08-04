@@ -24,6 +24,7 @@ Last edit: $Author: bgoli $ ($Id: setup.py 698 2019-07-30 14:03:26Z bgoli $)
 """
 
 import os
+import time
 local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 
 try:
@@ -33,34 +34,38 @@ except:
 
 mydata_files = []
 
-# release
-try:
-    STATUS = 'r'+'$Rev: 698 $'.replace('Rev: ','').replace('$','').strip()
-except:
-    STATUS = 'beta'
+# release get version
+vmaj = vmin = vmic = ''
+with open(os.path.join(local_path, 'cbmpy', 'CBConfig.py')) as F:
+    for l in F:
+        if l.startswith('__VERSION_MAJOR__'):
+            vmaj = l.split('=')[1].strip()
+        elif l.startswith('__VERSION_MINOR__'):
+            vmin = l.split('=')[1].strip()
+        elif l.startswith('__VERSION_MICRO__'):
+            vmic = l.split('=')[1].strip()
 
-mypackages= ['cbmpy', 'cbmpy.fluxmodules']
+mypackages = ['cbmpy', 'cbmpy.fluxmodules']
 
 setup(
- package_dir = {'cbmpy' : 'cbmpy'},
- packages = mypackages,
- data_files = mydata_files,
- name = "cbmpy",
- summary = "CBMPy: Constraint Based Modelling in Python",
- #version = "0.7.25.{}".format(STATUS),
- version = "0.8.0",
- maintainer = 'Brett G. Olivier',
- author = 'Brett G. Olivier',
- author_email = 'b.g.olivier@vu.nl',
- maintainer_email = 'bgoli@users.sourceforge.net',
-    url = "http://cbmpy.sourceforge.net",
-    download_url = "http://sourceforge.net/projects/cbmpy/files/release/0.8/",
-    license = "GNU General Public License (GPL)",
-    keywords = "computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard" ,
+ package_dir={'cbmpy': 'cbmpy'},
+ packages=mypackages,
+ data_files=mydata_files,
+ name="cbmpy",
+ summary="CBMPy: Constraint Based Modelling in Python",
+ version='{}.{}.{}'.format(vmaj, vmin, vmic),
+ maintainer='Brett G. Olivier',
+ author='Brett G. Olivier',
+ author_email='b.g.olivier@vu.nl',
+ maintainer_email='bgoli@users.sourceforge.net',
+    url="http://cbmpy.sourceforge.net",
+    download_url="http://sourceforge.net/projects/cbmpy/files/release/0.8/",
+    license="GNU General Public License (GPL)",
+    keywords="computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard",
     #zip_safe = False,
-    requires = ['numpy', 'sympy', 'libsbml', 'nose'],
-    platforms = ["Windows", "Linux", "Mac"],
-    classifiers = [
+    requires=['numpy', 'sympy', 'libsbml', 'nose'],
+    platforms=["Windows", "Linux", "Mac"],
+    classifiers=[
     'Development Status :: 4 - Beta',
     'Environment :: Console',
     'Intended Audience :: End Users/Desktop',
@@ -71,9 +76,8 @@ setup(
     'Programming Language :: Python :: 2',
     'Topic :: Scientific/Engineering :: Bio-Informatics',
     'Topic :: Scientific/Engineering :: Chemistry'
-     ],
- description =\
- """ CBMPy (http://cbmpy.sourceforge.net) is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods developed specifically for the ecosystem modelling."""
+ ],
+ description=""" CBMPy (http://cbmpy.sourceforge.net) is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods developed specifically for the ecosystem modelling."""
 )
 try:
     os.chdir(os.path.join(local_path, 'cbmpy', 'fluxmodules'))
