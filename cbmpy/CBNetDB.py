@@ -117,6 +117,16 @@ class DBTools(NetDBbase):
 
         self.db_cursor = self.db_conn.cursor()
 
+    def commitDB(self):
+        """
+        Commits all curent changes to DB, returns a boolean.
+        """
+        try:
+            self.db_cursor.connection.commit()
+            return True
+        except:
+            return False
+
     def createDBTable(self, table, sqlcols):
         """
         Create a database table if it does not exist:
