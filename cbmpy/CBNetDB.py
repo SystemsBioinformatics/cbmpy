@@ -333,7 +333,7 @@ class DBTools(NetDBbase):
             if colOut:
                 col = self.db_cursor.execute(sql2).fetchall()
                 col = [str(a[1]) for a in col]
-        except AttributeError:
+        except (AttributeError, sqlite3.OperationalError):
             return None
         if colOut:
             return r, col
