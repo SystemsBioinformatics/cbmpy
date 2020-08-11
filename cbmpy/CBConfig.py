@@ -32,29 +32,33 @@ Last edit: $Author: bgoli $ ($Id: CBConfig.py 711 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 __VERSION_MAJOR__ = 0
 __VERSION_MINOR__ = 8
 __VERSION_MICRO__ = 0
 
-__CBCONFIG__ = {'VERSION_MAJOR': __VERSION_MAJOR__,
-                'VERSION_MINOR': __VERSION_MINOR__,
-                'VERSION_MICRO': __VERSION_MICRO__,
-                'VERSION_STATUS': '',
-                'VERSION': '{}.{}.{}'.format(__VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__),
-                'DEBUG': False,
-                'SOLVER_PREF': 'CPLEX',
-                # 'SOLVER_PREF' : 'GLPK',
-                'SOLVER_ACTIVE': None,
-                'REVERSIBLE_SYMBOL': '<==>',
-                'IRREVERSIBLE_SYMBOL': '-->',
-                'HAVE_SBML2': False,
-                'HAVE_SBML3': False,
-                'CBMPY_DIR': None,
-                'CBMPY_CGLPK_VER': 'w452',
-                'SYMPY_DENOM_LIMIT': 10**32
-                }
+__CBCONFIG__ = {
+    'VERSION_MAJOR': __VERSION_MAJOR__,
+    'VERSION_MINOR': __VERSION_MINOR__,
+    'VERSION_MICRO': __VERSION_MICRO__,
+    'VERSION_STATUS': '',
+    'VERSION': '{}.{}.{}'.format(
+        __VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__
+    ),
+    'DEBUG': False,
+    #'SOLVER_PREF': 'CPLEX',
+    'SOLVER_PREF': 'GLPK',
+    'SOLVER_ACTIVE': None,
+    'REVERSIBLE_SYMBOL': '<==>',
+    'IRREVERSIBLE_SYMBOL': '-->',
+    'HAVE_SBML2': False,
+    'HAVE_SBML3': False,
+    'CBMPY_DIR': None,
+    'CBMPY_CGLPK_VER': 'w452',
+    'SYMPY_DENOM_LIMIT': 10 ** 32,
+}
 
 
 def current_version():
@@ -71,5 +75,3 @@ def current_version_tuple():
 
     """
     return (__VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__)
-
-
