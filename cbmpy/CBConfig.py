@@ -33,6 +33,13 @@ Last edit: $Author: bgoli $ ($Id: CBConfig.py 711 2020-04-27 14:22:34Z bgoli $)
 from __future__ import division, print_function
 from __future__ import absolute_import
 
+try:
+    import swiglpk
+
+    GLPK_VER = swiglpk.glp_version()
+except ImportError:
+    GLPK_VER = None
+
 # from __future__ import unicode_literals
 
 __VERSION_MAJOR__ = 0
@@ -56,7 +63,7 @@ __CBCONFIG__ = {
     'HAVE_SBML2': False,
     'HAVE_SBML3': False,
     'CBMPY_DIR': None,
-    'CBMPY_CGLPK_VER': 'w452',
+    'CBMPY_CGLPK_VER': str(GLPK_VER),
     'SYMPY_DENOM_LIMIT': 10 ** 32,
 }
 
