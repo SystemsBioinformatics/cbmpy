@@ -302,12 +302,23 @@ def glpk_Solve(lp, method='s'):
 
     """
 
+    solution_status = None
     if method == 'i':
-        glpksol = lp.interior()
+        # TODO: add parameters
+        glpksol = sw.glp_interior(lp, None)
+        # solution_status = sw.glp_ipt_status(lp)
     elif method == 'e':
-        glpksol = lp.exact()
+        # TODO: add parameters
+        glpksol = sw.glp_exact(lp, None)
+        # solution_status = glpk_getSolutionStatus(lp)
     else:
-        glpksol = lp.simplex(**GLPK_CFG['simplex'])
+        # TODO: add parameters
+        # glpksol = sw.glp_simplex(lp, **GLPK_CFG['simplex'])
+        glpksol = sw.glp_simplex(lp, None)
+        # solution_status = glpk_getSolutionStatus(lp)
+
+    print(glpksol)
+    return glpksol
 
     global GLPK_SOLUTION_STATUS
     GLPK_SOLUTION_STATUS = glpk_getSolutionStatus(lp)
