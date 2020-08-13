@@ -367,7 +367,6 @@ def glpk_getSolutionStatus(lp):
     return GLPK_STATUS[sw.glp_get_status(lp)]
 
 
-'''
 def glpk_analyzeModel(
     f,
     lpFname=None,
@@ -409,7 +408,7 @@ def glpk_analyzeModel(
     if f.__check_gene_activity__:
         f.updateNetwork(lower=0.0, upper=0.0)
 
-    fid = f.id
+    fid = f.getId()
 
     if with_reduced_costs == 'scaled':
         f.SCALED_REDUCED_COSTS = True
@@ -420,7 +419,7 @@ def glpk_analyzeModel(
 
     if lpFname == None:
         flp = glpk_constructLPfromFBA(f, fname=None)
-        f.id = '_glpktmp_.tmp'
+        f.setId('_glpktmp_.tmp')
     else:
         flp = glpk_constructLPfromFBA(f, fname=lpFname)
         fid = lpFname
@@ -428,7 +427,7 @@ def glpk_analyzeModel(
     _Stime = time.time()
 
     print('\nglpk_analyzeModel FBA --> LP time: {}\n'.format(time.time() - _Stime))
-    f.id = fid
+    f.setId(fid)
     glpk_Solve(flp, method)
 
     glpk_setFBAsolutionToModel(f, flp, with_reduced_costs=with_reduced_costs)
@@ -495,27 +494,33 @@ def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     else:
         with_reduced_costs = False
 
-    if objval != None and sol != {} and with_reduced_costs:
-        RC = glpk_getReducedCosts(lp, scaled=scaled)
-        setReducedCosts(fba, RC)
-    else:
-        setReducedCosts(fba, {})
+    # if objval != None and sol != {} and with_reduced_costs:
+    # RC = glpk_getReducedCosts(lp, scaled=scaled)
+    # setReducedCosts(fba, RC)
+    # else:
+    # setReducedCosts(fba, {})
 
 
 def glpk_getOptimalSolution(c):
     """
     From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal
+
+    - *c* a GLPK object
+
     """
     s_val = []
     s_name = []
     fba_sol = {}
     objf_name = None
     objf_val = None
+
     try:
-        objf_name = c.obj.name
-        objf_val = c.obj.value
-        for n in c.cols:
-            fba_sol.update({n.name: n.value})
+        objf_name = sw.glp_get_obj_name(c)
+        objf_val = sw.glp_get_obj_val(c)
+        for n in range(sw.glp_get_num_cols(c)):
+            fba_sol.update(
+                {sw.glp_get_col_name(c, n + 1): sw.glp_get_col_prim(c, n + 1)}
+            )
     except Exception as ex:
         print(ex)
         print('WARNING: No solution to get')
@@ -527,6 +532,7 @@ def glpk_getOptimalSolution(c):
     return fba_sol, objf_name, objf_val
 
 
+'''
 def glpk_getReducedCosts(c, scaled=False):
     """
     Extract ReducedCosts from LP and return as a dictionary 'Rid' : reduced cost
