@@ -494,11 +494,11 @@ def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     else:
         with_reduced_costs = False
 
-    # if objval != None and sol != {} and with_reduced_costs:
-    # RC = glpk_getReducedCosts(lp, scaled=scaled)
-    # setReducedCosts(fba, RC)
-    # else:
-    # setReducedCosts(fba, {})
+    if objval is not None and len(sol) > 0 and with_reduced_costs:
+        RC = glpk_getReducedCosts(lp, scaled=scaled)
+        setReducedCosts(fba, RC)
+    else:
+        setReducedCosts(fba, {})
 
 
 def glpk_getOptimalSolution(c):
@@ -532,7 +532,6 @@ def glpk_getOptimalSolution(c):
     return fba_sol, objf_name, objf_val
 
 
-'''
 def glpk_getReducedCosts(c, scaled=False):
     """
     Extract ReducedCosts from LP and return as a dictionary 'Rid' : reduced cost
@@ -545,11 +544,18 @@ def glpk_getReducedCosts(c, scaled=False):
     r_costs = []
     s_val = []
 
-    for c_ in c.cols:
-        s_name.append(c_.name)
-        r_costs.append(c_.dual)
-        s_val.append(c_.value)
-    objf_val = c.obj.value
+    # for c_ in c.cols:
+    # s_name.append(c_.name)
+    # r_costs.append(c_.dual)
+    # s_val.append(c_.value)
+    # objf_val = c.obj.value
+
+    for c_ in range(sw.glp_get_num_cols(c)):
+        s_name.append(sw.glp_get_col_name(c, c_ + 1))
+        r_costs.append(sw.glp_get_col_dual(c, c_ + 1))
+        s_val.append(sw.glp_get_col_prim(c, c_ + 1))
+    objf_val = sw.glp_get_obj_val(c)
+
     output = {}
     for v in range(len(s_name)):
         if scaled:
@@ -564,6 +570,37 @@ def glpk_getReducedCosts(c, scaled=False):
     return output
 
 
+def getReducedCosts(fba):
+    """
+    Get a dictionary of reduced costs for each reaction/flux
+
+    """
+    output = {}
+    for r in fba.reactions:
+        output.update({r.getId(): r.reduced_cost})
+    return output
+
+
+def setReducedCosts(fba, reduced_costs):
+    """
+    For each reaction/flux, sets the attribute "reduced_cost" from a dictionary of
+    reduced costs
+
+     - *fba* an fba object
+     - *reduced_costs* a dictionary of {reaction : value} pairs
+
+    """
+    if len(reduced_costs) == 0:
+        pass
+    else:
+        for r in fba.reactions:
+            if r.getId() in reduced_costs:
+                r.reduced_cost = reduced_costs[r.getId()]
+            else:
+                r.reduced_cost = None
+
+
+'''
 def glpk_FluxVariabilityAnalysis(
     fba,
     selected_reactions=None,
@@ -1036,34 +1073,6 @@ def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
     # c.write(cpxlp='test_obja.lp')
 
 
-def getReducedCosts(fba):
-    """
-    Get a dictionary of reduced costs for each reaction/flux
-
-    """
-    output = {}
-    for r in fba.reactions:
-        output.update({r.getId(): r.reduced_cost})
-    return output
-
-
-def setReducedCosts(fba, reduced_costs):
-    """
-    For each reaction/flux, sets the attribute "reduced_cost" from a dictionary of
-    reduced costs
-
-     - *fba* an fba object
-     - *reduced_costs* a dictionary of {reaction : value} pairs
-
-    """
-    if len(reduced_costs) == 0:
-        pass
-    else:
-        for r in fba.reactions:
-            if r.getId() in reduced_costs:
-                r.reduced_cost = reduced_costs[r.getId()]
-            else:
-                r.reduced_cost = None
 
 
 # def cplx_getDualValues(c):
