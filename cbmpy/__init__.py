@@ -26,13 +26,15 @@ Last edit: $Author: bgoli $ ($Id: __init__.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os
 
 # Setup some environment
 __SILENT_START__ = False
 from . import CBConfig
+
 __CBCONFIG__ = CBConfig.__CBCONFIG__
 __version__ = CBConfig.__CBCONFIG__['VERSION']
 __CBCONFIG__['CBMPY_DIR'] = os.path.split(CBConfig.__file__)[0]
@@ -44,6 +46,7 @@ __CBCONFIG__['CBMPY_DIR'] = os.path.split(CBConfig.__file__)[0]
 __HAVE_SOLVER__ = False
 try:
     from . import CBSolver
+
     analyzeModel = CBSolver.analyzeModel
     FluxVariabilityAnalysis = CBSolver.FluxVariabilityAnalysis
     MinimizeSumOfAbsFluxes = CBSolver.MinimizeSumOfAbsFluxes
@@ -56,10 +59,18 @@ except (ImportError, AttributeError):
 
 from .CBWrite import writeFVAtoCSV, writeModelToExcel97
 from .CBXML import _HAVE_SBML_
+
 if _HAVE_SBML_:
     from .CBXML import sbml_fileFindVersion, sbml_fileValidate
     from .CBRead import loadModel, readSBML3FBC, readSBML2FBA, readCOBRASBML
-    from .CBWrite import saveModel, writeSBML3FBC, writeModelToExcel97, writeModelToCOMBINEarchive, writeCOBRASBML, writeSBML3FBCV2
+    from .CBWrite import (
+        saveModel,
+        writeSBML3FBC,
+        writeModelToExcel97,
+        writeModelToCOMBINEarchive,
+        writeCOBRASBML,
+        writeSBML3FBCV2,
+    )
 else:
     print('\nWARNING: No SBML support, top-level SBML read/write functions disabled.\n')
 
@@ -74,56 +85,45 @@ INF = float('inf')
 NINF = -float('inf')
 NAN = float('nan')
 
-from . import CBModel, CBDataStruct, CBModelTools, CBRead, CBReadtxt, CBTools, CBWrite, CBXML, CBNetDB, CBPlot, CBMultiModel
+from . import (
+    CBModel,
+    CBCommon,
+    CBModelTools,
+    CBRead,
+    CBReadtxt,
+    CBTools,
+    CBWrite,
+    CBXML,
+    CBNetDB,
+    CBPlot,
+    CBMultiModel,
+)
 from .CBTools import deSerialize, deSerializeFromDisk
 from . import PyscesSED
-SED = PyscesSED.SEDCBMPY
 
-# this is now obsolete witht unit tests moved to the cbmpy-tests branch
-# try:
-    #__test_dir__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'nosetests')
-    #test_set = 1
-    #test_bundle = os.path.join(__test_dir__, 'cbmpy_test_bundle_v{}.zip.py'.format(test_set))
-    #test_file = os.path.join(__test_dir__, 'installed.v{}'.format(test_set))
-    # if not os.path.exists(test_file):
-        #import zipfile
-        #print('Installing test files (v{})...'.format(test_set))
-        #zfile = zipfile.ZipFile(test_bundle, allowZip64=True)
-        # zfile.extractall(path=__test_dir__)
-        # zfile.close()
-        # os.remove(test_bundle)
-        #del zipfile, zfile
-    #from . import nosetests
-    #test = nosetests.run
-    #del nosetests, test_bundle, test_file, test_set
-# except ImportError:
-    # def test():
-        #print("ERROR: Tests not installed")
+SED = PyscesSED.SEDCBMPY
 
 
 def test():
-    print('\nCBMPy test suite is now separate from CMBPy source, see https://github.com/SystemsBioinformatics/cbmpy for details.\n')
+    print(
+        '\nCBMPy test suite is now separate from CMBPy source, see https://github.com/SystemsBioinformatics/cbmpy for details.\n'
+    )
 
 
 del os
 
 if not __SILENT_START__:
-    print('\nCBMPy environment\n******************')
-    #print('Release: {}'.format(__version__.replace('.{}'.format(rev),'')))
-    # print 'pysces.model_dir = ' + model_dir
-    # print 'pysces.output_dir = ' + output_dir
-
     print('\n\n***********************************************************************')
-    print('* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling        *'.format(CBConfig.__CBCONFIG__['VERSION']))
+    print(
+        '* Welcome to CBMPy ({}) - PySCeS Constraint Based Modelling        *'.format(
+            CBConfig.__CBCONFIG__['VERSION']
+        )
+    )
     print('*                http://cbmpy.sourceforge.net                         *')
-    print('* Copyright(C) Brett G. Olivier 2014 - 2019                           *')
-    print('* Dept. of Systems Bioinformatics                                     *')
-    print('* Vrije Universiteit Amsterdam, Amsterdam, The Netherlands            *')
+    print('* Copyright(C) Brett G. Olivier 2014 - 2020                           *')
+    print('* Systems Biology Lab, Vrije Universiteit Amsterdam                   *')
+    print('* Amsterdam, The Netherlands                                          *')
     print('* CBMPy is developed as part of the BeBasic MetaToolKit Project       *')
-    #print('* PySCeS is distributed under the PySCeS (BSD style) licence, see     *')
     print('* Distributed under the GNU GPL v 3.0 licence, see                    *')
     print('* LICENCE (supplied with this release) for details                    *')
-    ##  print('*                 ** Read about PySCeS **                             *')
-    ##  print('* http://bioinformatics.oupjournals.org/cgi/content/short/21/4/560    *')
     print('***********************************************************************\n')
-

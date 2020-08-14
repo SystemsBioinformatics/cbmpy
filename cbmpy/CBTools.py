@@ -33,7 +33,8 @@ Last edit: $Author: bgoli $ ($Id: CBTools.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os
 import time
@@ -41,6 +42,7 @@ import re
 import pprint
 import gzip
 import zipfile
+
 try:
     import pickle
 except ImportError:
@@ -49,14 +51,19 @@ cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 import numpy
 
 from . import CBModel
-# from .CBDataStruct import StructMatrixLP # legacy
-from .CBCommon import HAVE_PYPARSING, checkChemFormula, pp_chemicalFormula, extractGeneIdsFromString
+from .CBCommon import (
+    HAVE_PYPARSING,
+    checkChemFormula,
+    pp_chemicalFormula,
+    extractGeneIdsFromString,
+)
 from .CBCommon import processSpeciesChargeChemFormulaAnnot, pyparsing
 
 _PPR_ = pprint.PrettyPrinter()
 
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
@@ -66,6 +73,7 @@ def createTempFileName():
     Return a temporary filename
     """
     return str(time.time()).split('.')[0]
+
 
 # TODO comrpess
 
@@ -144,7 +152,9 @@ def addSinkReaction(fbam, species, lb=0.0, ub=1000.0):
     else:
         reversible = False
     Rname = species + '_sink'
-    R = CBModel.Reaction(Rname, name='%s sink reaction' % species, reversible=reversible)
+    R = CBModel.Reaction(
+        Rname, name='%s sink reaction' % species, reversible=reversible
+    )
     Su = CBModel.Reagent(Rname + species, species, -1.0)
     R.addReagent(Su)
     R.is_exchange = True
@@ -156,7 +166,11 @@ def addSinkReaction(fbam, species, lb=0.0, ub=1000.0):
     fbam.addFluxBound(clb)
     fbam.addFluxBound(cub)
 
-    print('\n***\nCreated new reaction {} with bounds ({} : {})\n***\n'.format(Rname, lb, ub))
+    print(
+        '\n***\nCreated new reaction {} with bounds ({} : {})\n***\n'.format(
+            Rname, lb, ub
+        )
+    )
 
 
 # TODO: check this
@@ -179,7 +193,9 @@ def addSourceReaction(fbam, species, lb=0.0, ub=1000.0):
     else:
         reversible = False
     Rname = species + '_src'
-    R = CBModel.Reaction(Rname, name='%s source reaction' % species, reversible=reversible)
+    R = CBModel.Reaction(
+        Rname, name='%s source reaction' % species, reversible=reversible
+    )
     Su = CBModel.Reagent(Rname + species, species, 1.0)
     R.addReagent(Su)
     R.is_exchange = True
@@ -191,7 +207,11 @@ def addSourceReaction(fbam, species, lb=0.0, ub=1000.0):
     fbam.addFluxBound(clb)
     fbam.addFluxBound(cub)
 
-    print('\n***\nCreated new reaction {} with bounds ({} : {})\n***\n'.format(Rname, lb, ub))
+    print(
+        '\n***\nCreated new reaction {} with bounds ({} : {})\n***\n'.format(
+            Rname, lb, ub
+        )
+    )
 
 
 def findDeadEndMetabolites(fbam):
@@ -232,7 +252,9 @@ def findDeadEndReactions(fbam):
     return orphaned_list
 
 
-def setSpeciesPropertiesFromAnnotations(fbam, overwriteCharge=False, overwriteChemFormula=False):
+def setSpeciesPropertiesFromAnnotations(
+    fbam, overwriteCharge=False, overwriteChemFormula=False
+):
     """
     This will attempt to set the model Species properties from the annotation. With the default options
     it will only replace missing data. With ChemicalFormula this is easy to detect however charge may
@@ -245,9 +267,18 @@ def setSpeciesPropertiesFromAnnotations(fbam, overwriteCharge=False, overwriteCh
     """
     for s_ in fbam.species:
         try:
-            processSpeciesChargeChemFormulaAnnot(s_, getFromName=False, overwriteCharge=overwriteCharge, overwriteChemFormula=overwriteChemFormula)
+            processSpeciesChargeChemFormulaAnnot(
+                s_,
+                getFromName=False,
+                overwriteCharge=overwriteCharge,
+                overwriteChemFormula=overwriteChemFormula,
+            )
         except Exception:
-            print('processSpeciesChargeChemFormulaAnnot failed for species with id: {}'.format(s_.getId()))
+            print(
+                'processSpeciesChargeChemFormulaAnnot failed for species with id: {}'.format(
+                    s_.getId()
+                )
+            )
 
 
 def fixReversibility(fbam, auto_correct=False):
@@ -270,12 +301,18 @@ def fixReversibility(fbam, auto_correct=False):
         # print RE
         if O in ['greater', 'greaterEqual']:
             if not RE and float(V) < 0.0:
-                print('Warning {} is not reversible and lower bound is {}.'.format(R, V))
+                print(
+                    'Warning {} is not reversible and lower bound is {}.'.format(R, V)
+                )
                 if auto_correct:
                     print('Resetting {} lower bound ({}) to zero'.format(R, V))
                     c.value = 0.0
                 else:
-                    print('Reaction ({}) reversible={} inconsistent with fluxbound lower bound ({}) run with auto_correct=True to reset lower bound.'.format(R, RE, V))
+                    print(
+                        'Reaction ({}) reversible={} inconsistent with fluxbound lower bound ({}) run with auto_correct=True to reset lower bound.'.format(
+                            R, RE, V
+                        )
+                    )
                     time.sleep(1)
 
 
@@ -330,7 +367,11 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
     RB = fba.getReactionBounds(rid)
     LB = UB = EB = None
     if RB[1] != None and RB[2] != None:
-        assert RB[1] <= RB[2], 'ERROR: For reaction splitting ({}): LowerBound ({}) must be LessEqual to UpperBound ({})'.format(rid, round(RB[1], 6), round(RB[2], 6))
+        assert (
+            RB[1] <= RB[2]
+        ), 'ERROR: For reaction splitting ({}): LowerBound ({}) must be LessEqual to UpperBound ({})'.format(
+            rid, round(RB[1], 6), round(RB[2], 6)
+        )
     if RB[1] != None:
         LB = fba.getFluxBoundByReactionID(rid, 'lower')
     if RB[2] != None:
@@ -439,7 +480,9 @@ def exportLabelledArray(arr, fname, names=None, sep=',', fmt='%f'):
     print('exported to {}'.format(fname))
 
 
-def exportLabelledArrayWithHeader(arr, fname, names=None, header=None, sep=',', fmt='%f'):
+def exportLabelledArrayWithHeader(
+    arr, fname, names=None, header=None, sep=',', fmt='%f'
+):
     """
     Export an array with row names and header
 
@@ -455,7 +498,9 @@ def exportLabelledArrayWithHeader(arr, fname, names=None, header=None, sep=',', 
     if names != None:
         assert arr.shape[0] == len(names), '\n ...  rows must equal number of names!'
     if header != None:
-        assert arr.shape[1] == len(header), '\n ...  cols must equal number of header names!'
+        assert arr.shape[1] == len(
+            header
+        ), '\n ...  cols must equal number of header names!'
 
     F = file(fname, 'w')
     cntr = 0
@@ -487,7 +532,9 @@ def exportLabelledArrayWithHeader(arr, fname, names=None, header=None, sep=',', 
     print('exported to {}'.format(fname))
 
 
-def exportLabelledLinkedList(arr, fname, names=None, sep=',', fmt='%s', appendlist=False):
+def exportLabelledLinkedList(
+    arr, fname, names=None, sep=',', fmt='%s', appendlist=False
+):
     """
     Write a 2D linked list [[...],[...],[...],[...]] and optionally a list of row labels to file:
 
@@ -660,11 +707,7 @@ def getBoundsDict(fbamod, substring=None):
     rBdic = {}
     for r in fbamod.getReactionIds(substring=substring):
         name, lb, ub, eq = fbamod.getReactionBounds(r)
-        rBdic.update({name: {'lb': lb,
-                             'ub': ub,
-                             'eq': eq
-                             }
-                      })
+        rBdic.update({name: {'lb': lb, 'ub': ub, 'eq': eq}})
     return rBdic
 
 
@@ -678,11 +721,7 @@ def getExchBoundsDict(fbamod):
     rBdic = {}
     for r in fbamod.getReactionIds(substring=None):
         name, lb, ub, eq = fbamod.getReactionBounds(r)
-        rBdic.update({name: {'lb': lb,
-                             'ub': ub,
-                             'eq': eq
-                             }
-                      })
+        rBdic.update({name: {'lb': lb, 'ub': ub, 'eq': eq}})
     for r in fbamod.reactions:
         if not r.is_exchange:
             rBdic.pop(r.getId())
@@ -707,7 +746,7 @@ def processBiGGchemFormula(fba):
             for se in tmp2:
                 NM += '%s_' % se
             NM = NM[:-1]
-            #NM = tmp.replace('_%s' % CF, '')
+            # NM = tmp.replace('_%s' % CF, '')
         else:
             NM = s.name
             CF = ''
@@ -727,7 +766,9 @@ def processBiGGannotationNote(fba, annotation_key='note'):
      - requires an *annotation_key* which contains a BiGG HTML fragment
 
     """
-    print('\nDeprecation warning:\nCBTools.processBiGGannotationNote() is being replaced with CBTools.processSBMLAnnotationNotes')
+    print(
+        '\nDeprecation warning:\nCBTools.processBiGGannotationNote() is being replaced with CBTools.processSBMLAnnotationNotes'
+    )
 
     html_p = re.compile("<html:p>.*?</html:p>")
     for r in fba.reactions:
@@ -737,7 +778,13 @@ def processBiGGannotationNote(fba, annotation_key='note'):
             if __DEBUG__:
                 print(hPs)
             for p in hPs:
-                ps = p.replace('<html:p>', '').replace('</html:p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
+                ps = (
+                    p.replace('<html:p>', '')
+                    .replace('</html:p>', '')
+                    .replace('&lt;', '<')
+                    .replace('&gt;', '>')
+                    .split(':', 1)
+                )
                 if len(ps) == 2:
                     new_ann.update({ps[0].strip(): ps[1].strip()})
             r.annotation.update(new_ann)
@@ -756,10 +803,10 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
     """
 
     # if hasattr(fba, '_SBML_LEVEL_') and fba._SBML_LEVEL_ != None:
-        #print('\n==================================\nINFO \"CBTools.processSBMLAnnotationNotes()\":\n')
-        #print('This function is now called automatically\nduring model load and can be ignored.')
-        # print('==================================\n')
-        # return
+    # print('\n==================================\nINFO \"CBTools.processSBMLAnnotationNotes()\":\n')
+    # print('This function is now called automatically\nduring model load and can be ignored.')
+    # print('==================================\n')
+    # return
 
     html_p = re.compile("<p>.*?</p>")
     html_span = re.compile("<span>.*?</span>")
@@ -778,7 +825,14 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
                     print(hPs)
                 for p in hPs:
                     ps = re.findall(html_span, p)
-                    ps = [p.replace('<span>', '').replace('</span>', '').replace('&lt;', '<').replace('&gt;', '>').strip() for p in ps]
+                    ps = [
+                        p.replace('<span>', '')
+                        .replace('</span>', '')
+                        .replace('&lt;', '<')
+                        .replace('&gt;', '>')
+                        .strip()
+                        for p in ps
+                    ]
                     if len(ps) == 2 and ps[0] not in r.annotation:
                         new_ann.update({ps[0]: ps[1]})
             else:
@@ -787,7 +841,13 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
                     if __DEBUG__:
                         print(hPs)
                     for p in hPs:
-                        ps = p.replace('<html:p>', '').replace('</html:p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
+                        ps = (
+                            p.replace('<html:p>', '')
+                            .replace('</html:p>', '')
+                            .replace('&lt;', '<')
+                            .replace('&gt;', '>')
+                            .split(':', 1)
+                        )
                         if len(ps) == 2 and ps[0].strip() not in r.annotation:
                             new_ann.update({ps[0].strip(): ps[1].strip()})
                 else:
@@ -795,7 +855,13 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
                     if __DEBUG__:
                         print(hPs)
                     for p in hPs:
-                        ps = p.replace('<p>', '').replace('</p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
+                        ps = (
+                            p.replace('<p>', '')
+                            .replace('</p>', '')
+                            .replace('&lt;', '<')
+                            .replace('&gt;', '>')
+                            .split(':', 1)
+                        )
                         if len(ps) == 2 and ps[0].strip() not in r.annotation:
                             new_ann.update({ps[0].strip(): ps[1].strip()})
             r.annotation.update(new_ann)
@@ -815,7 +881,14 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
                     print(hPs)
                 for p in hPs:
                     ps = re.findall(html_span, p)
-                    ps = [p.replace('<span>', '').replace('</span>', '').replace('&lt;', '<').replace('&gt;', '>').strip() for p in ps]
+                    ps = [
+                        p.replace('<span>', '')
+                        .replace('</span>', '')
+                        .replace('&lt;', '<')
+                        .replace('&gt;', '>')
+                        .strip()
+                        for p in ps
+                    ]
                     if len(ps) == 2 and ps[0].strip() not in s.annotation:
                         new_ann.update({ps[0]: ps[1]})
             else:
@@ -824,7 +897,13 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
                     if __DEBUG__:
                         print(hPs)
                     for p in hPs:
-                        ps = p.replace('<html:p>', '').replace('</html:p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
+                        ps = (
+                            p.replace('<html:p>', '')
+                            .replace('</html:p>', '')
+                            .replace('&lt;', '<')
+                            .replace('&gt;', '>')
+                            .split(':', 1)
+                        )
                         if len(ps) == 2 and ps[0].strip() not in s.annotation:
                             new_ann.update({ps[0].strip(): ps[1].strip()})
                 else:
@@ -832,36 +911,58 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
                     if __DEBUG__:
                         print(hPs)
                     for p in hPs:
-                        ps = p.replace('<p>', '').replace('</p>', '').replace('&lt;', '<').replace('&gt;', '>').split(':', 1)
+                        ps = (
+                            p.replace('<p>', '')
+                            .replace('</p>', '')
+                            .replace('&lt;', '<')
+                            .replace('&gt;', '>')
+                            .split(':', 1)
+                        )
                         if len(ps) == 2 and ps[0].strip() not in s.annotation:
                             new_ann.update({ps[0].strip(): ps[1].strip()})
             s.annotation.update(new_ann)
 
-        if 'chemFormula' in s.annotation and (s.chemFormula is None or s.chemFormula == ''):
+        if 'chemFormula' in s.annotation and (
+            s.chemFormula is None or s.chemFormula == ''
+        ):
             s.chemFormula = s.annotation.pop('chemFormula')
             if __DEBUG__:
                 print(s.annotation)
-        elif 'FORMULA' in s.annotation and (s.chemFormula is None or s.chemFormula == ''):
+        elif 'FORMULA' in s.annotation and (
+            s.chemFormula is None or s.chemFormula == ''
+        ):
             s.chemFormula = s.annotation.pop('FORMULA')
 
         if s.chemFormula != '' and not checkChemFormula(s.chemFormula):
             s.chemFormula = ''
 
-        if (s.charge is None or s.charge == '' or s.charge == 0) and 'charge' in s.annotation and s.annotation['charge'] != '':
+        if (
+            (s.charge is None or s.charge == '' or s.charge == 0)
+            and 'charge' in s.annotation
+            and s.annotation['charge'] != ''
+        ):
             chrg = s.annotation.pop('charge')
             try:
                 s.charge = int(chrg)
             except ValueError:
                 s.charge = None
-                print('Invalid charge: {} defined for species {}'.format(chrg, s.getId()))
+                print(
+                    'Invalid charge: {} defined for species {}'.format(chrg, s.getId())
+                )
             if __DEBUG__:
                 print(s.annotation)
-        elif (s.charge is None or s.charge == '' or s.charge == 0) and 'CHARGE' in s.annotation and s.annotation['CHARGE'] != '':
+        elif (
+            (s.charge is None or s.charge == '' or s.charge == 0)
+            and 'CHARGE' in s.annotation
+            and s.annotation['CHARGE'] != ''
+        ):
             chrg = s.annotation.pop('CHARGE')
             try:
                 s.charge = int(chrg)
             except ValueError:
-                print('Invalid charge: {} defined for species {}'.format(chrg, s.getId()))
+                print(
+                    'Invalid charge: {} defined for species {}'.format(chrg, s.getId())
+                )
                 s.charge = None
             if __DEBUG__:
                 print(s.annotation)
@@ -906,7 +1007,9 @@ def processExchangeReactions(fba, key):
     return fexDic, mediumDic
 
 
-def generateInputScanReports(fba, exDict, mediumDict, optimal_growth_rates, wDir, tag=''):
+def generateInputScanReports(
+    fba, exDict, mediumDict, optimal_growth_rates, wDir, tag=''
+):
     modName = fba.sourcefile
     modName += tag
     rnames = fba.getReactionNames()
@@ -934,12 +1037,17 @@ def generateInputScanReports(fba, exDict, mediumDict, optimal_growth_rates, wDir
         print(rid)
     for r in optimal_growth_rates:
         RN = rnames[rid.index(r)]
-        F.write('%s, %s, %s, %s, "%s"\n' % (r, exDict[r]['lb'], exDict[r]['ub'], optimal_growth_rates[r], RN))
+        F.write(
+            '%s, %s, %s, %s, "%s"\n'
+            % (r, exDict[r]['lb'], exDict[r]['ub'], optimal_growth_rates[r], RN)
+        )
     F.write('\n')
     F.close()
 
 
-def getAllReactionsAssociatedWithGene(fba, gene, gene_annotation_key='GENE ASSOCIATION'):
+def getAllReactionsAssociatedWithGene(
+    fba, gene, gene_annotation_key='GENE ASSOCIATION'
+):
     out = []
     for r in fba.reactions:
         GA = None
@@ -975,19 +1083,35 @@ def scanForReactionDuplicates(f, ignore_coefficients=False):
                 if not ignore_coefficients:
                     go = True
                     for rgid in Rtest:
-                        if float(r.getReagentWithSpeciesRef(rgid).coefficient) != float(r2.getReagentWithSpeciesRef(rgid).coefficient):
+                        if float(r.getReagentWithSpeciesRef(rgid).coefficient) != float(
+                            r2.getReagentWithSpeciesRef(rgid).coefficient
+                        ):
                             go = False
                             break
                     if go:
-                        dup = [r.id, r2.id, ]
+                        dup = [
+                            r.id,
+                            r2.id,
+                        ]
                         dup.sort()
-                        dup = dup + [refspecies, f.getReaction(dup[0]).getName(), f.getReaction(dup[1]).getName()]
+                        dup = dup + [
+                            refspecies,
+                            f.getReaction(dup[0]).getName(),
+                            f.getReaction(dup[1]).getName(),
+                        ]
                         if dup not in duplicates:
                             duplicates.append(dup)
                 else:
-                    dup = [r.id, r2.id, ]
+                    dup = [
+                        r.id,
+                        r2.id,
+                    ]
                     dup.sort()
-                    dup = dup + [refspecies, f.getReaction(dup[0]).getName(), f.getReaction(dup[1]).getName()]
+                    dup = dup + [
+                        refspecies,
+                        f.getReaction(dup[0]).getName(),
+                        f.getReaction(dup[1]).getName(),
+                    ]
                     if dup not in duplicates:
                         duplicates.append(dup)
     for d in duplicates:
@@ -1016,11 +1140,17 @@ def addGenesFromAnnotations(fba, annotation_key='GENE ASSOCIATION', gene_pattern
 
     """
 
-    print('\nWARNING: CBTools.addGenesFromAnnotations IS DEPRECATED PLEASE USE cmod.createGeneAssociationsFromAnnotations()\n')
-    fba.createGeneAssociationsFromAnnotations(annotation_key=annotation_key, replace_existing=True)
+    print(
+        '\nWARNING: CBTools.addGenesFromAnnotations IS DEPRECATED PLEASE USE cmod.createGeneAssociationsFromAnnotations()\n'
+    )
+    fba.createGeneAssociationsFromAnnotations(
+        annotation_key=annotation_key, replace_existing=True
+    )
 
 
-def getModelGenesPerReaction(fba, gene_pattern=None, gene_annotation_key='GENE ASSOCIATION'):
+def getModelGenesPerReaction(
+    fba, gene_pattern=None, gene_annotation_key='GENE ASSOCIATION'
+):
     '''
     Parse a BiGG style gene annotation string using default gene_pattern='(\(\W*\w*\W*\))' or
     (<any non-alphanum><any alphanum><any non-alphanum>)
@@ -1032,7 +1162,7 @@ def getModelGenesPerReaction(fba, gene_pattern=None, gene_annotation_key='GENE A
     '''
 
     react_gene = {}
-    #gene_re = re.compile(gene_pattern)
+    # gene_re = re.compile(gene_pattern)
 
     for r in fba.reactions:
         GA = None
@@ -1049,8 +1179,8 @@ def getModelGenesPerReaction(fba, gene_pattern=None, gene_annotation_key='GENE A
             GA = 'gene association'
         if GA != None:
             genes = extractGeneIdsFromString(r.annotation[GA])
-            #genes = re.findall(gene_re, r.annotation[GA])
-            #genes = [g.replace('(','').replace(')','').strip() for g in genes]
+            # genes = re.findall(gene_re, r.annotation[GA])
+            # genes = [g.replace('(','').replace(')','').strip() for g in genes]
             # print r.annotation['GENE ASSOCIATION']
             if len(genes) == 0:
                 # print '\n'
@@ -1097,7 +1227,9 @@ def removeFixedSpeciesReactions(f):
     """
     c_react = []
     for rea in f.reactions:
-        lsa = numpy.array([f.getSpecies(r.species_ref).is_boundary for r in rea.reagents])
+        lsa = numpy.array(
+            [f.getSpecies(r.species_ref).is_boundary for r in rea.reagents]
+        )
         if lsa.all():
             c_react.append(rea.getId())
     for r in c_react:
@@ -1120,11 +1252,17 @@ def addFluxAsActiveObjective(f, reaction_id, osense, coefficient=1):
         osense = 'minimize'
     if osense in ['maximise', 'minimise']:
         osense = osense.replace('se', 'ze')
-    assert osense in ['maximize', 'minimize'], "\nosense must be ['maximize', 'minimize'] not %s" % osense
-    assert reaction_id in [r.getId() for r in f.reactions], '\n%s is not avalid reaction' % reaction_id
+    assert osense in ['maximize', 'minimize'], (
+        "\nosense must be ['maximize', 'minimize'] not %s" % osense
+    )
+    assert reaction_id in [r.getId() for r in f.reactions], (
+        '\n%s is not avalid reaction' % reaction_id
+    )
     n_obj = CBModel.Objective(reaction_id + '_objf', osense)
     f.addObjective(n_obj, active=True)
-    n_flux_obj = CBModel.FluxObjective(reaction_id + '_fluxobj', reaction_id, coefficient)
+    n_flux_obj = CBModel.FluxObjective(
+        reaction_id + '_fluxobj', reaction_id, coefficient
+    )
     n_obj.addFluxObjective(n_flux_obj)
 
 
@@ -1202,12 +1340,18 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
                 EBAL = False
             if RCHARGE[R] is None or abs(RCHARGE[R]) >= zero_tol:
                 CBAL = False
-        Rres.update({R: {'id': R,
-                         'charge_balanced': CBAL,
-                         'element_balanced': EBAL,
-                         'elements': Ed.copy(),
-                         'charge': RCHARGE[R],
-                         'stuff': ROUT[R]}})
+        Rres.update(
+            {
+                R: {
+                    'id': R,
+                    'charge_balanced': CBAL,
+                    'element_balanced': EBAL,
+                    'elements': Ed.copy(),
+                    'charge': RCHARGE[R],
+                    'stuff': ROUT[R],
+                }
+            }
+        )
         if CBAL and EBAL:
             f.getReaction(R).is_balanced = True
         else:
@@ -1280,7 +1424,11 @@ def createZipArchive(zipname, files, move=False, compression='normal'):
                 os.remove(f_)
             except Exception as ex:
                 print(ex)
-        print('\nINFO: {} input file(s) moved to archive \"{}\".'.format(len(files), zipname))
+        print(
+            '\nINFO: {} input file(s) moved to archive \"{}\".'.format(
+                len(files), zipname
+            )
+        )
     else:
         print('\nINFO: zip-archive \"{}\" created.'.format(zipname))
 
@@ -1300,13 +1448,21 @@ def checkExchangeReactions(fba, autocorrect=True):
         if True in [fba.getSpecies(rr_.species_ref).is_boundary for rr_ in r_.reagents]:
             has_fixed = True
         if r_.is_exchange and not has_fixed:
-            print('WARNING: reaction {} is labelled as an exchange reaction but has no fixed reagents.'.format(r_.getId()))
+            print(
+                'WARNING: reaction {} is labelled as an exchange reaction but has no fixed reagents.'.format(
+                    r_.getId()
+                )
+            )
             if autocorrect:
                 print('INFO: is_exchange reaction attribute corrected')
                 r_.is_exchange = has_fixed
             badR.append(r_.getId())
         elif not r_.is_exchange and has_fixed:
-            print('WARNING: reaction {} is not labelled as an exchange reaction but contains a fixed reagent.'.format(r_.getId()))
+            print(
+                'WARNING: reaction {} is not labelled as an exchange reaction but contains a fixed reagent.'.format(
+                    r_.getId()
+                )
+            )
             if autocorrect:
                 print('INFO: is_exchange reaction attribute corrected')
                 r_.is_exchange = has_fixed
@@ -1325,13 +1481,19 @@ def checkIds(fba, items='all'):
     """
 
     if items == 'all':
-        items = [a.strip() for a in 'species,reactions,flux_bounds,objectives'.split(',')]
+        items = [
+            a.strip() for a in 'species,reactions,flux_bounds,objectives'.split(',')
+        ]
     else:
         items = [a.strip() for a in items.split(',')]
 
     for i_ in range(len(items) - 1, -1, -1):
         if not hasattr(fba, items[i_]):
-            print('ERROR: bad descriptor \"{}\" removing from input list'.format(items.pop(i_)))
+            print(
+                'ERROR: bad descriptor \"{}\" removing from input list'.format(
+                    items.pop(i_)
+                )
+            )
 
     output = {}
     iddump = []
@@ -1368,7 +1530,9 @@ def checkIds(fba, items='all'):
                     else:
                         iddump.append(foid)
     if len(output) == 0:
-        print('\nWARNING: no valid object descriptors found, please check your function call!')
+        print(
+            '\nWARNING: no valid object descriptors found, please check your function call!'
+        )
     return output
 
 
@@ -1386,10 +1550,7 @@ def checkFluxBoundConsistency(fba):
     LB = {}
     UB = {}
     EB = {}
-    eMB = {'lower': {},
-           'upper': {},
-           'equality': {}
-           }
+    eMB = {'lower': {}, 'upper': {}, 'equality': {}}
 
     noreaction = []
     for fb in fba.flux_bounds:
@@ -1397,11 +1558,19 @@ def checkFluxBoundConsistency(fba):
         get_type = fb.getType()
         RID = fb.getReactionId()
         if raw_type != get_type:
-            print('WARNING: incorrect bound type for operation: \"{}\" old \"{}\" --> \"{}\"'.format(fb.operation, raw_type, get_type))
+            print(
+                'WARNING: incorrect bound type for operation: \"{}\" old \"{}\" --> \"{}\"'.format(
+                    fb.operation, raw_type, get_type
+                )
+            )
 
         if get_type == 'lower':
             if RID in LB:
-                print('ERROR multiple LOWER bounds defined for reaction: \"{}\"'.format(RID))
+                print(
+                    'ERROR multiple LOWER bounds defined for reaction: \"{}\"'.format(
+                        RID
+                    )
+                )
             if RID in eMB['lower']:
                 eMB['lower'][RID].append(fb)
             else:
@@ -1409,7 +1578,11 @@ def checkFluxBoundConsistency(fba):
             LB[RID] = fb
         if get_type == 'upper':
             if RID in UB:
-                print('ERROR multiple UPPER bounds defined for reaction: \"{}\"'.format(RID))
+                print(
+                    'ERROR multiple UPPER bounds defined for reaction: \"{}\"'.format(
+                        RID
+                    )
+                )
             if RID in eMB['upper']:
                 eMB['upper'][RID].append(fb)
             else:
@@ -1417,7 +1590,11 @@ def checkFluxBoundConsistency(fba):
             UB[RID] = fb
         if get_type == 'equality':
             if RID in EB:
-                print('ERROR multiple EQUAL bounds defined for reaction: \"{}\"'.format(RID))
+                print(
+                    'ERROR multiple EQUAL bounds defined for reaction: \"{}\"'.format(
+                        RID
+                    )
+                )
             if RID in eMB['equality']:
                 eMB['equality'][RID].append(fb)
             else:
@@ -1437,10 +1614,7 @@ def checkFluxBoundConsistency(fba):
         if len(eMB['equality'][mb_]) == 1:
             eMB['equality'].pop(mb_)
 
-    undefined = {'no_upper': [],
-                 'no_lower': [],
-                 'no_upper_lower': []
-                 }
+    undefined = {'no_upper': [], 'no_lower': [], 'no_upper_lower': []}
 
     for r_ in fba.getReactionIds():
         LBdef = True
@@ -1461,15 +1635,16 @@ def checkFluxBoundConsistency(fba):
                 print('WARNING: No UPPER BOUND defined for reaction: \"{}\"'.format(r_))
                 undefined['no_upper'].append(r_)
 
-    errors = {'eq+lb': [],
-              'eq+ub': [],
-              'duplicate_ids': dupIDs,
-              'multiple_defines': eMB,
-              'lb>ub': [],
-              'undefined': undefined,
-              'rev_contradict': [],
-              'no_reaction': noreaction
-              }
+    errors = {
+        'eq+lb': [],
+        'eq+ub': [],
+        'duplicate_ids': dupIDs,
+        'multiple_defines': eMB,
+        'lb>ub': [],
+        'undefined': undefined,
+        'rev_contradict': [],
+        'no_reaction': noreaction,
+    }
 
     for k_ in EB:
         if k_ in LB:
@@ -1481,21 +1656,33 @@ def checkFluxBoundConsistency(fba):
     for k_ in LB:
         if k_ in UB and k_ not in checked:
             if not LB[k_].getValue() <= UB[k_].getValue():
-                print('ERROR: Reaction {} has lower bound ({}) larger than upper bound ({})'.format(k_, LB[k_].getValue(), UB[k_].getValue()))
+                print(
+                    'ERROR: Reaction {} has lower bound ({}) larger than upper bound ({})'.format(
+                        k_, LB[k_].getValue(), UB[k_].getValue()
+                    )
+                )
                 errors['lb>ub'].append((LB[k_], UB[k_]))
             checked.append(k_)
         assR = fba.getReaction(LB[k_].getReactionId())
         if assR != None:
             if not assR.reversible:
                 if LB[k_].getValue() < 0.0:
-                    print('ERROR: Reaction {} is marked as irreversible but has a negative lower bound ({})'.format(assR.getId(), LB[k_].getValue()))
+                    print(
+                        'ERROR: Reaction {} is marked as irreversible but has a negative lower bound ({})'.format(
+                            assR.getId(), LB[k_].getValue()
+                        )
+                    )
                     errors['rev_contradict'].append(assR)
             del assR
 
     for k_ in UB:
         if k_ in LB and k_ not in checked:
             if not LB[k_].getValue() <= UB[k_].getValue():
-                print('ERROR: Reaction {} has lower bound ({}) larger than upper bound ({})'.format(k_, LB[k_].getValue(), UB[k_].getValue()))
+                print(
+                    'ERROR: Reaction {} has lower bound ({}) larger than upper bound ({})'.format(
+                        k_, LB[k_].getValue(), UB[k_].getValue()
+                    )
+                )
                 errors['lb>ub'].append((LB[k_], UB[k_]))
             checked.append(k_)
 

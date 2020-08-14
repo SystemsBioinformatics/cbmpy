@@ -35,7 +35,7 @@ from __future__ import absolute_import
 # all unicode literals must first be cast to string for libSBML API - brett
 #from __future__ import unicode_literals
 
-import os, time, numpy, cgi, re, json
+import os, time, numpy, cgi, re
 import ast, shutil
 # this is a hack that needs to be streamlined a bit
 try:
@@ -54,9 +54,7 @@ except ImportError:
 
 
 from . import CBModel
-#from .CBDataStruct import (MIRIAMannotation, MIRIAMModelAnnotation)
-from .CBDataStruct import MIRIAMannotation
-from .CBCommon import (checkChemFormula, getGPRasDictFromString, processSpeciesChargeChemFormulaAnnot)
+from .CBCommon import (getGPRasDictFromString, processSpeciesChargeChemFormulaAnnot, MIRIAMannotation)
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
 __DEBUG__ = __CBCONFIG__['DEBUG']

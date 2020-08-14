@@ -26,36 +26,45 @@ Last edit: $Author: bgoli $ ($Id: CBWrite.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 if 'cDir' in vars():
-    cDir=vars()['cDir']
+    cDir = vars()['cDir']
 else:
-    cDir=None
+    cDir = None
 import os, time, numpy, zipfile
+
 # this is a hack that needs to be streamlined a bit
 try:
     import cStringIO as csio
 except ImportError:
     import io as csio
 
-from . import CBTools, CBXML, CBDataStruct
+from . import CBTools, CBXML
 
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
 _HAVE_SYMPY_ = False
 try:
     import sympy
-    if int(sympy.__version__.split('.')[1]) >= 7 and int(sympy.__version__.split('.')[2]) >= 5:
+
+    if (
+        int(sympy.__version__.split('.')[1]) >= 7
+        and int(sympy.__version__.split('.')[2]) >= 5
+    ):
         _HAVE_SYMPY_ = True
     elif int(sympy.__version__.split('.')[0]) >= 1:
         _HAVE_SYMPY_ = True
     else:
         del sympy
-        print('\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.')
+        print(
+            '\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.'
+        )
 except ImportError:
     _HAVE_SYMPY_ = False
     print('\nERROR: SymPy import error (required for symbolic matrix support only).')
@@ -63,6 +72,7 @@ except ImportError:
 _HAVE_XLWT_ = False
 try:
     import xlwt
+
     _HAVE_XLWT_ = True
 except ImportError:
     print('\nINFO: No xlwt module available, Excel spreadsheet creation disabled')
@@ -77,14 +87,31 @@ def saveModel(model, filename, compress=False):
 
     """
 
-    writeSBML3FBCV2(model, filename, directory=None, gpr_from_annot=False, add_groups=True,\
-                    add_cbmpy_annot=True, add_cobra_annot=False, validate=False, compress_bounds=True,\
-                    zip_model=compress, return_model_string=False)
+    writeSBML3FBCV2(
+        model,
+        filename,
+        directory=None,
+        gpr_from_annot=False,
+        add_groups=True,
+        add_cbmpy_annot=True,
+        add_cobra_annot=False,
+        validate=False,
+        compress_bounds=True,
+        zip_model=compress,
+        return_model_string=False,
+    )
 
 
-def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
-                       add_groups=True, add_cbmpy_annot=True, add_cobra_annot=False,\
-                       xoptions={'fbc_version': 1, 'validate' : False, 'compress_bounds' : True}):
+def writeSBML3FBC(
+    fba,
+    fname,
+    directory=None,
+    gpr_from_annot=False,
+    add_groups=True,
+    add_cbmpy_annot=True,
+    add_cobra_annot=False,
+    xoptions={'fbc_version': 1, 'validate': False, 'compress_bounds': True},
+):
     """
     Takes an FBA model object and writes it to file as SBML L3 FBC:
 
@@ -107,15 +134,37 @@ def writeSBML3FBC(fba, fname, directory=None, gpr_from_annot=False,\
 
 
     """
-    sbml_level_version = (3,1)
-    autofix=True
-    return_fbc=False
-    return CBXML.sbml_writeSBML3FBC(fba, fname, directory, sbml_level_version, autofix, return_fbc,\
-                                    gpr_from_annot, add_groups, add_cbmpy_annot, add_cobra_annot, xoptions)
+    sbml_level_version = (3, 1)
+    autofix = True
+    return_fbc = False
+    return CBXML.sbml_writeSBML3FBC(
+        fba,
+        fname,
+        directory,
+        sbml_level_version,
+        autofix,
+        return_fbc,
+        gpr_from_annot,
+        add_groups,
+        add_cbmpy_annot,
+        add_cobra_annot,
+        xoptions,
+    )
 
 
-def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups=True, add_cbmpy_annot=True, add_cobra_annot=False,\
-                    validate=False, compress_bounds=True, zip_model=False, return_model_string=False):
+def writeSBML3FBCV2(
+    fba,
+    fname,
+    directory=None,
+    gpr_from_annot=False,
+    add_groups=True,
+    add_cbmpy_annot=True,
+    add_cobra_annot=False,
+    validate=False,
+    compress_bounds=True,
+    zip_model=False,
+    return_model_string=False,
+):
     """
     Takes an FBA model object and writes it to file as SBML L3 FBCv2 :
 
@@ -133,14 +182,31 @@ def writeSBML3FBCV2(fba, fname, directory=None, gpr_from_annot=False, add_groups
 
     """
 
-    xoptions = {'fbc_version': 2, 'validate' : validate, 'compress_bounds' : compress_bounds, 'return_model_string' : return_model_string, 'zip_model' : zip_model}
-    sbml_level_version=(3,1)
-    autofix=True,
-    return_fbc=False
-    #if fbc_version == 2:
-        #add_cobra_annot = False
-    return CBXML.sbml_writeSBML3FBC(fba, fname, directory, sbml_level_version, autofix, return_fbc,\
-                                    gpr_from_annot, add_groups, add_cbmpy_annot, add_cobra_annot, xoptions)
+    xoptions = {
+        'fbc_version': 2,
+        'validate': validate,
+        'compress_bounds': compress_bounds,
+        'return_model_string': return_model_string,
+        'zip_model': zip_model,
+    }
+    sbml_level_version = (3, 1)
+    autofix = (True,)
+    return_fbc = False
+    # if fbc_version == 2:
+    # add_cobra_annot = False
+    return CBXML.sbml_writeSBML3FBC(
+        fba,
+        fname,
+        directory,
+        sbml_level_version,
+        autofix,
+        return_fbc,
+        gpr_from_annot,
+        add_groups,
+        add_cbmpy_annot,
+        add_cobra_annot,
+        xoptions,
+    )
 
 
 def writeCOBRASBML(fba, fname, directory=None):
@@ -153,6 +219,7 @@ def writeCOBRASBML(fba, fname, directory=None):
 
     """
     return CBXML.sbml_writeCOBRASBML(fba, fname, directory)
+
 
 def writeSBML2FBA(fba, fname, directory=None, sbml_level_version=None):
     """
@@ -186,9 +253,9 @@ def writeSensitivitiesToCSV(sensitivities, fname):
     obj_sens = sensitivities[0]
     rhs_sens = sensitivities[1]
     bound_sens = sensitivities[2]
-    F = open(fname+'_flux_sensitivity.csv', 'w')
+    F = open(fname + '_flux_sensitivity.csv', 'w')
     head = "Flux,Reduced cost,OCS low,OC value,OCS high,LB low,LB high,UB low,UB high"
-    F.write(head+'\n')
+    F.write(head + '\n')
     for j in obj_sens:
         rc = obj_sens[j][0]
         lcs = obj_sens[j][1]
@@ -204,7 +271,9 @@ def writeSensitivitiesToCSV(sensitivities, fname):
             lb = 0
             ub = 0
             ubs = 0
-        F.write('%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (j,rc,lcs,ocv,ucs,lbs,lb,ub,ubs))
+        F.write(
+            '%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (j, rc, lcs, ocv, ucs, lbs, lb, ub, ubs)
+        )
 
     for j in bound_sens:
         if j not in obj_sens:
@@ -216,24 +285,31 @@ def writeSensitivitiesToCSV(sensitivities, fname):
             lb = bound_sens[j][1]
             ub = bound_sens[j][2]
             ubs = bound_sens[j][3]
-            F.write('%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (j,rc,lcs,ocv,ucs,lbs,lb,ub,ubs))
+            F.write(
+                '%s,%s,%s,%s,%s,%s,%s,%s,%s\n'
+                % (j, rc, lcs, ocv, ucs, lbs, lb, ub, ubs)
+            )
     F.flush()
     F.close()
 
-    F = open(fname+'_constraint_sensitivity.csv', 'w')
+    F = open(fname + '_constraint_sensitivity.csv', 'w')
     F.write('Constraint,RHS low,RHS,RHS high\n')
     for c in rhs_sens:
         F.write('%s,%s,%s,%s\n' % (c, rhs_sens[c][0], rhs_sens[c][1], rhs_sens[c][2]))
     F.flush()
     F.close()
 
+
 def WriteModelRaw(fba, work_dir=cDir):
     """
     INFO: this method will be deprecated please update your scripts to use \"writeModelRaw()\"
     """
-    print('\nINFO: this method will be deprecated please update your scripts to use \"writeModelRaw()\"\n')
+    print(
+        '\nINFO: this method will be deprecated please update your scripts to use \"writeModelRaw()\"\n'
+    )
     time.sleep(1)
     writeModelRaw(fba, work_dir)
+
 
 def writeModelRaw(fba, work_dir=cDir):
     """
@@ -245,26 +321,44 @@ def writeModelRaw(fba, work_dir=cDir):
     """
     if work_dir == None:
         work_dir = os.getcwd()
-    FF = open(os.path.join(work_dir,'WriteModelRawOutput.txt'), 'w')
+    FF = open(os.path.join(work_dir, 'WriteModelRawOutput.txt'), 'w')
     FF.write('Species information:\n\n')
     for s in fba.species:
-        FF.write('%s: value=%f, is_boundary=%s, name=%s\n' % (s.getId(), s.value, int(s.is_boundary), s.name))
+        FF.write(
+            '%s: value=%f, is_boundary=%s, name=%s\n'
+            % (s.getId(), s.value, int(s.is_boundary), s.name)
+        )
     FF.write('\nReaction information:\n\n')
     for r in fba.reactions:
-        FF.write('%s: reversible=%s, name=%s\n' % (r.getId(), int(r.reversible), r.name))
+        FF.write(
+            '%s: reversible=%s, name=%s\n' % (r.getId(), int(r.reversible), r.name)
+        )
         FF.write('\t%s\n' % r.getSpeciesIds())
     FF.write('\nConstraint information:\n\n')
     for c in fba.flux_bounds:
         FF.write('%s %s %f\n' % (c.reaction, c.operation, c.value))
     FF.write('\nObjective information:\n\n')
-    FF.write('Active Objective: %s (%s)\n' % (fba.objectives[fba.activeObjIdx].getId(), fba.objectives[fba.activeObjIdx].operation))
+    FF.write(
+        'Active Objective: %s (%s)\n'
+        % (
+            fba.objectives[fba.activeObjIdx].getId(),
+            fba.objectives[fba.activeObjIdx].operation,
+        )
+    )
     for o in fba.objectives:
-        FF.write('%s: %s, %s\n' % (o.getId(), o.operation, o.getFluxObjectiveReactions()))
+        FF.write(
+            '%s: %s, %s\n' % (o.getId(), o.operation, o.getFluxObjectiveReactions())
+        )
     if hasattr(fba.N, 'shape'):
         FF.write('\nStoichiometric information:\n\n')
         FF.write('N-matrix dimensions = (%s,%s)\n' % fba.N.shape)
     FF.close()
-    print('WriteModelRaw has written a file to {}'.format(os.path.join(work_dir,'WriteModelRawOutput.txt')))
+    print(
+        'WriteModelRaw has written a file to {}'.format(
+            os.path.join(work_dir, 'WriteModelRawOutput.txt')
+        )
+    )
+
 
 def BuildLPFluxBounds(fba, use_rational=False):
     """
@@ -277,25 +371,28 @@ def BuildLPFluxBounds(fba, use_rational=False):
     FFS = csio.StringIO()
     c2s = {}
     for c in fba.flux_bounds:
-        if __DEBUG__: print('%s: %s' % (c.getId(), c.operation))
+        if __DEBUG__:
+            print('%s: %s' % (c.getId(), c.operation))
         minv = None
         maxv = None
         oper = None
         R = c.reaction
-        if c.operation in ['less','lessEqual']:
+        if c.operation in ['less', 'lessEqual']:
             maxv = c.value
             oper = c.operation
             if oper == 'less':
                 oper = '<='
-                if __DEBUG__: print('LP Bounds operator must be <= not <')
+                if __DEBUG__:
+                    print('LP Bounds operator must be <= not <')
             else:
                 oper = '<='
-        if c.operation in ['greater','greaterEqual']:
+        if c.operation in ['greater', 'greaterEqual']:
             minv = c.value
             oper = c.operation
             if oper == 'greater':
                 oper = '<='
-                if __DEBUG__: print('LP Bounds operator must be <= not <')
+                if __DEBUG__:
+                    print('LP Bounds operator must be <= not <')
             else:
                 oper = '<='
         if c.operation == 'equals':
@@ -303,47 +400,52 @@ def BuildLPFluxBounds(fba, use_rational=False):
             oper = '='
         if maxv != None:
             if use_rational:
-                c2s.update({R+'r' : '%s %s' % (oper, sympy.Rational(maxv))})
+                c2s.update({R + 'r': '%s %s' % (oper, sympy.Rational(maxv))})
             else:
                 if maxv == float('inf'):
-                    c2s.update({R+'r' : '%s +%s' % (oper, maxv)})
+                    c2s.update({R + 'r': '%s +%s' % (oper, maxv)})
                 else:
-                    c2s.update({R+'r' : '%s %s' % (oper, maxv)})
+                    c2s.update({R + 'r': '%s %s' % (oper, maxv)})
         elif minv != None:
             if use_rational:
-                c2s.update({R+'l' : '%s %s' % (sympy.Rational(minv), oper)})
+                c2s.update({R + 'l': '%s %s' % (sympy.Rational(minv), oper)})
             else:
-                c2s.update({R+'l' : '%s %s' % (minv, oper)})
+                c2s.update({R + 'l': '%s %s' % (minv, oper)})
 
     c2sk = list(c2s)
     c2sk.sort()
-    for r in (c2sk):
+    for r in c2sk:
         rht = None
         lht = None
         R = r[:-1]
-        if R+'r' in c2s:
-            rht = c2s[R+'r']
-            c2s.pop(R+'r')
-        if R+'l' in c2s:
-            lht = c2s[R+'l']
-            c2s.pop(R+'l')
+        if R + 'r' in c2s:
+            rht = c2s[R + 'r']
+            c2s.pop(R + 'r')
+        if R + 'l' in c2s:
+            lht = c2s[R + 'l']
+            c2s.pop(R + 'l')
         if lht != None and rht != None:
-            if __DEBUG__: print('{} {} {}'.format(lht, R, rht))
+            if __DEBUG__:
+                print('{} {} {}'.format(lht, R, rht))
             ##  FFS.write('%s: %s %s %s\n' % (R, lht, R, rht))
-            FFS.write('%s %s %s\n' % (lht, R, rht)) # THIS MUST BE SO for GLPK
+            FFS.write('%s %s %s\n' % (lht, R, rht))  # THIS MUST BE SO for GLPK
         elif lht == None and rht == None:
-            if __DEBUG__: print('Skipping: ({}, {}, {})'.format(lht, R, rht))
+            if __DEBUG__:
+                print('Skipping: ({}, {}, {})'.format(lht, R, rht))
         elif lht != None:
-            if __DEBUG__: print('{} {}'.format(lht, R))
-            #FFS.write('%s: %s %s\n' % (R, lht, R))
+            if __DEBUG__:
+                print('{} {}'.format(lht, R))
+            # FFS.write('%s: %s %s\n' % (R, lht, R))
             FFS.write('%s %s\n' % (lht, R))
         elif rht != None:
-            if __DEBUG__: print('{} {}'.format(R, rht))
-            #FFS.write('%s: %s %s\n' % (R, R, rht))
+            if __DEBUG__:
+                print('{} {}'.format(R, rht))
+            # FFS.write('%s: %s %s\n' % (R, R, rht))
             FFS.write('%s %s\n' % (R, rht))
         else:
             print('CONFUSION: ({}, {}, {})'.format(lht, R, rht))
     return FFS
+
 
 def BuildLPConstraints(fba, use_rational=False):
     """
@@ -358,7 +460,7 @@ def BuildLPConstraints(fba, use_rational=False):
         use_rational = False
         print('Warning: install Sympy for rational output')
     rebuild_stoich = False
-    if not hasattr(fba,'N') or fba.N == None:
+    if not hasattr(fba, 'N') or fba.N == None:
         rebuild_stoich = True
     else:
         if len([s for s in fba.species if not s.is_boundary]) != fba.N.array.shape[0]:
@@ -366,7 +468,9 @@ def BuildLPConstraints(fba, use_rational=False):
         elif len(fba.reactions) != fba.N.array.shape[1]:
             rebuild_stoich = True
     if rebuild_stoich:
-        print('\nWarning FBA object has inconsistant stoichiometric matrix, rebuilding it now.')
+        print(
+            '\nWarning FBA object has inconsistant stoichiometric matrix, rebuilding it now.'
+        )
         CBTools.addStoichToFBAModel(fba)
 
     constr = {}
@@ -375,10 +479,10 @@ def BuildLPConstraints(fba, use_rational=False):
         RCon = []
         for c in range(fba.N.array.shape[1]):
             colName = fba.N.col[c]
-            colCoef = fba.N.array[r,c]
+            colCoef = fba.N.array[r, c]
             if colCoef != 0.0:
                 RCon.append((colCoef, colName))
-        constr.update({rowName : RCon})
+        constr.update({rowName: RCon})
 
     FFS = csio.StringIO()
     constrsk = list(constr)
@@ -418,6 +522,7 @@ def BuildLPConstraints(fba, use_rational=False):
             FFS.write('%s\n' % fba.N.RHS[r])
     return FFS
 
+
 def BuildLPUserConstraints(fba, use_rational=False):
     """
     Build and return a csio that contains constraint constructed from
@@ -432,11 +537,13 @@ def BuildLPUserConstraints(fba, use_rational=False):
         print('Warning: install Sympy for rational output')
     rebuild_stoich = False
     assert fba.user_constraints != None, "\nNo user constraints to build"
-    if not hasattr(fba,'CM') or fba.CM == None:
+    if not hasattr(fba, 'CM') or fba.CM == None:
         rebuild_stoich = True
 
     if rebuild_stoich:
-        print('\nWarning FBA object has inconsistant user constraint matrix, rebuilding it now.')
+        print(
+            '\nWarning FBA object has inconsistant user constraint matrix, rebuilding it now.'
+        )
         CBTools.addStoichToFBAModel(fba)
 
     constr = {}
@@ -445,10 +552,10 @@ def BuildLPUserConstraints(fba, use_rational=False):
         RCon = []
         for c in range(fba.CM.array.shape[1]):
             colName = fba.CM.col[c]
-            colCoef = fba.CM.array[r,c]
+            colCoef = fba.CM.array[r, c]
             if colCoef != 0.0:
                 RCon.append((colCoef, colName))
-        constr.update({rowName : RCon})
+        constr.update({rowName: RCon})
 
     FFS = csio.StringIO()
     constrsk = list(constr)
@@ -495,7 +602,7 @@ def BuildLPConstraintsRelaxed(fba):
     Relaxed refers to dS/dt >= 0
     """
     raise DeprecationWarning("\nThis method is deprecated")
-    if not hasattr(fba,'N') or fba.N == None:
+    if not hasattr(fba, 'N') or fba.N == None:
         print('\nWarning FBA object has no stoichiometric matrix constructing it now.')
         CBTools.addStoichToFBAModel(fba)
         time.sleep(1)
@@ -506,10 +613,10 @@ def BuildLPConstraintsRelaxed(fba):
         RCon = []
         for c in range(fba.N.array.shape[1]):
             colName = fba.N.col[c]
-            colCoef = fba.N.array[r,c]
+            colCoef = fba.N.array[r, c]
             if colCoef != 0.0:
                 RCon.append((colCoef, colName))
-        constr.update({rowName : RCon})
+        constr.update({rowName: RCon})
 
     FFS = csio.StringIO()
     constrsk = list(constr)
@@ -527,6 +634,7 @@ def BuildLPConstraintsRelaxed(fba):
 
     return FFS
 
+
 def BuildLPConstraintsStrict(fba, use_rational=False):
     """
     Build and return a csio that contains the constaints in LP format
@@ -538,7 +646,7 @@ def BuildLPConstraintsStrict(fba, use_rational=False):
         use_rational = False
         print('Warning: install Sympy for rational IO')
 
-    if not hasattr(fba,'N') or fba.N == None:
+    if not hasattr(fba, 'N') or fba.N == None:
         print('\nWarning FBA object has no stoichiometric matrix constructing it now.')
         CBTools.addStoichToFBAModel(fba)
         time.sleep(1)
@@ -549,10 +657,10 @@ def BuildLPConstraintsStrict(fba, use_rational=False):
         RCon = []
         for c in range(fba.N.array.shape[1]):
             colName = fba.N.col[c]
-            colCoef = fba.N.array[r,c]
+            colCoef = fba.N.array[r, c]
             if colCoef != 0.0:
                 RCon.append((colCoef, colName))
-        constr.update({rowName : RCon})
+        constr.update({rowName: RCon})
 
     FFS = csio.StringIO()
     constrsk = list(constr)
@@ -586,6 +694,7 @@ def BuildLPConstraintsStrict(fba, use_rational=False):
 
     return FFS
 
+
 def BuildLPConstraintsMath(fba, use_rational=False):
     """
     Build and return a csio that contains the constaints in LP format
@@ -596,7 +705,7 @@ def BuildLPConstraintsMath(fba, use_rational=False):
         use_rational = False
         print('Warning: install Sympy for rational IO')
 
-    if not hasattr(fba,'N') or fba.N == None:
+    if not hasattr(fba, 'N') or fba.N == None:
         print('\nWarning FBA object has no stoichiometric matrix constructing it now.')
         CBTools.addStoichToFBAModel(fba)
         time.sleep(1)
@@ -607,10 +716,10 @@ def BuildLPConstraintsMath(fba, use_rational=False):
         RCon = []
         for c in range(fba.N.array.shape[1]):
             colName = fba.N.col[c]
-            colCoef = fba.N.array[r,c]
+            colCoef = fba.N.array[r, c]
             if colCoef != 0.0:
                 RCon.append((colCoef, colName))
-        constr.update({rowName : RCon})
+        constr.update({rowName: RCon})
 
     FFS = csio.StringIO()
     constrsk = list(constr)
@@ -639,15 +748,37 @@ def BuildLPConstraintsMath(fba, use_rational=False):
             FFS.write('>= 0\n')
     return FFS
 
-def WriteModelLPOld(fba, work_dir=None, multisymb=' ', lpt=True, constraint_mode='strict', use_rational=False, format='%s'):
+
+def WriteModelLPOld(
+    fba,
+    work_dir=None,
+    multisymb=' ',
+    lpt=True,
+    constraint_mode='strict',
+    use_rational=False,
+    format='%s',
+):
     """
     INFO: this method will be deprecated please update your scripts to use \"writeModelLPOld()\"
     """
-    print('\nINFO: this method will be deprecated please update your scripts to use \"writeModelLPOld()\"\n')
+    print(
+        '\nINFO: this method will be deprecated please update your scripts to use \"writeModelLPOld()\"\n'
+    )
     time.sleep(1)
-    writeModelLPOld(fba, work_dir, multisymb, lpt, constraint_mode, use_rational, format)
+    writeModelLPOld(
+        fba, work_dir, multisymb, lpt, constraint_mode, use_rational, format
+    )
 
-def writeModelLPOld(fba, work_dir=None, multisymb=' ', lpt=True, constraint_mode='strict', use_rational=False, format='%s'):
+
+def writeModelLPOld(
+    fba,
+    work_dir=None,
+    multisymb=' ',
+    lpt=True,
+    constraint_mode='strict',
+    use_rational=False,
+    format='%s',
+):
     """
     Writes a fba as an LP/LPT
 
@@ -670,13 +801,13 @@ def writeModelLPOld(fba, work_dir=None, multisymb=' ', lpt=True, constraint_mode
     else:
         FnameTmp = os.path.join(work_dir, fba.getId())
     if use_rational:
-        FnameTmp = FnameTmp+'.rat'
+        FnameTmp = FnameTmp + '.rat'
     if not lpt:
-        FNAME = FnameTmp+'.lp'
+        FNAME = FnameTmp + '.lp'
         FF = open(FNAME, 'w')
         FF.write('Problem\n %s\n\n' % FnameTmp)
     else:
-        FNAME = FnameTmp+'.lp'
+        FNAME = FnameTmp + '.lp'
         FF = open(FNAME, 'w')
         FF.write('\\\\ %s \n\n' % FnameTmp)
     objO = fba.objectives[fba.activeObjIdx].operation.lower()
@@ -689,7 +820,11 @@ def writeModelLPOld(fba, work_dir=None, multisymb=' ', lpt=True, constraint_mode
         try:
             nc = float(fObj.coefficient)
         except ValueError:
-            print('Suspected rational number ({}) detected in fluxObjective {}'.format(fObj.coefficient, fObj.getId()))
+            print(
+                'Suspected rational number ({}) detected in fluxObjective {}'.format(
+                    fObj.coefficient, fObj.getId()
+                )
+            )
         if nc >= 0.0:
             sign = '+'
         else:
@@ -697,7 +832,11 @@ def writeModelLPOld(fba, work_dir=None, multisymb=' ', lpt=True, constraint_mode
         # TODO: if use_rational is not used simply try and evaluate the coefficient string with
         # sympy.Rational.evalf()  and use this as the value for nc ... also remove use_rational case
         if use_rational:
-            objStr += ' %s%s%s' % (sympy.Rational(fObj.coefficient), multisymb, fObj.reaction)
+            objStr += ' %s%s%s' % (
+                sympy.Rational(fObj.coefficient),
+                multisymb,
+                fObj.reaction,
+            )
             ##  FF.write('%s: %s%s%s\n' % (fobj0.reaction, sympy.Rational(fobj0.coefficient), multisymb, fobj0.reaction))
         else:
             objStr += ' %s %s%s%s' % (sign, abs(nc), multisymb, fObj.reaction)
@@ -713,8 +852,12 @@ def writeModelLPOld(fba, work_dir=None, multisymb=' ', lpt=True, constraint_mode
     CONST.seek(0)
     BOUNDS = BuildLPFluxBounds(fba, use_rational)
     BOUNDS.seek(0)
-    if __DEBUG__: print(CONST.read()); CONST.seek(0)
-    if __DEBUG__: print(BOUNDS.read()); BOUNDS.seek(0)
+    if __DEBUG__:
+        print(CONST.read())
+        CONST.seek(0)
+    if __DEBUG__:
+        print(BOUNDS.read())
+        BOUNDS.seek(0)
 
     FF.write('\nSubject To\n')
     FF.write(CONST.read())
@@ -725,15 +868,39 @@ def writeModelLPOld(fba, work_dir=None, multisymb=' ', lpt=True, constraint_mode
     print('writeModelLP has written a file to {}'.format(NAME))
     return FNAME
 
-def WriteModelLP(fba, work_dir=None, fname=None, multisymb=' ', format='%s', use_rational=False, constraint_mode=None, quiet=False):
+
+def WriteModelLP(
+    fba,
+    work_dir=None,
+    fname=None,
+    multisymb=' ',
+    format='%s',
+    use_rational=False,
+    constraint_mode=None,
+    quiet=False,
+):
     """
     INFO: this method will be deprecated please update your scripts to use \"writeModelLP()\"
     """
-    print('\nINFO: this method will be deprecated please update your scripts to use \"writeModelLP()\"\n')
+    print(
+        '\nINFO: this method will be deprecated please update your scripts to use \"writeModelLP()\"\n'
+    )
     time.sleep(1)
-    writeModelLP(fba, work_dir, fname, multisymb, format, use_rational, constraint_mode, quiet)
+    writeModelLP(
+        fba, work_dir, fname, multisymb, format, use_rational, constraint_mode, quiet
+    )
 
-def writeModelLP(fba, work_dir=None, fname=None, multisymb=' ', format='%s', use_rational=False, constraint_mode=None, quiet=False):
+
+def writeModelLP(
+    fba,
+    work_dir=None,
+    fname=None,
+    multisymb=' ',
+    format='%s',
+    use_rational=False,
+    constraint_mode=None,
+    quiet=False,
+):
     """
     Writes an FBA object as an LP in CPLEX LP format
 
@@ -752,24 +919,30 @@ def writeModelLP(fba, work_dir=None, fname=None, multisymb=' ', format='%s', use
 
     if not _HAVE_SYMPY_ and use_rational:
         use_rational = False
-        print('\nWarning switching to floating point arithmetic: install Sympy for rational IO')
+        print(
+            '\nWarning switching to floating point arithmetic: install Sympy for rational IO'
+        )
         time.sleep(2)
 
     FNAME = None
     if fname == None:
         fname = fba.getId()
     if work_dir != None:
-        FnameTmp = os.path.join(work_dir,  fname)
+        FnameTmp = os.path.join(work_dir, fname)
     else:
         FnameTmp = fname
 
-    FNAME = FnameTmp+'.lp'
+    FNAME = FnameTmp + '.lp'
     FF = open(FNAME, 'w')
     FF.write('\\\\ %s \n\n' % FnameTmp)
     if len(fba.objectives) > 0:
         ##  print fba.objectives
         if fba.objectives[fba.activeObjIdx].operation == None:
-            print('\nWARNING: Objective function \"{}\" has no \"operation\" defined assuming \"maximize\"'.format(fba.objectives[fba.activeObjIdx].getId()))
+            print(
+                '\nWARNING: Objective function \"{}\" has no \"operation\" defined assuming \"maximize\"'.format(
+                    fba.objectives[fba.activeObjIdx].getId()
+                )
+            )
             fba.objectives[fba.activeObjIdx].operation = 'maximize'
             time.sleep(2)
         objO = fba.objectives[fba.activeObjIdx].operation.lower()
@@ -785,13 +958,21 @@ def writeModelLP(fba, work_dir=None, fname=None, multisymb=' ', format='%s', use
                 if _HAVE_SYMPY_:
                     nc = sympy.Rational(fObj.coefficient).evalf()
                 else:
-                    raise ValuError( 'Invalid coefficient (%s) detected in fluxObjective %s' % (fObj.coefficient, fObj.getId()))
+                    raise ValuError(
+                        'Invalid coefficient (%s) detected in fluxObjective %s'
+                        % (fObj.coefficient, fObj.getId())
+                    )
             if nc >= 0.0:
                 sign = '+'
             else:
                 sign = '-'
             if use_rational:
-                objStr += ' %s %s%s%s' % (sign, sympy.Rational(abs(nc)), multisymb, fObj.reaction)
+                objStr += ' %s %s%s%s' % (
+                    sign,
+                    sympy.Rational(abs(nc)),
+                    multisymb,
+                    fObj.reaction,
+                )
             else:
                 objStr += ' %s %s%s%s' % (sign, abs(nc), multisymb, fObj.reaction)
     else:
@@ -805,8 +986,12 @@ def writeModelLP(fba, work_dir=None, fname=None, multisymb=' ', format='%s', use
         UCONST.seek(0)
     BOUNDS = BuildLPFluxBounds(fba, use_rational)
     BOUNDS.seek(0)
-    if __DEBUG__: print(CONST.read()); CONST.seek(0)
-    if __DEBUG__: print(BOUNDS.read()); BOUNDS.seek(0)
+    if __DEBUG__:
+        print(CONST.read())
+        CONST.seek(0)
+    if __DEBUG__:
+        print(BOUNDS.read())
+        BOUNDS.seek(0)
 
     FF.write('\nSubject To\n')
     FF.write(CONST.read())
@@ -820,6 +1005,7 @@ def writeModelLP(fba, work_dir=None, fname=None, multisymb=' ', format='%s', use
     if not quiet:
         print('writeModelLP has written a file to {}'.format(FNAME))
     return FNAME
+
 
 def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
     """
@@ -837,7 +1023,7 @@ def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
         maxv = None
         oper = None
         R = c.reaction
-        if c.operation in ['less','lessEqual']:
+        if c.operation in ['less', 'lessEqual']:
             if infinity_replace != None and numpy.isposinf([c.value])[0]:
                 maxv = infinity_replace
             elif infinity_replace != None and numpy.isneginf([c.value])[0]:
@@ -851,7 +1037,7 @@ def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
                 ##  print 'LP Bounds operator must be <= not <'
             else:
                 oper = '<='
-        if c.operation in ['greater','greaterEqual']:
+        if c.operation in ['greater', 'greaterEqual']:
             if infinity_replace != None and numpy.isposinf([c.value])[0]:
                 minv = infinity_replace
             elif infinity_replace != None and numpy.isneginf([c.value])[0]:
@@ -876,15 +1062,15 @@ def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
             ##  print 'maxv2', maxv
         if maxv != None:
             if not use_rational:
-                UBs.update({R : float(maxv)})
+                UBs.update({R: float(maxv)})
             else:
-                UBs.update({R : maxv})
+                UBs.update({R: maxv})
 
         elif minv != None:
             if not use_rational:
-                LBs.update({R : float(minv)})
+                LBs.update({R: float(minv)})
             else:
-                LBs.update({R : minv})
+                LBs.update({R: minv})
 
     if __DEBUG__:
         print(' ')
@@ -903,16 +1089,21 @@ def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
         else:
             raise RuntimeError('\nError: SymPy required for rational operations')
 
-
     LBskeys = list(LBs)
     for lb in range(len(LBskeys)):
         if not use_rational:
             LBm[lb, fba.N.col.index(LBskeys[lb])] = 1.0
             BsRHS.append(LBs[LBskeys[lb]])
         else:
-            LBm[lb, fba.N.col.index(LBskeys[lb])] = sympy.Rational(1.0).limit_denominator(__CBCONFIG__['SYMPY_DENOM_LIMIT'])
+            LBm[lb, fba.N.col.index(LBskeys[lb])] = sympy.Rational(
+                1.0
+            ).limit_denominator(__CBCONFIG__['SYMPY_DENOM_LIMIT'])
             print(LBs[LBskeys[lb]])
-            BsRHS.append(sympy.Rational(LBs[LBskeys[lb]]).limit_denominator(__CBCONFIG__['SYMPY_DENOM_LIMIT']))
+            BsRHS.append(
+                sympy.Rational(LBs[LBskeys[lb]]).limit_denominator(
+                    __CBCONFIG__['SYMPY_DENOM_LIMIT']
+                )
+            )
 
     if __DEBUG__:
         print(fba.N.col)
@@ -926,8 +1117,14 @@ def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
             UBm[ub, fba.N.col.index(UBskeys[ub])] = -1.0
             BsRHS.append(-UBs[UBskeys[ub]])
         else:
-            UBm[ub, fba.N.col.index(UBskeys[ub])] = sympy.Rational(-1.0).limit_denominator(__CBCONFIG__['SYMPY_DENOM_LIMIT'])
-            BsRHS.append(-sympy.Rational(UBs[UBskeys[ub]]).limit_denominator(__CBCONFIG__['SYMPY_DENOM_LIMIT']))
+            UBm[ub, fba.N.col.index(UBskeys[ub])] = sympy.Rational(
+                -1.0
+            ).limit_denominator(__CBCONFIG__['SYMPY_DENOM_LIMIT'])
+            BsRHS.append(
+                -sympy.Rational(UBs[UBskeys[ub]]).limit_denominator(
+                    __CBCONFIG__['SYMPY_DENOM_LIMIT']
+                )
+            )
 
     del LBskeys, UBskeys
 
@@ -940,15 +1137,33 @@ def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
 
     return numpy.vstack([LBm, UBm]), BsRHS
 
-def WriteModelHFormatFBA(fba, work_dir=None, use_rational=False, fullLP=True, format='%s', infinity_replace=None):
+
+def WriteModelHFormatFBA(
+    fba,
+    work_dir=None,
+    use_rational=False,
+    fullLP=True,
+    format='%s',
+    infinity_replace=None,
+):
     """
     INFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"
     """
-    print('\nINFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"\n')
+    print(
+        '\nINFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"\n'
+    )
     time.sleep(1)
     writeModelHFormatFBA(fba, work_dir, use_rational, fullLP, format, infinity_replace)
 
-def writeModelHFormatFBA(fba, work_dir=None, use_rational=False, fullLP=True, format='%s', infinity_replace=None):
+
+def writeModelHFormatFBA(
+    fba,
+    work_dir=None,
+    use_rational=False,
+    fullLP=True,
+    format='%s',
+    infinity_replace=None,
+):
     """
     Write an FBA-LP in polynomial H-Format file. This version has been replaced by `writeModelHFormatFBA2()`
     but is kept for backwards compatability.
@@ -993,18 +1208,21 @@ def writeModelHFormatFBA(fba, work_dir=None, use_rational=False, fullLP=True, fo
     else:
         name = M.getId().replace('.xml', '') + '_r.ine'
 
-    RHS = numpy.array(RHS,'d')
+    RHS = numpy.array(RHS, 'd')
     RHS.shape = (len(RHS), 1)
-    if __DEBUG__: print(RHS)
+    if __DEBUG__:
+        print(RHS)
     ##  LP = numpy.hstack([LHS, RHS])
 
-    OBJ_FUNC = numpy.zeros(LHS.shape[1]+1)
+    OBJ_FUNC = numpy.zeros(LHS.shape[1] + 1)
     for j in range(LHS.shape[1]):
         # first objective function, first flux objective
-        if __DEBUG__: print(M.objectives[0].fluxObjectives[0].reaction, M.N.col[j])
+        if __DEBUG__:
+            print(M.objectives[0].fluxObjectives[0].reaction, M.N.col[j])
         if M.objectives[0].fluxObjectives[0].reaction == M.N.col[j]:
             OBJ_FUNC[j] = float(M.objectives[0].fluxObjectives[0].coefficient)
-    if __DEBUG__: print(OBJ_FUNC)
+    if __DEBUG__:
+        print(OBJ_FUNC)
 
     # for Ax >= B Hformat wants -B A >= 0
     LP = numpy.hstack([-RHS, LHS])
@@ -1029,15 +1247,15 @@ def writeModelHFormatFBA(fba, work_dir=None, use_rational=False, fullLP=True, fo
         NUM_TYPE = 'rational'
     F.write('%s  %s  %s\n' % (LP.shape[0], LP.shape[1], NUM_TYPE))
 
-    strW = format+' '
+    strW = format + ' '
     for r in range(LP.shape[0]):
         for c in range(LP.shape[1]):
             if not use_rational:
-                if LP[r,c] == 0.0 or LP[r,c] == -0.0:
-                    LP[r,c] = 0.0
-                F.write(strW % LP[r,c])
+                if LP[r, c] == 0.0 or LP[r, c] == -0.0:
+                    LP[r, c] = 0.0
+                F.write(strW % LP[r, c])
             else:
-                F.write('%s ' % sympy.Rational(format % LP[r,c]))
+                F.write('%s ' % sympy.Rational(format % LP[r, c]))
         F.write('\n')
 
     if fullLP:
@@ -1052,22 +1270,44 @@ def writeModelHFormatFBA(fba, work_dir=None, use_rational=False, fullLP=True, fo
         F.write('end\n')
     F.write('\n')
     F.close()
-    F = open(Fname.replace('.ine','')+'.columns.txt', 'w')
+    F = open(Fname.replace('.ine', '') + '.columns.txt', 'w')
     for j in range(M.N.array.shape[1]):
         F.write('%s,%s\n' % (j, M.N.col[j]))
     F.write('\n')
     F.close()
     return Fname
 
-def WriteModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fullLP=True, format='%s', infinity_replace=None):
+
+def WriteModelHFormatFBA2(
+    fba,
+    fname=None,
+    work_dir=None,
+    use_rational=False,
+    fullLP=True,
+    format='%s',
+    infinity_replace=None,
+):
     """
     INFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"
     """
-    print('\nINFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"\n')
+    print(
+        '\nINFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"\n'
+    )
     time.sleep(1)
-    writeModelHFormatFBA2(fba, fname, work_dir, use_rational, fullLP, format, infinity_replace)
+    writeModelHFormatFBA2(
+        fba, fname, work_dir, use_rational, fullLP, format, infinity_replace
+    )
 
-def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fullLP=True, format='%s', infinity_replace=None):
+
+def writeModelHFormatFBA2(
+    fba,
+    fname=None,
+    work_dir=None,
+    use_rational=False,
+    fullLP=True,
+    format='%s',
+    infinity_replace=None,
+):
     """
     Write an FBA-LP in polynomial H-Format file. This is an improved version of `WriteModelHFormatFBA()`
     which it replaces. Note that if a SymPy matrix is used as input then use_rational is automatically enabled.
@@ -1087,7 +1327,7 @@ def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fu
         print('INFO: using rational matrix')
     M = fba
     LHS = M.N.array.copy()
-    #RHS = [0.0 for e in range(M.N.shape[0])]
+    # RHS = [0.0 for e in range(M.N.shape[0])]
     RHS = M.N.RHS.tolist()
     if __DEBUG__:
         print(LHS)
@@ -1099,7 +1339,9 @@ def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fu
     if __DEBUG__:
         print(LHS)
         print(RHS)
-    BsLHS, BsRHS = BuildHformatFluxBounds(M, infinity_replace=infinity_replace, use_rational=use_rational)
+    BsLHS, BsRHS = BuildHformatFluxBounds(
+        M, infinity_replace=infinity_replace, use_rational=use_rational
+    )
 
     if use_rational:
         BsLHS = sympy.Matrix(BsLHS)
@@ -1107,8 +1349,7 @@ def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fu
         BsRHS = [sympy.Rational(i).limit_denominator(den_lim) for i in BsRHS]
         for r in range(BsLHS.shape[0]):
             for c in range(BsLHS.shape[1]):
-                BsLHS[r,c] = sympy.Rational(BsLHS[r,c]).limit_denominator(den_lim)
-
+                BsLHS[r, c] = sympy.Rational(BsLHS[r, c]).limit_denominator(den_lim)
 
     if __DEBUG__:
         print(BsLHS)
@@ -1122,10 +1363,11 @@ def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fu
 
     RHS = numpy.array(RHS)
     RHS.shape = (len(RHS), 1)
-    if __DEBUG__: print(RHS)
+    if __DEBUG__:
+        print(RHS)
     ##  LP = numpy.hstack([LHS, RHS])
 
-    OBJ_FUNC = numpy.zeros(LHS.shape[1]+1)
+    OBJ_FUNC = numpy.zeros(LHS.shape[1] + 1)
     objIdx = M.activeObjIdx
     for j in range(LHS.shape[1]):
         for fo in range(len(M.objectives[objIdx].getFluxObjectiveReactions())):
@@ -1162,54 +1404,54 @@ def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fu
         NUM_TYPE = 'rational'
     F.write('%s  %s  %s\n' % (LP.shape[0], LP.shape[1], NUM_TYPE))
 
-    strW = format+' '
+    strW = format + ' '
 
     for r in range(LP.shape[0]):
         for c in range(LP.shape[1]):
             if use_rational or use_rational_old:
-                F.write('%s ' % LP[r,c])
+                F.write('%s ' % LP[r, c])
             else:
-                if LP[r,c] == 0.0 or LP[r,c] == -0.0:
-                    LP[r,c] = 0.0
-                F.write(strW % LP[r,c])
+                if LP[r, c] == 0.0 or LP[r, c] == -0.0:
+                    LP[r, c] = 0.0
+                F.write(strW % LP[r, c])
         F.write('\n')
 
     if fullLP:
         F.write('end\nlponly\n')
-        F.write('maximize\n') # check if Hformat has a minimize kw
+        F.write('maximize\n')  # check if Hformat has a minimize kw
         for o in OBJ_FUNC:
-            #if not use_rational:
-                #F.write(strW % o)
-            #else:
-                #F.write('%s ' % sympy.Rational(format % o))
+            # if not use_rational:
+            # F.write(strW % o)
+            # else:
+            # F.write('%s ' % sympy.Rational(format % o))
 
             if use_rational or use_rational_old:
                 F.write('%s ' % sympy.Rational(format % o))
             else:
                 if o == 0.0 or o == -0.0:
-                    LP[r,c] = 0.0
+                    LP[r, c] = 0.0
                 F.write(strW % o)
 
         # then we can use use this
         ##  F.write('%s\n' % M.objectives[M.activeObjIdx].operation)
         ##  if M.activeObjIdx].operation == 'maximize':
-            ##  for o in OBJ_FUNC:
-                ##  if not use_rational:
-                    ##  F.write(strW % o)
-                ##  else:
-                    ##  F.write('%s ' % sympy.Rational(format % o))
+        ##  for o in OBJ_FUNC:
+        ##  if not use_rational:
+        ##  F.write(strW % o)
         ##  else:
-            ##  for o in OBJ_FUNC:
-                ##  o = -o
-                ##  if not use_rational:
-                    ##  F.write(strW % o)
-                ##  else:
-                    ##  F.write('%s ' % sympy.Rational(format % o))
+        ##  F.write('%s ' % sympy.Rational(format % o))
+        ##  else:
+        ##  for o in OBJ_FUNC:
+        ##  o = -o
+        ##  if not use_rational:
+        ##  F.write(strW % o)
+        ##  else:
+        ##  F.write('%s ' % sympy.Rational(format % o))
     else:
         F.write('end\n')
     F.write('\n')
     F.close()
-    F = open(fname.replace('.ine','')+'.columns.txt', 'w')
+    F = open(fname.replace('.ine', '') + '.columns.txt', 'w')
     for j in range(M.N.array.shape[1]):
         F.write('%s,%s\n' % (j, M.N.col[j]))
     F.write('\n')
@@ -1217,7 +1459,15 @@ def writeModelHFormatFBA2(fba, fname=None, work_dir=None, use_rational=False, fu
     return fname
 
 
-def writeStoichiometricMatrix(fba, fname=None, work_dir=None, use_rational=False, fullLP=True, format='%s', infinity_replace=None):
+def writeStoichiometricMatrix(
+    fba,
+    fname=None,
+    work_dir=None,
+    use_rational=False,
+    fullLP=True,
+    format='%s',
+    infinity_replace=None,
+):
     """
     Write an FBA-LP in polynomial H-Format file. This is an improved version of `WriteModelHFormatFBA()`
     which it replaces but is kept for backwards compatability.
@@ -1240,39 +1490,40 @@ def writeStoichiometricMatrix(fba, fname=None, work_dir=None, use_rational=False
     if __DEBUG__:
         print(LHS)
         print(RHS)
-    #LHS = numpy.vstack([LHS, -M.N.array.copy()])
+    # LHS = numpy.vstack([LHS, -M.N.array.copy()])
     RHS += [0.0 for e in range(M.N.shape[0])]
     if __DEBUG__:
         print(LHS)
         print(RHS)
-    #BsLHS, BsRHS = BuildHformatFluxBounds(M, infinity_replace=infinity_replace)
+    # BsLHS, BsRHS = BuildHformatFluxBounds(M, infinity_replace=infinity_replace)
     if __DEBUG__:
         print(BsLHS)
         print(BsRHS)
-    #LHS = numpy.vstack([LHS, BsLHS])
-    #RHS += BsRHS
-    #del BsLHS, BsRHS
+    # LHS = numpy.vstack([LHS, BsLHS])
+    # RHS += BsRHS
+    # del BsLHS, BsRHS
     if __DEBUG__:
         print(LHS)
         print(RHS)
 
-    #RHS = numpy.array(RHS,'d')
-    #RHS.shape = (len(RHS), 1)
-    if __DEBUG__: print(RHS)
+    # RHS = numpy.array(RHS,'d')
+    # RHS.shape = (len(RHS), 1)
+    if __DEBUG__:
+        print(RHS)
     ##  LP = numpy.hstack([LHS, RHS])
 
-    #OBJ_FUNC = numpy.zeros(LHS.shape[1]+1)
+    # OBJ_FUNC = numpy.zeros(LHS.shape[1]+1)
     objIdx = M.activeObjIdx
-    #for j in range(LHS.shape[1]):
-        #for fo in range(len(M.objectives[objIdx].getFluxObjectiveReactions())):
-            #if M.objectives[objIdx].fluxObjectives[fo].reaction == M.N.col[j]:
-                #print(M.objectives[objIdx].fluxObjectives[fo].reaction, M.N.col[j])
-                #OBJ_FUNC[j] = float(M.objectives[objIdx].fluxObjectives[fo].coefficient)
+    # for j in range(LHS.shape[1]):
+    # for fo in range(len(M.objectives[objIdx].getFluxObjectiveReactions())):
+    # if M.objectives[objIdx].fluxObjectives[fo].reaction == M.N.col[j]:
+    # print(M.objectives[objIdx].fluxObjectives[fo].reaction, M.N.col[j])
+    # OBJ_FUNC[j] = float(M.objectives[objIdx].fluxObjectives[fo].coefficient)
     ###  print OBJ_FUNC
 
     # for Ax >= B Hformat wants -B A >= 0
-    #LP = numpy.hstack([-RHS, LHS])
-    #OBJ_FUNC = numpy.hstack([-OBJ_FUNC[-1], OBJ_FUNC[:-1]])
+    # LP = numpy.hstack([-RHS, LHS])
+    # OBJ_FUNC = numpy.hstack([-OBJ_FUNC[-1], OBJ_FUNC[:-1]])
 
     LP = LHS
 
@@ -1293,53 +1544,53 @@ def writeStoichiometricMatrix(fba, fname=None, work_dir=None, use_rational=False
         fname += '_r.ine'
 
     F = open(fname, 'w')
-    #F.write('* %s\n' % os.path.split(fname)[-1])
-    #F.write('H-representation\nbegin\n')
-    #NUM_TYPE = 'real'
-    #if use_rational:
-        #NUM_TYPE = 'rational'
-    #F.write('%s  %s  %s\n' % (LP.shape[0], LP.shape[1], NUM_TYPE))
+    # F.write('* %s\n' % os.path.split(fname)[-1])
+    # F.write('H-representation\nbegin\n')
+    # NUM_TYPE = 'real'
+    # if use_rational:
+    # NUM_TYPE = 'rational'
+    # F.write('%s  %s  %s\n' % (LP.shape[0], LP.shape[1], NUM_TYPE))
 
-    strW = format+' '
+    strW = format + ' '
     for r in range(LP.shape[0]):
         for c in range(LP.shape[1]):
             if not use_rational:
-                if LP[r,c] == 0.0 or LP[r,c] == -0.0:
-                    LP[r,c] = 0.0
-                F.write(strW % LP[r,c])
+                if LP[r, c] == 0.0 or LP[r, c] == -0.0:
+                    LP[r, c] = 0.0
+                F.write(strW % LP[r, c])
             else:
                 ##  print LP[r,c]
-                F.write('%s ' % sympy.Rational(format % LP[r,c]))
+                F.write('%s ' % sympy.Rational(format % LP[r, c]))
         F.write('\n')
 
-    #if fullLP:
-        #F.write('end\nlponly\n')
-        #F.write('maximize\n') # check if Hformat has a minimize kw
-        #for o in OBJ_FUNC:
-            #if not use_rational:
-                #F.write(strW % o)
-            #else:
-                #F.write('%s ' % sympy.Rational(format % o))
-        # then we can use use this
-        ##  F.write('%s\n' % M.objectives[M.activeObjIdx].operation)
-        ##  if M.activeObjIdx].operation == 'maximize':
-            ##  for o in OBJ_FUNC:
-                ##  if not use_rational:
-                    ##  F.write(strW % o)
-                ##  else:
-                    ##  F.write('%s ' % sympy.Rational(format % o))
-        ##  else:
-            ##  for o in OBJ_FUNC:
-                ##  o = -o
-                ##  if not use_rational:
-                    ##  F.write(strW % o)
-                ##  else:
-                    ##  F.write('%s ' % sympy.Rational(format % o))
-    #else:
-        #F.write('end\n')
-    #F.write('\n')
+    # if fullLP:
+    # F.write('end\nlponly\n')
+    # F.write('maximize\n') # check if Hformat has a minimize kw
+    # for o in OBJ_FUNC:
+    # if not use_rational:
+    # F.write(strW % o)
+    # else:
+    # F.write('%s ' % sympy.Rational(format % o))
+    # then we can use use this
+    ##  F.write('%s\n' % M.objectives[M.activeObjIdx].operation)
+    ##  if M.activeObjIdx].operation == 'maximize':
+    ##  for o in OBJ_FUNC:
+    ##  if not use_rational:
+    ##  F.write(strW % o)
+    ##  else:
+    ##  F.write('%s ' % sympy.Rational(format % o))
+    ##  else:
+    ##  for o in OBJ_FUNC:
+    ##  o = -o
+    ##  if not use_rational:
+    ##  F.write(strW % o)
+    ##  else:
+    ##  F.write('%s ' % sympy.Rational(format % o))
+    # else:
+    # F.write('end\n')
+    # F.write('\n')
     F.close()
-    F = open(fname.replace('.ine','')+'.columns.txt', 'w')
+    F = open(fname.replace('.ine', '') + '.columns.txt', 'w')
     for j in range(M.N.array.shape[1]):
         F.write('%s,%s\n' % (j, M.N.col[j]))
     F.write('\n')
@@ -1347,17 +1598,23 @@ def writeStoichiometricMatrix(fba, fname=None, work_dir=None, use_rational=False
     return fname
 
 
-def writeListToLP(fname, obj=None, const=None, bnds=None, work_dir=None, objtype='maximize'):
+def writeListToLP(
+    fname, obj=None, const=None, bnds=None, work_dir=None, objtype='maximize'
+):
     if work_dir == None:
         work_dir = os.getcwd()
-    F = open(os.path.join(work_dir, fname+'.lp'), 'w')
+    F = open(os.path.join(work_dir, fname + '.lp'), 'w')
     F.write("\\\\ %s\n" % fname)
     objtype = objtype.lower()
-    if objtype == 'max': objtype = 'maximize'
-    if objtype == 'min': objtype = 'minimize'
+    if objtype == 'max':
+        objtype = 'maximize'
+    if objtype == 'min':
+        objtype = 'minimize'
     if objtype in ['maximise', 'minimise']:
-        objtype = objtype.replace('se','ze')
-    assert objtype in ['maximize', 'minimize'], "\nobjtype must be ['maximize', 'minimize'] not %s" % objtype
+        objtype = objtype.replace('se', 'ze')
+    assert objtype in ['maximize', 'minimize'], (
+        "\nobjtype must be ['maximize', 'minimize'] not %s" % objtype
+    )
 
     if obj != None:
         if objtype == 'maximize':
@@ -1377,10 +1634,18 @@ def writeListToLP(fname, obj=None, const=None, bnds=None, work_dir=None, objtype
     F.write('\nEND\n')
     F.close()
     print('LP written to: {}.lp'.format(os.path.join(work_dir, fname)))
-    return os.path.join(work_dir, fname+'.lp')
+    return os.path.join(work_dir, fname + '.lp')
 
 
-def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_protein_cost=False, constraint_mode='strict', moma=False):
+def writeMinDistanceLP(
+    fname,
+    fbas,
+    work_dir=None,
+    ignoreDistance=[],
+    with_protein_cost=False,
+    constraint_mode='strict',
+    moma=False,
+):
     if work_dir == None:
         work_dir = os.getcwd()
 
@@ -1397,7 +1662,9 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
     if moma:
         assert len(fbas) == 2, '\nMOMA only defined for two inputs'
     else:
-        assert numpy.alltrue((fC == fC[0])), '\nModels must have the same number of fluxes\n!'
+        assert numpy.alltrue(
+            (fC == fC[0])
+        ), '\nModels must have the same number of fluxes\n!'
 
     conL = []
     # model flux_bounds
@@ -1439,7 +1706,7 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
 
     artVar = []
     artVarX = []
-    #ignoreDistance = []
+    # ignoreDistance = []
 
     Combi = CBTools.ComboGen()
     Cnumber = 2
@@ -1447,7 +1714,8 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
     unique_combinations = None
     for x in range(len(fbas)):
         Cdata += '%s' % x
-    if __DEBUG__: print(Cdata)
+    if __DEBUG__:
+        print(Cdata)
 
     Combi.uniqueCombinations(Cdata, Cnumber, temp=[])
     Combi.numberifyComb2Int()
@@ -1461,7 +1729,8 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
     zbase = 0
     combcount = 1
     for uq in unique_combinations:
-        if __DEBUG__: print(uq)
+        if __DEBUG__:
+            print(uq)
         MD0 = fbas[uq[0]]
         MD0 = fbas[uq[0]]
         if moma:
@@ -1473,14 +1742,15 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
         RiD1 = MD0.getReactionIds()
         RiD2 = MD1.getReactionIds()
         for s in range(len(MD0.reactions)):
-            if __DEBUG__: print(RiD1[s], RiD2[s])
+            if __DEBUG__:
+                print(RiD1[s], RiD2[s])
             if RiD1[s] not in ignoreDistance:
                 if moma:
-                    ridx2 = RiD2.index(MD1.prefix+RiD1[s])
+                    ridx2 = RiD2.index(MD1.prefix + RiD1[s])
                 else:
                     ridx2 = s
                 ##  av = 'z%s' % (zbase+s+1)
-                av = 'zvar%s%s' % (combcount,RiD1[s].replace(MD0.prefix,''))
+                av = 'zvar%s%s' % (combcount, RiD1[s].replace(MD0.prefix, ''))
 
                 c1 = '%sa: %s - %s - %s <= 0.0' % (av, RiD1[s], RiD2[ridx2], av)
                 ##  c1 = '%s - %s - %s <= 0.0' % (RiD1[s], RiD2[s], av)
@@ -1514,15 +1784,29 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
     objL = [objS]
 
     objFcnstr = [' ']
-    assert len(f.objectives[f.activeObjIdx].getFluxObjectiveReactions()) == 1, "\nOnly single fluxObjectives dealt with at this time"
+    assert (
+        len(f.objectives[f.activeObjIdx].getFluxObjectiveReactions()) == 1
+    ), "\nOnly single fluxObjectives dealt with at this time"
     if moma:
         f = fbas[0]
-        objFcnstr.append('C_%s: %s >= %f' % (f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],\
-                                             f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0], f.objectives[f.activeObjIdx].value))
+        objFcnstr.append(
+            'C_%s: %s >= %f'
+            % (
+                f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],
+                f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],
+                f.objectives[f.activeObjIdx].value,
+            )
+        )
     else:
         for f in fbas:
-            objFcnstr.append('C_%s: %s >= %f' % (f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],\
-                                                 f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0], f.objectives[f.activeObjIdx].value))
+            objFcnstr.append(
+                'C_%s: %s >= %f'
+                % (
+                    f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],
+                    f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],
+                    f.objectives[f.activeObjIdx].value,
+                )
+            )
     conL = conL + objFcnstr
 
     if __DEBUG__:
@@ -1533,7 +1817,7 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
         for b in bndL:
             print(b)
 
-    F = open(os.path.join(work_dir, fname+'.lp'), 'w')
+    F = open(os.path.join(work_dir, fname + '.lp'), 'w')
     header = '\\\\ MultiInputMinimization: '
     for f in fbas:
         header += '%s, ' % f.getId()
@@ -1550,9 +1834,19 @@ def writeMinDistanceLP(fname, fbas, work_dir=None, ignoreDistance=[], with_prote
     F.write('END\n\n')
     F.close()
     print('LP written to: {}.lp'.format(os.path.join(work_dir, fname)))
-    return os.path.join(work_dir, fname+'.lp')
+    return os.path.join(work_dir, fname + '.lp')
 
-def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM=500, with_protein_cost=False, constraint_mode='strict', moma=False):
+
+def writeMinDistanceLP_absL1(
+    fname,
+    fbas,
+    work_dir=None,
+    ignoreDistance=[],
+    bigM=500,
+    with_protein_cost=False,
+    constraint_mode='strict',
+    moma=False,
+):
     if work_dir == None:
         work_dir = os.getcwd()
 
@@ -1569,8 +1863,9 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
     if moma:
         assert len(fbas) == 2, '\nMOMA only defined for two inputs'
     else:
-        assert numpy.alltrue((fC == fC[0])), '\nModels must have the same number of fluxes\n!'
-
+        assert numpy.alltrue(
+            (fC == fC[0])
+        ), '\nModels must have the same number of fluxes\n!'
 
     conL = []
     # model flux_bounds
@@ -1618,7 +1913,8 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
     unique_combinations = None
     for x in range(len(fbas)):
         Cdata += '%s' % x
-    if __DEBUG__: print(Cdata)
+    if __DEBUG__:
+        print(Cdata)
 
     Combi.uniqueCombinations(Cdata, Cnumber, temp=[])
     Combi.numberifyComb2Int()
@@ -1631,19 +1927,19 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
     print(bigMS)
     print('\nbigM = ', bigM, '\n')
 
-
     ##  ILPMETHOD = 'SK' # steven
-    ILPMETHOD = 'GK' # gunnar
+    ILPMETHOD = 'GK'  # gunnar
     zbase = 0
     combcount = 1
 
     artVar = []
     artVarX = []
-    #ignoreDistance = []
+    # ignoreDistance = []
     boolVars = []
 
     for uq in unique_combinations:
-        if __DEBUG__: print(uq)
+        if __DEBUG__:
+            print(uq)
         MD0 = fbas[uq[0]]
         if moma:
             MD1 = fbas[uq[1]].clone()
@@ -1655,17 +1951,18 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
         RiD2 = MD1.getReactionIds()
 
         for s in range(len(MD0.reactions)):
-            if __DEBUG__: print(RiD1[s], RiD2[s])
+            if __DEBUG__:
+                print(RiD1[s], RiD2[s])
             if RiD1[s] not in ignoreDistance:
                 if moma:
-                    ridx2 = RiD2.index(MD1.prefix+RiD1[s])
+                    ridx2 = RiD2.index(MD1.prefix + RiD1[s])
                 else:
                     ridx2 = s
                 Var1 = RiD1[s]
-                bVar1 =  'xvar_%s' % Var1
+                bVar1 = 'xvar_%s' % Var1
                 absVar1 = 'absL_%s' % Var1
                 Var2 = RiD2[ridx2]
-                bVar2 =  'xvar_%s' % Var2
+                bVar2 = 'xvar_%s' % Var2
                 absVar2 = 'absL_%s' % Var2
 
                 c0a = '\n'
@@ -1675,11 +1972,23 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
                 if ILPMETHOD == 'GK':
                     # gunnar
                     c0a += '%s + %s - %s %s <= 0\n' % (absVar1, Var1, bigM, bVar1)
-                    c0a += '%s - %s + %s %s <= %s\n' % (absVar1, Var1, bigM, bVar1, bigM)
+                    c0a += '%s - %s + %s %s <= %s\n' % (
+                        absVar1,
+                        Var1,
+                        bigM,
+                        bVar1,
+                        bigM,
+                    )
                 elif ILPMETHOD == 'SK':
                     # steven
                     c0a += '%s - %s - %s %s <= 0\n' % (absVar1, Var1, bigM, bVar1)
-                    c0a += '%s + %s + %s %s <= %s\n' % (absVar1, Var1, bigM, bVar1, bigM)
+                    c0a += '%s + %s + %s %s <= %s\n' % (
+                        absVar1,
+                        Var1,
+                        bigM,
+                        bVar1,
+                        bigM,
+                    )
 
                 c0b = '\n'
                 c0b += '%s - %s >= 0\n' % (absVar2, Var2)
@@ -1687,15 +1996,27 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
                 if ILPMETHOD == 'GK':
                     # gunnar
                     c0b += '%s + %s - %s %s <= 0\n' % (absVar2, Var2, bigM, bVar2)
-                    c0b += '%s - %s + %s %s <= %s\n' % (absVar2, Var2, bigM, bVar2, bigM)
+                    c0b += '%s - %s + %s %s <= %s\n' % (
+                        absVar2,
+                        Var2,
+                        bigM,
+                        bVar2,
+                        bigM,
+                    )
                 elif ILPMETHOD == 'SK':
                     # steven
                     c0b += '%s - %s - %s %s <= 0\n' % (absVar2, Var2, bigM, bVar2)
-                    c0b += '%s + %s + %s %s <= %s\n' % (absVar2, Var2, bigM, bVar2, bigM)
+                    c0b += '%s + %s + %s %s <= %s\n' % (
+                        absVar2,
+                        Var2,
+                        bigM,
+                        bVar2,
+                        bigM,
+                    )
 
                 c0 = c0a + c0b
 
-                av = 'zvar%s%s' % (combcount,Var1.replace(MD0.prefix,''))
+                av = 'zvar%s%s' % (combcount, Var1.replace(MD0.prefix, ''))
 
                 if bVar1 not in boolVars:
                     boolVars.append(bVar1)
@@ -1732,16 +2053,30 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
     objL = [objS]
 
     objFcnstr = [' ']
-    assert len(f.objectives[f.activeObjIdx].getFluxObjectiveReactions()) == 1, "\nOnly single fluxObjectives dealt with at this time"
+    assert (
+        len(f.objectives[f.activeObjIdx].getFluxObjectiveReactions()) == 1
+    ), "\nOnly single fluxObjectives dealt with at this time"
     if moma:
-        #OFvalue = f.objectives[f.activeObjIdx].value
+        # OFvalue = f.objectives[f.activeObjIdx].value
         f = fbas[0]
-        objFcnstr.append('C_%s: %s >= %f' % (f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],\
-                                             f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0], f.objectives[f.activeObjIdx].value))
+        objFcnstr.append(
+            'C_%s: %s >= %f'
+            % (
+                f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],
+                f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],
+                f.objectives[f.activeObjIdx].value,
+            )
+        )
     else:
         for f in fbas:
-            objFcnstr.append('C_%s: %s >= %f' % (f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],\
-                                                 f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0], f.objectives[f.activeObjIdx].value))
+            objFcnstr.append(
+                'C_%s: %s >= %f'
+                % (
+                    f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],
+                    f.objectives[f.activeObjIdx].getFluxObjectiveReactions()[0],
+                    f.objectives[f.activeObjIdx].value,
+                )
+            )
     conL = conL + objFcnstr
     if __DEBUG__:
         print(objL)
@@ -1751,7 +2086,7 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
         for b in bndL:
             print(b)
 
-    F = open(os.path.join(work_dir, fname+'.lp'), 'w')
+    F = open(os.path.join(work_dir, fname + '.lp'), 'w')
     header = '\\\\ MultiInputMinimization: '
     for f in fbas:
         header += '%s, ' % f.getId()
@@ -1772,16 +2107,27 @@ def writeMinDistanceLP_absL1(fname, fbas, work_dir=None, ignoreDistance=[], bigM
     F.write('\nEND\n')
     F.close()
     print('LP written to: {}.lp'.format(os.path.join(work_dir, fname)))
-    return os.path.join(work_dir, fname+'.lp')
+    return os.path.join(work_dir, fname + '.lp')
 
 
-
-def writeMinDistanceLPwithCost(fname, fbas, work_dir=None, ignoreDistance=[], constraint_mode='strict'):
+def writeMinDistanceLPwithCost(
+    fname, fbas, work_dir=None, ignoreDistance=[], constraint_mode='strict'
+):
     """
     For backwards compatability only
     """
-    print("\n\n**********\nDeprecation warning!\nPlease use writeMinDistanceLP(with_protein_cost=True) instead of writeMinDistanceLPwithCost()\n\n**********\n")
-    writeMinDistanceLP(fname, fbas, work_dir=work_dir, ignoreDistance=ignoreDistance, with_protein_cost=True, constraint_mode=constraint_mode)
+    print(
+        "\n\n**********\nDeprecation warning!\nPlease use writeMinDistanceLP(with_protein_cost=True) instead of writeMinDistanceLPwithCost()\n\n**********\n"
+    )
+    writeMinDistanceLP(
+        fname,
+        fbas,
+        work_dir=work_dir,
+        ignoreDistance=ignoreDistance,
+        with_protein_cost=True,
+        constraint_mode=constraint_mode,
+    )
+
 
 # CAN GO SOON JUST PUTTING IN FOR SVN SYNCH
 """
@@ -1942,6 +2288,7 @@ def writeMinDistanceLPwithCost(fname, fbas, work_dir=None, ignoreDistance=[], co
     return os.path.join(work_dir, fname+'.lp')
 """
 
+
 def writeOptimalSolution(fba, fname, Dir=None, separator=',', only_exchange=False):
     """
     This function writes the optimal solution to file
@@ -1970,11 +2317,35 @@ def writeOptimalSolution(fba, fname, Dir=None, separator=',', only_exchange=Fals
     try:
         F = open(fname_r, 'w')
     except IOError:
-        print('\nCSV file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(fname_r))
+        print(
+            '\nCSV file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(
+                fname_r
+            )
+        )
         return
     cntr = 0
-    F.write('%s%s%s%s%s%s\n' % ('ObjectiveFunction',separator,objName,separator,separator,separator))
-    F.write('\"%s\"%s%s%s%s%s%s%s%s%s\"%s\"%s\"%s\"\n' % ('Reaction',separator,'Value',separator,'LowerBound',separator,'UpperBound',separator,'Reduced cost',separator,'Name',separator,'Gene association'))
+    F.write(
+        '%s%s%s%s%s%s\n'
+        % ('ObjectiveFunction', separator, objName, separator, separator, separator)
+    )
+    F.write(
+        '\"%s\"%s%s%s%s%s%s%s%s%s\"%s\"%s\"%s\"\n'
+        % (
+            'Reaction',
+            separator,
+            'Value',
+            separator,
+            'LowerBound',
+            separator,
+            'UpperBound',
+            separator,
+            'Reduced cost',
+            separator,
+            'Name',
+            separator,
+            'Gene association',
+        )
+    )
     for r in fba.reactions:
         GO = False
         if not only_exchange:
@@ -1994,12 +2365,32 @@ def writeOptimalSolution(fba, fname, Dir=None, separator=',', only_exchange=Fals
                     Lbnd = bnds[1]
                 if bnds[2] != None:
                     Ubnd = bnds[2]
-            F.write('\"%s\"%s%s%s%s%s%s%s%s%s\"%s\"%s\"%s\"\n' % (r.getId(),separator,r.value,separator,Lbnd,separator,Ubnd,separator,r.reduced_cost,separator,r.name,separator,gene))
+            F.write(
+                '\"%s\"%s%s%s%s%s%s%s%s%s\"%s\"%s\"%s\"\n'
+                % (
+                    r.getId(),
+                    separator,
+                    r.value,
+                    separator,
+                    Lbnd,
+                    separator,
+                    Ubnd,
+                    separator,
+                    r.reduced_cost,
+                    separator,
+                    r.name,
+                    separator,
+                    gene,
+                )
+            )
     F.flush()
     F.close()
     print('Reactions exported to {}'.format(fname_r))
 
-def writeModelInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=False, met_type='all'):
+
+def writeModelInfoToFile(
+    fba, fname, Dir=None, separator=',', only_exchange=False, met_type='all'
+):
     """
     This function writes a CBModel to file
 
@@ -2011,8 +2402,11 @@ def writeModelInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=Fals
      - *type* [default='all'] only output certain type of species: 'all','boundary' or 'variable'
 
     """
-    writeReactionInfoToFile(fba, fname, Dir=Dir, separator=separator, only_exchange=only_exchange)
+    writeReactionInfoToFile(
+        fba, fname, Dir=Dir, separator=separator, only_exchange=only_exchange
+    )
     writeSpeciesInfoToFile(fba, fname, Dir=Dir, separator=separator, met_type=met_type)
+
 
 def writeReactionInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=False):
     """
@@ -2042,11 +2436,33 @@ def writeReactionInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=F
     try:
         F = open(fname_r, 'w')
     except IOError:
-        print('\nOutput file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(fname_r))
+        print(
+            '\nOutput file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(
+                fname_r
+            )
+        )
         return
     cntr = 0
-    F.write('%s%s%s%s%s%s\n' % ('ObjectiveFunction',separator,objName,separator,separator,separator))
-    F.write('\"%s\"%s%s%s%s%s\"%s\"%s\"%s\"%s\"%s\"\n' % ('Reaction',separator,'LowerBound',separator,'UpperBound',separator,'Name',separator,'Equation',separator,'Gene association'))
+    F.write(
+        '%s%s%s%s%s%s\n'
+        % ('ObjectiveFunction', separator, objName, separator, separator, separator)
+    )
+    F.write(
+        '\"%s\"%s%s%s%s%s\"%s\"%s\"%s\"%s\"%s\"\n'
+        % (
+            'Reaction',
+            separator,
+            'LowerBound',
+            separator,
+            'UpperBound',
+            separator,
+            'Name',
+            separator,
+            'Equation',
+            separator,
+            'Gene association',
+        )
+    )
     for r in fba.reactions:
         if not only_exchange:
             GO = True
@@ -2068,7 +2484,7 @@ def writeReactionInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=F
             if r.reversible:
                 equation = ' %s ' % __CBCONFIG__['REVERSIBLE_SYMBOL']
             else:
-                equation = ' %s '  % __CBCONFIG__['IRREVERSIBLE_SYMBOL']
+                equation = ' %s ' % __CBCONFIG__['IRREVERSIBLE_SYMBOL']
             subs = ''
             prods = ''
             for rr in r.reagents:
@@ -2085,11 +2501,27 @@ def writeReactionInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=F
             subs = subs[3:]
             prods = prods[3:]
             equation = subs + equation + prods
-            F.write('\"%s\"%s%s%s%s%s\"%s\"%s\"%s\"%s\"%s\"\n' % (r.getId(),separator,Lbnd,separator,Ubnd,separator,r.name,separator,equation,separator,gene))
+            F.write(
+                '\"%s\"%s%s%s%s%s\"%s\"%s\"%s\"%s\"%s\"\n'
+                % (
+                    r.getId(),
+                    separator,
+                    Lbnd,
+                    separator,
+                    Ubnd,
+                    separator,
+                    r.name,
+                    separator,
+                    equation,
+                    separator,
+                    gene,
+                )
+            )
             GO = False
     F.flush()
     F.close()
     print('Reactions exported to {}'.format(fname_r))
+
 
 def writeSpeciesInfoToFile(fba, fname, Dir=None, separator=',', met_type='all'):
     """
@@ -2111,18 +2543,37 @@ def writeSpeciesInfoToFile(fba, fname, Dir=None, separator=',', met_type='all'):
     else:
         fname_s = fname + '.spec.txt'
         fname_sr = fname + '.s2r.txt'
-    if met_type not in ['all','boundary','variable']:
+    if met_type not in ['all', 'boundary', 'variable']:
         met_type = 'all'
 
     try:
         F2 = open(fname_s, 'w')
         F3 = open(fname_sr, 'w')
     except IOError:
-        print('\nOutput file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(fname_s))
+        print(
+            '\nOutput file \"{}\" is locked by an external application (probably Excel) please close file and try again (or use a different filename).'.format(
+                fname_s
+            )
+        )
         return
 
     maxReagentOf = 0
-    F2.write('\"%s\"%s%s%s%s%s\"%s\"%s\"%s\"%s\"%s\"\n' % ('Species',separator,'Name',separator,'Compartment',separator,'Fixed',separator,'ChemicalFormula',separator,'Charge'))
+    F2.write(
+        '\"%s\"%s%s%s%s%s\"%s\"%s\"%s\"%s\"%s\"\n'
+        % (
+            'Species',
+            separator,
+            'Name',
+            separator,
+            'Compartment',
+            separator,
+            'Fixed',
+            separator,
+            'ChemicalFormula',
+            separator,
+            'Charge',
+        )
+    )
     for s in fba.species:
         if len(s.isReagentOf()) > maxReagentOf:
             maxReagentOf = len(s.reagent_of)
@@ -2134,7 +2585,22 @@ def writeSpeciesInfoToFile(fba, fname, Dir=None, separator=',', met_type='all'):
         elif met_type == 'boundary' and s.is_boundary:
             GOS = True
         if GOS:
-            F2.write('\"%s\"%s%s%s%s%s\"%s\"%s\"%s\"%s\"%s\"\n' % (s.getId(),separator,s.getName(),separator,s.compartment,separator,s.is_boundary,separator,s.chemFormula,separator,s.charge))
+            F2.write(
+                '\"%s\"%s%s%s%s%s\"%s\"%s\"%s\"%s\"%s\"\n'
+                % (
+                    s.getId(),
+                    separator,
+                    s.getName(),
+                    separator,
+                    s.compartment,
+                    separator,
+                    s.is_boundary,
+                    separator,
+                    s.chemFormula,
+                    separator,
+                    s.charge,
+                )
+            )
     for s in fba.species:
         srl = len(s.reagent_of)
         rgOut = '\"%s\"%s' % (s.getId(), separator)
@@ -2161,7 +2627,6 @@ def writeSpeciesInfoToFile(fba, fname, Dir=None, separator=',', met_type='all'):
     print('Reagent map exported to {}'.format(fname_sr))
 
 
-
 def printFBASolution(fba, include_all=False):
     """
     Prints the FBA optimal solution to the screen.
@@ -2174,11 +2639,12 @@ def printFBASolution(fba, include_all=False):
     OFvalue = fba.objectives[fba.activeObjIdx].value
     OFSense = fba.objectives[fba.activeObjIdx].operation
     print('\n\n**********\nModel: {}\n\n'.format(fba.getId()))
-    print('{} objective: {}\nOptimal value: {}\n\n'.format(OFSense,OFflux,OFvalue))
+    print('{} objective: {}\nOptimal value: {}\n\n'.format(OFSense, OFflux, OFvalue))
     if include_all:
         for J in fba.reactions:
             print('{}: {}'.format(J.getId(), J.value))
     print('**********\n')
+
 
 def exportModel(fba, fname=None, fmt='lp', work_dir=None, use_rational='both'):
     """
@@ -2201,11 +2667,16 @@ def exportModel(fba, fname=None, fmt='lp', work_dir=None, use_rational='both'):
             fname = fba.getId().replace('.xml', '')
         if use_rational == 'both':
             writeModelHFormatFBA2(fba, fname=fname, work_dir=work_dir)
-            writeModelHFormatFBA2(fba, fname=fname, work_dir=work_dir, use_rational=True)
+            writeModelHFormatFBA2(
+                fba, fname=fname, work_dir=work_dir, use_rational=True
+            )
         elif use_rational == True:
-            writeModelHFormatFBA2(fba, fname=fname, work_dir=work_dir, use_rational=True)
+            writeModelHFormatFBA2(
+                fba, fname=fname, work_dir=work_dir, use_rational=True
+            )
         elif use_rational == False:
             writeModelHFormatFBA2(fba, fname=fname, work_dir=work_dir)
+
 
 def writeProteinCostToCSV(fba, fname):
     """
@@ -2215,7 +2686,7 @@ def writeProteinCostToCSV(fba, fname):
      - *fname* the exported file name
 
     """
-    F = open(fname+'.costs.csv','w')
+    F = open(fname + '.costs.csv', 'w')
     F.write('rid,minL,maxL,avgL,cost\n')
     for R in fba.reactions:
         rid = R.getId()
@@ -2236,26 +2707,31 @@ def writeProteinCostToCSV(fba, fname):
                     avg_l = 0
         if 'CBM_PEPTIDE_LENGTH_MIN' in R.annotation:
             minL = R.annotation['CBM_PEPTIDE_LENGTH_MIN']
-        F.write('%s,%s,%s,%s,%s\n' % (rid,minL,maxL,avg_l,pcost))
+        F.write('%s,%s,%s,%s,%s\n' % (rid, minL, maxL, avg_l, pcost))
     F.flush()
     F.close()
-    print('Protein costs written to file: {}'.format(fname+'.csv'))
+    print('Protein costs written to file: {}'.format(fname + '.csv'))
+
 
 def WriteFVAtoCSV(id, fva, names, Dir=None, fbaObj=None):
     """
     INFO: this method will be deprecated please update your scripts to use \"writeFVAtoCSV()\"
     """
-    print('\nINFO: this method will be deprecated please update your scripts to use \"writeFVAtoCSV()\"\n')
+    print(
+        '\nINFO: this method will be deprecated please update your scripts to use \"writeFVAtoCSV()\"\n'
+    )
     time.sleep(1)
     writeFVAtoCSV(fva, names, id, Dir, fbaObj)
 
-#def writeFVAtoCSV(id, fva, names, Dir=None, fbaObj=None):
-    #"""
-    #INFO: this method will be deprecated please update your scripts to use \"writeFVAtoCSV\"
-    #"""
-    #print('\nINFO: this method will be deprecated please update your scripts to use \"writeFVAtoCSV\"\n')
-    #time.sleep(1)
-    #writeFVAtoCSV(id, fva, names, Dir, fbaObj)
+
+# def writeFVAtoCSV(id, fva, names, Dir=None, fbaObj=None):
+# """
+# INFO: this method will be deprecated please update your scripts to use \"writeFVAtoCSV\"
+# """
+# print('\nINFO: this method will be deprecated please update your scripts to use \"writeFVAtoCSV\"\n')
+# time.sleep(1)
+# writeFVAtoCSV(id, fva, names, Dir, fbaObj)
+
 
 def writeFVAtoCSV(fvadata, names, fname, Dir=None, fbaObj=None):
     """
@@ -2270,14 +2746,16 @@ def writeFVAtoCSV(fvadata, names, fname, Dir=None, fbaObj=None):
 
     """
     if Dir != None:
-        Dir = os.path.join(Dir, fname+'.fva.csv')
+        Dir = os.path.join(Dir, fname + '.fva.csv')
     else:
-        Dir = fname+'.fva.csv'
+        Dir = fname + '.fva.csv'
     F = open(Dir, 'w')
     if fbaObj == None:
         F.write('name,optval,min,max,diff,red cost,minstat,maxstat\n')
     else:
-        F.write('name,optval,min,max,diff,red cost,minstat,maxstat,"equation","subsystem","gene association","confidence level"\n')
+        F.write(
+            'name,optval,min,max,diff,red cost,minstat,maxstat,"equation","subsystem","gene association","confidence level"\n'
+        )
     for Jidx in range(len(names)):
         if names[Jidx] != None:
             name = names[Jidx]
@@ -2289,30 +2767,76 @@ def writeFVAtoCSV(fvadata, names, fname, Dir=None, fbaObj=None):
             minstat = fvadata[Jidx][5]
             maxstat = fvadata[Jidx][6]
             if fbaObj == None:
-                F.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (name, optval, min, max, diff, rc, minstat, maxstat))
+                F.write(
+                    '%s,%s,%s,%s,%s,%s,%s,%s\n'
+                    % (name, optval, min, max, diff, rc, minstat, maxstat)
+                )
             else:
                 xInf = []
                 Ro = fbaObj.getReaction(name)
-                for k in ['Equation','SUBSYSTEM','GENE ASSOCIATION','Confidence Level']:
+                for k in [
+                    'Equation',
+                    'SUBSYSTEM',
+                    'GENE ASSOCIATION',
+                    'Confidence Level',
+                ]:
                     if k in Ro.annotation:
                         xInf.append(Ro.annotation[k])
                     else:
                         xInf.append('')
-                F.write('%s,%s,%s,%s,%s,%s,%s,%s,"%s","%s","%s",%s\n' % (name, optval, min, max, diff, rc, minstat, maxstat, xInf[0], xInf[1], xInf[2], xInf[3]))
+                F.write(
+                    '%s,%s,%s,%s,%s,%s,%s,%s,"%s","%s","%s",%s\n'
+                    % (
+                        name,
+                        optval,
+                        min,
+                        max,
+                        diff,
+                        rc,
+                        minstat,
+                        maxstat,
+                        xInf[0],
+                        xInf[1],
+                        xInf[2],
+                        xInf[3],
+                    )
+                )
 
     F.flush()
     F.close()
     print('FVA results written to: {}'.format(Dir))
 
-def WriteFVAdata(fva, names, fname, work_dir=None, roundec=None, scale_min=False, appendfile=False, info=None):
+
+def WriteFVAdata(
+    fva,
+    names,
+    fname,
+    work_dir=None,
+    roundec=None,
+    scale_min=False,
+    appendfile=False,
+    info=None,
+):
     """
     INFO: this method will be deprecated please update your scripts to use \"writeFVAdata()\"
     """
-    print('\nINFO: this method will be deprecated please update your scripts to use \"writeFVAdata()\"\n')
+    print(
+        '\nINFO: this method will be deprecated please update your scripts to use \"writeFVAdata()\"\n'
+    )
     time.sleep(1)
     writeFVAdata(fva, names, fname, work_dir, roundec, scale_min, appendfile, info)
 
-def writeFVAdata(fvadata, names, fname, work_dir=None, roundec=None, scale_min=False, appendfile=False, info=None):
+
+def writeFVAdata(
+    fvadata,
+    names,
+    fname,
+    work_dir=None,
+    roundec=None,
+    scale_min=False,
+    appendfile=False,
+    info=None,
+):
     """
     Takes the resuls of a FluxVariabilityAnalysis method and writes it to a nice
     csv file. Note this method replaces the glpk/cplx_WriteFVAtoCSV methods. Data is output as a csv file
@@ -2329,9 +2853,9 @@ def writeFVAdata(fvadata, names, fname, work_dir=None, roundec=None, scale_min=F
 
     """
     if work_dir != None:
-        work_dir = os.path.join(work_dir, fname+'.fvadata.csv')
+        work_dir = os.path.join(work_dir, fname + '.fvadata.csv')
     else:
-        work_dir = fname+'.fvadata.csv'
+        work_dir = fname + '.fvadata.csv'
     if not appendfile:
         F = open(work_dir, 'w')
     else:
@@ -2352,8 +2876,8 @@ def writeFVAdata(fvadata, names, fname, work_dir=None, roundec=None, scale_min=F
                 optval = round(optval, roundec)
             if scale_min:
                 if min > 0.0:
-                    max = max-min
-                    optval = optval-min
+                    max = max - min
+                    optval = optval - min
                     min = 0.0
                 elif min <= 0.0:
                     max = max + abs(min)
@@ -2361,18 +2885,57 @@ def writeFVAdata(fvadata, names, fname, work_dir=None, roundec=None, scale_min=F
                     min = 0.0
             if info == None:
                 if roundec == None:
-                    F.write('%s,%s,%s,%s,%s\n' % (name, min, max, optval, abs(fvadata[Jidx][3] - fvadata[Jidx][2])))
+                    F.write(
+                        '%s,%s,%s,%s,%s\n'
+                        % (
+                            name,
+                            min,
+                            max,
+                            optval,
+                            abs(fvadata[Jidx][3] - fvadata[Jidx][2]),
+                        )
+                    )
                 else:
-                    F.write('%s,%s,%s,%s,%s\n' % (name, min, max, optval, round(abs(fvadata[Jidx][3] - fvadata[Jidx][2]), roundec)))
+                    F.write(
+                        '%s,%s,%s,%s,%s\n'
+                        % (
+                            name,
+                            min,
+                            max,
+                            optval,
+                            round(abs(fvadata[Jidx][3] - fvadata[Jidx][2]), roundec),
+                        )
+                    )
 
             else:
                 if roundec == None:
-                    F.write('%s,%s,%s,%s,%s,%s\n' % (name, min, max, optval, abs(fvadata[Jidx][3] - fvadata[Jidx][2]), info))
+                    F.write(
+                        '%s,%s,%s,%s,%s,%s\n'
+                        % (
+                            name,
+                            min,
+                            max,
+                            optval,
+                            abs(fvadata[Jidx][3] - fvadata[Jidx][2]),
+                            info,
+                        )
+                    )
                 else:
-                    F.write('%s,%s,%s,%s,%s,%s\n' % (name, min, max, optval, round(abs(fvadata[Jidx][3] - fvadata[Jidx][2]), roundec), info))
+                    F.write(
+                        '%s,%s,%s,%s,%s,%s\n'
+                        % (
+                            name,
+                            min,
+                            max,
+                            optval,
+                            round(abs(fvadata[Jidx][3] - fvadata[Jidx][2]), roundec),
+                            info,
+                        )
+                    )
     F.flush()
     F.close()
     print('FVAdata results written to: {}'.format(work_dir))
+
 
 def writeSolutions(fname, sols=[], sep=',', extra_output=None, fba=None):
     """
@@ -2401,7 +2964,7 @@ def writeSolutions(fname, sols=[], sep=',', extra_output=None, fba=None):
             reac_names.append(fba.getReaction(r).getName())
             ##  reac_bnds.append(fba.getReactionBounds(r.getId()))
 
-    F = open(fname+'.csv', 'w')
+    F = open(fname + '.csv', 'w')
     for r in range(len(reac_ids)):
         row = '%s%s' % (reac_ids[r], sep)
         s_str = ''
@@ -2414,7 +2977,7 @@ def writeSolutions(fname, sols=[], sep=',', extra_output=None, fba=None):
         if extra_output:
             row += '\"%s\"\n' % reac_names[r]
         else:
-            row = row[:-1]+'\n'
+            row = row[:-1] + '\n'
         F.write(row)
     F.flush()
     F.close()
@@ -2432,6 +2995,7 @@ def generateBGID(num, prefix):
     while True:
         num += 1
         yield '{}{:0>6}'.format(prefix, num)
+
 
 def convertFloatToExcel(num, roundoff):
     """
@@ -2454,6 +3018,7 @@ def convertFloatToExcel(num, roundoff):
         rval = round(num, roundoff)
     return rval
 
+
 def convertExcelToFloat(num):
     """
     Converts an Excel "number" to a float
@@ -2474,6 +3039,7 @@ def convertExcelToFloat(num):
         rval = float(num)
     return rval
 
+
 def writeModelToExcel97(fba, filename, roundoff=6):
     """
     Exports the model as an Excel 97 spreadsheet
@@ -2485,13 +3051,19 @@ def writeModelToExcel97(fba, filename, roundoff=6):
     """
 
     if not _HAVE_XLWT_:
-        print('\nERROR: Cannot create Excel file, XLWT package not available (http://pypi.python.org/pypi/xlwt)')
+        print(
+            '\nERROR: Cannot create Excel file, XLWT package not available (http://pypi.python.org/pypi/xlwt)'
+        )
         return
     try:
         F = open('{}.xls'.format(filename), 'wb')
         F.close()
     except:
-        print('\nERROR: cannot open file "{}"! Please close workbook before writing!\n'.format('{}.xls'.format(filename)))
+        print(
+            '\nERROR: cannot open file "{}"! Please close workbook before writing!\n'.format(
+                '{}.xls'.format(filename)
+            )
+        )
         return
 
     fontB = xlwt.Font()
@@ -2551,9 +3123,9 @@ def writeModelToExcel97(fba, filename, roundoff=6):
             except:
                 wsInf.write(ridx, cidx, 'undefined')
             try:
-                wsInf.write(ridx, cidx+1, t_[1])
+                wsInf.write(ridx, cidx + 1, t_[1])
             except:
-                wsInf.write(ridx, cidx+1, 'undefined')
+                wsInf.write(ridx, cidx + 1, 'undefined')
             cidx += 2
     except:
         pass
@@ -2567,18 +3139,18 @@ def writeModelToExcel97(fba, filename, roundoff=6):
     wsInf.write(ridx, 0, 'modelcreated', styleBold)
     if fba.DATE_CREATED != None:
         for t_ in range(len(fba.DATE_CREATED)):
-            wsInf.write(ridx, t_+1, fba.DATE_CREATED[t_])
+            wsInf.write(ridx, t_ + 1, fba.DATE_CREATED[t_])
     ridx += 1
     wsInf.write(ridx, 0, 'lastmodified', styleBold)
     if fba.DATE_MODIFIED != None:
         for t_ in range(len(fba.DATE_MODIFIED)):
-            wsInf.write(ridx, t_+1, fba.DATE_MODIFIED[t_])
+            wsInf.write(ridx, t_ + 1, fba.DATE_MODIFIED[t_])
     ridx += 1
     cTime = list(time.gmtime())
     wsInf.write(ridx, 0, 'exported', styleBold)
     for t_ in range(len(cTime)):
-        if t_<= 5:
-            wsInf.write(ridx, t_+1, cTime[t_])
+        if t_ <= 5:
+            wsInf.write(ridx, t_ + 1, cTime[t_])
     ridx += 1
     ccridx = 0
     for cr_ in fba.getModelCreators():
@@ -2590,30 +3162,65 @@ def writeModelToExcel97(fba, filename, roundoff=6):
             wsInf.write(ridx, cidx, ne_)
         ridx += 1
     ridx += 1
-    wsInf.write(ridx, 0, xlwt.Formula('HYPERLINK("{}";"{}")'.format('http://cbmpy.sourceforge.net', 'Exported by CBMPy {}'.format(__version__))), styleHyper)
+    wsInf.write(
+        ridx,
+        0,
+        xlwt.Formula(
+            'HYPERLINK("{}";"{}")'.format(
+                'http://cbmpy.sourceforge.net',
+                'Exported by CBMPy {}'.format(__version__),
+            )
+        ),
+        styleHyper,
+    )
     ridx += 1
 
-    #Scol = ['metabolite', 'value', 'shadow price', '', 'reaction', 'flux', 'reduced cost', 'FVA min', 'FVA max']
+    # Scol = ['metabolite', 'value', 'shadow price', '', 'reaction', 'flux', 'reduced cost', 'FVA min', 'FVA max']
     if fba.SCALED_REDUCED_COSTS:
         rcstr = 'scaled reduced cost'
     else:
         rcstr = 'reduced cost'
 
-    Scol = ['reaction', 'flux', 'lower', 'upper', rcstr, 'FVA min', 'FVA max', 'FVA span', 'exchange', 'info', 'stoichiometry']
+    Scol = [
+        'reaction',
+        'flux',
+        'lower',
+        'upper',
+        rcstr,
+        'FVA min',
+        'FVA max',
+        'FVA span',
+        'exchange',
+        'info',
+        'stoichiometry',
+    ]
     for s_ in range(len(Scol)):
         wsSol.write(0, s_, Scol[s_], styleBoldC)
 
     # metabolites
     Mlist = []
-    Mcols = ['id','name','charge','chemformula','compartment','fixed']
-    #Mcols = ['id','name','charge','chemformula','compartment','fixed','bgid']
+    Mcols = ['id', 'name', 'charge', 'chemformula', 'compartment', 'fixed']
+    # Mcols = ['id','name','charge','chemformula','compartment','fixed','bgid']
     MUcols = []
 
-    MiriQual = ["is","isEncodedBy","encodes","hasPart","hasProperty","hasTaxon","hasVersion","isDescribedBy",\
-                "isHomologTo","isPartOf","isPropertyOf","isVersionOf","occursIn"]
+    MiriQual = [
+        "is",
+        "isEncodedBy",
+        "encodes",
+        "hasPart",
+        "hasProperty",
+        "hasTaxon",
+        "hasVersion",
+        "isDescribedBy",
+        "isHomologTo",
+        "isPartOf",
+        "isPropertyOf",
+        "isVersionOf",
+        "occursIn",
+    ]
     wsMiriam.write(0, 0, 'id', styleBoldC)
     for q_ in range(len(MiriQual)):
-        wsMiriam.write(0, q_+1, MiriQual[q_], styleBold)
+        wsMiriam.write(0, q_ + 1, MiriQual[q_], styleBold)
 
     # get data
     mcntr = 1
@@ -2625,7 +3232,7 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         Mdi['chemformula'] = fba.species[s_].getChemFormula()
         Mdi['compartment'] = fba.species[s_].compartment
         Mdi['fixed'] = fba.species[s_].is_boundary
-        #Mdi['bgid'] = bgGen.next()
+        # Mdi['bgid'] = bgGen.next()
         udata = {}
         for k_ in fba.species[s_].getAnnotations():
             if k_ not in MUcols:
@@ -2636,29 +3243,29 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         Mlist.append(Mdi)
 
         ## TODO: removed for now will appear in its own sheet at some point
-        #wsSol.write(s_+1, 0,  Mdi['id'])
-        #Sval = fba.species[s_].getValue()
-        #if Sval == None or numpy.isnan(Sval) or numpy.isinf(Sval):
-            #Sval = ''
-        #wsSol.write(s_+1, 1,  Sval)
-        #wsSol.write(s_+1, 2,  fba.species[s_].shadow_price)
+        # wsSol.write(s_+1, 0,  Mdi['id'])
+        # Sval = fba.species[s_].getValue()
+        # if Sval == None or numpy.isnan(Sval) or numpy.isinf(Sval):
+        # Sval = ''
+        # wsSol.write(s_+1, 1,  Sval)
+        # wsSol.write(s_+1, 2,  fba.species[s_].shadow_price)
         annot = fba.species[s_].getMIRIAMannotations()
         if annot != None:
             for k_ in annot:
                 for m_ in annot[k_]:
                     wsMiriam.write(mcntr, 0, Mdi['id'])
-                    #if 'identifiers.org' in m_:
-                        #wsMiriam.write(mcntr, MiriQual.index(k_)+1, xlwt.Formula('HYPERLINK("{}";"{}")'.format(m_.replace('identifiers.org', 'info.identifiers.org'),\
-                                                                                                #m_.rsplit('/',1)[1])), styleHyper)
-                    #else:
-                        #wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
-                    wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
+                    # if 'identifiers.org' in m_:
+                    # wsMiriam.write(mcntr, MiriQual.index(k_)+1, xlwt.Formula('HYPERLINK("{}";"{}")'.format(m_.replace('identifiers.org', 'info.identifiers.org'),\
+                    # m_.rsplit('/',1)[1])), styleHyper)
+                    # else:
+                    # wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
+                    wsMiriam.write(mcntr, MiriQual.index(k_) + 1, m_)
                     mcntr += 1
 
     # reactions
     Rlist = []
-    #Rcols = ['id','name','reversible','lowerbound','upperbound','compartment','bgid']
-    Rcols = ['id','name','reversible','lowerbound','upperbound','compartment']
+    # Rcols = ['id','name','reversible','lowerbound','upperbound','compartment','bgid']
+    Rcols = ['id', 'name', 'reversible', 'lowerbound', 'upperbound', 'compartment']
     RUcols = []
     try:
         AOIDS = fba.getActiveObjective().getFluxObjectiveReactions()
@@ -2673,7 +3280,7 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         Rdi['name'] = REAC.getName()
         Rdi['reversible'] = REAC.reversible
         Rdi['compartment'] = REAC.compartment
-        #Rdi['bgid'] = bgGen.next()
+        # Rdi['bgid'] = bgGen.next()
         Rdi['lowerbound'] = fba.getReactionLowerBound(Rdi['id'])
         Rdi['upperbound'] = fba.getReactionUpperBound(Rdi['id'])
         udata = {}
@@ -2700,43 +3307,62 @@ def writeModelToExcel97(fba, filename, roundoff=6):
             bnds[1] = bnds[3]
             bnds[2] = bnds[3]
         if Rdi['id'] not in AOIDS:
-            wsSol.write(r_+1, cstart,  Rdi['id'])
+            wsSol.write(r_ + 1, cstart, Rdi['id'])
         else:
-            wsSol.write(r_+1, cstart,  Rdi['id'], styleBold)
+            wsSol.write(r_ + 1, cstart, Rdi['id'], styleBold)
         rval = REAC.getValue()
         rval = convertFloatToExcel(rval, roundoff)
-        wsSol.write(r_+1, cstart+1, rval)
+        wsSol.write(r_ + 1, cstart + 1, rval)
         del rval
 
-        wsSol.write(r_+1, cstart+2, convertFloatToExcel(bnds[1], roundoff))
-        wsSol.write(r_+1, cstart+3, convertFloatToExcel(bnds[2], roundoff))
-        wsSol.write(r_+1, cstart+4, convertFloatToExcel(REAC.reduced_cost, roundoff))
+        wsSol.write(r_ + 1, cstart + 2, convertFloatToExcel(bnds[1], roundoff))
+        wsSol.write(r_ + 1, cstart + 3, convertFloatToExcel(bnds[2], roundoff))
+        wsSol.write(
+            r_ + 1, cstart + 4, convertFloatToExcel(REAC.reduced_cost, roundoff)
+        )
         if REAC.fva_min != None:
-            wsSol.write(r_+1, cstart+5, convertFloatToExcel(REAC.fva_min, roundoff))
+            wsSol.write(r_ + 1, cstart + 5, convertFloatToExcel(REAC.fva_min, roundoff))
         if REAC.fva_max != None:
-            wsSol.write(r_+1, cstart+6, convertFloatToExcel(REAC.fva_max, roundoff))
+            wsSol.write(r_ + 1, cstart + 6, convertFloatToExcel(REAC.fva_max, roundoff))
         if REAC.fva_min != None and REAC.fva_max != None:
-            wsSol.write(r_+1, cstart+7, convertFloatToExcel(REAC.fva_max-REAC.fva_min, roundoff))
+            wsSol.write(
+                r_ + 1,
+                cstart + 7,
+                convertFloatToExcel(REAC.fva_max - REAC.fva_min, roundoff),
+            )
         if REAC.is_exchange:
-            wsSol.write(r_+1, cstart+8, 'yes')
-        #else:
-            #wsSol.write(r_+1, cstart+8, 'no')
-        wsSol.write(r_+1, cstart+9, xlwt.Formula('HYPERLINK("#reactions!A{}";"{}")'.format(r_+1, 'info')), styleHyper)
-        wsSol.write(r_+1, cstart+10, xlwt.Formula('HYPERLINK("#network_react!A{}";"{}")'.format(((r_+1)*3)-2, 'stoich')), styleHyper)
+            wsSol.write(r_ + 1, cstart + 8, 'yes')
+        # else:
+        # wsSol.write(r_+1, cstart+8, 'no')
+        wsSol.write(
+            r_ + 1,
+            cstart + 9,
+            xlwt.Formula('HYPERLINK("#reactions!A{}";"{}")'.format(r_ + 1, 'info')),
+            styleHyper,
+        )
+        wsSol.write(
+            r_ + 1,
+            cstart + 10,
+            xlwt.Formula(
+                'HYPERLINK("#network_react!A{}";"{}")'.format(
+                    ((r_ + 1) * 3) - 2, 'stoich'
+                )
+            ),
+            styleHyper,
+        )
 
         annot = REAC.getMIRIAMannotations()
         if annot != None:
             for k_ in annot:
                 for m_ in annot[k_]:
                     wsMiriam.write(mcntr, 0, Rdi['id'])
-                    #if 'identifiers.org' in m_:
-                        #wsMiriam.write(mcntr, MiriQual.index(k_)+1, xlwt.Formula('HYPERLINK("{}";"{}")'.format(m_.replace('identifiers.org', 'info.identifiers.org'),\
-                                                                                                #m_.rsplit('/',1)[1])), styleHyper)
-                    #else:
-                        #wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
-                    wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
+                    # if 'identifiers.org' in m_:
+                    # wsMiriam.write(mcntr, MiriQual.index(k_)+1, xlwt.Formula('HYPERLINK("{}";"{}")'.format(m_.replace('identifiers.org', 'info.identifiers.org'),\
+                    # m_.rsplit('/',1)[1])), styleHyper)
+                    # else:
+                    # wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
+                    wsMiriam.write(mcntr, MiriQual.index(k_) + 1, m_)
                     mcntr += 1
-
 
     compHead = ['id', 'name', 'size', 'dimensions', '# species', '# reactions']
     compHeadU = []
@@ -2759,18 +3385,18 @@ def writeModelToExcel97(fba, filename, roundoff=6):
             if k_ not in compHeadU:
                 compHeadU.append(k_)
         for k_ in annot:
-            wsComp.write(ridx, 6+compHeadU.index(k_), annot[k_])
+            wsComp.write(ridx, 6 + compHeadU.index(k_), annot[k_])
 
         annot = c_.getMIRIAMannotations()
         if annot != None:
             for k_ in annot:
                 for m_ in annot[k_]:
                     wsMiriam.write(mcntr, 0, c_.getId())
-                    wsMiriam.write(mcntr, MiriQual.index(k_)+1, m_)
+                    wsMiriam.write(mcntr, MiriQual.index(k_) + 1, m_)
                     mcntr += 1
         ridx += 1
     for ud_ in range(0, len(compHeadU)):
-        wsComp.write(0, 6+ud_, compHeadU[ud_], styleItalicC)
+        wsComp.write(0, 6 + ud_, compHeadU[ud_], styleItalicC)
     ridx = 1
 
     del ridx, c_
@@ -2780,26 +3406,39 @@ def writeModelToExcel97(fba, filename, roundoff=6):
     for m_ in range(len(Mcols)):
         wsMet.write(0, m_, Mcols[m_], styleBold)
     for m_ in range(len(MUcols)):
-        wsMet.write(0, len(Mcols)+m_, MUcols[m_], styleItalic)
+        wsMet.write(0, len(Mcols) + m_, MUcols[m_], styleItalic)
     stridx = 0
     for s_ in range(len(Mlist)):
-        s = s_+1
+        s = s_ + 1
         wsMet.write(s, Mcols.index('id'), Mlist[s_]['id'])
         wsMet.write(s, Mcols.index('name'), Mlist[s_]['name'])
         wsMet.write(s, Mcols.index('charge'), Mlist[s_]['charge'])
         wsMet.write(s, Mcols.index('chemformula'), Mlist[s_]['chemformula'])
         wsMet.write(s, Mcols.index('compartment'), Mlist[s_]['compartment'])
         wsMet.write(s, Mcols.index('fixed'), Mlist[s_]['fixed'])
-        #wsMet.write(s, Mcols.index('bgid'), Mlist[s_]['bgid'])
+        # wsMet.write(s, Mcols.index('bgid'), Mlist[s_]['bgid'])
         for ud_ in Mlist[s_]['data']:
             try:
                 if Mlist[s_]['data'][ud_] is not None:
                     if len(Mlist[s_]['data'][ud_]) < 30000:
-                        wsMet.write(s, len(Mcols)+MUcols.index(ud_), str(Mlist[s_]['data'][ud_]))
+                        wsMet.write(
+                            s,
+                            len(Mcols) + MUcols.index(ud_),
+                            str(Mlist[s_]['data'][ud_]),
+                        )
                     else:
-                        wsMet.write(s, len(Mcols)+MUcols.index(ud_),'Data too long (more than 30000 characters)', styleBold)
+                        wsMet.write(
+                            s,
+                            len(Mcols) + MUcols.index(ud_),
+                            'Data too long (more than 30000 characters)',
+                            styleBold,
+                        )
             except TypeError:
-                print('Annotation write error (TypeError) {} : {}'.format(ud_, Mlist[s_]['data'][ud_]))
+                print(
+                    'Annotation write error (TypeError) {} : {}'.format(
+                        ud_, Mlist[s_]['data'][ud_]
+                    )
+                )
 
         wsStR.write(stridx, 0, Mlist[s_]['id'], styleBold)
         cidx = 0
@@ -2817,28 +3456,46 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         wsRe.write(0, r_, Rcols[r_], styleBold)
     for r_ in range(len(RUcols)):
         try:
-            wsRe.write(0, len(Rcols)+r_, RUcols[r_], styleItalic)
+            wsRe.write(0, len(Rcols) + r_, RUcols[r_], styleItalic)
         except Exception as why:
             print(why)
             print('\nERROR: Exceeded Excel columns')
     ridx = 0
     for r_ in range(len(Rlist)):
-        r = r_+1
+        r = r_ + 1
         wsRe.write(r, Rcols.index('id'), Rlist[r_]['id'])
         wsRe.write(r, Rcols.index('name'), Rlist[r_]['name'])
         wsRe.write(r, Rcols.index('reversible'), Rlist[r_]['reversible'])
-        wsRe.write(r, Rcols.index('lowerbound'), convertFloatToExcel(Rlist[r_]['lowerbound'], roundoff))
-        wsRe.write(r, Rcols.index('upperbound'), convertFloatToExcel(Rlist[r_]['upperbound'], roundoff))
+        wsRe.write(
+            r,
+            Rcols.index('lowerbound'),
+            convertFloatToExcel(Rlist[r_]['lowerbound'], roundoff),
+        )
+        wsRe.write(
+            r,
+            Rcols.index('upperbound'),
+            convertFloatToExcel(Rlist[r_]['upperbound'], roundoff),
+        )
         wsRe.write(r, Rcols.index('compartment'), Rlist[r_]['compartment'])
-        #wsRe.write(r, Rcols.index('bgid'), Rlist[r_]['bgid'])
+        # wsRe.write(r, Rcols.index('bgid'), Rlist[r_]['bgid'])
         for ud_ in Rlist[r_]['data']:
             if Rlist[r_]['data'][ud_] == None:
-                wsRe.write(r, len(Rcols)+RUcols.index(ud_), '')
-            elif type(Rlist[r_]['data'][ud_]) == str and len(Rlist[r_]['data'][ud_]) >= 30000:
-                wsRe.write(r, len(Rcols)+RUcols.index(ud_), 'Data too long (more than 30000 characters)', styleBold)
+                wsRe.write(r, len(Rcols) + RUcols.index(ud_), '')
+            elif (
+                type(Rlist[r_]['data'][ud_]) == str
+                and len(Rlist[r_]['data'][ud_]) >= 30000
+            ):
+                wsRe.write(
+                    r,
+                    len(Rcols) + RUcols.index(ud_),
+                    'Data too long (more than 30000 characters)',
+                    styleBold,
+                )
             else:
                 try:
-                    wsRe.write(r, len(Rcols)+RUcols.index(ud_), Rlist[r_]['data'][ud_])
+                    wsRe.write(
+                        r, len(Rcols) + RUcols.index(ud_), Rlist[r_]['data'][ud_]
+                    )
                 except:
                     print('Exceeded Excel columns')
 
@@ -2847,28 +3504,46 @@ def writeModelToExcel97(fba, filename, roundoff=6):
         wsSt.write(ridx, 0, 'substrates', styleBold)
         cidx = 1
         for sr_ in range(len(Rlist[r_]['substrates'])):
-            wsSt.write(ridx, cidx+sr_, Rlist[r_]['substrates'][sr_][0])
-            wsSt.write(ridx, cidx+sr_+1, Rlist[r_]['substrates'][sr_][1])
+            wsSt.write(ridx, cidx + sr_, Rlist[r_]['substrates'][sr_][0])
+            wsSt.write(ridx, cidx + sr_ + 1, Rlist[r_]['substrates'][sr_][1])
             cidx += 1
         ridx += 1
         wsSt.write(ridx, 0, 'products', styleBold)
         cidx = 1
         for pr_ in range(len(Rlist[r_]['products'])):
-            wsSt.write(ridx, cidx+pr_, Rlist[r_]['products'][pr_][0])
-            wsSt.write(ridx, cidx+pr_+1, Rlist[r_]['products'][pr_][1])
+            wsSt.write(ridx, cidx + pr_, Rlist[r_]['products'][pr_][0])
+            wsSt.write(ridx, cidx + pr_ + 1, Rlist[r_]['products'][pr_][1])
             cidx += 1
         ridx += 1
 
     gids = fba.getGroupIds()
     for g_ in range(len(gids)):
         mbrs = fba.getGroup(gids[g_]).getMemberIDs()
-        wsGrp.write(0, g_, '{} ({})'.format(gids[g_], fba.getGroup(gids[g_]).getName()), styleBold)
+        wsGrp.write(
+            0,
+            g_,
+            '{} ({})'.format(gids[g_], fba.getGroup(gids[g_]).getName()),
+            styleBold,
+        )
         for m_ in range(len(mbrs)):
-            wsGrp.write(m_+1, g_, str(mbrs[m_]))
+            wsGrp.write(m_ + 1, g_, str(mbrs[m_]))
 
     wb.save('{}.xls'.format(filename))
 
-def writeModelToCOMBINEarchive(mod, fname=None, directory=None, sbmlname=None, withExcel=True, vc_given='CBMPy', vc_family='Software', vc_email='None', vc_org='cbmpy.sourceforge.net', add_cbmpy_annot=True, add_cobra_annot=True):
+
+def writeModelToCOMBINEarchive(
+    mod,
+    fname=None,
+    directory=None,
+    sbmlname=None,
+    withExcel=True,
+    vc_given='CBMPy',
+    vc_family='Software',
+    vc_email='None',
+    vc_org='cbmpy.sourceforge.net',
+    add_cbmpy_annot=True,
+    add_cobra_annot=True,
+):
     """
     Write a model in SBML and Excel format to a COMBINE archive using the following information:
 
@@ -2885,53 +3560,66 @@ def writeModelToCOMBINEarchive(mod, fname=None, directory=None, sbmlname=None, w
     - *add_cobra_annot* [default=True] add COBRA <notes> annotation
 
     """
-    scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone/60/60)
-    #self.writeSedXML(sedx=True)
-    #sedxname = '%s.sed.omex' % (self.id)
-    #sf = os.path.join(self.sedpath, sedxname)
-    #self.__sedarchive__ = sf
+    scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone / 60 / 60)
+    # self.writeSedXML(sedx=True)
+    # sedxname = '%s.sed.omex' % (self.id)
+    # sf = os.path.join(self.sedpath, sedxname)
+    # self.__sedarchive__ = sf
     if directory != None:
-        zfpath = os.path.join(directory, fname+'.sbex.zip')
+        zfpath = os.path.join(directory, fname + '.sbex.zip')
     else:
-        zfpath = fname+'.sbex.zip'
+        zfpath = fname + '.sbex.zip'
     zf = zipfile.ZipFile(zfpath, mode='w', compression=zipfile.ZIP_DEFLATED)
     if sbmlname != None:
         if sbmlname.endswith('.xml'):
             sbmlf = sbmlname
             xlf = sbmlname[:-4]
         else:
-            sbmlf = sbmlname+'.xml'
+            sbmlf = sbmlname + '.xml'
             xlf = sbmlname
     else:
-        sbmlf = fname+'.xml'
+        sbmlf = fname + '.xml'
         xlf = fname
     ptmp = os.path.join(os.getcwd(), 'sedxtmp')
     if not os.path.exists(ptmp):
         os.makedirs(ptmp)
-    assert os.path.exists(ptmp), "Could not create temporary archive directory: {}".format(ptmp)
+    assert os.path.exists(
+        ptmp
+    ), "Could not create temporary archive directory: {}".format(ptmp)
 
     MFstr = ''
     MDstr = ''
     MFstr += '<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">\n'
     MFstr += ' <content location="." format="http://identifiers.org/combine.specifications/omex"/>\n'
-    #MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sedml"/>\n' % os.path.split(self.__sedxml__)[-1]
+    # MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sedml"/>\n' % os.path.split(self.__sedxml__)[-1]
     MFstr += ' <content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>\n'
 
     # SBML
-    writeSBML3FBCV2(mod, sbmlf, ptmp, add_cbmpy_annot=add_cbmpy_annot, add_cobra_annot=add_cobra_annot)
+    writeSBML3FBCV2(
+        mod,
+        sbmlf,
+        ptmp,
+        add_cbmpy_annot=add_cbmpy_annot,
+        add_cobra_annot=add_cobra_annot,
+    )
     zf.write(os.path.join(ptmp, sbmlf), arcname=sbmlf)
-    MFstr += ' <content location="./{}" format="http://identifiers.org/combine.specifications/sbml.level-3.version-1"/>\n'.format(sbmlf)
+    MFstr += ' <content location="./{}" format="http://identifiers.org/combine.specifications/sbml.level-3.version-1"/>\n'.format(
+        sbmlf
+    )
 
     # Excel
     if withExcel and _HAVE_XLWT_:
         writeModelToExcel97(mod, os.path.join(ptmp, xlf))
         xlf += '.xls'
         zf.write(os.path.join(ptmp, xlf), arcname=xlf)
-        MFstr += ' <content location="./{}" format="http://mediatypes.appspot.com/application/vnd.ms-excel"/>'.format(xlf)
+        MFstr += ' <content location="./{}" format="http://mediatypes.appspot.com/application/vnd.ms-excel"/>'.format(
+            xlf
+        )
     MF = open(os.path.join(ptmp, 'manifest.xml'), 'w')
-    MF.write('<?xml version="1.0" encoding="utf-8"?>\n{}\n</omexManifest>\n'.format(MFstr))
+    MF.write(
+        '<?xml version="1.0" encoding="utf-8"?>\n{}\n</omexManifest>\n'.format(MFstr)
+    )
     MF.close()
-
 
     MD = open(os.path.join(ptmp, 'metadata.rdf'), 'w')
     MD.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -2940,7 +3628,7 @@ def writeModelToCOMBINEarchive(mod, fname=None, directory=None, sbmlname=None, w
     MD.write('    xmlns:vCard="http://www.w3.org/2006/vcard/ns#"\n')
     MD.write('    xmlns:bqmodel="http://biomodels.net/models-qualifiers">\n')
     MD.write(' <rdf:Description rdf:about=".">\n')
-    #MDstr += '   <dcterms:description>\n     %s\n    </dcterms:description>\n' % self.omex_description
+    # MDstr += '   <dcterms:description>\n     %s\n    </dcterms:description>\n' % self.omex_description
     MDstr += ' <dcterms:creator>\n'
     MDstr += ' <rdf:Bag>\n'
     MDstr += '  <rdf:li rdf:parseType="Resource">\n'
@@ -2976,4 +3664,4 @@ def writeModelToCOMBINEarchive(mod, fname=None, directory=None, sbmlname=None, w
         os.removedirs(ptmp)
     except WindowsError:
         pass
-    print('COMBINE archive created: {}'.format(fname+'.zip'))
+    print('COMBINE archive created: {}'.format(fname + '.zip'))

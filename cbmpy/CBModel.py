@@ -74,11 +74,8 @@ try:
 except ImportError:
     HAVE_SCIPY = False
 
-
-#from .CBDataStruct import (StructMatrixLP, MIRIAMannotation, MIRIAMModelAnnotation)
-from .CBDataStruct import (StructMatrixLP, MIRIAMannotation)
 from .CBCommon import (checkChemFormula, extractGeneIdsFromString, getGPRasDictFromString,\
-                       binHash, fixId, checkId, createAssociationDictFromNode)
+                       binHash, fixId, checkId, createAssociationDictFromNode, StructMatrixLP, MIRIAMannotation)
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']

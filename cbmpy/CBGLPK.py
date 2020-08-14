@@ -67,17 +67,25 @@ except:
     raise ImportError
 
 
-# configuration options for GLPK
-GLPK_CFG = {
-    'simplex': {
-        'meth': sw.GLP_PRIMAL,
-        # 'meth' : sw.GLP_DUAL
-        # 'meth' : sw.GLP_DUALP
-        'tol_bnd': 1.0e-6,
-        'tol_dj': 1.0e-6,
-        'tol_piv': 1.0e-10,
-    }
-}
+# Configuration options for GLPK
+GLPK_S_CFG = sw.glp_smcp()
+# GLPK_S_CFG.meth = sw.GLP_PRIMAL
+# GLPK_S_CFG.meth = sw.GLP_DUAL
+GLPK_S_CFG.meth = sw.GLP_DUALP
+GLPK_S_CFG.tol_bnd = 1.0e-7
+GLPK_S_CFG.tol_dj = 1.0e-7
+GLPK_S_CFG.tol_piv = 1.0e-10
+GLPK_S_CFG.it_lim = 10000
+GLPK_S_CFG.tm_lim = 600000  #  units unknown
+
+# Configuration options for GLPK
+GLPK_I_CFG = sw.glp_iptcp()
+# GLPK_I_CFG.ord_alg = sw.GLP_ORD_NONE
+# GLPK_I_CFG.ord_alg = sw.GLP_ORD_QMD
+GLPK_I_CFG.ord_alg = sw.GLP_ORD_AMD
+# GLPK_I_CFG.ord_alg = sw.GLP_ORD_SYMAMD
+GLPK_I_CFG.msg_lev = sw.GLP_MSG_ALL
+
 
 GLPK_STATUS = {
     1: 'LPS_UNDEF',
@@ -190,10 +198,10 @@ def glpk_constructLPfromFBA(fba, fname=None):
         rhs = RHSmat[r_]
         if fba.N.operators[r_] in ['<=', '<', 'L']:
             # lp.rows[r_].bounds = None, rhs
-            sw.glp_set_row_bnds(lp, 1 + r_, sw.GLP_UP, None, rhs)
+            sw.glp_set_row_bnds(lp, 1 + r_, sw.GLP_UP, rhs, rhs)
         elif fba.N.operators[r_] in ['>=', '>', 'G']:
             # lp.rows[r_].bounds = rhs, None
-            sw.glp_set_row_bnds(lp, 1 + r_, sw.GLP_LO, rhs, None)
+            sw.glp_set_row_bnds(lp, 1 + r_, sw.GLP_LO, rhs, rhs)
         elif fba.N.operators[r_] in ['=', 'E']:
             # lp.rows[r_].bounds = rhs
             sw.glp_set_row_bnds(lp, 1 + r_, sw.GLP_FX, rhs, rhs)
@@ -270,7 +278,7 @@ def glpk_constructLPfromFBA(fba, fname=None):
 
         if ub != GLPK_INFINITY and lb != -GLPK_INFINITY and ub == lb:
             # lp.cols[varMap[r_b.getId()]].bounds = lb
-            sw.glp_set_col_bnds(lp, varMap[r_b.getId()] + 1, sw.GLP_DB, lb, lb)
+            sw.glp_set_col_bnds(lp, varMap[r_b.getId()] + 1, sw.GLP_FX, lb, lb)
 
         elif ub != GLPK_INFINITY and lb != -GLPK_INFINITY:
             # lp.cols[varMap[r_b.getId()]].bounds = lb, ub
@@ -298,42 +306,29 @@ def glpk_Solve(lp, method='s'):
 
      - *method* [default='s'] 's' = simplex, 'i' = interior, 'e' = exact
 
-    GLPK solver options can be set in the dictionary GLPK_CFG
+    GLPK solver options can be set in the GLPK_<METHOD>_CFG objects
 
     """
 
-    solution_status = None
+    global GLPK_SOLUTION_STATUS
+    solver_config = sw.glp_init_smcp(GLPK_S_CFG)
     if method == 'i':
         # TODO: add parameters
-        glpksol = sw.glp_interior(lp, None)
-        # solution_status = sw.glp_ipt_status(lp)
+        solver_config = sw.glp_init_iptcp(GLPK_I_CFG)
+        glpksol = sw.glp_interior(lp, solver_config)
     elif method == 'e':
         # TODO: add parameters
-        glpksol = sw.glp_exact(lp, None)
-        # solution_status = glpk_getSolutionStatus(lp)
+        # this sets up a base with the fp solver and then performs the exact, faster ... apparently
+        glpksol = sw.glp_simplex(lp, solver_config)
+        glpksol = sw.glp_exact(lp, solver_config)
     else:
         # TODO: add parameters
-        # glpksol = sw.glp_simplex(lp, **GLPK_CFG['simplex'])
-        glpksol = sw.glp_simplex(lp, None)
-        # solution_status = glpk_getSolutionStatus(lp)
+        glpksol = sw.glp_simplex(lp, solver_config)
 
     print(glpksol)
-    return glpksol
 
-    global GLPK_SOLUTION_STATUS
     GLPK_SOLUTION_STATUS = glpk_getSolutionStatus(lp)
-
-    # if status == 'LPS_UNDEF':
-    # sd.presolve = False
-    # status = glpk.glp_simplex(lp, sd)
-    # if status == 'LPS_UNDEF':
-    # print('\nINFO: Primal solver failure switching to dual-primal solver\n')
-    # sd.presolve = False
-    # sd.obj_ul = 1.0e10
-    # sd.obj_ll = 1.0e10
-    # sd.meth = glpk.GLP_DUALP
-    # glpk.glp_simplex(lp, sd)
-    # status = glpk_getSolutionStatus(lp)
+    print(GLPK_SOLUTION_STATUS)
 
     if GLPK_SOLUTION_STATUS in [
         'LPS_UNDEF',
@@ -371,7 +366,7 @@ def glpk_analyzeModel(
     f,
     lpFname=None,
     return_lp_obj=False,
-    with_reduced_costs='unscaled',
+    with_reduced_costs='scaled',
     with_sensitivity=False,
     del_intermediate=False,
     build_n=True,
@@ -388,12 +383,13 @@ def glpk_analyzeModel(
      - *f* an instantiated PySCeSCBM model object
      - *lpFname* [default=None] the name of the intermediate LP file saved when this has a string value.
      - *return_lp_obj* [default=False] off by default when enabled it returns the PyGLPK LP object
-     - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
+     - *with_reduced_costs* [default='scaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
        or anything else which is interpreted as 'None'. Scaled means s_rcost = (r.reduced_cost*rval)/obj_value
      - *with_sensitivity* [default=False] add solution sensitivity information (not yet implemented)
      - *del_intermediate* [default=False] delete the intermediary files after updating model object, useful for server applications
      - *build_n* [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)
      - *quiet* [default=False] suppress glpk output
+     - *oldlpgen* [default=False] not used anymore
      - *method* [default='s'] select the GLPK solver method, see the GLPK documentation for details
 
        - 's': simplex
@@ -419,7 +415,7 @@ def glpk_analyzeModel(
 
     if lpFname == None:
         flp = glpk_constructLPfromFBA(f, fname=None)
-        f.setId('_glpktmp_.tmp')
+        f.setId('_glpktmp_tmp_')
     else:
         flp = glpk_constructLPfromFBA(f, fname=lpFname)
         fid = lpFname
@@ -433,8 +429,6 @@ def glpk_analyzeModel(
     glpk_setFBAsolutionToModel(f, flp, with_reduced_costs=with_reduced_costs)
     glpk_setSolutionStatusToModel(f, flp)
 
-    if oldlpgen and del_intermediate:
-        os.remove(LPF)
     objv = f.getActiveObjective().getValue()
     print('\nanalyzeModel objective value: {}\n'.format(objv))
     if return_lp_obj:
@@ -457,7 +451,7 @@ def glpk_setSolutionStatusToModel(m, lp):
         m.SOLUTION_STATUS_INT = 999
 
 
-def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
+def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='scaled'):
     """
     Sets the FBA solution from a CPLEX solution to an FBA object
 
