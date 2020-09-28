@@ -55,8 +55,8 @@ __CBCONFIG__ = {
         __VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__
     ),
     'DEBUG': False,
-    #'SOLVER_PREF': 'CPLEX',
-    'SOLVER_PREF': 'GLPK',
+    'SOLVER_PREF': 'CPLEX',
+    #'SOLVER_PREF': 'GLPK',
     'SOLVER_ACTIVE': None,
     'REVERSIBLE_SYMBOL': '<==>',
     'IRREVERSIBLE_SYMBOL': '-->',
