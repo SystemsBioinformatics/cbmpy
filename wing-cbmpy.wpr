@@ -5,15 +5,22 @@
 ##################################################################
 [project attributes]
 proj.directory-list = [{'dirloc': loc('.'),
-                        'excludes': [u'src'],
-                        'filter': '*',
+                        'excludes': (),
+                        'filter': u'All Source Files',
                         'include_hidden': False,
                         'recursive': True,
                         'watch_for_changes': True},
-                       {'dirloc': loc('../python'),
+                       {'dirloc': loc('../cbmpy-test-suite'),
                         'excludes': (),
+                        'filter': u'All Source Files',
+                        'include_hidden': False,
+                        'recursive': True,
+                        'watch_for_changes': True},
+                       {'dirloc': loc('../mypython'),
+                        'excludes': [u'pyscesdev'],
                         'filter': u'All Source Files',
                         'include_hidden': False,
                         'recursive': True,
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
+testing.test-framework = {None: 'nose'}
