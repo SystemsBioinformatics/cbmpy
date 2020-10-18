@@ -35,7 +35,7 @@ from __future__ import absolute_import
 
 # from __future__ import unicode_literals
 
-import plaform
+import platform
 
 __VERSION_MAJOR__ = 0
 __VERSION_MINOR__ = 8
@@ -58,9 +58,10 @@ __CBCONFIG__ = {
     'HAVE_SBML2': False,
     'HAVE_SBML3': False,
     'CBMPY_DIR': None,
-    'CBMPY_CGLPK_VER': str(GLPK_VER),
     'SYMPY_DENOM_LIMIT': 10 ** 32,
-    'ENVIRONMENT' : '{} {} ({})'.format(platform.system(), platform.release(), platform.architecture()[0])
+    'ENVIRONMENT': '{} {} ({})'.format(
+        platform.system(), platform.release(), platform.architecture()[0]
+    ),
 }
 
 
