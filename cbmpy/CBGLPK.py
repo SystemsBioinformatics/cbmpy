@@ -51,6 +51,7 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
+__solver_version__ = '0.0'
 
 HAVE_SWIGLPK = False
 GLPK_SOLUTION_STATUS = None
@@ -63,6 +64,7 @@ try:
     sw.glp_delete_prob(lp)
     HAVE_SWIGLPK = True
     print('\n\nCBGLPK based on swiglpk: not all methods implimented yet!')
+    __solver_version__ = '{}.{}'.format(sw.GLP_MAJOR_VERSION, sw.GLP_MINOR_VERSION)
 except:
     raise ImportError
 

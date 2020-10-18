@@ -76,6 +76,7 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
+__solver_version__ = cplex.__version__
 
 
 # class FluxSensitivity(object):

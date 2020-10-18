@@ -33,14 +33,9 @@ Last edit: $Author: bgoli $ ($Id: CBConfig.py 711 2020-04-27 14:22:34Z bgoli $)
 from __future__ import division, print_function
 from __future__ import absolute_import
 
-try:
-    import swiglpk
-
-    GLPK_VER = swiglpk.glp_version()
-except ImportError:
-    GLPK_VER = None
-
 # from __future__ import unicode_literals
+
+import plaform
 
 __VERSION_MAJOR__ = 0
 __VERSION_MINOR__ = 8
@@ -65,6 +60,7 @@ __CBCONFIG__ = {
     'CBMPY_DIR': None,
     'CBMPY_CGLPK_VER': str(GLPK_VER),
     'SYMPY_DENOM_LIMIT': 10 ** 32,
+    'ENVIRONMENT' : '{} {} ({})'.format(platform.system(), platform.release(), platform.architecture()[0])
 }
 
 
