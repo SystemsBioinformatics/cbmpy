@@ -596,7 +596,6 @@ def setReducedCosts(fba, reduced_costs):
                 r.reduced_cost = None
 
 
-'''
 def glpk_FluxVariabilityAnalysis(
     fba,
     selected_reactions=None,
@@ -983,7 +982,7 @@ def glpk_func_SetObjectiveFunctionAsConstraint(
 
 def glpk_setSingleConstraint(c, cid, expr=[], sense='E', rhs=0.0):
     """
-    Sets a new sigle constraint to a GLPK model
+    Sets a new single constraint to a GLPK model
 
      - *c* a GLPK instance
      - *cid* the constraint id
@@ -1069,64 +1068,75 @@ def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
     # c.write(cpxlp='test_obja.lp')
 
 
+'''
+def cplx_getDualValues(c):
+    """
+    Get the get the dual values of the solution
+
+    - *c* a CPLEX LP
+
+    Output is a dictionary of {name : value} pairs
+
+    """
+    d_names = c.linear_constraints.get_names()
+    d_values = c.solution.get_dual_values()
+    output = {}
+    for j in range(len(d_names)):
+        output.update({d_names[j]: d_values[j]})
+    return output
 
 
-# def cplx_getDualValues(c):
-# """
-# Get the get the dual values of the solution
+def cplx_getSensitivities(c):
+    """
+    Get the sensitivities of each constraint on the objective function with input
 
-# - *c* a CPLEX LP
+    - *c* a CPLEX LP
 
-# Output is a dictionary of {name : value} pairs
+    Output is a tuple of bound and objective sensitivities where the objective
+    sensitivity is described in the CPLEX reference manual as::
 
-# """
-# d_names = c.linear_constraints.get_names()
-# d_values = c.solution.get_dual_values()
-# output = {}
-# for j in range(len(d_names)):
-# output.update({d_names[j] : d_values[j]})
-# return output
+    ... the objective sensitivity shows each variable, its reduced cost and the range over
+    which its objective function coefficient can vary without forcing a change
+    in the optimal basis. The current value of each objective coefficient is
+    also displayed for reference.
 
-# def cplx_getSensitivities(c):
-# """
-# Get the sensitivities of each constraint on the objective function with input
+    - *objective coefficient sensitivity* {flux : (reduced_cost, lower_obj_sensitivity, coeff_value, upper_obj_sensitivity)}
+    - *rhs sensitivity* {constraint : (low, value, high)}
+    - *bound sensitivity ranges* {flux : (lb_low, lb_high, ub_low, ub_high)}
 
-# - *c* a CPLEX LP
+    """
+    SENSE_RHS = {}
+    SENSE_BND = {}
+    SENSE_OBJ = {}
+    c_names = c.linear_constraints.get_names()
+    rhs_val = c.linear_constraints.get_rhs()
+    j_names = c.variables.get_names()
 
-# Output is a tuple of bound and objective sensitivities where the objective
-# sensitivity is described in the CPLEX reference manual as::
+    rhs_sense = c.solution.sensitivity.rhs()
+    bnd_sense = c.solution.sensitivity.bounds()
+    obj_sense = c.solution.sensitivity.objective()
+    obj_coeff = c.objective.get_linear()
+    red_cost = c.solution.get_reduced_costs()
 
-# ... the objective sensitivity shows each variable, its reduced cost and the range over
-# which its objective function coefficient can vary without forcing a change
-# in the optimal basis. The current value of each objective coefficient is
-# also displayed for reference.
+    for r in range(c.variables.get_num()):
+        SENSE_BND.update(
+            {
+                j_names[r]: (
+                    bnd_sense[r][0],
+                    bnd_sense[r][1],
+                    bnd_sense[r][2],
+                    bnd_sense[r][3],
+                )
+            }
+        )
+        SENSE_OBJ.update(
+            {j_names[r]: (red_cost[r], obj_sense[r][0], obj_coeff[r], obj_sense[r][1])}
+        )
 
-# - *objective coefficient sensitivity* {flux : (reduced_cost, lower_obj_sensitivity, coeff_value, upper_obj_sensitivity)}
-# - *rhs sensitivity* {constraint : (low, value, high)}
-# - *bound sensitivity ranges* {flux : (lb_low, lb_high, ub_low, ub_high)}
+    for s in range(c.linear_constraints.get_num()):
+        SENSE_RHS.update({c_names[s]: (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})
 
-# """
-# SENSE_RHS = {}
-# SENSE_BND = {}
-# SENSE_OBJ = {}
-# c_names = c.linear_constraints.get_names()
-# rhs_val = c.linear_constraints.get_rhs()
-# j_names = c.variables.get_names()
-
-# rhs_sense = c.solution.sensitivity.rhs()
-# bnd_sense = c.solution.sensitivity.bounds()
-# obj_sense = c.solution.sensitivity.objective()
-# obj_coeff = c.objective.get_linear()
-# red_cost = c.solution.get_reduced_costs()
-
-# for r in range(c.variables.get_num()):
-# SENSE_BND.update({j_names[r] : (bnd_sense[r][0], bnd_sense[r][1], bnd_sense[r][2], bnd_sense[r][3])})
-# SENSE_OBJ.update({j_names[r] : (red_cost[r], obj_sense[r][0], obj_coeff[r], obj_sense[r][1])})
-
-# for s in range(c.linear_constraints.get_num()):
-# SENSE_RHS.update({c_names[s] : (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})
-
-# return (SENSE_OBJ, SENSE_RHS, SENSE_BND)
+    return (SENSE_OBJ, SENSE_RHS, SENSE_BND)
 
 
 def glpk_MinimizeSumOfAbsFluxes(
