@@ -39,7 +39,7 @@ import platform
 
 __VERSION_MAJOR__ = 0
 __VERSION_MINOR__ = 8
-__VERSION_MICRO__ = 0
+__VERSION_MICRO__ = 1
 
 __CBCONFIG__ = {
     'VERSION_MAJOR': __VERSION_MAJOR__,
