@@ -788,7 +788,7 @@ def cplx_writeLPsolution(fba_sol, objf_name, fname, Dir=None, separator=','):
         assert os.path.exists(Dir), '\nPath does not exist'
         fname = os.path.join(Dir, fname)
     fname += '.csv'
-    F = file(fname, 'w')
+    F = open(fname, 'w')
     F.write('%s%s%s\n' % ('ObjectiveFunction', separator, objf_name))
     for r in fba_sol:
         F.write('%s%s%f\n' % (r, separator, fba_sol[r]))
@@ -799,11 +799,14 @@ def cplx_writeLPsolution(fba_sol, objf_name, fname, Dir=None, separator=','):
 
 def cplx_getShadowPrices(c):
     """
-    Returns a dictionary of shadow prices containing 'Rid' : (lb, rhs, ub)
+    Returns a dictionary of shadow prices containing 'N_row_id' : (lb, rhs, ub)
 
      - *c* a cplex LP object
 
     """
+    print(
+        'cplx_getShadowPrices: This function returns a RHS sensitivity and may or may not be realted to what is known as a shadow price.'
+    )
     c_names = c.linear_constraints.get_names()
     rhs_sense = c.solution.sensitivity.rhs()
     rhs_val = c.linear_constraints.get_rhs()
