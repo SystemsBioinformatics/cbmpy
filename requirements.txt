@@ -1,0 +1,14 @@
+biopython
+jedi==0.17.2
+ipython
+nose
+numpy
+matplotlib
+python-libsbml
+scipy
+swiglpk==4.65.1
+sympy
+xlrd
+XlsxWriter
+xlwt
+cbmpy>=0.8.0
