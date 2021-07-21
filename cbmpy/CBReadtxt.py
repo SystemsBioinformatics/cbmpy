@@ -2,7 +2,7 @@
 CBMPy: CBReadtxt module
 =======================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,10 +26,12 @@ Last edit: $Author: bgoli $ ($Id: CBReadtxt.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
@@ -64,12 +66,28 @@ def getBounds(fname, reaction_prefix='R_', has_header=False):
         print(bndsLst.pop(0))
     for b in bndsLst:
         # note the '-' --> '_' and '.' --> '_' replacement in the id
-        bndsOut.update({reaction_prefix + b[0].replace('-', '_').replace('.', '_'): {'min': float(b[1].replace(',', '.')), 'max': float(b[2].replace(',', '.'))}})
+        bndsOut.update(
+            {
+                reaction_prefix
+                + b[0]
+                .replace('-', '_')
+                .replace('.', '_'): {
+                    'min': float(b[1].replace(',', '.')),
+                    'max': float(b[2].replace(',', '.')),
+                }
+            }
+        )
     bndsF.close()
     return bndsOut
 
 
-def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, ignore_duplicates=False):
+def getReactions(
+    fname,
+    reaction_prefix='R_',
+    has_header=False,
+    save_rpt=False,
+    ignore_duplicates=False,
+):
     assert os.path.exists(fname), '\n%s is not a valid file!'
     rF = file(fname, 'r')
     rxnLst = []
@@ -95,7 +113,11 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
         R_id = reaction_prefix + r[0].replace('-', '_').replace('.', '_')
         ADD_REACTION = True
         if R_id in tuple(Reac):
-            if r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name'] and gene == Reac[R_id]['gene']:
+            if (
+                r[1] == Reac[R_id]['eqn']
+                and r[2] == Reac[R_id]['name']
+                and gene == Reac[R_id]['gene']
+            ):
                 print('Complete duplicate skipping reaction', R_id)
                 if R_id not in real_duplicates:
                     real_duplicates.append(R_id)
@@ -103,7 +125,11 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
             # elif r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name']:
             elif r[1] == Reac[R_id]['eqn']:
                 Reac[R_id]['gene'] = Reac[R_id]['gene'] + ' OR %s' % gene.strip()
-                print('Reaction differs only by gene association adding OR association', R_id, Reac[R_id]['gene'])
+                print(
+                    'Reaction differs only by gene association adding OR association',
+                    R_id,
+                    Reac[R_id]['gene'],
+                )
                 ADD_REACTION = False
                 if R_id not in gene_ors:
                     gene_ors.append(R_id)
@@ -146,7 +172,13 @@ def getReactions(fname, reaction_prefix='R_', has_header=False, save_rpt=False, 
     return Reac
 
 
-def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_rpt=False, ignore_duplicates=False):
+def getReactions_old_format(
+    fname,
+    reaction_prefix='R_',
+    has_header=False,
+    save_rpt=False,
+    ignore_duplicates=False,
+):
     assert os.path.exists(fname), '\n%s is not a valid file!'
     rF = file(fname, 'r')
     rxnLst = []
@@ -172,7 +204,11 @@ def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_
         R_id = reaction_prefix + r[0].replace('-', '_').replace('.', '_')
         ADD_REACTION = True
         if R_id in tuple(Reac):
-            if r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name'] and gene == Reac[R_id]['gene']:
+            if (
+                r[1] == Reac[R_id]['eqn']
+                and r[2] == Reac[R_id]['name']
+                and gene == Reac[R_id]['gene']
+            ):
                 print('Complete duplicate skipping reaction', R_id)
                 if R_id not in real_duplicates:
                     real_duplicates.append(R_id)
@@ -180,7 +216,11 @@ def getReactions_old_format(fname, reaction_prefix='R_', has_header=False, save_
             # elif r[1] == Reac[R_id]['eqn'] and r[2] == Reac[R_id]['name']:
             elif r[1] == Reac[R_id]['eqn']:
                 Reac[R_id]['gene'] = Reac[R_id]['gene'] + ' OR %s' % gene.strip()
-                print('Reaction differs only by gene association adding OR association', R_id, Reac[R_id]['gene'])
+                print(
+                    'Reaction differs only by gene association adding OR association',
+                    R_id,
+                    Reac[R_id]['gene'],
+                )
                 ADD_REACTION = False
                 if R_id not in gene_ors:
                     gene_ors.append(R_id)
@@ -270,7 +310,9 @@ def parseReactions(sRxns):
                 LHS[l][0] = 1.0
                 LHS[l][1] = 'M_' + LHS[l][1].replace('.', '_')
             else:
-                LHS[l][1] = 'M_' + LHS[l][1].replace(LHS[l][0][0], '').strip().replace('.', '_')
+                LHS[l][1] = 'M_' + LHS[l][1].replace(LHS[l][0][0], '').strip().replace(
+                    '.', '_'
+                )
                 LHS[l][0] = float(LHS[l][0][0].replace('(', '').replace(')', ''))
             LHS[l] = tuple(LHS[l])
 
@@ -281,21 +323,27 @@ def parseReactions(sRxns):
                 RHS[r][0] = 1.0
                 RHS[r][1] = 'M_' + RHS[r][1].replace('.', '_')
             else:
-                RHS[r][1] = 'M_' + RHS[r][1].replace(RHS[r][0][0], '').strip().replace('.', '_')
+                RHS[r][1] = 'M_' + RHS[r][1].replace(RHS[r][0][0], '').strip().replace(
+                    '.', '_'
+                )
                 RHS[r][0] = float(RHS[r][0][0].replace('(', '').replace(')', ''))
             RHS[r] = tuple(RHS[r])
         geneAss = 'unknown'
         if 'gene' in sRxns[RXN]:
             geneAss = sRxns[RXN]['gene']
-        Reactions.update({RXN: {'id': RXN,
-                                'reversible': Reversible,
-                                'exchange': Exchange,
-                                'substrates': LHS,
-                                'products': RHS,
-                                'name': sRxns[RXN]['name'],
-                                'gene': geneAss
-                                }
-                          })
+        Reactions.update(
+            {
+                RXN: {
+                    'id': RXN,
+                    'reversible': Reversible,
+                    'exchange': Exchange,
+                    'substrates': LHS,
+                    'products': RHS,
+                    'name': sRxns[RXN]['name'],
+                    'gene': geneAss,
+                }
+            }
+        )
     return Reactions
 
 
@@ -319,7 +367,9 @@ def dumpReactionsToTxt(Reactions, fname):
         dF.write('Name: %s\n' % Reactions[rx]['name'])
         dF.write('Reversible: %s\n' % Reactions[rx]['reversible'])
         dF.write('Exchange: %s\n' % Reactions[rx]['exchange'])
-        dF.write('Bounds: min=%s max=%s\n' % (Reactions[rx]['min'], Reactions[rx]['max']))
+        dF.write(
+            'Bounds: min=%s max=%s\n' % (Reactions[rx]['min'], Reactions[rx]['max'])
+        )
         if Reactions[rx]['reversible']:
             rsign = '<==>'
         else:
@@ -368,7 +418,9 @@ def buildFBAobj(reactions, species, objfname, modname='model'):
         S.setName(s)
         M.addSpecies(S)
     for r in reactions:
-        R = fm.Reaction(r, name=reactions[r]['name'], reversible=reactions[r]['reversible'])
+        R = fm.Reaction(
+            r, name=reactions[r]['name'], reversible=reactions[r]['reversible']
+        )
         for su in reactions[r]['substrates']:
             SU = fm.Reagent(r + su[1], su[1], -su[0])
             R.addReagent(SU)
@@ -398,7 +450,14 @@ def buildFBAobj(reactions, species, objfname, modname='model'):
     return M
 
 
-def readCSV(model_file, bounds_file=None, biomass_flux=None, model_id='FBAModel', reaction_prefix='R_', has_header=False):
+def readCSV(
+    model_file,
+    bounds_file=None,
+    biomass_flux=None,
+    model_id='FBAModel',
+    reaction_prefix='R_',
+    has_header=False,
+):
     """
     This function loads a CSV file and translates it into a Python object::
 
@@ -411,11 +470,18 @@ def readCSV(model_file, bounds_file=None, biomass_flux=None, model_id='FBAModel'
     """
 
     assert os.path.exists(model_file), '\nPlease supply a file name that exists.'
-    Rdict = getReactions(model_file, reaction_prefix=reaction_prefix, has_header=has_header, save_rpt=True)
+    Rdict = getReactions(
+        model_file,
+        reaction_prefix=reaction_prefix,
+        has_header=has_header,
+        save_rpt=True,
+    )
     R = parseReactions(Rdict)
     del Rdict
     if bounds_file != None and os.path.exists(bounds_file):
-        B = getBounds(bounds_file, reaction_prefix=reaction_prefix, has_header=has_header)
+        B = getBounds(
+            bounds_file, reaction_prefix=reaction_prefix, has_header=has_header
+        )
         print('\nBounds loaded from file: {}\n'.format(bounds_file))
     else:
         B = {}
@@ -445,5 +511,3 @@ if __name__ == '__main__':
     dumpSpeciesToTxt(Species, 'dump_species.txt')
     fba = buildFBAobj(Reactions, Species, 'biomass_LPL6_0', 'Spy')
 """
-
-

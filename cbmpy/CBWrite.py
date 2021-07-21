@@ -2,7 +2,7 @@
 CBMPy: CBWrite module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -49,17 +49,15 @@ from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
+from packaging import version as pkgver
+
 _HAVE_SYMPY_ = False
 try:
     import sympy
 
-    if (
-        int(sympy.__version__.split('.')[1]) >= 7
-        and int(sympy.__version__.split('.')[2]) >= 5
-    ):
+    if pkgver.parse(sympy.__version__) >= pkgver.Version('0.7.5'):
         _HAVE_SYMPY_ = True
-    elif int(sympy.__version__.split('.')[0]) >= 1:
-        _HAVE_SYMPY_ = True
+
     else:
         del sympy
         print(
@@ -67,7 +65,7 @@ try:
         )
 except ImportError:
     _HAVE_SYMPY_ = False
-    print('\nERROR: SymPy import error (required for symbolic matrix support only).')
+
 
 _HAVE_XLWT_ = False
 try:

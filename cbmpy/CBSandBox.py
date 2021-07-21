@@ -2,7 +2,7 @@
 CBMPy: CBSandBox module
 =======================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,11 +25,13 @@ Last edit: $Author: bgoli $ ($Id: CBSandBox.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os
 import time
 import re
+
 try:
     import pickle
 except ImportError:
@@ -38,6 +40,7 @@ import numpy
 
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
@@ -45,19 +48,27 @@ __version__ = __CBCONFIG__['VERSION']
 
 
 def setSuffix_extended(model, suffix='', target='all', ignore_list=[]):
-    print('\nThis function has been replaced by the new model method: cmod.renameObjectIds()\nPlease update your code!\n')
+    print(
+        '\nThis function has been replaced by the new model method: cmod.renameObjectIds()\nPlease update your code!\n'
+    )
     t = 6
     while t > 0:
         print(t)
         time.sleep(1)
         t = t - 1
     if hasattr(model, 'N') and hasattr(model.N, 'col'):
-        assert len(model.N.col) == len(model.reactions), "\nStoichiometry (number of reactions) doesn't match the model"
+        assert len(model.N.col) == len(
+            model.reactions
+        ), "\nStoichiometry (number of reactions) doesn't match the model"
     if hasattr(model, 'N') and hasattr(model.N, 'row'):
-        assert len(model.N.row) == len(model.species), "\nStoichiometry (number of species) doesn't match the model"
+        assert len(model.N.row) == len(
+            model.species
+        ), "\nStoichiometry (number of species) doesn't match the model"
 
     assert type(suffix) == str, "\nSuffix must be a string not %s" % suffix
-    assert target in ['species', 'reactions', 'all'], "\nTarget can only be one of ['species', 'reactions','all'] not %s" % target
+    assert target in ['species', 'reactions', 'all'], (
+        "\nTarget can only be one of ['species', 'reactions','all'] not %s" % target
+    )
 
     model.suffix = suffix
 
@@ -98,5 +109,3 @@ def setSuffix_extended(model, suffix='', target='all', ignore_list=[]):
             if f.reaction not in ignore_list:
                 f.id = f.id + suffix
                 f.reaction = f.reaction + suffix
-
-

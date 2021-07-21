@@ -2,7 +2,7 @@
 CBMPy: CBMultiEnv module
 ========================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ Last edit: $Author: bgoli $ ($Id: CBMultiEnv.py 710 2020-04-27 14:22:34Z bgoli $
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os
 import time
@@ -36,23 +37,33 @@ from . import CBRead, CBWrite, CBTools, CBNetDB, CBSolver, CBMultiCore
 HAVE_XLWT = False
 try:
     import xlwt
+
     HAVE_XLWT = True
 except:
     pass
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
-#print('\n***\nMultiple Environment Module ({})\n***\n'.format(__version__))
+# print('\n***\nMultiple Environment Module ({})\n***\n'.format(__version__))
 
 
-def addProteinCostAnnotation(F, reaction_gene_map, gene_peptide_map, gene_annotation_key='GENE ASSOCIATION'):
+def addProteinCostAnnotation(
+    F, reaction_gene_map, gene_peptide_map, gene_annotation_key='GENE ASSOCIATION'
+):
     reaction_gene_map = reaction_gene_map.copy()
     gene_peptide_map = gene_peptide_map.copy()
     for r in F.reactions:
         if reaction_gene_map[r.getId()] != None:
-            r.annotation.update({'CBM_PEPTIDE_LENGTHS': [(g, gene_peptide_map[g]) for g in reaction_gene_map[r.getId()]]})
+            r.annotation.update(
+                {
+                    'CBM_PEPTIDE_LENGTHS': [
+                        (g, gene_peptide_map[g]) for g in reaction_gene_map[r.getId()]
+                    ]
+                }
+            )
         else:
             r.annotation.update({'CBM_PEPTIDE_LENGTHS': []})
         GA = None
@@ -83,12 +94,18 @@ def addProteinCostAnnotation(F, reaction_gene_map, gene_peptide_map, gene_annota
                 r.annotation.update({'CBM_PEPTIDE_LENGTH_MIN': min(splitor)})
                 r.annotation.update({'CBM_PEPTIDE_LENGTH_MAX': max(splitor)})
             else:
-                if r.annotation['CBM_PEPTIDE_SUBSTITUTED_LENGTHS'] != None and r.annotation['CBM_PEPTIDE_SUBSTITUTED_LENGTHS'] != '':
+                if (
+                    r.annotation['CBM_PEPTIDE_SUBSTITUTED_LENGTHS'] != None
+                    and r.annotation['CBM_PEPTIDE_SUBSTITUTED_LENGTHS'] != ''
+                ):
                     maxL = 0
                     # print r.annotation['CBM_PEPTIDE_SUBSTITUTED_LENGTHS']
                     print(r.annotation['CBM_PEPTIDE_SUBSTITUTED_LENGTHS'])
                     try:
-                        exec('maxL = %s' % r.annotation['CBM_PEPTIDE_SUBSTITUTED_LENGTHS'])
+                        exec(
+                            'maxL = %s'
+                            % r.annotation['CBM_PEPTIDE_SUBSTITUTED_LENGTHS']
+                        )
                     except:
                         time.sleep(1)
                     r.annotation.update({'CBM_PEPTIDE_LENGTH_MIN': maxL})
@@ -104,45 +121,62 @@ def addProteinCostAnnotation(F, reaction_gene_map, gene_peptide_map, gene_annota
 
 
 def scaleProteinCostAnnotation(fba):
-    LEN_MAX = max([r.annotation['CBM_PEPTIDE_LENGTH_MAX'] for r in fba.reactions if r.annotation['CBM_PEPTIDE_LENGTH_MAX'] != None])
-    LEN_AVG = numpy.average([r.annotation['CBM_PEPTIDE_LENGTH_MAX'] for r in fba.reactions if r.annotation['CBM_PEPTIDE_LENGTH_MAX'] != None])
+    LEN_MAX = max(
+        [
+            r.annotation['CBM_PEPTIDE_LENGTH_MAX']
+            for r in fba.reactions
+            if r.annotation['CBM_PEPTIDE_LENGTH_MAX'] != None
+        ]
+    )
+    LEN_AVG = numpy.average(
+        [
+            r.annotation['CBM_PEPTIDE_LENGTH_MAX']
+            for r in fba.reactions
+            if r.annotation['CBM_PEPTIDE_LENGTH_MAX'] != None
+        ]
+    )
 
     # cost function (AAlen/avg(AAlen) or 1.0
     for R in fba.reactions:
         if R.annotation['CBM_PEPTIDE_LENGTH_MAX'] == None:
             R.annotation['CBM_PEPTIDE_COST'] = 1.0
         else:
-            R.annotation['CBM_PEPTIDE_COST'] = R.annotation['CBM_PEPTIDE_LENGTH_MAX'] / LEN_AVG
+            R.annotation['CBM_PEPTIDE_COST'] = (
+                R.annotation['CBM_PEPTIDE_LENGTH_MAX'] / LEN_AVG
+            )
         R.annotation['CBM_AVG_PEPTIDE_LENGTH'] = LEN_AVG
     print('\nAverage protein length:', LEN_AVG)
-        # print R.getId(), R.annotation['CBM_PEPTIDE_COST'], R.annotation['CBM_PEPTIDE_LENGTH_MAX']
+    # print R.getId(), R.annotation['CBM_PEPTIDE_COST'], R.annotation['CBM_PEPTIDE_LENGTH_MAX']
 
 
 # Standard amino acid abbreviations with ATP formation/production cost: Stouthamer (1973) Table 4 page 555
-amino_acid_table = [['A', 'Ala', 'Alanine', '+1'],
-                    ['R', 'Arg', 'Arginine', '-3'],
-                    ['N', 'Asn', 'Asparagine', '-2'],
-                    ['D', 'Asp', 'Aspartic acid', '+0'],
-                    ['C', 'Cys', 'Cysteine', '-3'],
-                    ['E', 'Glu', 'Glutamic acid', '+1'],
-                    ['Q', 'Gln', 'Glutamine', '+0'],
-                    ['G', 'Gly', 'Glycine', '+0'],
-                    ['H', 'His', 'Histidine', '-7'],
-                    ['I', 'Ile', 'Isoleucine', '-1'],
-                    ['L', 'Leu', 'Leucine', '+3'],
-                    ['K', 'Lys', 'Lysine', '+0'],
-                    ['M', 'Met', 'Methionine', '-4'],
-                    ['F', 'Phe', 'Phenylalanine', '-2'],
-                    ['P', 'Pro', 'Proline', '+0'],
-                    ['S', 'Ser', 'Serine', '+0'],
-                    ['T', 'Thr', 'Threonine', '-2'],
-                    ['W', 'Trp', 'Tryptophan', '-5'],
-                    ['Y', 'Tyr', 'Tyrosine', '-2'],
-                    ['V', 'Val', 'Valine', '+2']
-                    ]
+amino_acid_table = [
+    ['A', 'Ala', 'Alanine', '+1'],
+    ['R', 'Arg', 'Arginine', '-3'],
+    ['N', 'Asn', 'Asparagine', '-2'],
+    ['D', 'Asp', 'Aspartic acid', '+0'],
+    ['C', 'Cys', 'Cysteine', '-3'],
+    ['E', 'Glu', 'Glutamic acid', '+1'],
+    ['Q', 'Gln', 'Glutamine', '+0'],
+    ['G', 'Gly', 'Glycine', '+0'],
+    ['H', 'His', 'Histidine', '-7'],
+    ['I', 'Ile', 'Isoleucine', '-1'],
+    ['L', 'Leu', 'Leucine', '+3'],
+    ['K', 'Lys', 'Lysine', '+0'],
+    ['M', 'Met', 'Methionine', '-4'],
+    ['F', 'Phe', 'Phenylalanine', '-2'],
+    ['P', 'Pro', 'Proline', '+0'],
+    ['S', 'Ser', 'Serine', '+0'],
+    ['T', 'Thr', 'Threonine', '-2'],
+    ['W', 'Trp', 'Tryptophan', '-5'],
+    ['Y', 'Tyr', 'Tyrosine', '-2'],
+    ['V', 'Val', 'Valine', '+2'],
+]
 
 
-def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_reactions=None):
+def runMultiStateFBA(
+    input_list, dev_factor, options, dofva=False, fva_selected_reactions=None
+):
     if options['algorithm'] == "ABS_L1_METHOD":
         if options['with_cost']:
             work_dir = os.path.join(options['base_work_dir'], 'AbsL1_cost')
@@ -183,7 +217,9 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
                 print('Reaction', j_[0])
                 print('LB', j_[1])
                 print('UB', j_[2])
-                assert fmg1.getReaction(j_[0]) != None, '\n%s is not a valid reaction id!' % j_[0]
+                assert fmg1.getReaction(j_[0]) != None, (
+                    '\n%s is not a valid reaction id!' % j_[0]
+                )
                 fmg1.setReactionLowerBound(j_[0], j_[1])
                 fmg1.setReactionUpperBound(j_[0], j_[2])
             # os.sys.exit()
@@ -193,24 +229,49 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         # write LP
         CBTools.addStoichToFBAModel(fmg1)
 
-        #cpx1 = CBSolver.cplx_constructLPfromFBA(fmg1, fname=None)
+        # cpx1 = CBSolver.cplx_constructLPfromFBA(fmg1, fname=None)
         LPFile1 = CBWrite.writeModelLP(fmg1, work_dir)
         cpx1 = CBSolver.cplx_getModelFromLP(LPFile1)
-        CBSolver.cplx_setObjective(cpx1, prefix + 'obj1', [(1.0, inputB)], 'max', reset=True)
+        CBSolver.cplx_setObjective(
+            cpx1, prefix + 'obj1', [(1.0, inputB)], 'max', reset=True
+        )
         CBSolver.cplx_setBounds(cpx1, inputB, min=-options['myInf'], max=0.0)
-        CBSolver.cplx_setSingleConstraint(cpx1, 'C_' + prefix + biomass_name, expr=[(1, prefix + biomass_name)], sense='E', rhs=options['target_biomass'])
-        CBSolver.cplx_writeLPtoLPTfile(cpx1, os.path.join(work_dir, prefix + '%s(%s)_Imin' % (options['model_name_base'], I[0])), title='%s input minimization' % I[0], Dir=None)
+        CBSolver.cplx_setSingleConstraint(
+            cpx1,
+            'C_' + prefix + biomass_name,
+            expr=[(1, prefix + biomass_name)],
+            sense='E',
+            rhs=options['target_biomass'],
+        )
+        CBSolver.cplx_writeLPtoLPTfile(
+            cpx1,
+            os.path.join(
+                work_dir, prefix + '%s(%s)_Imin' % (options['model_name_base'], I[0])
+            ),
+            title='%s input minimization' % I[0],
+            Dir=None,
+        )
         CBSolver.cplx_Solve(cpx1)
         fba_sol1, objf_name1, objf_val1 = CBSolver.cplx_getOptimalSolution(cpx1)
         # for j in fba_sol:
-            # print '%s: %s' % (j, fba_sol[j])
+        # print '%s: %s' % (j, fba_sol[j])
         print('\nCPLEX returns objective {} = {}'.format(objf_name1, objf_val1))
         slv_stat = CBSolver.cplx_getSolutionStatus(cpx1)
         print('\nStatus: {}'.format(slv_stat))
         IO_list.append((I[0], objf_val1, I[1], slv_stat, environ))
 
-    print('\nInput values for target: {} = {}'.format(biomass_name, options['target_biomass']))
-    F = file(os.path.join(work_dir, 'find_input(%s)_(%s).csv' % (ModelPrefixStrIO, options['target_biomass'])), 'w')
+    print(
+        '\nInput values for target: {} = {}'.format(
+            biomass_name, options['target_biomass']
+        )
+    )
+    F = file(
+        os.path.join(
+            work_dir,
+            'find_input(%s)_(%s).csv' % (ModelPrefixStrIO, options['target_biomass']),
+        ),
+        'w',
+    )
     F.write('input,value,prefix,status,environ\n')
     for IO in IO_list:
         CBTools.processBiGGchemFormula(fmg1)
@@ -243,14 +304,18 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
             print('INFO: no custom environment defined')
         # inputValue = round(IO[1], 8) # note this is a thumbsuck
         prefix = IO[2]
-        fmg2 = CBRead.readSBML2FBA(options['input_model_file'], work_dir=options['model_dir'])
+        fmg2 = CBRead.readSBML2FBA(
+            options['input_model_file'], work_dir=options['model_dir']
+        )
         # fix annotations
         CBTools.processBiGGchemFormula(fmg2)
         CBTools.processSBMLAnnotationNotes(fmg2, annotation_key='note')
 
         if options['with_cost']:
             # process GENE ANNOTATIONS USE initial version of model
-            react_gene = CBTools.getModelGenesPerReaction(fmg2, gene_pattern=options['gene_pattern'])
+            react_gene = CBTools.getModelGenesPerReaction(
+                fmg2, gene_pattern=options['gene_pattern']
+            )
             gene_react, ecoli_genes, no_gene = CBTools.getReactionsPerGene(react_gene)
             # recreate KeGG identifiers
             ecoli_genes = [options['model_KeGG_prefix'] + g for g in ecoli_genes]
@@ -262,7 +327,9 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
                 Glen = DB.fetchAll('SELECT aa_len FROM ecoli_genes WHERE gene="%s"' % G)
                 if len(Glen) > 0 and len(Glen[0]) > 0:
                     Glen = Glen[0][0]
-                    gene_peplen.update({G.replace(options['model_KeGG_prefix'], ''): Glen})
+                    gene_peplen.update(
+                        {G.replace(options['model_KeGG_prefix'], ''): Glen}
+                    )
                 else:
                     print('WARNING: no DB data for gene: {}'.format(G))
             ##  gene_peplen = CBTools.getPeptideLengthsFromDB(db_cursor, ecoli_genes, options['model_KeGG_prefix'])
@@ -281,10 +348,12 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
                 print('Reaction', j_[0])
                 print('LB', j_[1])
                 print('UB', j_[2])
-                assert fmg2.getReaction(j_[0]) != None, '\n%s is not a valid reaction id!' % j_[0]
+                assert fmg2.getReaction(j_[0]) != None, (
+                    '\n%s is not a valid reaction id!' % j_[0]
+                )
                 fmg2.setReactionLowerBound(j_[0], j_[1])
                 fmg2.setReactionUpperBound(j_[0], j_[2])
-            #raw_input('Im bored. What play thing can you offer me today?')
+            # raw_input('Im bored. What play thing can you offer me today?')
 
         # prefix names
         fmg2.id = prefix + options['model_name_base']
@@ -293,10 +362,14 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         CBTools.addStoichToFBAModel(fmg2)
 
         fmg2lp = CBSolver.cplx_constructLPfromFBA(fmg2, fname=None)
-        #LPFile2 = CBWrite.writeModelLP(fmg2, work_dir=work_dir)
-        #fmg2lp = CBSolver.cplx_getModelFromLP(LPFile2)
+        # LPFile2 = CBWrite.writeModelLP(fmg2, work_dir=work_dir)
+        # fmg2lp = CBSolver.cplx_getModelFromLP(LPFile2)
         CBSolver.cplx_Solve(fmg2lp)
-        fmg2.objectives[0].solution, fmg2id, fmg2.objectives[0].value = CBSolver.cplx_getOptimalSolution(fmg2lp)
+        (
+            fmg2.objectives[0].solution,
+            fmg2id,
+            fmg2.objectives[0].value,
+        ) = CBSolver.cplx_getOptimalSolution(fmg2lp)
         slv_stat = CBSolver.cplx_getSolutionStatus(fmg2lp)
         print('\nStatus: {}'.format(slv_stat))
         print("{} = {}".format(fmg2id, fmg2.objectives[0].value))
@@ -308,15 +381,23 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         for M in range(1, len(multisolve)):
             for j in range(len(multisolve[0].N.col)):
                 # print multisolve[0].N.col[j][2:], multisolve[M].N.col[j][2:]
-                assert multisolve[0].N.col[j][2:] == multisolve[M].N.col[j][2:], '\nN col mismatch: %s not e %s' % (multisolve[0].N.col[j][2:], multisolve[M].N.col[j][2:])
+                assert multisolve[0].N.col[j][2:] == multisolve[M].N.col[j][2:], (
+                    '\nN col mismatch: %s not e %s'
+                    % (multisolve[0].N.col[j][2:], multisolve[M].N.col[j][2:])
+                )
             for j in range(len(multisolve[0].N.row)):
                 # print multisolve[0].N.row[j][2:], multisolve[M].N.row[j][2:]
-                assert multisolve[0].N.row[j][2:] == multisolve[M].N.row[j][2:], '\nN row mismatch: %s != %s' % (multisolve[0].N.row[j][2:], multisolve[M].N.row[j][2:])
+                assert multisolve[0].N.row[j][2:] == multisolve[M].N.row[j][2:], (
+                    '\nN row mismatch: %s != %s'
+                    % (multisolve[0].N.row[j][2:], multisolve[M].N.row[j][2:])
+                )
             idx = multisolve[0].getReactionIds()
             test_idx = multisolve[M].getReactionIds()
             for j in range(len(idx)):
                 print(idx[j][2:], test_idx[j][2:])
-                assert idx[j][2:] == test_idx[j][2:], '\nReaction ID mismatch: %s != %s' % (idx[j][2:], test_idx[j][2:])
+                assert (
+                    idx[j][2:] == test_idx[j][2:]
+                ), '\nReaction ID mismatch: %s != %s' % (idx[j][2:], test_idx[j][2:])
         print('\nOrder test completed succesfully')
         os.sys.exit()
 
@@ -339,18 +420,52 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         if options['with_cost']:
             if options['algorithm'] == "ABS_L1_METHOD":
                 ##  raise NotImplementedError
-                MultiFNbase = '%s_P(%s)_T(%s)_ABSL1_C' % (options['input_model_file'], ModelPrefixStr, dev_factor[devF])
-                LPFileG = CBWrite.writeMinDistanceLP_absL1(MultiFNbase, multisolve, work_dir=work_dir, with_protein_cost=True, ignoreDistance=[], bigM=options['L1_BIGM_VALUE'])
+                MultiFNbase = '%s_P(%s)_T(%s)_ABSL1_C' % (
+                    options['input_model_file'],
+                    ModelPrefixStr,
+                    dev_factor[devF],
+                )
+                LPFileG = CBWrite.writeMinDistanceLP_absL1(
+                    MultiFNbase,
+                    multisolve,
+                    work_dir=work_dir,
+                    with_protein_cost=True,
+                    ignoreDistance=[],
+                    bigM=options['L1_BIGM_VALUE'],
+                )
             elif options['algorithm'] == "L1_METHOD":
-                MultiFNbase = '%s_P(%s)_T(%s)_L1_C' % (options['input_model_file'], ModelPrefixStr, dev_factor[devF])
-                LPFileG = CBWrite.writeMinDistanceLP(MultiFNbase, multisolve, work_dir=work_dir, with_protein_cost=True)
+                MultiFNbase = '%s_P(%s)_T(%s)_L1_C' % (
+                    options['input_model_file'],
+                    ModelPrefixStr,
+                    dev_factor[devF],
+                )
+                LPFileG = CBWrite.writeMinDistanceLP(
+                    MultiFNbase, multisolve, work_dir=work_dir, with_protein_cost=True
+                )
         else:
             if options['algorithm'] == "ABS_L1_METHOD":
-                MultiFNbase = '%s_P(%s)_T(%s)_ABSL1' % (options['input_model_file'], ModelPrefixStr, dev_factor[devF])
-                LPFileG = CBWrite.writeMinDistanceLP_absL1(MultiFNbase, multisolve, work_dir=work_dir, with_protein_cost=False, ignoreDistance=[], bigM=options['L1_BIGM_VALUE'])
+                MultiFNbase = '%s_P(%s)_T(%s)_ABSL1' % (
+                    options['input_model_file'],
+                    ModelPrefixStr,
+                    dev_factor[devF],
+                )
+                LPFileG = CBWrite.writeMinDistanceLP_absL1(
+                    MultiFNbase,
+                    multisolve,
+                    work_dir=work_dir,
+                    with_protein_cost=False,
+                    ignoreDistance=[],
+                    bigM=options['L1_BIGM_VALUE'],
+                )
             elif options['algorithm'] == "L1_METHOD":
-                MultiFNbase = '%s_P(%s)_T(%s)_L1' % (options['input_model_file'], ModelPrefixStr, dev_factor[devF])
-                LPFileG = CBWrite.writeMinDistanceLP(MultiFNbase, multisolve, work_dir=work_dir, with_protein_cost=False)
+                MultiFNbase = '%s_P(%s)_T(%s)_L1' % (
+                    options['input_model_file'],
+                    ModelPrefixStr,
+                    dev_factor[devF],
+                )
+                LPFileG = CBWrite.writeMinDistanceLP(
+                    MultiFNbase, multisolve, work_dir=work_dir, with_protein_cost=False
+                )
 
         mGlp = CBSolver.cplx_getModelFromLP(LPFileG)
         TIME_START = time.time()
@@ -365,8 +480,18 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         for f in multisolve:
             print('Model: {}'.format(f.id))
             for inp in input_list:
-                print(' {} lower: {}'.format(f.prefix + inp[0], f.getFluxBoundByReactionID(f.prefix + inp[0], 'lower').value))
-                print(' {} upper: {}'.format(f.prefix + inp[0], f.getFluxBoundByReactionID(f.prefix + inp[0], 'upper').value))
+                print(
+                    ' {} lower: {}'.format(
+                        f.prefix + inp[0],
+                        f.getFluxBoundByReactionID(f.prefix + inp[0], 'lower').value,
+                    )
+                )
+                print(
+                    ' {} upper: {}'.format(
+                        f.prefix + inp[0],
+                        f.getFluxBoundByReactionID(f.prefix + inp[0], 'upper').value,
+                    )
+                )
 
         print('\nFBA optima')
         for i in multisolve:
@@ -380,23 +505,38 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         print('*****')
 
         print('\nMultipleInput({} states) Solve Time'.format(len(multisolve)))
-        print('Time: {}\nTime(m): {}\nTime(h): {}\n '.format(TIME_END - TIME_START, (TIME_END - TIME_START) / 60.0, (TIME_END - TIME_START) / 60.0**2))
+        print(
+            'Time: {}\nTime(m): {}\nTime(h): {}\n '.format(
+                TIME_END - TIME_START,
+                (TIME_END - TIME_START) / 60.0,
+                (TIME_END - TIME_START) / 60.0 ** 2,
+            )
+        )
 
         GENERIC_REACTION_OBJECTS = multisolve[0].reactions
         GENERIC_PREFIX = multisolve[0].prefix
         try:
-            FlxAO_J = numpy.zeros((len(GENERIC_REACTION_OBJECTS), len(multisolve)), numpy.double)
-            FlxAO_scaled = numpy.zeros((len(GENERIC_REACTION_OBJECTS), len(multisolve) + 1), numpy.double)
+            FlxAO_J = numpy.zeros(
+                (len(GENERIC_REACTION_OBJECTS), len(multisolve)), numpy.double
+            )
+            FlxAO_scaled = numpy.zeros(
+                (len(GENERIC_REACTION_OBJECTS), len(multisolve) + 1), numpy.double
+            )
         except AttributeError:
             FlxAO_J = numpy.zeros((len(GENERIC_REACTION_OBJECTS), len(multisolve)))
-            FlxAO_scaled = numpy.zeros((len(GENERIC_REACTION_OBJECTS), len(multisolve) + 1))
+            FlxAO_scaled = numpy.zeros(
+                (len(GENERIC_REACTION_OBJECTS), len(multisolve) + 1)
+            )
         FluxNamesOut = []
         FluxScaling = []
 
         for flx in range(len(GENERIC_REACTION_OBJECTS)):
-            Rid = GENERIC_REACTION_OBJECTS[flx].id[len(GENERIC_PREFIX):]
+            Rid = GENERIC_REACTION_OBJECTS[flx].id[len(GENERIC_PREFIX) :]
             FluxNamesOut.append(Rid)
-            if options['with_cost'] and 'CBM_PEPTIDE_COST' in GENERIC_REACTION_OBJECTS[flx].annotation:
+            if (
+                options['with_cost']
+                and 'CBM_PEPTIDE_COST' in GENERIC_REACTION_OBJECTS[flx].annotation
+            ):
                 cost = GENERIC_REACTION_OBJECTS[flx].annotation['CBM_PEPTIDE_COST']
             else:
                 cost = 1.0
@@ -413,16 +553,26 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         all_flux_diff_xxx = numpy.zeros(3)
         if len(multisolve) == 2:
             all_flux_diff = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 1])
-            all_flux_diff_xxx = numpy.abs(numpy.abs(FlxAO_scaled[:, 0]) - numpy.abs(FlxAO_scaled[:, 1]))
+            all_flux_diff_xxx = numpy.abs(
+                numpy.abs(FlxAO_scaled[:, 0]) - numpy.abs(FlxAO_scaled[:, 1])
+            )
         elif len(multisolve) == 3:
             all_flux_diff1 = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 1])
             all_flux_diff2 = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 2])
             all_flux_diff3 = numpy.abs(FlxAO_scaled[:, 1] - FlxAO_scaled[:, 2])
             all_flux_diff = all_flux_diff1 + all_flux_diff2 + all_flux_diff3
-            all_flux_diff_xxx1 = numpy.abs(numpy.abs(FlxAO_scaled[:, 0]) - numpy.abs(FlxAO_scaled[:, 1]))
-            all_flux_diff_xxx2 = numpy.abs(numpy.abs(FlxAO_scaled[:, 0]) - numpy.abs(FlxAO_scaled[:, 2]))
-            all_flux_diff_xxx3 = numpy.abs(numpy.abs(FlxAO_scaled[:, 1]) - numpy.abs(FlxAO_scaled[:, 2]))
-            all_flux_diff_xxx = all_flux_diff_xxx1 + all_flux_diff_xxx2 + all_flux_diff_xxx3
+            all_flux_diff_xxx1 = numpy.abs(
+                numpy.abs(FlxAO_scaled[:, 0]) - numpy.abs(FlxAO_scaled[:, 1])
+            )
+            all_flux_diff_xxx2 = numpy.abs(
+                numpy.abs(FlxAO_scaled[:, 0]) - numpy.abs(FlxAO_scaled[:, 2])
+            )
+            all_flux_diff_xxx3 = numpy.abs(
+                numpy.abs(FlxAO_scaled[:, 1]) - numpy.abs(FlxAO_scaled[:, 2])
+            )
+            all_flux_diff_xxx = (
+                all_flux_diff_xxx1 + all_flux_diff_xxx2 + all_flux_diff_xxx3
+            )
         elif len(multisolve) == 4:
             all_flux_diff1 = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 1])
             all_flux_diff2 = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 2])
@@ -430,8 +580,14 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
             all_flux_diff4 = numpy.abs(FlxAO_scaled[:, 1] - FlxAO_scaled[:, 2])
             all_flux_diff5 = numpy.abs(FlxAO_scaled[:, 1] - FlxAO_scaled[:, 3])
             all_flux_diff6 = numpy.abs(FlxAO_scaled[:, 2] - FlxAO_scaled[:, 3])
-            all_flux_diff = all_flux_diff1 + all_flux_diff2 + all_flux_diff3 +\
-                all_flux_diff4 + all_flux_diff5 + all_flux_diff6
+            all_flux_diff = (
+                all_flux_diff1
+                + all_flux_diff2
+                + all_flux_diff3
+                + all_flux_diff4
+                + all_flux_diff5
+                + all_flux_diff6
+            )
         elif len(multisolve) == 5:
             all_flux_diff1 = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 1])
             all_flux_diff2 = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 2])
@@ -443,8 +599,18 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
             all_flux_diff8 = numpy.abs(FlxAO_scaled[:, 2] - FlxAO_scaled[:, 3])
             all_flux_diff9 = numpy.abs(FlxAO_scaled[:, 2] - FlxAO_scaled[:, 4])
             all_flux_diff10 = numpy.abs(FlxAO_scaled[:, 3] - FlxAO_scaled[:, 4])
-            all_flux_diff = all_flux_diff1 + all_flux_diff2 + all_flux_diff3 + all_flux_diff4 + all_flux_diff5 +\
-                all_flux_diff6 + all_flux_diff7 + all_flux_diff8 + all_flux_diff9 + all_flux_diff10
+            all_flux_diff = (
+                all_flux_diff1
+                + all_flux_diff2
+                + all_flux_diff3
+                + all_flux_diff4
+                + all_flux_diff5
+                + all_flux_diff6
+                + all_flux_diff7
+                + all_flux_diff8
+                + all_flux_diff9
+                + all_flux_diff10
+            )
         elif len(multisolve) == 6:
             all_flux_diff1 = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 1])
             all_flux_diff2 = numpy.abs(FlxAO_scaled[:, 0] - FlxAO_scaled[:, 2])
@@ -461,8 +627,23 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
             all_flux_diff13 = numpy.abs(FlxAO_scaled[:, 3] - FlxAO_scaled[:, 4])
             all_flux_diff14 = numpy.abs(FlxAO_scaled[:, 3] - FlxAO_scaled[:, 5])
             all_flux_diff15 = numpy.abs(FlxAO_scaled[:, 4] - FlxAO_scaled[:, 5])
-            all_flux_diff = all_flux_diff1 + all_flux_diff2 + all_flux_diff3 + all_flux_diff4 + all_flux_diff5 +\
-                all_flux_diff6 + all_flux_diff7 + all_flux_diff8 + all_flux_diff9 + all_flux_diff10 + all_flux_diff11 + all_flux_diff12 + all_flux_diff13 + all_flux_diff14 + all_flux_diff15
+            all_flux_diff = (
+                all_flux_diff1
+                + all_flux_diff2
+                + all_flux_diff3
+                + all_flux_diff4
+                + all_flux_diff5
+                + all_flux_diff6
+                + all_flux_diff7
+                + all_flux_diff8
+                + all_flux_diff9
+                + all_flux_diff10
+                + all_flux_diff11
+                + all_flux_diff12
+                + all_flux_diff13
+                + all_flux_diff14
+                + all_flux_diff15
+            )
         else:
             all_flux_diff = FlxAO_scaled[:, -1]
 
@@ -474,32 +655,35 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
             SSAall = ({}, {}, {})
         elif options['algorithm'] == "L1_METHOD":
             SSAall = CBSolver.cplx_getSensitivities(mGlp)
-            CBWrite.writeSensitivitiesToCSV(SSAall, os.path.join(work_dir, '%s.ssa.csv' % MultiFNbase))
+            CBWrite.writeSensitivitiesToCSV(
+                SSAall, os.path.join(work_dir, '%s.ssa.csv' % MultiFNbase)
+            )
 
-        DD = {'dev_factor': dev_factor[devF],
-              'model_file': MultiFNbase,
-              'solution_status': CBSolver.cplx_getSolutionStatus(mGlp),
-              'obj_val': mGobjval,
-              'obj_id': mGobid,
-              'solution_cplex': mGsol.copy(),
-              'solution': FlxAO_J,
-              'solution_scaled': FlxAO_scaled,
-              'flux_names': tuple(FluxNamesOut),
-              'flux_diff': all_flux_diff.sum(),
-              'flux_diff_new': all_flux_diff_xxx.sum(),
-              'flux_scaling': tuple(FluxScaling),
-              'sensitivity': SSAall,
-              'prefixes': tuple(ModelPrefixes),
-              'input_list': tuple(input_list),
-              'multisolve': multisolve
-              }
+        DD = {
+            'dev_factor': dev_factor[devF],
+            'model_file': MultiFNbase,
+            'solution_status': CBSolver.cplx_getSolutionStatus(mGlp),
+            'obj_val': mGobjval,
+            'obj_id': mGobid,
+            'solution_cplex': mGsol.copy(),
+            'solution': FlxAO_J,
+            'solution_scaled': FlxAO_scaled,
+            'flux_names': tuple(FluxNamesOut),
+            'flux_diff': all_flux_diff.sum(),
+            'flux_diff_new': all_flux_diff_xxx.sum(),
+            'flux_scaling': tuple(FluxScaling),
+            'sensitivity': SSAall,
+            'prefixes': tuple(ModelPrefixes),
+            'input_list': tuple(input_list),
+            'multisolve': multisolve,
+        }
         del SSAall
         RESULT_DATA.append(DD)
         RESULT_LPS.append(mGlp)
 
         FR = file(os.path.join(work_dir, '%s_rpt.txt' % MultiFNbase), 'w')
         FR.write('MultipleInput(%s states) Result:\n' % len(multisolve))
-        #FR.write(' Flux diff: %s\n' % all_flux_diff.sum())
+        # FR.write(' Flux diff: %s\n' % all_flux_diff.sum())
         FR.write(' optimum: %s = %s\n' % (mGobid, mGobjval))
         FR.write(' status: %s\n\n' % CBSolver.cplx_getSolutionStatus(mGlp))
         if options['algorithm'] == "ABS_L1_METHOD":
@@ -509,7 +693,14 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         FR.write('Big M: %s\n' % options['L1_BIGM_VALUE'])
         FR.write('With cost scaling: %s\n\n' % options['with_cost'])
         FR.write('MultipleInput(%s states) Solve Time\n' % len(multisolve))
-        FR.write('Time: %s\nTime(m): %s\nTime(h): %s\n\n' % (TIME_END - TIME_START, (TIME_END - TIME_START) / 60.0, (TIME_END - TIME_START) / 60.0**2))
+        FR.write(
+            'Time: %s\nTime(m): %s\nTime(h): %s\n\n'
+            % (
+                TIME_END - TIME_START,
+                (TIME_END - TIME_START) / 60.0,
+                (TIME_END - TIME_START) / 60.0 ** 2,
+            )
+        )
 
         FR.close()
 
@@ -521,10 +712,10 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         for F in range(FlxAO_scaled.shape[0]):
             FD.write('%s,' % FluxNamesOut[F])
             # for C in range(FlxAO_scaled.shape[1]):
-                # if C != FlxAO_scaled.shape[1]-1:
-                    ##  FD.write('%s,' % FlxAO_scaled[F, C])
-                # else:
-                    ##  FD.write('%s\n' % FlxAO_scaled[F, C])
+            # if C != FlxAO_scaled.shape[1]-1:
+            ##  FD.write('%s,' % FlxAO_scaled[F, C])
+            # else:
+            ##  FD.write('%s\n' % FlxAO_scaled[F, C])
             for C in range(FlxAO_scaled.shape[1]):
                 FD.write('%s,' % FlxAO_scaled[F, C])
             ##  FD.write('%s,%s,%s\n' % (FluxScaling[F], FluxScaling[F]*FlxAO_scaled[F,-1]))
@@ -539,10 +730,10 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         for F in range(FlxAO_J.shape[0]):
             FD.write('%s,' % FluxNamesOut[F])
             # for C in range(FlxAO_J.shape[1]):
-                # if C != FlxAO_J.shape[1]-1:
-                    ##  FD.write('%s,' % FlxAO_J[F, C])
-                # else:
-                    ##  FD.write('%s\n' % FlxAO_J[F, C])
+            # if C != FlxAO_J.shape[1]-1:
+            ##  FD.write('%s,' % FlxAO_J[F, C])
+            # else:
+            ##  FD.write('%s\n' % FlxAO_J[F, C])
             for C in range(FlxAO_J.shape[1]):
                 FD.write('%s,' % FlxAO_J[F, C])
             FD.write('%s\n' % (FluxScaling[F]))
@@ -554,41 +745,45 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
     else:
         OFname = '%s_P(%s)' % (options['input_model_file'], ModelPrefixStr)
     if options['algorithm'] == "ABS_L1_METHOD":
-        CBTools.storeObj(RESULT_DATA, os.path.join(work_dir, '%s_ABSL1_multi.dat' % OFname))
+        CBTools.storeObj(
+            RESULT_DATA, os.path.join(work_dir, '%s_ABSL1_multi.dat' % OFname)
+        )
     elif options['algorithm'] == "L1_METHOD":
-        CBTools.storeObj(RESULT_DATA, os.path.join(work_dir, '%s_L1_multi.dat' % OFname))
+        CBTools.storeObj(
+            RESULT_DATA, os.path.join(work_dir, '%s_L1_multi.dat' % OFname)
+        )
 
     # multi file
     # if options['algorithm'] == "ABS_L1_METHOD":
-        #FD = file(os.path.join(work_dir, '%s_ABSL1_multi.csv' % OFname), 'w')
+    # FD = file(os.path.join(work_dir, '%s_ABSL1_multi.csv' % OFname), 'w')
     # elif options['algorithm'] == "L1_METHOD":
-        #FD = file(os.path.join(work_dir, '%s_L1_multi.csv' % OFname), 'w')
+    # FD = file(os.path.join(work_dir, '%s_L1_multi.csv' % OFname), 'w')
 
-    #dat_arr = [a['solution'] for a in RESULT_DATA]
-    #dat_arr = numpy.hstack(dat_arr)
+    # dat_arr = [a['solution'] for a in RESULT_DATA]
+    # dat_arr = numpy.hstack(dat_arr)
 
-    #hcntr = 0
-    #h2cntr = 0
-    #head = 'Flux, '
+    # hcntr = 0
+    # h2cntr = 0
+    # head = 'Flux, '
     # for p in (ModelPrefixes)*len(dev_factor):
-        # if hcntr <= len(ModelPrefixes)-1:
-            #head += '%s(%s%s),' % (p, '', dev_factor[h2cntr])
-            #hcntr += 1
-        # else:
-            #h2cntr += 1
-            #head += '%s(%s%s),' % (p, '', dev_factor[h2cntr])
-            #hcntr = 0
+    # if hcntr <= len(ModelPrefixes)-1:
+    # head += '%s(%s%s),' % (p, '', dev_factor[h2cntr])
+    # hcntr += 1
+    # else:
+    # h2cntr += 1
+    # head += '%s(%s%s),' % (p, '', dev_factor[h2cntr])
+    # hcntr = 0
 
     # print '\n'
-    #FD.write('%s\n' % head[:-1])
+    # FD.write('%s\n' % head[:-1])
     # for F in range(dat_arr.shape[0]):
-        #FD.write('%s,' % FluxNamesOut[F])
-        # for C in range(dat_arr.shape[1]):
-            # if C != dat_arr.shape[1]-1:
-                #FD.write('%s,' % dat_arr[F, C])
-            # else:
-                #FD.write('%s\n' % dat_arr[F, C])
-    #del dat_arr
+    # FD.write('%s,' % FluxNamesOut[F])
+    # for C in range(dat_arr.shape[1]):
+    # if C != dat_arr.shape[1]-1:
+    # FD.write('%s,' % dat_arr[F, C])
+    # else:
+    # FD.write('%s\n' % dat_arr[F, C])
+    # del dat_arr
 
     # start multi output
     dat_arr = numpy.hstack([a['solution'] for a in RESULT_DATA])
@@ -604,7 +799,9 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
             H.append('%s(%s%s)' % (ModelPrefixes[S], '', dev_factor[R]))
     print(H)
     print(dat_arr.shape)
-    CBTools.exportLabelledArrayWithHeader2CSV(dat_arr, fname=FDNAME, names=FluxNamesOut, header=H)
+    CBTools.exportLabelledArrayWithHeader2CSV(
+        dat_arr, fname=FDNAME, names=FluxNamesOut, header=H
+    )
     del dat_arr
     # end multi output
 
@@ -613,7 +810,11 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
         FR2 = file(os.path.join(work_dir, '%s_ABSL1_opt.csv' % OFname), 'w')
     elif options['algorithm'] == "L1_METHOD":
         FR2 = file(os.path.join(work_dir, '%s_L1_opt.csv' % OFname), 'w')
-    head = 'ObjDist(%s),optimum (%s),raw diff (%s)' % (ModelPrefixStr, ModelPrefixStr, ModelPrefixStr)
+    head = 'ObjDist(%s),optimum (%s),raw diff (%s)' % (
+        ModelPrefixStr,
+        ModelPrefixStr,
+        ModelPrefixStr,
+    )
     FR2.write('%s\n' % head)
     for d in opt_out:
         FR2.write('%s,%s,%s\n' % (d[0], d[1], d[2]))
@@ -694,18 +895,42 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
 
             if options['procs'] == None:
                 print('\nOld single threaded algorithm\n')
-                fva_res, fva_names = CBSolver.cplx_MultiFluxVariabilityAnalysis(dLP, selected_reactions=lp_var, tol=FVAtol,
-                                                                                rhs_sense='upper', optPercentage=FVAoptper,
-                                                                                work_dir=work_dir, debug=False)
+                fva_res, fva_names = CBSolver.cplx_MultiFluxVariabilityAnalysis(
+                    dLP,
+                    selected_reactions=lp_var,
+                    tol=FVAtol,
+                    rhs_sense='upper',
+                    optPercentage=FVAoptper,
+                    work_dir=work_dir,
+                    debug=False,
+                )
             else:
-                print('\nNew multi-threaded algorithm using {} threads.\n'.format(options['procs']))
-                fva_res, fva_names = CBMultiCore.runMultiCoreMultiEnvFVA(dLP, selected_reactions=lp_var, tol=FVAtol,
-                                                                         rhs_sense='upper', optPercentage=FVAoptper,
-                                                                         work_dir=work_dir, debug=False, procs=options['procs'])
+                print(
+                    '\nNew multi-threaded algorithm using {} threads.\n'.format(
+                        options['procs']
+                    )
+                )
+                fva_res, fva_names = CBMultiCore.runMultiCoreMultiEnvFVA(
+                    dLP,
+                    selected_reactions=lp_var,
+                    tol=FVAtol,
+                    rhs_sense='upper',
+                    optPercentage=FVAoptper,
+                    work_dir=work_dir,
+                    debug=False,
+                    procs=options['procs'],
+                )
             fva_meta_res.append((fva_res, fva_names))
             FVAOname = '%s(%s)_fva.csv' % (OFname, RESULT_DATA[L]['dev_factor'])
             FVAOname = os.path.join(work_dir, FVAOname)
-            CBTools.exportLabelledArrayWithHeader(fva_res, fname=FVAOname, fva_names=fva_names, header=['Opt', 'Min', 'Max', 'MinS', 'MaxS'], sep=',', format='%f')
+            CBTools.exportLabelledArrayWithHeader(
+                fva_res,
+                fname=FVAOname,
+                fva_names=fva_names,
+                header=['Opt', 'Min', 'Max', 'MinS', 'MaxS'],
+                sep=',',
+                format='%f',
+            )
             if HAVE_XLWT:
                 rfact = 8
                 for j_ in range(1, len(fva_names) + 1):
@@ -718,14 +943,14 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
                     sheet2.write(L + 1, 1, fva_res[j_ - 1, 0])
                     res = fva_res[j_ - 1, 1]
                     if numpy.isnan(res):
-                        #res = fva_res[j_-1, 0]
+                        # res = fva_res[j_-1, 0]
                         res = 'NaN'
                     else:
                         res = round(res, rfact)
                     sheet2.write(L + 1, 2, res)
                     res = fva_res[j_ - 1, 2]
                     if numpy.isnan(res):
-                        #res = fva_res[j_-1, 0]
+                        # res = fva_res[j_-1, 0]
                         res = 'NaN'
                     else:
                         res = round(res, rfact)
@@ -733,7 +958,7 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
                     for d_ in range(1, 4):
                         res = fva_res[j_ - 1, d_ - 1]
                         if numpy.isnan(res):
-                            #res = fva_res[j_-1, 0]
+                            # res = fva_res[j_-1, 0]
                             res = 'NaN'
                         else:
                             res = round(res, rfact)
@@ -749,14 +974,14 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
                             sheet3.write(pCntr[p_], 2, fva_res[j_ - 1, 0])
                             res = fva_res[j_ - 1, 1]
                             if numpy.isnan(res):
-                                #res = fva_res[j_-1, 0]
+                                # res = fva_res[j_-1, 0]
                                 res = 'NaN'
                             else:
                                 res = round(res, rfact)
                             sheet3.write(pCntr[p_], 3, res)
                             res = fva_res[j_ - 1, 2]
                             if numpy.isnan(res):
-                                #res = fva_res[j_-1, 0]
+                                # res = fva_res[j_-1, 0]
                                 res = 'NaN'
                             else:
                                 res = round(res, rfact)
@@ -765,14 +990,32 @@ def runMultiStateFBA(input_list, dev_factor, options, dofva=False, fva_selected_
             del dLP
         if HAVE_XLWT:
             t = str(time.time()).split('.')[0][-5:]
-            xlname = 'data_%s_(%s)' % (OFname.replace('.xml', '').replace('base', ''), t)
+            xlname = 'data_%s_(%s)' % (
+                OFname.replace('.xml', '').replace('base', ''),
+                t,
+            )
             wbk.save(os.path.join(work_dir, xlname + '.fva_per_objdist.xls'))
             wbk2.save(os.path.join(work_dir, xlname + '.fva_per_flux.xls'))
             wbk3.save(os.path.join(work_dir, xlname + '.fva_per_input.xls'))
         fva_time_end = time.time()
-        print('\n*****\nTotal ({} LP\'s) time for FVA ({} threads) min: {}\n*****\n'.format(len(MemDumpFiles) * len(lp_var), options['procs'], (fva_time_end - fva_time_start) / 60.0))
+        print(
+            '\n*****\nTotal ({} LP\'s) time for FVA ({} threads) min: {}\n*****\n'.format(
+                len(MemDumpFiles) * len(lp_var),
+                options['procs'],
+                (fva_time_end - fva_time_start) / 60.0,
+            )
+        )
         F = file(os.path.join(work_dir, '%s_fva_stats.txt' % OFname), 'a')
-        F.write('*****\nTotal (%s LP\'s) time for FVA (%s threads) min: %s\n*****\n' % (len(MemDumpFiles) * len(lp_var), options['procs'], (fva_time_end - fva_time_start) / 60.0))
+        F.write(
+            '*****\nTotal (%s LP\'s) time for FVA (%s threads) min: %s\n*****\n'
+            % (
+                len(MemDumpFiles) * len(lp_var),
+                options['procs'],
+                (fva_time_end - fva_time_start) / 60.0,
+            )
+        )
         F.close()
-        CBTools.storeObj(fva_meta_res, os.path.join(work_dir, '%s_fva_meta.dat' % OFname))
+        CBTools.storeObj(
+            fva_meta_res, os.path.join(work_dir, '%s_fva_meta.dat' % OFname)
+        )
     return True

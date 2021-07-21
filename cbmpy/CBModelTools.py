@@ -2,7 +2,7 @@
 CBMPy: CBModelTools module
 ==========================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,10 +26,12 @@ Last edit: $Author: bgoli $ ($Id: CBModelTools.py 710 2020-04-27 14:22:34Z bgoli
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
@@ -45,9 +47,15 @@ def addReversibilityBounds(reactions, bounds, infinity=numpy.inf):
             if not reactions[R]['reversible']:
                 bounds.update({reactions[R]['id']: {'lower': 0, 'upper': infinity}})
             else:
-                bounds.update({reactions[R]['id']: {'lower': -infinity, 'upper': infinity}})
+                bounds.update(
+                    {reactions[R]['id']: {'lower': -infinity, 'upper': infinity}}
+                )
         else:
-            print('Reaction {} already has bounds: {}'.format(reactions[R]['id'], str(reactions[R])))
+            print(
+                'Reaction {} already has bounds: {}'.format(
+                    reactions[R]['id'], str(reactions[R])
+                )
+            )
     return bounds
 
 
@@ -58,7 +66,11 @@ def addReversibilityBoundsIgnoreReversible(reactions, bounds):
             if not reactions[R]['reversible']:
                 bounds.update({reactions[R]['id']: {'lower': 0}})
         else:
-            print('Reaction {} already has bounds: {}'.format(reactions[R]['id'], str(reactions[R])))
+            print(
+                'Reaction {} already has bounds: {}'.format(
+                    reactions[R]['id'], str(reactions[R])
+                )
+            )
     return bounds
 
 
@@ -72,8 +84,13 @@ def addSpecies(model, species):
             comp = species[S].pop('compartment')
         if 'name' in species[S]:
             name = species[S].pop('name')
-        sObj = CBModel.Species(ids, boundary=species[S].pop('boundary'),
-                               name=name, value=0, compartment=comp)
+        sObj = CBModel.Species(
+            ids,
+            boundary=species[S].pop('boundary'),
+            name=name,
+            value=0,
+            compartment=comp,
+        )
         if len(species[S]) > 0:
             for a_ in species[S]:
                 sObj.annotation.update({a_: species[S][a_]})
@@ -84,10 +101,14 @@ def addBounds(model, bounds):
     cntr = 0
     for B in bounds:
         if 'lower' in bounds[B]:
-            model.addFluxBound(CBModel.FluxBound('%s_lb' % B, B, 'greaterEqual', bounds[B]['lower']))
+            model.addFluxBound(
+                CBModel.FluxBound('%s_lb' % B, B, 'greaterEqual', bounds[B]['lower'])
+            )
             cntr += 1
         if 'upper' in bounds[B]:
-            model.addFluxBound(CBModel.FluxBound('%s_ub' % B, B, 'lessEqual', bounds[B]['upper']))
+            model.addFluxBound(
+                CBModel.FluxBound('%s_ub' % B, B, 'lessEqual', bounds[B]['upper'])
+            )
             cntr += 1
 
 
@@ -109,7 +130,7 @@ def addReactions(model, reactions):
         if 'name' in reactions[R]:
             name = reactions[R]['name']
             # else:
-                # print 'Ignoring exchange status for reaction %s, %s is not one of [True, TRUE, true]' % (R, reactions[R]['exchange'])
+            # print 'Ignoring exchange status for reaction %s, %s is not one of [True, TRUE, true]' % (R, reactions[R]['exchange'])
         if len(Bounds) > 0:
             addBounds(model, Bounds)
 
@@ -127,12 +148,20 @@ def addReactions(model, reactions):
 
         # more generic way of doing this
         for k in reactions[R]:
-            if k not in ['lower', 'upper', 'exchange', 'name', 'id', 'reversible', 'reagents']:
+            if k not in [
+                'lower',
+                'upper',
+                'exchange',
+                'name',
+                'id',
+                'reversible',
+                'reagents',
+            ]:
                 react.annotation.update({k: reactions[R][k]})
         # if 'SUBSYSTEM' in reactions[R]:
-            ##  react.annotation.update({'SUBSYSTEM' : reactions[R]['SUBSYSTEM']})
+        ##  react.annotation.update({'SUBSYSTEM' : reactions[R]['SUBSYSTEM']})
         # else:
-            ##  react.annotation.update({'SUBSYSTEM' : 'metabolism'})
+        ##  react.annotation.update({'SUBSYSTEM' : 'metabolism'})
         react.is_exchange = exchange
 
 
@@ -150,7 +179,9 @@ def addObjectiveFunction(model, objective_function):
         objF.addFluxObjective(fObj)
 
 
-def quickDefaultBuild(model_name, Reactions, Species, Bounds, Objective_function, infinity=numpy.inf):
+def quickDefaultBuild(
+    model_name, Reactions, Species, Bounds, Objective_function, infinity=numpy.inf
+):
     fba = CBModel.Model(model_name)
     addSpecies(fba, Species)
     addReactions(fba, Reactions)

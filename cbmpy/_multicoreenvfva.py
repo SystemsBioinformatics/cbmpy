@@ -2,7 +2,7 @@
 CBMPy: MultiCoreEnvFVA module
 =============================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,12 +26,14 @@ Last edit: $Author: bgoli $ ($Id: _multicoreenvfva.py 710 2020-04-27 14:22:34Z b
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 
 import os
 import time
 import math
+
 try:
     import pickle
 except ImportError:
@@ -45,7 +47,9 @@ def funcFVA(x, r, tol, rhs_sense, optPercentage, work_dir, debug):
     x.parameters.threads.set(4)
     try:
 
-        fva, fvan = cbmpy.CBCPLEX.cplx_MultiFluxVariabilityAnalysis(x, r, tol, rhs_sense, optPercentage, work_dir, debug)
+        fva, fvan = cbmpy.CBCPLEX.cplx_MultiFluxVariabilityAnalysis(
+            x, r, tol, rhs_sense, optPercentage, work_dir, debug
+        )
     except Exception as ex:
         print(ex)
         fva = fvan = None
@@ -57,10 +61,17 @@ import copy
 
 
 def multiCoreEnvFVA(MEargs, procs=2, timeout=None):
-    #assert procs >= 2, '\nMinimum 2 processes required'
+    # assert procs >= 2, '\nMinimum 2 processes required'
     rid = MEargs[1]
     work_dir = MEargs[5]
-    PRs = [d_[0] for d_ in list(cbmpy.CBMultiCore.grouper(int(math.ceil(len(rid) / float(procs))), range(len(rid))))]
+    PRs = [
+        d_[0]
+        for d_ in list(
+            cbmpy.CBMultiCore.grouper(
+                int(math.ceil(len(rid) / float(procs))), range(len(rid))
+            )
+        )
+    ]
     print(procs, len(PRs), PRs)
 
     s2time = time.time()
@@ -73,13 +84,13 @@ def multiCoreEnvFVA(MEargs, procs=2, timeout=None):
         for p_ in range(len(PRs) - 1):
             print('{} -> {}'.format(PRs[p_], PRs[p_ + 1]))
             print('{} -> {}'.format(rid[PRs[p_]], rid[PRs[p_ + 1]]))
-            print(rid[PRs[p_]:PRs[p_ + 1]])
+            print(rid[PRs[p_] : PRs[p_ + 1]])
             MEargs2 = copy.deepcopy(MEargs)
-            MEargs2[1] = rid[PRs[p_]:PRs[p_ + 1]]
+            MEargs2[1] = rid[PRs[p_] : PRs[p_ + 1]]
             results.append(TP.apply_async(funcFVA, MEargs2))
         MEargs2 = copy.deepcopy(MEargs)
-        MEargs2[1] = rid[PRs[-1]:]
-        print(rid[PRs[-1]:])
+        MEargs2[1] = rid[PRs[-1] :]
+        print(rid[PRs[-1] :])
         results.append(TP.apply_async(funcFVA, MEargs2))
     fva = []
     fvan = []
@@ -90,7 +101,11 @@ def multiCoreEnvFVA(MEargs, procs=2, timeout=None):
     e2time = time.time()
     del results
 
-    print('\nMulticore FVA took: {}.2f min ({} processes)'.format((e2time - s2time) / 60., procs))
+    print(
+        '\nMulticore FVA took: {}.2f min ({} processes)'.format(
+            (e2time - s2time) / 60.0, procs
+        )
+    )
     return fva, fvan
 
 

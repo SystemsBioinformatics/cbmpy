@@ -2,7 +2,7 @@
 CBMPy: CBWx module
 ===================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,9 +26,11 @@ Last edit: $Author: bgoli $ ($Id: CBWx.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os, time, random, math, re, webbrowser, locale, sys
+
 # this is a hack that needs to be streamlined a bit
 try:
     import cStringIO as csio
@@ -44,8 +46,9 @@ try:
     import wx.lib.colourdb
     from wx.lib.floatcanvas import NavCanvas, FloatCanvas, Resources
     from wx.lib import scrolledpanel
-    import  wx.lib.mixins.listctrl  as  listmix
+    import wx.lib.mixins.listctrl as listmix
     from wx import ImageFromStream, BitmapFromImage
+
     HAVE_WX = True
     print('WX GUI tools available.')
 except ImportError as ex:
@@ -59,8 +62,9 @@ except:
     HAVE_URLLIB2 = False
 
 if HAVE_WX:
+
     class ModelEditor(wx.Frame):
-        PanelSize = (1100,600)
+        PanelSize = (1100, 600)
         RPwidth = 0.5
         RPheight = 1.0
         LPwidth = 0.5
@@ -68,7 +72,17 @@ if HAVE_WX:
         mainSizer = None
         RGridCol = None
         RGridRow = None
-        rlabels = ('Reaction','Name','Flux','d','LB','UB','RCost','Exch','Balanced')
+        rlabels = (
+            'Reaction',
+            'Name',
+            'Flux',
+            'd',
+            'LB',
+            'UB',
+            'RCost',
+            'Exch',
+            'Balanced',
+        )
         NOVAL = (None, '', 'None')
         RGrid = None
         pybox = None
@@ -118,14 +132,19 @@ if HAVE_WX:
             mystyle = wx.DEFAULT_DIALOG_STYLE
             mystyle = wx.DEFAULT_FRAME_STYLE
             fSize = wx.DisplaySize()
-            fSize = fSize[0], fSize[1]-50
-            wx.Frame.__init__(self, None, style=mystyle, name='frame1', pos=(0, 0), size=fSize)
-            #self.SetSize(self.PanelSize)
-            #self.SetMinSize(self.PanelSize)
-            #self.ShowFullScreen(True)
-            self.SetTitle('PySCeS-CBM Model Editor - editing: %s (%s)' % (cmod.getId(), cmod.getName()))
+            fSize = fSize[0], fSize[1] - 50
+            wx.Frame.__init__(
+                self, None, style=mystyle, name='frame1', pos=(0, 0), size=fSize
+            )
+            # self.SetSize(self.PanelSize)
+            # self.SetMinSize(self.PanelSize)
+            # self.ShowFullScreen(True)
+            self.SetTitle(
+                'PySCeS-CBM Model Editor - editing: %s (%s)'
+                % (cmod.getId(), cmod.getName())
+            )
             fSize = self.GetSize()
-            fSize = fSize[0], fSize[1]-20
+            fSize = fSize[0], fSize[1] - 20
             self.MainPanel = wx.Panel(self, -1, size=fSize)
             self.MainPanel.SetSize(fSize)
             self.MainPanel.SetMinSize(fSize)
@@ -147,16 +166,17 @@ if HAVE_WX:
 
             self.BuildMainPanel()
             self.CreateRGrid()
-            #self.LeftPanel.Refresh()
-            #self.MainPanel.UpdateWindowUI()
+            # self.LeftPanel.Refresh()
+            # self.MainPanel.UpdateWindowUI()
 
             import cbmpy as cbm
+
             self._cbm_ = cbm
             self.OUT_dir = os.getcwd()
             self.UpdateModelStatus()
             self.CreateMaps()
             try:
-                #self.RESTClient = cbm.CBNetDB.RESTClient()
+                # self.RESTClient = cbm.CBNetDB.RESTClient()
                 self.SemanticSBMLClient = cbm.CBNetDB.SemanticSBML()
             except:
                 print('REST web serices not available')
@@ -177,15 +197,30 @@ if HAVE_WX:
         def BuildMainPanel(self):
             # build some frame stuff
             # Setting up the menu.
-            filemenu= wx.Menu()
-            menuSave = filemenu.Append(101, "&Save Model"," Save to SBML", kind=wx.ID_SAVE)
-            menuExport = filemenu.Append(102, "Save S&ession"," Export session as Python script", kind=wx.ID_SAVE)
-            menuAbout= filemenu.Append(103, "&About"," Information about this program", kind=wx.ID_ABOUT)
-            menuExit = filemenu.Append(104,"E&xit"," Terminate the program", kind=wx.ID_EXIT)
+            filemenu = wx.Menu()
+            menuSave = filemenu.Append(
+                101, "&Save Model", " Save to SBML", kind=wx.ID_SAVE
+            )
+            menuExport = filemenu.Append(
+                102,
+                "Save S&ession",
+                " Export session as Python script",
+                kind=wx.ID_SAVE,
+            )
+            menuAbout = filemenu.Append(
+                103, "&About", " Information about this program", kind=wx.ID_ABOUT
+            )
+            menuExit = filemenu.Append(
+                104, "E&xit", " Terminate the program", kind=wx.ID_EXIT
+            )
 
             self.searchSelectmenu = wx.Menu()
-            self.CHECK_AUTOCOMP = self.searchSelectmenu.Append(211, 'AutoComplete', kind=wx.ITEM_CHECK)
-            self.CHECK_SUBSEARCH = self.searchSelectmenu.Append(212, 'Subsearch', kind=wx.ITEM_CHECK)
+            self.CHECK_AUTOCOMP = self.searchSelectmenu.Append(
+                211, 'AutoComplete', kind=wx.ITEM_CHECK
+            )
+            self.CHECK_SUBSEARCH = self.searchSelectmenu.Append(
+                212, 'Subsearch', kind=wx.ITEM_CHECK
+            )
 
             self.Bind(wx.EVT_MENU, self.EVT_SEARCH_MODE_SELECT, self.CHECK_AUTOCOMP)
             self.Bind(wx.EVT_MENU, self.EVT_SEARCH_MODE_SELECT, self.CHECK_SUBSEARCH)
@@ -195,7 +230,9 @@ if HAVE_WX:
             optionsMenu.AppendMenu(201, '&Search mode', self.searchSelectmenu)
 
             actionMenu = wx.Menu()
-            menuAnalyseBalances = actionMenu.Append(301, 'Run &Balance Checker', kind=wx.ID_DEFAULT)
+            menuAnalyseBalances = actionMenu.Append(
+                301, 'Run &Balance Checker', kind=wx.ID_DEFAULT
+            )
             SemSBMLMenu = wx.Menu()
             menuSemSBMLMenu_name = SemSBMLMenu.Append(311, 'Name', kind=wx.ID_DEFAULT)
             menuSemSBMLMenu_id = SemSBMLMenu.Append(312, 'Id', kind=wx.ID_DEFAULT)
@@ -204,13 +241,15 @@ if HAVE_WX:
             self.Bind(wx.EVT_MENU, self.SemSBML_name, menuSemSBMLMenu_name)
             self.Bind(wx.EVT_MENU, self.SemSBML_id, menuSemSBMLMenu_id)
 
-
-
             # Creating the menubar and statusbar
             menuBar = wx.MenuBar()
-            menuBar.Append(filemenu,"&File") # Adding the "filemenu" to the MenuBar
-            menuBar.Append(optionsMenu,"&Options") # Adding the "filemenu" to the MenuBar
-            menuBar.Append(actionMenu,"&Action") # Adding the "filemenu" to the MenuBar
+            menuBar.Append(filemenu, "&File")  # Adding the "filemenu" to the MenuBar
+            menuBar.Append(
+                optionsMenu, "&Options"
+            )  # Adding the "filemenu" to the MenuBar
+            menuBar.Append(
+                actionMenu, "&Action"
+            )  # Adding the "filemenu" to the MenuBar
             self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
             # Menu Events.
             self.Bind(wx.EVT_MENU, self.MENUOnSave, menuSave)
@@ -218,7 +257,9 @@ if HAVE_WX:
             self.Bind(wx.EVT_MENU, self.MENUOnExit, menuExit)
             self.Bind(wx.EVT_MENU, self.MENUOnAbout, menuAbout)
 
-            self.StatusBar = self.CreateStatusBar() # A StatusBar in the bottom of the window
+            self.StatusBar = (
+                self.CreateStatusBar()
+            )  # A StatusBar in the bottom of the window
             self.SetStatusText("Ready!")
 
             # create the sizers
@@ -232,7 +273,7 @@ if HAVE_WX:
             # Radio Boxes
             ##  radioList = ['blue', 'red', 'yellow', 'orange', 'green', 'purple', 'navy blue', 'black', 'gray']
             ##  rb = wx.RadioBox(self, label="What color would you like ?", pos=(20, 210), choices=radioList,  majorDimension=3,
-                        ##  style=wx.RA_SPECIFY_COLS)
+            ##  style=wx.RA_SPECIFY_COLS)
             ##  grid.Add(rb, pos=(5,0), span=(1,2))
             ##  self.Bind(wx.EVT_RADIOBOX, self.EvtRadioBox, rb)
 
@@ -240,23 +281,34 @@ if HAVE_WX:
             leftSizer = wx.BoxSizer(wx.VERTICAL)
             self.LeftPanel = wx.Panel(self.MainPanel, -1)
             self.RGridGap = 80
-            gridSize = (self.PanelSize[0]*self.LPwidth, self.PanelSize[1]-self.RGridGap)
+            gridSize = (
+                self.PanelSize[0] * self.LPwidth,
+                self.PanelSize[1] - self.RGridGap,
+            )
             self.RGridInitSize = gridSize
             self.LeftPanel.SetMinSize(gridSize)
 
             # Define a dynamically updatable grid
-            self.RGrid_scrollwindow = wx.ScrolledWindow(id=-1, size=gridSize,
-                                                        name='RGrid_scrollwindow', parent=self.LeftPanel,
-                                                        style=wx.HSCROLL | wx.VSCROLL)
+            self.RGrid_scrollwindow = wx.ScrolledWindow(
+                id=-1,
+                size=gridSize,
+                name='RGrid_scrollwindow',
+                parent=self.LeftPanel,
+                style=wx.HSCROLL | wx.VSCROLL,
+            )
 
-            self.RGrid = wx.grid.Grid(id=-1, name='RGrid', size=gridSize,
-                                      parent=self.RGrid_scrollwindow,
-                                      style=0)
+            self.RGrid = wx.grid.Grid(
+                id=-1,
+                name='RGrid',
+                size=gridSize,
+                parent=self.RGrid_scrollwindow,
+                style=0,
+            )
             self.RGridCol = len(self.rlabels)
 
             self.RGrid.CreateGrid(len(self._cmod_.reactions), self.RGridCol)
-            #self.RGrid.SetSize(gridSize)
-            #self.RGrid.SetMinSize(gridSize)
+            # self.RGrid.SetSize(gridSize)
+            # self.RGrid.SetMinSize(gridSize)
             ##  self.RGrid.SetMargins(5,5)
             self.RGrid.EnableScrolling(True, True)
             self.RGrid.SetScrollbars(10, 10, 10, 10)
@@ -268,8 +320,8 @@ if HAVE_WX:
             buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
 
             ButtonPanel = wx.Panel(self.LeftPanel, -1)
-            #ButtonPanel.SetSize((20,30))
-            #ButtonPanel.SetMinSize((20,30))
+            # ButtonPanel.SetSize((20,30))
+            # ButtonPanel.SetMinSize((20,30))
             self.BUT_optimise = wx.Button(ButtonPanel, label="Optimize")
             self.BUT_minsum = wx.Button(ButtonPanel, label="Min. SumAbsFlux")
             self.Bind(wx.EVT_BUTTON, self.EVT_BUT_optimise, self.BUT_optimise)
@@ -279,38 +331,54 @@ if HAVE_WX:
             ButtonPanel.SetSizer(buttonSizer)
 
             # add status text controls
-            statusSizer = wx.GridSizer(2,4,1,1)
-            StatusPanel = wx.Panel(self.LeftPanel, -1, size=wx.Size(self.PanelSize[0]*self.LPwidth,-1))
-            STS_OBJ_FUNC_LBL = wx.TextCtrl(StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER)
+            statusSizer = wx.GridSizer(2, 4, 1, 1)
+            StatusPanel = wx.Panel(
+                self.LeftPanel, -1, size=wx.Size(self.PanelSize[0] * self.LPwidth, -1)
+            )
+            STS_OBJ_FUNC_LBL = wx.TextCtrl(
+                StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER
+            )
             STS_OBJ_FUNC_LBL.write('ObjValue')
-            STS_OBJ_FUNC_LBL.SetBackgroundColour(wx.Colour(255,255,153))
+            STS_OBJ_FUNC_LBL.SetBackgroundColour(wx.Colour(255, 255, 153))
             statusSizer.Add(STS_OBJ_FUNC_LBL)
-            STS_OBJ_SENSE_LBL = wx.TextCtrl(StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER)
+            STS_OBJ_SENSE_LBL = wx.TextCtrl(
+                StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER
+            )
             STS_OBJ_SENSE_LBL.write('ObjSense')
-            STS_OBJ_SENSE_LBL.SetBackgroundColour(wx.Colour(255,255,153))
+            STS_OBJ_SENSE_LBL.SetBackgroundColour(wx.Colour(255, 255, 153))
             statusSizer.Add(STS_OBJ_SENSE_LBL)
-            STS_OBJ_COND_LBL = wx.TextCtrl(StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER)
+            STS_OBJ_COND_LBL = wx.TextCtrl(
+                StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER
+            )
             STS_OBJ_COND_LBL.write('ObjStatus')
-            STS_OBJ_COND_LBL.SetBackgroundColour(wx.Colour(255,255,153))
+            STS_OBJ_COND_LBL.SetBackgroundColour(wx.Colour(255, 255, 153))
             statusSizer.Add(STS_OBJ_COND_LBL)
 
-            SEARCH_OBJ_LBL = wx.TextCtrl(StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER)
+            SEARCH_OBJ_LBL = wx.TextCtrl(
+                StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER
+            )
             SEARCH_OBJ_LBL.write('SearchReactions')
-            SEARCH_OBJ_LBL.SetMinSize(wx.Size(130,-1))
-            SEARCH_OBJ_LBL.SetBackgroundColour(wx.Colour(102,255,255))
+            SEARCH_OBJ_LBL.SetMinSize(wx.Size(130, -1))
+            SEARCH_OBJ_LBL.SetBackgroundColour(wx.Colour(102, 255, 255))
             statusSizer.Add(SEARCH_OBJ_LBL)
 
             ## the combobox Control
-            #self.SEARCH_SELECT_COMB = wx.ComboBox(StatusPanel, size=wx.Size(130, -1), choices=['AutoComplete', 'SubString'], style=wx.CB_READONLY)
-            #self.SEARCH_SELECT_COMB.SetStringSelection('AutoComplete')
-            #statusSizer.Add(self.SEARCH_SELECT_COMB)
+            # self.SEARCH_SELECT_COMB = wx.ComboBox(StatusPanel, size=wx.Size(130, -1), choices=['AutoComplete', 'SubString'], style=wx.CB_READONLY)
+            # self.SEARCH_SELECT_COMB.SetStringSelection('AutoComplete')
+            # statusSizer.Add(self.SEARCH_SELECT_COMB)
             ## self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, self.edithear)
 
-            self.STS_OBJ_FUNC = wx.TextCtrl(StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER)
+            self.STS_OBJ_FUNC = wx.TextCtrl(
+                StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER
+            )
             statusSizer.Add(self.STS_OBJ_FUNC)
-            self.STS_OBJ_SENSE = wx.TextCtrl(StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER)
+            self.STS_OBJ_SENSE = wx.TextCtrl(
+                StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER
+            )
             statusSizer.Add(self.STS_OBJ_SENSE)
-            self.STS_OBJ_COND = wx.TextCtrl(StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER)
+            self.STS_OBJ_COND = wx.TextCtrl(
+                StatusPanel, -1, style=wx.TE_READONLY | wx.TE_CENTER
+            )
             statusSizer.Add(self.STS_OBJ_COND)
 
             def SearchSelectCallback(sList):
@@ -319,15 +387,23 @@ if HAVE_WX:
                 self.updateInfoFromReactionName(sList[0])
                 self.SelectGridRow(sList[0])
 
-
             try:
-                self.SEARCH_OBJ = TextCtrlAutoComplete(StatusPanel, choices=self._cmod_.getReactionIds(),\
-                                                       selectCallback=SearchSelectCallback, style=wx.TE_LEFT)
+                self.SEARCH_OBJ = TextCtrlAutoComplete(
+                    StatusPanel,
+                    choices=self._cmod_.getReactionIds(),
+                    selectCallback=SearchSelectCallback,
+                    style=wx.TE_LEFT,
+                )
                 self.SEARCH_OBJ.SetMinSize(wx.Size(130, -1))
                 self.SEARCH_OBJ.Enable(True)
             except:
-                self.SEARCH_OBJ = wx.TextCtrl(StatusPanel, -1, choices=self._cmod_.getReactionIds(), style=wx.TE_READONLY | wx.TE_CENTER)
-                self.SEARCH_OBJ.SetMinSize(wx.Size(130,-1))
+                self.SEARCH_OBJ = wx.TextCtrl(
+                    StatusPanel,
+                    -1,
+                    choices=self._cmod_.getReactionIds(),
+                    style=wx.TE_READONLY | wx.TE_CENTER,
+                )
+                self.SEARCH_OBJ.SetMinSize(wx.Size(130, -1))
                 self.SEARCH_OBJ.Enable(True)
             statusSizer.Add(self.SEARCH_OBJ)
             StatusPanel.SetSizer(statusSizer)
@@ -343,28 +419,40 @@ if HAVE_WX:
             # create the Rpanel notebook
             rightSizer = wx.BoxSizer(wx.VERTICAL)
             self.RightPanel = wx.Panel(self.MainPanel, -1)
-            NoteB1size = (self.PanelSize[0]*self.RPwidth, self.PanelSize[1]*self.RPheight)
+            NoteB1size = (
+                self.PanelSize[0] * self.RPwidth,
+                self.PanelSize[1] * self.RPheight,
+            )
             self.NoteB1 = wx.Notebook(self.RightPanel, size=NoteB1size)
             self.NoteB1.SetSize(NoteB1size)
             self.NoteB1.SetMinSize(NoteB1size)
             ##  self.NoteB1.SetPadding((10,-1))
             # create panels
-            RinfSize = wx.Size(NoteB1size[0]-8, NoteB1size[1]-25)
-            self.NoteB1_Psession =  wx.Panel(self.NoteB1, -1)
+            RinfSize = wx.Size(NoteB1size[0] - 8, NoteB1size[1] - 25)
+            self.NoteB1_Psession = wx.Panel(self.NoteB1, -1)
             self.NoteB1_Preaction = wx.Panel(self.NoteB1, -1)
             self.NoteB1_Pspecies = wx.Panel(self.NoteB1, -1)
             self.NoteB1_Prelate = wx.Panel(self.NoteB1, -1)
             self.NoteB1_Pgene = wx.Panel(self.NoteB1, -1)
-            #self.NoteB1_PRedit = wx.Panel(self.NoteB1, -1)
-            self.NoteB1_PRedit = wx.lib.scrolledpanel.ScrolledPanel(self.NoteB1, -1, style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER|wx.HSCROLL|wx.VSCROLL)
+            # self.NoteB1_PRedit = wx.Panel(self.NoteB1, -1)
+            self.NoteB1_PRedit = wx.lib.scrolledpanel.ScrolledPanel(
+                self.NoteB1,
+                -1,
+                style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER | wx.HSCROLL | wx.VSCROLL,
+            )
             self.NoteB1_PRedit.SetAutoLayout(1)
             self.NoteB1_PRedit.SetupScrolling()
 
-            #create pybox: python script window
-            self.PyBox = wx.TextCtrl(self.NoteB1_Psession, -1, size=self.NoteB1.GetVirtualSize(), style=wx.TE_MULTILINE | wx.HSCROLL)
+            # create pybox: python script window
+            self.PyBox = wx.TextCtrl(
+                self.NoteB1_Psession,
+                -1,
+                size=self.NoteB1.GetVirtualSize(),
+                style=wx.TE_MULTILINE | wx.HSCROLL,
+            )
             PyBox_sizer = wx.BoxSizer(wx.VERTICAL)
             PyBox_sizer.Add(self.PyBox, -1, wx.EXPAND)
-            #self.NoteB1_Psession.Fit(PyBox_sizer)
+            # self.NoteB1_Psession.Fit(PyBox_sizer)
             self.PyBox.SetEditable(False)
             self.writeCmd("#############################\n# ")
             self.writeCmd("# PySCeS-CBM GUI generated command file ")
@@ -375,70 +463,90 @@ if HAVE_WX:
             self.PyBox.SetMinSize(self.NoteB1.GetVirtualSize())
 
             # create html panel for reaction information
-            self.Rinfbox = wx.html.HtmlWindow(self.NoteB1_Preaction, -1, size=self.NoteB1.GetVirtualSize(), style=wx.html.HW_SCROLLBAR_AUTO)
+            self.Rinfbox = wx.html.HtmlWindow(
+                self.NoteB1_Preaction,
+                -1,
+                size=self.NoteB1.GetVirtualSize(),
+                style=wx.html.HW_SCROLLBAR_AUTO,
+            )
             self.Rinfbox.SetBorders(0)
             Rinfbox_sizer = wx.BoxSizer(wx.VERTICAL)
             Rinfbox_sizer.Add(self.Rinfbox, 0, wx.EXPAND)
             self.Rinfbox.SetMinSize(self.NoteB1.GetVirtualSize())
 
             # create reaction editor
-            self.FontCache.update({'SanSer12CS' : wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False, u'Comic Sans MS')})
-            self.FontCache.update({'SanSer12' : wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False)})
-            self.FontCache.update({'SanSer10' : wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL, False)})
+            self.FontCache.update(
+                {
+                    'SanSer12CS': wx.Font(
+                        12, wx.SWISS, wx.NORMAL, wx.NORMAL, False, u'Comic Sans MS'
+                    )
+                }
+            )
+            self.FontCache.update(
+                {'SanSer12': wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False)}
+            )
+            self.FontCache.update(
+                {'SanSer10': wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL, False)}
+            )
 
             # create the box sizer
             Reditbox_sizer = wx.BoxSizer(wx.VERTICAL)
 
             # create the edit button
-            #self.BUT_EnableEdit = wx.Button(self.NoteB1_PRedit, label="Edit Reaction")
-            #self.Bind(wx.EVT_BUTTON, self.EVT_BUT_EnableEdit, self.BUT_EnableEdit)
-            #Reditbox_sizer.Add(self.BUT_EnableEdit)
+            # self.BUT_EnableEdit = wx.Button(self.NoteB1_PRedit, label="Edit Reaction")
+            # self.Bind(wx.EVT_BUTTON, self.EVT_BUT_EnableEdit, self.BUT_EnableEdit)
+            # Reditbox_sizer.Add(self.BUT_EnableEdit)
 
             # create the component grid
-            #Reditgrid_sizer = wx.GridSizer(3,2,1,1)
-            #grow = 10
-            #gcol = 2
-            #cntr = True
-            #self.TEXTBOXES_Redit = []
-            #for tp in range(grow*gcol):
-                #cellHeight = -1
-                #if cntr:
-                    #tx = wx.TextCtrl(self.NoteB1_PRedit, style=wx.DEFAULT | wx.TE_READONLY | wx.TE_CENTER)
-                    #tx.SetSize(wx.Size(RinfSize[1]/4, cellHeight))
-                    #tx.SetMinSize(wx.Size(RinfSize[1]/4, cellHeight))
-                    #tx.SetFont(self.FontCache['SanSer10'])
-                    #cntr = False
-                #else:
-                    #tx = wx.TextCtrl(self.NoteB1_PRedit, style=wx.DEFAULT | wx.TE_LEFT | wx.EXPAND )
-                    #tx.SetSize(wx.Size(RinfSize[1]/2, cellHeight))
-                    #tx.SetMinSize(wx.Size(RinfSize[1]/2, cellHeight))
-                    #tx.SetFont(self.FontCache['SanSer10'])
-                    #cntr = True
-                #tx.Disable()
-                #tx.WriteText(str(tp+1))
-                #tx.PID = str(tp+1)
-                #Reditgrid_sizer.Add(tx, wx.EXPAND)
-                #self.TEXTBOXES_Redit.append(tx)
-            #Reditbox_sizer.Add(Reditgrid_sizer, wx.EXPAND) # add to boxsizer
+            # Reditgrid_sizer = wx.GridSizer(3,2,1,1)
+            # grow = 10
+            # gcol = 2
+            # cntr = True
+            # self.TEXTBOXES_Redit = []
+            # for tp in range(grow*gcol):
+            # cellHeight = -1
+            # if cntr:
+            # tx = wx.TextCtrl(self.NoteB1_PRedit, style=wx.DEFAULT | wx.TE_READONLY | wx.TE_CENTER)
+            # tx.SetSize(wx.Size(RinfSize[1]/4, cellHeight))
+            # tx.SetMinSize(wx.Size(RinfSize[1]/4, cellHeight))
+            # tx.SetFont(self.FontCache['SanSer10'])
+            # cntr = False
+            # else:
+            # tx = wx.TextCtrl(self.NoteB1_PRedit, style=wx.DEFAULT | wx.TE_LEFT | wx.EXPAND )
+            # tx.SetSize(wx.Size(RinfSize[1]/2, cellHeight))
+            # tx.SetMinSize(wx.Size(RinfSize[1]/2, cellHeight))
+            # tx.SetFont(self.FontCache['SanSer10'])
+            # cntr = True
+            # tx.Disable()
+            # tx.WriteText(str(tp+1))
+            # tx.PID = str(tp+1)
+            # Reditgrid_sizer.Add(tx, wx.EXPAND)
+            # self.TEXTBOXES_Redit.append(tx)
+            # Reditbox_sizer.Add(Reditgrid_sizer, wx.EXPAND) # add to boxsizer
 
             # create the annotate button
-            #self.BUT_Annotate = wx.Button(self.NoteB1_PRedit, label="SemanticSBML")
-            #self.Bind(wx.EVT_BUTTON, self.EVT_BUT_Annotate, self.BUT_Annotate)
-            #Reditbox_sizer.Add(self.BUT_Annotate)
+            # self.BUT_Annotate = wx.Button(self.NoteB1_PRedit, label="SemanticSBML")
+            # self.Bind(wx.EVT_BUTTON, self.EVT_BUT_Annotate, self.BUT_Annotate)
+            # Reditbox_sizer.Add(self.BUT_Annotate)
 
             # the big text box
-            #self.TEXTBOX_Annotate = wx.TextCtrl(self.NoteB1_PRedit, style=wx.TE_MULTILINE | wx.EXPAND )
-            #self.TEXTBOX_Annotate.SetMinSize(wx.Size(self.NoteB1.GetVirtualSize()[1], -1))
-            #self.TEXTBOX_Annotate.SetFont(self.FontCache['SanSer10'])
-            #self.TEXTBOX_Annotate.Disable()
-            #Reditbox_sizer.Add(self.TEXTBOX_Annotate, wx.EXPAND) # add to boxsizer
+            # self.TEXTBOX_Annotate = wx.TextCtrl(self.NoteB1_PRedit, style=wx.TE_MULTILINE | wx.EXPAND )
+            # self.TEXTBOX_Annotate.SetMinSize(wx.Size(self.NoteB1.GetVirtualSize()[1], -1))
+            # self.TEXTBOX_Annotate.SetFont(self.FontCache['SanSer10'])
+            # self.TEXTBOX_Annotate.Disable()
+            # Reditbox_sizer.Add(self.TEXTBOX_Annotate, wx.EXPAND) # add to boxsizer
 
             # add boxSizer to Panel
             self.NoteB1_PRedit.SetSizer(Reditbox_sizer, wx.DEFAULT)
             self.NoteB1_PRedit.SetMinSize(self.NoteB1.GetVirtualSize())
 
             # create html panel for reagent information
-            self.Sinfbox = wx.lib.ClickableHtmlWindow.PyClickableHtmlWindow(self.NoteB1_Pspecies, -1, size=self.NoteB1.GetVirtualSize(), style=wx.html.HW_SCROLLBAR_AUTO)
+            self.Sinfbox = wx.lib.ClickableHtmlWindow.PyClickableHtmlWindow(
+                self.NoteB1_Pspecies,
+                -1,
+                size=self.NoteB1.GetVirtualSize(),
+                style=wx.html.HW_SCROLLBAR_AUTO,
+            )
             self.Sinfbox.SetBorders(0)
             Sinfbox_sizer = wx.BoxSizer(wx.VERTICAL)
             Sinfbox_sizer.Add(self.Sinfbox, -1, wx.EXPAND)
@@ -450,11 +558,25 @@ if HAVE_WX:
             self.FC_LineStyles = list(FloatCanvas.DrawObject.LineStyleList)
 
             # create a met/gen canvas and do voodoo to get it to fill the notebook panel
-            self.MetCanvas = NavCanvas.NavCanvas(self.NoteB1_Prelate, -1, size=self.NoteB1.GetVirtualSize(), Debug=0, ProjectionFun=None, BackgroundColor="DARK SLATE BLUE")
+            self.MetCanvas = NavCanvas.NavCanvas(
+                self.NoteB1_Prelate,
+                -1,
+                size=self.NoteB1.GetVirtualSize(),
+                Debug=0,
+                ProjectionFun=None,
+                BackgroundColor="DARK SLATE BLUE",
+            )
             self.FCanvas_met = self.MetCanvas.Canvas
             self.FCanvas_met.SetProjectionFun(None)
             self.FCanvas_met.InitAll()
-            self.GenCanvas = NavCanvas.NavCanvas(self.NoteB1_Pgene, -1, size=self.NoteB1.GetVirtualSize(), Debug=0, ProjectionFun=None, BackgroundColor="DARK SLATE BLUE")
+            self.GenCanvas = NavCanvas.NavCanvas(
+                self.NoteB1_Pgene,
+                -1,
+                size=self.NoteB1.GetVirtualSize(),
+                Debug=0,
+                ProjectionFun=None,
+                BackgroundColor="DARK SLATE BLUE",
+            )
             self.FCanvas_gen = self.GenCanvas.Canvas
             self.FCanvas_gen.SetProjectionFun(None)
             self.FCanvas_gen.InitAll()
@@ -479,7 +601,7 @@ if HAVE_WX:
             self.NoteB1.AddPage(self.NoteB1_Pspecies, "MIRIAM")
 
             rightSizer.Add(self.NoteB1)
-            #self.RightPanel.Fit(rightSizer)
+            # self.RightPanel.Fit(rightSizer)
 
             # Add components to the main panel
 
@@ -491,7 +613,7 @@ if HAVE_WX:
             self.Bind(wx.EVT_SIZE, self.EVT_FRAME_resize, self)
 
             ##GENERIC click event
-            #self.Bind(wx.EVT_SIZE, self.EVT_onClick, self.MainPanel)
+            # self.Bind(wx.EVT_SIZE, self.EVT_onClick, self.MainPanel)
 
         def UpdateModelStatus(self):
             self.STS_OBJ_SENSE.Clear()
@@ -499,17 +621,19 @@ if HAVE_WX:
             self.STS_OBJ_FUNC.Clear()
             self.STS_OBJ_COND.write(str(self._cmod_.SOLUTION_STATUS))
             if self._cmod_.SOLUTION_STATUS == 'LPS_OPT':
-                self.STS_OBJ_COND.SetBackgroundColour(wx.Colour(255,255,255))
+                self.STS_OBJ_COND.SetBackgroundColour(wx.Colour(255, 255, 255))
             else:
-                self.STS_OBJ_COND.SetBackgroundColour(wx.Colour(255,0,51))
+                self.STS_OBJ_COND.SetBackgroundColour(wx.Colour(255, 0, 51))
             if self._cmod_.getActiveObjective() != None:
-                self.STS_OBJ_FUNC.write(str(self._cmod_.getActiveObjective().getValue()))
+                self.STS_OBJ_FUNC.write(
+                    str(self._cmod_.getActiveObjective().getValue())
+                )
                 self.STS_OBJ_SENSE.write(self._cmod_.getActiveObjective().operation)
             else:
                 self.STS_OBJ_FUNC.write('None')
                 self.STS_OBJ_SENSE.write('None')
 
-        def UpdateReactionInfo(self,rid):
+        def UpdateReactionInfo(self, rid):
             print('Updating reaction info')
             r = self._cmod_.getReaction(rid)
 
@@ -518,7 +642,10 @@ if HAVE_WX:
             rs += '<p><br/></p>'
             ##  rs += '<h3>Details</h3>'
             props = '<tr><th colspan="2"><strong>Properties</strong></th></tr>'
-            props += '<tr><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td></tr>' % ('Reversible',r.reversible,'Exchange',r.is_exchange)
+            props += (
+                '<tr><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td></tr>'
+                % ('Reversible', r.reversible, 'Exchange', r.is_exchange)
+            )
             props += '<tr><th colspan="2"><strong>Annotations</strong></th></tr>'
             RA = r.getAnnotations()
             for a in RA:
@@ -530,9 +657,15 @@ if HAVE_WX:
                 if rid in self.ReactionBalanceInfo:
                     rs += '<h3>Balancing information</h3>'
                     bi = self.ReactionBalanceInfo[rid]
-                    #print bi
-                    bal = '<tr><td colspan="2">Charge balanced: %s {\'charge\', %s}</td></tr>' % (bi['charge_balanced'], bi['charge'])
-                    bal += '<tr><td colspan="2">Element balanced: %s %s</td></tr>' % (bi['element_balanced'], bi['elements'])
+                    # print bi
+                    bal = (
+                        '<tr><td colspan="2">Charge balanced: %s {\'charge\', %s}</td></tr>'
+                        % (bi['charge_balanced'], bi['charge'])
+                    )
+                    bal += '<tr><td colspan="2">Element balanced: %s %s</td></tr>' % (
+                        bi['element_balanced'],
+                        bi['elements'],
+                    )
                     for rre in bi['stuff']:
                         sbal = ''
                         coeff = None
@@ -542,14 +675,14 @@ if HAVE_WX:
                                 out = rre[det]
                             if det == 1:
                                 coeff = rre[det]
-                                #out = re[det]
+                                # out = re[det]
                             elif det == 3:
                                 out = ''
                                 if rre[2] == '' or rre[3] == None:
                                     out = 'Unknown'
                                 else:
                                     for e in rre[det]:
-                                        out += '%.1f %s, ' % (coeff*e[1], e[0])
+                                        out += '%.1f %s, ' % (coeff * e[1], e[0])
                                     out = out[:-2]
                             if out != '':
                                 sbal += '<td>%s</td>' % out
@@ -561,19 +694,27 @@ if HAVE_WX:
                 s = self._cmod_.getSpecies(sid)
                 props += '<h4>%s</h4><table border="1" cellpadding="5">' % sid
                 ##  props += '<tr><th colspan="2"><strong>%s</strong></th></tr>' % sid
-                props += '<tr><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td></tr>' % ('Name',s.getName(),'Compartment',s.compartment)
-                props += '<tr><td>%s</td><td>%s</td></tr>' % ('Fixed',s.is_boundary)
-                props += '<tr><td>%s</td><td>%s</td></tr>' % ('Coefficient', r.getReagentWithSpeciesRef(sid).coefficient)
+                props += (
+                    '<tr><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td></tr>'
+                    % ('Name', s.getName(), 'Compartment', s.compartment)
+                )
+                props += '<tr><td>%s</td><td>%s</td></tr>' % ('Fixed', s.is_boundary)
+                props += '<tr><td>%s</td><td>%s</td></tr>' % (
+                    'Coefficient',
+                    r.getReagentWithSpeciesRef(sid).coefficient,
+                )
                 ##  props += '<tr><th colspan="2">Annotations</th></tr>'
-                props += '<tr><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td></tr>' % ('ChemFormula',s.chemFormula,'Charge',s.charge)
+                props += (
+                    '<tr><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td></tr>'
+                    % ('ChemFormula', s.chemFormula, 'Charge', s.charge)
+                )
                 ##  SA = s.getAnnotations()
                 ##  for a in RA:
-                    ##  props += '<tr><td>%s</td><td>%s</td></tr>' % (a, SA[a])
+                ##  props += '<tr><td>%s</td><td>%s</td></tr>' % (a, SA[a])
                 ##  rs += '<table border="1" cellpadding="5" width="70%s">%s</table>' % ('\\%', props)
                 props += '</table>'
             rs += props
-                ##  rs += '<table border="1" cellpadding="3" width="80%s"><tr><th>Property</th><th>Value</th></tr>%s</table>' % ('\\%', props)
-
+            ##  rs += '<table border="1" cellpadding="3" width="80%s"><tr><th>Property</th><th>Value</th></tr>%s</table>' % ('\\%', props)
 
             self.Rinfbox.SetPage("<html><body>%s</body></html>" % rs)
 
@@ -590,14 +731,21 @@ if HAVE_WX:
             STB_PAD = 0.15
             STB_SZ = 0.25
             STB_LC = 'Black'
-            GC = (0,0)
+            GC = (0, 0)
 
             FC_OBJ = []
             if rid not in self.RGdict:
-                STB = FloatCanvas.ScaledTextBox(rid, GC, Size=STB_SZ, PadSize=STB_PAD,\
-                                                LineWidth=STB_LW, LineColor=STB_LC,\
-                                                Family=wx.FONTFAMILY_DEFAULT, Weight=wx.BOLD,\
-                                                BackgroundColor='White')
+                STB = FloatCanvas.ScaledTextBox(
+                    rid,
+                    GC,
+                    Size=STB_SZ,
+                    PadSize=STB_PAD,
+                    LineWidth=STB_LW,
+                    LineColor=STB_LC,
+                    Family=wx.FONTFAMILY_DEFAULT,
+                    Weight=wx.BOLD,
+                    BackgroundColor='White',
+                )
                 self.__STB_center__(STB)
                 STB.Name = rid
                 STB.HitFill = True
@@ -612,16 +760,32 @@ if HAVE_WX:
                 radius = None
                 if len(R.reagents) == 1:
                     radius = 2
-                    cxy = [(0,radius)]
+                    cxy = [(0, radius)]
                 elif len(R.reagents) == 2:
                     radius = 2
-                    cxy = circlePoints(totalPoints=len(R.reagents), startAngle=0, arc=360, circleradius=radius, centerxy=GC, direction='forward', evenDistribution=True)
+                    cxy = circlePoints(
+                        totalPoints=len(R.reagents),
+                        startAngle=0,
+                        arc=360,
+                        circleradius=radius,
+                        centerxy=GC,
+                        direction='forward',
+                        evenDistribution=True,
+                    )
                 else:
                     if len(R.reagents) < 12:
                         radius = 3
                     else:
                         radius = 10
-                    cxy = circlePoints(totalPoints=len(R.reagents), startAngle=270, arc=360, circleradius=radius, centerxy=GC, direction='forward', evenDistribution=True)
+                    cxy = circlePoints(
+                        totalPoints=len(R.reagents),
+                        startAngle=270,
+                        arc=360,
+                        circleradius=radius,
+                        centerxy=GC,
+                        direction='forward',
+                        evenDistribution=True,
+                    )
 
                 scntr = 0
                 rcntr = 0
@@ -634,7 +798,16 @@ if HAVE_WX:
                         cf = '{%.1f} ' % abs(subs[s].coefficient)
                     else:
                         cf = ''
-                    STB = FloatCanvas.ScaledTextBox('%s%s' % (cf,subs[s].species_ref), cxy[rcntr], Size=STB_SZ, PadSize=STB_PAD, LineWidth=STB_LW, LineColor=STB_LC, Family=wx.SWISS, BackgroundColor='Green')
+                    STB = FloatCanvas.ScaledTextBox(
+                        '%s%s' % (cf, subs[s].species_ref),
+                        cxy[rcntr],
+                        Size=STB_SZ,
+                        PadSize=STB_PAD,
+                        LineWidth=STB_LW,
+                        LineColor=STB_LC,
+                        Family=wx.SWISS,
+                        BackgroundColor='Green',
+                    )
                     STB.Name = subs[s].species_ref
                     self.__STB_center__(STB)
                     STB.HitFill = True
@@ -652,7 +825,16 @@ if HAVE_WX:
                         cf = '{%.1f} ' % abs(prods[p].coefficient)
                     else:
                         cf = ''
-                    STB = FloatCanvas.ScaledTextBox('%s%s' % (cf, prods[p].species_ref), cxy[rcntr], Size=STB_SZ, PadSize=STB_PAD, LineWidth=STB_LW, LineColor=STB_LC, Family=wx.SWISS, BackgroundColor='Yellow')
+                    STB = FloatCanvas.ScaledTextBox(
+                        '%s%s' % (cf, prods[p].species_ref),
+                        cxy[rcntr],
+                        Size=STB_SZ,
+                        PadSize=STB_PAD,
+                        LineWidth=STB_LW,
+                        LineColor=STB_LC,
+                        Family=wx.SWISS,
+                        BackgroundColor='Yellow',
+                    )
                     STB.Name = prods[p].species_ref
                     self.__STB_center__(STB)
                     STB.HitFill = True
@@ -660,7 +842,7 @@ if HAVE_WX:
                     FC_OBJ.append(STB)
                     pcntr += 1
                     rcntr += 1
-                self.RGdict.update({rid : {'obj' : FC_OBJ}})
+                self.RGdict.update({rid: {'obj': FC_OBJ}})
                 ##  print 'Drawing from scratch'
             else:
                 ##  print 'Using cached graph'
@@ -673,21 +855,27 @@ if HAVE_WX:
 
         def __STB_center__(self, stb):
             box = stb.GetBoxRect()
-            stb.SetPoint( ( box[0][0] - abs(box[1][0])/2.0, box[0][1] - abs(box[1][1])/2.0) )
+            stb.SetPoint(
+                (box[0][0] - abs(box[1][0]) / 2.0, box[0][1] - abs(box[1][1]) / 2.0)
+            )
             return stb.GetBoxRect()
 
         def UpdateSpeciesGraph(self, sid):
-            #print sid, self.Smap[sid]
+            # print sid, self.Smap[sid]
             STB_LW = 2
             STB_PAD = 0.15
             STB_SZ = 0.25
             STB_LC = 'Black'
-            GC = (0,0)
+            GC = (0, 0)
             radius = None
 
             rList = self.Smap[sid]
             if self.OnlyActiveReactions:
-                rList = [j for j in self.Smap[sid] if round(abs(self._cmod_.getReaction(j).getValue()),6) != 0.0]
+                rList = [
+                    j
+                    for j in self.Smap[sid]
+                    if round(abs(self._cmod_.getReaction(j).getValue()), 6) != 0.0
+                ]
 
             self.FCanvas_met.ClearAll()
             FC_OBJ = []
@@ -699,10 +887,18 @@ if HAVE_WX:
                     cxz = GC
                 elif len(rList) == 1:
                     radius = 2
-                    cxy = [(0,radius)]
+                    cxy = [(0, radius)]
                 elif len(rList) == 2:
                     radius = 2
-                    cxy = circlePoints(totalPoints=len(rList), startAngle=0, arc=360, circleradius=radius, centerxy=GC, direction='forward', evenDistribution=True)
+                    cxy = circlePoints(
+                        totalPoints=len(rList),
+                        startAngle=0,
+                        arc=360,
+                        circleradius=radius,
+                        centerxy=GC,
+                        direction='forward',
+                        evenDistribution=True,
+                    )
                 else:
                     if len(rList) < 12:
                         radius = 3
@@ -712,10 +908,28 @@ if HAVE_WX:
                         radius = 9
                     else:
                         radius = 15
-                    cxy = circlePoints(totalPoints=len(rList), startAngle=270, arc=360, circleradius=radius, centerxy=GC, direction='forward', evenDistribution=True)
+                    cxy = circlePoints(
+                        totalPoints=len(rList),
+                        startAngle=270,
+                        arc=360,
+                        circleradius=radius,
+                        centerxy=GC,
+                        direction='forward',
+                        evenDistribution=True,
+                    )
                     print(cxy)
 
-                STB = FloatCanvas.ScaledTextBox(sid, GC, Size=STB_SZ, PadSize=STB_PAD, LineWidth=STB_LW, LineColor=STB_LC, Family=wx.NORMAL, Weight=wx.BOLD, BackgroundColor='White')
+                STB = FloatCanvas.ScaledTextBox(
+                    sid,
+                    GC,
+                    Size=STB_SZ,
+                    PadSize=STB_PAD,
+                    LineWidth=STB_LW,
+                    LineColor=STB_LC,
+                    Family=wx.NORMAL,
+                    Weight=wx.BOLD,
+                    BackgroundColor='White',
+                )
                 self.__STB_center__(STB)
                 STB.Name = sid
                 STB.HitFill = True
@@ -725,14 +939,23 @@ if HAVE_WX:
                 rcntr = 0
                 for R in range(len(rList)):
                     cf = ''
-                    STB = FloatCanvas.ScaledTextBox('%s%s' % (cf, rList[R]), cxy[R], Size=STB_SZ, PadSize=STB_PAD, LineWidth=STB_LW, LineColor=STB_LC, Family=wx.SWISS, BackgroundColor='Yellow')
+                    STB = FloatCanvas.ScaledTextBox(
+                        '%s%s' % (cf, rList[R]),
+                        cxy[R],
+                        Size=STB_SZ,
+                        PadSize=STB_PAD,
+                        LineWidth=STB_LW,
+                        LineColor=STB_LC,
+                        Family=wx.SWISS,
+                        BackgroundColor='Yellow',
+                    )
                     STB.Name = self.Smap[sid][R]
                     self.__STB_center__(STB)
                     STB.HitFill = True
                     STB.HitLineWidth = 5
                     FC_OBJ.append(STB)
                     rcntr += 1
-                self.SGdict.update({sid : {'obj' : FC_OBJ}})
+                self.SGdict.update({sid: {'obj': FC_OBJ}})
                 ##  print 'Drawing from scratch'
             else:
                 ##  print 'Using cached graph'
@@ -745,9 +968,9 @@ if HAVE_WX:
 
         def CreateMaps(self):
             for S in self._cmod_.species:
-                self.Smap.update({S.getId() : S.isReagentOf()})
+                self.Smap.update({S.getId(): S.isReagentOf()})
             for R in self._cmod_.reactions:
-                self.Rmap.update({R.getId() : R.getSpeciesIds()})
+                self.Rmap.update({R.getId(): R.getSpeciesIds()})
             self.GPRmap = self._cmod_.getAllGeneProteinAssociations()
             self.PRGmap = self._cmod_.getAllProteinGeneAssociations()
 
@@ -787,18 +1010,28 @@ if HAVE_WX:
                     ##  print reactions[r].getId()
                     if self.rlabels[c] == 'LB':
                         ##  grid.SetColFormatFloat(c, 10, 3)
-                        grid.SetCellValue(r, c, '%s' % self._cmod_.getReactionLowerBound(reactions[r].getId()))
+                        grid.SetCellValue(
+                            r,
+                            c,
+                            '%s'
+                            % self._cmod_.getReactionLowerBound(reactions[r].getId()),
+                        )
                     elif self.rlabels[c] == 'UB':
                         ##  grid.SetColFormatFloat(c, 10, 3)
-                        grid.SetCellValue(r, c, '%s' % self._cmod_.getReactionUpperBound(reactions[r].getId()))
+                        grid.SetCellValue(
+                            r,
+                            c,
+                            '%s'
+                            % self._cmod_.getReactionUpperBound(reactions[r].getId()),
+                        )
                     elif self.rlabels[c] == 'd':
                         grid.SetCellValue(r, c, '%s' % '   ')
                     elif self.rlabels[c] == 'Balanced':
-                        grid.SetReadOnly(r,c,True)
+                        grid.SetReadOnly(r, c, True)
                         txt = reactions[r].is_balanced
-                        grid.SetCellValue(r, c, '  %s' % str(txt) )
+                        grid.SetCellValue(r, c, '  %s' % str(txt))
                         if txt:
-                            grid.SetCellBackgroundColour(r, c, wx.Colour(255,193,96))
+                            grid.SetCellBackgroundColour(r, c, wx.Colour(255, 193, 96))
                     elif self.rlabels[c] == 'Flux':
                         Rval = reactions[r].getValue()
                         if Rval != None:
@@ -806,20 +1039,20 @@ if HAVE_WX:
                         else:
                             Rval = 'None'
                         grid.SetCellValue(r, c, '  %s' % Rval)
-                        grid.SetReadOnly(r,c,True)
+                        grid.SetReadOnly(r, c, True)
                         # colour by sign
                         if Rval == None or Rval == '' or Rval == 'None' or Rval == 0.0:
-                            grid.SetCellBackgroundColour(r,c,wx.Colour(255,255,255))
+                            grid.SetCellBackgroundColour(r, c, wx.Colour(255, 255, 255))
                         elif Rval < 0.0:
-                            grid.SetCellBackgroundColour(r,c,wx.Colour(255,204,204))
+                            grid.SetCellBackgroundColour(r, c, wx.Colour(255, 204, 204))
                         elif Rval > 0.0:
-                            grid.SetCellBackgroundColour(r,c,wx.Colour(153,255,153))
+                            grid.SetCellBackgroundColour(r, c, wx.Colour(153, 255, 153))
                         # boundary detection
                     elif self.rlabels[c] == 'Exch':
-                        grid.SetReadOnly(r,c,True)
+                        grid.SetReadOnly(r, c, True)
                         grid.SetCellValue(r, c, str(reactions[r].is_exchange))
                     elif self.rlabels[c] == 'RCost':
-                        grid.SetReadOnly(r,c,True)
+                        grid.SetReadOnly(r, c, True)
                         if not self.__ScaledReducedCost:
                             if reactions[r].reduced_cost != None:
                                 rcval = '%2.3e' % reactions[r].reduced_cost
@@ -827,16 +1060,16 @@ if HAVE_WX:
                                 rcval = 'None'
                             grid.SetCellValue(r, c, rcval)
                     elif self.rlabels[c] == 'Reaction':
-                        grid.SetCellBackgroundColour(r,c,wx.Colour(198,226,255))
+                        grid.SetCellBackgroundColour(r, c, wx.Colour(198, 226, 255))
                         grid.SetCellValue(r, c, str(reactions[r].getId()))
-                        grid.SetReadOnly(r,c,True)
+                        grid.SetReadOnly(r, c, True)
                     elif self.rlabels[c] == 'Name':
                         ##  grid.SetCellBackgroundColour(r,c,wx.Colour(255,255,153))
                         grid.SetCellValue(r, c, str(reactions[r].getName()))
                     else:
                         grid.SetCellValue(r, c, '')
                     if reactions[r].getId() in fluxObjs:
-                        grid.SetCellBackgroundColour(r,c,wx.Colour(255,255,153))
+                        grid.SetCellBackgroundColour(r, c, wx.Colour(255, 255, 153))
             for c in range(self.RGridCol):
                 if self.rlabels[c] not in ('Name'):
                     grid.AutoSizeColumn(c, True)
@@ -856,10 +1089,10 @@ if HAVE_WX:
 
             for r in range(len(reactions)):
                 for c in range(self.RGridCol):
-    ##                 if self.rlabels[c] == 'LB':
-    ##                     grid.SetCellValue(r, c, '%s' % self._cmod_.getFluxBoundByReactionID(reactions[r].getId(), 'lower').getValue())
-    ##                 elif self.rlabels[c] == 'UB':
-    ##                     grid.SetCellValue(r, c, '%s' % self._cmod_.getFluxBoundByReactionID(reactions[r].getId(), 'upper').getValue())
+                    ##                 if self.rlabels[c] == 'LB':
+                    ##                     grid.SetCellValue(r, c, '%s' % self._cmod_.getFluxBoundByReactionID(reactions[r].getId(), 'lower').getValue())
+                    ##                 elif self.rlabels[c] == 'UB':
+                    ##                     grid.SetCellValue(r, c, '%s' % self._cmod_.getFluxBoundByReactionID(reactions[r].getId(), 'upper').getValue())
                     if self.rlabels[c] == 'Flux':
                         Rval = reactions[r].getValue()
                         try:
@@ -873,22 +1106,28 @@ if HAVE_WX:
                         grid.SetCellValue(r, c, '  %s' % Rval)
                         # colour delta
                         D_col_idx = self.rlabels.index('d')
-                        if Rval in self.NOVAL or Rval_curr in self.NOVAL or abs(Rval - Rval_curr) <= self.ZERO_TOL:
+                        if (
+                            Rval in self.NOVAL
+                            or Rval_curr in self.NOVAL
+                            or abs(Rval - Rval_curr) <= self.ZERO_TOL
+                        ):
                             grid.SetCellValue(r, D_col_idx, '  ')
-                            grid.SetCellTextColour(r, D_col_idx, wx.Colour(255,255,255))
-                        elif abs(round(Rval,10)) < abs(round(Rval_curr,10)):
+                            grid.SetCellTextColour(
+                                r, D_col_idx, wx.Colour(255, 255, 255)
+                            )
+                        elif abs(round(Rval, 10)) < abs(round(Rval_curr, 10)):
                             grid.SetCellValue(r, D_col_idx, ' \/ ')
-                            grid.SetCellTextColour(r, D_col_idx, wx.Colour(255,0,0))
-                        elif abs(round(Rval,10)) > abs(round(Rval_curr,10)):
+                            grid.SetCellTextColour(r, D_col_idx, wx.Colour(255, 0, 0))
+                        elif abs(round(Rval, 10)) > abs(round(Rval_curr, 10)):
                             grid.SetCellValue(r, D_col_idx, ' /\ ')
-                            grid.SetCellTextColour(r, D_col_idx, wx.Colour(0,204,0))
+                            grid.SetCellTextColour(r, D_col_idx, wx.Colour(0, 204, 0))
                         # colour by sign J
                         if Rval in self.NOVAL or Rval == 0.0:
-                            grid.SetCellBackgroundColour(r,c,wx.Colour(255,255,255))
+                            grid.SetCellBackgroundColour(r, c, wx.Colour(255, 255, 255))
                         elif Rval < 0.0:
-                            grid.SetCellBackgroundColour(r,c,wx.Colour(255,204,204))
+                            grid.SetCellBackgroundColour(r, c, wx.Colour(255, 204, 204))
                         elif Rval > 0.0:
-                            grid.SetCellBackgroundColour(r,c,wx.Colour(153,255,153))
+                            grid.SetCellBackgroundColour(r, c, wx.Colour(153, 255, 153))
 
                         # boundary detection
                         if self.__BoundaryDetection:
@@ -896,16 +1135,32 @@ if HAVE_WX:
                             UB = self._cmod_.getReactionUpperBound(reactions[r].getId())
                             try:
                                 if abs(Rval - round(LB, 10)) <= self.ZERO_TOL:
-                                    grid.SetCellBackgroundColour(r,self.rlabels.index('LB'), wx.Colour(255,204,204))
+                                    grid.SetCellBackgroundColour(
+                                        r,
+                                        self.rlabels.index('LB'),
+                                        wx.Colour(255, 204, 204),
+                                    )
                                 else:
-                                    grid.SetCellBackgroundColour(r,self.rlabels.index('LB'), wx.Colour(255,255,255))
+                                    grid.SetCellBackgroundColour(
+                                        r,
+                                        self.rlabels.index('LB'),
+                                        wx.Colour(255, 255, 255),
+                                    )
                             except:
                                 print('INFO: LowerBound detector failed')
                             try:
                                 if abs(Rval - round(UB, 10)) <= self.ZERO_TOL:
-                                    grid.SetCellBackgroundColour(r,self.rlabels.index('UB'), wx.Colour(153,255,153))
+                                    grid.SetCellBackgroundColour(
+                                        r,
+                                        self.rlabels.index('UB'),
+                                        wx.Colour(153, 255, 153),
+                                    )
                                 else:
-                                    grid.SetCellBackgroundColour(r,self.rlabels.index('UB'), wx.Colour(255,255,255))
+                                    grid.SetCellBackgroundColour(
+                                        r,
+                                        self.rlabels.index('UB'),
+                                        wx.Colour(255, 255, 255),
+                                    )
                             except:
                                 print('INFO: UpperBound detector failed')
                     elif self.rlabels[c] == 'RCost':
@@ -919,35 +1174,46 @@ if HAVE_WX:
                         bval = reactions[r].is_balanced
                         grid.SetCellValue(r, c, str(bval))
                         if bval != None and not bval:
-                            grid.SetCellBackgroundColour(r, c, wx.Colour(255,193,96))
+                            grid.SetCellBackgroundColour(r, c, wx.Colour(255, 193, 96))
 
                     if reactions[r].getId() in fluxObjs:
-                        grid.SetCellBackgroundColour(r,c,wx.Colour(255,255,153))
+                        grid.SetCellBackgroundColour(r, c, wx.Colour(255, 255, 153))
             grid.ForceRefresh()
 
         ##  def EvtGridCellSelect(self, event):
-            ##  row = event.GetRow()
-            ##  col = event.GetCol()
-            ##  self.cell_selected_value = self.RGrid.GetCellValue(row, col)
-            ##  print 'selected value', self.cell_selected_value
-            ##  event.Skip()
+        ##  row = event.GetRow()
+        ##  col = event.GetCol()
+        ##  self.cell_selected_value = self.RGrid.GetCellValue(row, col)
+        ##  print 'selected value', self.cell_selected_value
+        ##  event.Skip()
 
         def writeCmd(self, txt):
-            print('cmd: '+txt)
-            self.PyBox.write(txt+'\n')
+            print('cmd: ' + txt)
+            self.PyBox.write(txt + '\n')
 
-
-        def MENUOnAbout(self,e):
+        def MENUOnAbout(self, e):
             # Create a message dialog box
-            dlg = wx.MessageDialog(self, " PySCes-CBM model editor\n(C) Brett G. Olivier, Amsterdam 2012", "About PySCes-CBM model editor", wx.OK)
-            dlg.ShowModal() # Shows it
-            dlg.Destroy() # finally destroy it when finished.
+            dlg = wx.MessageDialog(
+                self,
+                " PySCes-CBM model editor\n(C) Brett G. Olivier, Amsterdam 2012",
+                "About PySCes-CBM model editor",
+                wx.OK,
+            )
+            dlg.ShowModal()  # Shows it
+            dlg.Destroy()  # finally destroy it when finished.
 
-        def MENUOnExit(self,e):
+        def MENUOnExit(self, e):
             self.Close(True)  # Close the frame.
 
-        def MENUExport(self,e):
-            dlg = wx.FileDialog(self, "Enter filename", self.OUT_dir, "", "Python files (*.py)|*.py|All files (*.*)|*.*", wx.FD_SAVE)
+        def MENUExport(self, e):
+            dlg = wx.FileDialog(
+                self,
+                "Enter filename",
+                self.OUT_dir,
+                "",
+                "Python files (*.py)|*.py|All files (*.*)|*.*",
+                wx.FD_SAVE,
+            )
             if dlg.ShowModal() == wx.ID_OK:
                 OUT_file = dlg.GetFilename()
                 self.OUT_dir = dlg.GetDirectory()
@@ -959,30 +1225,46 @@ if HAVE_WX:
                 F.close()
             dlg.Destroy()
 
-        def MENUOnSave(self,e):
+        def MENUOnSave(self, e):
             """ Open a file"""
-            dlg = wx.FileDialog(self, "Enter filename", self.OUT_dir, "", "SBML files (*.xml)|*.xml|All files (*.*)|*.*", wx.FD_SAVE)
+            dlg = wx.FileDialog(
+                self,
+                "Enter filename",
+                self.OUT_dir,
+                "",
+                "SBML files (*.xml)|*.xml|All files (*.*)|*.*",
+                wx.FD_SAVE,
+            )
             if dlg.ShowModal() == wx.ID_OK:
                 self.OUT_file = dlg.GetFilename()
                 self.OUT_dir = dlg.GetDirectory()
                 if self.OUT_file[-4:] != '.xml':
                     self.OUT_file += '.xml'
                 self._cmod_.inputfile_id = self.OUT_file
-                self._cbm_.CBWrite.writeSBML2FBA(self._cmod_, self.OUT_file, directory=self.OUT_dir, sbml_level_version=None)
+                self._cbm_.CBWrite.writeSBML2FBA(
+                    self._cmod_,
+                    self.OUT_file,
+                    directory=self.OUT_dir,
+                    sbml_level_version=None,
+                )
             dlg.Destroy()
 
         def MENUAnalyseBalances(self, e):
             ''' Check the reaction balances'''
             wait = wx.BusyCursor()
             rids = self._cmod_.getReactionIds()
-            self.ReactionBalanceInfo = self._cbm_.CBTools.checkReactionBalanceElemental(self._cmod_, Rid=rids)
+            self.ReactionBalanceInfo = self._cbm_.CBTools.checkReactionBalanceElemental(
+                self._cmod_, Rid=rids
+            )
             for r in range(len(self._cmod_.reactions)):
                 for c in range(self.RGridCol):
                     if self.rlabels[c] == 'Balanced':
                         bval = self._cmod_.reactions[r].is_balanced
                         self.RGrid.SetCellValue(r, c, str(bval))
                         if bval != None and not bval:
-                            self.RGrid.SetCellBackgroundColour(r, c, wx.Colour(255,193,96))
+                            self.RGrid.SetCellBackgroundColour(
+                                r, c, wx.Colour(255, 193, 96)
+                            )
             del wait
             wx.MessageBox('Balance Check Complete', 'Info', wx.OK | wx.ICON_INFORMATION)
 
@@ -1005,7 +1287,7 @@ if HAVE_WX:
 
         def updateInfoFromReactionName(self, cval):
             self.UpdateReactionInfo(cval)
-            #self.UpdateSpeciesInfoForReaction(cval)
+            # self.UpdateSpeciesInfoForReaction(cval)
             self.UpdateReactionGraph(cval)
             self.__ActiveReaction = cval
 
@@ -1013,7 +1295,7 @@ if HAVE_WX:
             row = event.GetRow()
             col = event.GetCol()
             clbl = self.RGrid.GetColLabelValue(col)
-            #All cells have a value, regardless of the editor.
+            # All cells have a value, regardless of the editor.
             print('Changed cell: ({}, {})'.format(row, col))
             rid = self.RGrid.GetCellValue(row, 0)
             cell_val = self.RGrid.GetCellValue(row, col)
@@ -1029,22 +1311,34 @@ if HAVE_WX:
                     self._cmod_.setReactionLowerBound(rid, cell_val)
                     print('LB new', self._cmod_.getReactionLowerBound(rid))
                     if cell_val == 'inf' or cell_val == '-inf':
-                        self.writeCmd("cmod.setReactionLowerBound('%s', '%s')" % (rid, cell_val))
+                        self.writeCmd(
+                            "cmod.setReactionLowerBound('%s', '%s')" % (rid, cell_val)
+                        )
                     else:
-                        self.writeCmd("cmod.setReactionLowerBound('%s', %s)" % (rid, cell_val))
+                        self.writeCmd(
+                            "cmod.setReactionLowerBound('%s', %s)" % (rid, cell_val)
+                        )
                 else:
-                    self.RGrid.SetCellValue(row, col, str(self._cmod_.getReactionLowerBound(rid)))
+                    self.RGrid.SetCellValue(
+                        row, col, str(self._cmod_.getReactionLowerBound(rid))
+                    )
             elif clbl == 'UB':
                 if self.chkFloat(cell_val):
                     print('\nUB old', self._cmod_.getReactionUpperBound(rid))
                     self._cmod_.setReactionUpperBound(rid, cell_val)
                     print('UB new', self._cmod_.getReactionUpperBound(rid))
                     if cell_val == 'inf' or cell_val == '-inf':
-                        self.writeCmd("cmod.setReactionUpperBound('%s', '%s')" % (rid, cell_val))
+                        self.writeCmd(
+                            "cmod.setReactionUpperBound('%s', '%s')" % (rid, cell_val)
+                        )
                     else:
-                        self.writeCmd("cmod.setReactionUpperBound('%s', %s)" % (rid, cell_val))
+                        self.writeCmd(
+                            "cmod.setReactionUpperBound('%s', %s)" % (rid, cell_val)
+                        )
                 else:
-                    self.RGrid.SetCellValue(row, col, str(self._cmod_.getReactionUpperBound(rid)))
+                    self.RGrid.SetCellValue(
+                        row, col, str(self._cmod_.getReactionUpperBound(rid))
+                    )
             elif clbl == 'Reaction':
                 pass
             elif clbl == 'Name':
@@ -1054,41 +1348,45 @@ if HAVE_WX:
                 self.writeCmd("cmod.getReaction('%s').setName('%s')" % (rid, cell_val))
             event.Skip()
 
-        #def EVT_BUT_EnableEdit(self,event):
-            #print 'EVT_BUT_EnableEdit'
-            #for tb in self.TEXTBOXES_Redit:
-                #tb.Enable()
-            #event.Skip()
+        # def EVT_BUT_EnableEdit(self,event):
+        # print 'EVT_BUT_EnableEdit'
+        # for tb in self.TEXTBOXES_Redit:
+        # tb.Enable()
+        # event.Skip()
 
-        def SemSBML_id(self,event):
+        def SemSBML_id(self, event):
             if self.__ActiveReaction != None:
                 R = self._cmod_.getReaction(self.__ActiveReaction)
                 self.SelectGridRow(R.getId())
                 searchString = R.getId()
                 self.CallSemanticSBML(searchString)
             else:
-                self.Sinfbox.SetPage("<html><body>'<h1>Please select a reaction!</h1>'</body></html>")
+                self.Sinfbox.SetPage(
+                    "<html><body>'<h1>Please select a reaction!</h1>'</body></html>"
+                )
             self.NoteB1.ChangeSelection(5)
             event.Skip()
 
-        def SemSBML_name(self,event):
+        def SemSBML_name(self, event):
             if self.__ActiveReaction != None:
                 R = self._cmod_.getReaction(self.__ActiveReaction)
                 self.SelectGridRow(R.getId())
                 searchString = R.getName()
                 self.CallSemanticSBML(searchString)
             else:
-                self.Sinfbox.SetPage("<html><body>'<h1>Please select a reaction!</h1>'</body></html>")
+                self.Sinfbox.SetPage(
+                    "<html><body>'<h1>Please select a reaction!</h1>'</body></html>"
+                )
             self.NoteB1.ChangeSelection(5)
             event.Skip()
 
         def CallSemanticSBML(self, searchString):
             print('MENUAnalyseSemanticSBML')
-            #self.TEXTBOX_Annotate.Enable()
+            # self.TEXTBOX_Annotate.Enable()
             rs = ''
             if HAVE_URLLIB2:
                 wait = wx.BusyCursor()
-                #self.TEXTBOX_Annotate.Clear()
+                # self.TEXTBOX_Annotate.Clear()
 
                 rs = '<h2>SemanticSBML query</h2><br/><h3>%s</h3>' % searchString
                 # semanticSBML REST web services
@@ -1097,47 +1395,56 @@ if HAVE_WX:
                 try:
                     self.SemanticSBMLClient.Connect(site_root)
                     searchString = self.SemanticSBMLClient.URLEncode(searchString)
-                    RESTquery = "/semanticSBML/annotate/search%s?q=%s" % (reply_mode, searchString.strip().replace(' ','+'))
+                    RESTquery = "/semanticSBML/annotate/search%s?q=%s" % (
+                        reply_mode,
+                        searchString.strip().replace(' ', '+'),
+                    )
                     print(RESTquery)
                     data1 = self.SemanticSBMLClient.Get(RESTquery)
                     data1 = self.SemanticSBMLClient.URLDecode(data1)
                     self.SemanticSBMLClient.Close()
                     self.writeCmd('SemanticSBMLClient = cbm.CBNetDB.SemanticSBML()')
                     self.writeCmd('SemanticSBMLClient.Connect(\"%s\")' % (site_root))
-                    self.writeCmd('data1 = SemanticSBMLClient.Get(\"%s\")' % (RESTquery))
+                    self.writeCmd(
+                        'data1 = SemanticSBMLClient.Get(\"%s\")' % (RESTquery)
+                    )
                     self.writeCmd('SemanticSBMLClient.Close()')
                     print(self.SemanticSBMLClient.GetLog())
 
                     item_re = re.compile('<item>.+?</item>')
                     items = re.findall(item_re, data1)
-                    items = [i.replace('<item>','').replace('</item>','').strip() for i in items]
-                    #self.TEXTBOX_Annotate.write('SemanticSBML results for: %s\n\n' % (urllib2.unquote(searchString)))
+                    items = [
+                        i.replace('<item>', '').replace('</item>', '').strip()
+                        for i in items
+                    ]
+                    # self.TEXTBOX_Annotate.write('SemanticSBML results for: %s\n\n' % (urllib2.unquote(searchString)))
                     rs += '<table border="1" cellpadding="5">'
                     for i in items:
-                        #url = self.SemanticSBMLClient.MiriamURN2IdentifiersURL(i)
+                        # url = self.SemanticSBMLClient.MiriamURN2IdentifiersURL(i)
                         url = i
-                        rs += '<tr><td>%s</td><td><a href=%s>%s</a></td></tr>' % (i, url, url)
+                        rs += '<tr><td>%s</td><td><a href=%s>%s</a></td></tr>' % (
+                            i,
+                            url,
+                            url,
+                        )
                         print(i)
-                        #self.TEXTBOX_Annotate.write('%s\n' % i)<a href="/Education/">NCBI Education</a>
+                        # self.TEXTBOX_Annotate.write('%s\n' % i)<a href="/Education/">NCBI Education</a>
                     rs += '</table border="1" cellpadding="5">'
                     del wait
 
-
                 except Exception as ex:
                     rs += '<h1>Error connecting to: %s</h1>' % (site_root)
-                    #self.TEXTBOX_Annotate.WriteText('\n******************************************************\n')
-                    #self.TEXTBOX_Annotate.WriteText('\n* Error connecting to: %s *\n\n' % (site_root))
-                    #self.TEXTBOX_Annotate.WriteText('******************************************************\n\n')
+                    # self.TEXTBOX_Annotate.WriteText('\n******************************************************\n')
+                    # self.TEXTBOX_Annotate.WriteText('\n* Error connecting to: %s *\n\n' % (site_root))
+                    # self.TEXTBOX_Annotate.WriteText('******************************************************\n\n')
                     print(ex)
             elif HAVE_URLLIB2:
-                #self.TEXTBOX_Annotate.WriteText('Please select a reaction!')
+                # self.TEXTBOX_Annotate.WriteText('Please select a reaction!')
                 rs += '<h1>Please select a reaction!</h1>'
             else:
-                #self.TEXTBOX_Annotate.WriteText('HTTPLIB not available')
+                # self.TEXTBOX_Annotate.WriteText('HTTPLIB not available')
                 rs += '<h1>HTTPLIB not available!</h1>'
             self.Sinfbox.SetPage("<html><body>%s</body></html>" % rs)
-
-
 
         def EVT_BUT_optimise(self, event):
             wait = wx.BusyCursor()
@@ -1148,31 +1455,46 @@ if HAVE_WX:
             del wait
             event.Skip()
 
-        def EVT_BUT_minsum(self,event):
+        def EVT_BUT_minsum(self, event):
             wait = wx.BusyCursor()
-            self._cbm_.CBSolver.cplx_MinimizeSumOfAbsFluxes(self._cmod_, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower', optPercentage=100.0, work_dir=None, quiet=False, debug=False, objective_coefficients={}, return_lp_obj=False)
+            self._cbm_.CBSolver.cplx_MinimizeSumOfAbsFluxes(
+                self._cmod_,
+                selected_reactions=None,
+                pre_opt=True,
+                tol=None,
+                objF2constr=True,
+                rhs_sense='lower',
+                optPercentage=100.0,
+                work_dir=None,
+                quiet=False,
+                debug=False,
+                objective_coefficients={},
+                return_lp_obj=False,
+            )
             self.UpdateRGridData()
             self.UpdateModelStatus()
-            self.writeCmd("cbmpy.CBSolver.cplx_MinimizeSumOfAbsFluxes(cmod, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower', optPercentage=100.0, objective_coefficients={}, return_lp_obj=False)")
+            self.writeCmd(
+                "cbmpy.CBSolver.cplx_MinimizeSumOfAbsFluxes(cmod, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower', optPercentage=100.0, objective_coefficients={}, return_lp_obj=False)"
+            )
             del wait
             event.Skip()
             ##  cbmpy.CBSolver.cplx_MinimizeSumOfAbsFluxes
 
-        def PrintCoords(self,event):
+        def PrintCoords(self, event):
             print("coords are: {}".format(event.Coords), end=" ")
             print("pixel coords are: {}\n".format(event.GetPosition()), end=" ")
 
-        def EVT_FRAME_resize(self,event):
-            #print "Pixel coords are: %s"%(event.GetPosition(),)
+        def EVT_FRAME_resize(self, event):
+            # print "Pixel coords are: %s"%(event.GetPosition(),)
             print('Panel size', self.MainPanel.GetSize())
-            #print 'Frame size', self.GetSize()
-            #print 'Panel minsize', self.MainPanel.GetMinSize()
-            #print 'Frame minsize', self.GetMinSize()
-            #print 'Panel virtualsize', self.MainPanel.GetVirtualSize()
-            #print 'Frame virtualsize', self.GetVirtualSize()
-            #print 'mainSizer minsize', self.mainSizer.GetMinSize()
+            # print 'Frame size', self.GetSize()
+            # print 'Panel minsize', self.MainPanel.GetMinSize()
+            # print 'Frame minsize', self.GetMinSize()
+            # print 'Panel virtualsize', self.MainPanel.GetVirtualSize()
+            # print 'Frame virtualsize', self.GetVirtualSize()
+            # print 'mainSizer minsize', self.mainSizer.GetMinSize()
             self.FRAME_resize()
-            #print '\n'
+            # print '\n'
 
         def FRAME_resize(self):
             # get the frame size and adjust the main panel to it
@@ -1180,17 +1502,22 @@ if HAVE_WX:
             self.PanelSize = self.GetVirtualSize()
             self.MainPanel.SetSize(self.GetVirtualSize())
 
-            #LPsize = wx.Size(self.PanelSize[0]*self.LPwidth, self.PanelSize[1]*self.LPheight)
-            #RPsize = wx.Size(self.PanelSize[0]*self.RPwidth, self.PanelSize[1]*self.RPheight)
-            #LPsize = wx.Size(self.PanelSize[0]*self.LPwidth, self.RGridInitSize[1])
-            LPsize = wx.Size(self.PanelSize[0]*self.LPwidth, self.PanelSize[1]-self.RGridGap)
-            RPsize = wx.Size(self.PanelSize[0]*self.RPwidth, self.PanelSize[1])
+            # LPsize = wx.Size(self.PanelSize[0]*self.LPwidth, self.PanelSize[1]*self.LPheight)
+            # RPsize = wx.Size(self.PanelSize[0]*self.RPwidth, self.PanelSize[1]*self.RPheight)
+            # LPsize = wx.Size(self.PanelSize[0]*self.LPwidth, self.RGridInitSize[1])
+            LPsize = wx.Size(
+                self.PanelSize[0] * self.LPwidth, self.PanelSize[1] - self.RGridGap
+            )
+            RPsize = wx.Size(self.PanelSize[0] * self.RPwidth, self.PanelSize[1])
             # using the new panels to resize the components
             # self.StatusPanel.SetMinSize(wx.Size(LPsize[0],self.StatusPanel.GetVirtualSize()[1]))
             self.RGrid_scrollwindow.SetSize(LPsize)
             self.RGrid.SetSize(LPsize)
             self.NoteB1.SetSize(RPsize)
-            RinfSize = wx.Size(self.PanelSize[0]*self.RPwidth-8, self.PanelSize[1]*self.RPheight-25)
+            RinfSize = wx.Size(
+                self.PanelSize[0] * self.RPwidth - 8,
+                self.PanelSize[1] * self.RPheight - 25,
+            )
 
             self.PyBox.SetSize(RinfSize)
             self.Rinfbox.SetSize(RinfSize)
@@ -1198,21 +1525,19 @@ if HAVE_WX:
             self.MetCanvas.SetSize(RinfSize)
             self.GenCanvas.SetSize(RinfSize)
             self.RightPanel.SetSize(RPsize)
-            #self.LeftPanel.Layout()
+            # self.LeftPanel.Layout()
             self.MainPanel.CenterOnParent()
 
-
-        def EVT_onClick(self,event):
+        def EVT_onClick(self, event):
             print("Pixel coords are: {}".format(event.GetPosition()), end=" ")
-            #print 'Panel size', self.MainPanel.GetSize()
-            #print 'Frame size', self.GetSize()
-            #print 'Panel minsize', self.MainPanel.GetMinSize()
-            #print 'Frame minsize', self.GetMinSize()
-            #print 'Panel virtualsize', self.MainPanel.GetVirtualSize()
-            #print 'Frame virtualsize', self.GetVirtualSize()
-            #print '\nmainSizer minsize', self.mainSizer.GetMinSize()
-            #print '\n'
-
+            # print 'Panel size', self.MainPanel.GetSize()
+            # print 'Frame size', self.GetSize()
+            # print 'Panel minsize', self.MainPanel.GetMinSize()
+            # print 'Frame minsize', self.GetMinSize()
+            # print 'Panel virtualsize', self.MainPanel.GetVirtualSize()
+            # print 'Frame virtualsize', self.GetVirtualSize()
+            # print '\nmainSizer minsize', self.mainSizer.GetMinSize()
+            # print '\n'
 
         def __C_BUFF_ADD__(self, obj):
             self.__C_BUFF__.append(obj)
@@ -1220,7 +1545,6 @@ if HAVE_WX:
                 return self.__C_BUFF__.pop(0)
             else:
                 return None
-
 
         def HIT_STB_onClick(self, Object):
             print('')
@@ -1234,20 +1558,18 @@ if HAVE_WX:
                 self.RGrid.SelectRow(self.RGridRow.index(Object.Name))
                 self.RGrid.MakeCellVisible(self.RGridRow.index(Object.Name), 0)
 
-
-
             ##  Object.SetLineColor('Green')
             ##  self.FCanvas_met.Draw(True)
             ##  self.FCanvas_met.ZoomToBB()
             ##  wx.CallAfter(self.FCanvas_met.ZoomToBB)
             ##  wx.CallAfter(self.FCanvas_met.Draw)
 
-
     class HtmlWindowMod(wx.html.HtmlWindow):
         """
         Overrides 'OnLinkClicked' to open links in external browser
 
         """
+
         def __init__(self, *args, **kwargs):
             wx.html.HtmlWindow.__init__(*args, **kwargs)
             if "gtk2" in wx.PlatformInfo:
@@ -1256,7 +1578,15 @@ if HAVE_WX:
         def OnLinkClicked(self, link):
             wx.LaunchDefaultBrowser(link.GetHref())
 
-    def circlePoints(totalPoints=4, startAngle=0, arc=360, circleradius=1, centerxy=(0,0), direction='forward', evenDistribution=True):
+    def circlePoints(
+        totalPoints=4,
+        startAngle=0,
+        arc=360,
+        circleradius=1,
+        centerxy=(0, 0),
+        direction='forward',
+        evenDistribution=True,
+    ):
         """
         Returns a list of points evenly spread around a circle:
 
@@ -1283,19 +1613,19 @@ if HAVE_WX:
         ##  centery = 0
 
         roundfact = 10
-        mpi = math.pi/180.0
+        mpi = math.pi / 180.0
         startRadians = startAngle * mpi
-        incrementAngle = float(arc)/float(totalPoints)
+        incrementAngle = float(arc) / float(totalPoints)
         incrementRadians = incrementAngle * mpi
 
         if arc < 360:
             # this spreads the points out evenly across the arc
             if evenDistribution:
-                incrementAngle = float(arc)/(float(totalPoints-1))
+                incrementAngle = float(arc) / (float(totalPoints - 1))
                 incrementRadians = incrementAngle * mpi
             else:
-                incrementAngle = float(arc)/float(totalPoints)
-                incrementRadians = incrementAngle * mpi;
+                incrementAngle = float(arc) / float(totalPoints)
+                incrementRadians = incrementAngle * mpi
 
         cxy = []
         for p in range(totalPoints):
@@ -1305,10 +1635,9 @@ if HAVE_WX:
                 startRadians += incrementRadians
             else:
                 startRadians -= incrementRadians
-            cxy.append((round(xp,roundfact), round(yp, roundfact)))
+            cxy.append((round(xp, roundfact), round(yp, roundfact)))
             ##  print (round(xp,roundfact), round(yp, roundfact))
         return cxy
-
 
     '''
 
@@ -1321,11 +1650,9 @@ if HAVE_WX:
 
     '''
 
-
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def getSmallUpArrowData():
-        return \
-    '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+        return '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
     \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
     \x00\x00<IDAT8\x8dcddbf\xa0\x040Q\xa4{h\x18\xf0\xff\xdf\xdf\xffd\x1b\x00\xd3\
     \x8c\xcf\x10\x9c\x06\xa0k\xc2e\x08m\xc2\x00\x97m\xd8\xc41\x0c \x14h\xe8\xf2\
@@ -1339,10 +1666,8 @@ if HAVE_WX:
         stream = csio.StringIO(getSmallUpArrowData())
         return ImageFromStream(stream)
 
-
     def getSmallDnArrowData():
-        return \
-    "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+        return "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
     \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
     \x00\x00HIDAT8\x8dcddbf\xa0\x040Q\xa4{\xd4\x00\x06\x06\x06\x06\x06\x16t\x81\
     \xff\xff\xfe\xfe'\xa4\x89\x91\x89\x99\x11\xa7\x0b\x90%\ti\xc6j\x00>C\xb0\x89\
@@ -1355,21 +1680,33 @@ if HAVE_WX:
     def getSmallDnArrowImage():
         stream = csio.StringIO(getSmallDnArrowData())
         return ImageFromStream(stream)
-    #----------------------------------------------------------------------
+
+    # ----------------------------------------------------------------------
 
     class myListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
-        def __init__(self, parent, ID=-1, pos=wx.DefaultPosition,
-                     size=wx.DefaultSize, style=0):
+        def __init__(
+            self, parent, ID=-1, pos=wx.DefaultPosition, size=wx.DefaultSize, style=0
+        ):
             wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
             listmix.ListCtrlAutoWidthMixin.__init__(self)
 
-    class TextCtrlAutoComplete (wx.TextCtrl, listmix.ColumnSorterMixin ):
-
-        def __init__ ( self, parent, colNames=None, choices = None,
-                       multiChoices=None, showHead=True, dropDownClick=True,
-                       colFetch=-1, colSearch=0, hideOnNoMatch=True,
-                       selectCallback=None, entryCallback=None, matchFunction=None,
-                       **therest) :
+    class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
+        def __init__(
+            self,
+            parent,
+            colNames=None,
+            choices=None,
+            multiChoices=None,
+            showHead=True,
+            dropDownClick=True,
+            colFetch=-1,
+            colSearch=0,
+            hideOnNoMatch=True,
+            selectCallback=None,
+            entryCallback=None,
+            matchFunction=None,
+            **therest,
+        ):
             '''
             Constructor works just like wx.TextCtrl except you can pass in a
             list of choices.  You can also change the choice list at any time
@@ -1377,13 +1714,13 @@ if HAVE_WX:
             '''
 
             if 'style' in therest:
-                therest['style']=wx.TE_PROCESS_ENTER | therest['style']
+                therest['style'] = wx.TE_PROCESS_ENTER | therest['style']
             else:
-                therest['style']=wx.TE_PROCESS_ENTER
+                therest['style'] = wx.TE_PROCESS_ENTER
 
-            wx.TextCtrl.__init__(self, parent, **therest )
+            wx.TextCtrl.__init__(self, parent, **therest)
 
-            #Some variables
+            # Some variables
             self._dropDownClick = dropDownClick
             self._colNames = colNames
             self._multiChoices = multiChoices
@@ -1395,67 +1732,75 @@ if HAVE_WX:
             self._entryCallback = entryCallback
             self._matchFunction = matchFunction
 
-            self._screenheight = wx.SystemSettings.GetMetric( wx.SYS_SCREEN_Y )
+            self._screenheight = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
 
-            #sort variable needed by listmix
+            # sort variable needed by listmix
             self.itemDataMap = dict()
 
-            #Load and sort data
+            # Load and sort data
             if not (self._multiChoices or self._choices):
                 raise ValueError("Pass me at least one of multiChoices OR choices")
 
-            #widgets
-            self.dropdown = wx.PopupWindow( self )
+            # widgets
+            self.dropdown = wx.PopupWindow(self)
 
-            #Control the style
+            # Control the style
             flags = wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.LC_SORT_ASCENDING
-            if not (showHead and multiChoices) :
+            if not (showHead and multiChoices):
                 flags = flags | wx.LC_NO_HEADER
 
-            #Create the list and bind the events
-            self.dropdownlistbox = myListCtrl( self.dropdown, style=flags,
-                                               pos=wx.Point( 0, 0) )
+            # Create the list and bind the events
+            self.dropdownlistbox = myListCtrl(
+                self.dropdown, style=flags, pos=wx.Point(0, 0)
+            )
 
-            #initialize the parent
-            if multiChoices: ln = len(multiChoices)
-            else: ln = 1
-            #else: ln = len(choices)
+            # initialize the parent
+            if multiChoices:
+                ln = len(multiChoices)
+            else:
+                ln = 1
+            # else: ln = len(choices)
             listmix.ColumnSorterMixin.__init__(self, ln)
 
-            #load the data
-            if multiChoices: self.SetMultipleChoices (multiChoices, colSearch=colSearch, colFetch=colFetch)
-            else: self.SetChoices ( choices )
+            # load the data
+            if multiChoices:
+                self.SetMultipleChoices(
+                    multiChoices, colSearch=colSearch, colFetch=colFetch
+                )
+            else:
+                self.SetChoices(choices)
 
             gp = self
-            while ( gp != None ) :
-                gp.Bind ( wx.EVT_MOVE , self.onControlChanged, gp )
-                gp.Bind ( wx.EVT_SIZE , self.onControlChanged, gp )
+            while gp != None:
+                gp.Bind(wx.EVT_MOVE, self.onControlChanged, gp)
+                gp.Bind(wx.EVT_SIZE, self.onControlChanged, gp)
                 gp = gp.GetParent()
 
-            self.Bind( wx.EVT_KILL_FOCUS, self.onControlChanged, self )
-            self.Bind( wx.EVT_TEXT , self.onEnteredText, self )
-            self.Bind( wx.EVT_KEY_DOWN , self.onKeyDown, self )
+            self.Bind(wx.EVT_KILL_FOCUS, self.onControlChanged, self)
+            self.Bind(wx.EVT_TEXT, self.onEnteredText, self)
+            self.Bind(wx.EVT_KEY_DOWN, self.onKeyDown, self)
 
-            #If need drop down on left click
+            # If need drop down on left click
             if dropDownClick:
-                self.Bind ( wx.EVT_LEFT_DOWN , self.onClickToggleDown, self )
-                self.Bind ( wx.EVT_LEFT_UP , self.onClickToggleUp, self )
+                self.Bind(wx.EVT_LEFT_DOWN, self.onClickToggleDown, self)
+                self.Bind(wx.EVT_LEFT_UP, self.onClickToggleUp, self)
 
-            self.dropdown.Bind( wx.EVT_LISTBOX , self.onListItemSelected, self.dropdownlistbox )
+            self.dropdown.Bind(
+                wx.EVT_LISTBOX, self.onListItemSelected, self.dropdownlistbox
+            )
             self.dropdownlistbox.Bind(wx.EVT_LEFT_DOWN, self.onListClick)
             self.dropdownlistbox.Bind(wx.EVT_LEFT_DCLICK, self.onListDClick)
             self.dropdownlistbox.Bind(wx.EVT_LIST_COL_CLICK, self.onListColClick)
 
-            #self.il = wx.ImageList(16, 16)
+            # self.il = wx.ImageList(16, 16)
 
-            #self.sm_dn = self.il.Add(getSmallDnArrowBitmap())
-            #self.sm_up = self.il.Add(getSmallUpArrowBitmap())
+            # self.sm_dn = self.il.Add(getSmallDnArrowBitmap())
+            # self.sm_up = self.il.Add(getSmallUpArrowBitmap())
 
-            #self.dropdownlistbox.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
-            #self._ascending = True
+            # self.dropdownlistbox.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
+            # self._ascending = True
 
-
-        #-- methods called from mixin class
+        # -- methods called from mixin class
         def GetSortImages(self):
             return (self.sm_dn, self.sm_up)
 
@@ -1464,9 +1809,10 @@ if HAVE_WX:
 
         # -- event methods
         def onListClick(self, evt):
-            toSel, flag = self.dropdownlistbox.HitTest( evt.GetPosition() )
-            #no values on poition, return
-            if toSel == -1: return
+            toSel, flag = self.dropdownlistbox.HitTest(evt.GetPosition())
+            # no values on poition, return
+            if toSel == -1:
+                return
             self.dropdownlistbox.Select(toSel)
 
         def onListDClick(self, evt):
@@ -1475,11 +1821,11 @@ if HAVE_WX:
         def onListColClick(self, evt):
             col = evt.GetColumn()
 
-            #reverse the sort
+            # reverse the sort
             if col == self._colSearch:
                 self._ascending = not self._ascending
 
-            self.SortListItems( evt.GetColumn(), ascending=self._ascending )
+            self.SortListItems(evt.GetColumn(), ascending=self._ascending)
             self._colSearch = evt.GetColumn()
             evt.Skip()
 
@@ -1496,20 +1842,21 @@ if HAVE_WX:
                 event.Skip()
                 return
 
-
             found = False
             if self._multiChoices:
-                #load the sorted data into the listbox
+                # load the sorted data into the listbox
                 dd = self.dropdownlistbox
-                choices = [dd.GetItem(x, self._colSearch).GetText()
-                           for x in xrange(dd.GetItemCount())]
+                choices = [
+                    dd.GetItem(x, self._colSearch).GetText()
+                    for x in xrange(dd.GetItemCount())
+                ]
             else:
                 choices = self._choices
 
             for numCh, choice in enumerate(choices):
                 if self._matchFunction and self._matchFunction(text, choice):
                     found = True
-                elif choice.lower().startswith(text.lower()) :
+                elif choice.lower().startswith(text.lower()):
                     found = True
                 if found:
                     self._showDropDown(True)
@@ -1519,15 +1866,17 @@ if HAVE_WX:
                     break
 
             if not found:
-                self.dropdownlistbox.Select(self.dropdownlistbox.GetFirstSelected(), False)
+                self.dropdownlistbox.Select(
+                    self.dropdownlistbox.GetFirstSelected(), False
+                )
                 if self._hideOnNoMatch:
                     self._showDropDown(False)
 
             self._listItemVisible()
 
-            event.Skip ()
+            event.Skip()
 
-        def onKeyDown ( self, event ) :
+        def onKeyDown(self, event):
             """ Do some work when the user press on the keys:
                 up and down: move the cursor
                 left and right: move the search
@@ -1537,56 +1886,57 @@ if HAVE_WX:
             visible = self.dropdown.IsShown()
 
             KC = event.GetKeyCode()
-            if KC == wx.WXK_DOWN :
-                if sel < (self.dropdownlistbox.GetItemCount () - 1) :
-                    self.dropdownlistbox.Select ( sel+1 )
+            if KC == wx.WXK_DOWN:
+                if sel < (self.dropdownlistbox.GetItemCount() - 1):
+                    self.dropdownlistbox.Select(sel + 1)
                     self._listItemVisible()
-                self._showDropDown ()
+                self._showDropDown()
                 skip = False
-            elif KC == wx.WXK_UP :
-                if sel > 0 :
-                    self.dropdownlistbox.Select ( sel - 1 )
+            elif KC == wx.WXK_UP:
+                if sel > 0:
+                    self.dropdownlistbox.Select(sel - 1)
                     self._listItemVisible()
-                self._showDropDown ()
+                self._showDropDown()
                 skip = False
-            elif KC == wx.WXK_LEFT :
-                if not self._multiChoices: return
+            elif KC == wx.WXK_LEFT:
+                if not self._multiChoices:
+                    return
                 if self._colSearch > 0:
-                    self._colSearch -=1
-                self._showDropDown ()
+                    self._colSearch -= 1
+                self._showDropDown()
             elif KC == wx.WXK_RIGHT:
-                if not self._multiChoices: return
-                if self._colSearch < self.dropdownlistbox.GetColumnCount() -1:
+                if not self._multiChoices:
+                    return
+                if self._colSearch < self.dropdownlistbox.GetColumnCount() - 1:
                     self._colSearch += 1
                 self._showDropDown()
 
-            if visible :
-                if event.GetKeyCode() == wx.WXK_RETURN :
+            if visible:
+                if event.GetKeyCode() == wx.WXK_RETURN:
                     self._setValueFromSelected()
                     skip = False
-                if event.GetKeyCode() == wx.WXK_ESCAPE :
-                    self._showDropDown( False )
+                if event.GetKeyCode() == wx.WXK_ESCAPE:
+                    self._showDropDown(False)
                     skip = False
-            if skip :
+            if skip:
                 event.Skip()
 
-        def onListItemSelected (self, event):
+        def onListItemSelected(self, event):
             self._setValueFromSelected()
             event.Skip()
 
         def onClickToggleDown(self, event):
             self._lastinsertionpoint = self.GetInsertionPoint()
-            event.Skip ()
-
-        def onClickToggleUp ( self, event ) :
-            if ( self.GetInsertionPoint() == self._lastinsertionpoint ) :
-                self._showDropDown ( not self.dropdown.IsShown() )
-            event.Skip ()
-
-        def onControlChanged(self, event):
-            self._showDropDown( False )
             event.Skip()
 
+        def onClickToggleUp(self, event):
+            if self.GetInsertionPoint() == self._lastinsertionpoint:
+                self._showDropDown(not self.dropdown.IsShown())
+            event.Skip()
+
+        def onControlChanged(self, event):
+            self._showDropDown(False)
+            event.Skip()
 
         # -- Interfaces methods
         def SetMultipleChoices(self, choices, colSearch=0, colFetch=-1):
@@ -1595,29 +1945,31 @@ if HAVE_WX:
             self._multiChoices = choices
             self._choices = None
             if not isinstance(self._multiChoices, list):
-                self._multiChoices = [ x for x in self._multiChoices]
+                self._multiChoices = [x for x in self._multiChoices]
 
             flags = wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.LC_SORT_ASCENDING
             if not self._showHead:
                 flags |= wx.LC_NO_HEADER
             self.dropdownlistbox.SetWindowStyleFlag(flags)
 
-            #prevent errors on "old" systems
+            # prevent errors on "old" systems
             if sys.version.startswith("2.3"):
                 self._multiChoices.sort(lambda x, y: cmp(x[0].lower(), y[0].lower()))
             else:
-                self._multiChoices.sort(key=lambda x: locale.strxfrm(x[0]).lower() )
+                self._multiChoices.sort(key=lambda x: locale.strxfrm(x[0]).lower())
 
             self._updateDataList(self._multiChoices)
 
             lChoices = len(choices)
             if lChoices < 2:
-                raise ValuError( "You have to pass me a multi-dimension list")
+                raise ValuError("You have to pass me a multi-dimension list")
 
             for numCol, rowValues in enumerate(choices[0]):
 
-                if self._colNames: colName = self._colNames[numCol]
-                else: colName = "Select %i" % numCol
+                if self._colNames:
+                    colName = self._colNames[numCol]
+                else:
+                    colName = "Select %i" % numCol
 
                 self.dropdownlistbox.InsertColumn(numCol, colName)
 
@@ -1625,7 +1977,9 @@ if HAVE_WX:
 
                 for numCol, colVal in enumerate(valRow):
                     if numCol == 0:
-                        index = self.dropdownlistbox.InsertImageStringItem(sys.maxint, colVal, -1)
+                        index = self.dropdownlistbox.InsertImageStringItem(
+                            sys.maxint, colVal, -1
+                        )
                     self.dropdownlistbox.SetStringItem(index, numCol, colVal)
                     self.dropdownlistbox.SetItemData(index, numRow)
 
@@ -1640,13 +1994,15 @@ if HAVE_WX:
             '''
             self._choices = choices
             self._multiChoices = None
-            flags = wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.LC_SORT_ASCENDING | wx.LC_NO_HEADER
+            flags = (
+                wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.LC_SORT_ASCENDING | wx.LC_NO_HEADER
+            )
             self.dropdownlistbox.SetWindowStyleFlag(flags)
 
             if not isinstance(choices, list):
-                self._choices = [ x for x in choices]
+                self._choices = [x for x in choices]
 
-            #prevent errors on "old" systems
+            # prevent errors on "old" systems
             if sys.version.startswith("2.3"):
                 self._choices.sort(lambda x, y: cmp(x.lower(), y.lower()))
             else:
@@ -1657,7 +2013,9 @@ if HAVE_WX:
             self.dropdownlistbox.InsertColumn(0, "")
 
             for num, colVal in enumerate(self._choices):
-                index = self.dropdownlistbox.InsertImageStringItem(sys.maxint, colVal, -1)
+                index = self.dropdownlistbox.InsertImageStringItem(
+                    sys.maxint, colVal, -1
+                )
 
                 self.dropdownlistbox.SetStringItem(index, 0, colVal)
                 self.dropdownlistbox.SetItemData(index, num)
@@ -1683,64 +2041,69 @@ if HAVE_WX:
         def SetMatchFunction(self, mf=None):
             self._matchFunction = mf
 
-
-        #-- Internal methods
-        def _setValueFromSelected( self ) :
+        # -- Internal methods
+        def _setValueFromSelected(self):
             '''
             Sets the wx.TextCtrl value from the selected wx.ListCtrl item.
             Will do nothing if no item is selected in the wx.ListCtrl.
             '''
             sel = self.dropdownlistbox.GetFirstSelected()
             if sel > -1:
-                if self._colFetch != -1: col = self._colFetch
-                else: col = self._colSearch
+                if self._colFetch != -1:
+                    col = self._colFetch
+                else:
+                    col = self._colSearch
 
                 itemtext = self.dropdownlistbox.GetItem(sel, col).GetText()
                 if self._selectCallback:
                     dd = self.dropdownlistbox
-                    values = [dd.GetItem(sel, x).GetText()
-                              for x in xrange(dd.GetColumnCount())]
-                    self._selectCallback( values )
+                    values = [
+                        dd.GetItem(sel, x).GetText()
+                        for x in xrange(dd.GetColumnCount())
+                    ]
+                    self._selectCallback(values)
 
-                self.SetValue (itemtext)
-                self.SetInsertionPointEnd ()
-                self.SetSelection ( -1, -1 )
-                self._showDropDown ( False )
+                self.SetValue(itemtext)
+                self.SetInsertionPointEnd()
+                self.SetSelection(-1, -1)
+                self._showDropDown(False)
 
-
-        def _showDropDown ( self, show = True ) :
+        def _showDropDown(self, show=True):
             '''
             Either display the drop down list (show = True) or hide it (show = False).
             '''
-            if show :
+            if show:
                 size = self.dropdown.GetSize()
-                width, height = self . GetSizeTuple()
-                x, y = self . ClientToScreenXY ( 0, height )
-                if size.GetWidth() != width :
+                width, height = self.GetSizeTuple()
+                x, y = self.ClientToScreenXY(0, height)
+                if size.GetWidth() != width:
                     size.SetWidth(width)
                     self.dropdown.SetSize(size)
                     self.dropdownlistbox.SetSize(self.dropdown.GetClientSize())
-                if (y + size.GetHeight()) < self._screenheight :
-                    self.dropdown . SetPosition ( wx.Point(x, y) )
+                if (y + size.GetHeight()) < self._screenheight:
+                    self.dropdown.SetPosition(wx.Point(x, y))
                 else:
-                    self.dropdown . SetPosition ( wx.Point(x, y - height - size.GetHeight()) )
-            self.dropdown.Show ( show )
+                    self.dropdown.SetPosition(
+                        wx.Point(x, y - height - size.GetHeight())
+                    )
+            self.dropdown.Show(show)
 
-        def _listItemVisible( self ) :
+        def _listItemVisible(self):
             '''
             Moves the selected item to the top of the list ensuring it is always visible.
             '''
-            toSel =  self.dropdownlistbox.GetFirstSelected ()
-            if toSel == -1: return
-            self.dropdownlistbox.EnsureVisible( toSel )
+            toSel = self.dropdownlistbox.GetFirstSelected()
+            if toSel == -1:
+                return
+            self.dropdownlistbox.EnsureVisible(toSel)
 
         def _updateDataList(self, choices):
-            #delete, if need, all the previous data
+            # delete, if need, all the previous data
             if self.dropdownlistbox.GetColumnCount() != 0:
                 self.dropdownlistbox.DeleteAllColumns()
                 self.dropdownlistbox.DeleteAllItems()
 
-            #and update the dict
+            # and update the dict
             if choices:
                 for numVal, data in enumerate(choices):
                     self.itemDataMap[numVal] = data
@@ -1755,16 +2118,16 @@ if HAVE_WX:
                 choices = self._choices
 
             longest = 0
-            for choice in choices :
+            for choice in choices:
                 longest = max(len(choice), longest)
 
             longest += 6
-            itemcount = min( len( choices ) , 20 ) + 2
+            itemcount = min(len(choices), 20) + 2
             charheight = self.dropdownlistbox.GetCharHeight()
             charwidth = self.dropdownlistbox.GetCharWidth()
-            self.popupsize = wx.Size( charwidth*longest, charheight*itemcount )
-            self.dropdownlistbox.SetSize ( self.popupsize )
-            self.dropdown.SetClientSize( self.popupsize )
+            self.popupsize = wx.Size(charwidth * longest, charheight * itemcount)
+            self.dropdownlistbox.SetSize(self.popupsize)
+            self.dropdown.SetClientSize(self.popupsize)
 
     class MyAUIFrame(wx.Frame):
         def __init__(self, *args, **kwargs):
@@ -1772,11 +2135,11 @@ if HAVE_WX:
 
             self.mgr = wx.aui.AuiManager(self)
 
-            leftpanel = wx.Panel(self, -1, size = (200, 150))
-            rightpanel = wx.Panel(self, -1, size = (200, 150))
-            bottompanel = wx.Panel(self, -1, size = (200, 150))
-            toppanel = wx.Panel(self, -1, size = (200, 150))
-            centerpanel = wx.Panel(self, -1, size = (200, 150))
+            leftpanel = wx.Panel(self, -1, size=(200, 150))
+            rightpanel = wx.Panel(self, -1, size=(200, 150))
+            bottompanel = wx.Panel(self, -1, size=(200, 150))
+            toppanel = wx.Panel(self, -1, size=(200, 150))
+            centerpanel = wx.Panel(self, -1, size=(200, 150))
 
             wx.TextCtrl(rightpanel, -1, 'rightpanel')
             wx.TextCtrl(leftpanel, -1, 'leftpanel')

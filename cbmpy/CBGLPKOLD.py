@@ -2,7 +2,7 @@
 CBMPy: CBGLPK module
 ====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,22 +26,32 @@ Last edit: $Author: bgoli $ ($Id: CBGLPK.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
+
+from packaging import version as pkgver
 
 HAVE_SYMPY = False
 try:
     import sympy
-    if int(sympy.__version__.split('.')[1]) >= 7 and int(sympy.__version__.split('.')[2]) >= 4:
+
+    if pkgver.parse(sympy.__version__) >= pkgver.Version('0.7.5'):
         HAVE_SYMPY = True
+
     else:
         del sympy
+        print(
+            '\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.'
+        )
 except ImportError:
     HAVE_SYMPY = False
+
 
 import os, time
 import numpy
 from . import CBWrite
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
@@ -51,40 +61,46 @@ GLPK_SOLUTION_STATUS = None
 
 try:
     import glpk
+
     lp = glpk.LPX()
     HAVE_GLPK = True
 except:
     raise ImportError
 
 # configuration options for GLPK
-GLPK_CFG = {'simplex' : {'meth' : glpk.LPX.PRIMAL,
-                       #'meth' : glpk.LPX.DUAL,
-                       #'meth' : glpk.LPX.DUALP,
-                       'tol_bnd' : 1.0e-6,
-                       'tol_dj'  : 1.0e-6,
-                       'tol_piv' : 1.0e-10
-                       }
-          }
+GLPK_CFG = {
+    'simplex': {
+        'meth': glpk.LPX.PRIMAL,
+        #'meth' : glpk.LPX.DUAL,
+        #'meth' : glpk.LPX.DUALP,
+        'tol_bnd': 1.0e-6,
+        'tol_dj': 1.0e-6,
+        'tol_piv': 1.0e-10,
+    }
+}
 
 GLPK_STATUS = {
-    1 : 'LPS_UNDEF',
-    2 : 'LPS_FEAS',
-    3 : 'LPS_INFEAS',
-    4 : 'LPS_NOFEAS',
-    5 : 'LPS_OPT',
-    6 : 'LPS_UNBND'}
+    1: 'LPS_UNDEF',
+    2: 'LPS_FEAS',
+    3: 'LPS_INFEAS',
+    4: 'LPS_NOFEAS',
+    5: 'LPS_OPT',
+    6: 'LPS_UNBND',
+}
 
 GLPK_STATUS2 = {
-    'opt' : 'LPS_OPT',
-    'undef' : 'LPS_UNDEF',
-    'feas' : 'LPS_FEAS',
-    'infeas' : 'LPS_INFEAS',
-    'nofeas' : 'LPS_NOFEAS',
-    'unbnd' : 'LPS_UNBND'}
+    'opt': 'LPS_OPT',
+    'undef': 'LPS_UNDEF',
+    'feas': 'LPS_FEAS',
+    'infeas': 'LPS_INFEAS',
+    'nofeas': 'LPS_NOFEAS',
+    'unbnd': 'LPS_UNBND',
+}
 
 
 GLPK_SILENT_MODE = True
 GLPK_INFINITY = 1.0e9
+
 
 def glpk_constructLPfromFBA(fba, fname=None):
     """
@@ -99,7 +115,6 @@ def glpk_constructLPfromFBA(fba, fname=None):
     lp = glpk.LPX()
     lp.name = fba.getId()
     lp.cols.add(len(fba.N.col))
-
 
     if HAVE_SYMPY and fba.N.__array_type__ == sympy.MutableDenseMatrix:
         print('INFO: GLPK requires floating point, converting N')
@@ -120,7 +135,7 @@ def glpk_constructLPfromFBA(fba, fname=None):
         varMap[fba.N.col[n_]] = n_
         lp.cols[n_].name = fba.N.col[n_]
 
-    #print varMap
+    # print varMap
 
     try:
         # define objective
@@ -138,27 +153,27 @@ def glpk_constructLPfromFBA(fba, fname=None):
         print('\nWARNING(GLPK create LP): no objective function defined')
     # create N constraints
     lp.rows.add(Nmat.shape[0])
-    #conMap = {}
-    #for n_ in range(Nmat.shape[0]):
-        ##conMap[fba.N.row[n_]] = n_
-        #lp.rows[n_].name = fba.N.row[n_]
+    # conMap = {}
+    # for n_ in range(Nmat.shape[0]):
+    ##conMap[fba.N.row[n_]] = n_
+    # lp.rows[n_].name = fba.N.row[n_]
 
-    #tnew = time.time()
+    # tnew = time.time()
     for r_ in range(Nmat.shape[0]):
         # name and coefficients
         newCon = []
         for c_ in range(Nmat.shape[1]):
-            newCon.append((c_, Nmat[r_,c_]))
+            newCon.append((c_, Nmat[r_, c_]))
         lp.rows[r_].name = fba.N.row[r_]
         lp.rows[r_].matrix = newCon
 
         # sense and rhs
         rhs = RHSmat[r_]
-        if fba.N.operators[r_] in ['<=','<','L']:
+        if fba.N.operators[r_] in ['<=', '<', 'L']:
             lp.rows[r_].bounds = None, rhs
-        elif fba.N.operators[r_] in ['>=','>','G']:
+        elif fba.N.operators[r_] in ['>=', '>', 'G']:
             lp.rows[r_].bounds = rhs, None
-        elif fba.N.operators[r_] in ['=','E']:
+        elif fba.N.operators[r_] in ['=', 'E']:
             lp.rows[r_].bounds = rhs
         else:
             raise RuntimeError('INFO: invalid operator: %s' % fba.N.operators[n])
@@ -172,17 +187,17 @@ def glpk_constructLPfromFBA(fba, fname=None):
             newCon = []
             for c_ in range(CMmat.shape[1]):
                 newCon.append((c_, CMmat[r_, c_]))
-            lp.rows[baseRows+r_].name = fba.CM.row[r_]
-            lp.rows[baseRows+r_].matrix = newCon
+            lp.rows[baseRows + r_].name = fba.CM.row[r_]
+            lp.rows[baseRows + r_].matrix = newCon
 
             # sense and rhs
             rhs = CMrhs[r_]
-            if fba.CM.operators[r_] in ['<=','<','L']:
-                lp.rows[baseRows+r_].bounds = None, rhs
-            elif fba.CM.operators[r_] in ['>=','>','G']:
-                lp.rows[baseRows+r_].bounds = rhs, None
-            elif fba.CM.operators[r_] in ['=','E']:
-                lp.rows[baseRows+r_].bounds = rhs
+            if fba.CM.operators[r_] in ['<=', '<', 'L']:
+                lp.rows[baseRows + r_].bounds = None, rhs
+            elif fba.CM.operators[r_] in ['>=', '>', 'G']:
+                lp.rows[baseRows + r_].bounds = rhs, None
+            elif fba.CM.operators[r_] in ['=', 'E']:
+                lp.rows[baseRows + r_].bounds = rhs
             else:
                 raise RuntimeError('INFO: invalid operator: %s' % fba.N.operators[n])
 
@@ -224,8 +239,9 @@ def glpk_constructLPfromFBA(fba, fname=None):
 
     print('\ngplk_constructLPfromFBA time: {}\n'.format(time.time() - _Stime))
     if fname != None:
-        lp.write(cpxlp=fname+'.lp')
+        lp.write(cpxlp=fname + '.lp')
     return lp
+
 
 def glpk_Solve(lp, method='s'):
     """
@@ -244,32 +260,37 @@ def glpk_Solve(lp, method='s'):
     else:
         glpksol = lp.simplex(**GLPK_CFG['simplex'])
 
-
     global GLPK_SOLUTION_STATUS
     GLPK_SOLUTION_STATUS = glpk_getSolutionStatus(lp)
 
-    #if status == 'LPS_UNDEF':
-        #sd.presolve = False
-        #status = glpk.glp_simplex(lp, sd)
-    #if status == 'LPS_UNDEF':
-        #print('\nINFO: Primal solver failure switching to dual-primal solver\n')
-        #sd.presolve = False
-        #sd.obj_ul = 1.0e10
-        #sd.obj_ll = 1.0e10
-        #sd.meth = glpk.GLP_DUALP
-        #glpk.glp_simplex(lp, sd)
-        #status = glpk_getSolutionStatus(lp)
+    # if status == 'LPS_UNDEF':
+    # sd.presolve = False
+    # status = glpk.glp_simplex(lp, sd)
+    # if status == 'LPS_UNDEF':
+    # print('\nINFO: Primal solver failure switching to dual-primal solver\n')
+    # sd.presolve = False
+    # sd.obj_ul = 1.0e10
+    # sd.obj_ll = 1.0e10
+    # sd.meth = glpk.GLP_DUALP
+    # glpk.glp_simplex(lp, sd)
+    # status = glpk_getSolutionStatus(lp)
 
-
-
-    if GLPK_SOLUTION_STATUS in ['LPS_UNDEF', 'LPS_FEAS', 'LPS_INFEAS', 'LPS_NOFEAS', 'LPS_OPT', 'LPS_UNBND']:
+    if GLPK_SOLUTION_STATUS in [
+        'LPS_UNDEF',
+        'LPS_FEAS',
+        'LPS_INFEAS',
+        'LPS_NOFEAS',
+        'LPS_OPT',
+        'LPS_UNBND',
+    ]:
         if not GLPK_SILENT_MODE:
             print('Solution status returned as: {}'.format(GLPK_SOLUTION_STATUS))
-            print("Objective value = " , lp.obj.value)
+            print("Objective value = ", lp.obj.value)
         return GLPK_SOLUTION_STATUS
     else:
         print("INFO: No solution available ({})".format(GLPK_SOLUTION_STATUS))
         return None
+
 
 def glpk_getSolutionStatus(lp):
     """
@@ -285,8 +306,19 @@ def glpk_getSolutionStatus(lp):
     """
     return GLPK_STATUS2[lp.status]
 
-def glpk_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='unscaled', with_sensitivity=False,\
-                      del_intermediate=False, build_n=True, quiet=False, oldlpgen=False, method='s'):
+
+def glpk_analyzeModel(
+    f,
+    lpFname=None,
+    return_lp_obj=False,
+    with_reduced_costs='unscaled',
+    with_sensitivity=False,
+    del_intermediate=False,
+    build_n=True,
+    quiet=False,
+    oldlpgen=False,
+    method='s',
+):
     """
     Optimize a model and add the result of the optimization to the model object
     (e.g. `reaction.value`, `objectiveFunction.value`). The stoichiometric
@@ -317,7 +349,6 @@ def glpk_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='
         f.updateNetwork(lower=0.0, upper=0.0)
 
     fid = f.id
-
 
     if with_reduced_costs == 'scaled':
         f.SCALED_REDUCED_COSTS = True
@@ -352,17 +383,19 @@ def glpk_analyzeModel(f, lpFname=None, return_lp_obj=False, with_reduced_costs='
         del flp
         return objv
 
+
 def glpk_setSolutionStatusToModel(m, lp):
     """
     Sets the lp solutions status to the CBMPy model
 
     """
-    m.SOLUTION_STATUS =  glpk_getSolutionStatus(lp)
+    m.SOLUTION_STATUS = glpk_getSolutionStatus(lp)
     # TODO: need to synchronise all solvers to same integer system
     if m.SOLUTION_STATUS == 'LPS_OPT':
         m.SOLUTION_STATUS_INT = 1
     else:
         m.SOLUTION_STATUS_INT = 999
+
 
 def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     """
@@ -376,9 +409,15 @@ def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     """
     sol, objname, objval = glpk_getOptimalSolution(lp)
     if glpk_getSolutionStatus(lp) == 'LPS_OPT':
-        fba.objectives[fba.activeObjIdx].solution, fba.objectives[fba.activeObjIdx].value = sol, objval
+        (
+            fba.objectives[fba.activeObjIdx].solution,
+            fba.objectives[fba.activeObjIdx].value,
+        ) = (sol, objval)
     else:
-        fba.objectives[fba.activeObjIdx].solution, fba.objectives[fba.activeObjIdx].value = sol, numpy.NaN
+        (
+            fba.objectives[fba.activeObjIdx].solution,
+            fba.objectives[fba.activeObjIdx].value,
+        ) = (sol, numpy.NaN)
     for r in fba.reactions:
         rid = r.getId()
         if rid in sol:
@@ -401,6 +440,7 @@ def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
     else:
         setReducedCosts(fba, {})
 
+
 def glpk_getOptimalSolution(c):
     """
     From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal
@@ -414,7 +454,7 @@ def glpk_getOptimalSolution(c):
         objf_name = c.obj.name
         objf_val = c.obj.value
         for n in c.cols:
-            fba_sol.update({n.name : n.value})
+            fba_sol.update({n.name: n.value})
     except Exception as ex:
         print(ex)
         print('WARNING: No solution to get')
@@ -422,8 +462,9 @@ def glpk_getOptimalSolution(c):
         s_name = []
         fba_sol = {}
         objf_val = None
-    del s_name,s_val
+    del s_name, s_val
     return fba_sol, objf_name, objf_val
+
 
 def glpk_getReducedCosts(c, scaled=False):
     """
@@ -446,16 +487,33 @@ def glpk_getReducedCosts(c, scaled=False):
     for v in range(len(s_name)):
         if scaled:
             try:
-                r_val = r_costs[v]*s_val[v]/objf_val
+                r_val = r_costs[v] * s_val[v] / objf_val
             except:
                 r_val = float('nan')
         else:
             r_val = r_costs[v]
-        output.update({s_name[v] : r_val})
+        output.update({s_name[v]: r_val})
     del s_name, r_costs, s_val
     return output
 
-def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower', optPercentage=100.0, work_dir=None, quiet=True, debug=False, oldlpgen=False, markupmodel=True, default_on_fail=False, roundoff_span=10, method='s'):
+
+def glpk_FluxVariabilityAnalysis(
+    fba,
+    selected_reactions=None,
+    pre_opt=True,
+    tol=None,
+    objF2constr=True,
+    rhs_sense='lower',
+    optPercentage=100.0,
+    work_dir=None,
+    quiet=True,
+    debug=False,
+    oldlpgen=False,
+    markupmodel=True,
+    default_on_fail=False,
+    roundoff_span=10,
+    method='s',
+):
     """
     Perform a flux variability analysis on an fba model:
 
@@ -488,7 +546,7 @@ def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
     else:
         assert os.path.exists(work_dir), '\nWhat did you think would happen now!'
     if debug:
-        debug_dir = os.path.join(work_dir,'DEBUG')
+        debug_dir = os.path.join(work_dir, 'DEBUG')
         if not os.path.exists(debug_dir):
             os.mkdir(debug_dir)
     s2time = time.time()
@@ -497,11 +555,22 @@ def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
     cpx = OPTIMAL_PRESOLUTION = None
     pre_sol = pre_oid = pre_oval = None
     REDUCED_COSTS = {}
-    cpx, pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS = glpk_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=quiet, oldlpgen=oldlpgen, method=method)
+    (
+        cpx,
+        pre_sol,
+        pre_oid,
+        pre_oval,
+        OPTIMAL_PRESOLUTION,
+        REDUCED_COSTS,
+    ) = glpk_func_GetCPXandPresolve(
+        fba, pre_opt, objF2constr, quiet=quiet, oldlpgen=oldlpgen, method=method
+    )
 
     # if required add the objective function as a constraint
     if objF2constr:
-        glpk_func_SetObjectiveFunctionAsConstraint(cpx, rhs_sense, pre_oval, tol, optPercentage)
+        glpk_func_SetObjectiveFunctionAsConstraint(
+            cpx, rhs_sense, pre_oval, tol, optPercentage
+        )
     if debug:
         cpx.write(cpxlp=os.path.join(debug_dir, 'FVA_base.lp'))
 
@@ -549,14 +618,14 @@ def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
                 MIN_STAT = 3
             else:
                 MIN_STAT = 4
-            if MIN_STAT == 1: # solved
+            if MIN_STAT == 1:  # solved
                 min_oval = cpx.obj.value
-            elif MIN_STAT == 2: # unbound
+            elif MIN_STAT == 2:  # unbound
                 min_oval = -numpy.Inf
             elif MIN_STAT == 3:
-                #min_oval = pre_sol[R]
+                # min_oval = pre_sol[R]
                 min_oval = numpy.NaN
-            else: # other failure
+            else:  # other failure
                 min_oval = numpy.NaN
             if debug:
                 cpx.write(cpxlp=os.path.join(debug_dir, '%smin.lp' % R))
@@ -590,14 +659,14 @@ def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
                 MAX_STAT = 3
             else:
                 MAX_STAT = 4
-            if MAX_STAT == 1: # solved
+            if MAX_STAT == 1:  # solved
                 max_oval = cpx.obj.value
-            elif MAX_STAT == 2: # unbound
+            elif MAX_STAT == 2:  # unbound
                 max_oval = numpy.Inf
-            elif MAX_STAT == 3: # infeasable
-                #max_oval = pre_sol[R]
+            elif MAX_STAT == 3:  # infeasable
+                # max_oval = pre_sol[R]
                 max_oval = numpy.NaN
-            else: # other fail
+            else:  # other fail
                 max_oval = numpy.NaN
 
             if MAX_STAT >= 3:
@@ -629,14 +698,14 @@ def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
         if debug:
             cpx.write(cpxlp=os.path.join(debug_dir, '%smax.lp' % R))
 
-        OUTPUT_ARRAY[Ridx,0] = pre_sol[R]
+        OUTPUT_ARRAY[Ridx, 0] = pre_sol[R]
         if R in REDUCED_COSTS:
-            OUTPUT_ARRAY[Ridx,1] = REDUCED_COSTS[R]
-        OUTPUT_ARRAY[Ridx,2] = min_oval
-        OUTPUT_ARRAY[Ridx,3] = max_oval
-        OUTPUT_ARRAY[Ridx,4] = round(abs(max_oval - min_oval), roundoff_span)
-        OUTPUT_ARRAY[Ridx,5] = MIN_STAT
-        OUTPUT_ARRAY[Ridx,6] = MAX_STAT
+            OUTPUT_ARRAY[Ridx, 1] = REDUCED_COSTS[R]
+        OUTPUT_ARRAY[Ridx, 2] = min_oval
+        OUTPUT_ARRAY[Ridx, 3] = max_oval
+        OUTPUT_ARRAY[Ridx, 4] = round(abs(max_oval - min_oval), roundoff_span)
+        OUTPUT_ARRAY[Ridx, 5] = MIN_STAT
+        OUTPUT_ARRAY[Ridx, 6] = MAX_STAT
         if markupmodel:
             REAC = fba.getReaction(R)
             REAC.setValue(pre_sol[R])
@@ -646,7 +715,11 @@ def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
             if R in REDUCED_COSTS:
                 REAC.reduced_costs = REDUCED_COSTS[R]
         if not quiet and MAX_STAT > 1 or MIN_STAT > 1:
-            print('Solver fail for reaction \"{}\" (MIN_STAT: {} MAX_STAT: {})'.format(R, MIN_STAT, MAX_STAT))
+            print(
+                'Solver fail for reaction \"{}\" (MIN_STAT: {} MAX_STAT: {})'.format(
+                    R, MIN_STAT, MAX_STAT
+                )
+            )
         cntr += 1
         if cntr == 200:
             tcnt += cntr
@@ -655,15 +728,29 @@ def glpk_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol
 
     os.remove(mps_filename)
 
-    #cpx.write(cpxlp='thefinaldebug.lp')
+    # cpx.write(cpxlp='thefinaldebug.lp')
     del cpx
-    print('\nSinglecore FVA took: {} min (1 process)\n'.format((time.time()-s2time)/60.))
+    print(
+        '\nSinglecore FVA took: {} min (1 process)\n'.format(
+            (time.time() - s2time) / 60.0
+        )
+    )
     print('Output array has columns:')
-    print('Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus')
+    print(
+        'Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus'
+    )
     return OUTPUT_ARRAY, OUTPUT_NAMES
 
 
-def glpk_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen=True, with_reduced_costs='unscaled', method='s'):
+def glpk_func_GetCPXandPresolve(
+    fba,
+    pre_opt,
+    objF2constr,
+    quiet=False,
+    oldlpgen=True,
+    with_reduced_costs='unscaled',
+    method='s',
+):
     """
     This is a utility function that does a presolve for FVA, MSAF etc. Generates properly formatted
     empty objects if pre_opt == False
@@ -694,26 +781,31 @@ def glpk_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
             print('Valid Presolution')
             OPTIMAL_PRESOLUTION = True
             pre_sol, pre_oid, pre_oval = glpk_getOptimalSolution(cpx)
-            fba.objectives[fba.activeObjIdx].solution, fba.objectives[fba.activeObjIdx].value = pre_sol, pre_oval
+            (
+                fba.objectives[fba.activeObjIdx].solution,
+                fba.objectives[fba.activeObjIdx].value,
+            ) = (pre_sol, pre_oval)
             scaled = False
             if with_reduced_costs == 'scaled':
                 REDUCED_COSTS = glpk_getReducedCosts(cpx, scaled=True)
             elif with_reduced_costs == 'unscaled':
                 REDUCED_COSTS = glpk_getReducedCosts(cpx, scaled=False)
         else:
-            print('Invalid Presolution, because {}'.format(glpk_getSolutionStatus(cpx) ))
+            print('Invalid Presolution, because {}'.format(glpk_getSolutionStatus(cpx)))
             OPTIMAL_PRESOLUTION = False
             pre_sol = {}
             for r in fba.reactions:
-                pre_sol.update({r.getId() : 0.0})
+                pre_sol.update({r.getId(): 0.0})
                 r.reduced_cost = 0.0
             pre_oval = 0.0
             pre_oid = 'None'
-            raise RuntimeError('\nPresolve failed to optimize this model and cannot continue!')
+            raise RuntimeError(
+                '\nPresolve failed to optimize this model and cannot continue!'
+            )
     else:
         pre_sol = {}
         for r in fba.reactions:
-            pre_sol.update({r.getId() : 0.0})
+            pre_sol.update({r.getId(): 0.0})
         if objF2constr:
             pre_oval = fba.objectives[fba.activeObjIdx].value
             pre_oid = fba.objectives[fba.activeObjIdx].getId()
@@ -724,7 +816,10 @@ def glpk_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=False, oldlpgen
         r.value = pre_sol[r.id]
     return cpx, pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS
 
-def glpk_func_SetObjectiveFunctionAsConstraint(cpx, rhs_sense, oval, tol, optPercentage):
+
+def glpk_func_SetObjectiveFunctionAsConstraint(
+    cpx, rhs_sense, oval, tol, optPercentage
+):
     """
     Take the objective function and "optimum" value and add it as a constraint
      - *cpx* a cplex object
@@ -748,11 +843,15 @@ def glpk_func_SetObjectiveFunctionAsConstraint(cpx, rhs_sense, oval, tol, optPer
     if rhs_sense == 'equal':
         pass
     elif cpx.obj.maximize and (rhs_sense == 'upper'):
-        print('\nWarning: RHS sense error: \"upper\" does not match \"maximize\" changing to \"lower\"')
+        print(
+            '\nWarning: RHS sense error: \"upper\" does not match \"maximize\" changing to \"lower\"'
+        )
         rhs_sense = 'lower'
         time.sleep(1)
     elif not cpx.obj.maximize and (rhs_sense == 'lower'):
-        print('\nWarning: RHS sense error: \"lower\" does not match \"minimize\" changing to \"upper\"')
+        print(
+            '\nWarning: RHS sense error: \"lower\" does not match \"minimize\" changing to \"upper\"'
+        )
         rhs_sense = 'upper'
         time.sleep(1)
     else:
@@ -760,24 +859,27 @@ def glpk_func_SetObjectiveFunctionAsConstraint(cpx, rhs_sense, oval, tol, optPer
 
     # set objective constraint
     if rhs_sense == 'equal':
-        cplx_setSingleConstraint(cpx, 'ObjCstr', expr=new_constraint, sense='E', rhs=oval)
+        cplx_setSingleConstraint(
+            cpx, 'ObjCstr', expr=new_constraint, sense='E', rhs=oval
+        )
         ##  cplx_setSingleConstraint(cpx, 'ObjCstr', expr=[(1, pre_oid)], sense='E', rhs=oval)
     elif rhs_sense == 'upper':
         if tol != None:
-            ub =  numpy.ceil(oval/tol)*tol*optPercentage/100.0
+            ub = numpy.ceil(oval / tol) * tol * optPercentage / 100.0
         else:
-            ub = oval*(optPercentage/100.0)
+            ub = oval * (optPercentage / 100.0)
         glpk_setSingleConstraint(cpx, 'ObjCstr', expr=new_constraint, sense='L', rhs=ub)
         ##  cplx_setSingleConstraint(cpx, 'ObjCstr', expr=[(1, pre_oid)], sense='L', rhs=ub)
     elif rhs_sense == 'lower':
         if tol != None:
-            lb =  numpy.floor(oval/tol)*tol*optPercentage/100.0
+            lb = numpy.floor(oval / tol) * tol * optPercentage / 100.0
         else:
-            lb = oval*(optPercentage/100.0)
+            lb = oval * (optPercentage / 100.0)
         glpk_setSingleConstraint(cpx, 'ObjCstr', expr=new_constraint, sense='G', rhs=lb)
         ##  cplx_setSingleConstraint(cpx, 'ObjCstr', expr=[(1, pre_oid)], sense='G', rhs=lb)
     else:
         raise RuntimeError("\nInvalid RHS sense: %s" % rhs_sense)
+
 
 def glpk_setSingleConstraint(c, cid, expr=[], sense='E', rhs=0.0):
     """
@@ -808,15 +910,16 @@ def glpk_setSingleConstraint(c, cid, expr=[], sense='E', rhs=0.0):
     c.rows[baseRows].matrix = newCon
 
     # sense and rhs
-    if sense in ['<=','<','L']:
+    if sense in ['<=', '<', 'L']:
         c.rows[baseRows].bounds = None, rhs
-    elif sense in ['>=','>','G']:
+    elif sense in ['>=', '>', 'G']:
         c.rows[baseRows].bounds = rhs, None
-    elif sense in ['=','E']:
+    elif sense in ['=', 'E']:
         c.rows[baseRows].bounds = rhs
     else:
         raise RuntimeError('INFO: invalid operator: %s' % sense)
-    #c.write(cpxlp='test.setc.lp')
+    # c.write(cpxlp='test.setc.lp')
+
 
 def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
     """
@@ -832,11 +935,15 @@ def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
 
     """
     sense = sense.lower()
-    if sense == 'max': sense = 'maximize'
-    if sense == 'min': sense = 'minimize'
+    if sense == 'max':
+        sense = 'maximize'
+    if sense == 'min':
+        sense = 'minimize'
     if sense in ['maximise', 'minimise']:
-        sense = sense.replace('se','ze')
-    assert sense in ['maximize', 'minimize'], "\nsense must be ['maximize', 'minimize'] not %s" % sense
+        sense = sense.replace('se', 'ze')
+    assert sense in ['maximize', 'minimize'], (
+        "\nsense must be ['maximize', 'minimize'] not %s" % sense
+    )
 
     if expr != None:
         ofnames = [a[1] for a in expr]
@@ -853,11 +960,14 @@ def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
 
     if sense == 'minimize':
         c.obj.maximize = False
-        if __DEBUG__: print('Set minimizing')
+        if __DEBUG__:
+            print('Set minimizing')
     else:
         c.obj.maximize = True
-        if __DEBUG__: print('Set maximizing')
-    #c.write(cpxlp='test_obja.lp')
+        if __DEBUG__:
+            print('Set maximizing')
+    # c.write(cpxlp='test_obja.lp')
+
 
 def getReducedCosts(fba):
     """
@@ -866,8 +976,9 @@ def getReducedCosts(fba):
     """
     output = {}
     for r in fba.reactions:
-        output.update({r.getId() : r.reduced_cost})
+        output.update({r.getId(): r.reduced_cost})
     return output
+
 
 def setReducedCosts(fba, reduced_costs):
     """
@@ -888,65 +999,81 @@ def setReducedCosts(fba, reduced_costs):
                 r.reduced_cost = None
 
 
-#def cplx_getDualValues(c):
-    #"""
-    #Get the get the dual values of the solution
+# def cplx_getDualValues(c):
+# """
+# Get the get the dual values of the solution
 
-     #- *c* a CPLEX LP
+# - *c* a CPLEX LP
 
-    #Output is a dictionary of {name : value} pairs
+# Output is a dictionary of {name : value} pairs
 
-    #"""
-    #d_names = c.linear_constraints.get_names()
-    #d_values = c.solution.get_dual_values()
-    #output = {}
-    #for j in range(len(d_names)):
-        #output.update({d_names[j] : d_values[j]})
-    #return output
+# """
+# d_names = c.linear_constraints.get_names()
+# d_values = c.solution.get_dual_values()
+# output = {}
+# for j in range(len(d_names)):
+# output.update({d_names[j] : d_values[j]})
+# return output
 
-#def cplx_getSensitivities(c):
-    #"""
-    #Get the sensitivities of each constraint on the objective function with input
+# def cplx_getSensitivities(c):
+# """
+# Get the sensitivities of each constraint on the objective function with input
 
-     #- *c* a CPLEX LP
+# - *c* a CPLEX LP
 
-    #Output is a tuple of bound and objective sensitivities where the objective
-    #sensitivity is described in the CPLEX reference manual as::
+# Output is a tuple of bound and objective sensitivities where the objective
+# sensitivity is described in the CPLEX reference manual as::
 
-     #... the objective sensitivity shows each variable, its reduced cost and the range over
-     #which its objective function coefficient can vary without forcing a change
-     #in the optimal basis. The current value of each objective coefficient is
-     #also displayed for reference.
+# ... the objective sensitivity shows each variable, its reduced cost and the range over
+# which its objective function coefficient can vary without forcing a change
+# in the optimal basis. The current value of each objective coefficient is
+# also displayed for reference.
 
-     #- *objective coefficient sensitivity* {flux : (reduced_cost, lower_obj_sensitivity, coeff_value, upper_obj_sensitivity)}
-     #- *rhs sensitivity* {constraint : (low, value, high)}
-     #- *bound sensitivity ranges* {flux : (lb_low, lb_high, ub_low, ub_high)}
+# - *objective coefficient sensitivity* {flux : (reduced_cost, lower_obj_sensitivity, coeff_value, upper_obj_sensitivity)}
+# - *rhs sensitivity* {constraint : (low, value, high)}
+# - *bound sensitivity ranges* {flux : (lb_low, lb_high, ub_low, ub_high)}
 
-    #"""
-    #SENSE_RHS = {}
-    #SENSE_BND = {}
-    #SENSE_OBJ = {}
-    #c_names = c.linear_constraints.get_names()
-    #rhs_val = c.linear_constraints.get_rhs()
-    #j_names = c.variables.get_names()
+# """
+# SENSE_RHS = {}
+# SENSE_BND = {}
+# SENSE_OBJ = {}
+# c_names = c.linear_constraints.get_names()
+# rhs_val = c.linear_constraints.get_rhs()
+# j_names = c.variables.get_names()
 
-    #rhs_sense = c.solution.sensitivity.rhs()
-    #bnd_sense = c.solution.sensitivity.bounds()
-    #obj_sense = c.solution.sensitivity.objective()
-    #obj_coeff = c.objective.get_linear()
-    #red_cost = c.solution.get_reduced_costs()
+# rhs_sense = c.solution.sensitivity.rhs()
+# bnd_sense = c.solution.sensitivity.bounds()
+# obj_sense = c.solution.sensitivity.objective()
+# obj_coeff = c.objective.get_linear()
+# red_cost = c.solution.get_reduced_costs()
 
-    #for r in range(c.variables.get_num()):
-        #SENSE_BND.update({j_names[r] : (bnd_sense[r][0], bnd_sense[r][1], bnd_sense[r][2], bnd_sense[r][3])})
-        #SENSE_OBJ.update({j_names[r] : (red_cost[r], obj_sense[r][0], obj_coeff[r], obj_sense[r][1])})
+# for r in range(c.variables.get_num()):
+# SENSE_BND.update({j_names[r] : (bnd_sense[r][0], bnd_sense[r][1], bnd_sense[r][2], bnd_sense[r][3])})
+# SENSE_OBJ.update({j_names[r] : (red_cost[r], obj_sense[r][0], obj_coeff[r], obj_sense[r][1])})
 
-    #for s in range(c.linear_constraints.get_num()):
-        #SENSE_RHS.update({c_names[s] : (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})
+# for s in range(c.linear_constraints.get_num()):
+# SENSE_RHS.update({c_names[s] : (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})
 
-    #return (SENSE_OBJ, SENSE_RHS, SENSE_BND)
+# return (SENSE_OBJ, SENSE_RHS, SENSE_BND)
 
 
-def glpk_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower', optPercentage=100.0, work_dir=None, quiet=False, debug=False, objective_coefficients={}, return_lp_obj=False, oldlpgen=False, with_reduced_costs=None, method='s'):
+def glpk_MinimizeSumOfAbsFluxes(
+    fba,
+    selected_reactions=None,
+    pre_opt=True,
+    tol=None,
+    objF2constr=True,
+    rhs_sense='lower',
+    optPercentage=100.0,
+    work_dir=None,
+    quiet=False,
+    debug=False,
+    objective_coefficients={},
+    return_lp_obj=False,
+    oldlpgen=False,
+    with_reduced_costs=None,
+    method='s',
+):
     """
     Minimize the sum of absolute fluxes sum(abs(J1) + abs(J2) + abs(J3) ... abs(Jn)) by adding two constraints per flux
     and a variable representing the absolute value:
@@ -1008,7 +1135,7 @@ def glpk_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
     else:
         assert os.path.exists(work_dir), '\nWhat did you think would happen now!'
     if debug:
-        debug_dir = os.path.join(work_dir,'DEBUG')
+        debug_dir = os.path.join(work_dir, 'DEBUG')
         if not os.path.exists(debug_dir):
             os.mkdir(debug_dir)
 
@@ -1017,10 +1144,27 @@ def glpk_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
     cpx = OPTIMAL_PRESOLUTION = None
     pre_sol = pre_oid = pre_oval = None
     REDUCED_COSTS = {}
-    cpx, pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS = glpk_func_GetCPXandPresolve(fba, pre_opt, objF2constr, quiet=quiet, oldlpgen=oldlpgen, with_reduced_costs=with_reduced_costs, method=method)
+    (
+        cpx,
+        pre_sol,
+        pre_oid,
+        pre_oval,
+        OPTIMAL_PRESOLUTION,
+        REDUCED_COSTS,
+    ) = glpk_func_GetCPXandPresolve(
+        fba,
+        pre_opt,
+        objF2constr,
+        quiet=quiet,
+        oldlpgen=oldlpgen,
+        with_reduced_costs=with_reduced_costs,
+        method=method,
+    )
     # if required add the objective function as a constraint
     if objF2constr:
-        glpk_func_SetObjectiveFunctionAsConstraint(cpx, rhs_sense, pre_oval, tol, optPercentage)
+        glpk_func_SetObjectiveFunctionAsConstraint(
+            cpx, rhs_sense, pre_oval, tol, optPercentage
+        )
 
     STORED_OPT = None
     if pre_opt:
@@ -1040,55 +1184,63 @@ def glpk_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
     ##  fba_obj_ids = fba.getActiveObjective().getFluxObjectiveReactions()
     ##  print fba_obj_ids
     ##  for R in fba_obj_ids:
-        ##  if R in selected_reactions:
-            ##  selected_reactions.pop(selected_reactions.index(R))
+    ##  if R in selected_reactions:
+    ##  selected_reactions.pop(selected_reactions.index(R))
     ##  del R, fba_obj_ids
     NUM_FLX = len(selected_reactions)
     print('Total number of reactions: {}'.format(NUM_FLX))
     abs_selected_reactions = ['abs_%s' % r for r in selected_reactions]
     # absJ implicitly assumed to be absJ >= 0
-    #C#cpx.variables.add(names=abs_selected_reactions)
+    # C#cpx.variables.add(names=abs_selected_reactions)
     basecols = len(cpx.cols)
     cpx.cols.add(len(abs_selected_reactions))
     for v_ in range(len(abs_selected_reactions)):
-        cpx.cols[basecols+v_].name = abs_selected_reactions[v_]
-        cpx.cols[basecols+v_].bounds = 0, None
+        cpx.cols[basecols + v_].name = abs_selected_reactions[v_]
+        cpx.cols[basecols + v_].bounds = 0, None
 
     """
      J - abs_J <= 0
      J + abs_J >= 0
     """
     baserows = len(cpx.rows)
-    #tnew = time.time()
+    # tnew = time.time()
     rowNames = tuple([c.name for c in cpx.rows])
     colNames = tuple([c.name for c in cpx.cols])
-    cRange = range(baserows, baserows+(len(selected_reactions)))
+    cRange = range(baserows, baserows + (len(selected_reactions)))
     rcntr = 0
-    cpx.rows.add(len(selected_reactions)*2)
+    cpx.rows.add(len(selected_reactions) * 2)
     for r_ in cRange:
         # name and coefficients
         cpx.rows[r_].name = 'abs{}a'.format(selected_reactions[rcntr])
-        cpx.rows[r_].matrix = [(colNames.index(selected_reactions[rcntr]), 1),\
-                               (colNames.index(abs_selected_reactions[rcntr]), -1)]
+        cpx.rows[r_].matrix = [
+            (colNames.index(selected_reactions[rcntr]), 1),
+            (colNames.index(abs_selected_reactions[rcntr]), -1),
+        ]
         cpx.rows[r_].bounds = None, 0
-        cpx.rows[r_+len(selected_reactions)].name = 'abs{}b'.format(selected_reactions[rcntr])
-        cpx.rows[r_+len(selected_reactions)].matrix = [(colNames.index(selected_reactions[rcntr]), 1),\
-                                (colNames.index(abs_selected_reactions[rcntr]), 1)]
-        cpx.rows[r_+len(selected_reactions)].bounds = 0, None
+        cpx.rows[r_ + len(selected_reactions)].name = 'abs{}b'.format(
+            selected_reactions[rcntr]
+        )
+        cpx.rows[r_ + len(selected_reactions)].matrix = [
+            (colNames.index(selected_reactions[rcntr]), 1),
+            (colNames.index(abs_selected_reactions[rcntr]), 1),
+        ]
+        cpx.rows[r_ + len(selected_reactions)].bounds = 0, None
         rcntr += 1
 
-    glpk_setObjective(cpx, 'MAFS', [(1, j) for j in abs_selected_reactions], 'min', reset=True)
+    glpk_setObjective(
+        cpx, 'MAFS', [(1, j) for j in abs_selected_reactions], 'min', reset=True
+    )
 
     if debug:
         cpx.write(cpxlp=os.path.join(debug_dir, 'MSAF_base_(%s).lp' % time.time()))
-        #cplx_writeLPtoLPTfile(cpx, , title=None, Dir=debug_dir)
+        # cplx_writeLPtoLPTfile(cpx, , title=None, Dir=debug_dir)
         ##  cplx_writeLPtoLPTfile(cpx, 'MSAF_base_%s' % time.time() , title=None, Dir=debug_dir)
 
     glpk_Solve(cpx, method=method)
     glpk_setFBAsolutionToModel(fba, cpx, with_reduced_costs=with_reduced_costs)
     glpk_setSolutionStatusToModel(fba, cpx)
 
-    #cpx.write(cpxlp='test.lp'); return cpx
+    # cpx.write(cpxlp='test.lp'); return cpx
 
     minSum = cpx.obj.value
     fba.setAnnotation('min_flux_sum', minSum)
@@ -1096,11 +1248,12 @@ def glpk_MinimizeSumOfAbsFluxes(fba, selected_reactions=None, pre_opt=True, tol=
     print('\nMinimizeSumOfAbsFluxes objective value: {}\n'.format(minSum))
     if quiet:
         pass
-        #cplx_setOutputStreams(cpx, mode='default')
+        # cplx_setOutputStreams(cpx, mode='default')
     if not return_lp_obj:
         return minSum
     else:
         return cpx
+
 
 def glpk_writeLPtoLPTfile(c, filename, title=None, Dir=None):
     """
@@ -1109,8 +1262,8 @@ def glpk_writeLPtoLPTfile(c, filename, title=None, Dir=None):
     """
     if Dir != None:
         filename = os.path.join(Dir, filename)
-    #if title != None:
-        #c.set_problem_name(title)
-    #c.write(filename+'.lp', filetype='lp')
-    c.write(cpxlp=filename+'.lp')
-    print('LP output as {}'.format(filename+'.lp'))
+    # if title != None:
+    # c.set_problem_name(title)
+    # c.write(filename+'.lp', filetype='lp')
+    c.write(cpxlp=filename + '.lp')
+    print('LP output as {}'.format(filename + '.lp'))

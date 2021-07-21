@@ -2,7 +2,7 @@
 CBMPy: CBCPLEX module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import os
 import time
 import gc
 from collections import OrderedDict
+from packaging import version as pkgver
 
 # this is a hack that needs to be streamlined a bit
 try:
@@ -50,15 +51,16 @@ HAVE_SYMPY = False
 try:
     import sympy
 
-    if (
-        int(sympy.__version__.split('.')[1]) >= 7
-        and int(sympy.__version__.split('.')[2]) >= 4
-    ):
+    if pkgver.parse(sympy.__version__) >= pkgver.Version('0.7.4'):
         HAVE_SYMPY = True
     else:
         del sympy
+        print(
+            '\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.'
+        )
 except ImportError:
     HAVE_SYMPY = False
+
 HAVE_SCIPY = False
 try:
     from scipy.sparse import csr

@@ -2,7 +2,7 @@
 CBMPy: CBRead module
 ====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,14 +26,16 @@ Last edit: $Author: bgoli $ ($Id: CBRead.py 669 2019-02-18 22:58:19Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
 
-#__doc__ = """
-#CBMPy: CBRead module
-#"""
+# from __future__ import unicode_literals
+
+# __doc__ = """
+# CBMPy: CBRead module
+# """
 
 
 import os, time, numpy
+
 # this is a hack that needs to be streamlined a bit
 try:
     import cStringIO as csio
@@ -42,28 +44,36 @@ except ImportError:
 from . import CBXML, CBModel
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 
 ##  try:
-    ##  import psyco
-    ##  psyco.full()
+##  import psyco
+##  psyco.full()
 ##  except:
-    ##  pass
+##  pass
 
-_HAVE_SYMPY_ = None
+from packaging import version as pkgver
+
+_HAVE_SYMPY_ = False
 try:
     import sympy
-    if int(sympy.__version__.split('.')[1]) >= 7 and int(sympy.__version__.split('.')[2]) >= 4:
-        HAVE_SYMPY = True
+
+    if pkgver.parse(sympy.__version__) >= pkgver.Version('0.7.5'):
+        _HAVE_SYMPY_ = True
+
     else:
         del sympy
+        print(
+            '\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.'
+        )
 except ImportError:
-    print('Rational IO not available')
     _HAVE_SYMPY_ = False
-_HAVE_SYMPY_ = None
+
 try:
     import h5py
+
     _HAVE_HD5_ = True
 except ImportError:
     _HAVE_HD5_ = False
@@ -71,24 +81,27 @@ except ImportError:
 _HAVE_XLRD_ = False
 try:
     import xlrd
+
     _HAVE_XLRD_ = True
 except ImportError:
     print('\nINFO: No xlrd module available, Excel spreadsheet reading disabled')
 
-__example_models__ = {'cbmpy_test_core' : 'core_memesa_model.l3.xml',
-                      'cbmpy_test_ecoli' : 'Ecoli_iJR904.glc.l3.xml',
-                     }
+__example_models__ = {
+    'cbmpy_test_core': 'core_memesa_model.l3.xml',
+    'cbmpy_test_ecoli': 'Ecoli_iJR904.glc.l3.xml',
+}
 
 ## this is now obsolete with the new CBDefaultModels module
-#__example_model_path__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'models')
-#if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3.xml')) or\
-   #not os.path.exists(os.path.join(__example_model_path__, 'Ecoli_iJR904.glc.l3.xml')):
-    #import zipfile
-    #print('Installing default models ...')
-    #zfile = zipfile.ZipFile(os.path.join(__example_model_path__, 'default_models.zip.py'), allowZip64=True)
-    #zfile.extractall(path=__example_model_path__)
-    #zfile.close()
-    #del zipfile, zfile
+# __example_model_path__ = os.path.join(__CBCONFIG__['CBMPY_DIR'], 'models')
+# if not os.path.exists(os.path.join(__example_model_path__, 'core_memesa_model.l3.xml')) or\
+# not os.path.exists(os.path.join(__example_model_path__, 'Ecoli_iJR904.glc.l3.xml')):
+# import zipfile
+# print('Installing default models ...')
+# zfile = zipfile.ZipFile(os.path.join(__example_model_path__, 'default_models.zip.py'), allowZip64=True)
+# zfile.extractall(path=__example_model_path__)
+# zfile.close()
+# del zipfile, zfile
+
 
 def loadModel(sbmlfile):
     """
@@ -122,7 +135,13 @@ def loadModel(sbmlfile):
     return mod
 
 
-def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'validate' : False}, scan_notes_gpr=True):
+def readSBML3FBC(
+    fname,
+    work_dir=None,
+    return_sbml_model=False,
+    xoptions={'validate': False},
+    scan_notes_gpr=True,
+):
     """
     Read in an SBML Level 3 file with FBC annotation where and return a CBM model object
 
@@ -148,18 +167,32 @@ def readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={'valid
     """
     if fname in __example_models__:
         from . import CBDefaultModels
+
         print(fname)
         xoptions['read_model_string'] = True
-        xmod = CBXML.sbml_readSBML3FBC(getattr(CBDefaultModels, fname), work_dir, False, xoptions)
+        xmod = CBXML.sbml_readSBML3FBC(
+            getattr(CBDefaultModels, fname), work_dir, False, xoptions
+        )
     else:
         xmod = CBXML.sbml_readSBML3FBC(fname, work_dir, False, xoptions)
     if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
-        print('INFO: no standard gene encoding detected, attempting to load from annotations.')
+        print(
+            'INFO: no standard gene encoding detected, attempting to load from annotations.'
+        )
         xmod.createGeneAssociationsFromAnnotations()
     return xmod
 
-def readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermediate=False, fake_boundary_species_search=False,\
-                  output_dir=None, skip_genes=False, scan_notes_gpr=True):
+
+def readCOBRASBML(
+    fname,
+    work_dir=None,
+    return_sbml_model=False,
+    delete_intermediate=False,
+    fake_boundary_species_search=False,
+    output_dir=None,
+    skip_genes=False,
+    scan_notes_gpr=True,
+):
     """
     Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
     or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
@@ -173,13 +206,27 @@ def readCOBRASBML(fname, work_dir=None, return_sbml_model=False, delete_intermed
      - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
 
     """
-    xmod = CBXML.sbml_readCOBRASBML(fname, work_dir=work_dir, return_sbml_model=False, delete_intermediate=delete_intermediate, fake_boundary_species_search=fake_boundary_species_search, output_dir=output_dir, skip_genes=skip_genes)
+    xmod = CBXML.sbml_readCOBRASBML(
+        fname,
+        work_dir=work_dir,
+        return_sbml_model=False,
+        delete_intermediate=delete_intermediate,
+        fake_boundary_species_search=fake_boundary_species_search,
+        output_dir=output_dir,
+        skip_genes=skip_genes,
+    )
     if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
         xmod.createGeneAssociationsFromAnnotations()
     return xmod
 
 
-def readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_species_search=False, scan_notes_gpr=True):
+def readSBML2FBA(
+    fname,
+    work_dir=None,
+    return_sbml_model=False,
+    fake_boundary_species_search=False,
+    scan_notes_gpr=True,
+):
     """
     Read in an SBML Level 2 file with FBA annotation where:
 
@@ -191,7 +238,12 @@ def readSBML2FBA(fname, work_dir=None, return_sbml_model=False, fake_boundary_sp
 
     """
 
-    xmod = CBXML.sbml_readSBML2FBA(fname, work_dir, return_sbml_model=False, fake_boundary_species_search=fake_boundary_species_search)
+    xmod = CBXML.sbml_readSBML2FBA(
+        fname,
+        work_dir,
+        return_sbml_model=False,
+        fake_boundary_species_search=fake_boundary_species_search,
+    )
     if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
         xmod.createGeneAssociationsFromAnnotations()
     return xmod
@@ -201,13 +253,14 @@ def readLPtoList(fname, work_dir):
     NEW = False
     TYPE = None
     Object = []
-    Constr =[]
+    Constr = []
     Bounds = []
     F = file(os.path.join(work_dir, fname), 'r')
     for l in F:
         if l == '' or l[:2] == '\\\\' or l == '\n' or l.strip() == 'END':
             print('skipping')
-            if __DEBUG__: print(l)
+            if __DEBUG__:
+                print(l)
         else:
             L = l.strip()
             if L == 'Maximize':
@@ -239,6 +292,7 @@ def readLPtoList(fname, work_dir):
         print(Bounds)
     return Object, Constr, Bounds
 
+
 def readSK_FVA(filename):
     """
     Read Stevens FVA results (opt.fva) file and return a list of dictionaries
@@ -258,139 +312,140 @@ def readSK_FVA(filename):
         Vstat = V[1].strip()
         ##  name.append((Jn, Vstat))
         ##  vari.append((Vmin, Vmax))
-        vari.append({'name' : Jn,
-                     'min' : Vmin,
-                     'max' : Vmax,
-                     'status' : Vstat
-                     })
-        if __DEBUG__: print(Jn, Vmin, Vmax, Vstat)
+        vari.append({'name': Jn, 'min': Vmin, 'max': Vmax, 'status': Vstat})
+        if __DEBUG__:
+            print(Jn, Vmin, Vmax, Vstat)
     return vari
 
+
 ##  def readSK_vertexOld(fname, bigfile=False):
-    ##  """
-    ##  Reads in Stevens vertex analysis file and returns:
+##  """
+##  Reads in Stevens vertex analysis file and returns:
 
-        ##  - a list of vertex vectors
-        ##  - a list of ray vectors
-        ##  - the basis of the lineality space as a list of vectors
+##  - a list of vertex vectors
+##  - a list of ray vectors
+##  - the basis of the lineality space as a list of vectors
 
-    ##  all vectors in terms of the column space of N
+##  all vectors in terms of the column space of N
 
-    ##  """
+##  """
 
-    ##  assert _HAVE_SYMPY_, 'Install Sympy for rational IO support'
+##  assert _HAVE_SYMPY_, 'Install Sympy for rational IO support'
 
-    ##  assert os.path.exists(fname), 'Uhm exqueeze me ...'
-    ##  SK_vert_file = file(fname, 'r')
-    ##  VertOut = []
-    ##  LinOut = []
-    ##  RayOut = []
-    ##  if bigfile:
-        ##  VertTmp = gzip.open('_vtx_.tmp.gz','wb', compresslevel=3)
-        ##  LinTmp = gzip.open('_lin_.tmp.gz','wb', compresslevel=3)
-        ##  RayTmp = gzip.open('_ray_.tmp.gz','wb', compresslevel=3)
-    ##  GOvert = False
-    ##  GOray = False
-    ##  GOlin = False
-    ##  lcntr = 0
-    ##  lcntrtmp = 0
-    ##  for l in SK_vert_file:
-        ##  lcntr += 1
-        ##  if lcntr == 1000:
-            ##  print 'Processing vertex: %s' % (lcntr + lcntrtmp)
-            ##  lcntrtmp += lcntr
-            ##  lcntr = 0
-        ##  if '* Lineality basis ' in l:
-            ##  GOvert = False
-            ##  GOray = False
-            ##  GOlin = True
-        ##  if '* Rays ' in l:
-            ##  GOvert = False
-            ##  GOray = True
-            ##  GOlin = False
-        ##  if '* Vertices ' in l:
-            ##  GOvert = True
-            ##  GOray = False
-            ##  GOlin = False
-        ##  if l[:2] != '* ':
-            ##  L = l.split()
-            ##  rowL = []
-            ##  for c in L:
-                ##  c = c.strip()
-                ##  if c == '0':
-                    ##  rnum = '0'
-                    ##  rowL.append(0.0)
-                ##  else:
-                    ##  rnum = sympy.Rational('%s' % c)
-                    ##  rowL.append(rnum.evalf())
-                ##  del rnum
-            ##  del L
-            ##  if GOlin:
-                ##  if bigfile:
-                    ##  rowEnd = len(rowL)
-                    ##  cntr = 0
-                    ##  for e in rowL:
-                        ##  cntr += 1
-                        ##  if e == 0.0:
-                            ##  LinTmp.write('0.0')
-                        ##  else:
-                            ##  LinTmp.write('%.14f' % e)
-                        ##  if cntr == rowEnd:
-                            ##  LinTmp.write('\n')
-                        ##  else:
-                            ##  LinTmp.write(',')
-                ##  else:
-                    ##  LinOut.append(rowL)
-            ##  elif GOray:
-                ##  if bigfile:
-                    ##  rowEnd = len(rowL)
-                    ##  cntr = 0
-                    ##  for e in rowL:
-                        ##  cntr += 1
-                        ##  if e == 0.0:
-                            ##  RayTmp.write('0.0')
-                        ##  else:
-                            ##  RayTmp.write('%.14f' % e)
-                        ##  if cntr == rowEnd:
-                            ##  RayTmp.write('\n')
-                        ##  else:
-                            ##  RayTmp.write(',')
-                ##  else:
-                    ##  RayOut.append(rowL)
-            ##  elif GOvert:
-                ##  if bigfile:
-                    ##  rowEnd = len(rowL)
-                    ##  cntr = 0
-                    ##  for e in rowL:
-                        ##  cntr += 1
-                        ##  if e == 0.0:
-                            ##  VertTmp.write('0.0')
-                        ##  else:
-                            ##  VertTmp.write('%.14f' % e)
-                        ##  if cntr == rowEnd:
-                            ##  VertTmp.write('\n')
-                        ##  else:
-                            ##  VertTmp.write(',')
-                ##  else:
-                    ##  VertOut.append(rowL)
-            ##  del rowL
-    ##  print '\nProcessed %s vertices.\n' % (lcntr + lcntrtmp)
-    ##  SK_vert_file.close()
-    ##  if bigfile:
-        ##  VertTmp.close()
-        ##  RayTmp.close()
-        ##  LinTmp.close()
-        ##  VertTmp = gzip.open('_vtx_.tmp.gz','rb')
-        ##  LinTmp = gzip.open('_lin_.tmp.gz','rb')
-        ##  RayTmp = gzip.open('_ray_.tmp.gz','rb')
-        ##  return VertTmp, RayTmp, LinTmp
-    ##  else:
-        ##  print 'Lineality basis: %s' % len(LinOut)
-        ##  print 'Number of rays: %s' % len(RayOut)
-        ##  print 'Number of vertices: %s' % len(VertOut)
-        ##  return VertOut, RayOut, LinOut
+##  assert os.path.exists(fname), 'Uhm exqueeze me ...'
+##  SK_vert_file = file(fname, 'r')
+##  VertOut = []
+##  LinOut = []
+##  RayOut = []
+##  if bigfile:
+##  VertTmp = gzip.open('_vtx_.tmp.gz','wb', compresslevel=3)
+##  LinTmp = gzip.open('_lin_.tmp.gz','wb', compresslevel=3)
+##  RayTmp = gzip.open('_ray_.tmp.gz','wb', compresslevel=3)
+##  GOvert = False
+##  GOray = False
+##  GOlin = False
+##  lcntr = 0
+##  lcntrtmp = 0
+##  for l in SK_vert_file:
+##  lcntr += 1
+##  if lcntr == 1000:
+##  print 'Processing vertex: %s' % (lcntr + lcntrtmp)
+##  lcntrtmp += lcntr
+##  lcntr = 0
+##  if '* Lineality basis ' in l:
+##  GOvert = False
+##  GOray = False
+##  GOlin = True
+##  if '* Rays ' in l:
+##  GOvert = False
+##  GOray = True
+##  GOlin = False
+##  if '* Vertices ' in l:
+##  GOvert = True
+##  GOray = False
+##  GOlin = False
+##  if l[:2] != '* ':
+##  L = l.split()
+##  rowL = []
+##  for c in L:
+##  c = c.strip()
+##  if c == '0':
+##  rnum = '0'
+##  rowL.append(0.0)
+##  else:
+##  rnum = sympy.Rational('%s' % c)
+##  rowL.append(rnum.evalf())
+##  del rnum
+##  del L
+##  if GOlin:
+##  if bigfile:
+##  rowEnd = len(rowL)
+##  cntr = 0
+##  for e in rowL:
+##  cntr += 1
+##  if e == 0.0:
+##  LinTmp.write('0.0')
+##  else:
+##  LinTmp.write('%.14f' % e)
+##  if cntr == rowEnd:
+##  LinTmp.write('\n')
+##  else:
+##  LinTmp.write(',')
+##  else:
+##  LinOut.append(rowL)
+##  elif GOray:
+##  if bigfile:
+##  rowEnd = len(rowL)
+##  cntr = 0
+##  for e in rowL:
+##  cntr += 1
+##  if e == 0.0:
+##  RayTmp.write('0.0')
+##  else:
+##  RayTmp.write('%.14f' % e)
+##  if cntr == rowEnd:
+##  RayTmp.write('\n')
+##  else:
+##  RayTmp.write(',')
+##  else:
+##  RayOut.append(rowL)
+##  elif GOvert:
+##  if bigfile:
+##  rowEnd = len(rowL)
+##  cntr = 0
+##  for e in rowL:
+##  cntr += 1
+##  if e == 0.0:
+##  VertTmp.write('0.0')
+##  else:
+##  VertTmp.write('%.14f' % e)
+##  if cntr == rowEnd:
+##  VertTmp.write('\n')
+##  else:
+##  VertTmp.write(',')
+##  else:
+##  VertOut.append(rowL)
+##  del rowL
+##  print '\nProcessed %s vertices.\n' % (lcntr + lcntrtmp)
+##  SK_vert_file.close()
+##  if bigfile:
+##  VertTmp.close()
+##  RayTmp.close()
+##  LinTmp.close()
+##  VertTmp = gzip.open('_vtx_.tmp.gz','rb')
+##  LinTmp = gzip.open('_lin_.tmp.gz','rb')
+##  RayTmp = gzip.open('_ray_.tmp.gz','rb')
+##  return VertTmp, RayTmp, LinTmp
+##  else:
+##  print 'Lineality basis: %s' % len(LinOut)
+##  print 'Number of rays: %s' % len(RayOut)
+##  print 'Number of vertices: %s' % len(VertOut)
+##  return VertOut, RayOut, LinOut
 
-def readSK_vertexOld(fname, bigfile=False, fast_rational=False, nformat='%.14f', compresslevel=3):
+
+def readSK_vertexOld(
+    fname, bigfile=False, fast_rational=False, nformat='%.14f', compresslevel=3
+):
     """
     Reads in Stevens vertex analysis file and returns, even more optimized for large datasets than the original.
 
@@ -402,6 +457,7 @@ def readSK_vertexOld(fname, bigfile=False, fast_rational=False, nformat='%.14f',
 
     """
     import gzip
+
     if fast_rational:
         pass
     else:
@@ -420,9 +476,9 @@ def readSK_vertexOld(fname, bigfile=False, fast_rational=False, nformat='%.14f',
     LinOut = []
     RayOut = []
     if bigfile:
-        VertTmp = gzip.open('_vtx_.tmp.gz','wb', compresslevel=compresslevel)
-        LinTmp = gzip.open('_lin_.tmp.gz','wb', compresslevel=compresslevel)
-        RayTmp = gzip.open('_ray_.tmp.gz','wb', compresslevel=compresslevel)
+        VertTmp = gzip.open('_vtx_.tmp.gz', 'wb', compresslevel=compresslevel)
+        LinTmp = gzip.open('_lin_.tmp.gz', 'wb', compresslevel=compresslevel)
+        RayTmp = gzip.open('_ray_.tmp.gz', 'wb', compresslevel=compresslevel)
     GOvert = False
     GOray = False
     GOlin = False
@@ -432,7 +488,11 @@ def readSK_vertexOld(fname, bigfile=False, fast_rational=False, nformat='%.14f',
     for l in SK_vert_file:
         lcntr += 1
         if lcntr == 1000:
-            print('Processing vertex: {} ({} min)'.format(lcntr + lcntrtmp, round((time.time()-TZero)/60.0,1)))
+            print(
+                'Processing vertex: {} ({} min)'.format(
+                    lcntr + lcntrtmp, round((time.time() - TZero) / 60.0, 1)
+                )
+            )
             lcntrtmp += lcntr
             lcntr = 0
         if '* Lineality basis ' in l:
@@ -467,7 +527,7 @@ def readSK_vertexOld(fname, bigfile=False, fast_rational=False, nformat='%.14f',
                             rowL.append(float(rnum[0]))
                             ##  print c, float(rnum[0])
                         else:
-                            rowL.append(float(rnum[0])/float(rnum[1]))
+                            rowL.append(float(rnum[0]) / float(rnum[1]))
                             ##  print c, float(rnum[0].strip())/float(rnum[1].strip())
                 del rnum
             del L
@@ -528,9 +588,9 @@ def readSK_vertexOld(fname, bigfile=False, fast_rational=False, nformat='%.14f',
         RayTmp.close()
         LinTmp.close()
         try:
-            VertTmp = gzip.open('_vtx_.tmp.gz','rb')
-            LinTmp = gzip.open('_lin_.tmp.gz','rb')
-            RayTmp = gzip.open('_ray_.tmp.gz','rb')
+            VertTmp = gzip.open('_vtx_.tmp.gz', 'rb')
+            LinTmp = gzip.open('_lin_.tmp.gz', 'rb')
+            RayTmp = gzip.open('_ray_.tmp.gz', 'rb')
             return VertTmp, RayTmp, LinTmp
         except Exception as ex:
             print(ex)
@@ -542,7 +602,15 @@ def readSK_vertexOld(fname, bigfile=False, fast_rational=False, nformat='%.14f',
         print('Number of vertices: {}'.format(len(VertOut)))
         return VertOut, RayOut, LinOut
 
-def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', compression=None, hdf5file=None):
+
+def readSK_vertex(
+    fname,
+    bigfile=True,
+    fast_rational=False,
+    nformat='%.14f',
+    compression=None,
+    hdf5file=None,
+):
     """
     Reads in Stevens vertex analysis file:
 
@@ -563,7 +631,7 @@ def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', com
 
     """
 
-    bigfile=True
+    bigfile = True
 
     if not fast_rational:
         assert _HAVE_SYMPY_, 'Install Sympy for rational IO support'
@@ -585,17 +653,19 @@ def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', com
     CCNTR = 0
     for l in SK_vert_file:
         if '* Vertices (' in l:
-            VCNTR = long(l.replace('* Vertices (','').replace('vectors):','').strip())
+            VCNTR = long(l.replace('* Vertices (', '').replace('vectors):', '').strip())
             break
     SK_vert_file.seek(0)
     for l in SK_vert_file:
         if '* Lineality basis (' in l:
-            LCNTR = long(l.replace('* Lineality basis (','').replace('vectors):','').strip())
+            LCNTR = long(
+                l.replace('* Lineality basis (', '').replace('vectors):', '').strip()
+            )
             break
     SK_vert_file.seek(0)
     for l in SK_vert_file:
         if '* Rays (' in l:
-            RCNTR = long(l.replace('* Rays (','').replace('vectors):','').strip())
+            RCNTR = long(l.replace('* Rays (', '').replace('vectors):', '').strip())
             break
     SK_vert_file.seek(0)
     for l in SK_vert_file:
@@ -605,24 +675,30 @@ def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', com
             del L
             break
     SK_vert_file.seek(0)
-    print(RCNTR, LCNTR, VCNTR,  CCNTR)
+    print(RCNTR, LCNTR, VCNTR, CCNTR)
     VertOut = []
     LinOut = []
     RayOut = []
     outFileName = '_vtx_.tmp.hdf5'
     if bigfile:
         if hdf5file != None:
-            outFileName = hdf5file+'.'+str(compression)+'.hdf5'
-        HD5out = h5py.File(outFileName,'w')
+            outFileName = hdf5file + '.' + str(compression) + '.hdf5'
+        HD5out = h5py.File(outFileName, 'w')
         if 'data' in HD5out:
             del HD5out['data']
         Dgrp = HD5out.create_group('data')
         if VCNTR > 0:
-            VertTmp = HD5out['data'].create_dataset('vertices', (VCNTR, CCNTR), dtype=numpy.double, compression=compression)
+            VertTmp = HD5out['data'].create_dataset(
+                'vertices', (VCNTR, CCNTR), dtype=numpy.double, compression=compression
+            )
         if LCNTR > 0:
-            LinTmp = HD5out['data'].create_dataset('lin', (LCNTR, CCNTR), dtype=numpy.double, compression=compression)
+            LinTmp = HD5out['data'].create_dataset(
+                'lin', (LCNTR, CCNTR), dtype=numpy.double, compression=compression
+            )
         if RCNTR > 0:
-            RayTmp = HD5out['data'].create_dataset('rays', (RCNTR, CCNTR), dtype=numpy.double, compression=compression)
+            RayTmp = HD5out['data'].create_dataset(
+                'rays', (RCNTR, CCNTR), dtype=numpy.double, compression=compression
+            )
     GOvert = False
     GOray = False
     GOlin = False
@@ -637,7 +713,16 @@ def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', com
     for l in SK_vert_file:
         lcntr += 1
         if lcntr == 1000:
-            print('Processing vertex: {}: {} percent @ {} minutes ({} estimated)'.format(lcntr + lcntrtmp, (float(lcntr + lcntrtmp)/float(VCNTR)*100.0), round((time.time()-TZero)/60.0,1), float(VCNTR)/float(lcntr + lcntrtmp)*round((time.time()-TZero)/60.0,1)))
+            print(
+                'Processing vertex: {}: {} percent @ {} minutes ({} estimated)'.format(
+                    lcntr + lcntrtmp,
+                    (float(lcntr + lcntrtmp) / float(VCNTR) * 100.0),
+                    round((time.time() - TZero) / 60.0, 1),
+                    float(VCNTR)
+                    / float(lcntr + lcntrtmp)
+                    * round((time.time() - TZero) / 60.0, 1),
+                )
+            )
             lcntrtmp += lcntr
             lcntr = 0
         if '* Lineality basis ' in l and LCNTR > 0:
@@ -666,13 +751,13 @@ def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', com
                     else:
                         if not fast_rational:
                             rnum = sympy.Rational('%s' % val)
-                            LinTmp[lin_count,c] = rnum.evalf()
+                            LinTmp[lin_count, c] = rnum.evalf()
                         else:
                             rnum = val.split('/')
                             if len(rnum) == 1:
-                                LinTmp[lin_count,c] = float(rnum[0])
+                                LinTmp[lin_count, c] = float(rnum[0])
                             else:
-                                LinTmp[lin_count,c] = float(rnum[0])/float(rnum[1])
+                                LinTmp[lin_count, c] = float(rnum[0]) / float(rnum[1])
                 lin_count += 1
             elif GOray:
                 RayTmp[ray_count] = 0.0
@@ -685,13 +770,13 @@ def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', com
                     else:
                         if not fast_rational:
                             rnum = sympy.Rational('%s' % val)
-                            RayTmp[ray_count,c] = rnum.evalf()
+                            RayTmp[ray_count, c] = rnum.evalf()
                         else:
                             rnum = val.split('/')
                             if len(rnum) == 1:
-                                RayTmp[ray_count,c] = float(rnum[0])
+                                RayTmp[ray_count, c] = float(rnum[0])
                             else:
-                                RayTmp[ray_count,c] = float(rnum[0])/float(rnum[1])
+                                RayTmp[ray_count, c] = float(rnum[0]) / float(rnum[1])
                 ray_count += 1
             elif GOvert:
                 VertTmp[vert_count] = 0.0
@@ -712,12 +797,12 @@ def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', com
                         if fast_rational:
                             rnum = val.split('/')
                             if len(rnum) == 1:
-                                VertTmp[vert_count,c] = float(rnum[0])
+                                VertTmp[vert_count, c] = float(rnum[0])
                             else:
-                                VertTmp[vert_count,c] = float(rnum[0])/float(rnum[1])
+                                VertTmp[vert_count, c] = float(rnum[0]) / float(rnum[1])
                         else:
                             rnum = sympy.Rational('%s' % val)
-                            VertTmp[vert_count,c] = rnum.evalf()
+                            VertTmp[vert_count, c] = rnum.evalf()
 
                 vert_count += 1
 
@@ -733,7 +818,8 @@ def readSK_vertex(fname, bigfile=True, fast_rational=False, nformat='%.14f', com
         print('Number of vertices: {}'.format(len(VertOut)))
         return VertOut, RayOut, LinOut
 
-def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries=False):
+
+def readExcel97Model(xlname, write_sbml=True, sbml_level=3, return_dictionaries=False):
     """
     Reads a model encoded as an Excel97 workbook and returns it as a CBMPy model object and SBML file. Note the workbook must be formatted
     exactly like those produced by cbm.writeModelToExcel97(). Note that reactions have to be defined in **both** the *reaction*
@@ -749,7 +835,9 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
     """
 
     if not _HAVE_XLRD_:
-        print('\nERROR: Cannot read Excel file, XLRD package not available (http://pypi.python.org/pypi/xlrd)')
+        print(
+            '\nERROR: Cannot read Excel file, XLRD package not available (http://pypi.python.org/pypi/xlrd)'
+        )
         return
 
     assert os.path.exists(xlname), '\nERROR: File "{}" does not exist'.format(xlpath)
@@ -758,10 +846,11 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
         """
         Utility function converting a XLRD cell to a string
         """
-        #return str(c.value.strip())
+        # return str(c.value.strip())
         return str(c.value)
 
     MSGLog = csio.StringIO()
+
     def logMsg(msg):
         """
         Message logging utility
@@ -769,7 +858,6 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
         """
         print(msg)
         MSGLog.write('{}\n'.format(msg))
-
 
     wb = xlrd.open_workbook(xlname)
 
@@ -787,7 +875,6 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
         sComp = wb.sheet_by_name('compartments')
     except xlrd.XLRDError:
         sComp = None
-
 
     # INFO
     dInfo = {}
@@ -831,7 +918,7 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
                 else:
                     met[mcolNames[c_]] = c2s(r[c_])
                 if mcolNames[c_] == 'compartment':
-                    dCompartments[c2s(r[c_])] = {'id' : c2s(r[c_])}
+                    dCompartments[c2s(r[c_])] = {'id': c2s(r[c_])}
             else:
                 annot[mcolNames[c_]] = c2s(r[c_])
         met['annot'] = annot
@@ -864,7 +951,7 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
                 else:
                     reac[rcolNames[c_]] = c2s(r[c_])
                 if rcolNames[c_] == 'compartment':
-                    dCompartments[c2s(r[c_])] = {'id' : c2s(r[c_])}
+                    dCompartments[c2s(r[c_])] = {'id': c2s(r[c_])}
             else:
                 annot[rcolNames[c_]] = c2s(r[c_])
         reac['annot'] = annot
@@ -877,7 +964,7 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
     for n_ in range(0, sNR.nrows, 3):
         coeff = True
         sub = []
-        s = sNR.row(n_+1)
+        s = sNR.row(n_ + 1)
         for c in range(1, len(s)):
             if s[c].value != '' and c2s(s[c]) != '':
                 if coeff:
@@ -891,7 +978,7 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
 
         coeff = True
         prod = []
-        p = sNR.row(n_+2)
+        p = sNR.row(n_ + 2)
         for c in range(1, len(p)):
             if p[c].value != '' and c2s(p[c]) != '':
                 if coeff:
@@ -902,9 +989,7 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
                     coeff = True
                     if c2s(p[c]) not in reagentList:
                         reagentList.append(c2s(p[c]))
-        nDict[c2s(sNR.row(n_)[0])] = {'subs' : sub,
-                                      'prod' : prod
-                                      }
+        nDict[c2s(sNR.row(n_)[0])] = {'subs': sub, 'prod': prod}
 
     # compartments
     if sComp != None:
@@ -956,17 +1041,20 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
     if '' in dMet:
         dMet.pop('')
 
-
     # cross check reactions
     dReactError = {}
     nDictError = {}
     for r_ in tuple(dReact):
         if r_ not in nDict:
-            logMsg('ERROR: Reaction "{}" listed but not defined ... removing.'.format(r_))
+            logMsg(
+                'ERROR: Reaction "{}" listed but not defined ... removing.'.format(r_)
+            )
             dReactError[r_] = dReact.pop(r_)
     for r_ in tuple(nDict):
         if r_ not in dReact:
-            logMsg('ERROR: Reaction "{}" defined but not listed ... removing.'.format(r_))
+            logMsg(
+                'ERROR: Reaction "{}" defined but not listed ... removing.'.format(r_)
+            )
             nDictError[r_] = nDict.pop(r_)
 
     # cross check reagents versus species
@@ -976,9 +1064,9 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
     for s_ in dMet:
         if s_ not in reagentList:
             logMsg('WARNING: Metabolite "{}" listed but not used.'.format(s_))
-            #dMetError[s_] = dMet.pop(s_)
+            # dMetError[s_] = dMet.pop(s_)
 
-    for s_ in (reagentList):
+    for s_ in reagentList:
         if s_ not in dMet:
             logMsg('ERROR: Reagent "{}" used but not defined.'.format(s_))
             reagentError.append(reagentList.pop(reagentList.index(s_)))
@@ -989,10 +1077,15 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
             reag = [a[1] for a in nDict[e_]['subs']] + [a[1] for a in nDict[e_]['prod']]
             for r_ in reag:
                 if r_ in reagentError:
-                    logMsg('ERROR: Reaction "{}" contains an unknown reagent "{}" ... removing'.format(e_, r_))
-                    nDictReagentError[e_] = { 'reaction' : dReact.pop(e_),
-                                              'stoich' : nDict.pop(e_)
-                                              }
+                    logMsg(
+                        'ERROR: Reaction "{}" contains an unknown reagent "{}" ... removing'.format(
+                            e_, r_
+                        )
+                    )
+                    nDictReagentError[e_] = {
+                        'reaction': dReact.pop(e_),
+                        'stoich': nDict.pop(e_),
+                    }
     if return_dictionaries:
         return (dInfo, dReact, dMet, nDict, dCompartments, dMir)
 
@@ -1030,8 +1123,15 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
     # add metabolites
     for m_ in dMet:
         M = dMet[m_]
-        S = CBModel.Species(M['id'], boundary=M['fixed'], name=M['name'], value=0.0,\
-                            compartment=M['compartment'], charge=M['charge'], chemFormula=M['chemformula'])
+        S = CBModel.Species(
+            M['id'],
+            boundary=M['fixed'],
+            name=M['name'],
+            value=0.0,
+            compartment=M['compartment'],
+            charge=M['charge'],
+            chemFormula=M['chemformula'],
+        )
         for a_ in M['annot']:
             S.setAnnotation(a_, M['annot'][a_])
         cmod.addSpecies(S)
@@ -1065,12 +1165,16 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
                 lb = -numpy.inf
             else:
                 lb = 0.0
-            logMsg('Undefined lower bound for reaction "{}" setting to {}'.format(r_, lb))
+            logMsg(
+                'Undefined lower bound for reaction "{}" setting to {}'.format(r_, lb)
+            )
         try:
             ub = float(ub)
         except:
             ub = numpy.inf
-            logMsg('Undefined upper bound for reaction "{}" setting to {}'.format(r_, ub))
+            logMsg(
+                'Undefined upper bound for reaction "{}" setting to {}'.format(r_, ub)
+            )
         cmod.createReactionLowerBound(r_, lb)
         cmod.createReactionUpperBound(r_, ub)
     del r_, lb, ub
@@ -1081,48 +1185,55 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
     cmod.addObjective(O, True)
     del O
 
-
     # markup with MIRIAM
-    for x_ in cmod.species+cmod.reactions+cmod.compartments:
+    for x_ in cmod.species + cmod.reactions + cmod.compartments:
         xid = x_.getId()
         if xid in dMir:
             for q_ in dMir[xid]:
                 for i_ in dMir[xid][q_]:
-                    #ent, mid = i_.rsplit('/',1)
-                    #x_.addMIRIAMannotation(q_, ent, mid)
-                    #if q_ == 'is':
-                        #qual = 'isA'
-                    #else:
-                        #qual = q_
+                    # ent, mid = i_.rsplit('/',1)
+                    # x_.addMIRIAMannotation(q_, ent, mid)
+                    # if q_ == 'is':
+                    # qual = 'isA'
+                    # else:
+                    # qual = q_
                     if x_.miriam == None:
                         x_.miriam = CBModel.MIRIAMannotation()
                     x_.miriam.addIDorgURI(q_, i_)
 
     # ok lets play
-    #try:
-        #cmod.createGeneAssociationsFromAnnotations()
-        #geneerrors = cmod.testGeneProteinAssociations()
-        #logMsg('Successfully created gene associations from annotations.')
-    #except Exception as ex:
-        #logMsg(ex)
-    #try:
-        #cbm.analyzeModel(cmod)
-        #logMsg('Successfully optimized model.')
-    #except Exception as ex:
-        #logMsg(ex)
-    #try:
-        #cbm.writeModelToExcel97(cmod, xlname.replace('.xls','')+'.new')
-        #logMsg('Successfully wrote model to new Excel spreadsheet: "{}"'.format(xlname.replace('.xls','')+'.DEBUG.new.xls'))
-    #except Exception as ex:
-        #logMsg(ex)
+    # try:
+    # cmod.createGeneAssociationsFromAnnotations()
+    # geneerrors = cmod.testGeneProteinAssociations()
+    # logMsg('Successfully created gene associations from annotations.')
+    # except Exception as ex:
+    # logMsg(ex)
+    # try:
+    # cbm.analyzeModel(cmod)
+    # logMsg('Successfully optimized model.')
+    # except Exception as ex:
+    # logMsg(ex)
+    # try:
+    # cbm.writeModelToExcel97(cmod, xlname.replace('.xls','')+'.new')
+    # logMsg('Successfully wrote model to new Excel spreadsheet: "{}"'.format(xlname.replace('.xls','')+'.DEBUG.new.xls'))
+    # except Exception as ex:
+    # logMsg(ex)
     if write_sbml:
         try:
             if sbml_level == 3:
-                CBXML.sbml_writeSBML3FBC(cmod, xlname+'.l3.xml', gpr_from_annot=False)
-                logMsg('Successfully wrote model SBML3FBC file: "{}"'.format(xlname+'.l3.xml'))
+                CBXML.sbml_writeSBML3FBC(cmod, xlname + '.l3.xml', gpr_from_annot=False)
+                logMsg(
+                    'Successfully wrote model SBML3FBC file: "{}"'.format(
+                        xlname + '.l3.xml'
+                    )
+                )
             else:
-                CBXML.sbml_writeSBML2FBA(cmod, xlname+'.l3.xml')
-                logMsg('Successfully wrote model SBML2FBA file: "{}"'.format(xlname+'.l3.xml'))
+                CBXML.sbml_writeSBML2FBA(cmod, xlname + '.l3.xml')
+                logMsg(
+                    'Successfully wrote model SBML2FBA file: "{}"'.format(
+                        xlname + '.l3.xml'
+                    )
+                )
         except Exception as ex:
             logMsg(ex)
 
@@ -1140,4 +1251,3 @@ def readExcel97Model(xlname,  write_sbml=True, sbml_level=3, return_dictionaries
     MSGLog.close()
 
     return cmod
-

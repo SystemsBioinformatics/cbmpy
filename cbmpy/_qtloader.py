@@ -2,7 +2,7 @@
 CBMPy: CBQt4 module
 ===================
 Constraint Based Modelling in Python (http://pysces.sourceforge.net/getNewReaction)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ Last edit: $Author: bgoli $ ($Id: CBQt4.py 197 2014-06-25 12:26:38Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 from cbmpy.CBQt4 import fileDialogue
 import os

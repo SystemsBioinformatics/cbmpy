@@ -2,7 +2,7 @@
 CBMPy: CBGLPK module
 ====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,19 +29,23 @@ from __future__ import absolute_import
 
 # from __future__ import unicode_literals
 
+from packaging import version as pkgver
+
 HAVE_SYMPY = False
 try:
     import sympy
 
-    if (
-        int(sympy.__version__.split('.')[1]) >= 7
-        and int(sympy.__version__.split('.')[2]) >= 4
-    ):
+    if pkgver.parse(sympy.__version__) >= pkgver.Version('0.7.5'):
         HAVE_SYMPY = True
+
     else:
         del sympy
+        print(
+            '\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.'
+        )
 except ImportError:
     HAVE_SYMPY = False
+
 
 import os
 import time
@@ -119,6 +123,9 @@ def glpk_constructLPfromFBA(fba, fname=None):
     - *fname* optional filename if defined writes out the constructed lp
 
     """
+
+    print('\nCBGLPK based on swiglpk: not all methods implimented yet!')
+
     _Stime = time.time()
 
     # define model and add variables
