@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier (@bgoli)
 
-# About
+## About
 PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
 based modelling and analysis. It has been designed using principles developed
 in the PySCeS simulation software project: usability, flexibility and accessibility.
@@ -40,22 +40,22 @@ For more information on the development and use of CBMPy (https://github.com/Sys
 CBMPy has been tested on Windows 7 and 8.1, 10, Mac OSX and Ubuntu Linux 12.04, 14.04, 16.04, 20.04.
 CBMPy is currently developed on Python 3.7 and Python 3.6 or newer is highly recommended
 
-# Install
-The best way to get the basic CBMPy running is to install with Pip or create an Anaconda environment. CBMPy is developed on GitHub (https://github.com/SystemsBioinformatics/cbmpy)
+## Install
+The best way to get the basic CBMPy running is to install from **PyPI** or create an Anaconda environment. CBMPy is developed on GitHub (https://github.com/SystemsBioinformatics/cbmpy)
 
-## Install with pip using requirements.txt
+### Install with pip using requirements.txt
 From a terrminal or command prompt try:
 
 `pip install -r requirements.txt`
 
-## Install by creating an Anaconda environment using environment.yml
-From a terrminal or command prompt try:
+### Install by creating an Anaconda environment using environment.yml
+From a terminal or command prompt try:
 
 `conda env create -f=environment.yml`
 
-This creates an environment **cbmpy** that can be accessed from the command line using `conda activate cbmpy3`
+This creates an environment **cbmpy3** that can be accessed from the command line using `conda activate cbmpy3`
 
-## Check the basic installation
+### Check the basic installation
 To check you installation follow the installation try the following in a Python shell:
 
 ```
@@ -63,13 +63,13 @@ import cbmpy
 cmod = cbmpy.readSBML3FBC('cbmpy_test_core')
 cbmpy.doFBA(cmod)
 ```
-# Updating CBMPy
+## Updating CBMPy
 Once you have installed CBMPy it can be easily upgraded.
 
-## Pip update
+### Pip update
 `pip install --upgrade cbmpy`
 
-## Anaconda update
+### Anaconda update
 `conda update cbmpy`
 
 (c) Brett G. Olivier, Amsterdam, 2014-2021
