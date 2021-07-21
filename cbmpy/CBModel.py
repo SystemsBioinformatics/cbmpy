@@ -5877,7 +5877,7 @@ class GeneProteinAssociation(Fbase):
                 # print('addGeneRef')
             else:
                 # print('createAssociationAndGeneRefs', gid, label)
-                if gid is None or gid is 'None':
+                if gid is None or gid == 'None':
                     print(self.getTree(), genes, gid, label)
                     continue
                 self.__objref__().addGene(Gene(gid, label, active=True))

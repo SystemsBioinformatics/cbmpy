@@ -3027,7 +3027,7 @@ def convertExcelToFloat(num):
     ## keep this in sync with convertFloatToExcel
     if num == '':
         rval = None
-    elif num is 'nan':
+    elif num == 'nan':
         rval = numpy.nan
     elif num == 'inf':
         rval = numpy.inf

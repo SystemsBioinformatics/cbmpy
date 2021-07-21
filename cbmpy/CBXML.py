@@ -277,7 +277,7 @@ def formatSbmlId(s):
             out += x
         else:
             out += '_'
-    if not out[0].isalpha() and out[0] is not '_':
+    if not out[0].isalpha() and out[0] != '_':
         out = '_' + out
     return out
 
