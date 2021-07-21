@@ -30,8 +30,19 @@ local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 
 try:
     from setuptools import setup
+
+    install_requires_src = ['numpy']
+    extras_requires_src = {
+        'sympy': ['sympy'],
+        'glpk': ['swiglpk',],
+        'sbml': ['python_libsbml', 'lxml',],
+        'all': ['sympy', 'swiglpk', 'python_libsbml', 'lxml',],
+    }
 except:
     from distutils.core import setup
+
+    install_requires_src = []
+    extras_requires_src = {}
 
 mydata_files = []
 
@@ -64,6 +75,8 @@ setup(
     license="GNU General Public License (GPL)",
     keywords="computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard",
     # zip_safe = False,
+    install_requires=install_requires_src,
+    extras_requires=extras_requires_src,
     requires=['numpy', 'sympy', 'libsbml', 'nose'],
     platforms=["Windows", "Linux", "Mac"],
     classifiers=[
@@ -90,8 +103,8 @@ try:
 except ImportError:
     pass
 
-readme = """ PySCeS-CBMPy
- ============
+readme = """ CBMPy
+ =====
 
  PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
  based modelling and analysis. It has been designed using principles developed
