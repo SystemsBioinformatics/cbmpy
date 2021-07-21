@@ -2,7 +2,7 @@
 CBMPy: CBSolver2 module
 =======================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,39 +19,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 Author: Brett G. Olivier
 Contact email: bgoli@users.sourceforge.net
-Last edit: $Author: bgoli $ ($Id: CBSolver.py 305 2018-04-23 15:18:31Z bgoli $)
+Last edit: $Author: bgoli $ ($Id: CBSolver.py 305 2022-04-23 15:18:31Z bgoli $)
 
 """
 
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 SOLVER_PREF = __CBCONFIG__['SOLVER_PREF']
-#__CBCONFIG__['SOLVER_ACTIVE'] = None
+# __CBCONFIG__['SOLVER_ACTIVE'] = None
 
 HAVE_CPLEX = False
 HAVE_ECYGLPKI = False
 HAVE_GUROBI = False
 try:
     import cplex as cplex
+
     HAVE_CPLEX = True
 except ImportError:
     pass
 try:
     import ecyglpki as ecyglpki
+
     HAVE_ECYGLPKI = True
 except ImportError as why:
     print(why)
 # try:
-    #import gurobi as _gurobi_
-    #HAVE_GUROBI = True
+# import gurobi as _gurobi_
+# HAVE_GUROBI = True
 # except ImportError:
-    # pass
+# pass
 print('HAVE_ECYGLPKI:', HAVE_ECYGLPKI)
 print('HAVE_CPLEX:', HAVE_CPLEX)
 print('HAVE_GUROBI:', HAVE_GUROBI)
@@ -62,6 +66,7 @@ class LPBase(object):
     The base of all LP's
 
     """
+
     obj = None
     id = None
     name = None
@@ -87,7 +92,11 @@ class LPBase(object):
          - *sense* is the string 'MAX' or 'MIN'
 
         """
-        assert sense in self._objective_senses_, '\n{} is not a valid sense, must be one of {}.'.format(sense, self._objective_senses_)
+        assert (
+            sense in self._objective_senses_
+        ), '\n{} is not a valid sense, must be one of {}.'.format(
+            sense, self._objective_senses_
+        )
         self.objective_sense = sense
 
     def addLinearConstraint(self, cid, arr, sense, rhs, overwrite=False):
@@ -101,8 +110,14 @@ class LPBase(object):
          - *overwrite* [default=False] if a cid already exists overwrite it
 
         """
-        assert len(arr) > 0, '\nAt least one coefficient, variable pair needs to be defined.'
-        assert sense in self._constraint_senses_, '\n{} is not a valid sense, must be one of {}.'.format(sense, self._constraint_senses_)
+        assert (
+            len(arr) > 0
+        ), '\nAt least one coefficient, variable pair needs to be defined.'
+        assert (
+            sense in self._constraint_senses_
+        ), '\n{} is not a valid sense, must be one of {}.'.format(
+            sense, self._constraint_senses_
+        )
         if self.linear_constraints is None:
             self.linear_constraints = {}
         if cid in self.linear_constraints and not overwrite:
@@ -126,14 +141,14 @@ class QPbase(object):
 
 
 class LPCPLEX(LPBase):
-        """
+    """
     CPLEX LP implimentation
 
     """
 
 
 class LPECYGLPKI(LPBase):
-        """
+    """
     ECYGLPKI LP implimentation
 
     """

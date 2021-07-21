@@ -1,6 +1,8 @@
 include LICENCE_GPLv3.txt
-include README.txt
+include README.md
+include RELEASES.md
+include CONTRIBUTORS.md
+include environment.yml
+include requirements.txt
 include cbmpy/*
-include cbmpy/models/*
-include cbmpy/nosetests/*
 include cbmpy/fluxmodules/*

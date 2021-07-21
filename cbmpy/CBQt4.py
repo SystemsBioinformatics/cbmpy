@@ -2,7 +2,7 @@
 CBMPy: CBQt4 module
 ===================
 Constraint Based Modelling in Python (http://pysces.sourceforge.net/getNewReaction)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ Last edit: $Author: bgoli $ ($Id: CBQt4.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os
 import time
@@ -44,6 +45,7 @@ try:
     import PyQt4
     from PyQt4 import QtCore, QtGui, QtSvg
     from PyQt4.QtWebKit import QGraphicsWebView
+
     HAVE_QT4 = True
     print('Qt4 GUI tools available')
 except ImportError as ex:
@@ -53,7 +55,7 @@ except ImportError as ex:
 
 class ReactionCreator(QtGui.QWidget):
 
-    #_fba = None
+    # _fba = None
     _mlist = None
     _rlist = None
     _flist = None
@@ -92,7 +94,9 @@ class ReactionCreator(QtGui.QWidget):
 
     def addSubstrate(self, coeff, sid):
         self.tblSub.insertRow(self.tblSubRow)
-        self.tblSub.setItem(self.tblSubRow, 0, QtGui.QTableWidgetItem('{}'.format(coeff)))
+        self.tblSub.setItem(
+            self.tblSubRow, 0, QtGui.QTableWidgetItem('{}'.format(coeff))
+        )
         self.tblSub.setItem(self.tblSubRow, 1, QtGui.QTableWidgetItem('{}'.format(sid)))
         CF = 'None'
         if sid in self._cfdict:
@@ -118,8 +122,12 @@ class ReactionCreator(QtGui.QWidget):
 
     def addProduct(self, coeff, sid):
         self.tblProd.insertRow(self.tblProdRow)
-        self.tblProd.setItem(self.tblProdRow, 0, QtGui.QTableWidgetItem('{}'.format(coeff)))
-        self.tblProd.setItem(self.tblProdRow, 1, QtGui.QTableWidgetItem('{}'.format(sid)))
+        self.tblProd.setItem(
+            self.tblProdRow, 0, QtGui.QTableWidgetItem('{}'.format(coeff))
+        )
+        self.tblProd.setItem(
+            self.tblProdRow, 1, QtGui.QTableWidgetItem('{}'.format(sid))
+        )
         CF = 'None'
         if sid in self._cfdict:
             CF = self._cfdict[sid]
@@ -143,9 +151,9 @@ class ReactionCreator(QtGui.QWidget):
         self.checkBalance()
 
     # def keyPressEvent(self, event):
-        #print('KeyPress key: {}'.format(str(event.key())))
-        # if event.key() == 16777223:
-            #print('You pressed the delete key')
+    # print('KeyPress key: {}'.format(str(event.key())))
+    # if event.key() == 16777223:
+    # print('You pressed the delete key')
 
     def deleteSubstrates(self):
         self.deleteReagents('substrate')
@@ -173,10 +181,14 @@ class ReactionCreator(QtGui.QWidget):
         SUBACTIVE = False
         self.IGNORECHECK = True
         if reagentType == 'substrate':
-            selected = [(it_.row(), it_.column()) for it_ in self.tblSub.selectedItems()]
+            selected = [
+                (it_.row(), it_.column()) for it_ in self.tblSub.selectedItems()
+            ]
             SUBACTIVE = True
         elif reagentType == 'product':
-            selected = [(it_.row(), it_.column()) for it_ in self.tblProd.selectedItems()]
+            selected = [
+                (it_.row(), it_.column()) for it_ in self.tblProd.selectedItems()
+            ]
             PRODACTIVE = True
 
         if selected != None:
@@ -199,16 +211,20 @@ class ReactionCreator(QtGui.QWidget):
                     print('Deleting Sub table row: {}'.format(deleteRow[d_]))
                     self.statusBar.showMessage('Substrate(s) deleted')
                     # print(self._newSubs)
-                    #print(str(self.tblSub.item(d_, 1).text()))
-                    self._newSubs.pop(self._newSubs.index(str(self.tblSub.item(d_, 1).text())))
+                    # print(str(self.tblSub.item(d_, 1).text()))
+                    self._newSubs.pop(
+                        self._newSubs.index(str(self.tblSub.item(d_, 1).text()))
+                    )
                     self.tblSub.removeRow(deleteRow[d_])
                     self.tblSubRow -= 1
                 elif PRODACTIVE:
                     print('Deleting Prod table row: {}'.format(deleteRow[d_]))
                     self.statusBar.showMessage('Product(s) deleted')
                     # print(self._newProds)
-                    #print(str(self.tblProd.item(d_, 1).text()))
-                    self._newProds.pop(self._newProds.index(str(self.tblProd.item(d_, 1).text())))
+                    # print(str(self.tblProd.item(d_, 1).text()))
+                    self._newProds.pop(
+                        self._newProds.index(str(self.tblProd.item(d_, 1).text()))
+                    )
                     self.tblProd.removeRow(deleteRow[d_])
                     self.tblProdRow -= 1
         self.IGNORECHECK = False
@@ -255,16 +271,16 @@ class ReactionCreator(QtGui.QWidget):
                 # print sid, cf, cfl
                 for e_ in cfl:
                     if e_[0] in output:
-                        #print -pcoef*float(e_[1])
+                        # print -pcoef*float(e_[1])
                         output[e_[0]] = output[e_[0]] + pcoef * float(e_[1])
                     else:
-                        #print -pcoef*float(e_[1])
+                        # print -pcoef*float(e_[1])
                         output[e_[0]] = pcoef * float(e_[1])
                     if e_[0] in right:
-                        #print -pcoef*float(e_[1])
+                        # print -pcoef*float(e_[1])
                         right[e_[0]] = right[e_[0]] + pcoef * float(e_[1])
                     else:
-                        #print -pcoef*float(e_[1])
+                        # print -pcoef*float(e_[1])
                         right[e_[0]] = pcoef * float(e_[1])
         # print output
         self.updateBalance(output, left, right)
@@ -285,9 +301,15 @@ class ReactionCreator(QtGui.QWidget):
                 right[keys[k_]] = 'None'
             self.tblBalCol += 1
             self.tblBal.insertColumn(k_)
-            self.tblBal.setItem(0, k_, QtGui.QTableWidgetItem('{}'.format(abs(bdict[keys[k_]]))))
-            self.tblBal.setItem(1, k_, QtGui.QTableWidgetItem('{}'.format(left[keys[k_]])))
-            self.tblBal.setItem(2, k_, QtGui.QTableWidgetItem('{}'.format(right[keys[k_]])))
+            self.tblBal.setItem(
+                0, k_, QtGui.QTableWidgetItem('{}'.format(abs(bdict[keys[k_]])))
+            )
+            self.tblBal.setItem(
+                1, k_, QtGui.QTableWidgetItem('{}'.format(left[keys[k_]]))
+            )
+            self.tblBal.setItem(
+                2, k_, QtGui.QTableWidgetItem('{}'.format(right[keys[k_]]))
+            )
             self.tblBal.item(0, k_).setTextAlignment(QtCore.Qt.AlignCenter)
             if k_ == 0:
                 boldFont = self.tblBal.item(0, k_).font()
@@ -303,10 +325,13 @@ class ReactionCreator(QtGui.QWidget):
         self.tblBal.setHorizontalHeaderLabels(QtCore.QStringList(keys))
 
     def showErrorMessage(self, errorMsg, title="Reaction Creator"):
-        QtGui.QMessageBox.critical(None, title,
-                                   errorMsg,
-                                   QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default,
-                                   QtGui.QMessageBox.NoButton)
+        QtGui.QMessageBox.critical(
+            None,
+            title,
+            errorMsg,
+            QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default,
+            QtGui.QMessageBox.NoButton,
+        )
         self.statusBar.showMessage(errorMsg)
 
     def getNewReaction(self):
@@ -332,7 +357,7 @@ class ReactionCreator(QtGui.QWidget):
             self.NewReaction = None
             return None
 
-        #print('\nid=\"{}\"\nname=\"{}\"'.format(Id, Name))
+        # print('\nid=\"{}\"\nname=\"{}\"'.format(Id, Name))
         # print self.tblSub.rowCount(), self.tblSubRow
         # print self.tblProd.rowCount(), self.tblProdRow
         Reag = {}
@@ -357,15 +382,16 @@ class ReactionCreator(QtGui.QWidget):
             if Reag[r_] == 0.0:
                 Reag.pop(r_)
                 print('removing zero coefficient reagent: {}'.format(r_))
-        self.NewReaction = {'reversible': reversible,
-                            'id': Id,
-                            'name': Name,
-                            'is_exchange': exReac,
-                            'is_balanced': self.ISBALANCED,
-                            'reagents': Reag,
-                            'upper_bound': self._Bupper,
-                            'lower_bound': self._Blower
-                            }
+        self.NewReaction = {
+            'reversible': reversible,
+            'id': Id,
+            'name': Name,
+            'is_exchange': exReac,
+            'is_balanced': self.ISBALANCED,
+            'reagents': Reag,
+            'upper_bound': self._Bupper,
+            'lower_bound': self._Blower,
+        }
 
         sub = ''
         prod = ''
@@ -386,10 +412,15 @@ class ReactionCreator(QtGui.QWidget):
         else:
             eq = '%s\n\t%s\n%s' % (sub[:-3], '-->', prod[:-2])
 
-        #quit_msg = "Add reaction:\n\n{}\n\t{}\n{}".format(sub,rev,prod)
+        # quit_msg = "Add reaction:\n\n{}\n\t{}\n{}".format(sub,rev,prod)
         quit_msg = eq
-        reply = QtGui.QMessageBox.question(self, 'Do you want to add the reaction \"{}\" to the model?'.format(Id),
-                                           quit_msg, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        reply = QtGui.QMessageBox.question(
+            self,
+            'Do you want to add the reaction \"{}\" to the model?'.format(Id),
+            quit_msg,
+            QtGui.QMessageBox.Yes,
+            QtGui.QMessageBox.No,
+        )
         if reply == QtGui.QMessageBox.Yes:
             self.statusBar.showMessage('Reaction {} added to model'.format(Id))
             print(self.NewReaction)
@@ -444,9 +475,13 @@ class ReactionCreator(QtGui.QWidget):
 
         # create buttons
         self.btAddSub = QtGui.QPushButton('Add substrate(s)')
-        QtCore.QObject.connect(self.btAddSub, QtCore.SIGNAL('clicked()'), self.addSelectedSubstrates)
+        QtCore.QObject.connect(
+            self.btAddSub, QtCore.SIGNAL('clicked()'), self.addSelectedSubstrates
+        )
         self.btAddProd = QtGui.QPushButton('Add product(s)')
-        QtCore.QObject.connect(self.btAddProd, QtCore.SIGNAL('clicked()'), self.addSelectedProducts)
+        QtCore.QObject.connect(
+            self.btAddProd, QtCore.SIGNAL('clicked()'), self.addSelectedProducts
+        )
         self.btReverse = QtGui.QPushButton('Reversible')
         self.btReverse.setCheckable(True)
         self.btReverse.setChecked(True)
@@ -456,18 +491,26 @@ class ReactionCreator(QtGui.QWidget):
         self.tblSub.setSortingEnabled(True)
         self.tblSub.insertColumn(0)
         self.tblSub.insertColumn(1)
-        self.tblSub.setHorizontalHeaderLabels(QtCore.QStringList(('Coefficient', 'Metabolite')))
+        self.tblSub.setHorizontalHeaderLabels(
+            QtCore.QStringList(('Coefficient', 'Metabolite'))
+        )
         self.tblSub.verticalHeader().setVisible(False)
-        QtCore.QObject.connect(self.tblSub, QtCore.SIGNAL('cellChanged(int,int)'), self.checkBalance)
+        QtCore.QObject.connect(
+            self.tblSub, QtCore.SIGNAL('cellChanged(int,int)'), self.checkBalance
+        )
         self.tblSubRow = 0
         self.tblProd = QtGui.QTableWidget()
         self.tblProd.setSortingEnabled(True)
         self.tblProd.insertColumn(0)
         self.tblProd.insertColumn(1)
-        self.tblProd.setHorizontalHeaderLabels(QtCore.QStringList(('Coefficient', 'Metabolite')))
+        self.tblProd.setHorizontalHeaderLabels(
+            QtCore.QStringList(('Coefficient', 'Metabolite'))
+        )
         self.tblProd.verticalHeader().setVisible(False)
         self.tblProdRow = 0
-        QtCore.QObject.connect(self.tblProd, QtCore.SIGNAL('cellChanged(int,int)'), self.checkBalance)
+        QtCore.QObject.connect(
+            self.tblProd, QtCore.SIGNAL('cellChanged(int,int)'), self.checkBalance
+        )
 
         self.tblBal = QtGui.QTableWidget()
         self.tblBal.setMaximumHeight(150)
@@ -560,7 +603,14 @@ def createReaction(mod):
         cndict[s_.getId()] = s_.getName()
         ccdict[s_.getId()] = s_.compartment
     app = QtGui.QApplication([])
-    ex = ReactionCreator(mod.getReactionIds(), mod.getSpeciesIds(), mod.getBoundarySpeciesIds(), cfdict, cndict, ccdict)
+    ex = ReactionCreator(
+        mod.getReactionIds(),
+        mod.getSpeciesIds(),
+        mod.getBoundarySpeciesIds(),
+        cfdict,
+        cndict,
+        ccdict,
+    )
     app.exec_()
     newR = ex.NewReaction
     del app, ex
@@ -595,15 +645,19 @@ class CBFileDialogue(QtGui.QWidget):
         self.initUI()
 
     def initUI(self):
-        #self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+        # self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
         # self.setHidden(True)
         self.__dlg__ = QtGui.QFileDialog(self)
         if self.mode == 'open':
-            #self.model_file = str(self.__dlg__.getOpenFileName(self, 'Open file', self.work_dir, options=QtGui.QFileDialog.DontUseNativeDialog))
-            self.model_file = str(self.__dlg__.getOpenFileName(self, 'Open file', self.work_dir))
+            # self.model_file = str(self.__dlg__.getOpenFileName(self, 'Open file', self.work_dir, options=QtGui.QFileDialog.DontUseNativeDialog))
+            self.model_file = str(
+                self.__dlg__.getOpenFileName(self, 'Open file', self.work_dir)
+            )
         elif self.mode == 'save':
-            #self.model_file = str(self.__dlg__.getSaveFileName(self, 'Save file as', self.work_dir, options=QtGui.QFileDialog.DontUseNativeDialog))
-            self.model_file = str(self.__dlg__.getSaveFileName(self, 'Save file as', self.work_dir))
+            # self.model_file = str(self.__dlg__.getSaveFileName(self, 'Save file as', self.work_dir, options=QtGui.QFileDialog.DontUseNativeDialog))
+            self.model_file = str(
+                self.__dlg__.getSaveFileName(self, 'Save file as', self.work_dir)
+            )
         self.model_file = os.path.normpath(self.model_file)
 
 
@@ -678,7 +732,7 @@ class ViewSVG(QtGui.QWidget):
         grid.setSpacing(10)
 
         grid.addWidget(menuBar, 0, 0, 1, 2)
-        #grid.addWidget(self.txtId, 1, 0, 1, 2)
+        # grid.addWidget(self.txtId, 1, 0, 1, 2)
         grid.addWidget(view, 1, 0, 4, 4)
         grid.addWidget(self.statusBar, 5, 0, 1, 4)
 
@@ -711,7 +765,7 @@ class ValueSlider(QtGui.QWidget):
     def initUI(self):
 
         # create panels
-        #self.txtId = QtGui.QTextEdit()
+        # self.txtId = QtGui.QTextEdit()
 
         l1a = QtGui.QLabel(self)
         l1a.setText('Property')
@@ -739,9 +793,9 @@ class ValueSlider(QtGui.QWidget):
         grid.addWidget(self.l1b, 0, 1, 1, 1)
         grid.addWidget(sld1, 0, 2, 1, 5)
 
-        #grid.addWidget(self.txtId, 1, 0, 1, 2)
-        #grid.addWidget(menuBar, 0, 0)
-        #grid.addWidget(self.statusBar, 0, 1)
+        # grid.addWidget(self.txtId, 1, 0, 1, 2)
+        # grid.addWidget(menuBar, 0, 0)
+        # grid.addWidget(self.statusBar, 0, 1)
 
         self.setLayout(grid)
         self.setGeometry(self.mousePos.x() - 75, self.mousePos.y() - 75, 280, 170)
@@ -825,7 +879,7 @@ if __name__ == '__main__':
         app.exec_()
 """
 
-    # template microGUI
+# template microGUI
 """
     class MicroGUI(QtGui.QWidget):
         _appTitle = 'MicroGUI'

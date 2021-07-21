@@ -1,7 +1,7 @@
-name: cbmpy
+name: cbmpy3
 channels:
   - bgoli
-  - sbmlteam
+  - conda-forge
   - defaults
 dependencies:
   - biopython>=1.78
@@ -18,6 +18,7 @@ dependencies:
   - xlwt
   - cbmpy
   - pip
+  - packaging
   - pip:
-    - swiglpk==4.65.1
-prefix: C:\Anaconda3\envs\cbmpy
+    - swiglpk>=4.65.1
+prefix: C:\Anaconda3\envs\cbmpy3

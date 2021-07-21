@@ -2,7 +2,7 @@
 CBMPy: CBSolve module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,11 +32,13 @@ Last edit: $Author: bgoli $ ($Id: CBModel.py 706 2020-03-23 21:31:49Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os
 import time
 import gc
+
 # this is a hack that needs to be streamlined a bit
 try:
     import cStringIO as csio
@@ -47,18 +49,28 @@ import numpy
 from . import CBWrite, CBTools
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
+
+from packaging import version as pkgver
+
 HAVE_SYMPY = False
 try:
     import sympy
-    if int(sympy.__version__.split('.')[1]) >= 7 and int(sympy.__version__.split('.')[2]) >= 4:
+
+    if pkgver.parse(sympy.__version__) >= pkgver.Version('0.7.5'):
         HAVE_SYMPY = True
+
     else:
         del sympy
+        print(
+            '\nWARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.'
+        )
 except ImportError:
     HAVE_SYMPY = False
+
 HAVE_SCIPY = False
 try:
     from scipy.sparse import csr
+
     HAVE_SCIPY = True
 except ImportError:
     HAVE_SCIPY = False
@@ -125,10 +137,3 @@ if __name__ == '__main__':
     lp = LPbase('base')
     lpc = LPcplex('cplex')
     lpg = LPglpk('glpk')
-
-
-
-
-
-
-

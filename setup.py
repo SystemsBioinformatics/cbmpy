@@ -2,7 +2,7 @@
 CBMPy: setup.py
 ===============
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,12 +25,24 @@ Last edit: $Author: bgoli $ ($Id: setup.py 698 2019-07-30 14:03:26Z bgoli $)
 
 import os
 import time
+
 local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 
 try:
     from setuptools import setup
+
+    install_requires_src = ['numpy', 'packaging', 'nose']
+    extras_requires_src = {
+        'sympy': ['sympy'],
+        'glpk': ['swiglpk',],
+        'sbml': ['python_libsbml', 'lxml',],
+        'all': ['sympy', 'swiglpk', 'python_libsbml', 'lxml',],
+    }
 except:
     from distutils.core import setup
+
+    install_requires_src = []
+    extras_requires_src = {}
 
 mydata_files = []
 
@@ -48,49 +60,51 @@ with open(os.path.join(local_path, 'cbmpy', 'CBConfig.py')) as F:
 mypackages = ['cbmpy', 'cbmpy.fluxmodules']
 
 setup(
- package_dir={'cbmpy': 'cbmpy'},
- packages=mypackages,
- data_files=mydata_files,
- name="cbmpy",
- summary="CBMPy: Constraint Based Modelling in Python",
- version='{}.{}.{}'.format(vmaj, vmin, vmic),
- maintainer='Brett G. Olivier',
- author='Brett G. Olivier',
- author_email='b.g.olivier@vu.nl',
- maintainer_email='bgoli@users.sourceforge.net',
-    url="http://cbmpy.sourceforge.net",
-    download_url="http://sourceforge.net/projects/cbmpy/files/release/0.8/",
+    package_dir={'cbmpy': 'cbmpy'},
+    packages=mypackages,
+    data_files=mydata_files,
+    name="cbmpy",
+    summary="CBMPy: Constraint Based Modelling in Python",
+    version='{}.{}.{}'.format(vmaj, vmin, vmic),
+    maintainer='Brett G. Olivier',
+    author='Brett G. Olivier',
+    author_email='b.g.olivier@vu.nl',
+    maintainer_email='b.g.olivier@vu.nl',
+    url="https://github.com/SystemsBioinformatics/cbmpy",
+    download_url="https://github.com/SystemsBioinformatics/cbmpy/releases",
     license="GNU General Public License (GPL)",
     keywords="computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard",
-    #zip_safe = False,
-    requires=['numpy', 'sympy', 'libsbml', 'nose'],
+    # zip_safe = False,
+    install_requires=install_requires_src,
+    extras_requires=extras_requires_src,
+    requires=['numpy', 'nose', 'packaging'],
     platforms=["Windows", "Linux", "Mac"],
     classifiers=[
-    'Development Status :: 4 - Beta',
-    'Environment :: Console',
-    'Intended Audience :: End Users/Desktop',
-    'Intended Audience :: Science/Research',
-    'License :: OSI Approved :: GNU General Public License (GPL)',
-    'Natural Language :: English',
-    'Operating System :: OS Independent',
-    'Programming Language :: Python :: 2',
-    'Topic :: Scientific/Engineering :: Bio-Informatics',
-    'Topic :: Scientific/Engineering :: Chemistry'
- ],
- description=""" CBMPy (http://cbmpy.sourceforge.net) is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods developed specifically for the ecosystem modelling."""
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: End Users/Desktop',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2',
+        'Topic :: Scientific/Engineering :: Bio-Informatics',
+        'Topic :: Scientific/Engineering :: Chemistry',
+    ],
+    description=""" CBMPy (https://github.com/SystemsBioinformatics/cbmpy) is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods developed specifically for the ecosystem modelling.""",
 )
 try:
     os.chdir(os.path.join(local_path, 'cbmpy', 'fluxmodules'))
     print(os.getcwd())
     import cbmpy
+
     print(cbmpy.__version__)
     os.chdir(local_path)
 except ImportError:
     pass
 
-readme =\
- """ PySCeS-CBMPy
- ============
+readme = """ CBMPy
+ =====
 
  PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
  based modelling and analysis. It has been designed using principles developed

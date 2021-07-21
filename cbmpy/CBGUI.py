@@ -2,7 +2,7 @@
 CBMPy: CBGUI module
 ===================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ Last edit: $Author: bgoli $ ($Id: CBGUI.py 710 2020-04-27 14:22:34Z bgoli $)
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os
 
@@ -34,21 +35,23 @@ __HAVE_QT4__ = False
 __HAVE_WX__ = False
 try:
     from . import CBWx
+
     __HAVE_WX__ = True
 except ImportError as ex:
     print('WARNING: Error importing wxpython module')
     # print(ex)
 # try:
-    # if os.sys.platform == 'win32':
-        #from . import CBQt4
-        #__HAVE_QT4__ = True
-    # else:
-        #print('\nINFO: Qt currently only available on Windows')
+# if os.sys.platform == 'win32':
+# from . import CBQt4
+# __HAVE_QT4__ = True
+# else:
+# print('\nINFO: Qt currently only available on Windows')
 # except ImportError as ex:
-    #print('WARNING: Error importing CBQt4 module')
-    # print(ex)
+# print('WARNING: Error importing CBQt4 module')
+# print(ex)
 
 if __HAVE_WX__:
+
     def loadCBGUI(mod, version=2):
         """
         Load an FBA model instance into the quick editor to view or change basic model properties
@@ -60,10 +63,15 @@ if __HAVE_WX__:
             loadCBGUI = CBWx.runModelEditor(mod)
         elif version == 3:
             CBWx.runMyAUIApp()
+
+
 else:
-    print('\nWX GUI is not available please make sure WxPython is installed (http://www.wxpython.org)')
+    print(
+        '\nWX GUI is not available please make sure WxPython is installed (http://www.wxpython.org)'
+    )
 
 if __HAVE_QT4__:
+
     def createReaction(mod):
         """
         Load the QT4 reaction creator widget
@@ -94,6 +102,8 @@ if __HAVE_QT4__:
         if work_dir == None:
             work_dir = os.getcwd()
         return CBQt4.fileDialogue(work_dir, 'save', None)
+
+
 else:
     print('\nQT4 GUI tools are not available please make sure PyQT4 is installed ()')
 

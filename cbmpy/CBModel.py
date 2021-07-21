@@ -2,7 +2,7 @@
 CBMPy: CBModel module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ from __future__ import absolute_import
 # from __future__ import unicode_literals
 
 import numpy, re, time, weakref, copy, json, ast, os
+from packaging import version as pkgver
 
 try:
     from urllib2 import quote as urlquote
@@ -57,13 +58,9 @@ HAVE_SYMPY = False
 try:
     import sympy
 
-    if (
-        int(sympy.__version__.split('.')[1]) >= 7
-        and int(sympy.__version__.split('.')[2]) >= 5
-    ):
+    if pkgver.parse(sympy.__version__) >= pkgver.Version('0.7.5'):
         HAVE_SYMPY = True
-    elif int(sympy.__version__.split('.')[0]) >= 1:
-        HAVE_SYMPY = True
+
     else:
         del sympy
         print(
@@ -71,7 +68,7 @@ try:
         )
 except ImportError:
     HAVE_SYMPY = False
-    print('SymPy not install (only required for optional, symbolic matrix support).')
+
 
 HAVE_SCIPY = False
 try:
@@ -5880,7 +5877,7 @@ class GeneProteinAssociation(Fbase):
                 # print('addGeneRef')
             else:
                 # print('createAssociationAndGeneRefs', gid, label)
-                if gid is None or gid is 'None':
+                if gid is None or gid == 'None':
                     print(self.getTree(), genes, gid, label)
                     continue
                 self.__objref__().addGene(Gene(gid, label, active=True))

@@ -1,4 +1,5 @@
 biopython
+packaging
 jedi==0.17.2
 ipython
 nose
@@ -11,4 +12,4 @@ sympy
 xlrd
 XlsxWriter
 xlwt
-cbmpy>=0.8.0
+cbmpy>=0.8.1

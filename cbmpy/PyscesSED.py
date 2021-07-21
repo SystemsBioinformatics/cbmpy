@@ -1,7 +1,7 @@
 """
 PySCeS - Python Simulator for Cellular Systems (http://pysces.sourceforge.net)
 
-Copyright (C) 2004-2018 B.G. Olivier, J.M. Rohwer, J.-H.S Hofmeyr all rights reserved,
+Copyright (C) 2004-2022 B.G. Olivier, J.M. Rohwer, J.-H.S Hofmeyr all rights reserved,
 
 Brett G. Olivier (bgoli@users.sourceforge.net)
 Triple-J Group for Molecular Cell Physiology
@@ -56,15 +56,22 @@ class SBWSEDMLWebApps:
 
         try:
             import suds
+
             self.HAVE_SUDS = True
         except:
-            print('\nERROR: SUDS import error please install from http://pypi.python.org/pypi/suds (or easy_install suds)\n')
+            print(
+                '\nERROR: SUDS import error please install from http://pypi.python.org/pypi/suds (or easy_install suds)\n'
+            )
             self.HAVE_SUDS = False
         try:
             self.Kclient = suds.client.Client(url)
             self.SBWSEDMLURI = url
         except:
-            print('\nERROR: Error connecting to SBW SED-ML web-services \"{}\" please check your internet connection\n'.format(url))
+            print(
+                '\nERROR: Error connecting to SBW SED-ML web-services \"{}\" please check your internet connection\n'.format(
+                    url
+                )
+            )
             self.HAVE_SUDS = False
 
     def GetVersion(self):
@@ -73,7 +80,9 @@ class SBWSEDMLWebApps:
 
         """
         if not self.HAVE_SUDS or self.Kclient == None:
-            print('\nERROR: No suds client or connection, cannot comply with your request\n')
+            print(
+                '\nERROR: No suds client or connection, cannot comply with your request\n'
+            )
             return None
         try:
             print('Connecting ...')
@@ -93,7 +102,9 @@ class SBWSEDMLWebApps:
 
         """
         if not self.HAVE_SUDS or self.Kclient == None:
-            print('\nERROR: No suds client or connection, cannot comply with your request\n')
+            print(
+                '\nERROR: No suds client or connection, cannot comply with your request\n'
+            )
             return None
         try:
             print('Connecting ...')
@@ -138,7 +149,9 @@ class SED(object):
 
         """
         if libSEDMLpath == None:
-            self.libSEDMLpath = "C:\\Program Files (x86)\\SED-ML Script Editor\\SedMLConsole.exe"
+            self.libSEDMLpath = (
+                "C:\\Program Files (x86)\\SED-ML Script Editor\\SedMLConsole.exe"
+            )
         else:
             self.libSEDMLpath = libSEDMLpath
 
@@ -152,7 +165,7 @@ class SED(object):
         if not self.HAVE_LIBSEDML and not self.HAVE_SBWSEDSOAP:
             print('\nNo connection to libSEDML or SEDML webservices.')
 
-        #self.sed = {}
+        # self.sed = {}
         self.models = {}
         self.sims = {}
         self.tasks = {}
@@ -170,7 +183,9 @@ class SED(object):
             else:
                 self.models[id] = model.clone()
         except:
-            print('\nWARNING: model clone failed, using more than one model per SED is not recomended!\n')
+            print(
+                '\nWARNING: model clone failed, using more than one model per SED is not recomended!\n'
+            )
             self.models[id] = model
 
     def addModelAlt(self, id, model):
@@ -184,23 +199,24 @@ class SED(object):
             self.models[id] = model
         os.remove(os.path.join(self.sedpath, mid) + '.dat')
 
-    def addSimulation(self, id, start, end, steps, output, initial=None, algorithm='KISAO:0000019'):
+    def addSimulation(
+        self, id, start, end, steps, output, initial=None, algorithm='KISAO:0000019'
+    ):
         if initial == None:
             initial = start
-        S = {'start': start,
-             'initial': initial,
-             'end': end,
-             'steps': steps,
-             'algorithm': algorithm,
-             'output': output,
-             'type': 'sim'}
+        S = {
+            'start': start,
+            'initial': initial,
+            'end': end,
+            'steps': steps,
+            'algorithm': algorithm,
+            'output': output,
+            'type': 'sim',
+        }
         self.sims[id] = S
 
     def addSteadyState(self, id, output, algorithm='KISAO:0000437'):
-        self.sims[id] = {'algorithm': algorithm,
-                         'output': output,
-                         'type': 'state'
-                         }
+        self.sims[id] = {'algorithm': algorithm, 'output': output, 'type': 'state'}
 
     def addTask(self, id, sim_id, model_id):
         assert self.sims.has_key(sim_id), '\nBad simId'
@@ -222,13 +238,10 @@ class SED(object):
             self.addDataGenerator(o_, taskId)
 
     def addPlot(self, plotId, plotName, listOfCurves):
-        self.plots2d[plotId] = {'name': plotName,
-                                'curves': listOfCurves}
+        self.plots2d[plotId] = {'name': plotName, 'curves': listOfCurves}
 
     def addReport(self, id, name, columns):
-        self.reports[id] = {'name': name,
-                            'columns': columns
-                            }
+        self.reports[id] = {'name': name, 'columns': columns}
 
     def addTaskPlot(self, taskId):
         plotId = '%s_plot' % taskId
@@ -249,6 +262,7 @@ class SED(object):
     def writeSBML(self, mod, mfile):
         if self.__pysces__ == None:
             import pysces
+
             self.__pysces__ = pysces
         self.__pysces__.interface.writeMod2SBML(mod, mfile)
 
@@ -272,22 +286,38 @@ class SED(object):
         for s_ in self.sims:
             if self.sims[s_]['type'] == 'sim':
                 S = self.sims[s_]
-                sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" % (s_,
-                                                                                        S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
+                sedscr.write(
+                    "AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n"
+                    % (
+                        s_,
+                        S['algorithm'],
+                        S['start'],
+                        S['initial'],
+                        S['end'],
+                        S['steps'],
+                    )
+                )
             elif self.sims[s_]['type'] == 'state':
-                sedscr.write("AddSteadyState('%s', '%s')\n" % (s_, self.sims[s_]['algorithm']))
+                sedscr.write(
+                    "AddSteadyState('%s', '%s')\n" % (s_, self.sims[s_]['algorithm'])
+                )
         sedscr.write('\n')
 
         for t_ in self.tasks:
             T = self.tasks[t_]
-            sedscr.write("AddTask(\'%s\', \'%s\', \'%s\')\n" % (t_, T['sim'], T['model']))
+            sedscr.write(
+                "AddTask(\'%s\', \'%s\', \'%s\')\n" % (t_, T['sim'], T['model'])
+            )
         sedscr.write('\n')
 
         dgMap = {}
 
         for dg_ in self.datagens:
             D = self.datagens[dg_]
-            sedscr.write("AddColumn('%s', [['%s', '%s', '%s']])\n" % (dg_, D['varId'], D['taskId'], D['var']))
+            sedscr.write(
+                "AddColumn('%s', [['%s', '%s', '%s']])\n"
+                % (dg_, D['varId'], D['taskId'], D['var'])
+            )
             dgMap.update({D['var']: dg_})
         sedscr.write('\n')
 
@@ -336,13 +366,18 @@ class SED(object):
             print('\nBypass active: SED-ML files written to: %s' % self.sedpath)
         elif self.HAVE_LIBSEDML:
             assert os.path.exists(self.libSEDMLpath)
-            #sedname = '%s.sed.xml' % (self.id)
+            # sedname = '%s.sed.xml' % (self.id)
             # self.writeSedScript(sedx=sedx)
             # if not sedx:
-                #sf = os.path.join(self.sedpath, sedname)
+            # sf = os.path.join(self.sedpath, sedname)
             # else:
-                #sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
-            cmd = ['%s' % str(self.libSEDMLpath), '--fromScript', '%s' % str(self.__sedscript__), '%s' % str(sf)]
+            # sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
+            cmd = [
+                '%s' % str(self.libSEDMLpath),
+                '--fromScript',
+                '%s' % str(self.__sedscript__),
+                '%s' % str(sf),
+            ]
             try:
                 a = subprocess.call(cmd)
             except Exception as ex:
@@ -355,14 +390,16 @@ class SED(object):
             print('SED-ML files written to: %s' % self.sedpath)
             self.__sedarchive__ = None
         elif self.HAVE_SBWSEDSOAP:
-            print('\nINFO: PySCeS will now try to connect via internet to: http://sysbioapps.dyndns.org ...\n(press <ctrl>+<c> to abort)')
+            print(
+                '\nINFO: PySCeS will now try to connect via internet to: http://sysbioapps.dyndns.org ...\n(press <ctrl>+<c> to abort)'
+            )
             time.sleep(5)
-            #sedname = '%s.sed.xml' % (self.id)
+            # sedname = '%s.sed.xml' % (self.id)
             # self.writeSedScript(sedx=sedx)
             # if not sedx:
-                #sf = os.path.join(self.sedpath, sedname)
+            # sf = os.path.join(self.sedpath, sedname)
             # else:
-                #sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
+            # sf = os.path.join(self.sedpath, 'sedxtmp', sedname)
 
             F = open(self.__sedscript__, 'r')
             sedscr = F.read()
@@ -377,7 +414,7 @@ class SED(object):
             print('SED-ML files written to: %s' % self.sedpath)
             self.__sedarchive__ = None
         else:
-            raise(RuntimeError)
+            raise (RuntimeError)
         if self._SED_CURRENT_:
             F = open(self.__sedxml__, 'w')
             F.write(self._SED_XML_)
@@ -387,7 +424,7 @@ class SED(object):
     def writeSedXArchive(self):
         self.writeSedXML(sedx=True)
         sedxname = '%s.sed.sedx' % (self.id)
-        #sedxname = '%s.sed.sedx.zip' % (self.id)
+        # sedxname = '%s.sed.sedx.zip' % (self.id)
         ptmp = os.path.join(self.sedpath, 'sedxtmp')
         sf = os.path.join(self.sedpath, sedxname)
         self.__sedarchive__ = sf
@@ -407,7 +444,13 @@ class SED(object):
         self.__sedscript__ = None
         print('SED-ML archive created: %s' % sf)
 
-    def writeCOMBINEArchive(self, vc_given='PySCeS', vc_family='Software', vc_email='', vc_org='pysces.sourceforge.net'):
+    def writeCOMBINEArchive(
+        self,
+        vc_given='PySCeS',
+        vc_family='Software',
+        vc_email='',
+        vc_org='pysces.sourceforge.net',
+    ):
         """
         Write a COMBINE archive using the following information:
 
@@ -417,10 +460,12 @@ class SED(object):
         - vc_org
 
         """
-        scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone / 60 / 60)
+        scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (
+            time.timezone / 60 / 60
+        )
         self.writeSedXML(sedx=True)
         sedxname = '%s.sed.omex' % (self.id)
-        #sedxname = '%s.sed.omex.zip' % (self.id)
+        # sedxname = '%s.sed.omex.zip' % (self.id)
         sf = os.path.join(self.sedpath, sedxname)
         ptmp = os.path.join(self.sedpath, 'sedxtmp')
         self.__sedarchive__ = sf
@@ -431,16 +476,24 @@ class SED(object):
         MDstr = ''
         MFstr += '<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">\n'
         MFstr += ' <content location="." format="http://identifiers.org/combine.specifications/omex"/>\n'
-        MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sedml"/>\n' % os.path.split(self.__sedxml__)[-1]
+        MFstr += (
+            ' <content location="./%s" format="http://identifiers.org/combine.specifications/sedml"/>\n'
+            % os.path.split(self.__sedxml__)[-1]
+        )
         for m_ in self.models:
             modname = '%s-%s.xml' % (self.id, m_)
             modpath = os.path.join(ptmp, modname)
             zf.write(modpath, arcname=modname)
-            MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sbml"/>\n' % modname
+            MFstr += (
+                ' <content location="./%s" format="http://identifiers.org/combine.specifications/sbml"/>\n'
+                % modname
+            )
         MFstr += ' <content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>'
 
         MF = open(os.path.join(ptmp, 'manifest.xml'), 'w')
-        MF.write('<?xml version="1.0" encoding="utf-8"?>\n%s\n</omexManifest>\n' % MFstr)
+        MF.write(
+            '<?xml version="1.0" encoding="utf-8"?>\n%s\n</omexManifest>\n' % MFstr
+        )
         MF.close()
 
         MD = open(os.path.join(ptmp, 'metadata.rdf'), 'w')
@@ -450,7 +503,7 @@ class SED(object):
         MD.write('    xmlns:vCard="http://www.w3.org/2006/vcard/ns#"\n')
         MD.write('    xmlns:bqmodel="http://biomodels.net/models-qualifiers">\n')
         MD.write(' <rdf:Description rdf:about=".">\n')
-        #MDstr += '   <dcterms:description>\n     %s\n    </dcterms:description>\n' % self.omex_description
+        # MDstr += '   <dcterms:description>\n     %s\n    </dcterms:description>\n' % self.omex_description
         MDstr += ' <dcterms:creator>\n'
         MDstr += ' <rdf:Bag>\n'
         MDstr += '  <rdf:li rdf:parseType="Resource">\n'
@@ -503,7 +556,21 @@ class SEDCBMPY(SED):
     def __init__(self, id, sedpath):
         super(SEDCBMPY, self).__init__(id, sedpath, libSEDMLpath=None, sbwsedmluri=None)
 
-    def writeModelToCOMBINEarchive(self, mod, fname=None, directory=None, sbmlname=None, withExcel=True, vc_given='CBMPy', vc_family='Software', vc_email='None', vc_org='cbmpy.sourceforge.net', add_cbmpy_annot=True, add_cobra_annot=False, display_reactions=None):
+    def writeModelToCOMBINEarchive(
+        self,
+        mod,
+        fname=None,
+        directory=None,
+        sbmlname=None,
+        withExcel=True,
+        vc_given='CBMPy',
+        vc_family='Software',
+        vc_email='None',
+        vc_org='cbmpy.sourceforge.net',
+        add_cbmpy_annot=True,
+        add_cobra_annot=False,
+        display_reactions=None,
+    ):
         """
         Write a model in SBML and Excel format to a COMBINE archive using the following information:
 
@@ -532,12 +599,14 @@ class SEDCBMPY(SED):
         self.cbm_add_cbmpy_annot = add_cbmpy_annot
         self.cbm_add_cobra_annot = add_cobra_annot
 
-        #sed = cbmpy.SED('test_model_1', cDir)
+        # sed = cbmpy.SED('test_model_1', cDir)
 
         self.addModel(mod.getId(), mod)
         if display_reactions is None:
             ofids = mod.getActiveObjectiveReactionIds()
-            display_reactions = ofids + [a for a in mod.getReactionIds() if a not in ofids]
+            display_reactions = ofids + [
+                a for a in mod.getReactionIds() if a not in ofids
+            ]
         self.addSteadyState('state1', display_reactions, algorithm='KISAO:0000437')
         self.addTask('task1', 'state1', mod.getId())
         self.addTaskDataGenerators('task1')
@@ -549,12 +618,19 @@ class SEDCBMPY(SED):
     def writeSBML(self, mod, mfile):
         if self.__cbmpy__ == None:
             import cbmpy
+
             self.__cbmpy__ = cbmpy
-        self.__cbmpy__.writeSBML3FBC(mod, mfile, add_cobra_annot=self.cbm_add_cobra_annot, add_cbmpy_annot=self.cbm_add_cbmpy_annot)
+        self.__cbmpy__.writeSBML3FBC(
+            mod,
+            mfile,
+            add_cobra_annot=self.cbm_add_cobra_annot,
+            add_cbmpy_annot=self.cbm_add_cbmpy_annot,
+        )
 
     def writeExcel(self, mod, mfile):
         if self.__cbmpy__ == None:
             import cbmpy
+
             self.__cbmpy__ = cbmpy
         self.__cbmpy__.writeModelToExcel97(mod, mfile)
 
@@ -583,22 +659,38 @@ class SEDCBMPY(SED):
         for s_ in self.sims:
             if self.sims[s_]['type'] == 'sim':
                 S = self.sims[s_]
-                sedscr.write("AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n" % (s_,
-                                                                                        S['algorithm'], S['start'], S['initial'], S['end'], S['steps']))
+                sedscr.write(
+                    "AddTimeCourseSimulation('%s', '%s', %s, %s, %s, %s)\n"
+                    % (
+                        s_,
+                        S['algorithm'],
+                        S['start'],
+                        S['initial'],
+                        S['end'],
+                        S['steps'],
+                    )
+                )
             elif self.sims[s_]['type'] == 'state':
-                sedscr.write("AddSteadyState('%s', '%s')\n" % (s_, self.sims[s_]['algorithm']))
+                sedscr.write(
+                    "AddSteadyState('%s', '%s')\n" % (s_, self.sims[s_]['algorithm'])
+                )
         sedscr.write('\n')
 
         for t_ in self.tasks:
             T = self.tasks[t_]
-            sedscr.write("AddTask(\'%s\', \'%s\', \'%s\')\n" % (t_, T['sim'], T['model']))
+            sedscr.write(
+                "AddTask(\'%s\', \'%s\', \'%s\')\n" % (t_, T['sim'], T['model'])
+            )
         sedscr.write('\n')
 
         dgMap = {}
 
         for dg_ in self.datagens:
             D = self.datagens[dg_]
-            sedscr.write("AddColumn('%s', [['%s', '%s', '%s']])\n" % (dg_, D['varId'], D['taskId'], D['var']))
+            sedscr.write(
+                "AddColumn('%s', [['%s', '%s', '%s']])\n"
+                % (dg_, D['varId'], D['taskId'], D['var'])
+            )
             dgMap.update({D['var']: dg_})
         sedscr.write('\n')
 
@@ -635,7 +727,13 @@ class SEDCBMPY(SED):
         self.__sedscript__ = sf
         print('\nSED-ML script files written to:', sf)
 
-    def writeCOMBINEArchive(self, vc_given='PySCeS', vc_family='Software', vc_email='', vc_org='pysces.sourceforge.net'):
+    def writeCOMBINEArchive(
+        self,
+        vc_given='PySCeS',
+        vc_family='Software',
+        vc_email='',
+        vc_org='pysces.sourceforge.net',
+    ):
         """
         Write a COMBINE archive using the following information:
 
@@ -645,10 +743,12 @@ class SEDCBMPY(SED):
         - vc_org
 
         """
-        scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (time.timezone / 60 / 60)
+        scTime = time.strftime('%Y-%m-%dT%H:%M:%S') + '%i:00' % (
+            time.timezone / 60 / 60
+        )
         self.writeSedXML(sedx=True)
         sedxname = '%s.sed.omex' % (self.id)
-        #sedxname = '%s.sed.omex.zip' % (self.id)
+        # sedxname = '%s.sed.omex.zip' % (self.id)
         sf = os.path.join(self.sedpath, sedxname)
         ptmp = os.path.join(self.sedpath, 'sedxtmp')
         self.__sedarchive__ = sf
@@ -659,12 +759,18 @@ class SEDCBMPY(SED):
         MDstr = ''
         MFstr += '<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">\n'
         MFstr += ' <content location="." format="http://identifiers.org/combine.specifications/omex"/>\n'
-        MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sed-ml"/>\n' % os.path.split(self.__sedxml__)[-1]
+        MFstr += (
+            ' <content location="./%s" format="http://identifiers.org/combine.specifications/sed-ml"/>\n'
+            % os.path.split(self.__sedxml__)[-1]
+        )
         for m_ in self.models:
             modname = '%s-%s.xml' % (self.id, m_)
             modpath = os.path.join(ptmp, modname)
             zf.write(modpath, arcname=modname)
-            MFstr += ' <content location="./%s" format="http://identifiers.org/combine.specifications/sbml"/>\n' % modname
+            MFstr += (
+                ' <content location="./%s" format="http://identifiers.org/combine.specifications/sbml"/>\n'
+                % modname
+            )
         MFstr += ' <content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>\n'
 
         if self.CBM_WITH_EXCEL:
@@ -673,10 +779,14 @@ class SEDCBMPY(SED):
             print(xl)
             print(xlf)
             zf.write(xl, arcname=xlf)
-            MFstr += ' <content location="./{}" format="http://mediatypes.appspot.com/application/vnd.ms-excel"/>'.format(xlf)
+            MFstr += ' <content location="./{}" format="http://mediatypes.appspot.com/application/vnd.ms-excel"/>'.format(
+                xlf
+            )
 
         MF = open(os.path.join(ptmp, 'manifest.xml'), 'w')
-        MF.write('<?xml version="1.0" encoding="utf-8"?>\n%s\n</omexManifest>\n' % MFstr)
+        MF.write(
+            '<?xml version="1.0" encoding="utf-8"?>\n%s\n</omexManifest>\n' % MFstr
+        )
         MF.close()
 
         MD = open(os.path.join(ptmp, 'metadata.rdf'), 'w')
@@ -686,7 +796,7 @@ class SEDCBMPY(SED):
         MD.write('    xmlns:vCard="http://www.w3.org/2006/vcard/ns#"\n')
         MD.write('    xmlns:bqmodel="http://biomodels.net/models-qualifiers">\n')
         MD.write(' <rdf:Description rdf:about=".">\n')
-        #MDstr += '   <dcterms:description>\n     %s\n    </dcterms:description>\n' % self.omex_description
+        # MDstr += '   <dcterms:description>\n     %s\n    </dcterms:description>\n' % self.omex_description
         MDstr += ' <dcterms:creator>\n'
         MDstr += ' <rdf:Bag>\n'
         MDstr += '  <rdf:li rdf:parseType="Resource">\n'

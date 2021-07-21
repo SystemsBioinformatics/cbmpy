@@ -2,7 +2,7 @@
 CBMPy: MultiCoreFVA module
 ==========================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2018 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,13 +26,15 @@ Last edit: $Author: bgoli $ ($Id: _multicorefva.py 710 2020-04-27 14:22:34Z bgol
 # preparing for Python 3 port
 from __future__ import division, print_function
 from __future__ import absolute_import
-#from __future__ import unicode_literals
+
+# from __future__ import unicode_literals
 
 import os
 import time
 import math
 import copy
 import multiprocessing
+
 try:
     import pickle
 except ImportError:
@@ -56,9 +58,16 @@ def funcFVA(x, r):
 
 
 def multiCoreFVA(fvamod, procs=2, timeout=None):
-    #assert procs >= 2, '\nMinimum 2 processes required'
+    # assert procs >= 2, '\nMinimum 2 processes required'
     rid = fvamod.getReactionIds()
-    PRs = [d_[0] for d_ in list(cbmpy.CBMultiCore.grouper(int(math.ceil(len(rid) / float(procs))), range(len(rid))))]
+    PRs = [
+        d_[0]
+        for d_ in list(
+            cbmpy.CBMultiCore.grouper(
+                int(math.ceil(len(rid) / float(procs))), range(len(rid))
+            )
+        )
+    ]
     print(procs, len(PRs), PRs)
 
     s2time = time.time()
@@ -71,9 +80,11 @@ def multiCoreFVA(fvamod, procs=2, timeout=None):
             print('{} -> {}'.format(PRs[p_], PRs[p_ + 1]))
             print('{} -> {}'.format(rid[PRs[p_]], rid[PRs[p_ + 1]]))
             # investigate using without clone
-            #results.append(TP.apply_async(funcFVA, (fvamod, rid[PRs[p_]:PRs[p_+1]])))
-            results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[p_]:PRs[p_ + 1]])))
-        results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[-1]:])))
+            # results.append(TP.apply_async(funcFVA, (fvamod, rid[PRs[p_]:PRs[p_+1]])))
+            results.append(
+                TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[p_] : PRs[p_ + 1]]))
+            )
+        results.append(TP.apply_async(funcFVA, (fvamod.clone(), rid[PRs[-1] :])))
     fva = []
     fvan = []
     for r_ in results:
@@ -83,7 +94,11 @@ def multiCoreFVA(fvamod, procs=2, timeout=None):
     e2time = time.time()
     del results
 
-    print('\nMulticore FVA took: {} min ({} processes)'.format((e2time - s2time) / 60., procs))
+    print(
+        '\nMulticore FVA took: {} min ({} processes)'.format(
+            (e2time - s2time) / 60.0, procs
+        )
+    )
     return fva, fvan
 
 
