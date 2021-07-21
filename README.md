@@ -51,7 +51,6 @@ From a terrminal or command prompt try:
 ### New experimental PyPI install method.
 `pip install cbmpy[sbml]`
 
-
 ### Install by creating an Anaconda environment using environment.yml
 From a terminal or command prompt try:
 
