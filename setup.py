@@ -31,7 +31,7 @@ local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 try:
     from setuptools import setup
 
-    install_requires_src = ['numpy', 'packaging']
+    install_requires_src = ['numpy', 'packaging', 'nose']
     extras_requires_src = {
         'sympy': ['sympy'],
         'glpk': ['swiglpk',],
@@ -77,7 +77,7 @@ setup(
     # zip_safe = False,
     install_requires=install_requires_src,
     extras_requires=extras_requires_src,
-    requires=['numpy', 'sympy', 'python_libsbml', 'nose', 'packaging'],
+    requires=['numpy', 'nose', 'packaging'],
     platforms=["Windows", "Linux", "Mac"],
     classifiers=[
         'Development Status :: 4 - Beta',

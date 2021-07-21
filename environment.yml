@@ -20,5 +20,5 @@ dependencies:
   - pip
   - packaging
   - pip:
-    - swiglpk==4.65.1
+    - swiglpk>=4.65.1
 prefix: C:\Anaconda3\envs\cbmpy3
