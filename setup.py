@@ -31,7 +31,7 @@ local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 try:
     from setuptools import setup
 
-    install_requires_src = ['numpy', 'packaging', 'nose']
+    install_requires_src = ['numpy', 'packaging']
     extras_requires_src = {
         'sympy': ['sympy'],
         'glpk': ['swiglpk',],
