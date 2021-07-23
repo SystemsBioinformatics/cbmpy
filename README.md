@@ -1,6 +1,6 @@
 # CBMPy
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2021 Brett G. Olivier, Vrije Universiteit Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2022 Brett G. Olivier, Vrije Universiteit Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -75,4 +75,4 @@ Once you have installed CBMPy it can be easily upgraded.
 ### Anaconda update
 `conda update cbmpy`
 
-(c) Brett G. Olivier, Amsterdam, 2014-2021
+(c) Brett G. Olivier, Amsterdam, 2014-2022
