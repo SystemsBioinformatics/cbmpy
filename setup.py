@@ -32,17 +32,19 @@ try:
     from setuptools import setup
 
     install_requires_src = ['numpy', 'packaging', 'nose']
-    extras_requires_src = {
+    extras_require_src = {
         'sympy': ['sympy'],
         'glpk': ['swiglpk',],
         'sbml': ['python_libsbml', 'lxml',],
         'all': ['sympy', 'swiglpk', 'python_libsbml', 'lxml',],
     }
+    tests_require = ['nose']
 except:
     from distutils.core import setup
 
     install_requires_src = []
-    extras_requires_src = {}
+    extras_require_src = {}
+    tests_require = []
 
 mydata_files = []
 
@@ -76,8 +78,8 @@ setup(
     keywords="computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard",
     # zip_safe = False,
     install_requires=install_requires_src,
-    extras_requires=extras_requires_src,
-    requires=['numpy', 'nose', 'packaging'],
+    extras_require=extras_require_src,
+    tests_require=tests_require_src,    
     platforms=["Windows", "Linux", "Mac"],
     classifiers=[
         'Development Status :: 4 - Beta',
