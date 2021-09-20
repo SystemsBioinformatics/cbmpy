@@ -36,8 +36,14 @@ from __future__ import absolute_import
 # all unicode literals must first be cast to string for libSBML API - brett
 # from __future__ import unicode_literals
 
-import os, time, numpy, cgi, re
+import os, time, numpy, re
 import ast, shutil
+
+try:
+    from cgi import escape as ESCAPE
+except:
+    from html import escape as ESCAPE
+
 
 # this is a hack that needs to be streamlined a bit
 try:
@@ -2153,16 +2159,8 @@ def sbml_writeKeyValueDataAnnotation(annotations):
         # Ktype = 'string'
         if annotations[K] == '' or annotations[K] == None:
             Kval = ""
-        ##elif isinstance(annotations[K], list):
-        ###if len(annotations[K]) == 1:
-        ###Kval = annotations[K][0]
-        ###else:
-        #### this may be a bit dodgy but wtf let's run with it
-        ###Kval = ['&apos;{}&apos;'.format(str(v).strip()) for v in annotations[K]]
-        ###Kval = '['+', '.join(map(str, Kval))+']'
-        ##Kval = cgi.escape(str(annotations[K]))
         else:
-            Kval = cgi.escape(str(annotations[K]))
+            Kval = ESCAPE(str(annotations[K]))
 
         # fix the key to be sid compatible
         ## removed temporarily, no reason to be an sid
