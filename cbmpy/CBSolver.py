@@ -39,13 +39,13 @@ __AVAILABLE_SOLVERS__ = []
 
 __CBCONFIG__['SOLVER_ACTIVE'] = None
 try:
-    # for release 0.8.2+
-    # from . import CBGLPK
-    # from .CBGLPK import *
+    # for release 0.8.2
+    from . import CBGLPK
+    from .CBGLPK import *
 
-    # replaced by new module
-    from . import CBGLPKOLD
-    from .CBGLPKOLD import *
+    ## for transitional release
+    # from . import CBGLPKOLD
+    # from .CBGLPKOLD import *
 
     __CBCONFIG__['SOLVER_ACTIVE'] = 'GLPK'
     __AVAILABLE_SOLVERS__.append('GLPK')
