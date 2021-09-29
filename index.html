@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PySCeS: The Python Simulator for Cellular Systems</title>
+    <title>CBMPy: Constraint Based modelling in Python</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
   </head>
   <body>
 	  
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="https://pysces.github.io/">PySCeS</a>
+      <a class="navbar-brand" href="https://systemsbioinformatics.github.io/cbmpy/">CBMPy</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
@@ -23,7 +23,7 @@
           </li>
 -->
           <li class="nav-item">
-            <a class="nav-link" href="https://github.com/PySCeS/pysces">Code</a>
+            <a class="nav-link" href="https://github.com/SystemsBioinformatics/cbmpy">Code</a>
           </li>
 <!--          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
@@ -47,12 +47,14 @@
 	  
     <div class="container mt-2">
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 col-xl-12">
           <div class="jumbotron"> 
-            <img src="images/pysces_header.gif" alt="PySCeS" width="1200" height="400" class="img-fluid">
+            <img src="D:\myweb\cbmpy.github.io\images\cbmpy-01.jpg" alt="PySCeS" width="1024" height="159" class="img-fluid">
+            <h3 class="text-center">&nbsp;</h3>
             <h3 class="text-center">A flexible, user friendly tool for the analysis of cellular systems</h3>
-            <p class="text-center">Computer modelling has become an integral tool in the analysis and understanding of the reaction networks that underlie cellular processes. PySCeS, first released in 2003, is extremely flexible, user-extendible, open source, software actively used and developed by a community of researchers and developers.</p>
-            <h5 class="text-center">The latest PySCeS release is version 1.0 (expected August 2021).</h5>
+            <p class="text-center">&nbsp;</p>
+            <p class="text-center">PySCeS CBMPy is a platform for constraint based modelling and analysis. It has been designed using principles developed in the PySCeS simulation software project: usability, flexibility and accessibility. Its architecture is both extensible and flexible using data structures that are intuitive to the biologist (metabolites, reactions, compartments) while transparently translating these into the underlying mathematical structures used in advanced analysis (LP's, MILP's).</p>
+<h5 class="text-center">The latest CBMPy release is version 0.8.1 (July 2021 ).</h5>
           </div>
         </div>
       </div>
@@ -61,23 +63,23 @@
 	  	  <div class="container">
       <div class="row">
         <div class="col-lg-3 col-lg-6 col-12">
-          <h2>User friendly</h2>
+          <h2>Core CBMPy</h2>
           <ul>
-		    <li>Define models with human readable, <strong>Model Description Language</strong>. </li>
-		    <li>Use the full power of Python available to <strong>test, build and share</strong> your modelling experiments. </li>			  
-            <li>User friendly methods for generating and 1, 2 and n-dimension <strong>parameter scans</strong>.</li>
-            <li><strong>Visualise</strong> results of simulations with flexible Matplotlib and Gnuplot interfaces.</li>
-            <li>PySCeS supports <strong>open community standards</strong> for model exchange (SBML) and archiving (SEDML, OMEX).</li>
+		    <li>CBMPy provides a core model data structure that enables model creation editing and analysis without any solver. </li>
+		    <li>&nbsp;This includes: element and charge balancing, network analysis and model validation. </li>			  
+            <li>&nbsp;An interactive console, scripting for advanced use or as a library for software development</li>
+            <li>CBMPy has extensive support for mode and component metadata, including MIRIAM annotations, SBO and user-defined key:vaue pairs.</li>
+            <li>CBMPy supports <strong>open community standards</strong> for model exchange SBML Level 3 Core, FBC, Groups and archiving (SEDML, OMEX).</li>
           </ul>
 	    </div>
         <div class="col-lg-3 col-lg-6 col-12">
-          <h2>Modelling features</h2>
+          <h2>Extended functionality</h2>
           <ul>
-            <li><strong>Simulate</strong> your time courses with solvers like LSODA. </li>
-            <li>Efficiently determine <strong>steady states</strong> using a selection of non-linear, root-finding algorithms (e.g. HYBRD, NLEQ2). </li>
-            <li>Use <strong>Metabolic Control Analysis</strong> (MCA) to investigate control and regulation of cellular systems (elasticities, flux control   and response coefficients).</li>
-            <li>Perform <strong>structural analysis</strong> and determine nullspaces and reduced stoichiometric and MCA matrices</li>
-            <li>Investigate systems which exhibit multiple (stable and unstable) steady-state solutions using PITCON based <strong>bifurcation analysis</strong> module.</li>
+            <li>CBMPy <em>currently</em> supportes the IBM CPLEX solver (GLPK will again be available soon) </li>
+            <li>Fast parallel FVA is implemented for multicore CPU's&nbsp; &nbsp; &nbsp; </li>
+            <li>Multiple model editing is supported with support for easily copying modeld components (reaction, species) between models.</li>
+            <li>CBMPy includes methods for model validation and bound integrity checking.</li>
+            <li>CBMPy is used as a core model component for other tools including Metadraft and FAME.&nbsp;&nbsp;</li>
           </ul>
         </div>
       </div>
@@ -89,18 +91,18 @@
           <div class="card">
 <!--            <img class="card-img-top" src="images/600X300.gif" alt="Card image cap">-->
             <div class="card-body">
-              <h3 class="card-title">Installing PySCeS&nbsp;</h3>
-			  <p class="card-text">PySCeS is available for all major operating systems. The easiest way to install PySCeS is to use a Python package manager.</p>
+              <h3 class="card-title">Installing CBMPy&nbsp;</h3>
+			  <p class="card-text">CBMPy is available for all major operating systems. The easiest way to install PySCeS is to use a Python package manager.</p>
 				<div class="text-center">
-			    <a class="btn btn-danger btn-lg" href="https://pypi.org/project/pysces/#files" role="button">PyPi</a>
-				<a class="btn btn-lg btn-info" href="https://github.com/PySCeS/pysces" role="button">GitHub</a>
-				<a class="btn btn-warning btn-lg" href="https://anaconda.org/pysces/pysces" role="button">Anaconda</a>
+			    <a class="btn btn-danger btn-lg" href="https://pypi.org/project/cbmpy/#files" role="button">PyPi</a>
+				<a class="btn btn-lg btn-info" href="https://github.com/SystemsBioinformatics/cbmpy/releases" role="button">GitHub</a>
+				<a class="btn btn-warning btn-lg" href="https://anaconda.org/bgoli/cbmpy" role="button">Anaconda</a>
 				</div>
 				<p>&nbsp;</p>
-				<p class="card-text">PyPI<br/><code>pip install pysces</code></p>
-			  <p class="card-text">Conda<br/><code>conda install -c conda-forge -c pysces pysces</code></p>
-			  <p class="card-text">Latest source (GitHub see <a href="https://github.com/PySCeS/pysces/blob/master/INSTALL.md">install.md</a> for instructions)<br>
-		      <code>git clone https://github.com/PySCeS/pysces.git</code></p>
+				<p class="card-text">PyPI<br/><code>pip install cbmpy</code></p>
+			  <p class="card-text">Conda<br/><code>conda install -c conda-forge -c bgoli cbmpy</code></p>
+			  <p class="card-text">Latest source (GitHub see <a href="https://github.com/SystemsBioinformatics/cbmpy">README.md</a> for installation instructions)<br>
+		      <code>git clone https://github.com/SystemsBioinformatics/cbmpy.git</code></p>
             </div>
           </div>
         </div>
@@ -108,18 +110,21 @@
           <div class="card">
 <!--            <img class="card-img-top" src="images/600X300.gif" alt="Card image cap">-->
             <div class="card-body">
-              <h3 class="card-title">Documentation</h3>
-				<p class="card-text">For more information on using and citing PySCeS try the documentation or 2005 Bioinformatics publication.</p>
+              <h3 class="card-title">Contact information&nbsp;&nbsp;</h3>
+			<!--
 			<div class="text-center">
 				<a class="btn btn-info btn-lg" href="https://pythonhosted.org/PySCeS/" 	role="button">Documentation</a> 
 				<a class="btn btn-warning btn-lg" href="https://doi.org/10.1093/bioinformatics/bti046" role="button">Publication</a>
 			</div>
+			
 			  <p class="card-text">&nbsp;</p>
-			  <p class="card-text">PySCeS source code, issue tracker and wiki available on <a href="https://github.com/PySCeS/pysces">GitHub</a> and see who is citing PySCeS on <a href="https://scholar.google.nl/scholar?hl=en&as_sdt=2005&cites=17307229048471592416&scipsc=&q=&scisbd=1">Google Scholar</a>.</p>
-              <p class="card-text">PySCeS releases are archived on <a href="https://zenodo.org/">Zenodo&nbsp;</a>and can be referred to as DOI: <a href="https://doi.org/10.5281/zenodo.2600905">10.5281/zenodo.2600905</a><br>
+-->
+			  <p class="card-text">Contact us for questions and to report problems using a <a href="https://github.com/SystemsBioinformatics/cbmpy/issues">GitHub issue.</a></p>
+              <p class="card-text">CBMPy is published on <a href="https://zenodo.org/">Zenodo</a> please cite the latest release as:<br/>
+				  <em>Brett G Olivier and Willi Gottstein. (2021). CBMPy release 0.8.1, Zenodo. <a href="https://doi.org/10.5281/zenodo.5126865">https://doi.org/10.5281/zenodo.5126865</a></em>
               </p>
-              <p class="card-text"><strong>Contact</strong> <br>
-                Would you like to report an issue, discuss existing or new functionality? Raise an <a href="https://github.com/PySCeS/pysces/issues">issue</a> on GitHub or contact a developer on <a href="https://twitter.com/brett_olivier">Twitter</a>.</p>
+              <p class="card-text">Would you like to report an issue, discuss existing or new functionality? Raise an <a href="https://github.com/PySCeS/pysces/issues">issue</a> on GitHub or contact a developer on <a href="https://twitter.com/brett_olivier">Twitter</a>.</p>
+			  <p class="card-text"> This software is developed as part of the modelling activities of the The<a href="http://www.teusinkbruggemanlab.nl/"> Systems Biology Lab</a> at the <a href="https://vu.nl/en/about-vu/research-institutes/aimms">Vrije Universiteit Amsterdam</a>.</p>
             </div>
           </div>
         </div>
