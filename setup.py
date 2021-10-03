@@ -61,10 +61,40 @@ with open(os.path.join(local_path, 'cbmpy', 'CBConfig.py')) as F:
 
 mypackages = ['cbmpy', 'cbmpy.fluxmodules']
 
+readme = """ CBMPy
+ =====
+
+ PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
+ based modelling and analysis. It has been designed using principles developed
+ in the PySCeS simulation software project: usability, flexibility and accessibility. Its architecture is both extensible and flexible using data structures that are intuitive to  the biologist (metabolites, reactions, compartments) while transparently translating these into the underlying mathematical structures used in advanced analysis (LP's, MILP's).
+
+ PySCeS CBMPy implements popular analyses such as FBA, FVA, element/charge
+ balancing, network analysis and model editing as well as advanced methods
+ developed specifically for the ecosystem modelling: minimal distance methods,
+ flux minimization and input selection. To cater for a diverse range of modelling
+ needs PySCeS CBMPy supports user interaction via:
+
+ - interactive console, scripting for advanced use or as a library for software development
+ - GUI, for quick access to a visual representation of the model, analysis methods and annotation tools
+ - SOAP based web services: using the Mariner framework much high level functionality is exposed for integration into web tools
+
+ For more information on the development and use of PySCeS CBMPy feel free to contact me:
+
+ PySCeS-CBMPy has been tested on Windows 7 and 8.1, Mac OSX and Ubuntu Linux 12.04, 14.04, 16.04. It is compatible with Python 3.6+ 
+ 
+  To use follow the installation instructions given below and try the following in a Python shell::
+
+ import cbmpy
+ cmod = cbmpy.readSBML3FBC('cbmpy_test_core')
+ cbmpy.doFBA(cmod)
+
+"""
+
 setup(
     package_dir={'cbmpy': 'cbmpy'},
     packages=mypackages,
     data_files=mydata_files,
+    long_description=readme,
     name="cbmpy",
     summary="CBMPy: Constraint Based Modelling in Python",
     version='{}.{}.{}'.format(vmaj, vmin, vmic),
@@ -105,138 +135,3 @@ try:
 except ImportError:
     pass
 
-readme = """ CBMPy
- =====
-
- PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
- based modelling and analysis. It has been designed using principles developed
- in the PySCeS simulation software project: usability, flexibility and accessibility. Its architecture is both extensible and flexible using data structures that are intuitive to  the biologist (metabolites, reactions, compartments) while transparently translating these into the underlying mathematical structures used in advanced analysis (LP's, MILP's).
-
- PySCeS CBMPy implements popular analyses such as FBA, FVA, element/charge
- balancing, network analysis and model editing as well as advanced methods
- developed specifically for the ecosystem modelling: minimal distance methods,
- flux minimization and input selection. To cater for a diverse range of modelling
- needs PySCeS CBMPy supports user interaction via:
-
- - interactive console, scripting for advanced use or as a library for software development
- - GUI, for quick access to a visual representation of the model, analysis methods and annotation tools
- - SOAP based web services: using the Mariner framework much high level functionality is exposed for integration into web tools
-
- For more information on the development and use of PySCeS CBMPy feel free to contact me:
-
- PySCeS-CBMPy has been tested on Windows 7 and 8.1, Mac OSX and Ubuntu Linux 12.04, 14.04, 16.04. It is compatible with both Python 2.7+ and includes experimental support for Python 3.4+ It is highly recommend to use
- Python 2.7 as not all Python package dependencies (extended functionality) are available for Python 3.
-
- PySCeS CBMPy is now accessible as a Python module **cbmpy** in place of the the previously used **pyscescbm** which is no longer supported. CBMPy includes support for  reading/writing models in SBML3 FBC versions 1 and 2 as well as COBRA dialect, Excel spreadsheets and Python.
-
- To use follow the installation instructions given below and try the following in a Python shell::
-
- import cbmpy
- cmod = cbmpy.readSBML3FBC('cbmpy_test_core')
- cbmpy.doFBA(cmod)
-
- New Ipython notebook tutorials are available. Happy modelling!
-
- The following installation instructions are for Ubuntu 16.04 but should be adaptable to any
- Linux package managment system, OSX, Debian, etc. Except for GLPK (4.47) and SymPy (0.7.4 or newer)
- no specific library version is required. For more detailed installation instructions and Windows
- please see the online documentation http://cbmpy.sourceforge.net/reference/install_doc.html
-
- New! auto-dependency configuration
- ----------------------------------
-
- I am in the process of creating automated dependency checking and building tools for CBMPy. These can be found at::
-
-  https://github.com/bgoli/cbmpy-build
-
- Ubuntu support is almost complete with Windows/Conda support in development, grab form GitHub::
-
-  https://github.com/bgoli/cbmpy-build.git
-
- Manual dependency configuration is provided below although for almost all users the "batteries included"
- Python distribution Anaconda (http://www.anaconda.io) is recommended. Using conda installing CBMPy
- is then as easy as:
-
-  conda install -c bgoli -c sbmlteam cbmpy
-
- If you would like to roll your own installation on Linux using the native Python this is also relatively
- easy.
-
- Python2
- -------
-
- First we create a scientific Python workbench::
-
- sudo apt-get install python-dev python-numpy python-scipy python-matplotlib  python-pip
- sudo apt-get install python-sympy python-suds python-xlrd python-xlwt python-h5py
- sudo apt-get install python-wxgtk2.8
- sudo apt-get install ipython ipython-notebook
-
- libSBML
- ~~~~~~~
-
- Installing libSBML is now easy using Pip::
-
- sudo apt-get install libxml2 libxml2-dev
- sudo apt-get install zlib1g zlib1g-dev
- sudo apt-get install bzip2 libbz2-dev
-
- sudo pip install --update python-libsbml
-
- Extended functionality
- ~~~~~~~~~~~~~~~~~~~~~~
-
- sudo pip install biopython docx
-
- Windows
- ~~~~~~~
-
- Use easy_install, pip or your package manager (e.g. conda) to install the following packages::
-
-  numpy scipy matplotlib sympy xlrd xlwt
-  biopython docx suds wxPython
-
- pip install --update python-libsbml
-
- glpk/python-glpk
- ~~~~~~~~~~~~~~~~
-
- CBMPy requires a linear solver for numerical analysis, the open source (glpk) solver can be automatically built and installed as follows (requires git to be installed and accessible):
-
- Download the install script that will install GLPK/PyGLPK for CBMPy on Ubuntu 14.04 or newer::
-
-  curl --remote-name https://raw.githubusercontent.com/bgoli/cbmpy-glpk/master/install_glpk.sh
-
- Make executable::
-
-  chmod 744 install_glpk.sh
-
- and run::
-
-  ./install_glpk.sh
-
- Note this script is designed to be used for building containers and will remove any installed version of GLPK and build and install the correct version needed for PyGLPK.
-
- No warranty of any kind assumed or otherwise, use at own risk!
-
- CBMPy
- ~~~~~
-
- Finally, install CBMPy::
-
-  sudo easy_install cbmpy
-
- or
-
-  sudo pip install cbmpy
-
- or try the new CONDA support::
-
-  conda install -c bgoli -c sbmlteam cbmpy
-
- or download the source  and run::
-
-  python setup.py build sdist
-  sudo python setup.py install
-
-"""
