@@ -12,4 +12,4 @@ sympy
 xlrd
 XlsxWriter
 xlwt
-cbmpy>=0.8.1
+

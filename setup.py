@@ -38,13 +38,13 @@ try:
         'sbml': ['python_libsbml', 'lxml',],
         'all': ['sympy', 'swiglpk', 'python_libsbml', 'lxml',],
     }
-    tests_require = ['nose']
+    tests_require_src = ['nose']
 except:
     from distutils.core import setup
 
     install_requires_src = []
     extras_require_src = {}
-    tests_require = []
+    tests_require_src = []
 
 mydata_files = []
 
