@@ -33,7 +33,8 @@ jobs:
     - name: Test with nose
       run: |
         git clone https://github.com/bgoli/cbmpy-test-suite.git test
-        nosetests test/nosetests/test_Fbase.py test/nosetests/test_loadSBML.py
+        nosetests test/nosetests/test_Fbase.py 
+# test/nosetests/test_loadSBML.py
 
   build_sdist:
     name: Build source distribution
