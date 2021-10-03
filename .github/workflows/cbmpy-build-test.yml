@@ -33,5 +33,4 @@ jobs:
     - name: Test with nose
       run: |
         git clone https://github.com/bgoli/cbmpy-test-suite.git test
-        cd test
-        nosetests test_Fbase.py
+        nosetests test/nosetests/test_Fbase.py
