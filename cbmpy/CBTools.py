@@ -89,7 +89,7 @@ def storeObj(obj, filename, compress=False):
     """
     if filename[-4:] != '.dat':
         filename = filename + '.dat'
-    F = file(filename, 'wb')
+    F = open(filename, 'wb')
     pickle.dump(obj, F, protocol=2)
     print('Object serialised as {}'.format(filename))
     F.close()
@@ -103,7 +103,7 @@ def loadObj(filename):
     if filename[-4:] != '.dat':
         filename = filename + '.dat'
     assert os.path.exists(filename), '\nFile \"{}\" does not exist'.format(filename)
-    F = file(filename, 'rb')
+    F = open(filename, 'rb')
     obj = pickle.load(F)
     F.close()
     return obj
@@ -123,7 +123,7 @@ def deSerializeFromDisk(filename):
 
     """
     assert os.path.exists(filename), '\nFile \"{}\" does not exist'.format(filename)
-    F = file(filename, 'rb')
+    F = open(filename, 'rb')
     obj = pickle.load(F)
     F.close()
     return obj
@@ -460,7 +460,7 @@ def exportLabelledArray(arr, fname, names=None, sep=',', fmt='%f'):
     """
     if names != None:
         assert arr.shape[0] == len(names), '\n ...  rows must equal number of names!'
-    F = file(fname, 'w')
+    F = open(fname, 'w')
     cntr = 0
     for r in range(arr.shape[0]):
         if names != None:
@@ -502,7 +502,7 @@ def exportLabelledArrayWithHeader(
             header
         ), '\n ...  cols must equal number of header names!'
 
-    F = file(fname, 'w')
+    F = open(fname, 'w')
     cntr = 0
     if header != None:
         if names != None:
@@ -549,9 +549,9 @@ def exportLabelledLinkedList(
     if names != None:
         assert len(arr) == len(names), '\n ...  rows must equal number of names!'
     if not appendlist:
-        F = file(fname, 'w')
+        F = open(fname, 'w')
     else:
-        F = file(fname, 'a')
+        F = open(fname, 'a')
     cntr = 0
     for r in range(len(arr)):
         if names != None:
@@ -1014,7 +1014,7 @@ def generateInputScanReports(
     modName += tag
     rnames = fba.getReactionNames()
     rid = fba.getReactionIds()
-    F = file(os.path.join(wDir, '%s.medium.csv' % modName), 'w')
+    F = open(os.path.join(wDir, '%s.medium.csv' % modName), 'w')
     F.write('J, lb, ub\n')
     for r in mediumDict:
         RN = rnames[rid.index(r)]
@@ -1022,7 +1022,7 @@ def generateInputScanReports(
     F.write('\n')
     F.close()
 
-    F = file(os.path.join(wDir, '%s.exchange.csv' % modName), 'w')
+    F = open(os.path.join(wDir, '%s.exchange.csv' % modName), 'w')
     F.write('J, lb, ub\n')
     for r in exDict:
         RN = rnames[rid.index(r)]
@@ -1030,7 +1030,7 @@ def generateInputScanReports(
     F.write('\n')
     F.close()
 
-    F = file(os.path.join(wDir, '%s.optima.csv' % modName), 'w')
+    F = open(os.path.join(wDir, '%s.optima.csv' % modName), 'w')
     F.write('J, lb, ub, optimum, "name"\n')
     if __DEBUG__:
         print(rnames)

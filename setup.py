@@ -76,16 +76,13 @@ flux minimization and input selection. To cater for a diverse range of modelling
 needs PySCeS CBMPy supports user interaction via:
 """
 
-description=""" CBMPy 
-=====
-CBMPy https://github.com/SystemsBioinformatics/cbmpy is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods.
-"""
+description="""CBMPy: https://github.com/SystemsBioinformatics/cbmpy is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods."""
 
 setup(
     package_dir={'cbmpy': 'cbmpy'},
     packages=mypackages,
     data_files=mydata_files,
-    long_description=readme,
+    long_description=description,
     name="cbmpy",
     summary="CBMPy: Constraint Based Modelling in Python",
     version='{}.{}.{}'.format(vmaj, vmin, vmic),
@@ -114,7 +111,7 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry',
     ],
-    description=readme,
+    description=description,
 )
 try:
     os.chdir(os.path.join(local_path, 'cbmpy', 'fluxmodules'))

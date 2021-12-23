@@ -2165,7 +2165,7 @@ def cplx_MultiFluxVariabilityAnalysis(
     iter_cnt = 0
 
     # raw_input('\n*****\nMultiFVA ready, press <enter> to continue:')
-    Rdump = file(os.path.join(work_dir, TFname + '_resTemp.txt'), 'w')
+    Rdump = open(os.path.join(work_dir, TFname + '_resTemp.txt'), 'w')
     NEW_RUN = True
     ADD_MILP_CONSTR = False
     for Ridx in range(NUM_FLX):
