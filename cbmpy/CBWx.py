@@ -1219,7 +1219,7 @@ if HAVE_WX:
                 self.OUT_dir = dlg.GetDirectory()
                 if OUT_file[-3:] != '.py':
                     OUT_file += '.py'
-                F = file(os.path.join(self.OUT_dir, OUT_file), 'w')
+                F = open(os.path.join(self.OUT_dir, OUT_file), 'w')
                 F.write(self.PyBox.GetValue())
                 F.flush()
                 F.close()

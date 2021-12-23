@@ -113,14 +113,14 @@ if __name__ == '__main__':
     print(os.sys.argv)
 
     cores = int(os.sys.argv[1])
-    F = file(os.sys.argv[2], 'rb')
+    F = open(os.sys.argv[2], 'rb')
     MEargs = pickle.load(F)
     print('\t', MEargs)
     F.close()
 
     res = multiCoreEnvFVA(MEargs, procs=cores)
 
-    F = file(os.sys.argv[2], 'wb')
+    F = open(os.sys.argv[2], 'wb')
     pickle.dump(res, F, protocol=-1)
     F.flush()
     F.close()

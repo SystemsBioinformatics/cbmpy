@@ -53,7 +53,7 @@ BIG_BOUND = 999999.0
 
 
 def getBounds(fname, reaction_prefix='R_', has_header=False):
-    bndsF = file(fname, 'r')
+    bndsF = open(fname, 'r')
     bndsLst = []
     bndsOut = {}
     for L in bndsF:
@@ -89,7 +89,7 @@ def getReactions(
     ignore_duplicates=False,
 ):
     assert os.path.exists(fname), '\n%s is not a valid file!'
-    rF = file(fname, 'r')
+    rF = open(fname, 'r')
     rxnLst = []
     Reac = {}
     dupcntr = {}
@@ -180,7 +180,7 @@ def getReactions_old_format(
     ignore_duplicates=False,
 ):
     assert os.path.exists(fname), '\n%s is not a valid file!'
-    rF = file(fname, 'r')
+    rF = open(fname, 'r')
     rxnLst = []
     Reac = {}
     dupcntr = {}
@@ -361,7 +361,7 @@ def addBoundsToReactions(Reactions, Bounds, default=1111.0):
 
 
 def dumpReactionsToTxt(Reactions, fname):
-    dF = file(fname, 'w')
+    dF = open(fname, 'w')
     for rx in Reactions:
         dF.write('\n%s\n' % Reactions[rx]['id'])
         dF.write('Name: %s\n' % Reactions[rx]['name'])
@@ -399,7 +399,7 @@ def getSpecies(reactions):
 
 
 def dumpSpeciesToTxt(species, fname):
-    dF = file(fname, 'w')
+    dF = open(fname, 'w')
     for s in species:
         dF.write('\n%s\n' % s)
         dF.write('Compartment: %s\n' % species[s]['compartment'])

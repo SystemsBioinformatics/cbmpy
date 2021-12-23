@@ -255,7 +255,7 @@ def readLPtoList(fname, work_dir):
     Object = []
     Constr = []
     Bounds = []
-    F = file(os.path.join(work_dir, fname), 'r')
+    F = open(os.path.join(work_dir, fname), 'r')
     for l in F:
         if l == '' or l[:2] == '\\\\' or l == '\n' or l.strip() == 'END':
             print('skipping')
@@ -301,7 +301,7 @@ def readSK_FVA(filename):
     assert os.path.exists(filename), '\nGive me a break!\n'
     ##  name = []
     vari = []
-    F = file(filename, 'r')
+    F = open(filename, 'r')
     for l in F:
         L = l.split(':')
         Jn = L[0].strip()
@@ -333,7 +333,7 @@ def readSK_FVA(filename):
 ##  assert _HAVE_SYMPY_, 'Install Sympy for rational IO support'
 
 ##  assert os.path.exists(fname), 'Uhm exqueeze me ...'
-##  SK_vert_file = file(fname, 'r')
+##  SK_vert_file = open(fname, 'r')
 ##  VertOut = []
 ##  LinOut = []
 ##  RayOut = []
@@ -471,7 +471,7 @@ def readSK_vertexOld(
     print('nformat: {}'.format(nformat % 0.12345678901234567890))
     print('**********\n')
 
-    SK_vert_file = file(fname, 'r')
+    SK_vert_file = open(fname, 'r')
     VertOut = []
     LinOut = []
     RayOut = []
@@ -646,7 +646,7 @@ def readSK_vertex(
     print('nformat: {}'.format(nformat % 0.12345678901234567890))
     print('**********\n')
 
-    SK_vert_file = file(fname, 'r')
+    SK_vert_file = open(fname, 'r')
     VCNTR = 0
     LCNTR = 0
     RCNTR = 0
@@ -1239,7 +1239,7 @@ def readExcel97Model(xlname, write_sbml=True, sbml_level=3, return_dictionaries=
 
     # write log to file
     """
-    F = file(os.path.join(cDir,'{}.log'.format(xlname)),'w')
+    F = open(os.path.join(cDir,'{}.log'.format(xlname)),'w')
     MSGLog.seek(0)
     F.write(MSGLog.read())
     F.close()

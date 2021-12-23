@@ -265,7 +265,7 @@ def runMultiStateFBA(
             biomass_name, options['target_biomass']
         )
     )
-    F = file(
+    F = open(
         os.path.join(
             work_dir,
             'find_input(%s)_(%s).csv' % (ModelPrefixStrIO, options['target_biomass']),
@@ -681,7 +681,7 @@ def runMultiStateFBA(
         RESULT_DATA.append(DD)
         RESULT_LPS.append(mGlp)
 
-        FR = file(os.path.join(work_dir, '%s_rpt.txt' % MultiFNbase), 'w')
+        FR = open(os.path.join(work_dir, '%s_rpt.txt' % MultiFNbase), 'w')
         FR.write('MultipleInput(%s states) Result:\n' % len(multisolve))
         # FR.write(' Flux diff: %s\n' % all_flux_diff.sum())
         FR.write(' optimum: %s = %s\n' % (mGobid, mGobjval))
@@ -704,7 +704,7 @@ def runMultiStateFBA(
 
         FR.close()
 
-        FD = file(os.path.join(work_dir, '%s_dat.test.csv' % MultiFNbase), 'w')
+        FD = open(os.path.join(work_dir, '%s_dat.test.csv' % MultiFNbase), 'w')
         head = 'Flux, '
         for p in ModelPrefixes:
             head += '%s,' % p
@@ -722,7 +722,7 @@ def runMultiStateFBA(
             FD.write('%s,%s\n' % (FluxScaling[F], FlxAO_scaled[F, -1]))
         FD.flush()
         FD.close()
-        FD = file(os.path.join(work_dir, '%s_dat.csv' % MultiFNbase), 'w')
+        FD = open(os.path.join(work_dir, '%s_dat.csv' % MultiFNbase), 'w')
         head = 'Flux, '
         for p in ModelPrefixes:
             head += '%s,' % p
@@ -755,9 +755,9 @@ def runMultiStateFBA(
 
     # multi file
     # if options['algorithm'] == "ABS_L1_METHOD":
-    # FD = file(os.path.join(work_dir, '%s_ABSL1_multi.csv' % OFname), 'w')
+    # FD = open(os.path.join(work_dir, '%s_ABSL1_multi.csv' % OFname), 'w')
     # elif options['algorithm'] == "L1_METHOD":
-    # FD = file(os.path.join(work_dir, '%s_L1_multi.csv' % OFname), 'w')
+    # FD = open(os.path.join(work_dir, '%s_L1_multi.csv' % OFname), 'w')
 
     # dat_arr = [a['solution'] for a in RESULT_DATA]
     # dat_arr = numpy.hstack(dat_arr)
@@ -807,9 +807,9 @@ def runMultiStateFBA(
 
     opt_out = [(a['dev_factor'], a['obj_val'], a['flux_diff']) for a in RESULT_DATA]
     if options['algorithm'] == "ABS_L1_METHOD":
-        FR2 = file(os.path.join(work_dir, '%s_ABSL1_opt.csv' % OFname), 'w')
+        FR2 = open(os.path.join(work_dir, '%s_ABSL1_opt.csv' % OFname), 'w')
     elif options['algorithm'] == "L1_METHOD":
-        FR2 = file(os.path.join(work_dir, '%s_L1_opt.csv' % OFname), 'w')
+        FR2 = open(os.path.join(work_dir, '%s_L1_opt.csv' % OFname), 'w')
     head = 'ObjDist(%s),optimum (%s),raw diff (%s)' % (
         ModelPrefixStr,
         ModelPrefixStr,
@@ -1005,7 +1005,7 @@ def runMultiStateFBA(
                 (fva_time_end - fva_time_start) / 60.0,
             )
         )
-        F = file(os.path.join(work_dir, '%s_fva_stats.txt' % OFname), 'a')
+        F = open(os.path.join(work_dir, '%s_fva_stats.txt' % OFname), 'a')
         F.write(
             '*****\nTotal (%s LP\'s) time for FVA (%s threads) min: %s\n*****\n'
             % (
