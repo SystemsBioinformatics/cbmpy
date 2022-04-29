@@ -42,7 +42,6 @@ except ImportError:
     import cPickle as pickle
 
 from . import CBSolver
-
 from . import _multicorefva
 
 MULTIFVAFILE = __file__.replace('CBMultiCore', '_multicorefva')
@@ -89,14 +88,23 @@ def runMultiCoreFVA(
     oldlpgen=False,
     markupmodel=True,
     procs=2,
+    override_bin=None
 ):
     """
     Run a multicore FVA where:
 
      - *fba* is an fba model instance
      - *procs* [default=2] number of processing threads (optimum seems to be about the number of physical cores)
+     - *python_override_bin* allows customization of the Python bin used for the multicore process
 
     """
+    # this is a hack to sort out the multicore import mess
+    #if subprocess.call([PYTHON_BIN, '-c', 'import os', 'import cbmpy', 'os.sys.exit(-1)']):
+    if override_bin is not None:
+        PYTHON_BIN = override_bin
+        __CBCONFIG__['MULTICORE_PYTHON_BIN_OVERRIDE'] = override_bin
+    else:
+        PYTHON_BIN = 'python'
 
     # CBSolver.analyzeModel(fba, oldlpgen=False)
     # cplx_FluxVariabilityAnalysis(fba, selected_reactions=None, pre_opt=True, tol=None, objF2constr=True, rhs_sense='lower', optPercentage=100.0, work_dir=None, quiet=True, debug=False, oldlpgen=False, markupmodel=True)
@@ -116,7 +124,8 @@ def runMultiCoreFVA(
     fN = str(time.time()).split('.')[0]
     fba.serializeToDisk(fN, protocol=-1)
     fN = os.path.abspath(fN)
-    subprocess.call(['python', MULTIFVAFILE, str(procs), fN])
+    print(__CBCONFIG__['MULTICORE_PYTHON_BIN_OVERRIDE'])
+    subprocess.call([PYTHON_BIN, MULTIFVAFILE, str(procs), fN])
     F = open(fN, 'rb')
     res = pickle.load(F)
     F.close()
