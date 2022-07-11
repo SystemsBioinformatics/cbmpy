@@ -67,8 +67,12 @@ try:
     sw.glp_set_prob_name(lp, "sample")
     sw.glp_delete_prob(lp)
     HAVE_SWIGLPK = True
-    print('\n\nCBGLPK based on swiglpk: not all methods implimented yet!')
     __solver_version__ = '{}.{}'.format(sw.GLP_MAJOR_VERSION, sw.GLP_MINOR_VERSION)
+    print(
+        '\n\nCBGLPK based on swiglpk: not all methods implimented yet!',
+        __solver_version__,
+    )
+
 except:
     raise ImportError
 
