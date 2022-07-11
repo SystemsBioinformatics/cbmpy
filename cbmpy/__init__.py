@@ -35,8 +35,15 @@ import os
 __SILENT_START__ = False
 from . import CBConfig
 
+
 __CBCONFIG__ = CBConfig.__CBCONFIG__
 __version__ = CBConfig.__CBCONFIG__['VERSION']
+# Force the use of the GLPK solver by defining this envar
+if 'CBMPY_USE_GLPK' in os.environ:
+    CBConfig.__CBCONFIG__['SOLVER_PREF'] = 'GLPK'
+# Force the use of the CPLX solver by defining this envar
+if 'CBMPY_USE_CPLX' in os.environ:
+    CBConfig.__CBCONFIG__['SOLVER_PREF'] = 'CPLX'
 __CBCONFIG__['CBMPY_DIR'] = os.path.split(CBConfig.__file__)[0]
 
 # This is just a hack for backwards compatibility with existing scripts
