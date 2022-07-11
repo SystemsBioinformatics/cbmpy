@@ -58,12 +58,26 @@ try:
 
     analyzeModel = CBSolver.analyzeModel
     FluxVariabilityAnalysis = CBSolver.FluxVariabilityAnalysis
-    MinimizeSumOfAbsFluxes = CBSolver.MinimizeSumOfAbsFluxes
+
+    # temporary hack
+    if CBConfig.__CBCONFIG__['SOLVER_PREF'] == 'CPLX':
+        MinimizeSumOfAbsFluxes = CBSolver.MinimizeSumOfAbsFluxes
+        doFBAMinSum = CBSolver.MinimizeSumOfAbsFluxes
+    else:
+        print('doFBAMinSum not available with GLPK')
+
+        def MinimizeSumOfAbsFluxes(*args, **kwargs):
+            raise RuntimeError('doFBAMinSum not available with GLPK')
+
+        doFBAMinSum = MinimizeSumOfAbsFluxes
+
     doFBA = CBSolver.analyzeModel
     doFVA = CBSolver.FluxVariabilityAnalysis
-    doFBAMinSum = CBSolver.MinimizeSumOfAbsFluxes
+    # doFBAMinSum = CBSolver.MinimizeSumOfAbsFluxes
+
     __HAVE_SOLVER__ = True
-except (ImportError, AttributeError):
+except (ImportError, AttributeError) as e:
+    print(e)
     print('No solver present, unable to create shortcuts')
 
 from .CBWrite import writeFVAtoCSV, writeModelToExcel97
