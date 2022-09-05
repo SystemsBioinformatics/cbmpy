@@ -141,9 +141,9 @@ class DBTools(NetDBbase):
 
         Effectively writes CREATE TABLE "table" (<id> <type>, gene TEXT PRIMARY KEY, aa_seq TEXT, nuc_seq TEXT, aa_len INT, nuc_len INT) % table
         """
-        SQL = 'CREATE TABLE %s (' % table
+        SQL = 'CREATE TABLE "{}" ('.format(table)
         for c in sqlcols:
-            SQL += ' %s,' % c
+            SQL += ' "{}",'.format(c)
         SQL = SQL[:-1]
         SQL += ' )'
         print(SQL)
