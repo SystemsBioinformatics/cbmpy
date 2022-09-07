@@ -1856,11 +1856,12 @@ class CBMtoSBML3(FBCconnect):
             self.model.setModelHistory(sbmh)
         del sbmh
 
-    def addBoundsV2(self, compress_bounds=False):
+    def addBoundsV2(self, compress_bounds=False, sig_dig=20):
         """
         Add FBC V2 style fluxbounds to model
 
          - *compress_bounds* [default=False] enable parameter compression
+         - *sig_dig* [default=20] round off to significant digits
 
         """
         if compress_bounds:
@@ -1868,8 +1869,8 @@ class CBMtoSBML3(FBCconnect):
             bounds = {}
             shared_values = {}
             for r_ in self.fba.reactions:
-                lb = round(r_.getLowerBound(), 12)
-                ub = round(r_.getUpperBound(), 12)
+                lb = round(r_.getLowerBound(), sig_dig)
+                ub = round(r_.getUpperBound(), sig_dig)
                 rid = r_.getId()
                 bounds[rid] = (lb, ub)
 
