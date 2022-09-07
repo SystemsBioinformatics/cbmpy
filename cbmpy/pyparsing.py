@@ -2231,11 +2231,16 @@ class ParseExpression(ParserElement):
 
         if isinstance( exprs, basestring ):
             self.exprs = [ Literal( exprs ) ]
-        elif isinstance( exprs, collections.abc.Sequence ):
+        elif PY_3 and isinstance( exprs, collections.abc.Sequence ):
             # if sequence of strings provided, wrap with Literal
             if all(isinstance(expr, basestring) for expr in exprs):
                 exprs = map(Literal, exprs)
             self.exprs = list(exprs)
+        elif isinstance( exprs, collections.Sequence ):
+            # if sequence of strings provided, wrap with Literal
+            if all(isinstance(expr, basestring) for expr in exprs):
+                exprs = map(Literal, exprs)
+            self.exprs = list(exprs)            
         else:
             try:
                 self.exprs = list( exprs )
@@ -3236,7 +3241,9 @@ def oneOf( strs, caseless=False, useRegex=True ):
 
     if isinstance(strs,basestring):
         symbols = strs.split()
-    elif isinstance(strs, collections.abc.Sequence):
+    elif PY_3 and isinstance(strs, collections.abc.Sequence):
+        symbols = list(strs[:])
+    elif isinstance(strs, collections.Sequence):
         symbols = list(strs[:])
     elif isinstance(strs, _generatorType):
         symbols = list(strs)
