@@ -44,6 +44,10 @@ try:
 except:
     from html import escape as ESCAPE
 
+try:
+    from cgi import escape as ESCAPE
+except:
+    from html import escape as ESCAPE
 
 # this is a hack that needs to be streamlined a bit
 try:
@@ -61,7 +65,6 @@ except ImportError:
     from html import parser
 
     HTMLParser = parser.HTMLParser
-
 
 from . import CBModel
 from .CBCommon import (
@@ -261,8 +264,13 @@ class MLStripper(HTMLParser):
         self.fed = []
         return data
 
-
+# with Python 3.9+ moving unescape we now need to implement a nasty hack
 __tagStripper__ = MLStripper()
+try:
+    __tagStripper__.unescape('dfsdfsdfsdfsdfsdfsdef')
+except AttributeError as err:
+    from html import unescape
+    __tagStripper__.unescape = unescape
 
 
 def xml_stripTags(html):
