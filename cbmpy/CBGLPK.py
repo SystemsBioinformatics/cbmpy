@@ -69,7 +69,7 @@ try:
     HAVE_SWIGLPK = True
     __solver_version__ = '{}.{}'.format(sw.GLP_MAJOR_VERSION, sw.GLP_MINOR_VERSION)
     print(
-        '\n\nCBGLPK based on swiglpk: not all methods implimented yet!',
+        'CBGLPK based on swiglpk: not all methods implimented yet!',
         __solver_version__,
     )
 

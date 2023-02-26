@@ -326,7 +326,11 @@ def sbml_readSBML2FBA(
     F = csio.StringIO()
     model_id = M.getId()
     model_name = M.getName()
-    model_description = libsbml.XMLNode_convertXMLNodeToString(M.getNotes())
+    if libsbml.getLibSBMLVersion() >= 51903:
+        node_txt = libsbml.XMLNode.convertXMLNodeToString(M.getNotes())
+    else:
+        node_txt = libsbml.XMLNode_convertXMLNodeToString(M.getNotes())
+    model_description = node_txt
     model_description = xml_stripTags(model_description).strip()
 
     # print(model_description)
@@ -384,7 +388,10 @@ def sbml_readSBML2FBA(
             chemFormula=CF,
         )
         # process notes field, get rid of <head>, <body> elements
-        specNotes = libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
+        if libsbml.getLibSBMLVersion() >= 51903:
+            specNotes = libsbml.XMLNode.convertXMLNodeToString(SBSp.getNotes())
+        else:
+            specNotes = libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
         S.annotation = sbml_readCOBRANote(specNotes)
 
         # Note: chemFormula works will have to see about charge GETFROMNAME!!!
@@ -456,8 +463,11 @@ def sbml_readSBML2FBA(
         del reagents
         if EXREAC:
             R.is_exchange = True
-        # R.setAnnotation('note', libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes()))
-        reacNotes = libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
+
+        if libsbml.getLibSBMLVersion() >= 51903:
+            reacNotes = libsbml.XMLNode.convertXMLNodeToString(SBRe.getNotes())
+        else:
+            reacNotes = libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
         R.annotation = sbml_readCOBRANote(reacNotes)
         manot = sbml_getCVterms(SBRe, model=False)
         if manot != None:
@@ -472,7 +482,7 @@ def sbml_readSBML2FBA(
     if __HAVE_FBA_ANOT__:
         # root = ELTree.ElementTree(file=os.path.join(work_dir, _TEMP_XML_FILE_))
         root = ELTree.ElementTree(file=F)
-        root_i = root.getiterator()
+        root_i = root.iter()
         for ri in root_i:
             if (
                 ri.tag
@@ -481,7 +491,7 @@ def sbml_readSBML2FBA(
                 if __DEBUG__:
                     print(ri.tag)
                 rootfba = ELTree.ElementTree(ri)
-                root_fba_i = rootfba.getiterator()
+                root_fba_i = rootfba.iter()
         constraints = []
         for ret in root_fba_i:
             if (
@@ -491,8 +501,7 @@ def sbml_readSBML2FBA(
             ):
                 if __DEBUG__:
                     print(ret.tag)
-                chld = ret.getchildren()
-                for c in chld:
+                for c in list(ret):
                     if __DEBUG__:
                         print('\t{}'.format(c.tag))
                     attrib = c.attrib
@@ -524,7 +533,7 @@ def sbml_readSBML2FBA(
                         activeId = ret.attrib[
                             '{http://www.sbml.org/sbml/level3/version1/fba/version1}activeObjective'
                         ]
-                    for obj in ret.getchildren():
+                    for obj in list(ret):
                         ##  print obj.attrib
                         if (
                             '{http://www.sbml.org/sbml/level3/version1/fba/version1}type'
@@ -538,9 +547,9 @@ def sbml_readSBML2FBA(
                         ##  raw_input(ftype)
                         sid = obj.attrib['id']
                         # multiobj = []
-                        for c_ in obj.getchildren():
+                        for c_ in list(obj):
                             fo = []
-                            for cc_ in c_.getchildren():
+                            for cc_ in list(c_):
                                 fo.append(cc_.attrib)
                             multiobj.append(fo)
 
@@ -548,7 +557,7 @@ def sbml_readSBML2FBA(
                             print(objfunc_data)
                         obj_ = multiobj[-1]
                         for flobj_ in obj_:
-                            for a in flobj_:
+                            for a in tuple(flobj_):
                                 flobj_.update(
                                     {
                                         a.replace(
@@ -1186,7 +1195,10 @@ def sbml_getNotes(obj):
     """
     notes = ''
     try:
-        notes = libsbml.XMLNode_convertXMLNodeToString(obj.getNotes())
+        if libsbml.getLibSBMLVersion() >= 51903:
+            notes = libsbml.XMLNode.convertXMLNodeToString(obj.getNotes())
+        else:
+            notes = libsbml.XMLNode_convertXMLNodeToString(obj.getNotes())
         if notes != '' and notes is not None:
             # too aggressive but efficient behaviour removed
             # notes = xml_stripTags(notes).strip()
@@ -3763,9 +3775,11 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         if LOADANNOT:
             S.annotation = sbml_readKeyValueDataAnnotation(SBSp.getAnnotationString())
             if S.annotation == {}:
-                S.annotation = sbml_readCOBRANote(
-                    libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
-                )
+                if libsbml.getLibSBMLVersion() >= 51903:
+                    node_txt = libsbml.XMLNode.convertXMLNodeToString(SBSp.getNotes())
+                else:
+                    node_txt = libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
+                S.annotation = sbml_readCOBRANote(node_txt)
                 # SBSp.unsetNotes()
             manot = sbml_getCVterms(SBSp, model=False)
             if manot != None:
@@ -4016,10 +4030,12 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         if LOADANNOT:
             R.annotation = sbml_readKeyValueDataAnnotation(SBRe.getAnnotationString())
             # only dig for ancient annotation if not using V2
+            if libsbml.getLibSBMLVersion() >= 51903:
+                node_txt = libsbml.XMLNode.convertXMLNodeToString(SBRe.getNotes())
+            else:
+                node_txt = libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
             if FBCver < 2 and R.annotation == {}:
-                R.annotation = sbml_readCOBRANote(
-                    libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
-                )
+                R.annotation = sbml_readCOBRANote(node_txt)
             manot = sbml_getCVterms(SBRe, model=False)
             if manot != None:
                 R.miriam = manot
