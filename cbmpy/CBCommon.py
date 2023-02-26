@@ -71,18 +71,23 @@ else:
 
 chemElementDefs = None
 HAVE_PYPARSING = False
+
 try:
-    from . import pyparsing
-
+    import pyparsing
     HAVE_PYPARSING = True
+    print('pyparsing import')
 except ImportError:
-    try:
-        print('Attempting global PyParsing import')
-        import pyparsing
+    print('INFO: please install pyparsing to enable chemical balance checking!')
 
-        HAVE_PYPARSING = True
-    except ImportError:
-        print('INFO please install pyparsing to enable chemical balance checking!')
+
+#if not HAVE_PYPARSING:
+    #if os.sys.version_info[0] == 3 and os.sys.version_info[1] < 9:
+        #try:
+            #from . import pyparsing
+
+            #HAVE_PYPARSING = True
+        #except ImportError:
+            #print('INFO please install pyparsing to enable chemical balance checking!')
 
 if HAVE_PYPARSING:
     pp_caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

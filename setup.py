@@ -2,7 +2,7 @@
 CBMPy: setup.py
 ===============
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2023 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -64,9 +64,9 @@ mypackages = ['cbmpy', 'cbmpy.fluxmodules']
 readme = """
 PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
 based modelling and analysis. It has been designed using principles developed
-in the PySCeS simulation software project: usability, flexibility and accessibility. 
-Its architecture is both extensible and flexible using data structures that are intuitive to 
-the biologist (metabolites, reactions, compartments) while transparently translating these into 
+in the PySCeS simulation software project: usability, flexibility and accessibility.
+Its architecture is both extensible and flexible using data structures that are intuitive to
+the biologist (metabolites, reactions, compartments) while transparently translating these into
 the underlying mathematical structures used in advanced analysis (LP's, MILP's).
 
 PySCeS CBMPy implements popular analyses such as FBA, FVA, element/charge
@@ -97,7 +97,7 @@ setup(
     # zip_safe = False,
     install_requires=install_requires_src,
     extras_require=extras_require_src,
-    tests_require=tests_require_src,    
+    tests_require=tests_require_src,
     platforms=["Windows", "Linux", "Mac"],
     classifiers=[
         'Development Status :: 4 - Beta',

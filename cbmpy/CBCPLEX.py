@@ -1996,6 +1996,7 @@ def cplx_FluxVariabilityAnalysis(
             max_oval = numpy.NaN
         else:  # other fail
             max_oval = numpy.NaN
+
         if debug:
             cplx_writeLPtoLPTfile(
                 cpx, '%smax' % R, title='max%s=%s' % (R, max_oval), Dir=debug_dir
@@ -2016,33 +2017,38 @@ def cplx_FluxVariabilityAnalysis(
         OUTPUT_ARRAY[Ridx, 4] = round(abs(max_oval - min_oval), roundoff_span)
         OUTPUT_ARRAY[Ridx, 5] = MIN_STAT
         OUTPUT_ARRAY[Ridx, 6] = MAX_STAT
+
         if markupmodel:
             REAC = fba.getReaction(R)
             REAC.setValue(pre_sol[R])
             REAC.fva_min = min_oval
             REAC.fva_max = max_oval
             REAC.fva_status = (MIN_STAT, MAX_STAT)
-            # if MAX_STAT == 1:
-            # REAC.fva_max = max_oval
-            # else:
-            # REAC.fva_max = None
-            # if MIN_STAT == 1:
-            # REAC.fva_min = min_oval
-            # else:
-            # REAC.fva_min = None
+            #if MAX_STAT == 1:
+                #REAC.fva_max = max_oval
+            #else:
+                #REAC.fva_max = None
+            #if MIN_STAT == 1:
+                #REAC.fva_min = min_oval
+            #else:
+                #REAC.fva_min = None
             if R in REDUCED_COSTS:
                 REAC.reduced_costs = REDUCED_COSTS[R]
+
+        # TODO backport from CBGLPK line 839
         if not quiet and MAX_STAT > 1 or MIN_STAT > 1:
             print(
                 'Solver fail for reaction \"{}\" (MIN_STAT: {} MAX_STAT: {})'.format(
                     R, MIN_STAT, MAX_STAT
                 )
             )
+        # TODO backport from CBGLPK line 857
         cntr += 1
         if cntr == 200:
             tcnt += cntr
             print('FVA has processed {} of {} reactions'.format(tcnt, NUM_FLX))
             cntr = 0
+
     if quiet:
         cplx_setOutputStreams(cpx, mode='default')
     del cpx

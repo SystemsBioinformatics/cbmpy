@@ -159,7 +159,7 @@ def writeSBML3FBCV2(
     add_cbmpy_annot=True,
     add_cobra_annot=False,
     validate=False,
-    compress_bounds=True,
+    compress_bounds=False,
     zip_model=False,
     return_model_string=False,
 ):

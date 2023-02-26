@@ -31,6 +31,15 @@ from __future__ import absolute_import
 
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
+# Force the use of the CPLX solver by defining this envar
+import os
+
+if 'CBMPY_USE_CPLX' in os.environ:
+    __CBCONFIG__['SOLVER_PREF'] = 'CPLX'
+if 'CBMPY_USE_GLPK' in os.environ:
+    __CBCONFIG__['SOLVER_PREF'] = 'GLPK'
+del os
+
 __DEBUG__ = __CBCONFIG__['DEBUG']
 __version__ = __CBCONFIG__['VERSION']
 SOLVER_PREF = __CBCONFIG__['SOLVER_PREF']

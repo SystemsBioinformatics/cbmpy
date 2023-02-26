@@ -35,8 +35,17 @@ import os
 __SILENT_START__ = False
 from . import CBConfig
 
+
 __CBCONFIG__ = CBConfig.__CBCONFIG__
 __version__ = CBConfig.__CBCONFIG__['VERSION']
+# Force the use of the GLPK solver by defining this envar
+
+# Force the use of the CPLX solver by defining this envar
+if 'CBMPY_USE_CPLX' in os.environ:
+    CBConfig.__CBCONFIG__['SOLVER_PREF'] = 'CPLX'
+if 'CBMPY_USE_GLPK' in os.environ:
+    CBConfig.__CBCONFIG__['SOLVER_PREF'] = 'GLPK'
+
 __CBCONFIG__['CBMPY_DIR'] = os.path.split(CBConfig.__file__)[0]
 
 # This is just a hack for backwards compatibility with existing scripts
@@ -49,12 +58,26 @@ try:
 
     analyzeModel = CBSolver.analyzeModel
     FluxVariabilityAnalysis = CBSolver.FluxVariabilityAnalysis
-    MinimizeSumOfAbsFluxes = CBSolver.MinimizeSumOfAbsFluxes
+
+    # temporary hack
+    if CBConfig.__CBCONFIG__['SOLVER_PREF'] == 'CPLX':
+        MinimizeSumOfAbsFluxes = CBSolver.MinimizeSumOfAbsFluxes
+        doFBAMinSum = CBSolver.MinimizeSumOfAbsFluxes
+    else:
+        print('doFBAMinSum not available with GLPK')
+
+        def MinimizeSumOfAbsFluxes(*args, **kwargs):
+            raise RuntimeError('doFBAMinSum not available with GLPK')
+
+        doFBAMinSum = MinimizeSumOfAbsFluxes
+
     doFBA = CBSolver.analyzeModel
     doFVA = CBSolver.FluxVariabilityAnalysis
-    doFBAMinSum = CBSolver.MinimizeSumOfAbsFluxes
+    # doFBAMinSum = CBSolver.MinimizeSumOfAbsFluxes
+
     __HAVE_SOLVER__ = True
-except (ImportError, AttributeError):
+except (ImportError, AttributeError) as e:
+    print(e)
     print('No solver present, unable to create shortcuts')
 
 from .CBWrite import writeFVAtoCSV, writeModelToExcel97

@@ -67,8 +67,12 @@ try:
     sw.glp_set_prob_name(lp, "sample")
     sw.glp_delete_prob(lp)
     HAVE_SWIGLPK = True
-    print('\n\nCBGLPK based on swiglpk: not all methods implimented yet!')
     __solver_version__ = '{}.{}'.format(sw.GLP_MAJOR_VERSION, sw.GLP_MINOR_VERSION)
+    print(
+        'CBGLPK based on swiglpk: not all methods implimented yet!',
+        __solver_version__,
+    )
+
 except:
     raise ImportError
 
@@ -696,6 +700,7 @@ def glpk_FluxVariabilityAnalysis(
     except AttributeError:
         OUTPUT_ARRAY = numpy.zeros((NUM_FLX, 7))
     OUTPUT_NAMES = []
+    fva_ridx_fails = []
     cntr = 0
     tcnt = 0
     # this is a memory hack --> prevents solver going berserk
@@ -714,8 +719,9 @@ def glpk_FluxVariabilityAnalysis(
             # MIN
             # TODO: bgoli: see whether this also works with 'minimize'
             glpk_setObjective(cpx, 'min%s' % R, [(1, R)], 'min', reset=True)
-            ##  cplx_setBounds(c, id, min=None, max=None) # think about this
+
             MIN_STAT = glpk_Solve(cpx, method=method)
+
             if MIN_STAT == 'LPS_OPT':
                 MIN_STAT = 1
             elif MIN_STAT == 'LPS_UNBND':
@@ -724,6 +730,7 @@ def glpk_FluxVariabilityAnalysis(
                 MIN_STAT = 3
             else:
                 MIN_STAT = 4
+
             if MIN_STAT == 1:  # solved
                 min_oval = cpx.obj.value
             elif MIN_STAT == 2:  # unbound
@@ -735,17 +742,21 @@ def glpk_FluxVariabilityAnalysis(
                 min_oval = numpy.NaN
             if debug:
                 cpx.write(cpxlp=os.path.join(debug_dir, '%smin.lp' % R))
-            if MIN_STAT >= 3:
-                if gomin_cntr == 0:
-                    cpx.erase()
-                    del cpx
-                    time.sleep(0.1)
-                    cpx = glpk.LPX(mps=mps_filename)
-                    gomin_cntr += 1
-                else:
-                    GOMIN = False
+
+            if MIN_STAT > 3:
+                print('Mysterious GLPK MIN_STAT > 3: if you see this please contact a developer (not an error).')
+                #if gomin_cntr == 0:
+                    #cpx.erase()
+                    #del cpx
+                    #time.sleep(0.1)
+                    #cpx = glpk.LPX(mps=mps_filename)
+                    #gomin_cntr += 1
+                #else:
+                    #GOMIN = False
+                GOMIN = False
             else:
                 GOMIN = False
+
             if gomin_cntr >= max_error_iter:
                 GOMIN = False
 
@@ -765,6 +776,7 @@ def glpk_FluxVariabilityAnalysis(
                 MAX_STAT = 3
             else:
                 MAX_STAT = 4
+
             if MAX_STAT == 1:  # solved
                 max_oval = cpx.obj.value
             elif MAX_STAT == 2:  # unbound
@@ -775,24 +787,30 @@ def glpk_FluxVariabilityAnalysis(
             else:  # other fail
                 max_oval = numpy.NaN
 
-            if MAX_STAT >= 3:
-                if gomax_cntr == 0:
-                    cpx.erase()
-                    del cpx
-                    time.sleep(0.1)
-                    cpx = glpk.LPX(mps=mps_filename)
-                    gomax_cntr += 1
-                else:
-                    GOMAX = False
+            if MAX_STAT > 3:
+                print('Mysterious GLPK MAX_STAT > 3: if you see this please contact a developer (not an error).')
+                #if gomax_cntr == 0:
+                    #cpx.erase()
+                    #del cpx
+                    #time.sleep(0.1)
+                    #cpx = glpk.LPX(mps=mps_filename)
+                    #gomax_cntr += 1
+                #else:
+                    #GOMAX = False
+                GOMAX = False
             else:
                 GOMAX = False
+
             if gomax_cntr >= max_error_iter:
                 GOMAX = False
 
         # check for solver going berserk
-        if MIN_STAT > 1 and MAX_STAT > 1:
-            print(Ridx)
-            time.sleep(1)
+        #if MIN_STAT > 1 and MAX_STAT > 1:
+            #print(Ridx)
+            #time.sleep(1)
+
+        if debug:
+            cpx.write(cpxlp=os.path.join(debug_dir, '%smax.lp' % R))
 
         # enables using the default value as a solution if the solver fails
         if pre_opt and default_on_fail:
@@ -800,9 +818,6 @@ def glpk_FluxVariabilityAnalysis(
                 max_oval = pre_sol[R]
             if MIN_STAT > 1 and not MAX_STAT > 1:
                 min_oval = pre_sol[R]
-
-        if debug:
-            cpx.write(cpxlp=os.path.join(debug_dir, '%smax.lp' % R))
 
         OUTPUT_ARRAY[Ridx, 0] = pre_sol[R]
         if R in REDUCED_COSTS:
@@ -820,17 +835,27 @@ def glpk_FluxVariabilityAnalysis(
             REAC.fva_status = (MIN_STAT, MAX_STAT)
             if R in REDUCED_COSTS:
                 REAC.reduced_costs = REDUCED_COSTS[R]
-        if not quiet and MAX_STAT > 1 or MIN_STAT > 1:
-            print(
-                'Solver fail for reaction \"{}\" (MIN_STAT: {} MAX_STAT: {})'.format(
-                    R, MIN_STAT, MAX_STAT
-                )
-            )
+
+        if not quiet:
+            if MAX_STAT > 1:
+                fva_ridx_fails.append((R, MAX_STAT))
+                #print(
+                    #'Solver fail for reaction \"{}\" (MIN_STAT: {} MAX_STAT: {})'.format(
+                        #R, MIN_STAT, MAX_STAT
+                    #)
+            if MIN_STAT > 1:
+                fva_ridx_fails.append((R, MIN_STAT))
+
         cntr += 1
         if cntr == 200:
             tcnt += cntr
             print('FVA has processed {} of {} reactions'.format(tcnt, NUM_FLX))
             cntr = 0
+
+    if len(fva_ridx_fails) > 0:
+        print('Optimization failed for the following FVA operations. If this is a large list consider adjusting the FVA tolerances.')
+        print(fva_ridx_fails)
+
 
     os.remove(mps_filename)
 
