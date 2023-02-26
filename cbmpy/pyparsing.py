@@ -71,7 +71,10 @@ import sys
 import warnings
 import re
 import sre_constants
-import collections
+if sys.version_info.major == 3 and sys.version_info.minor >= 10 :
+    import collections.abc as collections
+else :
+    import collections
 import pprint
 #~ sys.stderr.write( "testing pyparsing module, version %s, %s\n" % (__version__,__versionTime__ ) )
 
