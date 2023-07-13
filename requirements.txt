@@ -1,7 +1,7 @@
 biopython
 packaging
 ipython
-nose
+nose-py3
 numpy
 matplotlib
 python-libsbml
