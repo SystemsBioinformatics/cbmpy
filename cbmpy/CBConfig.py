@@ -39,7 +39,7 @@ import platform
 
 __VERSION_MAJOR__ = 0
 __VERSION_MINOR__ = 8
-__VERSION_MICRO__ = 4
+__VERSION_MICRO__ = 5
 
 __CBCONFIG__ = {
     'VERSION_MAJOR': __VERSION_MAJOR__,
@@ -63,7 +63,7 @@ __CBCONFIG__ = {
         platform.system(), platform.release(), platform.architecture()[0]
     ),
     'MULTICORE_PYTHON_BIN_OVERRIDE': None,
-    
+
 }
 
 
