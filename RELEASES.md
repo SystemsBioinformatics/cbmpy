@@ -1,6 +1,6 @@
 # Release history
 
-## Release 0.8.4 (2023)
+## Release 0.8.4 (2024)
 Primarily a Python 9.x compatability release
 
 

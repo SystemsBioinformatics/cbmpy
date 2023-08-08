@@ -2,7 +2,7 @@
 CBMPy: setup.py
 ===============
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2023 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2010-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,14 +31,14 @@ local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 try:
     from setuptools import setup
 
-    install_requires_src = ['numpy', 'packaging', 'nose']
+    install_requires_src = ['numpy', 'packaging', 'nose_py3']
     extras_require_src = {
         'sympy': ['sympy'],
         'glpk': ['swiglpk',],
         'sbml': ['python_libsbml', 'lxml',],
         'all': ['sympy', 'swiglpk', 'python_libsbml', 'lxml',],
     }
-    tests_require_src = ['nose']
+    tests_require_src = ['nose_py3']
 except:
     from distutils.core import setup
 

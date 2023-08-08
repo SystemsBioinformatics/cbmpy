@@ -2,7 +2,7 @@
 CBMPy: CBConfig module
 ======================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ import platform
 
 __VERSION_MAJOR__ = 0
 __VERSION_MINOR__ = 8
-__VERSION_MICRO__ = 5
+__VERSION_MICRO__ = 7
 
 __CBCONFIG__ = {
     'VERSION_MAJOR': __VERSION_MAJOR__,

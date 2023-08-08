@@ -196,5 +196,5 @@ dependencies:
   - zlib=1.2.13=h8cc25b3_0
   - zstd=1.5.5=hd43e919_0
   - pip:
-      - nose3==1.3.8
+      - nose-py3
 prefix: C:\Anaconda3\envs\cbmpy

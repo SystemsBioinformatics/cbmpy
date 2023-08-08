@@ -6,7 +6,6 @@ channels:
 dependencies:
   - biopython>=1.78
   - ipython
-  - nose
   - numpy
   - matplotlib
   - python-libsbml>=5.18.0
@@ -22,4 +21,5 @@ dependencies:
   - pyparsing
   - pip:
     - swiglpk>=4.65.1
+    - nose-py3
 prefix: C:\Anaconda3\envs\cbmpy3
