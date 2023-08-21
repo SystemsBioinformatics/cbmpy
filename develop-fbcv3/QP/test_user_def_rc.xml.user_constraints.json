@@ -1,0 +1,37 @@
+{
+  "cons1": {
+    "fluxes": [
+      [
+        1,
+        "R16"
+      ],
+      [
+        1,
+        "R15"
+      ]
+    ],
+    "operator": "LE",
+    "rhs": 1.0
+  },
+  "cons2": {
+    "fluxes": [
+      [
+        1,
+        "R15"
+      ]
+    ],
+    "operator": "GE",
+    "rhs": -1
+  },
+  "cons3": {
+ 
+   "fluxes": [
+      [
+        1,
+        "R14"
+      ]
+    ],
+    "operator": "E",
+    "rhs": 0.0
+  }
+}

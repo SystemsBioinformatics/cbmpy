@@ -123,7 +123,7 @@ class Fbase(object):
         """
         Internal method that should allow our weakrefs to be 'picklable'
 
-        # overloaded by Model, FluxBound and Group
+        # overwritten by Model, FluxBound and Group
 
         """
 
@@ -151,6 +151,17 @@ class Fbase(object):
 
         """
         self.__objref__ = None
+
+    def getModel(self):
+        """
+        Get the parent model object linked to in objref, can return model or None for unlinked object
+
+        # Overwritten by Model
+        """
+        if self.__objref__ is not None:
+            return self.__objref__()
+        else:
+            return None
 
     def getPid(self):
         """
@@ -540,6 +551,7 @@ class Model(Fbase):
     sourcefile = ''
     description = ''
     user_constraints = None
+    user_defined_constraints = None
     CM = None
     sensitivity = None
     ##  optValue = None
@@ -590,6 +602,8 @@ class Model(Fbase):
         self.__genes_idx__ = []
         self.gpr = []
         self.parameters = []
+        self.user_defined_constraints = []
+        self.user_constraints = {}
         self.annotation = {}
         self.__TRASH__ = {}
         self.MODEL_CREATORS = {}
@@ -608,6 +622,39 @@ class Model(Fbase):
             self.__global_id__ = weakref.WeakValueDictionary({self.getId(): self})
         else:
             self.__global_id__ = {self.getId(): None}
+
+
+    def registerObjectInGlobalStore(self, obj):
+        """
+        - *object*
+
+        """
+        if obj.getId() in self.__global_id__:
+            raise RuntimeError(
+                'Duplicate object ID detected: {}'.format(obj.getId())
+            )
+        else:
+            self.__pushGlobalId__(obj.getId(), obj)
+
+
+    def unRegisterObjectInGlobalStore(self, sid):
+        """
+        - *sid*
+        """
+        if sid not in self.__global_id__:
+            raise RuntimeError(
+                'Object ID not registered: {}'.format(sid)
+            )
+        else:
+            self.__popGlobalId__(sid)
+
+
+    def getModel(self):
+        """
+        Overrides the FBase inherited method, returns own instance.
+
+        """
+        return self
 
     def clone(self):
         """
@@ -663,6 +710,11 @@ class Model(Fbase):
             self.__global_id__[p.getId()] = p
         for gr in self.groups:
             self.__global_id__[gr.getId()] = gr
+
+    def getObject(self, pid):
+        return self.__global_id__[gr.getId()] or None
+
+
 
     def __setModelSelf__(self):
         """
@@ -939,6 +991,7 @@ class Model(Fbase):
             str(obj.__objref__).split('to')[1][1:-1]
         )
         print('Adding objective: {}'.format(obj.id))
+
         obj.__objref__ = weakref.ref(self)
         if obj.getId() in self.__global_id__:
             raise RuntimeError('Duplicate obj ID detected: {}'.format(obj.getId()))
@@ -1129,6 +1182,69 @@ class Model(Fbase):
         newId = '%s_%s_bnd' % (reaction, 'upper')
         self.addFluxBound(FluxBound(newId, reaction, 'lessEqual', ub_value))
 
+
+
+    def createUserDefinedConstraint(self, pid, lb, ub, components=None):
+        """
+        Create an FBCv3 UserDefinedConstraint
+
+        - *pid* unique id
+        - *lb* lower bound float/parameter
+        - *ub* upper bound float/parameter
+        - *componentents* optional, the user defined constraint componenents in the form of a list
+           [(coefficient, variable, type), ...] and coefficient and variable can be parameters
+
+        """
+
+        udc =  UserDefinedConstraint(pid, lb, ub)
+        udc.setLowerBound(lb)
+        udc.setUppperBound(ub)
+
+        if components is not None:
+            for cc_ in components:
+                if type(cc_[0]) is Parameter:
+                    pid =  "userdcc_{}_{}".format(udc.getId(), cc_[1].getId())
+                else:
+                    pid =  "userdcc_{}_{}".format(udc.getId(), cc_[1])
+
+                ucc = udc.createConstraintComponent(pid, cc_[0], cc_[1], cc_[2])
+                udc.addConstraintComponent(ucc)
+
+        return udc
+
+
+
+
+    def addUserDefinedConstraint(self, udc):
+        """
+        Add a  User Defined Constraint object to the FBA model
+
+        - *obj* an instance of the UserDefinedConstraint class
+
+        """
+        assert (
+            type(udc) == UserDefinedConstraint
+        ), '\nERROR: requires an UserDefinedConstraint object, not something of type {}'.format(
+            type(udc)
+        )
+        assert (
+            udc.__objref__ is None
+        ), 'ERROR: object already bound to \"{}\", add a clone instead'.format(
+            str(udc.__objref__).split('to')[1][1:-1]
+        )
+        print('Adding objective: {}'.format(udc.getId()))
+
+        udc.__objref__ = weakref.ref(self)
+        udc.setObjRefOnComponents()
+
+        if udc.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate obj ID detected: {}'.format(udc.getId()))
+        else:
+            self.__pushGlobalId__(udc.getId(), udc)
+
+        self.user_defined_constraints.append(udc)
+
+
     def addFluxBound(self, fluxbound, fbexists=None):
         """
         Add an instantiated FluxBound object to the FBA model
@@ -1295,6 +1411,9 @@ class Model(Fbase):
             raise RuntimeError('Duplicate par ID detected: {}'.format(par.getId()))
         else:
             self.__pushGlobalId__(par.getId(), par)
+        # do magix
+        par.__objref__ = weakref.ref(self)
+
         self.parameters.append(par)
 
     def addCompartment(self, comp):
@@ -1351,7 +1470,9 @@ class Model(Fbase):
             )
         else:
             self.__pushGlobalId__(reaction.getId(), reaction)
+
         reaction.__objref__ = weakref.ref(self)
+
         for rr in reaction.reagents:
             rr.__objref__ = weakref.ref(self)
             if rr.getId() in self.__global_id__:
@@ -1360,7 +1481,9 @@ class Model(Fbase):
                 )
             else:
                 self.__pushGlobalId__(rr.getId(), rr)
+
         self.reactions.append(reaction)
+
         if create_default_bounds:
             rid = reaction.getId()
             self.createReactionUpperBound(rid, numpy.inf)
@@ -3802,6 +3925,207 @@ class FluxObjective(Fbase):
             raise TypeError('FluxObjective type must be one of:' + str(self.ctypes))
 
 
+class UserDefinedConstraint(Fbase):
+    """
+    This is an FBCv3 class that defines a set of user defined constraints, it is similar to an objective constraint except allows parameters as
+    coefficients and values in the constraint components
+
+    """
+
+    constraintComponents = None
+    solution = None
+    ub = None
+    lb = None
+
+    def __init__(self, pid, lb, ub):
+        pid = str(pid)
+        self.setId(pid)
+
+        self.constraintComponents = []
+        self.compartment = None
+        self.__delattr__('compartment')
+
+    def setLowerBound(self, bnd):
+        self.lb = bnd
+
+    def setUppperBound(self, bnd):
+        self.ub = bnd
+
+    def getUpperBound(self):
+        if type(self.ub) is Parameter:
+            return self.ub.getValue()
+        else:
+            return self.ub
+
+    def getUpperBound(self):
+        if type(self.ub) is Parameter:
+            return self.ub.getValue()
+        else:
+            return self.ub
+
+    def getLowerBound(self):
+        if type(self.lb) is Parameter:
+            return self.lb.getValue()
+        else:
+            return self.lb
+
+    def getConstraintComponentIDs(self):
+        """
+
+        """
+        return [f.getId() for f in self.constraintComponents]
+
+    def getConstraintComponentForReaction(self, rid):
+        """
+
+         *rid* a reaction id
+
+        """
+        fo = None
+        for fo_ in self.constraintComponents:
+            if fo_.reaction == rid:
+                if fo == None:
+                    fo = fo_
+                elif type(fo) == list:
+                    fo.append(fo_)
+                    print(
+                        '\nWARNING: multiple constraintComponents match rid: {}\n'.format(rid)
+                    )
+                else:
+                    fo = [fo]
+                    fo.append(fo_)
+                    print(
+                        '\nWARNING: multiple constraintComponents match rid: {}\n'.format(rid)
+                    )
+        return fo
+
+    def getConstraintComponentReactions(self):
+        """
+
+
+        """
+        return [f.reaction for f in self.constraintComponents]
+
+    def getConstraintComponentData(self):
+        """
+
+
+        """
+        return [(f.coefficient, f.reaction, f.ctype) for f in self.constraintComponents]
+
+    def getFluxObjective(self, foid):
+        """
+
+         - *foid* the flux objective id returns either an object or a list if there are multiply defined flux objectives
+
+        """
+        fo = None
+        for fo_ in self.constraintComponents:
+            if fo_.getId() == foid:
+                if fo == None:
+                    fo = fo_
+                elif type(fo) == list:
+                    fo.append(fo_)
+                    print('ERROR: multiple constraint components have id: {}'.format(foid))
+                else:
+                    fo = [fo]
+                    fo.append(fo_)
+                    print('ERROR: multiple constraint components have id: {}'.format(foid))
+        return fo
+
+    def getConstraintComponents(self):
+        """
+
+
+        """
+        return self.constraintComponents
+
+    def createConstraintComponent(self, pid, coefficient, variable, ctype):
+        """
+
+
+        """
+        return ConstraintComponent(pid, coefficient, variable, ctype)
+
+    def addConstraintComponent(self, cc):
+        """
+        - *cc* UserConstraintComponent
+        - *model* the model instance
+
+        """
+        self.constraintComponents.append(cc)
+
+    def setObjRefOnComponents(self):
+        for c in self.constraintComponents:
+            c.__objref__ = weakref.ref(self.__objref__())
+            c.getModel().registerObjectInGlobalStore(c)
+
+
+
+
+class ConstraintComponent(Fbase):
+    """
+    A weighted flux that appears in an user defined constraint
+
+    """
+
+    variable = None
+    coefficient = None
+    ctype = None
+    ctypes = ('linear', 'quadratic')
+
+    def __init__(self, pid, variable, coefficient, ctype='linear'):
+        pid = str(pid)
+        self.setId(pid)
+
+        self.variable = variable
+        self.coefficient = coefficient
+        self.annotation = {}
+        self.compartment = None
+        self.__delattr__('compartment')
+
+    def getVariable(self):
+        if type(self.variable) is Parameter:
+            return self.variable.getId()
+        else:
+            return self.variable
+
+    def getCoefficient(self):
+        if type(self.coefficient) is Parameter:
+            return self.coefficient.getValue()
+        else:
+            return self.coefficient
+
+    def setVariable(self, variable):
+        self.variable = variable
+
+    def setCoefficient(self, coefficient):
+        self.coefficient = coefficient
+
+    def setType(self, ctype):
+        if ctype in self.ctypes:
+            self.ctype = ctype
+        else:
+            raise ValueError('FluxObjective type must be one of:' + str(self.ctypes))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Compartment(Fbase):
     """A compartment"""
 
@@ -4369,10 +4693,6 @@ class FluxBound(Fbase):
         else:
             self.value = float(value)
 
-#class UserDefinedConstraint(self, pid, lb, ub, parent=None):
-    #constraints = None
-    #lb = None
-    #ub = None
 
 class FluxBoundBase(Fbase):
     """A refactored and streamlined FluxBound base class that can be a generic bound, superclass to FluxBoundUpper and FluxBoundLower"""
@@ -5095,7 +5415,7 @@ class Reaction(Fbase):
             eq = '{} {} {}'.format(sub[:-3], irreverse_symb, prod[:-2])
         return eq
 
-
+# This needs to be finished and allow the use of parameters as UB/LB
 class ReactionNew(Reaction):
     """Extended reaction class with new upper/lower bound structure"""
 
