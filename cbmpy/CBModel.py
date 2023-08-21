@@ -3770,8 +3770,10 @@ class FluxObjective(Fbase):
 
     reaction = None
     coefficient = None
+    ctype = None
+    ctypes = ('linear', 'quadratic')
 
-    def __init__(self, pid, reaction, coefficient=1):
+    def __init__(self, pid, reaction, coefficient=1, ctype='linear'):
         pid = str(pid)
         self.setId(pid)
 
@@ -3792,6 +3794,12 @@ class FluxObjective(Fbase):
 
     def setCoefficient(self, coefficient):
         self.coefficient = coefficient
+
+    def setType(self, ctype):
+        if ctype in self.ctypes:
+            self.ctype = ctype
+        else:
+            raise TypeError('FluxObjective type must be one of:' + str(self.ctypes))
 
 
 class Compartment(Fbase):
@@ -4361,6 +4369,10 @@ class FluxBound(Fbase):
         else:
             self.value = float(value)
 
+#class UserDefinedConstraint(self, pid, lb, ub, parent=None):
+    #constraints = None
+    #lb = None
+    #ub = None
 
 class FluxBoundBase(Fbase):
     """A refactored and streamlined FluxBound base class that can be a generic bound, superclass to FluxBoundUpper and FluxBoundLower"""

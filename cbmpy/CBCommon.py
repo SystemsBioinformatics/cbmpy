@@ -77,7 +77,7 @@ try:
     HAVE_PYPARSING = True
     print('pyparsing import')
 except ImportError:
-    print('INFO: please install pyparsing to enable chemical balance checking!')
+    print('INFO: please install pyparsing (pip install pyparsing) to enable chemical balance checking!')
 
 
 #if not HAVE_PYPARSING:
@@ -104,6 +104,8 @@ if HAVE_PYPARSING:
         pyparsing.Word(pyparsing.alphanums + '. ') | 'or' | 'OR' | 'and' | 'AND'
     )
     pp_gene_unnester = pyparsing.nestedExpr(content=pp_gene_ass)
+else:
+    print('Please install pyparsing! pip install pyparsing')
 
 ptElements = (
     'H',
