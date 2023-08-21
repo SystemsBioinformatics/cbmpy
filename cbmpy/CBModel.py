@@ -1516,6 +1516,29 @@ class Model(Fbase):
 
 
 
+    def convertUserConstraintsToUserDefinedConstraints(self):
+        for u in self.user_constraints:
+            print('Converting constraint', u)
+            if self.user_constraints[u]['operator'] == 'E':
+                lb = self.user_constraints[u]['rhs']
+                ub = self.user_constraints[u]['rhs']
+            elif self.user_constraints[u]['operator'] in ['G', 'GE']:
+                lb = self.user_constraints[u]['rhs']
+                ub = numpy.Inf
+
+            elif self.user_constraints[u]['operator'] in ['L', 'LE']:
+                lb = numpy.NINF
+                ub = self.user_constraints[u]['rhs']
+
+            components = []
+            for c in self.user_constraints[u]['fluxes']:
+                components.append((c[0], c[1], 'linear'))
+
+            print(lb, ub)
+
+            ucnew = self.createUserDefinedConstraint(u, lb, ub, components)
+            self.addUserDefinedConstraint(ucnew)
+
 
 
 
@@ -4113,21 +4136,6 @@ class ConstraintComponent(Fbase):
             self.ctype = ctype
         else:
             raise ValueError('FluxObjective type must be one of:' + str(self.ctypes))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
