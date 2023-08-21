@@ -712,9 +712,21 @@ class Model(Fbase):
             self.__global_id__[gr.getId()] = gr
 
     def getObject(self, pid):
-        return self.__global_id__[gr.getId()] or None
+        """
+        - *pid* returns a model object with pid or None
 
+        """
+        return self.__global_id__[pid] or None
 
+    def hasObject(self, pid):
+        """
+        - *pid* returns a boolean if there is a registered object with pid-
+
+        """
+        if pid in self.__global_id__:
+            return True
+        else:
+            return False
 
     def __setModelSelf__(self):
         """
@@ -1213,8 +1225,6 @@ class Model(Fbase):
         return udc
 
 
-
-
     def addUserDefinedConstraint(self, udc):
         """
         Add a  User Defined Constraint object to the FBA model
@@ -1504,6 +1514,12 @@ class Model(Fbase):
                         )
                     )
 
+
+
+
+
+
+
     def addUserConstraint(self, pid, fluxes=None, operator='>=', rhs=0.0):
         """
         Add a user defined constraint to FBA model, this is additional to the automatically determined Stoichiometric constraints.
@@ -1514,6 +1530,9 @@ class Model(Fbase):
          - *rhs* a float
 
         """
+
+        print('\nThis method is being deprecated ... use cmod.createUserDefinedConstraint and cmod.addUserDefinedConstraint instead.\n')
+
         assert (
             fluxes != None
         ), '\nNo *fluxes* defined: a list of (coefficient, reaction id) pairs where coefficient is a float'
@@ -1551,6 +1570,7 @@ class Model(Fbase):
         self.user_constraints.update(
             {pid: {'fluxes': fluxes, 'operator': operator, 'rhs': rhs}}
         )
+
 
     def deleteReactionAndBounds(self, rid):
         """
@@ -3975,63 +3995,46 @@ class UserDefinedConstraint(Fbase):
         """
         return [f.getId() for f in self.constraintComponents]
 
-    def getConstraintComponentForReaction(self, rid):
+    def getConstraintComponentForVariable(self, rid):
         """
 
-         *rid* a reaction id
+         *rid* a component id
 
         """
-        fo = None
+        fo = []
         for fo_ in self.constraintComponents:
-            if fo_.reaction == rid:
-                if fo == None:
-                    fo = fo_
-                elif type(fo) == list:
-                    fo.append(fo_)
-                    print(
-                        '\nWARNING: multiple constraintComponents match rid: {}\n'.format(rid)
-                    )
-                else:
-                    fo = [fo]
-                    fo.append(fo_)
-                    print(
-                        '\nWARNING: multiple constraintComponents match rid: {}\n'.format(rid)
-                    )
-        return fo
+            if fo_.variable == rid:
+                fo.append(fo_)
+        if len(fo) == 1:
+            return fo[0]
+        else:
+            print('WARNING: Multiple matches, possible but not correct, returning list')
+            return fo
 
-    def getConstraintComponentReactions(self):
+    def getConstraintComponentVariables(self):
         """
 
 
         """
-        return [f.reaction for f in self.constraintComponents]
+        return [f.variable for f in self.constraintComponents]
 
     def getConstraintComponentData(self):
         """
 
 
         """
-        return [(f.coefficient, f.reaction, f.ctype) for f in self.constraintComponents]
+        return [(f.coefficient, f.variable, f.ctype) for f in self.constraintComponents]
 
-    def getFluxObjective(self, foid):
+    def getConstraintComponent(self, cid):
         """
 
-         - *foid* the flux objective id returns either an object or a list if there are multiply defined flux objectives
+         - *cid* get a constraint component that matches cid
 
         """
-        fo = None
-        for fo_ in self.constraintComponents:
-            if fo_.getId() == foid:
-                if fo == None:
-                    fo = fo_
-                elif type(fo) == list:
-                    fo.append(fo_)
-                    print('ERROR: multiple constraint components have id: {}'.format(foid))
-                else:
-                    fo = [fo]
-                    fo.append(fo_)
-                    print('ERROR: multiple constraint components have id: {}'.format(foid))
-        return fo
+        if self.getModel().hasObject(cid):
+            return self.getModel().getObject(cid)
+        else:
+            return None
 
     def getConstraintComponents(self):
         """
@@ -4061,8 +4064,6 @@ class UserDefinedConstraint(Fbase):
             c.getModel().registerObjectInGlobalStore(c)
 
 
-
-
 class ConstraintComponent(Fbase):
     """
     A weighted flux that appears in an user defined constraint
@@ -4080,6 +4081,11 @@ class ConstraintComponent(Fbase):
 
         self.variable = variable
         self.coefficient = coefficient
+        if ctype in self.ctypes:
+            self.ctype = ctype
+        else:
+            print('Invalid ctype:', ctype)
+
         self.annotation = {}
         self.compartment = None
         self.__delattr__('compartment')
