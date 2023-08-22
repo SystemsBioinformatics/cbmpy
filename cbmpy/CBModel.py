@@ -1100,10 +1100,8 @@ class Model(Fbase):
         return p
 
 
-
     def createReaction(
-        self, rid, name=None, reversible=True, create_default_bounds=True, silent=False
-    ):
+        self, rid, name=None, reversible=True, create_default_bounds=True, silent=False, new=False):
         """
         Create a new blank reaction and add it to the model:
 
@@ -1127,6 +1125,34 @@ class Model(Fbase):
                     rid
                 )
             )
+
+
+    def createReactionNew(
+        self, rid, name=None, reversible=True, create_default_bounds=True, silent=False, new=False):
+        """
+        Create a new blank reaction and add it to the model:
+
+         - *id* the unique reaction ID
+         - *name* the reaction name
+         - *reversible* [default=True] the reaction reversibility. True is reversible, False is irreversible
+         - *create_default_bounds* create default reaction bounds, irreversible 0 <= J <= INF, reversable -INF <= J <= INF
+         - *silent* [default=False] if enabled this disables the printing of information messages
+
+        """
+
+        assert rid not in self.getReactionIds(), '\nReaction ID %s already exists' % rid
+        self.addReaction(
+            Reaction(rid, name, reversible),
+            create_default_bounds=create_default_bounds,
+            silent=silent,
+        )
+        if not silent:
+            print(
+                'Add reagents with cmod.createReactionReagent({}, metabolite, coefficient)'.format(
+                    rid
+                )
+            )
+
 
     def createReactionReagent(self, reaction, metabolite, coefficient, silent=False):
         """
@@ -1384,16 +1410,8 @@ class Model(Fbase):
 
         """
         # TODO: fix this whole gene thing, genes must use labels for gene names and id's for object search
-        assert isinstance(
-            gene, Gene
-        ), '\nERROR: requires a Gene object, not something of type {}'.format(
-            type(gene)
-        )
-        assert (
-            gene.__objref__ is None
-        ), 'ERROR: object already bound to \"{}\", add a clone instead'.format(
-            str(gene.__objref__).split('to')[1][1:-1]
-        )
+        assert isinstance(gene, Gene), '\nERROR: requires a Gene object, not something of type {}'.format(type(gene))
+        assert (gene.__objref__ is None), 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(gene.__objref__).split('to')[1][1:-1])
         if __DEBUG__:
             print('Adding Gene: {}'.format(gene.id))
         if gene.getId() in self.__global_id__:
@@ -1415,25 +1433,18 @@ class Model(Fbase):
         - *par* an instance of the Parameter class
 
         """
-        assert isinstance(
-            par, Parameter
-        ), '\nERROR: requires a Parameter object, not something of type {}'.format(
-            type(par)
-        )
-        assert (
-            par.__objref__ is None
-        ), 'ERROR: object already bound to \"{}\", add a clone instead'.format(
-            str(par.__objref__).split('to')[1][1:-1]
-        )
+        assert isinstance(par, Parameter ), '\nERROR: requires a Parameter object, not something of type {}'.format( type(par))
+        assert (par.__objref__ is None), 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(par.__objref__).split('to')[1][1:-1])
         if __DEBUG__:
             print('Adding Parameter: {}'.format(par.id))
+
         if par.getId() in self.__global_id__:
             raise RuntimeError('Duplicate par ID detected: {}'.format(par.getId()))
         else:
             self.__pushGlobalId__(par.getId(), par)
+
         # do magix
         par.__objref__ = weakref.ref(self)
-
         self.parameters.append(par)
 
     def addCompartment(self, comp):
@@ -3762,7 +3773,6 @@ class Objective(Fbase):
     """
 
     flux_objectives = None
-    ##  fluxObjectiveNames = None
     operation = None
     value = None
     solution = None
@@ -3824,20 +3834,20 @@ class Objective(Fbase):
         """
         Create and add flux objective objects to this objective function.
 
-         - *fluxlist* a list of one or more ('coefficient', 'rid') pairs
+         - *fluxlist* a list of one or more ('coefficient', 'rid', 'type') triples
 
         """
         FOreact = self.getFluxObjectiveReactions()
         for J in fluxlist:
             if J[1] not in FOreact:
                 fid = '{}_{}_fobj'.format(self.getId(), J[1])
-                self.addFluxObjective(FluxObjective(fid, J[1], J[0]))
+                if len(J) > 2:
+                    ctype = J[2]
+                else:
+                    ctype = 'linear'
+                self.addFluxObjective(FluxObjective(fid, J[1], J[0], ctype))
             else:
-                print(
-                    '\nObjective {} already contains flux {} ... skipping!\n'.format(
-                        self.getId(), J[1]
-                    )
-                )
+                print('\nObjective {} already contains flux {} ... skipping!\n'.format(self.getId(), J[1]))
 
     def deleteAllFluxObjectives(self):
         """
@@ -5446,25 +5456,12 @@ class ReactionNew(Reaction):
     ub = None
     lb = None
 
-    def __init__(
-        self, pid, name=None, lb=-float('inf'), ub=float('inf'), reversible=True
-    ):
+    def __init__(self, pid, name=None, lb=-float('inf'), ub=float('inf'), reversible=True):
         super(ReactionNew, self).__init__(pid, name, reversible)
 
-        self.ub = FluxBoundUpper(self, ub)
-        self.lb = FluxBoundLower(self, lb)
 
-    def createUpperBound(self, value):
-        if self.ub is None:
-            self.ub = FluxBoundUpper(self, value)
-        else:
-            print('UpperBound exists, try use setUpperBound')
-
-    def createLowerBound(self, value):
-        if self.lb is None:
-            self.lb = FluxBoundLower(self, value)
-        else:
-            print('LowerBound exists, try use setLowerBound')
+        self.ub = Parameter("{}_ub".format(pid), ub)
+        self.lb = Parameter("{}_lb".format(pid), lb)
 
     def setId(self, fid):
         """
@@ -5490,9 +5487,6 @@ class ReactionNew(Reaction):
             if fid not in self.__objref__().__global_id__:
                 self.id = fid
                 self.__objref__().__changeGlobalId__(oldId, self.id, self)
-                # for fb in self.__objref__().getFluxBoundsByReactionID(oldId):
-                # if fb is not None:
-                # fb.setReactionId(fid)
                 for gpr_ in self.__objref__().gpr:
                     if gpr_.getProtein() == oldId:
                         gpr_.setProtein(fid)
@@ -5501,11 +5495,7 @@ class ReactionNew(Reaction):
                         if fo.getReactionId() == oldId:
                             fo.setReactionId(fid)
             else:
-                print(
-                    'ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(
-                        fid
-                    )
-                )
+                print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
         else:
             self.id = fid
         # no matter if the reaction has a model ref or not setId resets reagent refs to new id
@@ -5517,14 +5507,14 @@ class ReactionNew(Reaction):
         Get the value of the reactions lower bound
 
         """
-        return self.lb.value
+        return self.lb.getValue()
 
     def getUpperBound(self):
         """
         Get the value of the reactions upper bound
 
         """
-        return self.ub.value
+        return self.ub.getValue()
 
     def setLowerBound(self, value):
         """
@@ -5533,7 +5523,7 @@ class ReactionNew(Reaction):
          - *value* a floating point value
 
         """
-        self.lb.value = value
+        self.lb.setValue(value)
 
     def setUpperBound(self, value):
         """
@@ -5542,7 +5532,7 @@ class ReactionNew(Reaction):
          - *value* a floating point value
 
         """
-        self.ub.value = value
+        self.ub.setValue(value)
 
     def deactivateReaction(self, lower=0.0, upper=0.0, silent=True):
         """
@@ -5571,11 +5561,16 @@ class ReactionNew(Reaction):
             self.__bound_history__ = None
             self.__is_active__ = True
             if not silent:
-                print(
-                    'Reaction {} bounds set to [{} : {}]'.format(
-                        self.id, self.__bound_history__[0], self.__bound_history__[1]
-                    )
-                )
+                print('Reaction {} bounds set to [{} : {}]'.format(self.id, self.__bound_history__[0], self.__bound_history__[1]))
+
+    def setObjRefOnComponents(self):
+        self.ub.__objref__ = weakref.ref(self.__objref__())
+        self.ub.getModel().registerObjectInGlobalStore(self.ub)
+        self.lb.__objref__ = weakref.ref(self.__objref__())
+        self.lb.getModel().registerObjectInGlobalStore(self.lb)
+
+
+
 
     def __setstate__(self, dic):
         """
