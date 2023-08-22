@@ -869,7 +869,7 @@ def xml_addSBML2FBAFluxBound(document, rid, operator, value, fbid=None):
     LoC.appendChild(F)
 
 
-def xml_createListOfFluxObjectives(document, fluxObjectives):
+def xml_createListOfFluxObjectives(document, l):
     """
     Create a list of fluxObjectives to add to an Objective:
 
@@ -954,7 +954,7 @@ def xml_getSBML2FBAannotation(fba, fname=None):
         xml_addSBML2FBAFluxBound(DOC, f.reaction, f.operation, f.value, f.getId())
 
     for o in fba.objectives:
-        fluxobjs = [(fo.reaction, fo.coefficient) for fo in o.fluxObjectives]
+        fluxobjs = [(fo.reaction, fo.coefficient) for fo in o.flux_objectives]
         OBJ = xml_createSBML2FBAObjective(DOC, o.id, o.operation, fluxobjs)
         if o.id == fba.objectives[fba.activeObjIdx].id:
             xml_addSBML2FBAObjective(DOC, OBJ, active=True)
@@ -1974,7 +1974,7 @@ class CBMtoSBML3(FBCconnect):
             if ob_.getId() == self.fba.getActiveObjective().getId():
                 active = True
             flux_objs = [
-                (o2.reaction, float(o2.coefficient)) for o2 in ob_.fluxObjectives
+                (o2.reaction, float(o2.coefficient)) for o2 in ob_.flux_objectives
             ]
             self.createObjective(ob_.getId(), ob_.operation, flux_objs, active=active)
 

@@ -812,7 +812,7 @@ def writeModelLPOld(
     objO = objO[0].upper() + objO[1:]
     FF.write('%s\n' % objO)
     objStr = '%s_objf: ' % fba.objectives[fba.activeObjIdx].getId()
-    for fObj in fba.objectives[fba.activeObjIdx].fluxObjectives:
+    for fObj in fba.objectives[fba.activeObjIdx].flux_objectives:
         sign = None
         nc = 0.0
         try:
@@ -947,7 +947,7 @@ def writeModelLP(
         objO = objO[0].upper() + objO[1:]
         FF.write('%s\n' % objO)
         objStr = '%s_objf: ' % fba.objectives[fba.activeObjIdx].getId()
-        for fObj in fba.objectives[fba.activeObjIdx].fluxObjectives:
+        for fObj in fba.objectives[fba.activeObjIdx].flux_objectives:
             sign = None
             nc = 0.0
             try:
@@ -1216,9 +1216,9 @@ def writeModelHFormatFBA(
     for j in range(LHS.shape[1]):
         # first objective function, first flux objective
         if __DEBUG__:
-            print(M.objectives[0].fluxObjectives[0].reaction, M.N.col[j])
-        if M.objectives[0].fluxObjectives[0].reaction == M.N.col[j]:
-            OBJ_FUNC[j] = float(M.objectives[0].fluxObjectives[0].coefficient)
+            print(M.objectives[0].flux_objectives[0].reaction, M.N.col[j])
+        if M.objectives[0].flux_objectives[0].reaction == M.N.col[j]:
+            OBJ_FUNC[j] = float(M.objectives[0].flux_objectives[0].coefficient)
     if __DEBUG__:
         print(OBJ_FUNC)
 
@@ -1369,9 +1369,9 @@ def writeModelHFormatFBA2(
     objIdx = M.activeObjIdx
     for j in range(LHS.shape[1]):
         for fo in range(len(M.objectives[objIdx].getFluxObjectiveReactions())):
-            if M.objectives[objIdx].fluxObjectives[fo].reaction == M.N.col[j]:
-                print(M.objectives[objIdx].fluxObjectives[fo].reaction, M.N.col[j])
-                OBJ_FUNC[j] = float(M.objectives[objIdx].fluxObjectives[fo].coefficient)
+            if M.objectives[objIdx].flux_objectives[fo].reaction == M.N.col[j]:
+                print(M.objectives[objIdx].flux_objectives[fo].reaction, M.N.col[j])
+                OBJ_FUNC[j] = float(M.objectives[objIdx].flux_objectives[fo].coefficient)
     ##  print OBJ_FUNC
 
     # for Ax >= B Hformat wants -B A >= 0
@@ -1514,9 +1514,9 @@ def writeStoichiometricMatrix(
     objIdx = M.activeObjIdx
     # for j in range(LHS.shape[1]):
     # for fo in range(len(M.objectives[objIdx].getFluxObjectiveReactions())):
-    # if M.objectives[objIdx].fluxObjectives[fo].reaction == M.N.col[j]:
-    # print(M.objectives[objIdx].fluxObjectives[fo].reaction, M.N.col[j])
-    # OBJ_FUNC[j] = float(M.objectives[objIdx].fluxObjectives[fo].coefficient)
+    # if M.objectives[objIdx].flux_objectives[fo].reaction == M.N.col[j]:
+    # print(M.objectives[objIdx].flux_objectives[fo].reaction, M.N.col[j])
+    # OBJ_FUNC[j] = float(M.objectives[objIdx].flux_objectives[fo].coefficient)
     ###  print OBJ_FUNC
 
     # for Ax >= B Hformat wants -B A >= 0
@@ -2633,7 +2633,7 @@ def printFBASolution(fba, include_all=False):
      - *include_all* include all variables
 
     """
-    OFflux = fba.objectives[fba.activeObjIdx].fluxObjectives[0].reaction
+    OFflux = fba.objectives[fba.activeObjIdx].flux_objectives[0].reaction
     OFvalue = fba.objectives[fba.activeObjIdx].value
     OFSense = fba.objectives[fba.activeObjIdx].operation
     print('\n\n**********\nModel: {}\n\n'.format(fba.getId()))

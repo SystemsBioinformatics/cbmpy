@@ -698,7 +698,7 @@ class Model(Fbase):
             self.__global_id__[fb.getId()] = fb
         for o in self.objectives:
             self.__global_id__[o.getId()] = o
-            for fo in o.fluxObjectives:
+            for fo in o.flux_objectives:
                 self.__global_id__[fo.getId()] = fo
         for c in self.compartments:
             self.__global_id__[c.getId()] = c
@@ -747,7 +747,7 @@ class Model(Fbase):
             fb.__setObjRef__(self)
         for o in self.objectives:
             o.__setObjRef__(self)
-            for fo in o.fluxObjectives:
+            for fo in o.flux_objectives:
                 fo.__setObjRef__(self)
         for c in self.compartments:
             c.__setObjRef__(self)
@@ -779,7 +779,7 @@ class Model(Fbase):
             fb.__unsetObjRef__()
         for o in self.objectives:
             o.__unsetObjRef__()
-            for fo in o.fluxObjectives:
+            for fo in o.flux_objectives:
                 fo.__unsetObjRef__()
         for c in self.compartments:
             c.__unsetObjRef__()
@@ -1091,6 +1091,16 @@ class Model(Fbase):
         else:
             print('Error: compartment id \"{}\"'.format(cid))
 
+    def createParameter(self, pid, value, constant=True):
+        """
+        Instantiates a parameter
+
+        """
+        p = Parameter(pid, value, constant)
+        return p
+
+
+
     def createReaction(
         self, rid, name=None, reversible=True, create_default_bounds=True, silent=False
     ):
@@ -1242,7 +1252,7 @@ class Model(Fbase):
         ), 'ERROR: object already bound to \"{}\", add a clone instead'.format(
             str(udc.__objref__).split('to')[1][1:-1]
         )
-        print('Adding objective: {}'.format(udc.getId()))
+        print('Adding constraint: {}'.format(udc.getId()))
 
         udc.__objref__ = weakref.ref(self)
         udc.setObjRefOnComponents()
@@ -1534,10 +1544,10 @@ class Model(Fbase):
             for c in self.user_constraints[u]['fluxes']:
                 components.append((c[0], c[1], 'linear'))
 
-            print(lb, ub)
-
             ucnew = self.createUserDefinedConstraint(u, lb, ub, components)
             self.addUserDefinedConstraint(ucnew)
+
+        self.user_constraints.clear()
 
 
 
@@ -1641,7 +1651,7 @@ class Model(Fbase):
         for o in range(len(self.objectives) - 1, -1, -1):
             if self.objectives[o].getId() == objective_id:
                 Oobj = self.objectives.pop(o)
-                for fo in Oobj.fluxObjectives:
+                for fo in Oobj.flux_objectives:
                     self.__popGlobalId__(fo.getId())
                 self.__popGlobalId__(objective_id)
         print('Deleting objective {}'.format(objective_id))
@@ -3032,7 +3042,7 @@ class Model(Fbase):
                     s.setId(prefix + s.getId())
                 if SUFFIX:
                     s.setId(s.getId() + suffix)
-                for f in s.fluxObjectives:
+                for f in s.flux_objectives:
                     if PREFIX:
                         f.setId(prefix + f.getId())
                         # if f.reaction not in ignore:
@@ -3751,7 +3761,7 @@ class Objective(Fbase):
 
     """
 
-    fluxObjectives = None
+    flux_objectives = None
     ##  fluxObjectiveNames = None
     operation = None
     value = None
@@ -3767,7 +3777,7 @@ class Objective(Fbase):
             self.operation = 'minimize'
         else:
             print('WARNING: Invalid operation: {}'.format(operation))
-        self.fluxObjectives = []
+        self.flux_objectives = []
         self.compartment = None
         self.__delattr__('compartment')
 
@@ -3808,7 +3818,7 @@ class Objective(Fbase):
             return
         if not override:
             self.__objref__().__pushGlobalId__(fobj.getId(), fobj)
-        self.fluxObjectives.append(fobj)
+        self.flux_objectives.append(fobj)
 
     def createFluxObjectives(self, fluxlist):
         """
@@ -3834,9 +3844,9 @@ class Objective(Fbase):
         Delete all flux objectives
 
         """
-        for fo in self.fluxObjectives:
+        for fo in self.flux_objectives:
             self.__objref__().__popGlobalId__(fo.getId())
-        self.fluxObjectives = []
+        self.flux_objectives = []
 
     def getFluxObjectiveIDs(self):
         """
@@ -3844,7 +3854,7 @@ class Objective(Fbase):
         or for coefficient, fluxobjective pairs use *getFluxObjectiveData()*
 
         """
-        return [f.getId() for f in self.fluxObjectives]
+        return [f.getId() for f in self.flux_objectives]
 
     def getFluxObjectiveForReaction(self, rid):
         """
@@ -3855,36 +3865,36 @@ class Objective(Fbase):
 
         """
         fo = None
-        for fo_ in self.fluxObjectives:
+        for fo_ in self.flux_objectives:
             if fo_.reaction == rid:
                 if fo == None:
                     fo = fo_
                 elif type(fo) == list:
                     fo.append(fo_)
                     print(
-                        '\nWARNING: multiple fluxObjectives match rid: {}\n'.format(rid)
+                        '\nWARNING: multiple flux_objectives match rid: {}\n'.format(rid)
                     )
                 else:
                     fo = [fo]
                     fo.append(fo_)
                     print(
-                        '\nWARNING: multiple fluxObjectives match rid: {}\n'.format(rid)
+                        '\nWARNING: multiple flux_objectives match rid: {}\n'.format(rid)
                     )
         return fo
 
     def getFluxObjectiveReactions(self):
         """
-        Returns a list of reactions that are used as FluxObjectives
+        Returns a list of reactions that are used as flux_objectives
 
         """
-        return [f.reaction for f in self.fluxObjectives]
+        return [f.reaction for f in self.flux_objectives]
 
     def getFluxObjectiveData(self):
         """
         Returns a list of ObjectiveFunction components as (coefficient, flux) pairs
 
         """
-        return [(f.coefficient, f.reaction) for f in self.fluxObjectives]
+        return [(f.coefficient, f.reaction) for f in self.flux_objectives]
 
     def getFluxObjective(self, foid):
         """
@@ -3894,7 +3904,7 @@ class Objective(Fbase):
 
         """
         fo = None
-        for fo_ in self.fluxObjectives:
+        for fo_ in self.flux_objectives:
             if fo_.getId() == foid:
                 if fo == None:
                     fo = fo_
@@ -3912,7 +3922,7 @@ class Objective(Fbase):
         Returns the list of FluxObjective objects.
 
         """
-        return self.fluxObjectives
+        return self.flux_objectives
 
     def getValue(self):
         """
@@ -3975,7 +3985,7 @@ class UserDefinedConstraint(Fbase):
 
     """
 
-    constraintComponents = None
+    constraint_components = None
     solution = None
     ub = None
     lb = None
@@ -3984,7 +3994,7 @@ class UserDefinedConstraint(Fbase):
         pid = str(pid)
         self.setId(pid)
 
-        self.constraintComponents = []
+        self.constraint_components = []
         self.compartment = None
         self.__delattr__('compartment')
 
@@ -4016,7 +4026,7 @@ class UserDefinedConstraint(Fbase):
         """
 
         """
-        return [f.getId() for f in self.constraintComponents]
+        return [f.getId() for f in self.constraint_components]
 
     def getConstraintComponentForVariable(self, rid):
         """
@@ -4025,7 +4035,7 @@ class UserDefinedConstraint(Fbase):
 
         """
         fo = []
-        for fo_ in self.constraintComponents:
+        for fo_ in self.constraint_components:
             if fo_.variable == rid:
                 fo.append(fo_)
         if len(fo) == 1:
@@ -4039,14 +4049,14 @@ class UserDefinedConstraint(Fbase):
 
 
         """
-        return [f.variable for f in self.constraintComponents]
+        return [f.variable for f in self.constraint_components]
 
     def getConstraintComponentData(self):
         """
 
 
         """
-        return [(f.coefficient, f.variable, f.ctype) for f in self.constraintComponents]
+        return [(f.coefficient, f.variable, f.ctype) for f in self.constraint_components]
 
     def getConstraintComponent(self, cid):
         """
@@ -4064,7 +4074,7 @@ class UserDefinedConstraint(Fbase):
 
 
         """
-        return self.constraintComponents
+        return self.constraint_components
 
     def createConstraintComponent(self, pid, coefficient, variable, ctype):
         """
@@ -4079,10 +4089,10 @@ class UserDefinedConstraint(Fbase):
         - *model* the model instance
 
         """
-        self.constraintComponents.append(cc)
+        self.constraint_components.append(cc)
 
     def setObjRefOnComponents(self):
-        for c in self.constraintComponents:
+        for c in self.constraint_components:
             c.__objref__ = weakref.ref(self.__objref__())
             c.getModel().registerObjectInGlobalStore(c)
 
@@ -5114,7 +5124,7 @@ class Reaction(Fbase):
                     if gpr_.getProtein() == oldId:
                         gpr_.setProtein(fid)
                 for obj in self.__objref__().objectives:
-                    for fo in obj.fluxObjectives:
+                    for fo in obj.flux_objectives:
                         if fo.getReactionId() == oldId:
                             fo.setReactionId(fid)
             else:
@@ -5440,6 +5450,7 @@ class ReactionNew(Reaction):
         self, pid, name=None, lb=-float('inf'), ub=float('inf'), reversible=True
     ):
         super(ReactionNew, self).__init__(pid, name, reversible)
+
         self.ub = FluxBoundUpper(self, ub)
         self.lb = FluxBoundLower(self, lb)
 
@@ -5486,7 +5497,7 @@ class ReactionNew(Reaction):
                     if gpr_.getProtein() == oldId:
                         gpr_.setProtein(fid)
                 for obj in self.__objref__().objectives:
-                    for fo in obj.fluxObjectives:
+                    for fo in obj.flux_objectives:
                         if fo.getReactionId() == oldId:
                             fo.setReactionId(fid)
             else:

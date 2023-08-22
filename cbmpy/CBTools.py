@@ -694,7 +694,7 @@ def stringReplace(fbamod, old, new, target):
     if target == 'objectives' or target == 'all':
         for s in fbamod.objectives:
             s.id = s.id.replace(old, new)
-            for f in s.fluxObjectives:
+            for f in s.flux_objectives:
                 f.id = f.id.replace(old, new)
                 f.reaction = f.reaction.replace(old, new)
     return fbamod
@@ -1521,7 +1521,7 @@ def checkIds(fba, items='all'):
             if i_ == 'objectives':
                 if 'fluxObjectives' not in output:
                     output['fluxObjectives'] = []
-                for fo_ in I_.fluxObjectives:
+                for fo_ in I_.flux_objectives:
                     foid = fo_.getId()
                     if foid in iddump:
                         print('INFO: duplicate \"fluxObjective\" id: {}'.format(foid))

@@ -100,7 +100,7 @@ def cplex_constructLPfromFBA(prob, fba):
     prob.objective.set_linear(
         [
             (fo.reaction, fo.coefficient)
-            for fo in fba.getActiveObjective().fluxObjectives
+            for fo in fba.getActiveObjective().flux_objectives
         ]
     )
 

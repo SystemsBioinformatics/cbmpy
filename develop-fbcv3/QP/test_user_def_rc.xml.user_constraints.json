@@ -10,8 +10,8 @@
         "R15"
       ]
     ],
-    "operator": "LE",
-    "rhs": 1.0
+    "operator": "E",
+    "rhs": 0.8
   },
   "cons2": {
     "fluxes": [
@@ -20,18 +20,17 @@
         "R15"
       ]
     ],
-    "operator": "GE",
-    "rhs": -1
+    "operator": "G",
+    "rhs": 0.1
   },
   "cons3": {
- 
-   "fluxes": [
+    "fluxes": [
       [
         1,
         "R14"
       ]
     ],
-    "operator": "E",
-    "rhs": 0.0
+    "operator": "G",
+    "rhs": 0.1
   }
 }

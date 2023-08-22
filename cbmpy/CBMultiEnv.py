@@ -207,7 +207,7 @@ def runMultiStateFBA(
 
         fmg1 = CBRead.readSBML2FBA(options['input_model_file'], options['model_dir'])
         # get active (1st) objfunc
-        biomass_name = fmg1.objectives[0].fluxObjectives[0].reaction
+        biomass_name = fmg1.objectives[0].flux_objectives[0].reaction
         # set name and inputs
         fmg1.id = prefix + options['model_name_base']
         # set environment
