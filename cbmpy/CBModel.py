@@ -1922,32 +1922,35 @@ class Model(Fbase):
                     gprmap[gpr.protein].extend(gpr.getGeneIds())
         return gprmap
 
-    def getGene(self, g_id):
+    def getGene(self, gid):
         """
         Returns a gene object that has the identifier:
 
          - *gid* the gene identifier
 
         """
+        #TODO
         out = None
+        #out = self.getObject(gid)
         for g_ in self.genes:
-            if g_.getId() == g_id:
+            if g_.getId() == gid:
                 out = g_
                 break
         return out
 
-    def getGPRassociation(self, gpr_id):
+    def getGPRassociation(self, gprid):
         """
         Returns a gene protein association object that has the identifier:
 
-         - *gpr_id* the gene protein identifier
+         - *gprid* the gene protein identifier
 
         """
         out = None
-        for g_ in self.gpr:
-            if g_.getId() == gpr_id:
-                out = g_
-                break
+        out = self.getObject(gprid)
+        #for g_ in self.gpr:
+            #if g_.getId() == gpr_id:
+                #out = g_
+                #break
         return out
 
     def getGPRforReaction(self, rid):
@@ -2399,16 +2402,17 @@ class Model(Fbase):
 
         """
         out = None
-        for c in self.compartments:
-            if c.getId() == cid:
-                out = c
-                break
-        if self.compartments.count(cid) > 1:
-            print(
-                '\nERROR: multiple compartments with id \"{}\" returning first'.format(
-                    cid
-                )
-            )
+        out = self.getObject(cid)
+        #for c in self.compartments:
+            #if c.getId() == cid:
+                #out = c
+                #break
+        #if self.compartments.count(cid) > 1:
+            #print(
+                #'\nERROR: multiple compartments with id \"{}\" returning first'.format(
+                    #cid
+                #)
+            #)
         return out
 
     def getReaction(self, rid):
@@ -2419,10 +2423,11 @@ class Model(Fbase):
 
         """
         out = None
-        for r in self.reactions:
-            if r.getId() == rid:
-                out = r
-                break
+        out = self.getObject(rid)
+        #for r in self.reactions:
+            #if r.getId() == rid:
+                #out = r
+                #break
         return out
 
     def getSpecies(self, sid):
@@ -2433,10 +2438,11 @@ class Model(Fbase):
 
         """
         out = None
-        for s in self.species:
-            if s.getId() == sid:
-                out = s
-                break
+        out = self.getObject(sid)
+        #for s in self.species:
+            #if s.getId() == sid:
+                #out = s
+                #break
         return out
 
     def getParameter(self, pid):
@@ -2445,10 +2451,11 @@ class Model(Fbase):
 
         """
         out = None
-        for p in self.parameters:
-            if p.getId() == pid:
-                out = p
-                break
+        out = self.getObject(pid)
+        #for p in self.parameters:
+            #if p.getId() == pid:
+                #out = p
+                #break
         return out
 
     def getReactionBounds(self, rid):
@@ -2459,24 +2466,27 @@ class Model(Fbase):
 
         """
         lb = ub = eq = None
-        lb = self.getFluxBoundByReactionID(rid, 'lower')
-        ub = self.getFluxBoundByReactionID(rid, 'upper')
-        eq = self.getFluxBoundByReactionID(rid, 'equality')
-        if lb != None:
-            if numpy.isinf(lb.value) or numpy.isreal(lb.value):
-                lb = lb.value
-            else:
-                lb = float(lb)
-        if ub != None:
-            if numpy.isinf(ub.value) or numpy.isreal(ub.value):
-                ub = ub.value
-            else:
-                ub = float(ub)
-        if eq != None:
-            if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                eq = eq.value
-            else:
-                eq = float(eq)
+        lb = self.getObject(rid).getLowerBound()
+        ub = self.getObject(rid).getUpperBound()
+
+        #lb = self.getFluxBoundByReactionID(rid, 'lower')
+        #ub = self.getFluxBoundByReactionID(rid, 'upper')
+        #eq = self.getFluxBoundByReactionID(rid, 'equality')
+        #if lb != None:
+            #if numpy.isinf(lb.value) or numpy.isreal(lb.value):
+                #lb = lb.value
+            #else:
+                #lb = float(lb)
+        #if ub != None:
+            #if numpy.isinf(ub.value) or numpy.isreal(ub.value):
+                #ub = ub.value
+            #else:
+                #ub = float(ub)
+        #if eq != None:
+            #if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+                #eq = eq.value
+            #else:
+                #eq = float(eq)
         return rid, lb, ub, eq
 
     def getReactionLowerBound(self, rid):
@@ -2487,22 +2497,23 @@ class Model(Fbase):
 
         """
         lb = eq = None
-        lb = self.getFluxBoundByReactionID(rid, 'lower')
-        if lb != None:
-            if type(lb.value) != str and (
-                numpy.isreal(lb.value) or numpy.isinf(lb.value)
-            ):
-                lb = lb.value
-            else:
-                lb = float(lb.value)
-        else:
-            eq = self.getFluxBoundByReactionID(rid, 'equality')
-            if eq != None:
-                # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
-                if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                    lb = eq.value
-                else:
-                    lb = float(eq)
+        lb = self.getObject(rid)
+        #lb = self.getFluxBoundByReactionID(rid, 'lower')
+        #if lb != None:
+            #if type(lb.value) != str and (
+                #numpy.isreal(lb.value) or numpy.isinf(lb.value)
+            #):
+                #lb = lb.value
+            #else:
+                #lb = float(lb.value)
+        #else:
+            #eq = self.getFluxBoundByReactionID(rid, 'equality')
+            #if eq != None:
+                ## print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+                #if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+                    #lb = eq.value
+                #else:
+                    #lb = float(eq)
         return lb
 
     def getReactionUpperBound(self, rid):
@@ -2513,51 +2524,43 @@ class Model(Fbase):
 
         """
         ub = eq = None
-        ub = self.getFluxBoundByReactionID(rid, 'upper')
-        if ub != None:
-            if type(ub.value) != str and (
-                numpy.isreal(ub.value) or numpy.isinf(ub.value)
-            ):
-                ub = ub.value
-            else:
-                ub = float(ub.value)
-        else:
-            eq = self.getFluxBoundByReactionID(rid, 'equality')
-            if eq != None:
-                # print('\nINFO: Upper bound defined as an equality ({})'.format(rid))
-                if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                    ub = eq.value
-                else:
-                    ub = float(eq)
-        return ub
-
-    ##  def getBoundByName(self, rid, bound):
-    ##  """
-    ##  Return a FluxBound instance. Note this is an old name for the newer preferred method: `getFluxBoundByReactionID`
-
-    ##  - *rid* the reaction ID
-    ##  - *bound* the bound: 'upper', 'lower', 'equal'
-
-    ##  """
-    ##  print 'Deprecated: use *getFluxBoundByReactionID*'
-    ##  return self.getFluxBoundByReactionID(rid, bound)
+        ub = self.getObject(rid)
+        #ub = self.getFluxBoundByReactionID(rid, 'upper')
+        #if ub != None:
+            #if type(ub.value) != str and (
+                #numpy.isreal(ub.value) or numpy.isinf(ub.value)
+            #):
+                #ub = ub.value
+            #else:
+                #ub = float(ub.value)
+        #else:
+            #eq = self.getFluxBoundByReactionID(rid, 'equality')
+            #if eq != None:
+                ## print('\nINFO: Upper bound defined as an equality ({})'.format(rid))
+                #if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+                    #ub = eq.value
+                #else:
+                    #ub = float(eq)
+        #return ub
 
     def getFluxBoundByID(self, fid):
         """
-        Returns a FluxBound with id
+        Returns a FluxBound/Parameter with id
 
          - *fid* the fluxBound ID
 
         """
-        c_ = None
-        for c_ in self.flux_bounds:
-            if c_.getId() == fid:
-                return c_
-        return c_
+
+        return self.getObject(fid)
+        #c_ = None
+        #for c_ in self.flux_bounds:
+            #if c_.getId() == fid:
+                #return c_
+        #return c_
 
     def getFluxBoundByReactionID(self, rid, bound):
         """
-        Returns a FluxBound instance
+        Returns a FluxBound/Parameter instance
 
          - *rid* the reaction ID
          - *bound* the bound: 'upper', 'lower', 'equality'
@@ -2886,26 +2889,37 @@ class Model(Fbase):
          - *bound* this is either 'lower' or 'upper', or 'equal'
 
         """
+        R = self.getObject(rid)
+
         if rid not in self.getReactionIds():
             print('\nERROR setReactionBound: reaction id {} does not exist'.format(rid))
             return
-        c2 = self.getFluxBoundByReactionID(rid, bound)
-        # changed to no str() casting
-        if c2 != None:
-            c2.setValue(value)
-            if __DEBUG__:
-                print(c2.reaction, c2.operation, c2.value)
+
+        if bound == 'upper':
+            R.setUpperBound(bound)
+        elif bound == 'lower':
+            R.setLowerBound(bound)
         else:
-            # if the bound does not exist, create a new one
-            if bound == 'upper':
-                self.createReactionUpperBound(rid, value)
-            elif bound == 'lower':
-                self.createReactionLowerBound(rid, value)
-            else:
-                raise RuntimeError(
-                    '\n%s is not a valid reaction name or \'%s\' bound does not exist '
-                    % (rid, bound)
-                )
+            R.setUpperBound(bound)
+            R.setLowerBound(bound)
+
+        #c2 = self.getFluxBoundByReactionID(rid, bound)
+        ## changed to no str() casting
+        #if c2 != None:
+            #c2.setValue(value)
+            #if __DEBUG__:
+                #print(c2.reaction, c2.operation, c2.value)
+        #else:
+            ## if the bound does not exist, create a new one
+            #if bound == 'upper':
+                #self.createReactionUpperBound(rid, value)
+            #elif bound == 'lower':
+                #self.createReactionLowerBound(rid, value)
+            #else:
+                #raise RuntimeError(
+                    #'\n%s is not a valid reaction name or \'%s\' bound does not exist '
+                    #% (rid, bound)
+                #)
 
     def setReactionBounds(self, rid, lower, upper):
         """
@@ -2942,9 +2956,11 @@ class Model(Fbase):
 
     def getAllFluxBounds(self):
         """
+        DEPRECATED
         Returns a dictionary of all flux bounds [id:value]
 
         """
+        print('Deprecation warning: This method will be changed in CBMPy 0.9.8')
         out = {}
         for f_ in self.flux_bounds:
             fid = f_.getId()
@@ -2970,11 +2986,13 @@ class Model(Fbase):
 
     def setFluxBoundsFromDict(self, bounds):
         """
+        DEPRECATED! This method will be modified to use reaction Idin CBMPy 0.9.8
         Sets all the fluxbounds present in bounds
 
          - *bounds* a dictionary of [fluxbound_id : value] pairs (not per reaction!!!)
 
         """
+        print('Deprecation warning: This method will be changed in CBMPy 0.9.8')
 
         fbids = self.getFluxBoundIds()
         for f_ in self.flux_bounds:
@@ -3262,6 +3280,7 @@ class Model(Fbase):
 
         """
         print('DEPRECATION WARNING: please use cmod.getFluxesAssociatedWithSpecies()')
+        print('Deprecation warning: This method will be deleted in CBMPy 0.9.8')
         return self.getFluxesAssociatedWithSpecies(metab)
 
     def getFluxesAssociatedWithSpecies(self, metab):
