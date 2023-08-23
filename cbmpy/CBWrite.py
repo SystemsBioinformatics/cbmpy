@@ -207,6 +207,63 @@ def writeSBML3FBCV2(
     )
 
 
+def writeSBML3FBCV3(
+    fba,
+    fname,
+    directory=None,
+    gpr_from_annot=False,
+    add_groups=True,
+    add_cbmpy_annot=True,
+    add_cobra_annot=False,
+    validate=False,
+    compress_bounds=False,
+    zip_model=False,
+    return_model_string=False,
+):
+    """
+    Takes an FBA model object and writes it to file as SBML L3 FBCv3 :
+
+     - *fba* an fba model object
+     - *fname* the model will be written as XML to *fname*
+     - *directory* [default=None] if defined it is prepended to fname
+     - *gpr_from_annot* [default=False] if enabled will attempt to add the gene protein associations from the annotations
+     - *add_groups* [default=True] add SBML3 groups (if supported by libSBML)
+     - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
+     - *add_cobra_annot* [default=False] add COBRA <notes> annotation
+     - *validate* [default=False] validate the output SBML file
+     - *compress_bounds* [default=True] try compress output flux bound parameters
+     - *zip_model* [default=False] compress the model using ZIP encoding
+     - *return_model_string* [default=False] return the SBML XML file as a string
+
+    """
+
+    xoptions = {
+        'fbc_version': 3,
+        'validate': validate,
+        'compress_bounds': compress_bounds,
+        'return_model_string': return_model_string,
+        'zip_model': zip_model,
+    }
+    sbml_level_version = (3, 1)
+    autofix = (True,)
+    return_fbc = False
+    if xoptions['fbc_version'] == 3:
+        add_cobra_annot = False
+    return CBXML.sbml_writeSBML3FBC(
+        fba,
+        fname,
+        directory,
+        sbml_level_version,
+        autofix,
+        return_fbc,
+        gpr_from_annot,
+        add_groups,
+        add_cbmpy_annot,
+        add_cobra_annot,
+        xoptions,
+    )
+
+
 def writeCOBRASBML(fba, fname, directory=None):
     """
     Takes an FBA model object and writes it to file as a COBRA compatible :

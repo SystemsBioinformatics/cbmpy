@@ -1592,7 +1592,7 @@ class FBCconnect(object):
     groupsversion = 1
     sbmlns = None
     fbc = None
-    fbcversion = 1
+    fbcversion = 2
     fbcstrict = True
     maxobjname = ('maximize', 'maximise', 'max')
     minobjname = ('minimize', 'minimise', 'min')
@@ -1641,13 +1641,11 @@ class FBCconnect(object):
                 print('\nWARNING: Groups initialisation error, not enabled.')
                 self.GROUPS_AVAILABLE = False
 
-        if fbc_version == 2 and fbc_strict:
+        if fbc_version >= 2 and fbc_strict:
             self.fbcstrict = True
             self.fbc.setStrict(True)
 
-        assert (
-            self.fbc != None
-        ), '\nSBML Level 3 FBC package required!\n(http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/Flux_Balance_Constraints_%28flux%29)'
+        assert (self.fbc != None), '\nSBML Level 3 FBC package required!\n(http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/Flux_Balance_Constraints_%28flux%29)'
 
     def _checkPackageRegistry(self, pkg):
         pkgs = []
@@ -1713,6 +1711,12 @@ class FBCconnect(object):
                 "\nCannot interpret bound %s with value %s" % (fid, value)
             )
 
+    FBC3_VARIABLE_TYPES = {'linear' : libsbml.FBC_VARIABLE_TYPE_LINEAR,
+                          'quadratic' : libsbml.FBC_VARIABLE_TYPE_QUADRATIC,
+                          'invalid' : libsbml.FBC_VARIABLE_TYPE_INVALID
+                          }
+
+
     def createObjective(self, oid, osense, flux_objs, name=None, active=True):
         """
         Create and add the FBC Objective function
@@ -1741,6 +1745,14 @@ class FBCconnect(object):
             FO = O.createFluxObjective()
             FO.setReaction(fo_[0])
             FO.setCoefficient(fo_[1])
+            if self.fbcversion == 3:
+                FO.setId(fo_[2])
+                # assume variable is linear if unknown
+                if fo_[3] is None:
+                    FO.setVariableType('linear')
+                else:
+                    self.FBC3_VARIABLE_TYPES[fo_[3]]
+
 
     def createGeneAssociationV1(self, rid, assoc, gprid=None):
         """
@@ -1812,7 +1824,7 @@ class CBMtoSBML3(FBCconnect):
     parameter_map = None
     parameter_cntr = 0
 
-    def __init__(self, fba, fbc_version=1, fbc_strict=True, enable_groups=False):
+    def __init__(self, fba, fbc_version=2, fbc_strict=True, enable_groups=False):
         """
         Convert a CBM model to SBML level 3 with FBC
 
@@ -1889,6 +1901,8 @@ class CBMtoSBML3(FBCconnect):
             bounds = {}
             shared_values = {}
             for r_ in self.fba.reactions:
+                print(r_.getLowerBound())
+                print(r_.getUpperBound())
                 lb = round(r_.getLowerBound(), sig_dig)
                 ub = round(r_.getUpperBound(), sig_dig)
                 rid = r_.getId()
@@ -1934,7 +1948,9 @@ class CBMtoSBML3(FBCconnect):
                 elif btype == 'upper':
                     self.parameter_map[rid]['ub'] = bid
                 else:
-                    print('ERROR: strange flux bound assigment type error (CBXML:1635)')
+                    self.parameter_map[rid]['lb'] = bid
+                    self.parameter_map[rid]['ub'] = bid
+                    print('ERROR: strange flux bound assigment type error (CBXML:1635)', btype, self.parameter_map[rid])
 
     def addBoundsV1(self, autofix=False):
         """
@@ -1974,7 +1990,7 @@ class CBMtoSBML3(FBCconnect):
             if ob_.getId() == self.fba.getActiveObjective().getId():
                 active = True
             flux_objs = [
-                (o2.reaction, float(o2.coefficient)) for o2 in ob_.flux_objectives
+                (o2.reaction, float(o2.coefficient), o2.getId(), o2.getType()) for o2 in ob_.flux_objectives
             ]
             self.createObjective(ob_.getId(), ob_.operation, flux_objs, active=active)
 
@@ -2067,6 +2083,41 @@ class CBMtoSBML3(FBCconnect):
                     )
                 )
 
+
+    def addUserDefinedConstraintsV3(self, add_cbmpy_anno=True):
+        """
+        Add FBC V3 user defined constraints
+
+        """
+        assert (self.fbcversion >= 3), "UserDefinedConstraints support require FBCv3"
+
+        for u in self.fba.user_defined_constraints:
+            print(u)
+            UC = self.fbc.createUserDefinedConstraint()
+            UC.setId(u.getId())
+            # TODO - for now lets just assume CBMPy is using values and not parameters
+            plb = CBModel.Parameter('udcc_{}_lb'.format(u.getId()), u.getLowerBound())
+            pub = CBModel.Parameter('udcc_{}_ub'.format(u.getId()), u.getUpperBound())
+            LB = self.createParParameter(plb)
+            UB = self.createParParameter(pub)
+            self.model.addParameter(LB)
+            self.model.addParameter(UB)
+            UC.setLowerBound(LB.getId())
+            UC.setUpperBound(UB.getId())
+
+            for f in u.constraint_components:
+                UCFO = UC.createUserDefinedConstraintComponent()
+                UCFO.setId(f.getId())
+                # TODO - for now lets just assume CBMPy is using values and not parameters
+                #var = CBModel.Parameter('udcc_{}_{}_{}_var'.format(u.getId(), f.getId(), f.getVariable()), f.getCoefficient())
+                #VAR = self.createParParameter(var)
+                #self.model.addParameter(VAR)
+                UCFO.setVariable(f.getVariable())
+                UCFO.setCoefficient(f.getCoefficient())
+                UCFO.setVariableType(self.FBC3_VARIABLE_TYPES[f.getType()])
+
+
+
     def createParParameter(self, param, add_cbmpy_anno=True):
         """
         Create a generic SBML parameter from a CBMPy parameter
@@ -2092,6 +2143,7 @@ class CBMtoSBML3(FBCconnect):
                 miriam = param.miriam.getAllMIRIAMUris()
                 if len(miriam) > 0:
                     sbml_setCVterms(param, miriam, model=False)
+        return par
 
     def createFbParameterV2(self, bnd, add_cbmpy_anno=True):
         """
@@ -2146,6 +2198,7 @@ class CBMtoSBML3(FBCconnect):
         par.setValue(value)
         par.setConstant(True)
         par.setSBOTerm('SBO:0000625')
+
 
     def _cleanUP_(self):
         self.fba = None
@@ -2462,7 +2515,7 @@ def sbml_setReactionsL3Fbc(
     for rxn in reactions:
         # print 'Adding reaction:', reactions[rxn]['id']
         r = fbcmod.model.createReaction()
-        if fbc_version == 2:
+        if fbc_version >= 2:
             FB = r.getPlugin('fbc')
         r.setId(reactions[rxn]['id'])
         # METAID
@@ -2502,7 +2555,7 @@ def sbml_setReactionsL3Fbc(
             for mo_ in reactions[rxn]['modifiers']:
                 r.addModifier(fbcmod.model.getSpecies(mo_))
 
-        if fbc_version == 2:
+        if fbc_version >= 2:
             FB.setLowerFluxBound(fbcmod.parameter_map[reactions[rxn]['id']]['lb'])
             FB.setUpperFluxBound(fbcmod.parameter_map[reactions[rxn]['id']]['ub'])
             if reactions[rxn]['id'] in gpr_reaction_map:
@@ -2834,7 +2887,7 @@ def sbml_writeSBML3FBC(
     ), "\nSBML not available ... install libSBML with Python bindings for SBML support"
 
     # load options
-    fbc_version = 1
+    fbc_version = 2
     VALIDATE = False
     compress_bounds = False
     zip_model = False
@@ -2845,18 +2898,18 @@ def sbml_writeSBML3FBC(
         VALIDATE = xoptions['validate']
     if 'return_model_string' in xoptions:
         return_model_string = xoptions['return_model_string']
-    if 'compress_bounds' in xoptions and fbc_version == 2:
+    if 'compress_bounds' in xoptions and fbc_version >= 2:
         compress_bounds = xoptions['compress_bounds']
     if 'zip_model' in xoptions:
         zip_model = xoptions['zip_model']
-    if fbc_version == 2:
+    if fbc_version >= 2:
         autofix = True
 
     print('\nINFO: using FBC version: {}'.format(fbc_version))
 
     if fba.getName() in [None, '', ' ']:
-        ##fba.setName('cbmpy_fbc_v{}_model'.format(fbc_version))
         fba.setName('cbmpy_fbc_model')
+
     fba.setModifiedDate()
 
     USE_GROUPS = False
@@ -2872,7 +2925,7 @@ def sbml_writeSBML3FBC(
 
     if fbc_version == 1:
         cs3.addBoundsV1(autofix=autofix)
-    elif fbc_version == 2:
+    elif fbc_version >= 2:
         cs3.addBoundsV2(compress_bounds=compress_bounds)
 
     cs3.addObjectives()
@@ -2883,12 +2936,11 @@ def sbml_writeSBML3FBC(
             annotation_key='GENE_ASSOCIATION',
             add_cbmpy_anno=add_cbmpy_annot,
         )
-    elif fbc_version == 2:
+    elif fbc_version >= 2:
         cs3.addGenesV2(
             parse_from_annotation=gpr_from_annot,
             annotation_key='GENE_ASSOCIATION',
-            add_cbmpy_anno=add_cbmpy_annot,
-        )
+            add_cbmpy_anno=add_cbmpy_annot)
 
     # create a model
     sbml_setDescription(cs3.model, fba)
@@ -2909,6 +2961,11 @@ def sbml_writeSBML3FBC(
         fbc_version=fbc_version,
     )
     sbml_setParametersL3Fbc(cs3, add_cbmpy_anno=add_cbmpy_annot)
+
+
+    if fbc_version >= 3:
+        cs3.addUserDefinedConstraintsV3(add_cbmpy_anno=add_cbmpy_annot)
+
 
     if USE_GROUPS:
         sbml_setGroupsL3(cs3, fba)

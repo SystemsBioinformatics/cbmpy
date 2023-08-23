@@ -1535,9 +1535,12 @@ class Model(Fbase):
                         )
                     )
 
-
-
     def convertUserConstraintsToUserDefinedConstraints(self):
+        """
+        If a model is loaded with the old CBMPy specific constraint data structures json files and dictionaries, this function will
+        upmark it to the new FBCv3 data structures
+
+        """
         for u in self.user_constraints:
             print('Converting constraint', u)
             if self.user_constraints[u]['operator'] == 'E':
@@ -2465,28 +2468,29 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        lb = ub = eq = None
-        lb = self.getObject(rid).getLowerBound()
-        ub = self.getObject(rid).getUpperBound()
+        # TODO SORT THE MESS OUT to make this work
+        #lb = ub = eq = None
+        #lb = self.getObject(rid).getLowerBound()
+        #ub = self.getObject(rid).getUpperBound()
 
-        #lb = self.getFluxBoundByReactionID(rid, 'lower')
-        #ub = self.getFluxBoundByReactionID(rid, 'upper')
-        #eq = self.getFluxBoundByReactionID(rid, 'equality')
-        #if lb != None:
-            #if numpy.isinf(lb.value) or numpy.isreal(lb.value):
-                #lb = lb.value
-            #else:
-                #lb = float(lb)
-        #if ub != None:
-            #if numpy.isinf(ub.value) or numpy.isreal(ub.value):
-                #ub = ub.value
-            #else:
-                #ub = float(ub)
-        #if eq != None:
-            #if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                #eq = eq.value
-            #else:
-                #eq = float(eq)
+        lb = self.getFluxBoundByReactionID(rid, 'lower')
+        ub = self.getFluxBoundByReactionID(rid, 'upper')
+        eq = self.getFluxBoundByReactionID(rid, 'equality')
+        if lb != None:
+            if numpy.isinf(lb.value) or numpy.isreal(lb.value):
+                lb = lb.value
+            else:
+                lb = float(lb)
+        if ub != None:
+            if numpy.isinf(ub.value) or numpy.isreal(ub.value):
+                ub = ub.value
+            else:
+                ub = float(ub)
+        if eq != None:
+            if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+                eq = eq.value
+            else:
+                eq = float(eq)
         return rid, lb, ub, eq
 
     def getReactionLowerBound(self, rid):
@@ -2496,24 +2500,25 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        lb = eq = None
-        lb = self.getObject(rid)
-        #lb = self.getFluxBoundByReactionID(rid, 'lower')
-        #if lb != None:
-            #if type(lb.value) != str and (
-                #numpy.isreal(lb.value) or numpy.isinf(lb.value)
-            #):
-                #lb = lb.value
-            #else:
-                #lb = float(lb.value)
-        #else:
-            #eq = self.getFluxBoundByReactionID(rid, 'equality')
-            #if eq != None:
-                ## print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
-                #if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                    #lb = eq.value
-                #else:
-                    #lb = float(eq)
+        # TODO SORT THE MESS OUT to make this work
+        #lb = eq = None
+        #lb = self.getObject(rid)
+        lb = self.getFluxBoundByReactionID(rid, 'lower')
+        if lb != None:
+            if type(lb.value) != str and (
+                numpy.isreal(lb.value) or numpy.isinf(lb.value)
+            ):
+                lb = lb.value
+            else:
+                lb = float(lb.value)
+        else:
+            eq = self.getFluxBoundByReactionID(rid, 'equality')
+            if eq != None:
+                # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+                if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+                    lb = eq.value
+                else:
+                    lb = float(eq)
         return lb
 
     def getReactionUpperBound(self, rid):
@@ -2523,25 +2528,26 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        ub = eq = None
-        ub = self.getObject(rid)
-        #ub = self.getFluxBoundByReactionID(rid, 'upper')
-        #if ub != None:
-            #if type(ub.value) != str and (
-                #numpy.isreal(ub.value) or numpy.isinf(ub.value)
-            #):
-                #ub = ub.value
-            #else:
-                #ub = float(ub.value)
-        #else:
-            #eq = self.getFluxBoundByReactionID(rid, 'equality')
-            #if eq != None:
-                ## print('\nINFO: Upper bound defined as an equality ({})'.format(rid))
-                #if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                    #ub = eq.value
-                #else:
-                    #ub = float(eq)
-        #return ub
+        # TODO SORT THE MESS OUT to make this work
+        #ub = eq = None
+        #ub = self.getObject(rid)
+        ub = self.getFluxBoundByReactionID(rid, 'upper')
+        if ub != None:
+            if type(ub.value) != str and (
+                numpy.isreal(ub.value) or numpy.isinf(ub.value)
+            ):
+                ub = ub.value
+            else:
+                ub = float(ub.value)
+        else:
+            eq = self.getFluxBoundByReactionID(rid, 'equality')
+            if eq != None:
+                # print('\nINFO: Upper bound defined as an equality ({})'.format(rid))
+                if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+                    ub = eq.value
+                else:
+                    ub = float(eq)
+        return ub
 
     def getFluxBoundByID(self, fid):
         """
@@ -2960,7 +2966,7 @@ class Model(Fbase):
         Returns a dictionary of all flux bounds [id:value]
 
         """
-        print('Deprecation warning: This method will be changed in CBMPy 0.9.8')
+        print('Deprecation warning: This method will be changed in CBMPy 0.9.0')
         out = {}
         for f_ in self.flux_bounds:
             fid = f_.getId()
@@ -2986,13 +2992,13 @@ class Model(Fbase):
 
     def setFluxBoundsFromDict(self, bounds):
         """
-        DEPRECATED! This method will be modified to use reaction Idin CBMPy 0.9.8
+        DEPRECATED! This method will be modified to use reaction Idin CBMPy 0.9.0
         Sets all the fluxbounds present in bounds
 
          - *bounds* a dictionary of [fluxbound_id : value] pairs (not per reaction!!!)
 
         """
-        print('Deprecation warning: This method will be changed in CBMPy 0.9.8')
+        print('Deprecation warning: This method will be changed in CBMPy 0.9.0')
 
         fbids = self.getFluxBoundIds()
         for f_ in self.flux_bounds:
@@ -3280,7 +3286,7 @@ class Model(Fbase):
 
         """
         print('DEPRECATION WARNING: please use cmod.getFluxesAssociatedWithSpecies()')
-        print('Deprecation warning: This method will be deleted in CBMPy 0.9.8')
+        print('Deprecation warning: This method will be deleted in CBMPy 0.9.0')
         return self.getFluxesAssociatedWithSpecies(metab)
 
     def getFluxesAssociatedWithSpecies(self, metab):
@@ -4006,6 +4012,10 @@ class FluxObjective(Fbase):
         else:
             raise TypeError('FluxObjective type must be one of:' + str(self.ctypes))
 
+    def getType(self):
+        return self.ctype
+
+
 
 class UserDefinedConstraint(Fbase):
     """
@@ -4137,7 +4147,7 @@ class ConstraintComponent(Fbase):
     ctype = None
     ctypes = ('linear', 'quadratic')
 
-    def __init__(self, pid, variable, coefficient, ctype='linear'):
+    def __init__(self, pid, coefficient, variable, ctype='linear'):
         pid = str(pid)
         self.setId(pid)
 
@@ -4176,6 +4186,8 @@ class ConstraintComponent(Fbase):
         else:
             raise ValueError('FluxObjective type must be one of:' + str(self.ctypes))
 
+    def getType(self):
+        return self.ctype
 
 
 
@@ -4910,7 +4922,8 @@ class Parameter(Fbase):
         """
         pid = str(pid)
         self.setId(pid)
-
+        if name is None:
+            name = pid
         self.name = name
         self.setValue(value)
         self.constant = constant

@@ -56,6 +56,7 @@ MIRIAM_KEYS.sort()
 MIRIAM_KEYS = tuple(MIRIAM_KEYS)
 MIRIAM_KEYSlc = tuple([a.lower() for a in MIRIAM_KEYS])
 
+# TODO fine out what this comment is about
 # MIRIAM.update({'EC' : {'data_entry': 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&amp;ec=$id',
 # 'example': '1.1.1.1',
 # 'name': 'Enzyme Nomenclature',
