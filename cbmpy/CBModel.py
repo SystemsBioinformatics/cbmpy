@@ -2469,28 +2469,28 @@ class Model(Fbase):
 
         """
         # TODO SORT THE MESS OUT to make this work
-        #lb = ub = eq = None
-        #lb = self.getObject(rid).getLowerBound()
-        #ub = self.getObject(rid).getUpperBound()
+        lb = ub = eq = None
+        lb = self.getObject(rid).getLowerBound()
+        ub = self.getObject(rid).getUpperBound()
 
-        lb = self.getFluxBoundByReactionID(rid, 'lower')
-        ub = self.getFluxBoundByReactionID(rid, 'upper')
-        eq = self.getFluxBoundByReactionID(rid, 'equality')
-        if lb != None:
-            if numpy.isinf(lb.value) or numpy.isreal(lb.value):
-                lb = lb.value
-            else:
-                lb = float(lb)
-        if ub != None:
-            if numpy.isinf(ub.value) or numpy.isreal(ub.value):
-                ub = ub.value
-            else:
-                ub = float(ub)
-        if eq != None:
-            if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                eq = eq.value
-            else:
-                eq = float(eq)
+#         lb = self.getFluxBoundByReactionID(rid, 'lower')
+#         ub = self.getFluxBoundByReactionID(rid, 'upper')
+#         eq = self.getFluxBoundByReactionID(rid, 'equality')
+#         if lb != None:
+#             if numpy.isinf(lb.value) or numpy.isreal(lb.value):
+#                 lb = lb.value
+#             else:
+#                 lb = float(lb)
+#         if ub != None:
+#             if numpy.isinf(ub.value) or numpy.isreal(ub.value):
+#                 ub = ub.value
+#             else:
+#                 ub = float(ub)
+#         if eq != None:
+#             if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+#                 eq = eq.value
+#             else:
+#                 eq = float(eq)
         return rid, lb, ub, eq
 
     def getReactionLowerBound(self, rid):
@@ -2500,25 +2500,30 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        # TODO SORT THE MESS OUT to make this work
-        #lb = eq = None
-        #lb = self.getObject(rid)
-        lb = self.getFluxBoundByReactionID(rid, 'lower')
-        if lb != None:
-            if type(lb.value) != str and (
-                numpy.isreal(lb.value) or numpy.isinf(lb.value)
-            ):
-                lb = lb.value
-            else:
-                lb = float(lb.value)
-        else:
-            eq = self.getFluxBoundByReactionID(rid, 'equality')
-            if eq != None:
-                # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
-                if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                    lb = eq.value
-                else:
-                    lb = float(eq)
+
+        lb = eq = None
+        lb = self.getObject(rid).getLowerBound()
+
+#         # Now duplicated directly in Reaction
+#
+#         #lb = eq = None
+#         #lb = self.getObject(rid)
+#         lb = self.getFluxBoundByReactionID(rid, 'lower')
+#         if lb != None:
+#             if type(lb.value) != str and (
+#                 numpy.isreal(lb.value) or numpy.isinf(lb.value)
+#             ):
+#                 lb = lb.value
+#             else:
+#                 lb = float(lb.value)
+#         else:
+#             eq = self.getFluxBoundByReactionID(rid, 'equality')
+#             if eq != None:
+#                 # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+#                 if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+#                     lb = eq.value
+#                 else:
+#                     lb = float(eq)
         return lb
 
     def getReactionUpperBound(self, rid):
@@ -2528,25 +2533,28 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        # TODO SORT THE MESS OUT to make this work
-        #ub = eq = None
-        #ub = self.getObject(rid)
-        ub = self.getFluxBoundByReactionID(rid, 'upper')
-        if ub != None:
-            if type(ub.value) != str and (
-                numpy.isreal(ub.value) or numpy.isinf(ub.value)
-            ):
-                ub = ub.value
-            else:
-                ub = float(ub.value)
-        else:
-            eq = self.getFluxBoundByReactionID(rid, 'equality')
-            if eq != None:
-                # print('\nINFO: Upper bound defined as an equality ({})'.format(rid))
-                if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                    ub = eq.value
-                else:
-                    ub = float(eq)
+        ub = eq = None
+        ub = self.getObject(rid).getUpperBound()
+
+#         Now duplicated directly in Reaction
+
+#         ub = eq = None
+#         ub = self.getFluxBoundByReactionID(rid, 'upper')
+#         if ub != None:
+#             if type(ub.value) != str and (
+#                 numpy.isreal(ub.value) or numpy.isinf(ub.value)
+#             ):
+#                 ub = ub.value
+#             else:
+#                 ub = float(ub.value)
+#         else:
+#             eq = self.getFluxBoundByReactionID(rid, 'equality')
+#             if eq != None:
+#                 # print('\nINFO: Upper bound defined as an equality ({})'.format(rid))
+#                 if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+#                     ub = eq.value
+#                 else:
+#                     ub = float(eq)
         return ub
 
     def getFluxBoundByID(self, fid):
@@ -2572,6 +2580,14 @@ class Model(Fbase):
          - *bound* the bound: 'upper', 'lower', 'equality'
 
         """
+
+#         print('This function will change in 0.9.0 to only return a value')
+
+#         if bound == 'upper':
+#             return self.getReactionUpperBound(rid)
+#         elif bound == 'lower':
+#             return self.getReactionLowerBound(rid)
+#
         c_ = None
         for c_ in self.flux_bounds:
             if c_.reaction == rid and c_.is_bound == bound:
@@ -2895,37 +2911,37 @@ class Model(Fbase):
          - *bound* this is either 'lower' or 'upper', or 'equal'
 
         """
-        R = self.getObject(rid)
+#         R = self.getObject(rid)
+#
+#         if rid not in self.getReactionIds():
+#             print('\nERROR setReactionBound: reaction id {} does not exist'.format(rid))
+#             return
+#
+#         if bound == 'upper':
+#             R.setUpperBound(bound)
+#         elif bound == 'lower':
+#             R.setLowerBound(bound)
+#         else:
+#             R.setUpperBound(bound)
+#             R.setLowerBound(bound)
 
-        if rid not in self.getReactionIds():
-            print('\nERROR setReactionBound: reaction id {} does not exist'.format(rid))
-            return
-
-        if bound == 'upper':
-            R.setUpperBound(bound)
-        elif bound == 'lower':
-            R.setLowerBound(bound)
+        c2 = self.getFluxBoundByReactionID(rid, bound)
+        # changed to no str() casting
+        if c2 != None:
+            c2.setValue(value)
+            if __DEBUG__:
+                print(c2.reaction, c2.operation, c2.value)
         else:
-            R.setUpperBound(bound)
-            R.setLowerBound(bound)
-
-        #c2 = self.getFluxBoundByReactionID(rid, bound)
-        ## changed to no str() casting
-        #if c2 != None:
-            #c2.setValue(value)
-            #if __DEBUG__:
-                #print(c2.reaction, c2.operation, c2.value)
-        #else:
-            ## if the bound does not exist, create a new one
-            #if bound == 'upper':
-                #self.createReactionUpperBound(rid, value)
-            #elif bound == 'lower':
-                #self.createReactionLowerBound(rid, value)
-            #else:
-                #raise RuntimeError(
-                    #'\n%s is not a valid reaction name or \'%s\' bound does not exist '
-                    #% (rid, bound)
-                #)
+            # if the bound does not exist, create a new one
+            if bound == 'upper':
+                self.createReactionUpperBound(rid, value)
+            elif bound == 'lower':
+                self.createReactionLowerBound(rid, value)
+            else:
+                raise RuntimeError(
+                    '\n%s is not a valid reaction name or \'%s\' bound does not exist '
+                    % (rid, bound)
+                )
 
     def setReactionBounds(self, rid, lower, upper):
         """
@@ -4745,7 +4761,7 @@ class FluxBound(Fbase):
         """
         Returns the current value of the attribute (input/solution)
         """
-        return self.value
+        return float(self.value)
 
     def setValue(self, value):
         """
@@ -4990,8 +5006,10 @@ class Reaction(Fbase):
     __bound_history__ = None
     __is_active__ = True
     _modifiers_ = None
+    __lower_bound_id__ = None
+    __upper_bound_id__ = None
     """
-    # TODO: next major revision 0.8 is to get rid of fluxbound array
+    # TODO: next major revision 0.9 is to get rid of fluxbound array
     # by adding fluxbound objects directly to the reactions this should simplify the
     # data structure but will mean a major rewrite of existing code and potentially breaking
     # backwards compatability
@@ -5346,26 +5364,58 @@ class Reaction(Fbase):
         Get the value of the reactions lower bound
 
         """
-        try:
-            return self.__objref__().getReactionLowerBound(self.id)
-        except AttributeError as why:
-            print(
-                'WARNING: This function requires that this reaction object be added to a CBMPy instance to work.'
-            )
-            return None
+        if self.__lower_bound_id__ is not None:
+            print('Using getLowerBound shortcut')
+            return self.getModel().getObject(self.__lower_bound_id__).getValue()
+        else:
+            out = None
+
+            try:
+                lb = self.getModel().getFluxBoundByReactionID(self.getId(), 'lower')
+                if lb != None:
+                    self.__lower_bound_id__ = lb.getId()
+                    out = lb.getValue()
+                else:
+                    eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
+                    self.__lower_bound_id__ = eq.getId()
+                    if eq != None:
+                        # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+                        out = eq.getValue()
+                return out
+            except AttributeError as why:
+                print(
+                    'WARNING: getLowerBound requires that this reaction object be added to a CBMPy instance to work.'
+                )
+                return None
 
     def getUpperBound(self):
         """
         Get the value of the reactions upper bound
 
         """
-        try:
-            return self.__objref__().getReactionUpperBound(self.id)
-        except AttributeError as why:
-            print(
-                'WARNING: This function requires that this reaction object be added to a CBMPy instance to work.'
-            )
-            return None
+        if self.__upper_bound_id__ is not None:
+            print('Using getUpperBound shortcut')
+            return self.getModel().getObject(self.__upper_bound_id__).getValue()
+        else:
+            out = None
+
+            try:
+                ub = self.getModel().getFluxBoundByReactionID(self.getId(), 'upper')
+                if ub != None:
+                    self.__upper_bound_id__ = ub.getId()
+                    out = ub.getValue()
+                else:
+                    eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
+                    self.__upper_bound_id__ = eq.getId()
+                    if eq != None:
+                        # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+                        out = eq.getValue()
+                return out
+            except AttributeError as why:
+                print(
+                    'WARNING: getUpperBound requires that this reaction object be added to a CBMPy instance to work.'
+                )
+                return None
 
     def setLowerBound(self, value):
         """
