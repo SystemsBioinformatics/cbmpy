@@ -5,6 +5,15 @@ ucmod = cbmpy.readSBML3FBC('test_user_def_rc.xml')
 ucmod.importUserConstraints('test_user_def_rc.xml.user_constraints.json')
 print(ucmod.user_constraints)
 
+
+for r in ucmod.reactions:
+    r.setNotes('<p>Finally <strong>notes</strong> are free to be notes!</p>')
+
+for s in ucmod.species:
+    if s.is_boundary:
+        s.setAnnotation('IsBoundaryOf', ucmod.getId())
+
+
 # convert to new FBCv3 structures
 ucmod.convertUserConstraintsToUserDefinedConstraints()
 print(ucmod.user_constraints, ucmod.user_defined_constraints)

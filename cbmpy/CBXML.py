@@ -1082,7 +1082,7 @@ def sbml_setCompartmentsL3(model, fba):
             sbml_setNotes3(comp_def, notes)
 
 
-def sbml_setParametersL3Fbc(fbcmod, add_cbmpy_anno=True):
+def sbml_setParametersL3Fbc(fbcmod, add_cbmpy_anno=True, fbc_version=2):
     """
     Add non fluxbound related parameters to the model
 
@@ -2223,39 +2223,18 @@ def sbml_writeKeyValueDataAnnotation(annotations):
     for K in annotations:
         Ktype = None
         Kval = None
-        # if type(annotations[K]) == bool:
-        # Ktype = 'boolean'
-        # elif type(annotations[K]) == int or type(annotations[K]) == long:
-        # Ktype = 'integer'
-        # elif type(annotations[K]) == float or type(annotations[K]) == numpy.float or type(annotations[K]) == numpy.double:
-        # Ktype = 'double'
-        # else:
-        # Ktype = 'string'
         if annotations[K] == '' or annotations[K] == None:
             Kval = ""
         else:
             Kval = ESCAPE(str(annotations[K]))
 
-        # fix the key to be sid compatible
-        ## removed temporarily, no reason to be an sid
-        # Kfix = ''
-        # for l in K:
-        # if l.isalnum():
-        # Kfix += l
-        # else:
-        # Kfix += '_'
-
-        ## removed temporarily, no reason to be an sid
-        # if not Kfix[0].isalpha():
-        # Kfix = 'id_' + Kfix
-        ## taken out for now
         # Kfix = Kfix.lower()
         Kfix = K
 
         # annoSTR += ' <data id="%s" type="%s" value="%s"/>\n' % (Kfix, Ktype, Kval)
         annoSTR += ' <data id="{}" value="{}"/>\n'.format(Kfix, Kval)
     annoSTR += '</listOfKeyValueData>\n'
-    # print annoSTR
+    print(annoSTR)
     return annoSTR
 
 
@@ -2304,6 +2283,7 @@ def sbml_setSpeciesL3(
     add_cobra_anno=False,
     add_cbmpy_anno=True,
     substance_units=True,
+    fbc_version=2
 ):
     """
     Add the species definitions to the SBML object:
@@ -2314,6 +2294,7 @@ def sbml_setSpeciesL3(
      - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_anno* [default=False] add COBRA <notes> annotation
      - *substance_units* [default=True] defines the species in amounts rather than concentrations (necessary for default mmol/gdw.h)
+     - *fbc_version* [default=2] the FBC version to use
 
     returns:
 
@@ -2385,34 +2366,22 @@ def sbml_setSpeciesL3(
     for spe in keys:
         s = model.createSpecies()
         s.setId(species[spe]['id'])
+        Sfbc = s.getPlugin('fbc')
         # METAID
         s.setMetaId(METAPREFIX + species[spe]['id'])
         s.setName(species[spe]['name'])
         # in theory species are constant at whatever level it is set dX/dT == 0 also there is no way to change them
         s.setConstant(False)  # TODO (201209) think about this
+        s.setConstant(True) # (2023) don't think too long
         # if not (species[spe]['charge'] != None or species[spe]['charge'] != ''):
         # s.setCharge(int(species[spe]['charge']))
-        if species[spe]['charge'] not in [
-            '',
-            None,
-            0,
-        ]:  # TODO this needs to be considered - bgoli
+        if species[spe]['charge'] not in ['', None, 0,]:  # TODO this needs to be considered - bgoli
             # print species[spe]['charge'], int(species[spe]['charge'])
-            if (
-                s.getPlugin('fbc').setCharge(int(species[spe]['charge']))
-                != libsbml.LIBSBML_OPERATION_SUCCESS
-            ):
+            if (Sfbc.setCharge(int(species[spe]['charge'])) != libsbml.LIBSBML_OPERATION_SUCCESS):
                 print('Unable to set charge for species: {}'.format(species[spe]['id']))
         if species[spe]['chemFormula'] not in ['', None]:
-            if (
-                s.getPlugin('fbc').setChemicalFormula(str(species[spe]['chemFormula']))
-                != libsbml.LIBSBML_OPERATION_SUCCESS
-            ):
-                print(
-                    'Unable to set chemFormula for species: {}'.format(
-                        species[spe]['id']
-                    )
-                )
+            if (Sfbc.setChemicalFormula(str(species[spe]['chemFormula'])) != libsbml.LIBSBML_OPERATION_SUCCESS):
+                print('Unable to set chemFormula for species: {}'.format(species[spe]['id']))
 
         s.setCompartment(species[spe]['compartment'])
 
@@ -2421,27 +2390,34 @@ def sbml_setSpeciesL3(
             # s.setConstant(True)
         else:
             s.setBoundaryCondition(False)
+            #s.setConstant(True)
         # print species[spe]['value'], type(species[spe]['value'])
-        if not numpy.isnan(species[spe]['value']) and species[spe]['value'] not in [
-            '',
-            None,
-        ]:
+        if not numpy.isnan(species[spe]['value']) and species[spe]['value'] not in ['', None,]:
             if substance_units:
                 # set the species to be in amounts or concentrations default is amounts for mmol/gdw.h
                 s.setInitialAmount(float(species[spe]['value']))
             else:
                 s.setInitialConcentration(float(species[spe]['value']))
+        else: # added 2023 if there are no concentrations defined export the model as inf
+            if substance_units:
+                # set the species to be in amounts or concentrations default is amounts for mmol/gdw.h
+                s.setInitialAmount(numpy.Inf)
+            else:
+                s.setInitialConcentration(numpy.Inf)
         s.setHasOnlySubstanceUnits(substance_units)
 
         if len(species[spe]['annotation']) > 0:
             if add_cbmpy_anno:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(
-                    species[spe]['annotation']
-                )
-                annores = s.appendAnnotation(annoSTRnew)
-                if annores == -3:
-                    print('Invalid annotation in reaction:', species[spe]['id'])
-                    print(species[spe]['annotation'], '\n')
+                if fbc_version < 3:
+                    annoSTRnew = sbml_writeKeyValueDataAnnotation(species[spe]['annotation'])
+                    annores = s.appendAnnotation(annoSTRnew)
+                    if annores == -3:
+                        print('Invalid annotation in reaction:', species[spe]['id'])
+                        print(species[spe]['annotation'], '\n')
+                else:
+                    # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                    sbml_setFBCv3KeyValuePairs(Sfbc, species[spe]['annotation'])
+
             if add_cobra_anno:
                 annoSTR = sbml_writeAnnotationsAsCOBRANote(
                     species[spe]['annotation']
@@ -2459,8 +2435,7 @@ def sbml_setSpeciesL3(
 
 
 def sbml_setReactionsL3Fbc(
-    fbcmod, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=1
-):
+    fbcmod, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=2):
     """
     Add the FBA instance reactions to the SBML model
 
@@ -2468,7 +2443,7 @@ def sbml_setReactionsL3Fbc(
      - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
      - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_anno* [default=False] add COBRA <notes> annotation
-     - *fbc_version* [default=1] writes either FBC v1 (2013) or v2 (2015)
+     - *fbc_version* [default=2] writes either FBC v1 (2013) or v2 (2015) or v3 (2023)
 
     """
 
@@ -2572,43 +2547,39 @@ def sbml_setReactionsL3Fbc(
                     pass
                     # print('WARNING: {} cannot create association from tree: {}'.format(GPR.getId(), GPR.getTree()))
 
+                # add annotation
                 if len(GPR.annotation) > 0:
                     if add_cbmpy_anno:
-                        annoSTRnew = sbml_writeKeyValueDataAnnotation(GPR.annotation)
-                        annores = sbgpr.appendAnnotation(annoSTRnew)
-                        if annores == -3:
-                            print(
-                                'Invalid annotation in reaction GPR association',
-                                reactions[rxn]['id'],
-                            )
+                        if fbc_version < 3:
+                            annoSTRnew = sbml_writeKeyValueDataAnnotation(GPR.annotation)
+                            annores = sbgpr.appendAnnotation(annoSTRnew)
+                            if annores == -3:
+                                print('Invalid annotation in reaction GPR association', reactions[rxn]['id'])
+                        else:
+                            # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                            sbml_setFBCv3KeyValuePairs(sbgpr, GPR.annotation)
+
                 if GPR.miriam is not None:
                     sbml_setCVterms(sbgpr, GPR.miriam.getAllMIRIAMUris(), model=False)
 
+        # add annotation
         if len(reactions[rxn]['annotation']) > 0:
             if add_cbmpy_anno:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(
-                    reactions[rxn]['annotation']
-                )
-                annores = r.appendAnnotation(annoSTRnew)
-                if annores == -3:
-                    print('Invalid annotation in reaction', reactions[rxn]['id'])
-                    print(reactions[rxn]['annotation'], '\n')
+                if fbc_version < 3:
+                    annoSTRnew = sbml_writeKeyValueDataAnnotation(reactions[rxn]['annotation'])
+                    annores = r.appendAnnotation(annoSTRnew)
+                    if annores == -3:
+                        print('Invalid annotation in reaction', reactions[rxn]['id'])
+                        print(reactions[rxn]['annotation'], '\n')
+                else:
+                    # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                    sbml_setFBCv3KeyValuePairs(FB, reactions[rxn]['annotation'])
 
         if len(reactions[rxn]['miriam']) > 0:
             sbml_setCVterms(r, reactions[rxn]['miriam'], model=False)
 
         if reactions[rxn]['sboterm'] is not None and reactions[rxn]['sboterm'] != '':
             r.setSBOTerm(str(reactions[rxn]['sboterm']))
-
-        if len(reactions[rxn]['annotation']) > 0:
-            if add_cbmpy_anno:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(
-                    reactions[rxn]['annotation']
-                )
-                annores = r.appendAnnotation(annoSTRnew)
-                if annores == -3:
-                    print('Invalid annotation in reaction', reactions[rxn]['id'])
-                    print(reactions[rxn]['annotation'], '\n')
 
         if add_cobra_anno:
             annoSTR = sbml_writeAnnotationsAsCOBRANote(
@@ -2620,6 +2591,23 @@ def sbml_setReactionsL3Fbc(
                 sbml_setNotes3(r, annoSTR)
         elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] is not None:
             sbml_setNotes3(r, reactions[rxn]['notes'])
+
+
+
+def sbml_setFBCv3KeyValuePairs(fbcp, kv_pairs):
+    """
+    Adds key value pairs to any FBCv3 SBase derived object
+
+    - *fbcp* an FBCv3 plugin
+    - *kv_pairs* a dictionary of CBMPy Key Value pairs (format will be upgraded over next few versions)
+
+    """
+    for kv_ in kv_pairs:
+        kvp = fbcp.createKeyValuePair()
+        kvp.setKey(kv_)
+        if kv_pairs[kv_] is not None:
+            kvp.setValue(kv_pairs[kv_])
+
 
 
 def sbml_setGroupsL3(cs, fba):
@@ -2951,6 +2939,7 @@ def sbml_writeSBML3FBC(
         add_cobra_anno=add_cobra_annot,
         add_cbmpy_anno=add_cbmpy_annot,
         substance_units=True,
+        fbc_version=fbc_version
     )
     sbml_setCompartmentsL3(cs3.model, fba)
     sbml_setReactionsL3Fbc(
@@ -2958,9 +2947,9 @@ def sbml_writeSBML3FBC(
         return_dict=False,
         add_cobra_anno=add_cobra_annot,
         add_cbmpy_anno=add_cbmpy_annot,
-        fbc_version=fbc_version,
+        fbc_version=fbc_version
     )
-    sbml_setParametersL3Fbc(cs3, add_cbmpy_anno=add_cbmpy_annot)
+    sbml_setParametersL3Fbc(cs3, add_cbmpy_anno=add_cbmpy_annot, fbc_version=fbc_version)
 
     if USE_GROUPS:
         sbml_setGroupsL3(cs3, fba)
