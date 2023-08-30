@@ -1556,7 +1556,11 @@ class Model(Fbase):
 
             components = []
             for c in self.user_constraints[u]['fluxes']:
-                components.append((c[0], c[1], 'linear'))
+                if len(c) == 3:
+                    assert c[2] in ['linear', 'quadratic']
+                    components.append((c[0], c[1], c[2]))
+                else:
+                    components.append((c[0], c[1], 'linear'))
 
             ucnew = self.createUserDefinedConstraint(u, lb, ub, components)
             self.addUserDefinedConstraint(ucnew)
@@ -3690,13 +3694,12 @@ class Model(Fbase):
         F = open(filename, 'r')
         # din = json.load(F)
         self.user_constraints = json.load(F)
-        # key = os.path.split(self.sourcefile)[-1]
-        # F.close()
-        # if key in din:
-        # self.user_constraints = din[key]
-        # else:
-        # print('ERROR: constraints refers to file \"{}\" whereas this is file \"{}\"'.format(list(din.keys())[0], key))
-        # return False
+
+        for uc in self.user_constraints:
+            for ucc in self.user_constraints[uc]['fluxes']:
+                if len(ucc) == 2:
+                    ucc.append('linear')
+
         return True
 
     def exportUserConstraints(self, filename):
@@ -3704,6 +3707,12 @@ class Model(Fbase):
         Exports user constraints in json
 
         """
+        for uc in self.user_constraints:
+            for ucc in self.user_constraints[uc]['fluxes']:
+                if len(ucc) == 2:
+                    ucc.append('linear')
+
+
         F = open(filename, 'w')
         # json.dump({os.path.split(self.sourcefile)[-1] : self.user_constraints}, F, indent=2)
         json.dump(self.user_constraints, F, indent=2)

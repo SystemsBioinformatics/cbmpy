@@ -1745,7 +1745,7 @@ class FBCconnect(object):
             FO = O.createFluxObjective()
             FO.setReaction(fo_[0])
             FO.setCoefficient(fo_[1])
-            if self.fbcversion == 3:
+            if self.fbcversion >= 3:
                 FO.setId(fo_[2])
                 # assume variable is linear if unknown
                 if fo_[3] is None:
@@ -2962,11 +2962,6 @@ def sbml_writeSBML3FBC(
     )
     sbml_setParametersL3Fbc(cs3, add_cbmpy_anno=add_cbmpy_annot)
 
-
-    if fbc_version >= 3:
-        cs3.addUserDefinedConstraintsV3(add_cbmpy_anno=add_cbmpy_annot)
-
-
     if USE_GROUPS:
         sbml_setGroupsL3(cs3, fba)
 
@@ -3005,9 +3000,19 @@ def sbml_writeSBML3FBC(
         F.close()
         print('Model exported as: {}'.format(fname))
 
-    # bgoli: temporary (until incorporated into FBC stadard) solution to store the constraints in a separate json file
+    # try and keep backwards compatability with FBCv2 hack and FBCv3
     if fba.user_constraints is not None and len(fba.user_constraints) >= 1:
-        fba.exportUserConstraints(fname + '.user_constraints.json')
+        if fbc_version == 2:
+            print("\nWARNING: User defined constraints are included in FBCv3 and you are attempting to save a FBCv2 file. Please save the model using the newer format.\nIn CBMPy 0.9 this will become compulsory.\n")
+            time.sleep(5)
+            fba.exportUserConstraints(fname + '.user_constraints.json')
+        elif fbc_version >= 3:
+            print("\nWARNING: User defined constraints defined using old FBCv2 format, converting to FBCv3 ...\n")
+            fba.convertUserConstraintsToUserDefinedConstraints()
+
+    # add FBCv3 user defined constraints
+    if fbc_version >= 3:
+        cs3.addUserDefinedConstraintsV3(add_cbmpy_anno=add_cbmpy_annot)
 
     if VALIDATE:
         sbml_setValidationOptions(cs3.doc, level='full')
