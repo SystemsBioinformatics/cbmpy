@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SBML created with CBMPy (0.8.7) on Wed, 30 Aug 2023 12:45:59 -->
+<!-- SBML created with CBMPy (0.8.7) on Thu, 31 Aug 2023 16:20:29 -->
 <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version3" xmlns:html="http://www.w3.org/1999/xhtml" level="3" version="1" fbc:required="false">
   <model metaid="meta_sbml_model" id="sbml_model" substanceUnits="mmol_per_gdw" timeUnits="hour" extentUnits="mmol_per_gdw" fbc:strict="true">
     <notes>
@@ -48,46 +48,46 @@
       <compartment metaid="meta_Cell" id="Cell" name="Cell" spatialDimensions="3" size="1" units="dimensionless" constant="true"/>
     </listOfCompartments>
     <listOfSpecies>
-      <species metaid="meta_A" id="A" name="A" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_B" id="B" name="B" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_C" id="C" name="C" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_D" id="D" name="D" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_F1" id="F1" name="F1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_F2" id="F2" name="F2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_G" id="G" name="G" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_H" id="H" name="H" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_I1" id="I1" name="I1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_I2" id="I2" name="I2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_J1" id="J1" name="J1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_J2" id="J2" name="J2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_K1" id="K1" name="K1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_K2" id="K2" name="K2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_L" id="L" name="L" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_M" id="M" name="M" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_N" id="N" name="N" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_X0" id="X0" name="X0" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="true">
+      <species metaid="meta_A" id="A" name="A" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_B" id="B" name="B" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_C" id="C" name="C" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_D" id="D" name="D" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_F1" id="F1" name="F1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_F2" id="F2" name="F2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_G" id="G" name="G" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_H" id="H" name="H" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_I1" id="I1" name="I1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_I2" id="I2" name="I2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_J1" id="J1" name="J1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_J2" id="J2" name="J2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_K1" id="K1" name="K1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_K2" id="K2" name="K2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_L" id="L" name="L" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_M" id="M" name="M" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_N" id="N" name="N" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_X0" id="X0" name="X0" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="boundary" value="sbml_model"/>
+            <keyValuePair key="IsBoundaryOf" value="sbml_model"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
-      <species metaid="meta_X1" id="X1" name="X1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="true">
+      <species metaid="meta_X1" id="X1" name="X1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="boundary" value="sbml_model"/>
+            <keyValuePair key="IsBoundaryOf" value="sbml_model"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
-      <species metaid="meta_X3" id="X3" name="X3" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="true">
+      <species metaid="meta_X3" id="X3" name="X3" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="boundary" value="sbml_model"/>
+            <keyValuePair key="IsBoundaryOf" value="sbml_model"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
-      <species metaid="meta_mE1" id="mE1" name="mE1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
-      <species metaid="meta_mE2" id="mE2" name="mE2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="true"/>
+      <species metaid="meta_mE1" id="mE1" name="mE1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_mE2" id="mE2" name="mE2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
     </listOfSpecies>
     <listOfParameters>
       <parameter metaid="meta_bnd_par0" sboTerm="SBO:0000625" id="bnd_par0" value="0" constant="true"/>

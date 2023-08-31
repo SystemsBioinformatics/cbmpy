@@ -2371,8 +2371,7 @@ def sbml_setSpeciesL3(
         s.setMetaId(METAPREFIX + species[spe]['id'])
         s.setName(species[spe]['name'])
         # in theory species are constant at whatever level it is set dX/dT == 0 also there is no way to change them
-        s.setConstant(False)  # TODO (201209) think about this
-        s.setConstant(True) # (2023) don't think too long
+        s.setConstant(False)  # (2023) Non-boundary conditions species cannot be constant
         # if not (species[spe]['charge'] != None or species[spe]['charge'] != ''):
         # s.setCharge(int(species[spe]['charge']))
         if species[spe]['charge'] not in ['', None, 0,]:  # TODO this needs to be considered - bgoli
@@ -2387,10 +2386,10 @@ def sbml_setSpeciesL3(
 
         if species[spe]['boundary']:
             s.setBoundaryCondition(True)
-            # s.setConstant(True)
+            # s.setConstant(True) # this is technically true but may have other impacts so not enabling
         else:
             s.setBoundaryCondition(False)
-            #s.setConstant(True)
+            s.setConstant(False)
         # print species[spe]['value'], type(species[spe]['value'])
         if not numpy.isnan(species[spe]['value']) and species[spe]['value'] not in ['', None,]:
             if substance_units:
