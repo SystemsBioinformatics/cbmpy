@@ -2277,13 +2277,31 @@ def sbml_readKeyValueDataAnnotation(annotations):
     return kvout
 
 
-def sbml_readFBCv3KeyValuePairs(annotations):
+def sbml_readFBCv3KeyValuePairs(fbcp):
     """
     Reads FBCv3 KeyValue pair annotation and returns a dictionary of key:value pairs
 
+    - *fbcp* an FBC plugin
+
     """
-    print("sbml_readFBCv3KeyValuePairs coming to a reader near you.")
-    return {}
+    print("sbml_readFBCv3KeyValuePairs coming to a reader near you.", fbcp)
+
+    kv_base = {}
+    kv_ext = {}
+
+    for k_ in range(fbcp.getNumKeyValuePairs()):
+        kvp = fbcp.getKeyValuePair(k_)
+        key = kvp.getKey()
+        val =  kvp.getValue()
+        kv_base[key] = val
+        kv_ext[key] = {'id' : kvp.getId(),
+                       'name' : kvp.getName(),
+                       'uri' : kvp.getUri(),
+        }
+        print(kv_base)
+        print(kv_ext)
+
+    return kv_base, kv_ext
 
 
 
@@ -3837,10 +3855,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                         node_txt = libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
                     S.annotation = sbml_readCOBRANote(node_txt)
                     # SBSp.unsetNotes()
-                manot = sbml_getCVterms(SBSp, model=False)
-                if manot != None:
-                    S.miriam = manot
-                del manot
+            else:
+                # TODO bgoli deal with v3 extended annotation
+                S.annotation, S.annotation_ext = sbml_readFBCv3KeyValuePairs(SBSpF)
+
+            manot = sbml_getCVterms(SBSp, model=False)
+            if manot != None:
+                S.miriam = manot
+            del manot
+
         setCBSBOterm(SBSp.getSBOTermID(), S)
         S.setNotes(sbml_getNotes(SBSp))
         SPEC.append(S)
@@ -4116,7 +4139,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         size = SBcmp.getSize()
         if numpy.isnan(size) or size == None or size == '':
             size = None
-        volume = SBcmp.getVolume()
+        #volume = SBcmp.getVolume()
         dimensions = SBcmp.getSpatialDimensions()
         if dimensions == 0:
             print('Zero dimension compartment detected: {}'.format(cid))
@@ -4251,7 +4274,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 # print 'Added new upper bound', newId
 
     # TODO bgoli this has to be deprecated for FBC v 2+ by 0.9
-    elif HAVE_FBC and fbc_version == 2:
+    elif HAVE_FBC and fbc_version >= 2:
         timeFBV2 = time.time()
         for bnd in FB_data:
             FB = CBModel.FluxBound(bnd['id'], bnd['reaction'], bnd['operation'], bnd['value'])

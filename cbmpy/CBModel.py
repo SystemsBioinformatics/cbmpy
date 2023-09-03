@@ -106,6 +106,7 @@ class Fbase(object):
     id = None
     name = None
     annotation = None
+    annotation_ext = None
     compartment = None
     miriam = None
     notes = ''
@@ -256,26 +257,23 @@ class Fbase(object):
         # self.notes=notes
         self.notes = notes
 
-    def setAnnotation(self, key, value):
+    def setAnnotation(self, key, value, ext=None):
         """
         Set an objects annotation as a key : value pair.
 
          - *key* the annotation key
          - *value* the annotation value
+         - *ext* a dictionary of extended properties in FBCv3 id, name, uri
 
         """
         assert self.annotation != None, '\nThis class has no annotation field'
         self.annotation.update({key: value})
-        # if type(value) != list:
-        # self.annotation.update({key : value})
-        # elif type(value) == list:
-        # if len(value) == 1:
-        # self.annotation.update({key : value[0]})
-        # else:
-        # value = ['&apos;{}&apos;'.format(str(v).strip()) for v in value]
-        # self.annotation.update({key : '['+', '.join(map(str, value))+']'})
-        ##self.annotation.update({key : str(json.dumps(value))})
-        ##self.annotation.update({key : value})
+        if ext is not None:
+            for e in ext:
+                if e in ['id','name', 'uri']:
+                    self.annotation_ext[e] = ext[e]
+
+
 
     def deleteAnnotation(self, key):
         """
