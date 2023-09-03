@@ -3893,10 +3893,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             'is_fluxbound': False,
         }
         if LOADANNOT:
-            pdict['annotation'] = sbml_readKeyValueDataAnnotation(
-                P.getAnnotationString()
-            )
+            if fbc_version < 3:
+                pdict['annotation'] = sbml_readKeyValueDataAnnotation(P.getAnnotationString())
+            else:
+                # TODO bgoli deal with v3 extended annotation
+                Pfbc = P.getPlugin("fbc")
+                pdict['annotation'], pdict['annotation_ext'] = sbml_readFBCv3KeyValuePairs(Pfbc)
+
             manot = sbml_getCVterms(P, model=False)
+
             if manot != None:
                 pdict['miriam'] = manot
             del manot
@@ -3919,10 +3924,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 'notes': sbml_getNotes(G),
             }
             if LOADANNOT:
-                gdict['annotation'] = sbml_readKeyValueDataAnnotation(
-                    G.getAnnotationString()
-                )
+                if fbc_version < 3:
+                    gdict['annotation'] = sbml_readKeyValueDataAnnotation(G.getAnnotationString())
+                else:
+                    # TODO bgoli deal with v3 extended annotation
+                    Gfbc = G.getPlugin("fbc")
+                    gdict['annotation'], gdict['annotation_ext'] = sbml_readFBCv3KeyValuePairs(Gfbc)
+
                 manot = sbml_getCVterms(G, model=False)
+
                 if manot != None:
                     gdict['miriam'] = manot
                 del manot
@@ -3951,6 +3961,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     'id': '{}_lb'.format(R_id),
                     'parameter': lfbid,
                     'annotation': PARAM_D[lfbid]['annotation'],
+                    'annotation_ext': PARAM_D[ufbid]['annotation_ext'],
                     'miriam': PARAM_D[lfbid]['miriam'],
                     'sbo': PARAM_D[lfbid]['sbo'],
                     'type': 'lower',
@@ -3967,6 +3978,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     'id': '{}_ub'.format(R_id),
                     'parameter': ufbid,
                     'annotation': PARAM_D[ufbid]['annotation'],
+                    'annotation_ext': PARAM_D[ufbid]['annotation_ext'],
                     'miriam': PARAM_D[ufbid]['miriam'],
                     'sbo': PARAM_D[ufbid]['sbo'],
                     'type': 'upper',
@@ -4026,10 +4038,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 GPR_D[GPR_id]['sbo'] = SBgpr.getSBOTermID()
                 GPR_D[GPR_id]['notes'] = sbml_getNotes(SBgpr)
                 if LOADANNOT:
-                    GPR_D[GPR_id]['annotation'] = sbml_readKeyValueDataAnnotation(
-                        SBgpr.getAnnotationString()
-                    )
+                    if fbc_version < 3:
+                        GPR_D[GPR_id]['annotation'] = sbml_readKeyValueDataAnnotation(SBgpr.getAnnotationString())
+                    else:
+                        # TODO bgoli deal with v3 extended annotation
+                        GPRfbc = SBgpr.getPlugin("fbc")
+                        GPR_D[GPR_id]['annotation'], GPR_D[GPR_id]['annotation_ext'] = sbml_readFBCv3KeyValuePairs(GPRfbc)
+
                     manot = sbml_getCVterms(SBgpr, model=False)
+
                     if manot != None:
                         GPR_D[GPR_id]['miriam'] = manot
                     del manot
@@ -4072,9 +4089,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     products[spec2] += float(stoi2)
             if spec2 in boundary_species:
                 EXREAC = True
-        R = CBModel.Reaction(
-            SBRe.getId(), SBRe.getName(), reversible=SBRe.getReversible()
-        )
+        R = CBModel.Reaction(SBRe.getId(), SBRe.getName(), reversible=SBRe.getReversible())
         reactionsReversability.append(SBRe.getReversible())
 
         if USE_NET_STOICH:
@@ -4107,15 +4122,22 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             R.is_exchange = True
         R.annotation = {}
         if LOADANNOT:
-            R.annotation = sbml_readKeyValueDataAnnotation(SBRe.getAnnotationString())
-            # only dig for ancient annotation if not using V2
-            if libsbml.getLibSBMLVersion() >= 51903:
-                node_txt = libsbml.XMLNode.convertXMLNodeToString(SBRe.getNotes())
+            if fbc_version < 3:
+                R.annotation = sbml_readKeyValueDataAnnotation(SBRe.getAnnotationString())
+                # only dig for ancient annotation if not using V2
+                if libsbml.getLibSBMLVersion() >= 51903:
+                    node_txt = libsbml.XMLNode.convertXMLNodeToString(SBRe.getNotes())
+                else:
+                    node_txt = libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
+                if fbc_version < 2 and R.annotation == {}:
+                    R.annotation = sbml_readCOBRANote(node_txt)
             else:
-                node_txt = libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
-            if fbc_version < 2 and R.annotation == {}:
-                R.annotation = sbml_readCOBRANote(node_txt)
+                # TODO bgoli deal with v3 extended annotation
+                #GPRfbc = SBgpr.getPlugin("fbc")
+                R.annotation, R.annotation_ext = sbml_readFBCv3KeyValuePairs(RFBCplg)
+
             manot = sbml_getCVterms(SBRe, model=False)
+
             if manot != None:
                 R.miriam = manot
             del manot
@@ -4149,8 +4171,16 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         C = CBModel.Compartment(cid, name=name, size=size, dimensions=dimensions)
 
         if LOADANNOT:
-            C.annotation = sbml_readKeyValueDataAnnotation(SBcmp.getAnnotationString())
+            # TODO fix annotation
+            if fbc_version < 3:
+                C.annotation = sbml_readKeyValueDataAnnotation(SBcmp.getAnnotationString())
+            else:
+                # TODO bgoli deal with v3 extended annotation
+                Cfbc = SBcmp.getPlugin("fbc")
+                C.annotation, C.annotation_ext = sbml_readFBCv3KeyValuePairs(Cfbc)
+
             manot = sbml_getCVterms(SBcmp, model=False)
+
             if manot != None:
                 C.miriam = manot
             del manot
@@ -4279,6 +4309,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         for bnd in FB_data:
             FB = CBModel.FluxBound(bnd['id'], bnd['reaction'], bnd['operation'], bnd['value'])
             FB.annotation = bnd['annotation']
+            FB.annotation_ext = bnd['annotation_ext']
             FB.miriam = bnd['miriam']
             FB.__param__ = bnd['parameter']
             FB.__sbo_term__ = bnd['sbo']
@@ -4299,6 +4330,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             p_, PARAM_D[p_]['value'], PARAM_D[p_]['name'], PARAM_D[p_]['constant']
         )
         P.annotation = PARAM_D[p_]['annotation']
+        P.annotation_ext = PARAM_D[p_]['annotation_ext']
         P.miriam = PARAM_D[p_]['miriam']
         P.__sbo_term__ = PARAM_D[p_]['sbo']
         P._associations_ = PARAM_D[p_]['association']
