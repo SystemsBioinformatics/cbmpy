@@ -40,4 +40,4 @@ ucmod.setNotes(notes)
 
 # write my first SBML3 FBCv3 file
 
-cbmpy.CBWrite.writeSBML3FBCV3(ucmod, 'the_third.v3.xml', compress_bounds=True)
+cbmpy.CBWrite.writeSBML3FBCV3(ucmod, 'the_third.fbc3.xml', compress_bounds=True)

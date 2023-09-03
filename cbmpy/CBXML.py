@@ -165,6 +165,7 @@ UNIT_DICTIONARY = {
 MODEL_UNITS = {'extent': 'mmol_per_gdw', 'substance': 'mmol_per_gdw', 'time': 'hour'}
 
 SBML_NS = [
+    ('http://www.sbml.org/sbml/level3/version1/fbc/version3', 'L3V1FBC3'),
     ('http://www.sbml.org/sbml/level3/version1/fbc/version2', 'L3V1FBC2'),
     ('http://www.sbml.org/sbml/level3/version1/fbc/version1', 'L3V1FBC1'),
     ('http://www.sbml.org/sbml/level3/version2/fbc/version2', 'L3V2FBC2'),
@@ -2276,6 +2277,17 @@ def sbml_readKeyValueDataAnnotation(annotations):
     return kvout
 
 
+def sbml_readFBCv3KeyValuePairs(annotations):
+    """
+    Reads FBCv3 KeyValue pair annotation and returns a dictionary of key:value pairs
+
+    """
+    print("sbml_readFBCv3KeyValuePairs coming to a reader near you.")
+    return {}
+
+
+
+
 def sbml_setSpeciesL3(
     model,
     fba,
@@ -3515,6 +3527,8 @@ def sbml_fileFindVersion(f):
         msg = 'SBML Level 3 FBC version 1 model detected, loading with cbmpy.readSBML3FBC()'
     elif output == 'L3V1FBC2':
         msg = 'SBML Level 3 FBC version 2 model detected, loading with cbmpy.readSBML3FBC()'
+    elif output == 'L3V1FBC3':
+        msg = 'Awesome! SBML Level 3 FBC version 3 model detected, loading with cbmpy.readSBML3FBC()'
     elif output == 'L2FBA':
         msg = 'SBML Level 2 FAME model detected, loading with cbmpy.readSBML2FBA()'
     elif output == 'COBRA':
@@ -3650,7 +3664,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             )
 
     if 'model_metaclass' in xoptions:
-        raise NotImplementedError
+        raise NotImplementedError("Custom metaclass loading is still being considered.")
         # if os.sys.version_info > (3, 0):
         # CUSTOM_MODEL_METACLASS = True
         # class CBModelExtended(CBModel.Model, metaclass=xoptions['model_metaclass']):
@@ -3672,14 +3686,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     # check for file read errors
     if D.getNumErrors() > 0:
-        print(
-            '***\nDANGER: libSBML reports *{}* read errors, this indicates that this is an invalid SBML file. I will try to load it but cannot guarantee its accuracy.\n***\n'.format(
-                D.getNumErrors()
-            )
-        )
-        errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = sbml_validateDocument(
-            D, docread=True
-        )
+        print('***\nDANGER: libSBML reports *{}* read errors, this indicates that this is an invalid SBML file. I will try to load it but cannot guarantee its accuracy.\n***\n'.format(
+                D.getNumErrors()))
+        errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = sbml_validateDocument(D, docread=True)
         if not DOCUMENT_VALID:
             raise RuntimeError(
                 "\nERROR: Validation has detected an invalid SBML document This is a fatal error.\n"
@@ -3708,9 +3717,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     M = D.getModel()
     assert M != None, "\n\nInvalid SBML file"
-    assert (
-        M.getLevel() >= 3 and M.getVersion() >= 1
-    ), "\nAn SBML L3V1 or greater model is required"
+    assert (M.getLevel() >= 3 and M.getVersion() >= 1), "\nAn SBML L3V1 or greater model is required"
 
     ## we are now going to allow loading non-FBC models (just to be friendly)
     HAVE_FBC = True
@@ -3731,37 +3738,31 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         )
         # return None
 
-    FBCver = 0
+    fbc_version = 0
     FBCstrict = True
     if HAVE_FBC:
-        FBCver = FBCplg.getPackageVersion()
-        if FBCver == 2:
+        fbc_version = FBCplg.getPackageVersion()
+        if fbc_version >= 2:
             FBCstrict = FBCplg.getStrict()
 
-        if FBCver == 2 and not FBCstrict:
+        if fbc_version >= 2 and not FBCstrict:
             print("\nWARNING!!!!\n")
-            print(
-                "This model has fbc:strict=\"false\" this means that is not necessarily a linear program and may contain a number of unsupported features containing aribtrary mathematical expressions such as, InitialAssignments, Rules, Events etc."
-            )
-            print(
-                "\nCBMPy can continue to load this model but will treat it as a convex linear problem and only load what it can interpret."
-            )
+            print("This model has fbc:strict=\"false\" this means that is not necessarily a linear program and may contain a number of unsupported features containing aribtrary mathematical expressions such as, InitialAssignments, Rules, Events etc.")
+            print("\nCBMPy can continue to load this model but will treat it as a convex linear problem and only load what it can interpret.")
             print("\nWARNING!!!!\n")
-            if not raw_input('\nDo you wish to continue (Y/N): ') == 'Y':
+            if not input('\nDo you wish to continue (Y/N): ') == 'Y':
                 os.sys.exit(-1)
 
     # print some model information
-    print('FBC version: {}'.format(FBCver))
+    print('FBC version: {}'.format(fbc_version))
     print('M.getNumReactions: {}'.format(M.getNumReactions()))
     print('M.getNumSpecies: {}'.format(M.getNumSpecies()))
     if HAVE_FBC:
         print('FBC.getNumObjectives: {}'.format(FBCplg.getNumObjectives()))
-        if FBCver == 1:
-            print(
-                'FBC.getNumGeneAssociations: {}'.format(FBCplg.getNumGeneAssociations())
-            )
+        if fbc_version == 1:
+            print('FBC.getNumGeneAssociations: {}'.format(FBCplg.getNumGeneAssociations()))
             print('FBC.getNumFluxBounds: {}'.format(FBCplg.getNumFluxBounds()))
-        elif FBCver == 2:
+        elif fbc_version >= 2:
             print('FBC.getNumParameters: {}'.format(M.getNumParameters()))
             print('FBC.getNumGeneProducts: {}'.format(FBCplg.getNumGeneProducts()))
 
@@ -3774,6 +3775,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     # model_description = xml_stripTags(model_description).strip()
     model_description = model_description.strip()
 
+    # TODO bgoli this will need to be refactored and scrubbed at some point
     __HAVE_FBA_ANOT_OBJ__ = True
     __HAVE_FBA_ANOT_BNDS__ = True
     __HAVE_FBA_ANOT_GENEASS__ = True
@@ -3807,7 +3809,10 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             SBSpF = SBSp.getPlugin("fbc")
             if SBSpF != None:
                 CF = SBSpF.getChemicalFormula()
-                CH = int(SBSpF.getCharge())
+                if fbc_version < 3:
+                    CH = int(SBSpF.getCharge())
+                else:
+                    CH = float(SBSpF.getCharge())
             # print CF, CH
 
         NM = SBSp.getName()  # get name
@@ -3823,18 +3828,19 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         )
         S.annotation = {}
         if LOADANNOT:
-            S.annotation = sbml_readKeyValueDataAnnotation(SBSp.getAnnotationString())
-            if S.annotation == {}:
-                if libsbml.getLibSBMLVersion() >= 51903:
-                    node_txt = libsbml.XMLNode.convertXMLNodeToString(SBSp.getNotes())
-                else:
-                    node_txt = libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
-                S.annotation = sbml_readCOBRANote(node_txt)
-                # SBSp.unsetNotes()
-            manot = sbml_getCVterms(SBSp, model=False)
-            if manot != None:
-                S.miriam = manot
-            del manot
+            if fbc_version < 3:
+                S.annotation = sbml_readKeyValueDataAnnotation(SBSp.getAnnotationString())
+                if S.annotation == {}:
+                    if libsbml.getLibSBMLVersion() >= 51903:
+                        node_txt = libsbml.XMLNode.convertXMLNodeToString(SBSp.getNotes())
+                    else:
+                        node_txt = libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
+                    S.annotation = sbml_readCOBRANote(node_txt)
+                    # SBSp.unsetNotes()
+                manot = sbml_getCVterms(SBSp, model=False)
+                if manot != None:
+                    S.miriam = manot
+                del manot
         setCBSBOterm(SBSp.getSBOTermID(), S)
         S.setNotes(sbml_getNotes(SBSp))
         SPEC.append(S)
@@ -3874,7 +3880,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         PARAM_D[pid] = pdict
 
     GENE_D = {}
-    if HAVE_FBC and FBCver == 2:
+    if HAVE_FBC and fbc_version >= 2:
         for g_ in range(FBCplg.getNumGeneProducts()):
             G = FBCplg.getGeneProduct(g_)
             gid = G.getId()
@@ -3909,7 +3915,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     for r in range(M.getNumReactions()):
         SBRe = M.getReaction(r)
         R_id = SBRe.getId()
-        if HAVE_FBC and FBCver == 2:
+        if HAVE_FBC and fbc_version >= 2:
             # deal with new style fluxbounds
             RFBCplg = SBRe.getPlugin('fbc')
             lfbid = RFBCplg.getLowerFluxBound()
@@ -4084,7 +4090,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 node_txt = libsbml.XMLNode.convertXMLNodeToString(SBRe.getNotes())
             else:
                 node_txt = libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
-            if FBCver < 2 and R.annotation == {}:
+            if fbc_version < 2 and R.annotation == {}:
                 R.annotation = sbml_readCOBRANote(node_txt)
             manot = sbml_getCVterms(SBRe, model=False)
             if manot != None:
@@ -4135,7 +4141,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     time0 = time.time()
 
     # extract fluxbounds
-    if HAVE_FBC and FBCver == 1:
+    if HAVE_FBC and fbc_version == 1:
         FB_data = []
         for fb_ in range(FBCplg.getNumFluxBounds()):
             SBFb = FBCplg.getFluxBound(fb_)
@@ -4160,7 +4166,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     UboundReactionIDs = []
     AboundReactionIDs = []
     DefinedReactionIDs = []
-    if HAVE_FBC and FBCver == 1:
+    if HAVE_FBC and fbc_version == 1:
         cntr = 0
         for c in FB_data:
             if 'id' in c:
@@ -4243,12 +4249,12 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 )
                 ubcntr += 1
                 # print 'Added new upper bound', newId
-    elif HAVE_FBC and FBCver == 2:
+
+    # TODO bgoli this has to be deprecated for FBC v 2+ by 0.9
+    elif HAVE_FBC and fbc_version == 2:
         timeFBV2 = time.time()
         for bnd in FB_data:
-            FB = CBModel.FluxBound(
-                bnd['id'], bnd['reaction'], bnd['operation'], bnd['value']
-            )
+            FB = CBModel.FluxBound(bnd['id'], bnd['reaction'], bnd['operation'], bnd['value'])
             FB.annotation = bnd['annotation']
             FB.miriam = bnd['miriam']
             FB.__param__ = bnd['parameter']
@@ -4284,7 +4290,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     # GPRASSOC = {}
     if HAVE_FBC and LOADGENES:
-        if FBCver == 1 and __HAVE_FBA_ANOT_GENEASS__:
+        if fbc_version == 1 and __HAVE_FBA_ANOT_GENEASS__:
             SBGPR = FBCplg.getListOfGeneAssociations()
             for g_ in SBGPR:
                 gprid = g_.getId()
@@ -4314,7 +4320,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     fm.setNotes(model_description)
     fm.annotation = sbml_readKeyValueDataAnnotation(M.getAnnotationString())
     fm.__FBC_STRICT__ = FBCstrict
-    fm.__FBC_VERSION__ = FBCver
+    fm.__FBC_VERSION__ = fbc_version
 
     # try extract objective functions
     OBJFUNCout = []
@@ -4442,7 +4448,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     for g_ in GENE_D:
         gene_labels[GENE_D[g_]['id']] = GENE_D[g_]['label']
 
-    if FBCver == 1 and LOADGENES:
+    if fbc_version == 1 and LOADGENES:
         for g_ in GPR_D:
             if 'reaction' in GPR_D[g_] and GPR_D[g_]['gpr_tree'] is not None:
 
@@ -4460,7 +4466,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 if gpr is not None:
                     gpr.setTree(GPR_D[g_]['gpr_tree'])
         fm.__updateGeneIdx__()
-    elif FBCver == 2 and LOADGENES:
+    elif fbc_version >= 2 and LOADGENES:
         # note we may want to add branches here for using indexes etc etc
         non_gpr_genes = []
         for g_ in GPR_D:

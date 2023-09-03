@@ -5704,7 +5704,7 @@ class Species(Fbase):
          - **name** [default=''] the species name
          - **value** [default=nan] the value *not currently used*
          - **compartment** [default=None] the compartment the species is located in
-         - **charge** [default=None] the species charge
+         - **charge** [default=None] the species charge, from v3 a float
          - **chemFormula** [default=None] the chemical formula
 
         """

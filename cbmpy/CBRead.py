@@ -120,7 +120,9 @@ def loadModel(sbmlfile):
         return None
 
     try:
-        if res == 'L3V1FBC2':
+        if res == 'L3V1FBC3':
+            mod = readSBML3FBC(sbmlfile, scan_notes_gpr=False, xoptions={'validate': False, 'readcobra': False})
+        elif res == 'L3V1FBC2':
             mod = readSBML3FBC(sbmlfile)
         elif res == 'L3V1FBC1':
             mod = readSBML3FBC(sbmlfile)
@@ -176,10 +178,9 @@ def readSBML3FBC(
     else:
         xmod = CBXML.sbml_readSBML3FBC(fname, work_dir, False, xoptions)
     if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
-        print(
-            'INFO: no standard gene encoding detected, attempting to load from annotations.'
-        )
+        print('INFO: no standard gene encoding detected, attempting to load from annotations ...')
         xmod.createGeneAssociationsFromAnnotations()
+        print('INFO: No gene associations found in model.')
     return xmod
 
 
