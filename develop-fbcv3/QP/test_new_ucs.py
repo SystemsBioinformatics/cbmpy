@@ -5,13 +5,20 @@ ucmod = cbmpy.readSBML3FBC('test_user_def_rc.xml')
 ucmod.importUserConstraints('test_user_def_rc.xml.user_constraints.json')
 print(ucmod.user_constraints)
 
+ucmod.getActiveObjective().getFluxObjectives()[0].setType('quadratic')
 
-for r in ucmod.reactions:
+for r in ucmod.reactions[:3]:
     r.setNotes('<p>Finally <strong>notes</strong> are free to be notes!</p>')
 
 for s in ucmod.species:
     if s.is_boundary:
-        s.setAnnotation('IsBoundaryOf', ucmod.getId())
+        s.setAnnotation('secret', s.getId())
+
+for c in ucmod.compartments:
+    c.setAnnotation('secret', c.getId())
+
+for p in ucmod.parameters:
+    p.setAnnotation('secret', p.getId())
 
 
 # convert to new FBCv3 structures

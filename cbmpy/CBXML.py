@@ -107,10 +107,33 @@ try:
                 libsbml.SBML_FBC_GENEPRODUCTREF: 'geneproductref',
             }
         )
+        FBC3_VARIABLE_TYPES = {libsbml.FBC_VARIABLE_TYPE_LINEAR : 'linear',
+                              libsbml.FBC_VARIABLE_TYPE_QUADRATIC : 'quadratic',
+                              libsbml.FBC_VARIABLE_TYPE_INVALID : 'invalid',
+                              'linear' : libsbml.FBC_VARIABLE_TYPE_LINEAR,
+                              'quadratic' : libsbml.FBC_VARIABLE_TYPE_QUADRATIC,
+                              'invalid' : libsbml.FBC_VARIABLE_TYPE_INVALID
+                              }
     except AttributeError:
         print(
             '\nWARNING: No or limited FBC support limited! Please update your libSBML to the latest version.\n'
         )
+
+    try:
+        FBC3_VARIABLE_TYPES = {libsbml.FBC_VARIABLE_TYPE_LINEAR : 'linear',
+                              libsbml.FBC_VARIABLE_TYPE_QUADRATIC : 'quadratic',
+                              libsbml.FBC_VARIABLE_TYPE_INVALID : 'invalid',
+                              'linear' : libsbml.FBC_VARIABLE_TYPE_LINEAR,
+                              'quadratic' : libsbml.FBC_VARIABLE_TYPE_QUADRATIC,
+                              'invalid' : libsbml.FBC_VARIABLE_TYPE_INVALID
+                              }
+    except AttributeError:
+        print(
+            '\nWARNING: Your libSBML does not contain FBCv3 support, please upgrade.'
+        )
+
+
+
 
 except ImportError:
     print(
@@ -1712,10 +1735,13 @@ class FBCconnect(object):
                 "\nCannot interpret bound %s with value %s" % (fid, value)
             )
 
-    FBC3_VARIABLE_TYPES = {'linear' : libsbml.FBC_VARIABLE_TYPE_LINEAR,
-                          'quadratic' : libsbml.FBC_VARIABLE_TYPE_QUADRATIC,
-                          'invalid' : libsbml.FBC_VARIABLE_TYPE_INVALID
-                          }
+    #FBC3_VARIABLE_TYPES = {libsbml.FBC_VARIABLE_TYPE_LINEAR : 'linear',
+                          #libsbml.FBC_VARIABLE_TYPE_QUADRATIC : 'quadratic',
+                          #libsbml.FBC_VARIABLE_TYPE_INVALID : 'invalid',
+                          #'linear' : libsbml.FBC_VARIABLE_TYPE_LINEAR,
+                          #'quadratic' : libsbml.FBC_VARIABLE_TYPE_QUADRATIC,
+                          #'invalid' : libsbml.FBC_VARIABLE_TYPE_INVALID
+                          #}
 
 
     def createObjective(self, oid, osense, flux_objs, name=None, active=True):
@@ -1752,7 +1778,8 @@ class FBCconnect(object):
                 if fo_[3] is None:
                     FO.setVariableType('linear')
                 else:
-                    self.FBC3_VARIABLE_TYPES[fo_[3]]
+                    print('INFO: creating a type', fo_[3], 'fluxobjective')
+                    FO.setVariableType(FBC3_VARIABLE_TYPES[fo_[3]])
 
 
     def createGeneAssociationV1(self, rid, assoc, gprid=None):
@@ -2115,7 +2142,7 @@ class CBMtoSBML3(FBCconnect):
                 #self.model.addParameter(VAR)
                 UCFO.setVariable(f.getVariable())
                 UCFO.setCoefficient(f.getCoefficient())
-                UCFO.setVariableType(self.FBC3_VARIABLE_TYPES[f.getType()])
+                UCFO.setVariableType(FBC3_VARIABLE_TYPES[f.getType()])
 
 
 
@@ -2862,7 +2889,6 @@ def sbml_createAssociationFromTreeV2(tree, out):
             ref.setGeneProduct(c)
     return out
 
-
 def sbml_writeSBML3FBC(
     fba,
     fname,
@@ -2891,7 +2917,7 @@ def sbml_writeSBML3FBC(
      - *add_cobra_annot* [default=True] add COBRA <notes> annotation
      - *xoptions* extended options
 
-       - *fbc_version* [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)
+       - *fbc_version* [default=2] write SBML3FBC using version 1 (2013) or version 2 (2015) oe version (2023)
        - *validate* [default=False] validate the output SBML file
        - *compress_bounds* [default=False] try compress output flux bound parameters
        - *zip_model* [default=False] compress the model using ZIP encoding
@@ -3887,6 +3913,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             'sbo': P.getSBOTermID(),
             'name': P.getName(),
             'annotation': None,
+            'annotation_ext': None,
             'miriam': None,
             'association': [],
             'notes': sbml_getNotes(P),
@@ -3961,7 +3988,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     'id': '{}_lb'.format(R_id),
                     'parameter': lfbid,
                     'annotation': PARAM_D[lfbid]['annotation'],
-                    'annotation_ext': PARAM_D[ufbid]['annotation_ext'],
+                    'annotation_ext': PARAM_D[lfbid]['annotation_ext'],
                     'miriam': PARAM_D[lfbid]['miriam'],
                     'sbo': PARAM_D[lfbid]['sbo'],
                     'type': 'lower',
@@ -4403,9 +4430,10 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     oid = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
                 else:
                     oid = SBOf.getId()
-                Oflx = CBModel.FluxObjective(
-                    oid, SBOfl.getReaction(), float(SBOfl.getCoefficient())
-                )
+                if fbc_version < 3:
+                    Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()))
+                else:
+                    Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()), SBOfl.getType())
                 Oflx.setName(SBOfl.getName())
                 OF.addFluxObjective(Oflx)
             OBJFUNCout.append(OF)
