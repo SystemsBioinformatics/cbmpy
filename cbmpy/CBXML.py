@@ -4433,7 +4433,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 if fbc_version < 3:
                     Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()))
                 else:
-                    Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()), SBOfl.getType())
+                    Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()), \
+                                                 FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
+                    print('vtype', Oflx.getType())
                 Oflx.setName(SBOfl.getName())
                 OF.addFluxObjective(Oflx)
             OBJFUNCout.append(OF)

@@ -1038,7 +1038,7 @@ class Model(Fbase):
             for o in self.getObjectiveIds():
                 self.deleteObjective(o)
         obj = Objective(new_obj_id, osense)
-        FO = FluxObjective('{}_{}_fluxobj'.format(new_obj_id, rid), rid, coefficient)
+        FO = FluxObjective('{}_{}_fluxobj'.format(new_obj_id, rid), rid, coefficient, 'linear')
         self.addObjective(obj, active=active)
         obj.addFluxObjective(FO)
 
@@ -3949,10 +3949,10 @@ class Objective(Fbase):
 
     def getFluxObjectiveData(self):
         """
-        Returns a list of ObjectiveFunction components as (coefficient, flux) pairs
+        Returns a list of ObjectiveFunction components as (coefficient, flux, type) pairs
 
         """
-        return [(f.coefficient, f.reaction) for f in self.flux_objectives]
+        return [(f.coefficient, f.reaction, f.ctype) for f in self.flux_objectives]
 
     def getFluxObjective(self, foid):
         """
@@ -4010,6 +4010,7 @@ class FluxObjective(Fbase):
     def __init__(self, pid, reaction, coefficient=1, ctype='linear'):
         pid = str(pid)
         self.setId(pid)
+        self.ctype = ctype
 
         self.reaction = reaction
         self.coefficient = coefficient
@@ -4029,16 +4030,14 @@ class FluxObjective(Fbase):
     def setCoefficient(self, coefficient):
         self.coefficient = coefficient
 
+    def getType(self):
+        return self.ctype
+
     def setType(self, ctype):
         if ctype in self.ctypes:
             self.ctype = ctype
         else:
             raise TypeError('FluxObjective type must be one of:' + str(self.ctypes))
-
-    def getType(self):
-        return self.ctype
-
-
 
 class UserDefinedConstraint(Fbase):
     """
