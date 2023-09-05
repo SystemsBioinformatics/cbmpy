@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SBML created with CBMPy (0.8.7) on Tue, 05 Sep 2023 16:08:14 -->
+<!-- SBML created with CBMPy (0.8.7) on Tue, 05 Sep 2023 15:55:42 -->
 <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version3" xmlns:html="http://www.w3.org/1999/xhtml" level="3" version="1" fbc:required="false">
   <model metaid="meta_sbml_model" id="sbml_model" substanceUnits="mmol_per_gdw" timeUnits="hour" extentUnits="mmol_per_gdw" fbc:strict="true">
     <notes>
@@ -45,13 +45,7 @@
       </unitDefinition>
     </listOfUnitDefinitions>
     <listOfCompartments>
-      <compartment metaid="meta_Cell" id="Cell" name="Cell" spatialDimensions="3" size="1" units="dimensionless" constant="true">
-        <annotation>
-          <listOfKeyValueData xmlns="http://pysces.sourceforge.net/KeyValueData">
-            <data id="secret" value="Cell"/>
-          </listOfKeyValueData>
-        </annotation>
-      </compartment>
+      <compartment metaid="meta_Cell" id="Cell" name="Cell" spatialDimensions="3" size="1" units="dimensionless" constant="true"/>
     </listOfCompartments>
     <listOfSpecies>
       <species metaid="meta_A" id="A" name="A" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
@@ -624,7 +618,7 @@
     <fbc:listOfObjectives fbc:activeObjective="objMaxJ25">
       <fbc:objective fbc:id="objMaxJ25" fbc:type="maximize">
         <fbc:listOfFluxObjectives>
-          <fbc:fluxObjective fbc:id="objMaxJ25_R25_flobj" fbc:reaction="R25" fbc:coefficient="1" fbc:variableType="quadratic"/>
+          <fbc:fluxObjective fbc:id="objMaxJ25" fbc:reaction="R25" fbc:coefficient="1" fbc:variableType="quadratic"/>
         </fbc:listOfFluxObjectives>
       </fbc:objective>
     </fbc:listOfObjectives>

@@ -4211,6 +4211,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             if manot != None:
                 C.miriam = manot
             del manot
+
         setCBSBOterm(SBcmp.getSBOTermID(), C)
         C.setNotes(sbml_getNotes(SBcmp))
         COMP.append(C)
@@ -4353,9 +4354,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     # Create parameters
     PARAM = []
     for p_ in PARAM_D:
-        P = CBModel.Parameter(
-            p_, PARAM_D[p_]['value'], PARAM_D[p_]['name'], PARAM_D[p_]['constant']
-        )
+        P = CBModel.Parameter(p_, PARAM_D[p_]['value'], PARAM_D[p_]['name'],\
+                              PARAM_D[p_]['constant'])
         P.annotation = PARAM_D[p_]['annotation']
         P.annotation_ext = PARAM_D[p_]['annotation_ext']
         P.miriam = PARAM_D[p_]['miriam']
@@ -4400,7 +4400,14 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         fm.setMetaId('meta_{}'.format(model_id))
     fm.name = model_name
     fm.setNotes(model_description)
-    fm.annotation = sbml_readKeyValueDataAnnotation(M.getAnnotationString())
+    if fbc_version < 3:
+        fm.annotation = sbml_readKeyValueDataAnnotation(M.getAnnotationString())
+        fm.annotation_ext = {}
+    else:
+        # TODO bgoli deal with v3 extended annotation
+        # GPRfbc = SBgpr.getPlugin("fbc")
+        fm.annotation, fm.annotation_ext = sbml_readFBCv3KeyValuePairs(FBCplg)
+
     fm.__FBC_STRICT__ = FBCstrict
     fm.__FBC_VERSION__ = fbc_version
 
