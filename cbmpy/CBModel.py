@@ -3994,6 +3994,30 @@ class Objective(Fbase):
         """
         self.value = value
 
+    def getLinearVariables(self):
+        """
+        Returns a list of linear variable flux objective objects
+
+        """
+        out = []
+        for fo in self.flux_objectives:
+            if fo.getType() is None or fo.getType() == 'linear':
+                out.append(fo)
+        return out
+
+    def getQuadraticVariables(self):
+        """
+        Returns a list of quadratic variable flux objective objects
+
+        """
+        out = []
+        for fo in self.flux_objectives:
+            if fo.getType() == 'quadratic':
+                out.append(fo)
+        return out
+
+
+
 
 class FluxObjective(Fbase):
     """
@@ -4038,6 +4062,7 @@ class FluxObjective(Fbase):
             self.ctype = ctype
         else:
             raise TypeError('FluxObjective type must be one of:' + str(self.ctypes))
+
 
 class UserDefinedConstraint(Fbase):
     """
@@ -5371,7 +5396,8 @@ class Reaction(Fbase):
 
         """
         if self.__lower_bound_id__ is not None:
-            print('Using getLowerBound shortcut')
+            if __DEBUG__:
+                print('Using getLowerBound shortcut')
             return self.getModel().getObject(self.__lower_bound_id__).getValue()
         else:
             out = None
@@ -5400,7 +5426,8 @@ class Reaction(Fbase):
 
         """
         if self.__upper_bound_id__ is not None:
-            print('Using getUpperBound shortcut')
+            if __DEBUG__:
+                print('Using getUpperBound shortcut')
             return self.getModel().getObject(self.__upper_bound_id__).getValue()
         else:
             out = None

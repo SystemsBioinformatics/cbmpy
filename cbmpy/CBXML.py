@@ -1929,8 +1929,9 @@ class CBMtoSBML3(FBCconnect):
             bounds = {}
             shared_values = {}
             for r_ in self.fba.reactions:
-                print(r_.getLowerBound())
-                print(r_.getUpperBound())
+                if __DEBUG__:
+                    print('clb', r_.getLowerBound())
+                    print('cub', r_.getUpperBound())
                 lb = round(r_.getLowerBound(), sig_dig)
                 ub = round(r_.getUpperBound(), sig_dig)
                 rid = r_.getId()
@@ -2262,7 +2263,8 @@ def sbml_writeKeyValueDataAnnotation(annotations):
         # annoSTR += ' <data id="%s" type="%s" value="%s"/>\n' % (Kfix, Ktype, Kval)
         annoSTR += ' <data id="{}" value="{}"/>\n'.format(Kfix, Kval)
     annoSTR += '</listOfKeyValueData>\n'
-    print(annoSTR)
+    if __DEBUG__:
+        print(annoSTR)
     return annoSTR
 
 
@@ -2311,7 +2313,7 @@ def sbml_readFBCv3KeyValuePairs(fbcp):
     - *fbcp* an FBC plugin
 
     """
-    print("sbml_readFBCv3KeyValuePairs coming to a reader near you.", fbcp)
+    #print("sbml_readFBCv3KeyValuePairs coming to a reader near you.", fbcp)
 
     kv_base = {}
     kv_ext = {}
@@ -2325,8 +2327,9 @@ def sbml_readFBCv3KeyValuePairs(fbcp):
                        'name' : kvp.getName(),
                        'uri' : kvp.getUri(),
         }
-        print(kv_base)
-        print(kv_ext)
+        if __DEBUG__:
+            print(kv_base)
+            print(kv_ext)
 
     return kv_base, kv_ext
 
@@ -4442,7 +4445,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 else:
                     Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()), \
                                                  FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
-                    print('vtype', Oflx.getType())
+                    if __DEBUG__:
+                        print('vtype', Oflx.getType())
                 Oflx.setName(SBOfl.getName())
                 OF.addFluxObjective(Oflx)
             OBJFUNCout.append(OF)
