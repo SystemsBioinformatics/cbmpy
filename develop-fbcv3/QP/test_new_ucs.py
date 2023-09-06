@@ -20,11 +20,22 @@ for c in ucmod.compartments:
 for p in ucmod.parameters:
     p.setAnnotation('secret', p.getId())
 
+for o in ucmod.objectives:
+    o.setAnnotation('secret', o.getId())
+    for fo in o.flux_objectives:
+        fo.setAnnotation('secret', fo.getId())
 
 # convert to new FBCv3 structures
 ucmod.convertUserConstraintsToUserDefinedConstraints()
 print(ucmod.user_constraints, ucmod.user_defined_constraints)
 print(list(ucmod.__global_id__.keys()))
+
+
+for uc in ucmod.user_defined_constraints:
+    uc.setAnnotation('secret', uc.getId())
+    for var in uc.constraint_components:
+        var.setAnnotation('secret', var.getId())
+
 
 notes = """
         <html:p>

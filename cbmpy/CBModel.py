@@ -3825,6 +3825,7 @@ class Objective(Fbase):
     value = None
     solution = None
 
+
     def __init__(self, pid, operation):
         pid = str(pid)
         self.setId(pid)
@@ -3838,6 +3839,8 @@ class Objective(Fbase):
         self.flux_objectives = []
         self.compartment = None
         self.__delattr__('compartment')
+        self.annotation = {}
+        self.annotation_ext = {}
 
     def setOperation(self, operation):
         """
@@ -4083,6 +4086,8 @@ class UserDefinedConstraint(Fbase):
         self.constraint_components = []
         self.compartment = None
         self.__delattr__('compartment')
+        self.annotation = {}
+        self.annotation_ext = {}
 
     def setLowerBound(self, bnd):
         self.lb = bnd
