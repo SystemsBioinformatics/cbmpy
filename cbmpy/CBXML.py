@@ -4201,7 +4201,6 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         C = CBModel.Compartment(cid, name=name, size=size, dimensions=dimensions)
 
         if LOADANNOT:
-            # TODO fix annotation
             if fbc_version < 3:
                 C.annotation = sbml_readKeyValueDataAnnotation(SBcmp.getAnnotationString())
             else:
@@ -4223,6 +4222,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if DEBUG:
         print('Compartment load: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
+
 
     # extract fluxbounds
     if HAVE_FBC and fbc_version == 1:
