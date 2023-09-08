@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SBML created with CBMPy (0.8.7) on Thu, 07 Sep 2023 13:14:12 -->
+<!-- SBML created with CBMPy (0.8.7) on Fri, 08 Sep 2023 12:46:02 -->
 <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version3" xmlns:html="http://www.w3.org/1999/xhtml" level="3" version="1" fbc:required="false">
   <model metaid="meta_sbml_model" id="sbml_model" substanceUnits="mmol_per_gdw" timeUnits="hour" extentUnits="mmol_per_gdw" fbc:strict="true">
     <notes>
@@ -100,6 +100,12 @@
       <parameter metaid="meta_bnd_par1" sboTerm="SBO:0000625" id="bnd_par1" value="1" constant="true"/>
       <parameter metaid="meta_bnd_par2" sboTerm="SBO:0000625" id="bnd_par2" value="1000" constant="true"/>
       <parameter metaid="meta_bnd_par3" sboTerm="SBO:0000625" id="bnd_par3" value="-1000" constant="true"/>
+      <parameter metaid="meta_udcc_cons1_lb" id="udcc_cons1_lb" name="udcc_cons1_lb" value="0.8" constant="true"/>
+      <parameter metaid="meta_udcc_cons1_ub" id="udcc_cons1_ub" name="udcc_cons1_ub" value="0.8" constant="true"/>
+      <parameter metaid="meta_udcc_cons2_lb" id="udcc_cons2_lb" name="udcc_cons2_lb" value="0.1" constant="true"/>
+      <parameter metaid="meta_udcc_cons2_ub" id="udcc_cons2_ub" name="udcc_cons2_ub" value="INF" constant="true"/>
+      <parameter metaid="meta_udcc_cons3_lb" id="udcc_cons3_lb" name="udcc_cons3_lb" value="0.1" constant="true"/>
+      <parameter metaid="meta_udcc_cons3_ub" id="udcc_cons3_ub" name="udcc_cons3_ub" value="INF" constant="true"/>
     </listOfParameters>
     <listOfReactions>
       <reaction metaid="meta_R01" id="R01" name="R01" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par1">
@@ -628,5 +634,23 @@
         </fbc:listOfFluxObjectives>
       </fbc:objective>
     </fbc:listOfObjectives>
+    <fbc:listOfUserDefinedConstraints>
+      <fbc:userDefinedConstraint fbc:id="cons1" fbc:lowerBound="udcc_cons1_lb" fbc:upperBound="udcc_cons1_ub">
+        <fbc:listOfUserDefinedConstraintComponents>
+          <fbc:userDefinedConstraintComponent fbc:id="userdcc_cons1_R16" fbc:coefficient="1" fbc:variable="R16" fbc:variableType="linear"/>
+          <fbc:userDefinedConstraintComponent fbc:id="userdcc_cons1_R15" fbc:coefficient="1" fbc:variable="R15" fbc:variableType="linear"/>
+        </fbc:listOfUserDefinedConstraintComponents>
+      </fbc:userDefinedConstraint>
+      <fbc:userDefinedConstraint fbc:id="cons2" fbc:lowerBound="udcc_cons2_lb" fbc:upperBound="udcc_cons2_ub">
+        <fbc:listOfUserDefinedConstraintComponents>
+          <fbc:userDefinedConstraintComponent fbc:id="userdcc_cons2_R15" fbc:coefficient="1" fbc:variable="R15" fbc:variableType="linear"/>
+        </fbc:listOfUserDefinedConstraintComponents>
+      </fbc:userDefinedConstraint>
+      <fbc:userDefinedConstraint fbc:id="cons3" fbc:lowerBound="udcc_cons3_lb" fbc:upperBound="udcc_cons3_ub">
+        <fbc:listOfUserDefinedConstraintComponents>
+          <fbc:userDefinedConstraintComponent fbc:id="userdcc_cons3_R14" fbc:coefficient="1" fbc:variable="R14" fbc:variableType="linear"/>
+        </fbc:listOfUserDefinedConstraintComponents>
+      </fbc:userDefinedConstraint>
+    </fbc:listOfUserDefinedConstraints>
   </model>
 </sbml>
