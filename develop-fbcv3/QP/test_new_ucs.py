@@ -17,9 +17,6 @@ for s in ucmod.species:
 for c in ucmod.compartments:
     c.setAnnotation('secret', c.getId())
 
-for p in ucmod.parameters:
-    p.setAnnotation('secret', p.getId())
-
 for o in ucmod.objectives:
     o.setAnnotation('secret', o.getId())
     for fo in o.flux_objectives:
@@ -35,6 +32,19 @@ for uc in ucmod.user_defined_constraints:
     uc.setAnnotation('secret', uc.getId())
     for var in uc.constraint_components:
         var.setAnnotation('secret', var.getId())
+
+
+P1 = ucmod.createParameter('mypar1', 1)
+P1.setAnnotation('secret', 'mypar1')
+P2 = ucmod.createParameter('mypar2', 2)
+P2.setAnnotation('secret', 'mypar2')
+ucmod.addParameter(P1)
+ucmod.addParameter(P2)
+
+
+
+for p in ucmod.parameters:
+    p.setAnnotation('secret', p.getId())
 
 
 notes = """

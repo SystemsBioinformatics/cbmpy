@@ -2146,6 +2146,12 @@ class CBMtoSBML3(FBCconnect):
                 UC.setUpperBound(pubid)
                 self.model.getParameter(pubid).setValue(u.getUpperBound())
 
+            if len(u.annotation) > 0:
+                if add_cbmpy_anno:
+                    if self.fbcversion >= 3:
+                        # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                        sbml_setFBCv3KeyValuePairs(UC.getPlugin('fbc'), u.annotation)
+
 
             for f in u.constraint_components:
                 UCFO = UC.createUserDefinedConstraintComponent()
@@ -2157,6 +2163,12 @@ class CBMtoSBML3(FBCconnect):
                 UCFO.setVariable(f.getVariable())
                 UCFO.setCoefficient(f.getCoefficient())
                 UCFO.setVariableType(FBC3_VARIABLE_TYPES[f.getType()])
+
+                if len(f.annotation) > 0:
+                    if add_cbmpy_anno:
+                        if self.fbcversion >= 3:
+                            # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                            sbml_setFBCv3KeyValuePairs(UCFO.getPlugin('fbc'), f.annotation)
 
 
 
@@ -2172,19 +2184,27 @@ class CBMtoSBML3(FBCconnect):
         par = self.model.createParameter()
         par.setId(param.getId())
         par.setMetaId('meta_{}'.format(param.getId()))
-        par.setName(param.getName())
+        if param.getName() is not None:
+            print(param.getName())
+            par.setName(param.getName())
         par.setValue(param.getValue())
         par.setConstant(True)
         if add_cbmpy_anno:
             if param.getSBOterm() is not None:
                 par.setSBOTerm(param.getSBOterm())
-            if len(param.annotation) > 0:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(param.annotation)
-                annores = par.appendAnnotation(annoSTRnew)
             if param.miriam != None:
                 miriam = param.miriam.getAllMIRIAMUris()
                 if len(miriam) > 0:
                     sbml_setCVterms(param, miriam, model=False)
+            if self.fbcversion < 3:
+                if len(param.annotation) > 0:
+                    annoSTRnew = sbml_writeKeyValueDataAnnotation(param.annotation)
+                    annores = par.appendAnnotation(annoSTRnew)
+            elif self.fbcversion >= 3:
+                if len(param.annotation) > 0:
+                    # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                    sbml_setFBCv3KeyValuePairs(par.getPlugin('fbc'), param.annotation)
+
         return par
 
     def createFbParameterV2(self, bnd, add_cbmpy_anno=True):
@@ -2194,7 +2214,7 @@ class CBMtoSBML3(FBCconnect):
          - *bnd* object
 
         """
-        # print('createFbParameterV2', bnd.getId())
+        #print('createFbParameterV2', bnd.getId(), add_cbmpy_anno)
 
         par = self.model.createParameter()
         bid = '{}_{}'.format(bnd.getReactionId(), bnd.getType())

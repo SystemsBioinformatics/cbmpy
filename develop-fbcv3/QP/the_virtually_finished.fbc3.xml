@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SBML created with CBMPy (0.8.7) on Sun, 10 Sep 2023 17:12:03 -->
+<!-- SBML created with CBMPy (0.8.7) on Sun, 10 Sep 2023 17:48:52 -->
 <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version3" xmlns:html="http://www.w3.org/1999/xhtml" level="3" version="1" fbc:required="false">
   <model metaid="meta_sbml_model" id="sbml_model" substanceUnits="mmol_per_gdw" timeUnits="hour" extentUnits="mmol_per_gdw" fbc:strict="true">
     <notes>
@@ -631,18 +631,18 @@
     <fbc:listOfUserDefinedConstraints>
       <fbc:userDefinedConstraint fbc:id="cons1" fbc:lowerBound="udcc_cons1_lb" fbc:upperBound="udcc_cons1_ub">
         <fbc:listOfUserDefinedConstraintComponents>
-          <fbc:userDefinedConstraintComponent fbc:id="userdcc_cons1_R16" fbc:coefficient="1" fbc:variable="R16" fbc:variableType="linear"/>
-          <fbc:userDefinedConstraintComponent fbc:id="userdcc_cons1_R15" fbc:coefficient="1" fbc:variable="R15" fbc:variableType="linear"/>
+          <fbc:userDefinedConstraintComponent fbc:id="udcc_cons1_R16" fbc:coefficient="1" fbc:variable="R16" fbc:variableType="linear"/>
+          <fbc:userDefinedConstraintComponent fbc:id="udcc_cons1_R15" fbc:coefficient="1" fbc:variable="R15" fbc:variableType="linear"/>
         </fbc:listOfUserDefinedConstraintComponents>
       </fbc:userDefinedConstraint>
       <fbc:userDefinedConstraint fbc:id="cons2" fbc:lowerBound="udcc_cons2_lb" fbc:upperBound="udcc_cons2_ub">
         <fbc:listOfUserDefinedConstraintComponents>
-          <fbc:userDefinedConstraintComponent fbc:id="userdcc_cons2_R15" fbc:coefficient="1" fbc:variable="R15" fbc:variableType="linear"/>
+          <fbc:userDefinedConstraintComponent fbc:id="udcc_cons2_R15" fbc:coefficient="1" fbc:variable="R15" fbc:variableType="linear"/>
         </fbc:listOfUserDefinedConstraintComponents>
       </fbc:userDefinedConstraint>
       <fbc:userDefinedConstraint fbc:id="cons3" fbc:lowerBound="udcc_cons3_lb" fbc:upperBound="udcc_cons3_ub">
         <fbc:listOfUserDefinedConstraintComponents>
-          <fbc:userDefinedConstraintComponent fbc:id="userdcc_cons3_R14" fbc:coefficient="1" fbc:variable="R14" fbc:variableType="linear"/>
+          <fbc:userDefinedConstraintComponent fbc:id="udcc_cons3_R14" fbc:coefficient="1" fbc:variable="R14" fbc:variableType="linear"/>
         </fbc:listOfUserDefinedConstraintComponents>
       </fbc:userDefinedConstraint>
     </fbc:listOfUserDefinedConstraints>

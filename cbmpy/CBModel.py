@@ -1094,7 +1094,7 @@ class Model(Fbase):
         Instantiates a parameter
 
         """
-        p = Parameter(pid, value, constant)
+        p = Parameter(pid, value, None, constant)
         return p
 
 
