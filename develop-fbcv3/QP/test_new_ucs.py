@@ -3,7 +3,7 @@ import cbmpy
 # load model and old user constraints
 ucmod = cbmpy.readSBML3FBC('test_user_def_rc.xml')
 ucmod.importUserConstraints('test_user_def_rc.xml.user_constraints.json')
-print(ucmod.user_constraints)
+#print(ucmod.user_constraints)
 
 ucmod.getActiveObjective().getFluxObjectives()[0].setType('quadratic')
 
@@ -24,8 +24,8 @@ for o in ucmod.objectives:
 
 # convert to new FBCv3 structures
 ucmod.convertUserConstraintsToUserDefinedConstraints()
-print(ucmod.user_constraints, ucmod.user_defined_constraints)
-print(list(ucmod.__global_id__.keys()))
+print('usercons', ucmod.user_constraints, ucmod.user_defined_constraints)
+print('global_id', list(ucmod.__global_id__.keys()))
 
 
 for uc in ucmod.user_defined_constraints:

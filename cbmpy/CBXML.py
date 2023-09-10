@@ -2121,7 +2121,7 @@ class CBMtoSBML3(FBCconnect):
         assert (self.fbcversion >= 3), "UserDefinedConstraints support require FBCv3"
 
         for u in self.fba.user_defined_constraints:
-            print(u)
+            #print(u)
             UC = self.fbc.createUserDefinedConstraint()
             UC.setId(u.getId())
             # TODO - for now lets just assume CBMPy is using values and not parameters
@@ -2185,7 +2185,7 @@ class CBMtoSBML3(FBCconnect):
         par.setId(param.getId())
         par.setMetaId('meta_{}'.format(param.getId()))
         if param.getName() is not None:
-            print(param.getName())
+            #print(param.getName())
             par.setName(param.getName())
         par.setValue(param.getValue())
         par.setConstant(True)
@@ -4575,18 +4575,18 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             print('INFO: duplicate parameter id detected: {}'.format(p_.getId()))
 
 
-    print([a.getId() for a in PARAM])
+    #print([a.getId() for a in PARAM])
 
     # READ FBCv3 user defined constraints
-    print('Reading ucs ...')
+    #print('Reading ucs ...')
     if fbc_version >= 3:
         for uc in FBCplg.getListOfUserDefinedConstraints():
-            print(uc.getId())
+            #print(uc.getId())
 
             # TODO bgoli for now we are going to flatten the bounds into floats
             lb = float(M.getParameter(uc.getLowerBound()).getValue())
             ub = float(M.getParameter(uc.getUpperBound()).getValue())
-            print(lb, ub)
+            #print(lb, ub)
 
 
 
@@ -4594,7 +4594,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             component_annotations = {}
 
             for uccc in uc.getListOfUserDefinedConstraintComponents():
-                print(uccc.getId())
+                #print(uccc.getId())
                 coeff = uccc.getCoefficient()
                 var = uccc.getVariable()
                 vartype = FBC3_VARIABLE_TYPES[uccc.getVariableType()]
@@ -4606,8 +4606,8 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                                                        'annotation_ext' : a_ext,
                                                        'miriam' : miriam}
 
-            print('c', components)
-            print('ca', component_annotations)
+            #print('c', components)
+            #print('ca', component_annotations)
             udc = fm.createUserDefinedConstraint(uc.getId(), lb, ub, components)
             fm.addUserDefinedConstraint(udc)
             # TODO bgoli deal with v3 extended annotation
