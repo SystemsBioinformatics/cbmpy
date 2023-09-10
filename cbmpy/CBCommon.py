@@ -56,6 +56,7 @@ MIRIAM_KEYS.sort()
 MIRIAM_KEYS = tuple(MIRIAM_KEYS)
 MIRIAM_KEYSlc = tuple([a.lower() for a in MIRIAM_KEYS])
 
+# TODO fine out what this comment is about
 # MIRIAM.update({'EC' : {'data_entry': 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&amp;ec=$id',
 # 'example': '1.1.1.1',
 # 'name': 'Enzyme Nomenclature',
@@ -77,7 +78,7 @@ try:
     HAVE_PYPARSING = True
     print('pyparsing import')
 except ImportError:
-    print('INFO: please install pyparsing to enable chemical balance checking!')
+    print('INFO: please install pyparsing (pip install pyparsing) to enable chemical balance checking!')
 
 
 #if not HAVE_PYPARSING:
@@ -104,6 +105,8 @@ if HAVE_PYPARSING:
         pyparsing.Word(pyparsing.alphanums + '. ') | 'or' | 'OR' | 'and' | 'AND'
     )
     pp_gene_unnester = pyparsing.nestedExpr(content=pp_gene_ass)
+else:
+    print('Please install pyparsing! pip install pyparsing')
 
 ptElements = (
     'H',

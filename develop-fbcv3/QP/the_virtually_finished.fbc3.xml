@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SBML created with CBMPy (0.8.7) on Sun, 10 Sep 2023 22:16:34 -->
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version3" xmlns:html="http://www.w3.org/1999/xhtml" level="3" version="1" fbc:required="false">
+  <model metaid="meta_sbml_model" id="sbml_model" substanceUnits="mmol_per_gdw" timeUnits="hour" extentUnits="mmol_per_gdw" fbc:strict="true">
+    <notes>
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <html:p>
+          <html:span style="font-family: Courier New,Courier,monospace;">
+            <span xmlns="http://www.w3.org/1999/xhtml">
+              <p>
+                <span style="font-family: Courier New,Courier,monospace;"/>
+              </p>
+              <p>
+                <br/>
+                Core MEMESA model extended and updated as an FBC version 3 test model.<br/>
+                Build with <a href="https://systemsbioinformatics.github.io/cbmpy/">CBMPy</a> 0.8.7
+              </p>
+              </span>
+            </html:span>
+          </html:p>
+        </body>
+      </notes>
+    <listOfUnitDefinitions>
+      <unitDefinition id="hour" name="hour">
+        <listOfUnits>
+          <unit kind="second" exponent="1" scale="0" multiplier="3600"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="mmol_per_gdw" name="mmol_per_gdw">
+        <listOfUnits>
+          <unit kind="mole" exponent="1" scale="-3" multiplier="1"/>
+          <unit kind="gram" exponent="-1" scale="0" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="mmol_per_hour" name="mmol_per_hour">
+        <listOfUnits>
+          <unit kind="mole" exponent="1" scale="-3" multiplier="1"/>
+          <unit kind="second" exponent="-1" scale="0" multiplier="3600"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="per_hour" name="per_hour">
+        <listOfUnits>
+          <unit kind="second" exponent="-1" scale="0" multiplier="3600"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment metaid="meta_Cell" id="Cell" name="Cell" spatialDimensions="3" size="1" units="dimensionless" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species metaid="meta_A" id="A" name="A" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_B" id="B" name="B" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_C" id="C" name="C" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_D" id="D" name="D" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_F1" id="F1" name="F1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_F2" id="F2" name="F2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_G" id="G" name="G" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_H" id="H" name="H" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_I1" id="I1" name="I1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_I2" id="I2" name="I2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_J1" id="J1" name="J1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_J2" id="J2" name="J2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_K1" id="K1" name="K1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_K2" id="K2" name="K2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_L" id="L" name="L" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_M" id="M" name="M" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_N" id="N" name="N" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_X0" id="X0" name="X0" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false">
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="secret" value="X0"/>
+          </listOfKeyValuePairs>
+        </annotation>
+      </species>
+      <species metaid="meta_X1" id="X1" name="X1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false">
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="secret" value="X1"/>
+          </listOfKeyValuePairs>
+        </annotation>
+      </species>
+      <species metaid="meta_X3" id="X3" name="X3" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false">
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="secret" value="X3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+      </species>
+      <species metaid="meta_mE1" id="mE1" name="mE1" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species metaid="meta_mE2" id="mE2" name="mE2" compartment="Cell" initialAmount="INF" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter metaid="meta_bnd_par0" sboTerm="SBO:0000625" id="bnd_par0" value="0" constant="true"/>
+      <parameter metaid="meta_bnd_par1" sboTerm="SBO:0000625" id="bnd_par1" value="1" constant="true"/>
+      <parameter metaid="meta_bnd_par2" sboTerm="SBO:0000625" id="bnd_par2" value="1000" constant="true"/>
+      <parameter metaid="meta_bnd_par3" sboTerm="SBO:0000625" id="bnd_par3" value="-1000" constant="true"/>
+      <parameter metaid="meta_mypar1" id="mypar1" name="mypar1" value="1" constant="true">
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="secret" value="mypar1"/>
+          </listOfKeyValuePairs>
+        </annotation>
+      </parameter>
+      <parameter metaid="meta_mypar2" id="mypar2" name="mypar2" value="2" constant="true">
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="secret" value="mypar2"/>
+          </listOfKeyValuePairs>
+        </annotation>
+      </parameter>
+      <parameter metaid="meta_udcc_cons1_lb" id="udcc_cons1_lb" name="udcc_cons1_lb" value="0.8" constant="true"/>
+      <parameter metaid="meta_udcc_cons1_ub" id="udcc_cons1_ub" name="udcc_cons1_ub" value="0.8" constant="true"/>
+      <parameter metaid="meta_udcc_cons2_lb" id="udcc_cons2_lb" name="udcc_cons2_lb" value="0.1" constant="true"/>
+      <parameter metaid="meta_udcc_cons2_ub" id="udcc_cons2_ub" name="udcc_cons2_ub" value="INF" constant="true"/>
+      <parameter metaid="meta_udcc_cons3_lb" id="udcc_cons3_lb" name="udcc_cons3_lb" value="0.1" constant="true"/>
+      <parameter metaid="meta_udcc_cons3_ub" id="udcc_cons3_ub" name="udcc_cons3_ub" value="INF" constant="true"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction metaid="meta_R01" id="R01" name="R01" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par1">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+            <p>Finally <strong>notes</strong> are free to be notes!</p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R01"/>
+            <keyValuePair key="subsystem"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="X0" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R10" id="R10" name="R10" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+            <p>Finally <strong>notes</strong> are free to be notes!</p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R10"/>
+            <keyValuePair key="subsystem" value="C2"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="F1" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="F2" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R03" id="R03" name="R03" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+            <p>Finally <strong>notes</strong> are free to be notes!</p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R03"/>
+            <keyValuePair key="subsystem" value="C1"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R02" id="R02" name="R02" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R02</html:p>
+            <html:p>SUBSYSTEM: C1</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R02"/>
+            <keyValuePair key="subsystem" value="C1"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="B" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R05" id="R05" name="R05" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R05</html:p>
+            <html:p>SUBSYSTEM: </html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R05"/>
+            <keyValuePair key="subsystem"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="B" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="D" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R04" id="R04" name="R04" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R04</html:p>
+            <html:p>SUBSYSTEM: C1</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R04"/>
+            <keyValuePair key="subsystem" value="C1"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="C" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="B" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R16" id="R16" name="R16" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R16</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R16"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="H" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="J1" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R17" id="R17" name="R17" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R17</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R17"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="J1" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="J2" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R14" id="R14" name="R14" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R14</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R14"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="I1" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="I2" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R15" id="R15" name="R15" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R15</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R15"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="I2" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="L" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R12" id="R12" name="R12" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R12</html:p>
+            <html:p>SUBSYSTEM: </html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R12"/>
+            <keyValuePair key="subsystem"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="G" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="H" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R13" id="R13" name="R13" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R13</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R13"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="H" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="I1" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R07" id="R07" name="R07" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R07</html:p>
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R07"/>
+            <keyValuePair key="subsystem" value="C2"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="mE1" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="mE2" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R06" id="R06" name="R06" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R06</html:p>
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R06"/>
+            <keyValuePair key="subsystem" value="C2"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="D" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="mE1" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R09" id="R09" name="R09" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R09</html:p>
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R09"/>
+            <keyValuePair key="subsystem" value="C2"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="D" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="F1" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R08" id="R08" name="R08" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R08</html:p>
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R08"/>
+            <keyValuePair key="subsystem" value="C2"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="mE2" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="G" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R11" id="R11" name="R11" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R11</html:p>
+            <html:p>SUBSYSTEM: C2</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R11"/>
+            <keyValuePair key="subsystem" value="C2"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="F2" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="G" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R18" id="R18" name="R18" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R18</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R18"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="J2" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="L" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R19" id="R19" name="R19" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R19</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R19"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="I1" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="K1" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R26" id="R26" name="R26" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R26</html:p>
+            <html:p>SUBSYSTEM: </html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R26"/>
+            <keyValuePair key="subsystem"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="N" stoichiometry="0.5" constant="true"/>
+          <speciesReference species="X3" stoichiometry="0.5" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R25" id="R25" name="R25" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R25</html:p>
+            <html:p>SUBSYSTEM: </html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R25"/>
+            <keyValuePair key="subsystem"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="N" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="X1" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R24" id="R24" name="R24" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R24</html:p>
+            <html:p>SUBSYSTEM: C4</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R24"/>
+            <keyValuePair key="subsystem" value="C4"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="M" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="N" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R23" id="R23" name="R23" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R23</html:p>
+            <html:p>SUBSYSTEM: C4</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R23"/>
+            <keyValuePair key="subsystem" value="C4"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="M" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="N" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R22" id="R22" name="R22" reversible="false" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R22</html:p>
+            <html:p>SUBSYSTEM: </html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R22"/>
+            <keyValuePair key="subsystem"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="L" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="M" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R21" id="R21" name="R21" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R21</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R21"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="K2" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="I2" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="meta_R20" id="R20" name="R20" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+        <notes>
+          <body xmlns:html="http://www.w3.org/1999/xhtml">
+            <html:p>Abbreviation: R20</html:p>
+            <html:p>SUBSYSTEM: C3</html:p>
+          </body>
+        </notes>
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="abbreviation" value="R20"/>
+            <keyValuePair key="subsystem" value="C3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <listOfReactants>
+          <speciesReference species="K1" stoichiometry="1" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="K2" stoichiometry="1" constant="true"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+    <fbc:listOfObjectives fbc:activeObjective="objMaxJ25">
+      <fbc:objective fbc:id="objMaxJ25" fbc:type="maximize">
+        <fbc:listOfFluxObjectives>
+          <fbc:fluxObjective fbc:id="objMaxJ25" fbc:reaction="R25" fbc:coefficient="1" fbc:variableType="quadratic"/>
+        </fbc:listOfFluxObjectives>
+      </fbc:objective>
+    </fbc:listOfObjectives>
+    <fbc:listOfUserDefinedConstraints>
+      <fbc:userDefinedConstraint fbc:id="cons1" fbc:lowerBound="udcc_cons1_lb" fbc:upperBound="udcc_cons1_ub">
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="secret" value="cons1"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <fbc:listOfUserDefinedConstraintComponents>
+          <fbc:userDefinedConstraintComponent fbc:id="udcc_cons1_R16" fbc:coefficient="1" fbc:variable="R16" fbc:variableType="linear">
+            <annotation>
+              <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+                <keyValuePair key="secret" value="udcc_cons1_R16"/>
+              </listOfKeyValuePairs>
+            </annotation>
+          </fbc:userDefinedConstraintComponent>
+          <fbc:userDefinedConstraintComponent fbc:id="udcc_cons1_R15" fbc:coefficient="1" fbc:variable="R15" fbc:variableType="linear">
+            <annotation>
+              <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+                <keyValuePair key="secret" value="udcc_cons1_R15"/>
+              </listOfKeyValuePairs>
+            </annotation>
+          </fbc:userDefinedConstraintComponent>
+        </fbc:listOfUserDefinedConstraintComponents>
+      </fbc:userDefinedConstraint>
+      <fbc:userDefinedConstraint fbc:id="cons2" fbc:lowerBound="udcc_cons2_lb" fbc:upperBound="udcc_cons2_ub">
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="secret" value="cons2"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <fbc:listOfUserDefinedConstraintComponents>
+          <fbc:userDefinedConstraintComponent fbc:id="udcc_cons2_R15" fbc:coefficient="1" fbc:variable="R15" fbc:variableType="linear">
+            <annotation>
+              <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+                <keyValuePair key="secret" value="udcc_cons2_R15"/>
+              </listOfKeyValuePairs>
+            </annotation>
+          </fbc:userDefinedConstraintComponent>
+        </fbc:listOfUserDefinedConstraintComponents>
+      </fbc:userDefinedConstraint>
+      <fbc:userDefinedConstraint fbc:id="cons3" fbc:lowerBound="udcc_cons3_lb" fbc:upperBound="udcc_cons3_ub">
+        <annotation>
+          <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+            <keyValuePair key="secret" value="cons3"/>
+          </listOfKeyValuePairs>
+        </annotation>
+        <fbc:listOfUserDefinedConstraintComponents>
+          <fbc:userDefinedConstraintComponent fbc:id="udcc_cons3_R14" fbc:coefficient="1" fbc:variable="R14" fbc:variableType="linear">
+            <annotation>
+              <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
+                <keyValuePair key="secret" value="udcc_cons3_R14"/>
+              </listOfKeyValuePairs>
+            </annotation>
+          </fbc:userDefinedConstraintComponent>
+        </fbc:listOfUserDefinedConstraintComponents>
+      </fbc:userDefinedConstraint>
+    </fbc:listOfUserDefinedConstraints>
+  </model>
+</sbml>

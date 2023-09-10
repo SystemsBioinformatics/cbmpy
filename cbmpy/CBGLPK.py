@@ -171,7 +171,7 @@ def glpk_constructLPfromFBA(fba, fname=None):
 
         sw.glp_set_obj_name(lp, fba.getActiveObjective().getId())
 
-        for fo_ in fba.getActiveObjective().fluxObjectives:
+        for fo_ in fba.getActiveObjective().flux_objectives:
             # lp.obj[varMap[fo_.reaction]] = fo_.coefficient
             sw.glp_set_obj_coef(lp, varMap[fo_.reaction] + 1, fo_.coefficient)
     except AttributeError:

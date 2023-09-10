@@ -147,7 +147,7 @@ def glpk_constructLPfromFBA(fba, fname=None):
         else:
             raise RuntimeError('\n%s - is not a valid objective operation' % osense)
         lp.obj.name = fba.getActiveObjective().getId()
-        for fo_ in fba.getActiveObjective().fluxObjectives:
+        for fo_ in fba.getActiveObjective().flux_objectives:
             lp.obj[varMap[fo_.reaction]] = fo_.coefficient
     except AttributeError:
         print('\nWARNING(GLPK create LP): no objective function defined')

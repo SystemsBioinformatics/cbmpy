@@ -207,6 +207,63 @@ def writeSBML3FBCV2(
     )
 
 
+def writeSBML3FBCV3(
+    fba,
+    fname,
+    directory=None,
+    gpr_from_annot=False,
+    add_groups=True,
+    add_cbmpy_annot=True,
+    add_cobra_annot=False,
+    validate=False,
+    compress_bounds=False,
+    zip_model=False,
+    return_model_string=False,
+):
+    """
+    Takes an FBA model object and writes it to file as SBML L3 FBCv3 :
+
+     - *fba* an fba model object
+     - *fname* the model will be written as XML to *fname*
+     - *directory* [default=None] if defined it is prepended to fname
+     - *gpr_from_annot* [default=False] if enabled will attempt to add the gene protein associations from the annotations
+     - *add_groups* [default=True] add SBML3 groups (if supported by libSBML)
+     - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
+     - *add_cobra_annot* [default=False] add COBRA <notes> annotation
+     - *validate* [default=False] validate the output SBML file
+     - *compress_bounds* [default=True] try compress output flux bound parameters
+     - *zip_model* [default=False] compress the model using ZIP encoding
+     - *return_model_string* [default=False] return the SBML XML file as a string
+
+    """
+
+    xoptions = {
+        'fbc_version': 3,
+        'validate': validate,
+        'compress_bounds': compress_bounds,
+        'return_model_string': return_model_string,
+        'zip_model': zip_model,
+    }
+    sbml_level_version = (3, 1)
+    autofix = (True,)
+    return_fbc = False
+    if xoptions['fbc_version'] == 3:
+        add_cobra_annot = False
+    return CBXML.sbml_writeSBML3FBC(
+        fba,
+        fname,
+        directory,
+        sbml_level_version,
+        autofix,
+        return_fbc,
+        gpr_from_annot,
+        add_groups,
+        add_cbmpy_annot,
+        add_cobra_annot,
+        xoptions,
+    )
+
+
 def writeCOBRASBML(fba, fname, directory=None):
     """
     Takes an FBA model object and writes it to file as a COBRA compatible :
@@ -812,7 +869,7 @@ def writeModelLPOld(
     objO = objO[0].upper() + objO[1:]
     FF.write('%s\n' % objO)
     objStr = '%s_objf: ' % fba.objectives[fba.activeObjIdx].getId()
-    for fObj in fba.objectives[fba.activeObjIdx].fluxObjectives:
+    for fObj in fba.objectives[fba.activeObjIdx].flux_objectives:
         sign = None
         nc = 0.0
         try:
@@ -947,7 +1004,7 @@ def writeModelLP(
         objO = objO[0].upper() + objO[1:]
         FF.write('%s\n' % objO)
         objStr = '%s_objf: ' % fba.objectives[fba.activeObjIdx].getId()
-        for fObj in fba.objectives[fba.activeObjIdx].fluxObjectives:
+        for fObj in fba.objectives[fba.activeObjIdx].flux_objectives:
             sign = None
             nc = 0.0
             try:
@@ -1216,9 +1273,9 @@ def writeModelHFormatFBA(
     for j in range(LHS.shape[1]):
         # first objective function, first flux objective
         if __DEBUG__:
-            print(M.objectives[0].fluxObjectives[0].reaction, M.N.col[j])
-        if M.objectives[0].fluxObjectives[0].reaction == M.N.col[j]:
-            OBJ_FUNC[j] = float(M.objectives[0].fluxObjectives[0].coefficient)
+            print(M.objectives[0].flux_objectives[0].reaction, M.N.col[j])
+        if M.objectives[0].flux_objectives[0].reaction == M.N.col[j]:
+            OBJ_FUNC[j] = float(M.objectives[0].flux_objectives[0].coefficient)
     if __DEBUG__:
         print(OBJ_FUNC)
 
@@ -1369,9 +1426,9 @@ def writeModelHFormatFBA2(
     objIdx = M.activeObjIdx
     for j in range(LHS.shape[1]):
         for fo in range(len(M.objectives[objIdx].getFluxObjectiveReactions())):
-            if M.objectives[objIdx].fluxObjectives[fo].reaction == M.N.col[j]:
-                print(M.objectives[objIdx].fluxObjectives[fo].reaction, M.N.col[j])
-                OBJ_FUNC[j] = float(M.objectives[objIdx].fluxObjectives[fo].coefficient)
+            if M.objectives[objIdx].flux_objectives[fo].reaction == M.N.col[j]:
+                print(M.objectives[objIdx].flux_objectives[fo].reaction, M.N.col[j])
+                OBJ_FUNC[j] = float(M.objectives[objIdx].flux_objectives[fo].coefficient)
     ##  print OBJ_FUNC
 
     # for Ax >= B Hformat wants -B A >= 0
@@ -1514,9 +1571,9 @@ def writeStoichiometricMatrix(
     objIdx = M.activeObjIdx
     # for j in range(LHS.shape[1]):
     # for fo in range(len(M.objectives[objIdx].getFluxObjectiveReactions())):
-    # if M.objectives[objIdx].fluxObjectives[fo].reaction == M.N.col[j]:
-    # print(M.objectives[objIdx].fluxObjectives[fo].reaction, M.N.col[j])
-    # OBJ_FUNC[j] = float(M.objectives[objIdx].fluxObjectives[fo].coefficient)
+    # if M.objectives[objIdx].flux_objectives[fo].reaction == M.N.col[j]:
+    # print(M.objectives[objIdx].flux_objectives[fo].reaction, M.N.col[j])
+    # OBJ_FUNC[j] = float(M.objectives[objIdx].flux_objectives[fo].coefficient)
     ###  print OBJ_FUNC
 
     # for Ax >= B Hformat wants -B A >= 0
@@ -2633,7 +2690,7 @@ def printFBASolution(fba, include_all=False):
      - *include_all* include all variables
 
     """
-    OFflux = fba.objectives[fba.activeObjIdx].fluxObjectives[0].reaction
+    OFflux = fba.objectives[fba.activeObjIdx].flux_objectives[0].reaction
     OFvalue = fba.objectives[fba.activeObjIdx].value
     OFSense = fba.objectives[fba.activeObjIdx].operation
     print('\n\n**********\nModel: {}\n\n'.format(fba.getId()))

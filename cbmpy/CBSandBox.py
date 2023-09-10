@@ -105,7 +105,7 @@ def setSuffix_extended(model, suffix='', target='all', ignore_list=[]):
     if target == 'objectives' or target == 'all':
         for obj in model.objectives:
             obj.id = obj.id + suffix
-        for f in obj.fluxObjectives:
+        for f in obj.flux_objectives:
             if f.reaction not in ignore_list:
                 f.id = f.id + suffix
                 f.reaction = f.reaction + suffix

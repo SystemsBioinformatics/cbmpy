@@ -225,7 +225,7 @@ def cplx_constructLPfromFBA(fba, fname=None):
         lp.objective.set_linear(
             [
                 (fo.reaction, fo.coefficient)
-                for fo in fba.getActiveObjective().fluxObjectives
+                for fo in fba.getActiveObjective().flux_objectives
             ]
         )
     except AttributeError:
