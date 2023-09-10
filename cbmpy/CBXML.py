@@ -4591,8 +4591,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
 
             components = []
-            component_annotations = []
-            miriams = []
+            component_annotations = {}
 
             for uccc in uc.getListOfUserDefinedConstraintComponents():
                 print(uccc.getId())
@@ -4601,20 +4600,25 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 vartype = FBC3_VARIABLE_TYPES[uccc.getVariableType()]
                 components.append((coeff, var, vartype, uccc.getId()))
                 #ADD annotations
-                component_annotations.append(sbml_readFBCv3KeyValuePairs(uccc.getPlugin('fbc')))
-                miriams.append(sbml_getCVterms(uccc, model=False))
+                a, a_ext = sbml_readFBCv3KeyValuePairs(uccc.getPlugin('fbc'))
+                miriam = sbml_getCVterms(uccc, model=False)
+                component_annotations[uccc.getId()] = {'annotation' : a,
+                                                       'annotation_ext' : a_ext,
+                                                       'miriam' : miriam}
 
-
-            print(components)
-            print(component_annotations)
-            print(miriams)
+            print('c', components)
+            print('ca', component_annotations)
             udc = fm.createUserDefinedConstraint(uc.getId(), lb, ub, components)
             fm.addUserDefinedConstraint(udc)
             # TODO bgoli deal with v3 extended annotation
             udc.annotation, udc.annotation_ext = sbml_readFBCv3KeyValuePairs(uc.getPlugin('fbc'))
             udc.miriam =  sbml_getCVterms(uc, model=False)
 
-
+            for cc in udc.constraint_components:
+                cc.annotation = component_annotations[cc.getId()]['annotation']
+                cc.annotation_ext = component_annotations[cc.getId()]['annotation_ext']
+                if component_annotations[cc.getId()]['miriam'] is not None:
+                    cc.miriam = component_annotations[cc.getId()]['miriam']
 
 
     if DEBUG:
