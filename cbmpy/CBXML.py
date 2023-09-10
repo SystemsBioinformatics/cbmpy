@@ -2125,14 +2125,27 @@ class CBMtoSBML3(FBCconnect):
             UC = self.fbc.createUserDefinedConstraint()
             UC.setId(u.getId())
             # TODO - for now lets just assume CBMPy is using values and not parameters
-            plb = CBModel.Parameter('udcc_{}_lb'.format(u.getId()), u.getLowerBound())
-            pub = CBModel.Parameter('udcc_{}_ub'.format(u.getId()), u.getUpperBound())
-            LB = self.createParParameter(plb)
-            UB = self.createParParameter(pub)
-            self.model.addParameter(LB)
-            self.model.addParameter(UB)
-            UC.setLowerBound(LB.getId())
-            UC.setUpperBound(UB.getId())
+
+            plbid = 'udcc_{}_lb'.format(u.getId())
+            if self.model.getParameter(plbid) is None:
+                plb = CBModel.Parameter(plbid, u.getLowerBound())
+                LB = self.createParParameter(plb)
+                self.model.addParameter(LB)
+                UC.setLowerBound(LB.getId())
+            else:
+                UC.setLowerBound(plbid)
+                self.model.getParameter(plbid).setValue(u.getLowerBound())
+
+            pubid = 'udcc_{}_ub'.format(u.getId())
+            if self.model.getParameter(pubid) is None:
+                pub = CBModel.Parameter(pubid, u.getUpperBound())
+                UB = self.createParParameter(pub)
+                self.model.addParameter(UB)
+                UC.setUpperBound(UB.getId())
+            else:
+                UC.setUpperBound(pubid)
+                self.model.getParameter(pubid).setValue(u.getUpperBound())
+
 
             for f in u.constraint_components:
                 UCFO = UC.createUserDefinedConstraintComponent()
@@ -4540,6 +4553,31 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             fm.addParameter(p_)
         except RuntimeError:
             print('INFO: duplicate parameter id detected: {}'.format(p_.getId()))
+
+
+    print([a.getId() for a in PARAM])
+
+    # READ FBCv3 user defined constraints
+    print('Reading ucs ...')
+    if fbc_version >= 3:
+        for uc in FBCplg.getListOfUserDefinedConstraints():
+            print(uc.getId())
+            components = []
+            # TODO bgoli for now we are going to flatten the bounds into floats
+            lb = float(M.getParameter(uc.getLowerBound()).getValue())
+            ub = float(M.getParameter(uc.getUpperBound()).getValue())
+            print(lb, ub)
+
+            for uccc in uc.getListOfUserDefinedConstraintComponents():
+                print(uccc.getId())
+                coeff = uccc.getCoefficient()
+                var = uccc.getVariable()
+                vartype = FBC3_VARIABLE_TYPES[uccc.getVariableType()]
+                components.append((coeff, var, vartype, uccc.getId()))
+            print(components)
+            udc = fm.createUserDefinedConstraint(uc.getId(), lb, ub, components)
+            fm.addUserDefinedConstraint(udc)
+
 
     if DEBUG:
         print('Parameter build: {}'.format(round(time.time() - time0, 3)))

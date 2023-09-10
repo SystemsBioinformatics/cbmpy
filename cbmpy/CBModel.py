@@ -1238,7 +1238,8 @@ class Model(Fbase):
         - *lb* lower bound float/parameter
         - *ub* upper bound float/parameter
         - *componentents* optional, the user defined constraint componenents in the form of a list
-           [(coefficient, variable, type), ...] and coefficient and variable can be parameters
+           [(coefficient, variable, type, id), ...] and coefficient and variable can be parameters
+           id is optional
 
         """
 
@@ -1249,12 +1250,19 @@ class Model(Fbase):
         if components is not None:
             for cc_ in components:
                 if type(cc_[0]) is Parameter:
-                    pid =  "userdcc_{}_{}".format(udc.getId(), cc_[1].getId())
+                    if len(cc_) == 4:
+                        pid =  cc_[3]
+                    else:
+                        pid =  "udcc_{}_{}".format(udc.getId(), cc_[1].getId())
                 else:
-                    pid =  "userdcc_{}_{}".format(udc.getId(), cc_[1])
+                    if len(cc_) == 4:
+                        pid =  cc_[3]
+                    else:
+                        pid =  "udcc_{}_{}".format(udc.getId(), cc_[1])
 
                 ucc = udc.createConstraintComponent(pid, cc_[0], cc_[1], cc_[2])
                 udc.addConstraintComponent(ucc)
+
 
         return udc
 
@@ -4177,7 +4185,6 @@ class UserDefinedConstraint(Fbase):
     def addConstraintComponent(self, cc):
         """
         - *cc* UserConstraintComponent
-        - *model* the model instance
 
         """
         self.constraint_components.append(cc)
