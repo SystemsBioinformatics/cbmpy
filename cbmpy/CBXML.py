@@ -4582,11 +4582,17 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     if fbc_version >= 3:
         for uc in FBCplg.getListOfUserDefinedConstraints():
             print(uc.getId())
-            components = []
+
             # TODO bgoli for now we are going to flatten the bounds into floats
             lb = float(M.getParameter(uc.getLowerBound()).getValue())
             ub = float(M.getParameter(uc.getUpperBound()).getValue())
             print(lb, ub)
+
+
+
+            components = []
+            component_annotations = []
+            miriams = []
 
             for uccc in uc.getListOfUserDefinedConstraintComponents():
                 print(uccc.getId())
@@ -4594,9 +4600,21 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 var = uccc.getVariable()
                 vartype = FBC3_VARIABLE_TYPES[uccc.getVariableType()]
                 components.append((coeff, var, vartype, uccc.getId()))
+                #ADD annotations
+                component_annotations.append(sbml_readFBCv3KeyValuePairs(uccc.getPlugin('fbc')))
+                miriams.append(sbml_getCVterms(uccc, model=False))
+
+
             print(components)
+            print(component_annotations)
+            print(miriams)
             udc = fm.createUserDefinedConstraint(uc.getId(), lb, ub, components)
             fm.addUserDefinedConstraint(udc)
+            # TODO bgoli deal with v3 extended annotation
+            udc.annotation, udc.annotation_ext = sbml_readFBCv3KeyValuePairs(uc.getPlugin('fbc'))
+            udc.miriam =  sbml_getCVterms(uc, model=False)
+
+
 
 
     if DEBUG:
