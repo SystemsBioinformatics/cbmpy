@@ -1746,7 +1746,7 @@ class FBCconnect(object):
 
     def createObjective(self, oid, osense, flux_objs, name=None, active=True):
         """
-        Create and add the FBC Objective function
+        Create and add the FBC Objective function. Returns the SBML objective object
 
          - *oid* objective id
          - *osense* objective sense
@@ -1780,6 +1780,7 @@ class FBCconnect(object):
                 else:
                     print('INFO: creating a type', fo_[3], 'fluxobjective')
                     FO.setVariableType(FBC3_VARIABLE_TYPES[fo_[3]])
+        return O
 
 
     def createGeneAssociationV1(self, rid, assoc, gprid=None):
@@ -2009,11 +2010,12 @@ class CBMtoSBML3(FBCconnect):
             else:
                 print('Bound %s already exists, skipping ...' % (rid))
 
-    def addObjectives(self):
+    def addObjectives(self, add_cbmpy_anno=True,):
         """
         Add the CBM objective function to SBML
 
         """
+#         add_cbmpy_anno = True
         for ob_ in self.fba.objectives:
             active = False
             if ob_.getId() == self.fba.getActiveObjective().getId():
@@ -2021,7 +2023,22 @@ class CBMtoSBML3(FBCconnect):
             flux_objs = [
                 (o2.reaction, float(o2.coefficient), o2.getId(), o2.getType()) for o2 in ob_.flux_objectives
             ]
-            self.createObjective(ob_.getId(), ob_.operation, flux_objs, active=active)
+            OBJ = self.createObjective(ob_.getId(), ob_.operation, flux_objs, active=active)
+            if add_cbmpy_anno:
+                if ob_.getSBOterm() is not None:
+                    OBJ.setSBOTerm(ob_.getSBOterm())
+                if ob_.miriam != None:
+                    miriam = ob_.miriam.getAllMIRIAMUris()
+                    if len(miriam) > 0:
+                        sbml_setCVterms(ob_, miriam, model=False)
+                if self.fbcversion < 3:
+                    if len(ob_.annotation) > 0:
+                        annoSTRnew = sbml_writeKeyValueDataAnnotation(ob_.annotation)
+                        annores = OBJ.appendAnnotation(annoSTRnew)
+                elif self.fbcversion >= 3:
+                    if len(ob_.annotation) > 0:
+                        # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                        sbml_setFBCv3KeyValuePairs(OBJ.getPlugin('fbc'), ob_.annotation)
 
     def addGenesV2(
         self,
@@ -2061,11 +2078,16 @@ class CBMtoSBML3(FBCconnect):
 
             if len(g.annotation) > 0:
                 if add_cbmpy_anno:
-                    annoSTRnew = sbml_writeKeyValueDataAnnotation(g.annotation)
-                    annores = G.appendAnnotation(annoSTRnew)
-                    if annores == -3:
-                        print('Invalid annotation in Gene', g.getId())
-                        print(g.annotation, '\n')
+                    if self.fbcversion < 3:
+                        annoSTRnew = sbml_writeKeyValueDataAnnotation(g.annotation)
+                        annores = G.appendAnnotation(annoSTRnew)
+                        if annores == -3:
+                            print('Invalid annotation in Gene', g.getId())
+                            print(g.annotation, '\n')
+                    elif self.fbcversion >= 3:
+                        # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                        sbml_setFBCv3KeyValuePairs(G.getPlugin('fbc'), g.annotation)
+
             if g.miriam != None:
                 # last blah blah
                 sbml_setCVterms(G, g.miriam.getAllMIRIAMUris(), model=False)
