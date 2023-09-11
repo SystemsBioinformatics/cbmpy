@@ -2475,34 +2475,34 @@ class Model(Fbase):
 
         """
         # TODO SORT THE MESS OUT to make this work
-        lb = ub = eq = None
-        try:
-            lb = self.getObject(rid).getLowerBound()
-        except KeyError:
-            lb = None
-        try:
-            ub = self.getObject(rid).getUpperBound()
-        except KeyError:
-            ub = None
+        # lb = ub = eq = None
+        # try:
+            # lb = self.getObject(rid).getLowerBound()
+        # except KeyError:
+            # lb = None
+        # try:
+            # ub = self.getObject(rid).getUpperBound()
+        # except KeyError:
+            # ub = None
 
-#         lb = self.getFluxBoundByReactionID(rid, 'lower')
-#         ub = self.getFluxBoundByReactionID(rid, 'upper')
-#         eq = self.getFluxBoundByReactionID(rid, 'equality')
-#         if lb != None:
-#             if numpy.isinf(lb.value) or numpy.isreal(lb.value):
-#                 lb = lb.value
-#             else:
-#                 lb = float(lb)
-#         if ub != None:
-#             if numpy.isinf(ub.value) or numpy.isreal(ub.value):
-#                 ub = ub.value
-#             else:
-#                 ub = float(ub)
-#         if eq != None:
-#             if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-#                 eq = eq.value
-#             else:
-#                 eq = float(eq)
+        lb = self.getFluxBoundByReactionID(rid, 'lower')
+        ub = self.getFluxBoundByReactionID(rid, 'upper')
+        eq = self.getFluxBoundByReactionID(rid, 'equality')
+        if lb is not None:
+            if numpy.isinf(lb.value) or numpy.isreal(lb.value):
+                lb = lb.value
+            else:
+                lb = float(lb)
+        if ub is not None:
+            if numpy.isinf(ub.value) or numpy.isreal(ub.value):
+                ub = ub.value
+            else:
+                ub = float(ub)
+        if eq is not None:
+            if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+                eq = eq.value
+            else:
+                eq = float(eq)
         return rid, lb, ub, eq
 
     def getReactionLowerBound(self, rid):
@@ -2948,7 +2948,7 @@ class Model(Fbase):
 
         c2 = self.getFluxBoundByReactionID(rid, bound)
         # changed to no str() casting
-        if c2 != None:
+        if c2 is not None:
             c2.setValue(value)
             if __DEBUG__:
                 print(c2.reaction, c2.operation, c2.value)
