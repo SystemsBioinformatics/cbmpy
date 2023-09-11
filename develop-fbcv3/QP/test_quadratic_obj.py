@@ -3,14 +3,15 @@ import cbmpy
 # read my first SBML3 FBCv3 file
 
 print('\nREADING ...\n')
-cmod3 = cbmpy.CBRead.readSBML3FBC('the_third.fbc3.xml')
+# cmod3 = cbmpy.CBRead.readSBML3FBC('e_coli_core.xml')
+cmod3 = cbmpy.CBRead.readSBML3FBC('test_user_def_rc.xml')
 
+rid =  cmod3.reactions[20].getId()
 
-print('FOdata:', cmod3.getActiveObjective().getFluxObjectiveData())
-print('Linear objective variables:', cmod3.getActiveObjective().getLinearVariables())
-print('Quadratic objective variables:', cmod3.getActiveObjective().getQuadraticVariables()[0].getReactionId())
+print('getReactionBounds')
+print('Known ({}):'.format(rid), cmod3.getReactionBounds(rid))
+print('UnKnown:', cmod3.getReactionBounds('Fred'))
 
-print('\nWRITING ...\n')
-cbmpy.CBWrite.writeSBML3FBCV3(cmod3, 'the_virtually_finished.fbc3.xml', compress_bounds=True)
-
-print('done ....')
+print('getUpperBound')
+print('Known ({}):'.format(rid), cmod3.getReaction(rid).getUpperBound())
+print('UnKnown (this should fail):', cmod3.getReaction('fred').getUpperBound())

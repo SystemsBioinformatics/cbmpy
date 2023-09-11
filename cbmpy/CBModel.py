@@ -4885,12 +4885,17 @@ class FluxBound(Fbase):
         """
         Returns the current value of the attribute (input/solution)
         """
-        return float(self.value)
+        if self.value is None:
+            print('Warning fluxbound: {} has no value'.format(self.getId()))
+            return None
+        else:
+            return float(self.value)
 
     def setValue(self, value):
         """
         Sets the attribute ''value''
         """
+        assert value is not None, "setValue is cannot set None as a value"
         if numpy.isreal(value):
             self.value = value
         elif numpy.isinf(value):
