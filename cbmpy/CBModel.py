@@ -2476,8 +2476,14 @@ class Model(Fbase):
         """
         # TODO SORT THE MESS OUT to make this work
         lb = ub = eq = None
-        lb = self.getObject(rid).getLowerBound()
-        ub = self.getObject(rid).getUpperBound()
+        try:
+            lb = self.getObject(rid).getLowerBound()
+        except KeyError:
+            lb = None
+        try:
+            ub = self.getObject(rid).getUpperBound()
+        except KeyError:
+            ub = None
 
 #         lb = self.getFluxBoundByReactionID(rid, 'lower')
 #         ub = self.getFluxBoundByReactionID(rid, 'upper')
@@ -5485,7 +5491,10 @@ class Reaction(Fbase):
         if self.__lower_bound_id__ is not None:
             if __DEBUG__:
                 print('Using getLowerBound shortcut')
-            return self.getModel().getObject(self.__lower_bound_id__).getValue()
+            try:
+                return self.getModel().getObject(self.__lower_bound_id__).getValue()
+            except KeyError:
+                return None
         else:
             out = None
 
@@ -5515,7 +5524,10 @@ class Reaction(Fbase):
         if self.__upper_bound_id__ is not None:
             if __DEBUG__:
                 print('Using getUpperBound shortcut')
-            return self.getModel().getObject(self.__upper_bound_id__).getValue()
+            try:
+                return self.getModel().getObject(self.__upper_bound_id__).getValue()
+            except KeyError:
+                return None
         else:
             out = None
 
