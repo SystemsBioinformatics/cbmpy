@@ -4895,7 +4895,7 @@ class FluxBound(Fbase):
         """
         Sets the attribute ''value''
         """
-        assert value is not None, "setValue is cannot set None as a value"
+        assert value is not None, "setValuecannot set None as a value"
         if numpy.isreal(value):
             self.value = value
         elif numpy.isinf(value):
