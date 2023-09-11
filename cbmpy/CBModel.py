@@ -2414,8 +2414,12 @@ class Model(Fbase):
          - *cid* compartment ID
 
         """
-        out = None
-        out = self.getObject(cid)
+        try:
+            return self.getObject(cid)
+        except KeyError:
+            return None
+        #out = None
+        #out = self.getObject(cid)
         #for c in self.compartments:
             #if c.getId() == cid:
                 #out = c
@@ -2426,7 +2430,7 @@ class Model(Fbase):
                     #cid
                 #)
             #)
-        return out
+        #return out
 
     def getReaction(self, rid):
         """
@@ -2435,13 +2439,10 @@ class Model(Fbase):
          - *rid* reaction ID
 
         """
-        out = None
-        out = self.getObject(rid)
-        #for r in self.reactions:
-            #if r.getId() == rid:
-                #out = r
-                #break
-        return out
+        try:
+            return self.getObject(rid)
+        except KeyError:
+            return None
 
     def getSpecies(self, sid):
         """
@@ -2450,26 +2451,21 @@ class Model(Fbase):
          - *sid* a specied ID
 
         """
-        out = None
-        out = self.getObject(sid)
-        #for s in self.species:
-            #if s.getId() == sid:
-                #out = s
-                #break
-        return out
+        try:
+            return self.getObject(sid)
+        except KeyError:
+            return None
 
     def getParameter(self, pid):
         """
         Returns a parameter object with pid
 
         """
-        out = None
-        out = self.getObject(pid)
-        #for p in self.parameters:
-            #if p.getId() == pid:
-                #out = p
-                #break
-        return out
+        try:
+            return self.getObject(pid)
+        except KeyError:
+            return None
+
 
     def getReactionBounds(self, rid):
         """
@@ -2510,9 +2506,11 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-
-        lb = eq = None
-        lb = self.getObject(rid).getLowerBound()
+        # lb = eq = None
+        try:
+            lb = self.getObject(rid).getLowerBound()
+        except KeyError:
+            return None
 
 #         # Now duplicated directly in Reaction
 #
@@ -2534,7 +2532,7 @@ class Model(Fbase):
 #                     lb = eq.value
 #                 else:
 #                     lb = float(eq)
-        return lb
+#        return lb
 
     def getReactionUpperBound(self, rid):
         """
@@ -2543,8 +2541,10 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        ub = eq = None
-        ub = self.getObject(rid).getUpperBound()
+        try:
+            return self.getObject(rid).getUpperBound()
+        except KeyError:
+            return None
 
 #         Now duplicated directly in Reaction
 
@@ -2565,7 +2565,7 @@ class Model(Fbase):
 #                     ub = eq.value
 #                 else:
 #                     ub = float(eq)
-        return ub
+#        return ub
 
     def getFluxBoundByID(self, fid):
         """
@@ -2574,8 +2574,13 @@ class Model(Fbase):
          - *fid* the fluxBound ID
 
         """
+        #return self.getObject(fid)
+        try:
+            return self.getObject(fid)
+        except KeyError:
+            return None
 
-        return self.getObject(fid)
+
         #c_ = None
         #for c_ in self.flux_bounds:
             #if c_.getId() == fid:
@@ -3908,6 +3913,17 @@ class Objective(Fbase):
             else:
                 print('\nObjective {} already contains flux {} ... skipping!\n'.format(self.getId(), J[1]))
 
+    def createQuadraticFluxObjectives(self, fluxlist):
+        """
+        Create and add quadratic flux objective objects to this objective function.
+
+         - *fluxlist* a list of one or more ('coefficient', 'rid', 'rid2', 'type') triples
+
+        """
+        for J in fluxlist:
+            fid = '{}_{}_{}_fobj'.format(self.getId(), J[1], J[2])
+            self.addFluxObjective(FluxObjectiveQuadratic(fid, J[1], J[2], J[0], 'quadratic'))
+
     def deleteAllFluxObjectives(self):
         """
         Delete all flux objectives
@@ -3935,7 +3951,7 @@ class Objective(Fbase):
         """
         fo = None
         for fo_ in self.flux_objectives:
-            if fo_.reaction == rid:
+            if fo_.reaction == rid and type(fo_) != FluxObjectiveQuadratic:
                 if fo == None:
                     fo = fo_
                 elif type(fo) == list:
@@ -4027,7 +4043,66 @@ class Objective(Fbase):
                 out.append(fo)
         return out
 
+class FluxObjectiveQuadratic(Fbase):
+    """
+    A weighted quadratic flux that appears in an objective function, this fluxobjective contains
+    two reaction terms to define "quadratic" fluxobjectives of the type <coefficient>*<variable1>*<variable2>
+    For example 2*R1*R2
 
+    NOTE: reaction is a string containing a reaction id
+    """
+
+    reaction = None
+    reaction2 = None
+    coefficient = None
+    ctype = None
+    ctypes = ('quadratic')
+
+    def __init__(self, pid, reaction, reaction2, coefficient=1, ctype='quadratic'):
+        pid = str(pid)
+        self.setId(pid)
+        self.ctype = ctype
+
+        self.reaction = reaction
+        self.reaction = reaction2
+        self.coefficient = coefficient
+        self.annotation = {}
+        self.compartment = None
+        self.__delattr__('compartment')
+
+    def getReactionIds(self):
+        return (self.reaction, self.reaction2)
+
+    def getReactionId(self):
+        return self.reaction
+
+    def getReactionId2(self):
+        return self.reaction2
+
+    def getCoefficient(self):
+        return self.coefficient
+
+    def setReactionId(self, reaction):
+        self.reaction = reaction
+
+    def setReactionId2(self, reaction2):
+        self.reaction2 = reaction2
+
+    def setReactionIds(self, reaction, reaction2):
+        self.reaction = reaction
+        self.reaction2 = reaction2
+
+    def setCoefficient(self, coefficient):
+        self.coefficient = coefficient
+
+    def getType(self):
+        return self.ctype
+
+    def setType(self, ctype):
+        if ctype in self.ctypes:
+            self.ctype = ctype
+        else:
+            raise TypeError('FluxObjective type must be one of:' + str(self.ctypes)
 
 
 class FluxObjective(Fbase):
