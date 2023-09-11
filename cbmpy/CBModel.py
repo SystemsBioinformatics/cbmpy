@@ -4102,7 +4102,7 @@ class FluxObjectiveQuadratic(Fbase):
         if ctype in self.ctypes:
             self.ctype = ctype
         else:
-            raise TypeError('FluxObjective type must be one of:' + str(self.ctypes)
+            raise TypeError('FluxObjective type must be one of:' + str(self.ctypes))
 
 
 class FluxObjective(Fbase):
