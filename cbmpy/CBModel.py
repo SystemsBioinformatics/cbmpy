@@ -2474,33 +2474,43 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        # TODO SORT THE MESS OUT to make this work
-        # lb = ub = eq = None
-        # try:
-            # lb = self.getObject(rid).getLowerBound()
-        # except KeyError:
-            # lb = None
-        # try:
-            # ub = self.getObject(rid).getUpperBound()
-        # except KeyError:
-            # ub = None
+        # TODO SORT THIS MESS OUT ...
+        lb = ub = eq = None
+        try:
+            lb = self.getObject(rid).getLowerBound()
+        except KeyError:
+            try:
+                lb = self.getFluxBoundByReactionID(rid, 'lower').getValue()
+            except AttributeError:
+                lb = None
+        try:
+            ub = self.getObject(rid).getUpperBound()
+        except KeyError:
+            try:
+                ub = self.getFluxBoundByReactionID(rid, 'upper').getValue()
+            except AttributeError:
+                ub = None
 
-        lb = self.getFluxBoundByReactionID(rid, 'lower')
-        ub = self.getFluxBoundByReactionID(rid, 'upper')
-        eq = self.getFluxBoundByReactionID(rid, 'equality')
+        if lb is None and ub is None:
+            try:
+                eq = self.getFluxBoundByReactionID(rid, 'equality').getValue()
+            except AttributeError:
+                eq = None
+
+
         if lb is not None:
-            if numpy.isinf(lb.value) or numpy.isreal(lb.value):
-                lb = lb.value
+            if numpy.isinf(lb) or numpy.isreal(lb):
+                pass
             else:
                 lb = float(lb)
         if ub is not None:
-            if numpy.isinf(ub.value) or numpy.isreal(ub.value):
-                ub = ub.value
+            if numpy.isinf(ub) or numpy.isreal(ub):
+                pass
             else:
                 ub = float(ub)
         if eq is not None:
-            if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                eq = eq.value
+            if numpy.isinf(eq) or numpy.isreal(eq):
+                pass
             else:
                 eq = float(eq)
         return rid, lb, ub, eq
@@ -2514,7 +2524,7 @@ class Model(Fbase):
         """
         # lb = eq = None
         try:
-            lb = self.getObject(rid).getLowerBound()
+            return self.getObject(rid).getLowerBound()
         except KeyError:
             return None
 
@@ -4895,13 +4905,14 @@ class FluxBound(Fbase):
         """
         Sets the attribute ''value''
         """
-        assert value is not None, "setValuecannot set None as a value"
         if numpy.isreal(value):
             self.value = value
         elif numpy.isinf(value):
             self.value = value
-        else:
-            self.value = float(value)
+        elif value is None:
+            self.value = value
+        # else:
+            # self.value = float(value)
 
 
 class FluxBoundBase(Fbase):
@@ -5493,66 +5504,62 @@ class Reaction(Fbase):
         Get the value of the reactions lower bound
 
         """
+        out = None
         if self.__lower_bound_id__ is not None:
             if __DEBUG__:
                 print('Using getLowerBound shortcut')
             try:
                 return self.getModel().getObject(self.__lower_bound_id__).getValue()
             except KeyError:
-                return None
-        else:
-            out = None
-
-            try:
-                lb = self.getModel().getFluxBoundByReactionID(self.getId(), 'lower')
-                if lb != None:
-                    self.__lower_bound_id__ = lb.getId()
-                    out = lb.getValue()
-                else:
-                    eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
-                    self.__lower_bound_id__ = eq.getId()
-                    if eq != None:
-                        # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
-                        out = eq.getValue()
-                return out
-            except AttributeError as why:
-                print(
-                    'WARNING: getLowerBound requires that this reaction object be added to a CBMPy instance to work.'
-                )
-                return None
+                pass
+        try:
+            lb = self.getModel().getFluxBoundByReactionID(self.getId(), 'lower')
+            if lb != None:
+                self.__lower_bound_id__ = lb.getId()
+                out = lb.getValue()
+            else:
+                eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
+                self.__lower_bound_id__ = eq.getId()
+                if eq != None:
+                    # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+                    out = eq.getValue()
+            return out
+        except AttributeError as why:
+            print(
+                'WARNING: getLowerBound requires that this reaction object be added to a CBMPy instance to work.'
+            )
+            return None
 
     def getUpperBound(self):
         """
         Get the value of the reactions upper bound
 
         """
+        out = None
         if self.__upper_bound_id__ is not None:
             if __DEBUG__:
                 print('Using getUpperBound shortcut')
             try:
                 return self.getModel().getObject(self.__upper_bound_id__).getValue()
             except KeyError:
-                return None
-        else:
-            out = None
-
-            try:
-                ub = self.getModel().getFluxBoundByReactionID(self.getId(), 'upper')
-                if ub != None:
-                    self.__upper_bound_id__ = ub.getId()
-                    out = ub.getValue()
-                else:
-                    eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
-                    self.__upper_bound_id__ = eq.getId()
-                    if eq != None:
-                        # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
-                        out = eq.getValue()
-                return out
-            except AttributeError as why:
-                print(
-                    'WARNING: getUpperBound requires that this reaction object be added to a CBMPy instance to work.'
-                )
-                return None
+                pass
+        try:
+            ub = self.getModel().getFluxBoundByReactionID(self.getId(), 'upper')
+            if ub is not None:
+                self.__upper_bound_id__ = ub.getId()
+                out = ub.getValue()
+            else:
+                eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
+                self.__upper_bound_id__ = eq.getId()
+                if eq != None:
+                    # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+                    out = eq.getValue()
+            return out
+        except AttributeError as why:
+            print(
+                'WARNING: getUpperBound requires that this reaction object be added to a CBMPy instance to work.'
+            )
+            return None
 
     def setLowerBound(self, value):
         """
