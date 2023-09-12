@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SBML created with CBMPy (0.8.7) on Tue, 12 Sep 2023 19:13:43 -->
+<!-- SBML created with CBMPy (0.8.7) on Tue, 12 Sep 2023 22:50:55 -->
 <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version3" xmlns:html="http://www.w3.org/1999/xhtml" level="3" version="1" fbc:required="false">
   <model metaid="meta_sbml_model" id="sbml_model" substanceUnits="mmol_per_gdw" timeUnits="hour" extentUnits="mmol_per_gdw" fbc:strict="true">
     <notes>
@@ -644,6 +644,8 @@
         </annotation>
         <fbc:listOfFluxObjectives>
           <fbc:fluxObjective fbc:id="objMaxJ25" fbc:reaction="R25" fbc:coefficient="1" fbc:variableType="quadratic"/>
+          <fbc:fluxObjective fbc:id="objMaxJ25_R01_R01_qflobj" fbc:reaction="R01" fbc:coefficient="0.5" fbc:variableType="quadratic"/>
+          <fbc:fluxObjective fbc:id="objMaxJ25_R24_R25_qflobj" fbc:reaction="R25" fbc:coefficient="0.5" fbc:variableType="quadratic"/>
         </fbc:listOfFluxObjectives>
       </fbc:objective>
     </fbc:listOfObjectives>

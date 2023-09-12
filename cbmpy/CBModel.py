@@ -1183,7 +1183,6 @@ class Model(Fbase):
          - **value** the value of the bound
 
         """
-
         bnds = self.getReactionBounds(reaction)
         assert bnds[1] == None and bnds[3] == None, (
             '\nLower or equality bound exists for reaction: %s' % reaction
@@ -1501,6 +1500,7 @@ class Model(Fbase):
 
         if __DEBUG__:
             print('Adding reaction: {}'.format(reaction.id))
+
         if reaction.getId() in self.__global_id__:
             raise RuntimeError(
                 'Duplicate reaction ID detected: {}'.format(reaction.getId())
@@ -2490,13 +2490,11 @@ class Model(Fbase):
                 ub = self.getFluxBoundByReactionID(rid, 'upper').getValue()
             except AttributeError:
                 ub = None
-
         if lb is None and ub is None:
             try:
                 eq = self.getFluxBoundByReactionID(rid, 'equality').getValue()
             except AttributeError:
                 eq = None
-
 
         if lb is not None:
             if numpy.isinf(lb) or numpy.isreal(lb):
@@ -5519,8 +5517,8 @@ class Reaction(Fbase):
                 out = lb.getValue()
             else:
                 eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
-                self.__lower_bound_id__ = eq.getId()
                 if eq != None:
+                    self.__lower_bound_id__ = eq.getId()
                     # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
                     out = eq.getValue()
             return out
@@ -5550,15 +5548,14 @@ class Reaction(Fbase):
                 out = ub.getValue()
             else:
                 eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
-                self.__upper_bound_id__ = eq.getId()
-                if eq != None:
+                if eq is not None:
+                    self.__upper_bound_id__ = eq.getId()
                     # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
                     out = eq.getValue()
             return out
         except AttributeError as why:
-            print(
-                'WARNING: getUpperBound requires that this reaction object be added to a CBMPy instance to work.'
-            )
+            print(why)
+            print('WARNING: getUpperBound requires that this reaction object be added to a CBMPy instance to work.')
             return None
 
     def setLowerBound(self, value):

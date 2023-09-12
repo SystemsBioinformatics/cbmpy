@@ -4517,15 +4517,18 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             OF.miriam = sbml_getCVterms(SBOf, model=False)
             OF.__sbo_term__ = SBOf.getSBOTermID()
 
+            # add bivariate quadratic objective terms
             if fbc_version >= 3 and OF.hasAnnotation('quadratic_objective'):
-                print('(Temporary) Custom quadratic objective detected:', OF.getAnnotation('quadratic_objective'))
+                print('(Temporary) Bivariate quadratic objective detected:', OF.getAnnotation('quadratic_objective'))
                 pstring =  OF.getAnnotation('quadratic_objective').strip()
                 pstring = pstring.replace(' ', '')
                 Qobjects = [a.split('*') for a in pstring.split(',')]
-
                 print(Qobjects)
-
-
+                for qo in Qobjects:
+                    oid = '{}_{}_{}_qflobj'.format(SBOf.getId(), qo[1], qo[2])
+                    QFO = CBModel.FluxObjectiveQuadratic(oid, qo[1], qo[2], coefficient=qo[0])
+                    QFO.setName('quadratic_objective')
+                    OF.addFluxObjective(QFO)
             OBJFUNCout.append(OF)
 
         if DEBUG:

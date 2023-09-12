@@ -24,6 +24,9 @@ except AttributeError:
     print('UnKnown (this should fail)')
 
 
+R = cbmpy.CBModel.Reaction('newR')
+cmod3.addReaction(R, create_default_bounds=True, silent=True)
+
 for r in cmod3.reactions:
     lb1 = r.getLowerBound()
     ub1 = r.getUpperBound()
