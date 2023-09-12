@@ -2040,6 +2040,7 @@ class CBMtoSBML3(FBCconnect):
                         # FBCv3 rules this needs to be extended to deal with new KV pair properties
                         sbml_setFBCv3KeyValuePairs(OBJ.getPlugin('fbc'), ob_.annotation)
 
+
     def addGenesV2(
         self,
         parse_from_annotation=False,
@@ -4397,6 +4398,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     elif HAVE_FBC and fbc_version >= 2:
         timeFBV2 = time.time()
         for bnd in FB_data:
+
             FB = CBModel.FluxBound(bnd['id'], bnd['reaction'], bnd['operation'], bnd['value'])
             FB.annotation = bnd['annotation']
             FB.annotation_ext = bnd['annotation_ext']
@@ -4508,6 +4510,22 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                         print('vtype', Oflx.getType())
                 Oflx.setName(SBOfl.getName())
                 OF.addFluxObjective(Oflx)
+
+            # TODO bgoli add quadratic objective to be replaced by lastminute FBCv3 update
+            #ADD annotations
+            OF.annotation, OF.annotation_ext = sbml_readFBCv3KeyValuePairs(SBOf.getPlugin('fbc'))
+            OF.miriam = sbml_getCVterms(SBOf, model=False)
+            OF.__sbo_term__ = SBOf.getSBOTermID()
+
+            if fbc_version >= 3 and OF.hasAnnotation('quadratic_objective'):
+                print('(Temporary) Custom quadratic objective detected:', OF.getAnnotation('quadratic_objective'))
+                pstring =  OF.getAnnotation('quadratic_objective').strip()
+                pstring = pstring.replace(' ', '')
+                Qobjects = [a.split('*') for a in pstring.split(',')]
+
+                print(Qobjects)
+
+
             OBJFUNCout.append(OF)
 
         if DEBUG:
