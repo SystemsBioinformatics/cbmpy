@@ -639,7 +639,7 @@
       <fbc:objective fbc:id="objMaxJ25" fbc:type="maximize">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="quadratic_objective" value="0.5*R01*R01,0.5*R24*R25"/>
+            <keyValuePair key="quadratic_objective" value="2*R23*R23,2*R23*R24"/>
           </listOfKeyValuePairs>
         </annotation>
         <fbc:listOfFluxObjectives>
