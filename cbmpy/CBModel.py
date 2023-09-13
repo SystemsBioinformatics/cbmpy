@@ -1570,11 +1570,46 @@ class Model(Fbase):
 
             ucnew = self.createUserDefinedConstraint(u, lb, ub, components)
             self.addUserDefinedConstraint(ucnew)
+        print("Markging up model V2 --> V3")
+        self.__FBC_VERSION__ = 3
 
         self.user_constraints.clear()
 
 
+    def copyUserDefinedConstraintsToUserConstraints(self):
 
+        """
+        This is a workaround until I complete full UserDefinedConstraints support
+
+        """
+        # TODO bgoli ... this is a hack get rid of it!
+        out = {}
+        for udc in self.user_defined_constraints:
+            operator = None
+            lb = ub = rhs = None
+
+            if udc.getLowerBound() == udc.getUpperBound():
+                operator = "E"
+                lb = ub = rhs = udc.getLowerBound()
+            elif udc.getUpperBound() == numpy.Inf:
+                operator = "G"
+                ub = numpy.Inf
+                lb = rhs = udc.getLowerBound()
+            elif udc.getLowerBound() == numpy.NINF:
+                operator == "L"
+                lb = numpy.NINF
+                ub = rhs = udc.getUpperBound()
+            else:
+                print('copyUserDefinedConstraintsToUserConstraints does not know what to do with')
+                print(udc.getLowerBound(), udc.getUpperBound())
+
+            fluxes = []
+            for uc in udc.getConstraintComponents():
+                fluxes.append([uc.getCoefficient(), uc.getVariable(), uc.getType()])
+            out[udc.getId()] = {'fluxes' : fluxes,
+                                'operator' : operator,
+                                'rhs' : rhs}
+        return(out)
 
 
     def addUserConstraint(self, pid, fluxes=None, operator='>=', rhs=0.0):
@@ -3548,10 +3583,24 @@ class Model(Fbase):
                 rhs=RHS,
             )
 
-        # build and append additional constraint matric
+        # build and append additional constraint matrix
         CM = None
+        GO = False
+
+        # TODO bgoli this is an evil hack and needs to be consolidated to only use FBCv3 objects
         if self.user_constraints is not None and self.__FBC_VERSION__ < 3:
-            crows = list(self.user_constraints)
+            my_user_constraints = self.user_constraints.copy()
+            GO = True
+            print('USING USER_CONSTRAINTS', self.__FBC_VERSION__)
+            # print(my_user_constraints)
+        if self.user_defined_constraints is not None and self.__FBC_VERSION__ >= 3:
+            my_user_constraints = self.copyUserDefinedConstraintsToUserConstraints()
+            GO = True
+            print('USING USER_DEFINED_CONSTRAINTS', self.__FBC_VERSION__)
+            # print(my_user_constraints)
+
+        if GO:
+            crows = list(my_user_constraints)
             crows.sort()
             ccols = reac_id
             cnum_col = len(ccols)
@@ -3572,7 +3621,7 @@ class Model(Fbase):
                 CM = numpy.zeros((cnum_row, cnum_col))
                 CRHS = numpy.zeros(cnum_row)
             for cs in range(cnum_row):
-                for flx in self.user_constraints[crows[cs]]['fluxes']:
+                for flx in my_user_constraints[crows[cs]]['fluxes']:
                     tcol = ccols.index(flx[1])
                     if SYMGO:
                         CM[cs, tcol] = sympy.Rational(flx[0]).limit_denominator(
@@ -3589,13 +3638,13 @@ class Model(Fbase):
                     else:
                         CM[cs, tcol] = float(flx[0])
 
-                    Coperators[cs] = self.user_constraints[crows[cs]]['operator']
+                    Coperators[cs] = my_user_constraints[crows[cs]]['operator']
                     if SYMGO:
                         CRHS[cs] = sympy.Rational(
-                            self.user_constraints[crows[cs]]['rhs']
+                            my_user_constraints[crows[cs]]['rhs']
                         ).limit_denominator(sym_dlim)
                     else:
-                        CRHS[cs] = float(self.user_constraints[crows[cs]]['rhs'])
+                        CRHS[cs] = float(my_user_constraints[crows[cs]]['rhs'])
 
             if matrix_type == 'scipy_csr':
                 CM = csr_matrix(
@@ -3624,6 +3673,7 @@ class Model(Fbase):
                     rhs=CRHS,
                     operators=Coperators,
                 )
+
         if not only_return:
             self.N = N
             if CM != None:
@@ -4251,6 +4301,16 @@ class UserDefinedConstraint(Fbase):
         """
         return [f.variable for f in self.constraint_components]
 
+    def getConstraintComponentVariableTypes(self):
+        """
+
+
+        """
+        try:
+            return [type(self.getModel().getObject(f.variable)) for f in self.constraint_components]
+        except (KeyError, AttributeError):
+            return [None] * len(self.constraint_components)
+
     def getConstraintComponentData(self):
         """
 
@@ -4349,6 +4409,11 @@ class ConstraintComponent(Fbase):
     def getType(self):
         return self.ctype
 
+    def getVariableType(self):
+        try:
+            return type(self.getModel().getObject(self.variable))
+        except (KeyError, AttributeError):
+            return None
 
 
 class Compartment(Fbase):
