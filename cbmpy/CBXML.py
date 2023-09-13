@@ -1750,7 +1750,7 @@ class FBCconnect(object):
 
          - *oid* objective id
          - *osense* objective sense
-         - *flux_objs* [(reaction, coefficient)]
+         - *flux_objs* [(reaction, coefficient, type)]
          - *name*
          - *active*
 
@@ -2020,10 +2020,10 @@ class CBMtoSBML3(FBCconnect):
             active = False
             if ob_.getId() == self.fba.getActiveObjective().getId():
                 active = True
-            flux_objs = [
-                (o2.reaction, float(o2.coefficient), o2.getId(), o2.getType()) for o2 in ob_.flux_objectives
+            lin_flux_objs = [
+                (o2.reaction, float(o2.coefficient), o2.getId(), o2.getType()) for o2 in ob_.getLinearFluxObjectives()
             ]
-            OBJ = self.createObjective(ob_.getId(), ob_.operation, flux_objs, active=active)
+            OBJ = self.createObjective(ob_.getId(), ob_.operation, lin_flux_objs, active=active)
             if add_cbmpy_anno:
                 if ob_.getSBOterm() is not None:
                     OBJ.setSBOTerm(ob_.getSBOterm())
@@ -2039,7 +2039,17 @@ class CBMtoSBML3(FBCconnect):
                     if len(ob_.annotation) > 0:
                         # FBCv3 rules this needs to be extended to deal with new KV pair properties
                         sbml_setFBCv3KeyValuePairs(OBJ.getPlugin('fbc'), ob_.annotation)
+            quad_flux_objs = [
+                (o2.reaction, o2.reaction2, float(o2.coefficient), o2.getId(), o2.getType()) for o2 in ob_.getQuadraticBivariateFluxObjectives()]
+            print(quad_flux_objs)
+            qoterms = []
+            for qob in quad_flux_objs:
+                qoterms.append('{}*{}*{}'.format(qob[2], qob[0], qob[1]))
+            ob_.setAnnotation('quadratic_objective', ','.join(qoterms))
+            print(ob_.annotation)
 
+
+# TODO Implementr
 
     def addGenesV2(
         self,

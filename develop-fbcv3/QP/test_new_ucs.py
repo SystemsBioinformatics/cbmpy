@@ -15,15 +15,28 @@ for s in ucmod.species:
 for c in ucmod.compartments:
     c.setAnnotation('secret', c.getId())
 
-ucmod.getActiveObjective().getFluxObjectives()[0].setType('quadratic')
+# ucmod.getActiveObjective().getFluxObjectives()[0].setType('quadratic')
 ucmod.getActiveObjective().setAnnotation('quadratic_objective', '0.5*R01*R01,0.5*R24*R25')
 for fo in ucmod.getActiveObjective().flux_objectives:
     fo.setAnnotation('secret', fo.getId())
+
+print('\nFBA with OLD constraints:', cbmpy.doFBA(ucmod))
+old_cons =  (ucmod.getReaction('R14').getValue(), ucmod.getReaction('R15').getValue(), ucmod.getReaction('R16').getValue())
+print(old_cons)
+print('\n')
 
 # convert to new FBCv3 structures
 ucmod.convertUserConstraintsToUserDefinedConstraints()
 print('usercons', ucmod.user_constraints, ucmod.user_defined_constraints)
 print('global_id', list(ucmod.__global_id__.keys()))
+
+print('\nFBA with NEW constraints:', cbmpy.doFBA(ucmod))
+new_cons = (ucmod.getReaction('R14').getValue(), ucmod.getReaction('R15').getValue(), ucmod.getReaction('R16').getValue())
+print(new_cons)
+
+print(old_cons[0] - new_cons[0] == 0)
+print(old_cons[1] - new_cons[1] == 0)
+print(old_cons[2] - new_cons[2] == 0)
 
 
 for uc in ucmod.user_defined_constraints:

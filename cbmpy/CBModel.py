@@ -4035,7 +4035,7 @@ class Objective(Fbase):
         """
         self.value = value
 
-    def getLinearVariables(self):
+    def getLinearFluxObjectives(self):
         """
         Returns a list of linear variable flux objective objects
 
@@ -4046,7 +4046,7 @@ class Objective(Fbase):
                 out.append(fo)
         return out
 
-    def getQuadraticVariables(self):
+    def getQuadraticFluxObjectives(self):
         """
         Returns a list of quadratic variable flux objective objects
 
@@ -4056,6 +4056,18 @@ class Objective(Fbase):
             if fo.getType() == 'quadratic':
                 out.append(fo)
         return out
+
+    def getQuadraticBivariateFluxObjectives(self):
+        """
+        Returns a list of bivariate quadratic variable flux objective objects
+
+        """
+        out = []
+        for fo in self.flux_objectives:
+            if fo.getType() == 'quadratic' and type(fo) == FluxObjectiveQuadratic:
+                out.append(fo)
+        return out
+
 
 class FluxObjectiveQuadratic(Fbase):
     """
@@ -4078,7 +4090,7 @@ class FluxObjectiveQuadratic(Fbase):
         self.ctype = ctype
 
         self.reaction = reaction
-        self.reaction = reaction2
+        self.reaction2 = reaction2
         self.coefficient = coefficient
         self.annotation = {}
         self.compartment = None
