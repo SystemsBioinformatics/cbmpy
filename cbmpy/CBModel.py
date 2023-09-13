@@ -3550,7 +3550,7 @@ class Model(Fbase):
 
         # build and append additional constraint matric
         CM = None
-        if self.user_constraints != None:
+        if self.user_constraints is not None and self.__FBC_VERSION__ < 3:
             crows = list(self.user_constraints)
             crows.sort()
             ccols = reac_id

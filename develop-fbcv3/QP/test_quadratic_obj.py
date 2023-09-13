@@ -9,7 +9,7 @@ print('\nREADING ...\n')
 
 cmod3 = cbmpy.CBRead.readSBML3FBC('the_xenomorph.fbc3.xml')
 
-cmod3.getActiveObjective().setOperation('minimize')
+# cmod3.getActiveObjective().setOperation('minimize')
 
 cbmpy.doFBA(cmod3)
 
