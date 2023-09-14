@@ -93,6 +93,7 @@ if _HAVE_SBML_:
         writeModelToCOMBINEarchive,
         writeCOBRASBML,
         writeSBML3FBCV2,
+        writeSBML3FBCV3,
     )
 else:
     print('\nWARNING: No SBML support, top-level SBML read/write functions disabled.\n')
