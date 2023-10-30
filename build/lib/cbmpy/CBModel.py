@@ -3634,6 +3634,7 @@ class Objective(Fbase):
 
         """
         if fobj.getId() in self.getFluxObjectiveIDs():
+            print('FOBJID', fobj.getId())
             print(
                 '\nWARNING: a flux objective with id \"{}\" already exists ... not adding!\n'.format(
                     fobj.getId()
@@ -3651,6 +3652,7 @@ class Objective(Fbase):
          - *fluxlist* a list of one or more ('coefficient', 'rid') pairs
 
         """
+        raise DeprecationWarning
         FOreact = self.getFluxObjectiveReactions()
         for J in fluxlist:
             if J[1] not in FOreact:

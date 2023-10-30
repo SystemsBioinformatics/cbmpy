@@ -235,11 +235,11 @@ def cplx_constructLPfromFBA(fba, fname=None):
             # TODO bgoli this needs to be cleaned up
             if len(fba.getActiveObjective().getLinearFluxObjectives()) > 0:
                 print('Linear term(s) detected and added to objective function.')
-                print(fba.getActiveObjective().getLinearFluxObjectives())
-                print([
-                        (fo.reaction, fo.coefficient)
-                        for fo in fba.getActiveObjective().getLinearFluxObjectives()
-                    ])
+                # print(fba.getActiveObjective().getLinearFluxObjectives())
+                # print([
+                        # (fo.reaction, fo.coefficient)
+                        # for fo in fba.getActiveObjective().getLinearFluxObjectives()
+                    # ])
                 lp.objective.set_linear(
                     [
                         (fo.reaction, fo.coefficient)
@@ -248,11 +248,11 @@ def cplx_constructLPfromFBA(fba, fname=None):
                 )
             if len(fba.getActiveObjective().getQuadraticFluxObjectives()) > 0:
                 print('Quadratric terms detected and added to objective function.')
-                print(fba.getActiveObjective().getQuadraticFluxObjectives())
-                print([
-                    (fo.reaction, fo.reaction2, float(fo.coefficient))
-                        for fo in fba.getActiveObjective().getQuadraticFluxObjectives()
-                    ])
+                # print(fba.getActiveObjective().getQuadraticFluxObjectives())
+                # print([
+                    # (fo.reaction, fo.reaction2, float(fo.coefficient))
+                        # for fo in fba.getActiveObjective().getQuadraticFluxObjectives()
+                    # ])
                 lp.objective.set_quadratic_coefficients(
                     [
                         (fo.reaction, fo.reaction2, float(fo.coefficient))

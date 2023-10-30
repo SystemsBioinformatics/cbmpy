@@ -3591,12 +3591,12 @@ class Model(Fbase):
         if self.user_constraints is not None and self.__FBC_VERSION__ < 3:
             my_user_constraints = self.user_constraints.copy()
             GO = True
-            print('USING USER_CONSTRAINTS', self.__FBC_VERSION__)
+            print('User defined contraint FBC version', self.__FBC_VERSION__)
             # print(my_user_constraints)
         if self.user_defined_constraints is not None and self.__FBC_VERSION__ >= 3:
             my_user_constraints = self.copyUserDefinedConstraintsToUserConstraints()
             GO = True
-            print('USING USER_DEFINED_CONSTRAINTS', self.__FBC_VERSION__)
+            print('User defined contraint FBC version', self.__FBC_VERSION__)
             # print(my_user_constraints)
 
         if GO:
@@ -3783,9 +3783,14 @@ class Model(Fbase):
 
         """
         for uc in self.user_constraints:
+            fluxes2 = []
             for ucc in self.user_constraints[uc]['fluxes']:
+                ucc = list(ucc)
                 if len(ucc) == 2:
                     ucc.append('linear')
+                fluxes2.append(ucc)
+            self.user_constraints[uc]['fluxes'] = fluxes2
+
 
 
         F = open(filename, 'w')
@@ -3948,6 +3953,7 @@ class Objective(Fbase):
 
         """
         if fobj.getId() in self.getFluxObjectiveIDs():
+            print('FOBJID', fobj.getId())
             print(
                 '\nWARNING: a flux objective with id \"{}\" already exists ... not adding!\n'.format(
                     fobj.getId()

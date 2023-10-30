@@ -8,172 +8,220 @@
       <species id="A" name="A" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="B" name="B" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="C" name="C" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="D" name="D" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="F1" name="F1" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="F2" name="F2" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="G" name="G" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="H" name="H" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="I1" name="I1" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="I2" name="I2" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="J1" name="J1" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="J2" name="J2" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="K1" name="K1" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="K2" name="K2" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="L" name="L" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="M" name="M" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="N" name="N" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="X0" name="X0" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="X1" name="X1" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="X3" name="X3" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="mE1" name="mE1" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
       <species id="mE2" name="mE2" compartment="Cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false" fbc:charge="0">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
-            <keyValuePair key="time" value="15:33:08"/>
+            <keyValuePair key="time" value="23:01:26"/>
           </listOfKeyValuePairs>
         </annotation>
       </species>
     </listOfSpecies>
     <listOfParameters>
-      <parameter id="bnd_par1" value="1" constant="true"/>
-      <parameter id="bnd_par0" value="0" constant="true"/>
-      <parameter id="bnd_par2" value="1000" constant="true"/>
-      <parameter id="bnd_par3" value="-1000" constant="true"/>
-      <parameter id="uc_cons1_R15_ub" value="1" constant="true"/>
-      <parameter id="uc_cons1_R15_lb" value="-INF" constant="true"/>
+      <parameter id="R01_upper" value="1" constant="true"/>
+      <parameter id="R01_lower" value="0" constant="true"/>
+      <parameter id="R10_upper" value="1000" constant="true"/>
+      <parameter id="R10_lower" value="0" constant="true"/>
+      <parameter id="R03_upper" value="1000" constant="true"/>
+      <parameter id="R03_lower" value="-1000" constant="true"/>
+      <parameter id="R02_upper" value="1000" constant="true"/>
+      <parameter id="R02_lower" value="-1000" constant="true"/>
+      <parameter id="R05_upper" value="1000" constant="true"/>
+      <parameter id="R05_lower" value="0" constant="true"/>
+      <parameter id="R04_upper" value="1000" constant="true"/>
+      <parameter id="R04_lower" value="-1000" constant="true"/>
+      <parameter id="R16_upper" value="1000" constant="true"/>
+      <parameter id="R16_lower" value="0" constant="true"/>
+      <parameter id="R17_upper" value="1000" constant="true"/>
+      <parameter id="R17_lower" value="0" constant="true"/>
+      <parameter id="R14_upper" value="1000" constant="true"/>
+      <parameter id="R14_lower" value="-1000" constant="true"/>
+      <parameter id="R15_upper" value="1000" constant="true"/>
+      <parameter id="R15_lower" value="0" constant="true"/>
+      <parameter id="R12_upper" value="1000" constant="true"/>
+      <parameter id="R12_lower" value="0" constant="true"/>
+      <parameter id="R13_upper" value="1000" constant="true"/>
+      <parameter id="R13_lower" value="0" constant="true"/>
+      <parameter id="R07_upper" value="1000" constant="true"/>
+      <parameter id="R07_lower" value="0" constant="true"/>
+      <parameter id="R06_upper" value="1000" constant="true"/>
+      <parameter id="R06_lower" value="0" constant="true"/>
+      <parameter id="R09_upper" value="1000" constant="true"/>
+      <parameter id="R09_lower" value="0" constant="true"/>
+      <parameter id="R08_upper" value="1000" constant="true"/>
+      <parameter id="R08_lower" value="0" constant="true"/>
+      <parameter id="R11_upper" value="1000" constant="true"/>
+      <parameter id="R11_lower" value="0" constant="true"/>
+      <parameter id="R18_upper" value="1000" constant="true"/>
+      <parameter id="R18_lower" value="0" constant="true"/>
+      <parameter id="R19_upper" value="1000" constant="true"/>
+      <parameter id="R19_lower" value="-1000" constant="true"/>
+      <parameter id="R26_upper" value="1000" constant="true"/>
+      <parameter id="R26_lower" value="0" constant="true"/>
+      <parameter id="R25_upper" value="1000" constant="true"/>
+      <parameter id="R25_lower" value="0" constant="true"/>
+      <parameter id="R24_upper" value="1000" constant="true"/>
+      <parameter id="R24_lower" value="0" constant="true"/>
+      <parameter id="R23_upper" value="1000" constant="true"/>
+      <parameter id="R23_lower" value="-1000" constant="true"/>
+      <parameter id="R22_upper" value="1000" constant="true"/>
+      <parameter id="R22_lower" value="0" constant="true"/>
+      <parameter id="R21_upper" value="1000" constant="true"/>
+      <parameter id="R21_lower" value="-1000" constant="true"/>
+      <parameter id="R20_upper" value="1000" constant="true"/>
+      <parameter id="R20_lower" value="-1000" constant="true"/>
+      <parameter id="uc_cons1_R15_ub" value="0.8" constant="true"/>
+      <parameter id="uc_cons1_R15_lb" value="0.8" constant="true"/>
       <parameter id="uc_cons2_R15_ub" value="INF" constant="true"/>
-      <parameter id="uc_cons2_R15_lb" value="-1" constant="true"/>
-      <parameter id="uc_cons3_R14_ub" value="0" constant="true"/>
-      <parameter id="uc_cons3_R14_lb" value="0" constant="true"/>
+      <parameter id="uc_cons2_R15_lb" value="0.1" constant="true"/>
+      <parameter id="uc_cons3_R14_ub" value="INF" constant="true"/>
+      <parameter id="uc_cons3_R14_lb" value="0.1" constant="true"/>
     </listOfParameters>
     <listOfReactions>
-      <reaction id="R01" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par1">
+      <reaction id="R01" reversible="true" fast="false" fbc:lowerFluxBound="R01_lower" fbc:upperFluxBound="R01_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R01"/>
@@ -187,7 +235,7 @@
           <speciesReference species="A" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R10" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R10" reversible="true" fast="false" fbc:lowerFluxBound="R10_lower" fbc:upperFluxBound="R10_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R10"/>
@@ -201,7 +249,7 @@
           <speciesReference species="F2" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R03" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R03" reversible="true" fast="false" fbc:lowerFluxBound="R03_lower" fbc:upperFluxBound="R03_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R03"/>
@@ -215,7 +263,7 @@
           <speciesReference species="C" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R02" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R02" reversible="true" fast="false" fbc:lowerFluxBound="R02_lower" fbc:upperFluxBound="R02_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R02"/>
@@ -229,7 +277,7 @@
           <speciesReference species="B" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R05" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R05" reversible="true" fast="false" fbc:lowerFluxBound="R05_lower" fbc:upperFluxBound="R05_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R05"/>
@@ -243,7 +291,7 @@
           <speciesReference species="D" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R04" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R04" reversible="true" fast="false" fbc:lowerFluxBound="R04_lower" fbc:upperFluxBound="R04_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R04"/>
@@ -257,7 +305,7 @@
           <speciesReference species="B" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R16" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R16" reversible="true" fast="false" fbc:lowerFluxBound="R16_lower" fbc:upperFluxBound="R16_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R16"/>
@@ -271,7 +319,7 @@
           <speciesReference species="J1" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R17" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R17" reversible="true" fast="false" fbc:lowerFluxBound="R17_lower" fbc:upperFluxBound="R17_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R17"/>
@@ -285,7 +333,7 @@
           <speciesReference species="J2" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R14" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R14" reversible="true" fast="false" fbc:lowerFluxBound="R14_lower" fbc:upperFluxBound="R14_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R14"/>
@@ -299,7 +347,7 @@
           <speciesReference species="I2" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R15" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R15" reversible="true" fast="false" fbc:lowerFluxBound="R15_lower" fbc:upperFluxBound="R15_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R15"/>
@@ -313,7 +361,7 @@
           <speciesReference species="L" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R12" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R12" reversible="true" fast="false" fbc:lowerFluxBound="R12_lower" fbc:upperFluxBound="R12_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R12"/>
@@ -327,7 +375,7 @@
           <speciesReference species="H" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R13" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R13" reversible="true" fast="false" fbc:lowerFluxBound="R13_lower" fbc:upperFluxBound="R13_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R13"/>
@@ -341,7 +389,7 @@
           <speciesReference species="I1" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R07" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R07" reversible="true" fast="false" fbc:lowerFluxBound="R07_lower" fbc:upperFluxBound="R07_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R07"/>
@@ -355,7 +403,7 @@
           <speciesReference species="mE2" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R06" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R06" reversible="true" fast="false" fbc:lowerFluxBound="R06_lower" fbc:upperFluxBound="R06_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R06"/>
@@ -369,7 +417,7 @@
           <speciesReference species="mE1" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R09" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R09" reversible="true" fast="false" fbc:lowerFluxBound="R09_lower" fbc:upperFluxBound="R09_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R09"/>
@@ -383,7 +431,7 @@
           <speciesReference species="F1" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R08" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R08" reversible="true" fast="false" fbc:lowerFluxBound="R08_lower" fbc:upperFluxBound="R08_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R08"/>
@@ -397,7 +445,7 @@
           <speciesReference species="G" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R11" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R11" reversible="true" fast="false" fbc:lowerFluxBound="R11_lower" fbc:upperFluxBound="R11_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R11"/>
@@ -411,7 +459,7 @@
           <speciesReference species="G" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R18" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R18" reversible="true" fast="false" fbc:lowerFluxBound="R18_lower" fbc:upperFluxBound="R18_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R18"/>
@@ -425,7 +473,7 @@
           <speciesReference species="L" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R19" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R19" reversible="true" fast="false" fbc:lowerFluxBound="R19_lower" fbc:upperFluxBound="R19_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R19"/>
@@ -439,7 +487,7 @@
           <speciesReference species="K1" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R26" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R26" reversible="true" fast="false" fbc:lowerFluxBound="R26_lower" fbc:upperFluxBound="R26_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R26"/>
@@ -454,7 +502,7 @@
           <speciesReference species="X3" stoichiometry="0.5" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R25" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R25" reversible="true" fast="false" fbc:lowerFluxBound="R25_lower" fbc:upperFluxBound="R25_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R25"/>
@@ -468,7 +516,7 @@
           <speciesReference species="X1" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R24" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R24" reversible="true" fast="false" fbc:lowerFluxBound="R24_lower" fbc:upperFluxBound="R24_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R24"/>
@@ -482,7 +530,7 @@
           <speciesReference species="N" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R23" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R23" reversible="true" fast="false" fbc:lowerFluxBound="R23_lower" fbc:upperFluxBound="R23_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R23"/>
@@ -496,7 +544,7 @@
           <speciesReference species="N" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R22" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par0" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R22" reversible="true" fast="false" fbc:lowerFluxBound="R22_lower" fbc:upperFluxBound="R22_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R22"/>
@@ -510,7 +558,7 @@
           <speciesReference species="M" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R21" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R21" reversible="true" fast="false" fbc:lowerFluxBound="R21_lower" fbc:upperFluxBound="R21_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R21"/>
@@ -524,7 +572,7 @@
           <speciesReference species="I2" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R20" reversible="true" fast="false" fbc:lowerFluxBound="bnd_par3" fbc:upperFluxBound="bnd_par2">
+      <reaction id="R20" reversible="true" fast="false" fbc:lowerFluxBound="R20_lower" fbc:upperFluxBound="R20_upper">
         <annotation>
           <listOfKeyValuePairs xmlns="http://sbml.org/fbc/keyvaluepair">
             <keyValuePair key="abbreviation" value="R20"/>

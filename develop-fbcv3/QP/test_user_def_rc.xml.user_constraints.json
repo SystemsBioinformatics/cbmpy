@@ -3,11 +3,13 @@
     "fluxes": [
       [
         1,
-        "R16"
+        "R16",
+        "linear"
       ],
       [
         1,
-        "R15"
+        "R15",
+        "linear"
       ]
     ],
     "operator": "E",
@@ -17,7 +19,8 @@
     "fluxes": [
       [
         1,
-        "R15"
+        "R15",
+        "linear"
       ]
     ],
     "operator": "G",
@@ -27,7 +30,8 @@
     "fluxes": [
       [
         1,
-        "R14"
+        "R14",
+        "linear"
       ]
     ],
     "operator": "G",

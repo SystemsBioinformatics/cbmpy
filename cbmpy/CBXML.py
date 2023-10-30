@@ -4508,14 +4508,23 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             for ofl_ in range(SBOf.getNumFluxObjectives()):
                 SBOfl = SBOf.getFluxObjective(ofl_)
                 if SBOfl.getId() in [None, '']:
-                    oid = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
+                    if fbc_version < 3:
+                        oid = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
+                    else:
+                        oid = '{}_{}_{}_flobj'.format(SBOf.getId(), SBOfl.getReaction(), FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
                 else:
-                    oid = SBOf.getId()
+                    oid = SBOfl.getId()
                 if fbc_version < 3:
                     Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()))
                 else:
-                    Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()), \
-                                                 FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
+                    # TODO: needs optimization
+                    if FBC3_VARIABLE_TYPES[SBOfl.getVariableType()] == 'linear':
+                        Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()), \
+                                                     FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
+                    else:
+                        Oflx = CBModel.FluxObjectiveQuadratic(oid, SBOfl.getReaction(), SBOfl.getReaction(), float(SBOfl.getCoefficient()), \
+                                                     FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
+
                     if __DEBUG__:
                         print('vtype', Oflx.getType())
                 Oflx.setName(SBOfl.getName())
@@ -4539,7 +4548,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     QFO = CBModel.FluxObjectiveQuadratic(oid, qo[1], qo[2], coefficient=qo[0])
                     QFO.setName('quadratic_objective')
                     OF.addFluxObjective(QFO)
+
             OBJFUNCout.append(OF)
+        # print('OBJFUNCout', OBJFUNCout)
 
         if DEBUG:
             print('ObjectiveFunction load: {}'.format(round(time.time() - time0, 3)))
