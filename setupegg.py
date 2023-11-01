@@ -16,8 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: setupegg.py 660 2024-09-24 14:57:04Z bgoli $)
 
 """

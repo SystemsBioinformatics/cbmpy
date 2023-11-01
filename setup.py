@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: setup.py 698 2019-07-30 14:03:26Z bgoli $)
 
 """

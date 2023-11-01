@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: __init__.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
@@ -144,7 +144,7 @@ if not __SILENT_START__:
         )
     )
     print('*       https://systemsbioinformatics.github.io/cbmpy/                *')
-    print('* Copyright(C) Brett G. Olivier, 2014 - 2024                          *')
+    print('* Copyright (C) Brett G. Olivier, 2014 - 2024                         *')
     print('* Systems Biology Lab, A-LIFE, AIMMS, Faculty of Science              *')
     print('* Vrije Universiteit Amsterdam, Amsterdam, The Netherlands            *')
     #print('* CBMPy is developed as part of the BeBasic MetaToolKit Project       *')
