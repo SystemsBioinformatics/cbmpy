@@ -31,12 +31,12 @@ local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 try:
     from setuptools import setup
 
-    install_requires_src = ['numpy', 'packaging', 'nose_py3']
+    install_requires_src = ['numpy', 'packaging']
     extras_require_src = {
         'sympy': ['sympy'],
         'glpk': ['swiglpk',],
         'sbml': ['python_libsbml', 'lxml',],
-        'all': ['sympy', 'swiglpk', 'python_libsbml', 'lxml',],
+        'all': ['sympy', 'swiglpk', 'python_libsbml', 'lxml', 'scipy'],
     }
     tests_require_src = ['nose_py3']
 except:
@@ -62,21 +62,20 @@ with open(os.path.join(local_path, 'cbmpy', 'CBConfig.py')) as F:
 mypackages = ['cbmpy', 'cbmpy.fluxmodules']
 
 readme = """
-PySCeS CBMPy (http://cbmpy.sourceforge.net) is a new platform for constraint
-based modelling and analysis. It has been designed using principles developed
-in the PySCeS simulation software project: usability, flexibility and accessibility.
-Its architecture is both extensible and flexible using data structures that are intuitive to
-the biologist (metabolites, reactions, compartments) while transparently translating these into
-the underlying mathematical structures used in advanced analysis (LP's, MILP's).
+CBMPy (https://systemsbioinformatics.github.io/cbmpy/) is a platform for constraint
+based modelling and analysis. Its architecture is both extensible and flexible using
+data structures that are intuitive to the biologist (metabolites, reactions, compartments)
+while transparently translating these into the underlying mathematical structures used in
+advanced analysis (LP's, MILP's).
 
-PySCeS CBMPy implements popular analyses such as FBA, FVA, element/charge
+CBMPy is fully compatible with the latest SBML3 Flux Balance Constraints (FBC) interoperability
+specifications and implements popular analyses such as FBA, FVA, element/charge
 balancing, network analysis and model editing as well as advanced methods
 developed specifically for the ecosystem modelling: minimal distance methods,
-flux minimization and input selection. To cater for a diverse range of modelling
-needs PySCeS CBMPy supports user interaction via:
+flux minimization and input selection.
 """
 
-description="""CBMPy: https://github.com/SystemsBioinformatics/cbmpy is a platform for constraint based modelling and analysis. CBMPy implements popular analyses such as FBA, FVA, element/charge balancing, network analysis and model editing as well as advanced methods."""
+description="""CBMPy: https://systemsbioinformatics.github.io/cbmpy/ is a platform for constraint based modelling. It implements popular FBA analyses, model editing and supports the latest SBML3FBC standards."""
 
 setup(
     package_dir={'cbmpy': 'cbmpy'},
@@ -90,7 +89,7 @@ setup(
     author='Brett G. Olivier',
     author_email='b.g.olivier@vu.nl',
     maintainer_email='b.g.olivier@vu.nl',
-    url="https://github.com/SystemsBioinformatics/cbmpy",
+    url="https://systemsbioinformatics.github.io/cbmpy/",
     download_url="https://github.com/SystemsBioinformatics/cbmpy/releases",
     license="GNU General Public License (GPL)",
     keywords="computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard",
