@@ -1,6 +1,6 @@
 # Release history
 
-## Release 0.8.7 (2023)
+## Release 0.8.8 (2023)
 Intermediatery release that includes bug fixes, code cleanup and new features to support endPoint FBA. Has alpha support for Flux Balance Constraints V3 features including quadratic objectives, non-storichiometric user constraints and KeyValue pairs. Try the latest format with cbmpy.writeSBML3FBCV3.
 
 ## Release 0.8.4 (2022)

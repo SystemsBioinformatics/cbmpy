@@ -31,14 +31,11 @@ local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 try:
     from setuptools import setup
 
-    install_requires_src = ['numpy', 'packaging']
+    install_requires_src = ['numpy', 'packaging', 'pyparsing', 'python_libsbml', 'lxml', 'xlrd', 'xlwt', 'swiglpk', 'scipy', 'XlsxWriter']
     extras_require_src = {
-        'sympy': ['sympy'],
-        'glpk': ['swiglpk',],
-        'sbml': ['python_libsbml', 'lxml',],
-        'all': ['sympy', 'swiglpk', 'python_libsbml', 'lxml', 'scipy'],
+        'all': ['sympy', 'numpy', 'packaging', 'pyparsing', 'python_libsbml', 'lxml', 'xlrd', 'xlwt', 'swiglpk', 'scipy', 'nose_py3', 'XlsxWriter'],
     }
-    tests_require_src = ['nose_py3']
+    tests_require_src = ['numpy', 'packaging', 'pyparsing', 'python_libsbml', 'lxml', 'numpy', 'nose_py3']
 except:
     from distutils.core import setup
 
