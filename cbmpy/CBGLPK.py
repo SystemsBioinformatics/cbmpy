@@ -414,8 +414,10 @@ def glpk_analyzeModel(
     if build_n:
         f.buildStoichMatrix()
 
+    # I've moved the check gene activity function to the evaluation
     if f.__check_gene_activity__:
         f.updateNetwork(lower=0.0, upper=0.0)
+        f.__check_gene_activity__ = False
 
     fid = f.getId()
 

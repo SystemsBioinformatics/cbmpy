@@ -2911,8 +2911,9 @@ class Model(Fbase):
             g.setInactive()
             if update_reactions:
                 self.updateNetwork(lower, upper)
-            # else:
-            # self.__check_gene_activity__ = True
+                self.__check_gene_activity__ = False
+            else:
+                self.__check_gene_activity__ = True
             return True
         else:
             return False
@@ -2930,8 +2931,9 @@ class Model(Fbase):
             g.setActive()
             if update_reactions:
                 self.updateNetwork()
-            # else:
-            # self.__check_gene_activity__ = True
+                self.__check_gene_activity__ = False
+            else:
+                self.__check_gene_activity__ = True
             return True
         else:
             return False
@@ -2953,7 +2955,8 @@ class Model(Fbase):
                 R.reactivateReaction()
         if not silent:
             print('Updating gene activity network ... done.')
-        self.__check_gene_activity__ = False
+        # this must be explicitly unset
+        # self.__check_gene_activity__ = False
 
     def resetAllGenes(self, update_reactions=False):
         """
