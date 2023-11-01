@@ -2,7 +2,7 @@
 CBMPy: CBTools module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: CBTools.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
@@ -694,7 +694,7 @@ def stringReplace(fbamod, old, new, target):
     if target == 'objectives' or target == 'all':
         for s in fbamod.objectives:
             s.id = s.id.replace(old, new)
-            for f in s.fluxObjectives:
+            for f in s.flux_objectives:
                 f.id = f.id.replace(old, new)
                 f.reaction = f.reaction.replace(old, new)
     return fbamod
@@ -1521,7 +1521,7 @@ def checkIds(fba, items='all'):
             if i_ == 'objectives':
                 if 'fluxObjectives' not in output:
                     output['fluxObjectives'] = []
-                for fo_ in I_.fluxObjectives:
+                for fo_ in I_.flux_objectives:
                     foid = fo_.getId()
                     if foid in iddump:
                         print('INFO: duplicate \"fluxObjective\" id: {}'.format(foid))

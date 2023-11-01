@@ -2,7 +2,7 @@
 CBMPy: __init__.py
 ==================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: __init__.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
@@ -93,6 +93,7 @@ if _HAVE_SBML_:
         writeModelToCOMBINEarchive,
         writeCOBRASBML,
         writeSBML3FBCV2,
+        writeSBML3FBCV3,
     )
 else:
     print('\nWARNING: No SBML support, top-level SBML read/write functions disabled.\n')
@@ -142,11 +143,11 @@ if not __SILENT_START__:
             CBConfig.__CBCONFIG__['VERSION']
         )
     )
-    print('*                http://cbmpy.sourceforge.net                         *')
-    print('* Copyright(C) Brett G. Olivier 2014 - 2020                           *')
-    print('* Systems Biology Lab, Vrije Universiteit Amsterdam                   *')
-    print('* Amsterdam, The Netherlands                                          *')
-    print('* CBMPy is developed as part of the BeBasic MetaToolKit Project       *')
-    print('* Distributed under the GNU GPL v 3.0 licence, see                    *')
-    print('* LICENCE (supplied with this release) for details                    *')
+    print('*       https://systemsbioinformatics.github.io/cbmpy/                *')
+    print('* Copyright (C) Brett G. Olivier, 2014 - 2024                         *')
+    print('* Systems Biology Lab, A-LIFE, AIMMS, Faculty of Science              *')
+    print('* Vrije Universiteit Amsterdam, Amsterdam, The Netherlands            *')
+    #print('* CBMPy is developed as part of the BeBasic MetaToolKit Project       *')
+    print('* This version of CBMPy distributed under the GNU GPL v 3.0 licence   *')
+    #print('* See LICENCE.txt for details                                         *')
     print('***********************************************************************\n')

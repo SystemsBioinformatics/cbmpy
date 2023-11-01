@@ -2,7 +2,7 @@
 CBMPy: CBCommon module
 ======================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: CBCommon.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
@@ -56,6 +56,7 @@ MIRIAM_KEYS.sort()
 MIRIAM_KEYS = tuple(MIRIAM_KEYS)
 MIRIAM_KEYSlc = tuple([a.lower() for a in MIRIAM_KEYS])
 
+# TODO fine out what this comment is about
 # MIRIAM.update({'EC' : {'data_entry': 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&amp;ec=$id',
 # 'example': '1.1.1.1',
 # 'name': 'Enzyme Nomenclature',
@@ -77,7 +78,7 @@ try:
     HAVE_PYPARSING = True
     print('pyparsing import')
 except ImportError:
-    print('INFO: please install pyparsing to enable chemical balance checking!')
+    print('INFO: please install pyparsing (pip install pyparsing) to enable chemical balance checking!')
 
 
 #if not HAVE_PYPARSING:
@@ -104,6 +105,8 @@ if HAVE_PYPARSING:
         pyparsing.Word(pyparsing.alphanums + '. ') | 'or' | 'OR' | 'and' | 'AND'
     )
     pp_gene_unnester = pyparsing.nestedExpr(content=pp_gene_ass)
+else:
+    print('Please install pyparsing! pip install pyparsing')
 
 ptElements = (
     'H',

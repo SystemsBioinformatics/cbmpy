@@ -2,7 +2,7 @@
 CBMPy: CBCPLEX module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: CBCPLEX.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
@@ -212,6 +212,7 @@ def cplx_constructLPfromFBA(fba, fname=None):
     # print(lp.parameters.simplex.get_changed())
     lp.set_problem_name('%s' % (fba.getId()))
     lp.variables.add(names=fba.N.col)
+
     try:
         # define objective
         osense = fba.getActiveObjective().operation.lower()
@@ -222,12 +223,42 @@ def cplx_constructLPfromFBA(fba, fname=None):
         else:
             raise RuntimeError('\n%s - is not a valid objective operation' % osense)
         lp.objective.set_name(fba.getActiveObjective().getId())
-        lp.objective.set_linear(
-            [
-                (fo.reaction, fo.coefficient)
-                for fo in fba.getActiveObjective().fluxObjectives
-            ]
-        )
+
+        if fba.__FBC_VERSION__ < 3:
+            lp.objective.set_linear(
+                [
+                    (fo.reaction, fo.coefficient)
+                    for fo in fba.getActiveObjective().flux_objectives
+                ]
+            )
+        else:
+            # TODO bgoli this needs to be cleaned up
+            if len(fba.getActiveObjective().getLinearFluxObjectives()) > 0:
+                print('Linear term(s) detected and added to objective function.')
+                # print(fba.getActiveObjective().getLinearFluxObjectives())
+                # print([
+                        # (fo.reaction, fo.coefficient)
+                        # for fo in fba.getActiveObjective().getLinearFluxObjectives()
+                    # ])
+                lp.objective.set_linear(
+                    [
+                        (fo.reaction, fo.coefficient)
+                        for fo in fba.getActiveObjective().getLinearFluxObjectives()
+                    ]
+                )
+            if len(fba.getActiveObjective().getQuadraticFluxObjectives()) > 0:
+                print('Quadratric terms detected and added to objective function.')
+                # print(fba.getActiveObjective().getQuadraticFluxObjectives())
+                # print([
+                    # (fo.reaction, fo.reaction2, float(fo.coefficient))
+                        # for fo in fba.getActiveObjective().getQuadraticFluxObjectives()
+                    # ])
+                lp.objective.set_quadratic_coefficients(
+                    [
+                        (fo.reaction, fo.reaction2, float(fo.coefficient))
+                        for fo in fba.getActiveObjective().getQuadraticFluxObjectives()
+                    ])
+
     except AttributeError:
         print('\nWARNING(CPLEX create LP): no objective function defined')
 
@@ -390,8 +421,10 @@ def cplx_analyzeModel(
     if build_n:
         f.buildStoichMatrix()
 
+    # I've moved the check gene activity function to the evaluation
     if f.__check_gene_activity__:
         f.updateNetwork(lower=0.0, upper=0.0)
+        f.__check_gene_activity__ = False
 
     fid = f.id
 

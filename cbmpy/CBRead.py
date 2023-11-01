@@ -2,7 +2,7 @@
 CBMPy: CBRead module
 ====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: CBRead.py 669 2019-02-18 22:58:19Z bgoli $)
 
 """
@@ -120,7 +120,9 @@ def loadModel(sbmlfile):
         return None
 
     try:
-        if res == 'L3V1FBC2':
+        if res == 'L3V1FBC3':
+            mod = readSBML3FBC(sbmlfile, scan_notes_gpr=False, xoptions={'validate': False, 'readcobra': False})
+        elif res == 'L3V1FBC2':
             mod = readSBML3FBC(sbmlfile)
         elif res == 'L3V1FBC1':
             mod = readSBML3FBC(sbmlfile)
@@ -176,10 +178,9 @@ def readSBML3FBC(
     else:
         xmod = CBXML.sbml_readSBML3FBC(fname, work_dir, False, xoptions)
     if scan_notes_gpr and len(xmod.getGeneIds()) == 0:
-        print(
-            'INFO: no standard gene encoding detected, attempting to load from annotations.'
-        )
+        print('INFO: no standard gene encoding detected, attempting to load from annotations ...')
         xmod.createGeneAssociationsFromAnnotations()
+        print('INFO: No gene associations found in model.')
     return xmod
 
 

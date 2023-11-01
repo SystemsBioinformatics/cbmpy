@@ -2,7 +2,7 @@
 CBMPy: CBXML module
 ===================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: CBXML.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
@@ -107,10 +107,33 @@ try:
                 libsbml.SBML_FBC_GENEPRODUCTREF: 'geneproductref',
             }
         )
+        FBC3_VARIABLE_TYPES = {libsbml.FBC_VARIABLE_TYPE_LINEAR : 'linear',
+                              libsbml.FBC_VARIABLE_TYPE_QUADRATIC : 'quadratic',
+                              libsbml.FBC_VARIABLE_TYPE_INVALID : 'invalid',
+                              'linear' : libsbml.FBC_VARIABLE_TYPE_LINEAR,
+                              'quadratic' : libsbml.FBC_VARIABLE_TYPE_QUADRATIC,
+                              'invalid' : libsbml.FBC_VARIABLE_TYPE_INVALID
+                              }
     except AttributeError:
         print(
             '\nWARNING: No or limited FBC support limited! Please update your libSBML to the latest version.\n'
         )
+
+    try:
+        FBC3_VARIABLE_TYPES = {libsbml.FBC_VARIABLE_TYPE_LINEAR : 'linear',
+                              libsbml.FBC_VARIABLE_TYPE_QUADRATIC : 'quadratic',
+                              libsbml.FBC_VARIABLE_TYPE_INVALID : 'invalid',
+                              'linear' : libsbml.FBC_VARIABLE_TYPE_LINEAR,
+                              'quadratic' : libsbml.FBC_VARIABLE_TYPE_QUADRATIC,
+                              'invalid' : libsbml.FBC_VARIABLE_TYPE_INVALID
+                              }
+    except AttributeError:
+        print(
+            '\nWARNING: Your libSBML does not contain FBCv3 support, please upgrade.'
+        )
+
+
+
 
 except ImportError:
     print(
@@ -165,6 +188,7 @@ UNIT_DICTIONARY = {
 MODEL_UNITS = {'extent': 'mmol_per_gdw', 'substance': 'mmol_per_gdw', 'time': 'hour'}
 
 SBML_NS = [
+    ('http://www.sbml.org/sbml/level3/version1/fbc/version3', 'L3V1FBC3'),
     ('http://www.sbml.org/sbml/level3/version1/fbc/version2', 'L3V1FBC2'),
     ('http://www.sbml.org/sbml/level3/version1/fbc/version1', 'L3V1FBC1'),
     ('http://www.sbml.org/sbml/level3/version2/fbc/version2', 'L3V2FBC2'),
@@ -869,7 +893,7 @@ def xml_addSBML2FBAFluxBound(document, rid, operator, value, fbid=None):
     LoC.appendChild(F)
 
 
-def xml_createListOfFluxObjectives(document, fluxObjectives):
+def xml_createListOfFluxObjectives(document, l):
     """
     Create a list of fluxObjectives to add to an Objective:
 
@@ -954,7 +978,7 @@ def xml_getSBML2FBAannotation(fba, fname=None):
         xml_addSBML2FBAFluxBound(DOC, f.reaction, f.operation, f.value, f.getId())
 
     for o in fba.objectives:
-        fluxobjs = [(fo.reaction, fo.coefficient) for fo in o.fluxObjectives]
+        fluxobjs = [(fo.reaction, fo.coefficient) for fo in o.flux_objectives]
         OBJ = xml_createSBML2FBAObjective(DOC, o.id, o.operation, fluxobjs)
         if o.id == fba.objectives[fba.activeObjIdx].id:
             xml_addSBML2FBAObjective(DOC, OBJ, active=True)
@@ -1082,7 +1106,7 @@ def sbml_setCompartmentsL3(model, fba):
             sbml_setNotes3(comp_def, notes)
 
 
-def sbml_setParametersL3Fbc(fbcmod, add_cbmpy_anno=True):
+def sbml_setParametersL3Fbc(fbcmod, add_cbmpy_anno=True, fbc_version=2):
     """
     Add non fluxbound related parameters to the model
 
@@ -1592,7 +1616,7 @@ class FBCconnect(object):
     groupsversion = 1
     sbmlns = None
     fbc = None
-    fbcversion = 1
+    fbcversion = 2
     fbcstrict = True
     maxobjname = ('maximize', 'maximise', 'max')
     minobjname = ('minimize', 'minimise', 'min')
@@ -1641,13 +1665,11 @@ class FBCconnect(object):
                 print('\nWARNING: Groups initialisation error, not enabled.')
                 self.GROUPS_AVAILABLE = False
 
-        if fbc_version == 2 and fbc_strict:
+        if fbc_version >= 2 and fbc_strict:
             self.fbcstrict = True
             self.fbc.setStrict(True)
 
-        assert (
-            self.fbc != None
-        ), '\nSBML Level 3 FBC package required!\n(http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/Flux_Balance_Constraints_%28flux%29)'
+        assert (self.fbc != None), '\nSBML Level 3 FBC package required!\n(http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/Flux_Balance_Constraints_%28flux%29)'
 
     def _checkPackageRegistry(self, pkg):
         pkgs = []
@@ -1713,13 +1735,22 @@ class FBCconnect(object):
                 "\nCannot interpret bound %s with value %s" % (fid, value)
             )
 
+    #FBC3_VARIABLE_TYPES = {libsbml.FBC_VARIABLE_TYPE_LINEAR : 'linear',
+                          #libsbml.FBC_VARIABLE_TYPE_QUADRATIC : 'quadratic',
+                          #libsbml.FBC_VARIABLE_TYPE_INVALID : 'invalid',
+                          #'linear' : libsbml.FBC_VARIABLE_TYPE_LINEAR,
+                          #'quadratic' : libsbml.FBC_VARIABLE_TYPE_QUADRATIC,
+                          #'invalid' : libsbml.FBC_VARIABLE_TYPE_INVALID
+                          #}
+
+
     def createObjective(self, oid, osense, flux_objs, name=None, active=True):
         """
-        Create and add the FBC Objective function
+        Create and add the FBC Objective function. Returns the SBML objective object
 
          - *oid* objective id
          - *osense* objective sense
-         - *flux_objs* [(reaction, coefficient)]
+         - *flux_objs* [(reaction, coefficient, type)]
          - *name*
          - *active*
 
@@ -1741,6 +1772,16 @@ class FBCconnect(object):
             FO = O.createFluxObjective()
             FO.setReaction(fo_[0])
             FO.setCoefficient(fo_[1])
+            if self.fbcversion >= 3:
+                FO.setId(fo_[2])
+                # assume variable is linear if unknown
+                if fo_[3] is None:
+                    FO.setVariableType('linear')
+                else:
+                    print('INFO: creating a type', fo_[3], 'fluxobjective')
+                    FO.setVariableType(FBC3_VARIABLE_TYPES[fo_[3]])
+        return O
+
 
     def createGeneAssociationV1(self, rid, assoc, gprid=None):
         """
@@ -1812,7 +1853,7 @@ class CBMtoSBML3(FBCconnect):
     parameter_map = None
     parameter_cntr = 0
 
-    def __init__(self, fba, fbc_version=1, fbc_strict=True, enable_groups=False):
+    def __init__(self, fba, fbc_version=2, fbc_strict=True, enable_groups=False):
         """
         Convert a CBM model to SBML level 3 with FBC
 
@@ -1889,6 +1930,9 @@ class CBMtoSBML3(FBCconnect):
             bounds = {}
             shared_values = {}
             for r_ in self.fba.reactions:
+                if __DEBUG__:
+                    print('clb', r_.getLowerBound())
+                    print('cub', r_.getUpperBound())
                 lb = round(r_.getLowerBound(), sig_dig)
                 ub = round(r_.getUpperBound(), sig_dig)
                 rid = r_.getId()
@@ -1934,7 +1978,9 @@ class CBMtoSBML3(FBCconnect):
                 elif btype == 'upper':
                     self.parameter_map[rid]['ub'] = bid
                 else:
-                    print('ERROR: strange flux bound assigment type error (CBXML:1635)')
+                    self.parameter_map[rid]['lb'] = bid
+                    self.parameter_map[rid]['ub'] = bid
+                    print('ERROR: strange flux bound assigment type error (CBXML:1635)', btype, self.parameter_map[rid])
 
     def addBoundsV1(self, autofix=False):
         """
@@ -1964,19 +2010,46 @@ class CBMtoSBML3(FBCconnect):
             else:
                 print('Bound %s already exists, skipping ...' % (rid))
 
-    def addObjectives(self):
+    def addObjectives(self, add_cbmpy_anno=True,):
         """
         Add the CBM objective function to SBML
 
         """
+#         add_cbmpy_anno = True
         for ob_ in self.fba.objectives:
             active = False
             if ob_.getId() == self.fba.getActiveObjective().getId():
                 active = True
-            flux_objs = [
-                (o2.reaction, float(o2.coefficient)) for o2 in ob_.fluxObjectives
+            lin_flux_objs = [
+                (o2.reaction, float(o2.coefficient), o2.getId(), o2.getType()) for o2 in ob_.getLinearFluxObjectives()
             ]
-            self.createObjective(ob_.getId(), ob_.operation, flux_objs, active=active)
+            OBJ = self.createObjective(ob_.getId(), ob_.operation, lin_flux_objs, active=active)
+            if add_cbmpy_anno:
+                if ob_.getSBOterm() is not None:
+                    OBJ.setSBOTerm(ob_.getSBOterm())
+                if ob_.miriam != None:
+                    miriam = ob_.miriam.getAllMIRIAMUris()
+                    if len(miriam) > 0:
+                        sbml_setCVterms(ob_, miriam, model=False)
+                if self.fbcversion < 3:
+                    if len(ob_.annotation) > 0:
+                        annoSTRnew = sbml_writeKeyValueDataAnnotation(ob_.annotation)
+                        annores = OBJ.appendAnnotation(annoSTRnew)
+                elif self.fbcversion >= 3:
+                    if len(ob_.annotation) > 0:
+                        # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                        sbml_setFBCv3KeyValuePairs(OBJ.getPlugin('fbc'), ob_.annotation)
+            quad_flux_objs = [
+                (o2.reaction, o2.reaction2, float(o2.coefficient), o2.getId(), o2.getType()) for o2 in ob_.getQuadraticBivariateFluxObjectives()]
+            print(quad_flux_objs)
+            qoterms = []
+            for qob in quad_flux_objs:
+                qoterms.append('{}*{}*{}'.format(qob[2], qob[0], qob[1]))
+            ob_.setAnnotation('quadratic_objective', ','.join(qoterms))
+            print(ob_.annotation)
+
+
+# TODO Implementr
 
     def addGenesV2(
         self,
@@ -2016,11 +2089,16 @@ class CBMtoSBML3(FBCconnect):
 
             if len(g.annotation) > 0:
                 if add_cbmpy_anno:
-                    annoSTRnew = sbml_writeKeyValueDataAnnotation(g.annotation)
-                    annores = G.appendAnnotation(annoSTRnew)
-                    if annores == -3:
-                        print('Invalid annotation in Gene', g.getId())
-                        print(g.annotation, '\n')
+                    if self.fbcversion < 3:
+                        annoSTRnew = sbml_writeKeyValueDataAnnotation(g.annotation)
+                        annores = G.appendAnnotation(annoSTRnew)
+                        if annores == -3:
+                            print('Invalid annotation in Gene', g.getId())
+                            print(g.annotation, '\n')
+                    elif self.fbcversion >= 3:
+                        # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                        sbml_setFBCv3KeyValuePairs(G.getPlugin('fbc'), g.annotation)
+
             if g.miriam != None:
                 # last blah blah
                 sbml_setCVterms(G, g.miriam.getAllMIRIAMUris(), model=False)
@@ -2067,6 +2145,66 @@ class CBMtoSBML3(FBCconnect):
                     )
                 )
 
+
+    def addUserDefinedConstraintsV3(self, add_cbmpy_anno=True):
+        """
+        Add FBC V3 user defined constraints
+
+        """
+        assert (self.fbcversion >= 3), "UserDefinedConstraints support require FBCv3"
+
+        for u in self.fba.user_defined_constraints:
+            #print(u)
+            UC = self.fbc.createUserDefinedConstraint()
+            UC.setId(u.getId())
+            # TODO - for now lets just assume CBMPy is using values and not parameters
+
+            plbid = 'udcc_{}_lb'.format(u.getId())
+            if self.model.getParameter(plbid) is None:
+                plb = CBModel.Parameter(plbid, u.getLowerBound())
+                LB = self.createParParameter(plb)
+                self.model.addParameter(LB)
+                UC.setLowerBound(LB.getId())
+            else:
+                UC.setLowerBound(plbid)
+                self.model.getParameter(plbid).setValue(u.getLowerBound())
+
+            pubid = 'udcc_{}_ub'.format(u.getId())
+            if self.model.getParameter(pubid) is None:
+                pub = CBModel.Parameter(pubid, u.getUpperBound())
+                UB = self.createParParameter(pub)
+                self.model.addParameter(UB)
+                UC.setUpperBound(UB.getId())
+            else:
+                UC.setUpperBound(pubid)
+                self.model.getParameter(pubid).setValue(u.getUpperBound())
+
+            if len(u.annotation) > 0:
+                if add_cbmpy_anno:
+                    if self.fbcversion >= 3:
+                        # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                        sbml_setFBCv3KeyValuePairs(UC.getPlugin('fbc'), u.annotation)
+
+
+            for f in u.constraint_components:
+                UCFO = UC.createUserDefinedConstraintComponent()
+                UCFO.setId(f.getId())
+                # TODO - for now lets just assume CBMPy is using values and not parameters
+                #var = CBModel.Parameter('udcc_{}_{}_{}_var'.format(u.getId(), f.getId(), f.getVariable()), f.getCoefficient())
+                #VAR = self.createParParameter(var)
+                #self.model.addParameter(VAR)
+                UCFO.setVariable(f.getVariable())
+                UCFO.setCoefficient(f.getCoefficient())
+                UCFO.setVariableType(FBC3_VARIABLE_TYPES[f.getType()])
+
+                if len(f.annotation) > 0:
+                    if add_cbmpy_anno:
+                        if self.fbcversion >= 3:
+                            # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                            sbml_setFBCv3KeyValuePairs(UCFO.getPlugin('fbc'), f.annotation)
+
+
+
     def createParParameter(self, param, add_cbmpy_anno=True):
         """
         Create a generic SBML parameter from a CBMPy parameter
@@ -2079,19 +2217,28 @@ class CBMtoSBML3(FBCconnect):
         par = self.model.createParameter()
         par.setId(param.getId())
         par.setMetaId('meta_{}'.format(param.getId()))
-        par.setName(param.getName())
+        if param.getName() is not None:
+            #print(param.getName())
+            par.setName(param.getName())
         par.setValue(param.getValue())
         par.setConstant(True)
         if add_cbmpy_anno:
             if param.getSBOterm() is not None:
                 par.setSBOTerm(param.getSBOterm())
-            if len(param.annotation) > 0:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(param.annotation)
-                annores = par.appendAnnotation(annoSTRnew)
             if param.miriam != None:
                 miriam = param.miriam.getAllMIRIAMUris()
                 if len(miriam) > 0:
                     sbml_setCVterms(param, miriam, model=False)
+            if self.fbcversion < 3:
+                if len(param.annotation) > 0:
+                    annoSTRnew = sbml_writeKeyValueDataAnnotation(param.annotation)
+                    annores = par.appendAnnotation(annoSTRnew)
+            elif self.fbcversion >= 3:
+                if len(param.annotation) > 0:
+                    # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                    sbml_setFBCv3KeyValuePairs(par.getPlugin('fbc'), param.annotation)
+
+        return par
 
     def createFbParameterV2(self, bnd, add_cbmpy_anno=True):
         """
@@ -2100,7 +2247,7 @@ class CBMtoSBML3(FBCconnect):
          - *bnd* object
 
         """
-        # print('createFbParameterV2', bnd.getId())
+        #print('createFbParameterV2', bnd.getId(), add_cbmpy_anno)
 
         par = self.model.createParameter()
         bid = '{}_{}'.format(bnd.getReactionId(), bnd.getType())
@@ -2147,6 +2294,7 @@ class CBMtoSBML3(FBCconnect):
         par.setConstant(True)
         par.setSBOTerm('SBO:0000625')
 
+
     def _cleanUP_(self):
         self.fba = None
         self.parameter_map = {}
@@ -2170,39 +2318,19 @@ def sbml_writeKeyValueDataAnnotation(annotations):
     for K in annotations:
         Ktype = None
         Kval = None
-        # if type(annotations[K]) == bool:
-        # Ktype = 'boolean'
-        # elif type(annotations[K]) == int or type(annotations[K]) == long:
-        # Ktype = 'integer'
-        # elif type(annotations[K]) == float or type(annotations[K]) == numpy.float or type(annotations[K]) == numpy.double:
-        # Ktype = 'double'
-        # else:
-        # Ktype = 'string'
         if annotations[K] == '' or annotations[K] == None:
             Kval = ""
         else:
             Kval = ESCAPE(str(annotations[K]))
 
-        # fix the key to be sid compatible
-        ## removed temporarily, no reason to be an sid
-        # Kfix = ''
-        # for l in K:
-        # if l.isalnum():
-        # Kfix += l
-        # else:
-        # Kfix += '_'
-
-        ## removed temporarily, no reason to be an sid
-        # if not Kfix[0].isalpha():
-        # Kfix = 'id_' + Kfix
-        ## taken out for now
         # Kfix = Kfix.lower()
         Kfix = K
 
         # annoSTR += ' <data id="%s" type="%s" value="%s"/>\n' % (Kfix, Ktype, Kval)
         annoSTR += ' <data id="{}" value="{}"/>\n'.format(Kfix, Kval)
     annoSTR += '</listOfKeyValueData>\n'
-    # print annoSTR
+    if __DEBUG__:
+        print(annoSTR)
     return annoSTR
 
 
@@ -2244,6 +2372,36 @@ def sbml_readKeyValueDataAnnotation(annotations):
     return kvout
 
 
+def sbml_readFBCv3KeyValuePairs(fbcp):
+    """
+    Reads FBCv3 KeyValue pair annotation and returns a dictionary of key:value pairs
+
+    - *fbcp* an FBC plugin
+
+    """
+    #print("sbml_readFBCv3KeyValuePairs coming to a reader near you.", fbcp)
+
+    kv_base = {}
+    kv_ext = {}
+
+    for k_ in range(fbcp.getNumKeyValuePairs()):
+        kvp = fbcp.getKeyValuePair(k_)
+        key = kvp.getKey()
+        val =  kvp.getValue()
+        kv_base[key] = val
+        kv_ext[key] = {'id' : kvp.getId(),
+                       'name' : kvp.getName(),
+                       'uri' : kvp.getUri(),
+        }
+        if __DEBUG__:
+            print(kv_base)
+            print(kv_ext)
+
+    return kv_base, kv_ext
+
+
+
+
 def sbml_setSpeciesL3(
     model,
     fba,
@@ -2251,6 +2409,7 @@ def sbml_setSpeciesL3(
     add_cobra_anno=False,
     add_cbmpy_anno=True,
     substance_units=True,
+    fbc_version=2
 ):
     """
     Add the species definitions to the SBML object:
@@ -2261,6 +2420,7 @@ def sbml_setSpeciesL3(
      - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_anno* [default=False] add COBRA <notes> annotation
      - *substance_units* [default=True] defines the species in amounts rather than concentrations (necessary for default mmol/gdw.h)
+     - *fbc_version* [default=2] the FBC version to use
 
     returns:
 
@@ -2332,63 +2492,57 @@ def sbml_setSpeciesL3(
     for spe in keys:
         s = model.createSpecies()
         s.setId(species[spe]['id'])
+        Sfbc = s.getPlugin('fbc')
         # METAID
         s.setMetaId(METAPREFIX + species[spe]['id'])
         s.setName(species[spe]['name'])
         # in theory species are constant at whatever level it is set dX/dT == 0 also there is no way to change them
-        s.setConstant(False)  # TODO (201209) think about this
+        s.setConstant(False)  # (2023) Non-boundary conditions species cannot be constant
         # if not (species[spe]['charge'] != None or species[spe]['charge'] != ''):
         # s.setCharge(int(species[spe]['charge']))
-        if species[spe]['charge'] not in [
-            '',
-            None,
-            0,
-        ]:  # TODO this needs to be considered - bgoli
+        if species[spe]['charge'] not in ['', None, 0,]:  # TODO this needs to be considered - bgoli
             # print species[spe]['charge'], int(species[spe]['charge'])
-            if (
-                s.getPlugin('fbc').setCharge(int(species[spe]['charge']))
-                != libsbml.LIBSBML_OPERATION_SUCCESS
-            ):
+            if (Sfbc.setCharge(int(species[spe]['charge'])) != libsbml.LIBSBML_OPERATION_SUCCESS):
                 print('Unable to set charge for species: {}'.format(species[spe]['id']))
         if species[spe]['chemFormula'] not in ['', None]:
-            if (
-                s.getPlugin('fbc').setChemicalFormula(str(species[spe]['chemFormula']))
-                != libsbml.LIBSBML_OPERATION_SUCCESS
-            ):
-                print(
-                    'Unable to set chemFormula for species: {}'.format(
-                        species[spe]['id']
-                    )
-                )
+            if (Sfbc.setChemicalFormula(str(species[spe]['chemFormula'])) != libsbml.LIBSBML_OPERATION_SUCCESS):
+                print('Unable to set chemFormula for species: {}'.format(species[spe]['id']))
 
         s.setCompartment(species[spe]['compartment'])
 
         if species[spe]['boundary']:
             s.setBoundaryCondition(True)
-            # s.setConstant(True)
+            # s.setConstant(True) # this is technically true but may have other impacts so not enabling
         else:
             s.setBoundaryCondition(False)
+            s.setConstant(False)
         # print species[spe]['value'], type(species[spe]['value'])
-        if not numpy.isnan(species[spe]['value']) and species[spe]['value'] not in [
-            '',
-            None,
-        ]:
+        if not numpy.isnan(species[spe]['value']) and species[spe]['value'] not in ['', None,]:
             if substance_units:
                 # set the species to be in amounts or concentrations default is amounts for mmol/gdw.h
                 s.setInitialAmount(float(species[spe]['value']))
             else:
                 s.setInitialConcentration(float(species[spe]['value']))
+        else: # added 2023 if there are no concentrations defined export the model as inf
+            if substance_units:
+                # set the species to be in amounts or concentrations default is amounts for mmol/gdw.h
+                s.setInitialAmount(numpy.Inf)
+            else:
+                s.setInitialConcentration(numpy.Inf)
         s.setHasOnlySubstanceUnits(substance_units)
 
         if len(species[spe]['annotation']) > 0:
             if add_cbmpy_anno:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(
-                    species[spe]['annotation']
-                )
-                annores = s.appendAnnotation(annoSTRnew)
-                if annores == -3:
-                    print('Invalid annotation in reaction:', species[spe]['id'])
-                    print(species[spe]['annotation'], '\n')
+                if fbc_version < 3:
+                    annoSTRnew = sbml_writeKeyValueDataAnnotation(species[spe]['annotation'])
+                    annores = s.appendAnnotation(annoSTRnew)
+                    if annores == -3:
+                        print('Invalid annotation in reaction:', species[spe]['id'])
+                        print(species[spe]['annotation'], '\n')
+                else:
+                    # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                    sbml_setFBCv3KeyValuePairs(Sfbc, species[spe]['annotation'])
+
             if add_cobra_anno:
                 annoSTR = sbml_writeAnnotationsAsCOBRANote(
                     species[spe]['annotation']
@@ -2406,8 +2560,7 @@ def sbml_setSpeciesL3(
 
 
 def sbml_setReactionsL3Fbc(
-    fbcmod, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=1
-):
+    fbcmod, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=2):
     """
     Add the FBA instance reactions to the SBML model
 
@@ -2415,7 +2568,7 @@ def sbml_setReactionsL3Fbc(
      - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
      - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
      - *add_cobra_anno* [default=False] add COBRA <notes> annotation
-     - *fbc_version* [default=1] writes either FBC v1 (2013) or v2 (2015)
+     - *fbc_version* [default=2] writes either FBC v1 (2013) or v2 (2015) or v3 (2023)
 
     """
 
@@ -2462,7 +2615,7 @@ def sbml_setReactionsL3Fbc(
     for rxn in reactions:
         # print 'Adding reaction:', reactions[rxn]['id']
         r = fbcmod.model.createReaction()
-        if fbc_version == 2:
+        if fbc_version >= 2:
             FB = r.getPlugin('fbc')
         r.setId(reactions[rxn]['id'])
         # METAID
@@ -2502,7 +2655,7 @@ def sbml_setReactionsL3Fbc(
             for mo_ in reactions[rxn]['modifiers']:
                 r.addModifier(fbcmod.model.getSpecies(mo_))
 
-        if fbc_version == 2:
+        if fbc_version >= 2:
             FB.setLowerFluxBound(fbcmod.parameter_map[reactions[rxn]['id']]['lb'])
             FB.setUpperFluxBound(fbcmod.parameter_map[reactions[rxn]['id']]['ub'])
             if reactions[rxn]['id'] in gpr_reaction_map:
@@ -2519,43 +2672,39 @@ def sbml_setReactionsL3Fbc(
                     pass
                     # print('WARNING: {} cannot create association from tree: {}'.format(GPR.getId(), GPR.getTree()))
 
+                # add annotation
                 if len(GPR.annotation) > 0:
                     if add_cbmpy_anno:
-                        annoSTRnew = sbml_writeKeyValueDataAnnotation(GPR.annotation)
-                        annores = sbgpr.appendAnnotation(annoSTRnew)
-                        if annores == -3:
-                            print(
-                                'Invalid annotation in reaction GPR association',
-                                reactions[rxn]['id'],
-                            )
+                        if fbc_version < 3:
+                            annoSTRnew = sbml_writeKeyValueDataAnnotation(GPR.annotation)
+                            annores = sbgpr.appendAnnotation(annoSTRnew)
+                            if annores == -3:
+                                print('Invalid annotation in reaction GPR association', reactions[rxn]['id'])
+                        else:
+                            # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                            sbml_setFBCv3KeyValuePairs(sbgpr, GPR.annotation)
+
                 if GPR.miriam is not None:
                     sbml_setCVterms(sbgpr, GPR.miriam.getAllMIRIAMUris(), model=False)
 
+        # add annotation
         if len(reactions[rxn]['annotation']) > 0:
             if add_cbmpy_anno:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(
-                    reactions[rxn]['annotation']
-                )
-                annores = r.appendAnnotation(annoSTRnew)
-                if annores == -3:
-                    print('Invalid annotation in reaction', reactions[rxn]['id'])
-                    print(reactions[rxn]['annotation'], '\n')
+                if fbc_version < 3:
+                    annoSTRnew = sbml_writeKeyValueDataAnnotation(reactions[rxn]['annotation'])
+                    annores = r.appendAnnotation(annoSTRnew)
+                    if annores == -3:
+                        print('Invalid annotation in reaction', reactions[rxn]['id'])
+                        print(reactions[rxn]['annotation'], '\n')
+                else:
+                    # FBCv3 rules this needs to be extended to deal with new KV pair properties
+                    sbml_setFBCv3KeyValuePairs(FB, reactions[rxn]['annotation'])
 
         if len(reactions[rxn]['miriam']) > 0:
             sbml_setCVterms(r, reactions[rxn]['miriam'], model=False)
 
         if reactions[rxn]['sboterm'] is not None and reactions[rxn]['sboterm'] != '':
             r.setSBOTerm(str(reactions[rxn]['sboterm']))
-
-        if len(reactions[rxn]['annotation']) > 0:
-            if add_cbmpy_anno:
-                annoSTRnew = sbml_writeKeyValueDataAnnotation(
-                    reactions[rxn]['annotation']
-                )
-                annores = r.appendAnnotation(annoSTRnew)
-                if annores == -3:
-                    print('Invalid annotation in reaction', reactions[rxn]['id'])
-                    print(reactions[rxn]['annotation'], '\n')
 
         if add_cobra_anno:
             annoSTR = sbml_writeAnnotationsAsCOBRANote(
@@ -2567,6 +2716,23 @@ def sbml_setReactionsL3Fbc(
                 sbml_setNotes3(r, annoSTR)
         elif reactions[rxn]['notes'] != '' and reactions[rxn]['notes'] is not None:
             sbml_setNotes3(r, reactions[rxn]['notes'])
+
+
+
+def sbml_setFBCv3KeyValuePairs(fbcp, kv_pairs):
+    """
+    Adds key value pairs to any FBCv3 SBase derived object
+
+    - *fbcp* an FBCv3 plugin
+    - *kv_pairs* a dictionary of CBMPy Key Value pairs (format will be upgraded over next few versions)
+
+    """
+    for kv_ in kv_pairs:
+        kvp = fbcp.createKeyValuePair()
+        kvp.setKey(kv_)
+        if kv_pairs[kv_] is not None:
+            kvp.setValue(kv_pairs[kv_])
+
 
 
 def sbml_setGroupsL3(cs, fba):
@@ -2792,7 +2958,6 @@ def sbml_createAssociationFromTreeV2(tree, out):
             ref.setGeneProduct(c)
     return out
 
-
 def sbml_writeSBML3FBC(
     fba,
     fname,
@@ -2821,7 +2986,7 @@ def sbml_writeSBML3FBC(
      - *add_cobra_annot* [default=True] add COBRA <notes> annotation
      - *xoptions* extended options
 
-       - *fbc_version* [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)
+       - *fbc_version* [default=2] write SBML3FBC using version 1 (2013) or version 2 (2015) oe version (2023)
        - *validate* [default=False] validate the output SBML file
        - *compress_bounds* [default=False] try compress output flux bound parameters
        - *zip_model* [default=False] compress the model using ZIP encoding
@@ -2834,7 +2999,7 @@ def sbml_writeSBML3FBC(
     ), "\nSBML not available ... install libSBML with Python bindings for SBML support"
 
     # load options
-    fbc_version = 1
+    fbc_version = 2
     VALIDATE = False
     compress_bounds = False
     zip_model = False
@@ -2845,18 +3010,18 @@ def sbml_writeSBML3FBC(
         VALIDATE = xoptions['validate']
     if 'return_model_string' in xoptions:
         return_model_string = xoptions['return_model_string']
-    if 'compress_bounds' in xoptions and fbc_version == 2:
+    if 'compress_bounds' in xoptions and fbc_version >= 2:
         compress_bounds = xoptions['compress_bounds']
     if 'zip_model' in xoptions:
         zip_model = xoptions['zip_model']
-    if fbc_version == 2:
+    if fbc_version >= 2:
         autofix = True
 
     print('\nINFO: using FBC version: {}'.format(fbc_version))
 
     if fba.getName() in [None, '', ' ']:
-        ##fba.setName('cbmpy_fbc_v{}_model'.format(fbc_version))
         fba.setName('cbmpy_fbc_model')
+
     fba.setModifiedDate()
 
     USE_GROUPS = False
@@ -2872,7 +3037,7 @@ def sbml_writeSBML3FBC(
 
     if fbc_version == 1:
         cs3.addBoundsV1(autofix=autofix)
-    elif fbc_version == 2:
+    elif fbc_version >= 2:
         cs3.addBoundsV2(compress_bounds=compress_bounds)
 
     cs3.addObjectives()
@@ -2883,12 +3048,11 @@ def sbml_writeSBML3FBC(
             annotation_key='GENE_ASSOCIATION',
             add_cbmpy_anno=add_cbmpy_annot,
         )
-    elif fbc_version == 2:
+    elif fbc_version >= 2:
         cs3.addGenesV2(
             parse_from_annotation=gpr_from_annot,
             annotation_key='GENE_ASSOCIATION',
-            add_cbmpy_anno=add_cbmpy_annot,
-        )
+            add_cbmpy_anno=add_cbmpy_annot)
 
     # create a model
     sbml_setDescription(cs3.model, fba)
@@ -2899,6 +3063,7 @@ def sbml_writeSBML3FBC(
         add_cobra_anno=add_cobra_annot,
         add_cbmpy_anno=add_cbmpy_annot,
         substance_units=True,
+        fbc_version=fbc_version
     )
     sbml_setCompartmentsL3(cs3.model, fba)
     sbml_setReactionsL3Fbc(
@@ -2906,9 +3071,26 @@ def sbml_writeSBML3FBC(
         return_dict=False,
         add_cobra_anno=add_cobra_annot,
         add_cbmpy_anno=add_cbmpy_annot,
-        fbc_version=fbc_version,
+        fbc_version=fbc_version
     )
-    sbml_setParametersL3Fbc(cs3, add_cbmpy_anno=add_cbmpy_annot)
+    sbml_setParametersL3Fbc(cs3, add_cbmpy_anno=add_cbmpy_annot, fbc_version=fbc_version)
+
+
+    # User defined constraints try and keep backwards compatability with FBCv2 hack and FBCv3
+    if fba.user_constraints is not None and len(fba.user_constraints) >= 1:
+        if fbc_version == 2:
+            print("\nWARNING: User defined constraints are included in FBCv3 and you are attempting to save a FBCv2 file. Please save the model using the newer format.\nIn CBMPy 0.9 this will become compulsory.\n")
+            time.sleep(5)
+            fba.exportUserConstraints(fname + '.user_constraints.json')
+        elif fbc_version >= 3:
+            print("\nWARNING: User defined constraints defined using old FBCv2 format, convert to FBCv3 with ...")
+            print('cmod.convertUserConstraintsToUserDefinedConstraints()')
+
+    # add FBCv3 user defined constraints
+    if fbc_version >= 3:
+        if fba.user_constraints is not None and len(fba.user_constraints) >= 1:
+            print("\nWARNING: User constraints are defined and you are attempting to save a FBCv2 file. Please update the constraints using cmod.convertUserConstraintsToUserDefinedConstraints().\nIn CBMPy 0.9 this will become compulsory.\n")
+        cs3.addUserDefinedConstraintsV3(add_cbmpy_anno=add_cbmpy_annot)
 
     if USE_GROUPS:
         sbml_setGroupsL3(cs3, fba)
@@ -2948,9 +3130,6 @@ def sbml_writeSBML3FBC(
         F.close()
         print('Model exported as: {}'.format(fname))
 
-    # bgoli: temporary (until incorporated into FBC stadard) solution to store the constraints in a separate json file
-    if fba.user_constraints is not None and len(fba.user_constraints) >= 1:
-        fba.exportUserConstraints(fname + '.user_constraints.json')
 
     if VALIDATE:
         sbml_setValidationOptions(cs3.doc, level='full')
@@ -3465,6 +3644,8 @@ def sbml_fileFindVersion(f):
         msg = 'SBML Level 3 FBC version 1 model detected, loading with cbmpy.readSBML3FBC()'
     elif output == 'L3V1FBC2':
         msg = 'SBML Level 3 FBC version 2 model detected, loading with cbmpy.readSBML3FBC()'
+    elif output == 'L3V1FBC3':
+        msg = 'Awesome! SBML Level 3 FBC version 3 model detected, loading with cbmpy.readSBML3FBC()'
     elif output == 'L2FBA':
         msg = 'SBML Level 2 FAME model detected, loading with cbmpy.readSBML2FBA()'
     elif output == 'COBRA':
@@ -3600,7 +3781,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             )
 
     if 'model_metaclass' in xoptions:
-        raise NotImplementedError
+        raise NotImplementedError("Custom metaclass loading is still being considered.")
         # if os.sys.version_info > (3, 0):
         # CUSTOM_MODEL_METACLASS = True
         # class CBModelExtended(CBModel.Model, metaclass=xoptions['model_metaclass']):
@@ -3622,14 +3803,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     # check for file read errors
     if D.getNumErrors() > 0:
-        print(
-            '***\nDANGER: libSBML reports *{}* read errors, this indicates that this is an invalid SBML file. I will try to load it but cannot guarantee its accuracy.\n***\n'.format(
-                D.getNumErrors()
-            )
-        )
-        errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = sbml_validateDocument(
-            D, docread=True
-        )
+        print('***\nDANGER: libSBML reports *{}* read errors, this indicates that this is an invalid SBML file. I will try to load it but cannot guarantee its accuracy.\n***\n'.format(
+                D.getNumErrors()))
+        errors, warnings, others, DOCUMENT_VALID, MODEL_VALID = sbml_validateDocument(D, docread=True)
         if not DOCUMENT_VALID:
             raise RuntimeError(
                 "\nERROR: Validation has detected an invalid SBML document This is a fatal error.\n"
@@ -3658,9 +3834,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     M = D.getModel()
     assert M != None, "\n\nInvalid SBML file"
-    assert (
-        M.getLevel() >= 3 and M.getVersion() >= 1
-    ), "\nAn SBML L3V1 or greater model is required"
+    assert (M.getLevel() >= 3 and M.getVersion() >= 1), "\nAn SBML L3V1 or greater model is required"
 
     ## we are now going to allow loading non-FBC models (just to be friendly)
     HAVE_FBC = True
@@ -3681,37 +3855,31 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         )
         # return None
 
-    FBCver = 0
+    fbc_version = 0
     FBCstrict = True
     if HAVE_FBC:
-        FBCver = FBCplg.getPackageVersion()
-        if FBCver == 2:
+        fbc_version = FBCplg.getPackageVersion()
+        if fbc_version >= 2:
             FBCstrict = FBCplg.getStrict()
 
-        if FBCver == 2 and not FBCstrict:
+        if fbc_version >= 2 and not FBCstrict:
             print("\nWARNING!!!!\n")
-            print(
-                "This model has fbc:strict=\"false\" this means that is not necessarily a linear program and may contain a number of unsupported features containing aribtrary mathematical expressions such as, InitialAssignments, Rules, Events etc."
-            )
-            print(
-                "\nCBMPy can continue to load this model but will treat it as a convex linear problem and only load what it can interpret."
-            )
+            print("This model has fbc:strict=\"false\" this means that is not necessarily a linear program and may contain a number of unsupported features containing aribtrary mathematical expressions such as, InitialAssignments, Rules, Events etc.")
+            print("\nCBMPy can continue to load this model but will treat it as a convex linear problem and only load what it can interpret.")
             print("\nWARNING!!!!\n")
-            if not raw_input('\nDo you wish to continue (Y/N): ') == 'Y':
+            if not input('\nDo you wish to continue (Y/N): ') == 'Y':
                 os.sys.exit(-1)
 
     # print some model information
-    print('FBC version: {}'.format(FBCver))
+    print('FBC version: {}'.format(fbc_version))
     print('M.getNumReactions: {}'.format(M.getNumReactions()))
     print('M.getNumSpecies: {}'.format(M.getNumSpecies()))
     if HAVE_FBC:
         print('FBC.getNumObjectives: {}'.format(FBCplg.getNumObjectives()))
-        if FBCver == 1:
-            print(
-                'FBC.getNumGeneAssociations: {}'.format(FBCplg.getNumGeneAssociations())
-            )
+        if fbc_version == 1:
+            print('FBC.getNumGeneAssociations: {}'.format(FBCplg.getNumGeneAssociations()))
             print('FBC.getNumFluxBounds: {}'.format(FBCplg.getNumFluxBounds()))
-        elif FBCver == 2:
+        elif fbc_version >= 2:
             print('FBC.getNumParameters: {}'.format(M.getNumParameters()))
             print('FBC.getNumGeneProducts: {}'.format(FBCplg.getNumGeneProducts()))
 
@@ -3724,6 +3892,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     # model_description = xml_stripTags(model_description).strip()
     model_description = model_description.strip()
 
+    # TODO bgoli this will need to be refactored and scrubbed at some point
     __HAVE_FBA_ANOT_OBJ__ = True
     __HAVE_FBA_ANOT_BNDS__ = True
     __HAVE_FBA_ANOT_GENEASS__ = True
@@ -3757,7 +3926,10 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             SBSpF = SBSp.getPlugin("fbc")
             if SBSpF != None:
                 CF = SBSpF.getChemicalFormula()
-                CH = int(SBSpF.getCharge())
+                if fbc_version < 3:
+                    CH = int(SBSpF.getCharge())
+                else:
+                    CH = float(SBSpF.getCharge())
             # print CF, CH
 
         NM = SBSp.getName()  # get name
@@ -3773,18 +3945,24 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         )
         S.annotation = {}
         if LOADANNOT:
-            S.annotation = sbml_readKeyValueDataAnnotation(SBSp.getAnnotationString())
-            if S.annotation == {}:
-                if libsbml.getLibSBMLVersion() >= 51903:
-                    node_txt = libsbml.XMLNode.convertXMLNodeToString(SBSp.getNotes())
-                else:
-                    node_txt = libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
-                S.annotation = sbml_readCOBRANote(node_txt)
-                # SBSp.unsetNotes()
+            if fbc_version < 3:
+                S.annotation = sbml_readKeyValueDataAnnotation(SBSp.getAnnotationString())
+                if S.annotation == {}:
+                    if libsbml.getLibSBMLVersion() >= 51903:
+                        node_txt = libsbml.XMLNode.convertXMLNodeToString(SBSp.getNotes())
+                    else:
+                        node_txt = libsbml.XMLNode_convertXMLNodeToString(SBSp.getNotes())
+                    S.annotation = sbml_readCOBRANote(node_txt)
+                    # SBSp.unsetNotes()
+            else:
+                # TODO bgoli deal with v3 extended annotation
+                S.annotation, S.annotation_ext = sbml_readFBCv3KeyValuePairs(SBSpF)
+
             manot = sbml_getCVterms(SBSp, model=False)
             if manot != None:
                 S.miriam = manot
             del manot
+
         setCBSBOterm(SBSp.getSBOTermID(), S)
         S.setNotes(sbml_getNotes(SBSp))
         SPEC.append(S)
@@ -3808,23 +3986,29 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             'sbo': P.getSBOTermID(),
             'name': P.getName(),
             'annotation': None,
+            'annotation_ext': None,
             'miriam': None,
             'association': [],
             'notes': sbml_getNotes(P),
             'is_fluxbound': False,
         }
         if LOADANNOT:
-            pdict['annotation'] = sbml_readKeyValueDataAnnotation(
-                P.getAnnotationString()
-            )
+            if fbc_version < 3:
+                pdict['annotation'] = sbml_readKeyValueDataAnnotation(P.getAnnotationString())
+            else:
+                # TODO bgoli deal with v3 extended annotation
+                Pfbc = P.getPlugin("fbc")
+                pdict['annotation'], pdict['annotation_ext'] = sbml_readFBCv3KeyValuePairs(Pfbc)
+
             manot = sbml_getCVterms(P, model=False)
+
             if manot != None:
                 pdict['miriam'] = manot
             del manot
         PARAM_D[pid] = pdict
 
     GENE_D = {}
-    if HAVE_FBC and FBCver == 2:
+    if HAVE_FBC and fbc_version >= 2:
         for g_ in range(FBCplg.getNumGeneProducts()):
             G = FBCplg.getGeneProduct(g_)
             gid = G.getId()
@@ -3840,10 +4024,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 'notes': sbml_getNotes(G),
             }
             if LOADANNOT:
-                gdict['annotation'] = sbml_readKeyValueDataAnnotation(
-                    G.getAnnotationString()
-                )
+                if fbc_version < 3:
+                    gdict['annotation'] = sbml_readKeyValueDataAnnotation(G.getAnnotationString())
+                else:
+                    # TODO bgoli deal with v3 extended annotation
+                    Gfbc = G.getPlugin("fbc")
+                    gdict['annotation'], gdict['annotation_ext'] = sbml_readFBCv3KeyValuePairs(Gfbc)
+
                 manot = sbml_getCVterms(G, model=False)
+
                 if manot != None:
                     gdict['miriam'] = manot
                 del manot
@@ -3859,7 +4048,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     for r in range(M.getNumReactions()):
         SBRe = M.getReaction(r)
         R_id = SBRe.getId()
-        if HAVE_FBC and FBCver == 2:
+        if HAVE_FBC and fbc_version >= 2:
             # deal with new style fluxbounds
             RFBCplg = SBRe.getPlugin('fbc')
             lfbid = RFBCplg.getLowerFluxBound()
@@ -3872,6 +4061,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     'id': '{}_lb'.format(R_id),
                     'parameter': lfbid,
                     'annotation': PARAM_D[lfbid]['annotation'],
+                    'annotation_ext': PARAM_D[lfbid]['annotation_ext'],
                     'miriam': PARAM_D[lfbid]['miriam'],
                     'sbo': PARAM_D[lfbid]['sbo'],
                     'type': 'lower',
@@ -3888,6 +4078,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     'id': '{}_ub'.format(R_id),
                     'parameter': ufbid,
                     'annotation': PARAM_D[ufbid]['annotation'],
+                    'annotation_ext': PARAM_D[ufbid]['annotation_ext'],
                     'miriam': PARAM_D[ufbid]['miriam'],
                     'sbo': PARAM_D[ufbid]['sbo'],
                     'type': 'upper',
@@ -3947,10 +4138,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 GPR_D[GPR_id]['sbo'] = SBgpr.getSBOTermID()
                 GPR_D[GPR_id]['notes'] = sbml_getNotes(SBgpr)
                 if LOADANNOT:
-                    GPR_D[GPR_id]['annotation'] = sbml_readKeyValueDataAnnotation(
-                        SBgpr.getAnnotationString()
-                    )
+                    if fbc_version < 3:
+                        GPR_D[GPR_id]['annotation'] = sbml_readKeyValueDataAnnotation(SBgpr.getAnnotationString())
+                    else:
+                        # TODO bgoli deal with v3 extended annotation
+                        GPRfbc = SBgpr.getPlugin("fbc")
+                        GPR_D[GPR_id]['annotation'], GPR_D[GPR_id]['annotation_ext'] = sbml_readFBCv3KeyValuePairs(GPRfbc)
+
                     manot = sbml_getCVterms(SBgpr, model=False)
+
                     if manot != None:
                         GPR_D[GPR_id]['miriam'] = manot
                     del manot
@@ -3993,9 +4189,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                     products[spec2] += float(stoi2)
             if spec2 in boundary_species:
                 EXREAC = True
-        R = CBModel.Reaction(
-            SBRe.getId(), SBRe.getName(), reversible=SBRe.getReversible()
-        )
+        R = CBModel.Reaction(SBRe.getId(), SBRe.getName(), reversible=SBRe.getReversible())
         reactionsReversability.append(SBRe.getReversible())
 
         if USE_NET_STOICH:
@@ -4028,15 +4222,22 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             R.is_exchange = True
         R.annotation = {}
         if LOADANNOT:
-            R.annotation = sbml_readKeyValueDataAnnotation(SBRe.getAnnotationString())
-            # only dig for ancient annotation if not using V2
-            if libsbml.getLibSBMLVersion() >= 51903:
-                node_txt = libsbml.XMLNode.convertXMLNodeToString(SBRe.getNotes())
+            if fbc_version < 3:
+                R.annotation = sbml_readKeyValueDataAnnotation(SBRe.getAnnotationString())
+                # only dig for ancient annotation if not using V2
+                if libsbml.getLibSBMLVersion() >= 51903:
+                    node_txt = libsbml.XMLNode.convertXMLNodeToString(SBRe.getNotes())
+                else:
+                    node_txt = libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
+                if fbc_version < 2 and R.annotation == {}:
+                    R.annotation = sbml_readCOBRANote(node_txt)
             else:
-                node_txt = libsbml.XMLNode_convertXMLNodeToString(SBRe.getNotes())
-            if FBCver < 2 and R.annotation == {}:
-                R.annotation = sbml_readCOBRANote(node_txt)
+                # TODO bgoli deal with v3 extended annotation
+                #GPRfbc = SBgpr.getPlugin("fbc")
+                R.annotation, R.annotation_ext = sbml_readFBCv3KeyValuePairs(RFBCplg)
+
             manot = sbml_getCVterms(SBRe, model=False)
+
             if manot != None:
                 R.miriam = manot
             del manot
@@ -4060,7 +4261,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         size = SBcmp.getSize()
         if numpy.isnan(size) or size == None or size == '':
             size = None
-        volume = SBcmp.getVolume()
+        #volume = SBcmp.getVolume()
         dimensions = SBcmp.getSpatialDimensions()
         if dimensions == 0:
             print('Zero dimension compartment detected: {}'.format(cid))
@@ -4070,11 +4271,19 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         C = CBModel.Compartment(cid, name=name, size=size, dimensions=dimensions)
 
         if LOADANNOT:
-            C.annotation = sbml_readKeyValueDataAnnotation(SBcmp.getAnnotationString())
+            if fbc_version < 3:
+                C.annotation = sbml_readKeyValueDataAnnotation(SBcmp.getAnnotationString())
+            else:
+                # TODO bgoli deal with v3 extended annotation
+                Cfbc = SBcmp.getPlugin("fbc")
+                C.annotation, C.annotation_ext = sbml_readFBCv3KeyValuePairs(Cfbc)
+
             manot = sbml_getCVterms(SBcmp, model=False)
+
             if manot != None:
                 C.miriam = manot
             del manot
+
         setCBSBOterm(SBcmp.getSBOTermID(), C)
         C.setNotes(sbml_getNotes(SBcmp))
         COMP.append(C)
@@ -4084,8 +4293,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         print('Compartment load: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
 
+
     # extract fluxbounds
-    if HAVE_FBC and FBCver == 1:
+    if HAVE_FBC and fbc_version == 1:
         FB_data = []
         for fb_ in range(FBCplg.getNumFluxBounds()):
             SBFb = FBCplg.getFluxBound(fb_)
@@ -4110,7 +4320,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     UboundReactionIDs = []
     AboundReactionIDs = []
     DefinedReactionIDs = []
-    if HAVE_FBC and FBCver == 1:
+    if HAVE_FBC and fbc_version == 1:
         cntr = 0
         for c in FB_data:
             if 'id' in c:
@@ -4193,13 +4403,15 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 )
                 ubcntr += 1
                 # print 'Added new upper bound', newId
-    elif HAVE_FBC and FBCver == 2:
+
+    # TODO bgoli this has to be deprecated for FBC v 2+ by 0.9
+    elif HAVE_FBC and fbc_version >= 2:
         timeFBV2 = time.time()
         for bnd in FB_data:
-            FB = CBModel.FluxBound(
-                bnd['id'], bnd['reaction'], bnd['operation'], bnd['value']
-            )
+
+            FB = CBModel.FluxBound(bnd['id'], bnd['reaction'], bnd['operation'], bnd['value'])
             FB.annotation = bnd['annotation']
+            FB.annotation_ext = bnd['annotation_ext']
             FB.miriam = bnd['miriam']
             FB.__param__ = bnd['parameter']
             FB.__sbo_term__ = bnd['sbo']
@@ -4216,10 +4428,10 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     # Create parameters
     PARAM = []
     for p_ in PARAM_D:
-        P = CBModel.Parameter(
-            p_, PARAM_D[p_]['value'], PARAM_D[p_]['name'], PARAM_D[p_]['constant']
-        )
+        P = CBModel.Parameter(p_, PARAM_D[p_]['value'], PARAM_D[p_]['name'],\
+                              PARAM_D[p_]['constant'])
         P.annotation = PARAM_D[p_]['annotation']
+        P.annotation_ext = PARAM_D[p_]['annotation_ext']
         P.miriam = PARAM_D[p_]['miriam']
         P.__sbo_term__ = PARAM_D[p_]['sbo']
         P._associations_ = PARAM_D[p_]['association']
@@ -4234,7 +4446,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
     # GPRASSOC = {}
     if HAVE_FBC and LOADGENES:
-        if FBCver == 1 and __HAVE_FBA_ANOT_GENEASS__:
+        if fbc_version == 1 and __HAVE_FBA_ANOT_GENEASS__:
             SBGPR = FBCplg.getListOfGeneAssociations()
             for g_ in SBGPR:
                 gprid = g_.getId()
@@ -4262,9 +4474,16 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         fm.setMetaId('meta_{}'.format(model_id))
     fm.name = model_name
     fm.setNotes(model_description)
-    fm.annotation = sbml_readKeyValueDataAnnotation(M.getAnnotationString())
+    if fbc_version < 3:
+        fm.annotation = sbml_readKeyValueDataAnnotation(M.getAnnotationString())
+        fm.annotation_ext = {}
+    else:
+        # TODO bgoli deal with v3 extended annotation
+        # GPRfbc = SBgpr.getPlugin("fbc")
+        fm.annotation, fm.annotation_ext = sbml_readFBCv3KeyValuePairs(FBCplg)
+
     fm.__FBC_STRICT__ = FBCstrict
-    fm.__FBC_VERSION__ = FBCver
+    fm.__FBC_VERSION__ = fbc_version
 
     # try extract objective functions
     OBJFUNCout = []
@@ -4289,15 +4508,49 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
             for ofl_ in range(SBOf.getNumFluxObjectives()):
                 SBOfl = SBOf.getFluxObjective(ofl_)
                 if SBOfl.getId() in [None, '']:
-                    oid = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
+                    if fbc_version < 3:
+                        oid = '%s_%s_flobj' % (SBOf.getId(), SBOfl.getReaction())
+                    else:
+                        oid = '{}_{}_{}_flobj'.format(SBOf.getId(), SBOfl.getReaction(), FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
                 else:
-                    oid = SBOf.getId()
-                Oflx = CBModel.FluxObjective(
-                    oid, SBOfl.getReaction(), float(SBOfl.getCoefficient())
-                )
+                    oid = SBOfl.getId()
+                if fbc_version < 3:
+                    Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()))
+                else:
+                    # TODO: needs optimization
+                    if FBC3_VARIABLE_TYPES[SBOfl.getVariableType()] == 'linear':
+                        Oflx = CBModel.FluxObjective(oid, SBOfl.getReaction(), float(SBOfl.getCoefficient()), \
+                                                     FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
+                    else:
+                        Oflx = CBModel.FluxObjectiveQuadratic(oid, SBOfl.getReaction(), SBOfl.getReaction(), float(SBOfl.getCoefficient()), \
+                                                     FBC3_VARIABLE_TYPES[SBOfl.getVariableType()])
+
+                    if __DEBUG__:
+                        print('vtype', Oflx.getType())
                 Oflx.setName(SBOfl.getName())
                 OF.addFluxObjective(Oflx)
+
+            # TODO bgoli add quadratic objective to be replaced by lastminute FBCv3 update
+            #ADD annotations
+            OF.annotation, OF.annotation_ext = sbml_readFBCv3KeyValuePairs(SBOf.getPlugin('fbc'))
+            OF.miriam = sbml_getCVterms(SBOf, model=False)
+            OF.__sbo_term__ = SBOf.getSBOTermID()
+
+            # add bivariate quadratic objective terms
+            if fbc_version >= 3 and OF.hasAnnotation('quadratic_objective'):
+                print('(Temporary) Bivariate quadratic objective detected:', OF.getAnnotation('quadratic_objective'))
+                pstring =  OF.getAnnotation('quadratic_objective').strip()
+                pstring = pstring.replace(' ', '')
+                Qobjects = [a.split('*') for a in pstring.split(',')]
+                print(Qobjects)
+                for qo in Qobjects:
+                    oid = '{}_{}_{}_qflobj'.format(SBOf.getId(), qo[1], qo[2])
+                    QFO = CBModel.FluxObjectiveQuadratic(oid, qo[1], qo[2], coefficient=qo[0])
+                    QFO.setName('quadratic_objective')
+                    OF.addFluxObjective(QFO)
+
             OBJFUNCout.append(OF)
+        # print('OBJFUNCout', OBJFUNCout)
 
         if DEBUG:
             print('ObjectiveFunction load: {}'.format(round(time.time() - time0, 3)))
@@ -4385,6 +4638,53 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
         except RuntimeError:
             print('INFO: duplicate parameter id detected: {}'.format(p_.getId()))
 
+
+    #print([a.getId() for a in PARAM])
+
+    # READ FBCv3 user defined constraints
+    #print('Reading ucs ...')
+    if fbc_version >= 3:
+        for uc in FBCplg.getListOfUserDefinedConstraints():
+            #print(uc.getId())
+
+            # TODO bgoli for now we are going to flatten the bounds into floats
+            lb = float(M.getParameter(uc.getLowerBound()).getValue())
+            ub = float(M.getParameter(uc.getUpperBound()).getValue())
+            #print(lb, ub)
+
+
+
+            components = []
+            component_annotations = {}
+
+            for uccc in uc.getListOfUserDefinedConstraintComponents():
+                #print(uccc.getId())
+                coeff = uccc.getCoefficient()
+                var = uccc.getVariable()
+                vartype = FBC3_VARIABLE_TYPES[uccc.getVariableType()]
+                components.append((coeff, var, vartype, uccc.getId()))
+                #ADD annotations
+                a, a_ext = sbml_readFBCv3KeyValuePairs(uccc.getPlugin('fbc'))
+                miriam = sbml_getCVterms(uccc, model=False)
+                component_annotations[uccc.getId()] = {'annotation' : a,
+                                                       'annotation_ext' : a_ext,
+                                                       'miriam' : miriam}
+
+            #print('c', components)
+            #print('ca', component_annotations)
+            udc = fm.createUserDefinedConstraint(uc.getId(), lb, ub, components)
+            fm.addUserDefinedConstraint(udc)
+            # TODO bgoli deal with v3 extended annotation
+            udc.annotation, udc.annotation_ext = sbml_readFBCv3KeyValuePairs(uc.getPlugin('fbc'))
+            udc.miriam =  sbml_getCVterms(uc, model=False)
+
+            for cc in udc.constraint_components:
+                cc.annotation = component_annotations[cc.getId()]['annotation']
+                cc.annotation_ext = component_annotations[cc.getId()]['annotation_ext']
+                if component_annotations[cc.getId()]['miriam'] is not None:
+                    cc.miriam = component_annotations[cc.getId()]['miriam']
+
+
     if DEBUG:
         print('Parameter build: {}'.format(round(time.time() - time0, 3)))
     time0 = time.time()
@@ -4392,7 +4692,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
     for g_ in GENE_D:
         gene_labels[GENE_D[g_]['id']] = GENE_D[g_]['label']
 
-    if FBCver == 1 and LOADGENES:
+    if fbc_version == 1 and LOADGENES:
         for g_ in GPR_D:
             if 'reaction' in GPR_D[g_] and GPR_D[g_]['gpr_tree'] is not None:
 
@@ -4410,7 +4710,7 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
                 if gpr is not None:
                     gpr.setTree(GPR_D[g_]['gpr_tree'])
         fm.__updateGeneIdx__()
-    elif FBCver == 2 and LOADGENES:
+    elif fbc_version >= 2 and LOADGENES:
         # note we may want to add branches here for using indexes etc etc
         non_gpr_genes = []
         for g_ in GPR_D:

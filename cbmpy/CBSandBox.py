@@ -2,7 +2,7 @@
 CBMPy: CBSandBox module
 =======================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: CBSandBox.py 710 2020-04-27 14:22:34Z bgoli $)
 
 """
@@ -105,7 +105,7 @@ def setSuffix_extended(model, suffix='', target='all', ignore_list=[]):
     if target == 'objectives' or target == 'all':
         for obj in model.objectives:
             obj.id = obj.id + suffix
-        for f in obj.fluxObjectives:
+        for f in obj.flux_objectives:
             if f.reaction not in ignore_list:
                 f.id = f.id + suffix
                 f.reaction = f.reaction + suffix

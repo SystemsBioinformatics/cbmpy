@@ -2,7 +2,7 @@
 CBMPy: CBGLPK module
 ====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: CBGLPK.py 713 2020-07-29 22:28:43Z bgoli $)
 
 """
@@ -171,7 +171,7 @@ def glpk_constructLPfromFBA(fba, fname=None):
 
         sw.glp_set_obj_name(lp, fba.getActiveObjective().getId())
 
-        for fo_ in fba.getActiveObjective().fluxObjectives:
+        for fo_ in fba.getActiveObjective().flux_objectives:
             # lp.obj[varMap[fo_.reaction]] = fo_.coefficient
             sw.glp_set_obj_coef(lp, varMap[fo_.reaction] + 1, fo_.coefficient)
     except AttributeError:
@@ -414,8 +414,10 @@ def glpk_analyzeModel(
     if build_n:
         f.buildStoichMatrix()
 
+    # I've moved the check gene activity function to the evaluation
     if f.__check_gene_activity__:
         f.updateNetwork(lower=0.0, upper=0.0)
+        f.__check_gene_activity__ = False
 
     fid = f.getId()
 

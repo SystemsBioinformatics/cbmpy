@@ -2,7 +2,7 @@
 CBMPy: CBModel module
 =====================
 PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2009-2022 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-Author: Brett G. Olivier
-Contact email: bgoli@users.sourceforge.net
+Author: Brett G. Olivier PhD
+Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
 Last edit: $Author: bgoli $ ($Id: CBModel.py 706 2020-03-23 21:31:49Z bgoli $)
 
 """
@@ -106,6 +106,7 @@ class Fbase(object):
     id = None
     name = None
     annotation = None
+    annotation_ext = None
     compartment = None
     miriam = None
     notes = ''
@@ -123,7 +124,7 @@ class Fbase(object):
         """
         Internal method that should allow our weakrefs to be 'picklable'
 
-        # overloaded by Model, FluxBound and Group
+        # overwritten by Model, FluxBound and Group
 
         """
 
@@ -151,6 +152,17 @@ class Fbase(object):
 
         """
         self.__objref__ = None
+
+    def getModel(self):
+        """
+        Get the parent model object linked to in objref, can return model or None for unlinked object
+
+        # Overwritten by Model
+        """
+        if self.__objref__ is not None:
+            return self.__objref__()
+        else:
+            return None
 
     def getPid(self):
         """
@@ -245,26 +257,23 @@ class Fbase(object):
         # self.notes=notes
         self.notes = notes
 
-    def setAnnotation(self, key, value):
+    def setAnnotation(self, key, value, ext=None):
         """
         Set an objects annotation as a key : value pair.
 
          - *key* the annotation key
          - *value* the annotation value
+         - *ext* a dictionary of extended properties in FBCv3 id, name, uri
 
         """
         assert self.annotation != None, '\nThis class has no annotation field'
         self.annotation.update({key: value})
-        # if type(value) != list:
-        # self.annotation.update({key : value})
-        # elif type(value) == list:
-        # if len(value) == 1:
-        # self.annotation.update({key : value[0]})
-        # else:
-        # value = ['&apos;{}&apos;'.format(str(v).strip()) for v in value]
-        # self.annotation.update({key : '['+', '.join(map(str, value))+']'})
-        ##self.annotation.update({key : str(json.dumps(value))})
-        ##self.annotation.update({key : value})
+        if ext is not None:
+            for e in ext:
+                if e in ['id','name', 'uri']:
+                    self.annotation_ext[e] = ext[e]
+
+
 
     def deleteAnnotation(self, key):
         """
@@ -540,6 +549,7 @@ class Model(Fbase):
     sourcefile = ''
     description = ''
     user_constraints = None
+    user_defined_constraints = None
     CM = None
     sensitivity = None
     ##  optValue = None
@@ -590,6 +600,8 @@ class Model(Fbase):
         self.__genes_idx__ = []
         self.gpr = []
         self.parameters = []
+        self.user_defined_constraints = []
+        self.user_constraints = {}
         self.annotation = {}
         self.__TRASH__ = {}
         self.MODEL_CREATORS = {}
@@ -608,6 +620,39 @@ class Model(Fbase):
             self.__global_id__ = weakref.WeakValueDictionary({self.getId(): self})
         else:
             self.__global_id__ = {self.getId(): None}
+
+
+    def registerObjectInGlobalStore(self, obj):
+        """
+        - *object*
+
+        """
+        if obj.getId() in self.__global_id__:
+            raise RuntimeError(
+                'Duplicate object ID detected: {}'.format(obj.getId())
+            )
+        else:
+            self.__pushGlobalId__(obj.getId(), obj)
+
+
+    def unRegisterObjectInGlobalStore(self, sid):
+        """
+        - *sid*
+        """
+        if sid not in self.__global_id__:
+            raise RuntimeError(
+                'Object ID not registered: {}'.format(sid)
+            )
+        else:
+            self.__popGlobalId__(sid)
+
+
+    def getModel(self):
+        """
+        Overrides the FBase inherited method, returns own instance.
+
+        """
+        return self
 
     def clone(self):
         """
@@ -651,7 +696,7 @@ class Model(Fbase):
             self.__global_id__[fb.getId()] = fb
         for o in self.objectives:
             self.__global_id__[o.getId()] = o
-            for fo in o.fluxObjectives:
+            for fo in o.flux_objectives:
                 self.__global_id__[fo.getId()] = fo
         for c in self.compartments:
             self.__global_id__[c.getId()] = c
@@ -663,6 +708,23 @@ class Model(Fbase):
             self.__global_id__[p.getId()] = p
         for gr in self.groups:
             self.__global_id__[gr.getId()] = gr
+
+    def getObject(self, pid):
+        """
+        - *pid* returns a model object with pid or None
+
+        """
+        return self.__global_id__[pid] or None
+
+    def hasObject(self, pid):
+        """
+        - *pid* returns a boolean if there is a registered object with pid-
+
+        """
+        if pid in self.__global_id__:
+            return True
+        else:
+            return False
 
     def __setModelSelf__(self):
         """
@@ -683,7 +745,7 @@ class Model(Fbase):
             fb.__setObjRef__(self)
         for o in self.objectives:
             o.__setObjRef__(self)
-            for fo in o.fluxObjectives:
+            for fo in o.flux_objectives:
                 fo.__setObjRef__(self)
         for c in self.compartments:
             c.__setObjRef__(self)
@@ -715,7 +777,7 @@ class Model(Fbase):
             fb.__unsetObjRef__()
         for o in self.objectives:
             o.__unsetObjRef__()
-            for fo in o.fluxObjectives:
+            for fo in o.flux_objectives:
                 fo.__unsetObjRef__()
         for c in self.compartments:
             c.__unsetObjRef__()
@@ -939,6 +1001,7 @@ class Model(Fbase):
             str(obj.__objref__).split('to')[1][1:-1]
         )
         print('Adding objective: {}'.format(obj.id))
+
         obj.__objref__ = weakref.ref(self)
         if obj.getId() in self.__global_id__:
             raise RuntimeError('Duplicate obj ID detected: {}'.format(obj.getId()))
@@ -975,7 +1038,7 @@ class Model(Fbase):
             for o in self.getObjectiveIds():
                 self.deleteObjective(o)
         obj = Objective(new_obj_id, osense)
-        FO = FluxObjective('{}_{}_fluxobj'.format(new_obj_id, rid), rid, coefficient)
+        FO = FluxObjective('{}_{}_fluxobj'.format(new_obj_id, rid), rid, coefficient, 'linear')
         self.addObjective(obj, active=active)
         obj.addFluxObjective(FO)
 
@@ -1026,9 +1089,17 @@ class Model(Fbase):
         else:
             print('Error: compartment id \"{}\"'.format(cid))
 
+    def createParameter(self, pid, value, constant=True):
+        """
+        Instantiates a parameter
+
+        """
+        p = Parameter(pid, value, None, constant)
+        return p
+
+
     def createReaction(
-        self, rid, name=None, reversible=True, create_default_bounds=True, silent=False
-    ):
+        self, rid, name=None, reversible=True, create_default_bounds=True, silent=False, new=False):
         """
         Create a new blank reaction and add it to the model:
 
@@ -1052,6 +1123,34 @@ class Model(Fbase):
                     rid
                 )
             )
+
+
+    def createReactionNew(
+        self, rid, name=None, reversible=True, create_default_bounds=True, silent=False, new=False):
+        """
+        Create a new blank reaction and add it to the model:
+
+         - *id* the unique reaction ID
+         - *name* the reaction name
+         - *reversible* [default=True] the reaction reversibility. True is reversible, False is irreversible
+         - *create_default_bounds* create default reaction bounds, irreversible 0 <= J <= INF, reversable -INF <= J <= INF
+         - *silent* [default=False] if enabled this disables the printing of information messages
+
+        """
+
+        assert rid not in self.getReactionIds(), '\nReaction ID %s already exists' % rid
+        self.addReaction(
+            Reaction(rid, name, reversible),
+            create_default_bounds=create_default_bounds,
+            silent=silent,
+        )
+        if not silent:
+            print(
+                'Add reagents with cmod.createReactionReagent({}, metabolite, coefficient)'.format(
+                    rid
+                )
+            )
+
 
     def createReactionReagent(self, reaction, metabolite, coefficient, silent=False):
         """
@@ -1084,7 +1183,6 @@ class Model(Fbase):
          - **value** the value of the bound
 
         """
-
         bnds = self.getReactionBounds(reaction)
         assert bnds[1] == None and bnds[3] == None, (
             '\nLower or equality bound exists for reaction: %s' % reaction
@@ -1128,6 +1226,75 @@ class Model(Fbase):
         self.addFluxBound(FluxBound(newId, reaction, 'greaterEqual', lb_value))
         newId = '%s_%s_bnd' % (reaction, 'upper')
         self.addFluxBound(FluxBound(newId, reaction, 'lessEqual', ub_value))
+
+
+
+    def createUserDefinedConstraint(self, pid, lb, ub, components=None):
+        """
+        Create an FBCv3 UserDefinedConstraint
+
+        - *pid* unique id
+        - *lb* lower bound float/parameter
+        - *ub* upper bound float/parameter
+        - *componentents* optional, the user defined constraint componenents in the form of a list
+           [(coefficient, variable, type, id), ...] and coefficient and variable can be parameters
+           id is optional
+
+        """
+
+        udc =  UserDefinedConstraint(pid, lb, ub)
+        udc.setLowerBound(lb)
+        udc.setUppperBound(ub)
+
+        if components is not None:
+            for cc_ in components:
+                if type(cc_[0]) is Parameter:
+                    if len(cc_) == 4:
+                        pid =  cc_[3]
+                    else:
+                        pid =  "udcc_{}_{}".format(udc.getId(), cc_[1].getId())
+                else:
+                    if len(cc_) == 4:
+                        pid =  cc_[3]
+                    else:
+                        pid =  "udcc_{}_{}".format(udc.getId(), cc_[1])
+
+                ucc = udc.createConstraintComponent(pid, cc_[0], cc_[1], cc_[2])
+                udc.addConstraintComponent(ucc)
+
+
+        return udc
+
+
+    def addUserDefinedConstraint(self, udc):
+        """
+        Add a  User Defined Constraint object to the FBA model
+
+        - *obj* an instance of the UserDefinedConstraint class
+
+        """
+        assert (
+            type(udc) == UserDefinedConstraint
+        ), '\nERROR: requires an UserDefinedConstraint object, not something of type {}'.format(
+            type(udc)
+        )
+        assert (
+            udc.__objref__ is None
+        ), 'ERROR: object already bound to \"{}\", add a clone instead'.format(
+            str(udc.__objref__).split('to')[1][1:-1]
+        )
+        print('Adding constraint: {}'.format(udc.getId()))
+
+        udc.__objref__ = weakref.ref(self)
+        udc.setObjRefOnComponents()
+
+        if udc.getId() in self.__global_id__:
+            raise RuntimeError('Duplicate obj ID detected: {}'.format(udc.getId()))
+        else:
+            self.__pushGlobalId__(udc.getId(), udc)
+
+        self.user_defined_constraints.append(udc)
+
 
     def addFluxBound(self, fluxbound, fbexists=None):
         """
@@ -1248,16 +1415,8 @@ class Model(Fbase):
 
         """
         # TODO: fix this whole gene thing, genes must use labels for gene names and id's for object search
-        assert isinstance(
-            gene, Gene
-        ), '\nERROR: requires a Gene object, not something of type {}'.format(
-            type(gene)
-        )
-        assert (
-            gene.__objref__ is None
-        ), 'ERROR: object already bound to \"{}\", add a clone instead'.format(
-            str(gene.__objref__).split('to')[1][1:-1]
-        )
+        assert isinstance(gene, Gene), '\nERROR: requires a Gene object, not something of type {}'.format(type(gene))
+        assert (gene.__objref__ is None), 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(gene.__objref__).split('to')[1][1:-1])
         if __DEBUG__:
             print('Adding Gene: {}'.format(gene.id))
         if gene.getId() in self.__global_id__:
@@ -1279,22 +1438,18 @@ class Model(Fbase):
         - *par* an instance of the Parameter class
 
         """
-        assert isinstance(
-            par, Parameter
-        ), '\nERROR: requires a Parameter object, not something of type {}'.format(
-            type(par)
-        )
-        assert (
-            par.__objref__ is None
-        ), 'ERROR: object already bound to \"{}\", add a clone instead'.format(
-            str(par.__objref__).split('to')[1][1:-1]
-        )
+        assert isinstance(par, Parameter ), '\nERROR: requires a Parameter object, not something of type {}'.format( type(par))
+        assert (par.__objref__ is None), 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(par.__objref__).split('to')[1][1:-1])
         if __DEBUG__:
             print('Adding Parameter: {}'.format(par.id))
+
         if par.getId() in self.__global_id__:
             raise RuntimeError('Duplicate par ID detected: {}'.format(par.getId()))
         else:
             self.__pushGlobalId__(par.getId(), par)
+
+        # do magix
+        par.__objref__ = weakref.ref(self)
         self.parameters.append(par)
 
     def addCompartment(self, comp):
@@ -1345,13 +1500,16 @@ class Model(Fbase):
 
         if __DEBUG__:
             print('Adding reaction: {}'.format(reaction.id))
+
         if reaction.getId() in self.__global_id__:
             raise RuntimeError(
                 'Duplicate reaction ID detected: {}'.format(reaction.getId())
             )
         else:
             self.__pushGlobalId__(reaction.getId(), reaction)
+
         reaction.__objref__ = weakref.ref(self)
+
         for rr in reaction.reagents:
             rr.__objref__ = weakref.ref(self)
             if rr.getId() in self.__global_id__:
@@ -1360,7 +1518,9 @@ class Model(Fbase):
                 )
             else:
                 self.__pushGlobalId__(rr.getId(), rr)
+
         self.reactions.append(reaction)
+
         if create_default_bounds:
             rid = reaction.getId()
             self.createReactionUpperBound(rid, numpy.inf)
@@ -1381,6 +1541,77 @@ class Model(Fbase):
                         )
                     )
 
+    def convertUserConstraintsToUserDefinedConstraints(self):
+        """
+        If a model is loaded with the old CBMPy specific constraint data structures json files and dictionaries, this function will
+        upmark it to the new FBCv3 data structures
+
+        """
+        for u in self.user_constraints:
+            print('Converting constraint', u)
+            if self.user_constraints[u]['operator'] == 'E':
+                lb = self.user_constraints[u]['rhs']
+                ub = self.user_constraints[u]['rhs']
+            elif self.user_constraints[u]['operator'] in ['G', 'GE']:
+                lb = self.user_constraints[u]['rhs']
+                ub = numpy.Inf
+
+            elif self.user_constraints[u]['operator'] in ['L', 'LE']:
+                lb = numpy.NINF
+                ub = self.user_constraints[u]['rhs']
+
+            components = []
+            for c in self.user_constraints[u]['fluxes']:
+                if len(c) == 3:
+                    assert c[2] in ['linear', 'quadratic']
+                    components.append((c[0], c[1], c[2]))
+                else:
+                    components.append((c[0], c[1], 'linear'))
+
+            ucnew = self.createUserDefinedConstraint(u, lb, ub, components)
+            self.addUserDefinedConstraint(ucnew)
+        print("Markging up model V2 --> V3")
+        self.__FBC_VERSION__ = 3
+
+        self.user_constraints.clear()
+
+
+    def copyUserDefinedConstraintsToUserConstraints(self):
+
+        """
+        This is a workaround until I complete full UserDefinedConstraints support
+
+        """
+        # TODO bgoli ... this is a hack get rid of it!
+        out = {}
+        for udc in self.user_defined_constraints:
+            operator = None
+            lb = ub = rhs = None
+
+            if udc.getLowerBound() == udc.getUpperBound():
+                operator = "E"
+                lb = ub = rhs = udc.getLowerBound()
+            elif udc.getUpperBound() == numpy.Inf:
+                operator = "G"
+                ub = numpy.Inf
+                lb = rhs = udc.getLowerBound()
+            elif udc.getLowerBound() == numpy.NINF:
+                operator == "L"
+                lb = numpy.NINF
+                ub = rhs = udc.getUpperBound()
+            else:
+                print('copyUserDefinedConstraintsToUserConstraints does not know what to do with')
+                print(udc.getLowerBound(), udc.getUpperBound())
+
+            fluxes = []
+            for uc in udc.getConstraintComponents():
+                fluxes.append([uc.getCoefficient(), uc.getVariable(), uc.getType()])
+            out[udc.getId()] = {'fluxes' : fluxes,
+                                'operator' : operator,
+                                'rhs' : rhs}
+        return(out)
+
+
     def addUserConstraint(self, pid, fluxes=None, operator='>=', rhs=0.0):
         """
         Add a user defined constraint to FBA model, this is additional to the automatically determined Stoichiometric constraints.
@@ -1391,6 +1622,9 @@ class Model(Fbase):
          - *rhs* a float
 
         """
+
+        print('\nThis method is being deprecated ... use cmod.createUserDefinedConstraint and cmod.addUserDefinedConstraint instead.\n')
+
         assert (
             fluxes != None
         ), '\nNo *fluxes* defined: a list of (coefficient, reaction id) pairs where coefficient is a float'
@@ -1428,6 +1662,7 @@ class Model(Fbase):
         self.user_constraints.update(
             {pid: {'fluxes': fluxes, 'operator': operator, 'rhs': rhs}}
         )
+
 
     def deleteReactionAndBounds(self, rid):
         """
@@ -1475,7 +1710,7 @@ class Model(Fbase):
         for o in range(len(self.objectives) - 1, -1, -1):
             if self.objectives[o].getId() == objective_id:
                 Oobj = self.objectives.pop(o)
-                for fo in Oobj.fluxObjectives:
+                for fo in Oobj.flux_objectives:
                     self.__popGlobalId__(fo.getId())
                 self.__popGlobalId__(objective_id)
         print('Deleting objective {}'.format(objective_id))
@@ -1735,32 +1970,35 @@ class Model(Fbase):
                     gprmap[gpr.protein].extend(gpr.getGeneIds())
         return gprmap
 
-    def getGene(self, g_id):
+    def getGene(self, gid):
         """
         Returns a gene object that has the identifier:
 
          - *gid* the gene identifier
 
         """
+        #TODO
         out = None
+        #out = self.getObject(gid)
         for g_ in self.genes:
-            if g_.getId() == g_id:
+            if g_.getId() == gid:
                 out = g_
                 break
         return out
 
-    def getGPRassociation(self, gpr_id):
+    def getGPRassociation(self, gprid):
         """
         Returns a gene protein association object that has the identifier:
 
-         - *gpr_id* the gene protein identifier
+         - *gprid* the gene protein identifier
 
         """
         out = None
-        for g_ in self.gpr:
-            if g_.getId() == gpr_id:
-                out = g_
-                break
+        out = self.getObject(gprid)
+        #for g_ in self.gpr:
+            #if g_.getId() == gpr_id:
+                #out = g_
+                #break
         return out
 
     def getGPRforReaction(self, rid):
@@ -2211,18 +2449,23 @@ class Model(Fbase):
          - *cid* compartment ID
 
         """
-        out = None
-        for c in self.compartments:
-            if c.getId() == cid:
-                out = c
-                break
-        if self.compartments.count(cid) > 1:
-            print(
-                '\nERROR: multiple compartments with id \"{}\" returning first'.format(
-                    cid
-                )
-            )
-        return out
+        try:
+            return self.getObject(cid)
+        except KeyError:
+            return None
+        #out = None
+        #out = self.getObject(cid)
+        #for c in self.compartments:
+            #if c.getId() == cid:
+                #out = c
+                #break
+        #if self.compartments.count(cid) > 1:
+            #print(
+                #'\nERROR: multiple compartments with id \"{}\" returning first'.format(
+                    #cid
+                #)
+            #)
+        #return out
 
     def getReaction(self, rid):
         """
@@ -2231,12 +2474,10 @@ class Model(Fbase):
          - *rid* reaction ID
 
         """
-        out = None
-        for r in self.reactions:
-            if r.getId() == rid:
-                out = r
-                break
-        return out
+        try:
+            return self.getObject(rid)
+        except KeyError:
+            return None
 
     def getSpecies(self, sid):
         """
@@ -2245,24 +2486,21 @@ class Model(Fbase):
          - *sid* a specied ID
 
         """
-        out = None
-        for s in self.species:
-            if s.getId() == sid:
-                out = s
-                break
-        return out
+        try:
+            return self.getObject(sid)
+        except KeyError:
+            return None
 
     def getParameter(self, pid):
         """
         Returns a parameter object with pid
 
         """
-        out = None
-        for p in self.parameters:
-            if p.getId() == pid:
-                out = p
-                break
-        return out
+        try:
+            return self.getObject(pid)
+        except KeyError:
+            return None
+
 
     def getReactionBounds(self, rid):
         """
@@ -2271,23 +2509,41 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
+        # TODO SORT THIS MESS OUT ...
         lb = ub = eq = None
-        lb = self.getFluxBoundByReactionID(rid, 'lower')
-        ub = self.getFluxBoundByReactionID(rid, 'upper')
-        eq = self.getFluxBoundByReactionID(rid, 'equality')
-        if lb != None:
-            if numpy.isinf(lb.value) or numpy.isreal(lb.value):
-                lb = lb.value
+        try:
+            lb = self.getObject(rid).getLowerBound()
+        except KeyError:
+            try:
+                lb = self.getFluxBoundByReactionID(rid, 'lower').getValue()
+            except AttributeError:
+                lb = None
+        try:
+            ub = self.getObject(rid).getUpperBound()
+        except KeyError:
+            try:
+                ub = self.getFluxBoundByReactionID(rid, 'upper').getValue()
+            except AttributeError:
+                ub = None
+        if lb is None and ub is None:
+            try:
+                eq = self.getFluxBoundByReactionID(rid, 'equality').getValue()
+            except AttributeError:
+                eq = None
+
+        if lb is not None:
+            if numpy.isinf(lb) or numpy.isreal(lb):
+                pass
             else:
                 lb = float(lb)
-        if ub != None:
-            if numpy.isinf(ub.value) or numpy.isreal(ub.value):
-                ub = ub.value
+        if ub is not None:
+            if numpy.isinf(ub) or numpy.isreal(ub):
+                pass
             else:
                 ub = float(ub)
-        if eq != None:
-            if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                eq = eq.value
+        if eq is not None:
+            if numpy.isinf(eq) or numpy.isreal(eq):
+                pass
             else:
                 eq = float(eq)
         return rid, lb, ub, eq
@@ -2299,24 +2555,33 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        lb = eq = None
-        lb = self.getFluxBoundByReactionID(rid, 'lower')
-        if lb != None:
-            if type(lb.value) != str and (
-                numpy.isreal(lb.value) or numpy.isinf(lb.value)
-            ):
-                lb = lb.value
-            else:
-                lb = float(lb.value)
-        else:
-            eq = self.getFluxBoundByReactionID(rid, 'equality')
-            if eq != None:
-                # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
-                if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                    lb = eq.value
-                else:
-                    lb = float(eq)
-        return lb
+        # lb = eq = None
+        try:
+            return self.getObject(rid).getLowerBound()
+        except KeyError:
+            return None
+
+#         # Now duplicated directly in Reaction
+#
+#         #lb = eq = None
+#         #lb = self.getObject(rid)
+#         lb = self.getFluxBoundByReactionID(rid, 'lower')
+#         if lb != None:
+#             if type(lb.value) != str and (
+#                 numpy.isreal(lb.value) or numpy.isinf(lb.value)
+#             ):
+#                 lb = lb.value
+#             else:
+#                 lb = float(lb.value)
+#         else:
+#             eq = self.getFluxBoundByReactionID(rid, 'equality')
+#             if eq != None:
+#                 # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+#                 if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+#                     lb = eq.value
+#                 else:
+#                     lb = float(eq)
+#        return lb
 
     def getReactionUpperBound(self, rid):
         """
@@ -2325,57 +2590,68 @@ class Model(Fbase):
          - *rid* the reaction ID
 
         """
-        ub = eq = None
-        ub = self.getFluxBoundByReactionID(rid, 'upper')
-        if ub != None:
-            if type(ub.value) != str and (
-                numpy.isreal(ub.value) or numpy.isinf(ub.value)
-            ):
-                ub = ub.value
-            else:
-                ub = float(ub.value)
-        else:
-            eq = self.getFluxBoundByReactionID(rid, 'equality')
-            if eq != None:
-                # print('\nINFO: Upper bound defined as an equality ({})'.format(rid))
-                if numpy.isinf(eq.value) or numpy.isreal(eq.value):
-                    ub = eq.value
-                else:
-                    ub = float(eq)
-        return ub
+        try:
+            return self.getObject(rid).getUpperBound()
+        except KeyError:
+            return None
 
-    ##  def getBoundByName(self, rid, bound):
-    ##  """
-    ##  Return a FluxBound instance. Note this is an old name for the newer preferred method: `getFluxBoundByReactionID`
+#         Now duplicated directly in Reaction
 
-    ##  - *rid* the reaction ID
-    ##  - *bound* the bound: 'upper', 'lower', 'equal'
-
-    ##  """
-    ##  print 'Deprecated: use *getFluxBoundByReactionID*'
-    ##  return self.getFluxBoundByReactionID(rid, bound)
+#         ub = eq = None
+#         ub = self.getFluxBoundByReactionID(rid, 'upper')
+#         if ub != None:
+#             if type(ub.value) != str and (
+#                 numpy.isreal(ub.value) or numpy.isinf(ub.value)
+#             ):
+#                 ub = ub.value
+#             else:
+#                 ub = float(ub.value)
+#         else:
+#             eq = self.getFluxBoundByReactionID(rid, 'equality')
+#             if eq != None:
+#                 # print('\nINFO: Upper bound defined as an equality ({})'.format(rid))
+#                 if numpy.isinf(eq.value) or numpy.isreal(eq.value):
+#                     ub = eq.value
+#                 else:
+#                     ub = float(eq)
+#        return ub
 
     def getFluxBoundByID(self, fid):
         """
-        Returns a FluxBound with id
+        Returns a FluxBound/Parameter with id
 
          - *fid* the fluxBound ID
 
         """
-        c_ = None
-        for c_ in self.flux_bounds:
-            if c_.getId() == fid:
-                return c_
-        return c_
+        #return self.getObject(fid)
+        try:
+            return self.getObject(fid)
+        except KeyError:
+            return None
+
+
+        #c_ = None
+        #for c_ in self.flux_bounds:
+            #if c_.getId() == fid:
+                #return c_
+        #return c_
 
     def getFluxBoundByReactionID(self, rid, bound):
         """
-        Returns a FluxBound instance
+        Returns a FluxBound/Parameter instance
 
          - *rid* the reaction ID
          - *bound* the bound: 'upper', 'lower', 'equality'
 
         """
+
+#         print('This function will change in 0.9.0 to only return a value')
+
+#         if bound == 'upper':
+#             return self.getReactionUpperBound(rid)
+#         elif bound == 'lower':
+#             return self.getReactionLowerBound(rid)
+#
         c_ = None
         for c_ in self.flux_bounds:
             if c_.reaction == rid and c_.is_bound == bound:
@@ -2635,8 +2911,9 @@ class Model(Fbase):
             g.setInactive()
             if update_reactions:
                 self.updateNetwork(lower, upper)
-            # else:
-            # self.__check_gene_activity__ = True
+                self.__check_gene_activity__ = False
+            else:
+                self.__check_gene_activity__ = True
             return True
         else:
             return False
@@ -2654,8 +2931,9 @@ class Model(Fbase):
             g.setActive()
             if update_reactions:
                 self.updateNetwork()
-            # else:
-            # self.__check_gene_activity__ = True
+                self.__check_gene_activity__ = False
+            else:
+                self.__check_gene_activity__ = True
             return True
         else:
             return False
@@ -2677,7 +2955,8 @@ class Model(Fbase):
                 R.reactivateReaction()
         if not silent:
             print('Updating gene activity network ... done.')
-        self.__check_gene_activity__ = False
+        # this must be explicitly unset
+        # self.__check_gene_activity__ = False
 
     def resetAllGenes(self, update_reactions=False):
         """
@@ -2699,12 +2978,23 @@ class Model(Fbase):
          - *bound* this is either 'lower' or 'upper', or 'equal'
 
         """
-        if rid not in self.getReactionIds():
-            print('\nERROR setReactionBound: reaction id {} does not exist'.format(rid))
-            return
+#         R = self.getObject(rid)
+#
+#         if rid not in self.getReactionIds():
+#             print('\nERROR setReactionBound: reaction id {} does not exist'.format(rid))
+#             return
+#
+#         if bound == 'upper':
+#             R.setUpperBound(bound)
+#         elif bound == 'lower':
+#             R.setLowerBound(bound)
+#         else:
+#             R.setUpperBound(bound)
+#             R.setLowerBound(bound)
+
         c2 = self.getFluxBoundByReactionID(rid, bound)
         # changed to no str() casting
-        if c2 != None:
+        if c2 is not None:
             c2.setValue(value)
             if __DEBUG__:
                 print(c2.reaction, c2.operation, c2.value)
@@ -2755,9 +3045,11 @@ class Model(Fbase):
 
     def getAllFluxBounds(self):
         """
+        DEPRECATED
         Returns a dictionary of all flux bounds [id:value]
 
         """
+        print('Deprecation warning: This method will be changed in CBMPy 0.9.0')
         out = {}
         for f_ in self.flux_bounds:
             fid = f_.getId()
@@ -2783,11 +3075,13 @@ class Model(Fbase):
 
     def setFluxBoundsFromDict(self, bounds):
         """
+        DEPRECATED! This method will be modified to use reaction Idin CBMPy 0.9.0
         Sets all the fluxbounds present in bounds
 
          - *bounds* a dictionary of [fluxbound_id : value] pairs (not per reaction!!!)
 
         """
+        print('Deprecation warning: This method will be changed in CBMPy 0.9.0')
 
         fbids = self.getFluxBoundIds()
         for f_ in self.flux_bounds:
@@ -2866,7 +3160,7 @@ class Model(Fbase):
                     s.setId(prefix + s.getId())
                 if SUFFIX:
                     s.setId(s.getId() + suffix)
-                for f in s.fluxObjectives:
+                for f in s.flux_objectives:
                     if PREFIX:
                         f.setId(prefix + f.getId())
                         # if f.reaction not in ignore:
@@ -3075,6 +3369,7 @@ class Model(Fbase):
 
         """
         print('DEPRECATION WARNING: please use cmod.getFluxesAssociatedWithSpecies()')
+        print('Deprecation warning: This method will be deleted in CBMPy 0.9.0')
         return self.getFluxesAssociatedWithSpecies(metab)
 
     def getFluxesAssociatedWithSpecies(self, metab):
@@ -3291,10 +3586,24 @@ class Model(Fbase):
                 rhs=RHS,
             )
 
-        # build and append additional constraint matric
+        # build and append additional constraint matrix
         CM = None
-        if self.user_constraints != None:
-            crows = list(self.user_constraints)
+        GO = False
+
+        # TODO bgoli this is an evil hack and needs to be consolidated to only use FBCv3 objects
+        if self.user_constraints is not None and self.__FBC_VERSION__ < 3:
+            my_user_constraints = self.user_constraints.copy()
+            GO = True
+            print('User defined contraint FBC version', self.__FBC_VERSION__)
+            # print(my_user_constraints)
+        if self.user_defined_constraints is not None and self.__FBC_VERSION__ >= 3:
+            my_user_constraints = self.copyUserDefinedConstraintsToUserConstraints()
+            GO = True
+            print('User defined contraint FBC version', self.__FBC_VERSION__)
+            # print(my_user_constraints)
+
+        if GO:
+            crows = list(my_user_constraints)
             crows.sort()
             ccols = reac_id
             cnum_col = len(ccols)
@@ -3315,7 +3624,7 @@ class Model(Fbase):
                 CM = numpy.zeros((cnum_row, cnum_col))
                 CRHS = numpy.zeros(cnum_row)
             for cs in range(cnum_row):
-                for flx in self.user_constraints[crows[cs]]['fluxes']:
+                for flx in my_user_constraints[crows[cs]]['fluxes']:
                     tcol = ccols.index(flx[1])
                     if SYMGO:
                         CM[cs, tcol] = sympy.Rational(flx[0]).limit_denominator(
@@ -3332,13 +3641,13 @@ class Model(Fbase):
                     else:
                         CM[cs, tcol] = float(flx[0])
 
-                    Coperators[cs] = self.user_constraints[crows[cs]]['operator']
+                    Coperators[cs] = my_user_constraints[crows[cs]]['operator']
                     if SYMGO:
                         CRHS[cs] = sympy.Rational(
-                            self.user_constraints[crows[cs]]['rhs']
+                            my_user_constraints[crows[cs]]['rhs']
                         ).limit_denominator(sym_dlim)
                     else:
-                        CRHS[cs] = float(self.user_constraints[crows[cs]]['rhs'])
+                        CRHS[cs] = float(my_user_constraints[crows[cs]]['rhs'])
 
             if matrix_type == 'scipy_csr':
                 CM = csr_matrix(
@@ -3367,6 +3676,7 @@ class Model(Fbase):
                     rhs=CRHS,
                     operators=Coperators,
                 )
+
         if not only_return:
             self.N = N
             if CM != None:
@@ -3462,13 +3772,12 @@ class Model(Fbase):
         F = open(filename, 'r')
         # din = json.load(F)
         self.user_constraints = json.load(F)
-        # key = os.path.split(self.sourcefile)[-1]
-        # F.close()
-        # if key in din:
-        # self.user_constraints = din[key]
-        # else:
-        # print('ERROR: constraints refers to file \"{}\" whereas this is file \"{}\"'.format(list(din.keys())[0], key))
-        # return False
+
+        for uc in self.user_constraints:
+            for ucc in self.user_constraints[uc]['fluxes']:
+                if len(ucc) == 2:
+                    ucc.append('linear')
+
         return True
 
     def exportUserConstraints(self, filename):
@@ -3476,6 +3785,17 @@ class Model(Fbase):
         Exports user constraints in json
 
         """
+        for uc in self.user_constraints:
+            fluxes2 = []
+            for ucc in self.user_constraints[uc]['fluxes']:
+                ucc = list(ucc)
+                if len(ucc) == 2:
+                    ucc.append('linear')
+                fluxes2.append(ucc)
+            self.user_constraints[uc]['fluxes'] = fluxes2
+
+
+
         F = open(filename, 'w')
         # json.dump({os.path.split(self.sourcefile)[-1] : self.user_constraints}, F, indent=2)
         json.dump(self.user_constraints, F, indent=2)
@@ -3585,11 +3905,11 @@ class Objective(Fbase):
 
     """
 
-    fluxObjectives = None
-    ##  fluxObjectiveNames = None
+    flux_objectives = None
     operation = None
     value = None
     solution = None
+
 
     def __init__(self, pid, operation):
         pid = str(pid)
@@ -3601,9 +3921,11 @@ class Objective(Fbase):
             self.operation = 'minimize'
         else:
             print('WARNING: Invalid operation: {}'.format(operation))
-        self.fluxObjectives = []
+        self.flux_objectives = []
         self.compartment = None
         self.__delattr__('compartment')
+        self.annotation = {}
+        self.annotation_ext = {}
 
     def setOperation(self, operation):
         """
@@ -3634,6 +3956,7 @@ class Objective(Fbase):
 
         """
         if fobj.getId() in self.getFluxObjectiveIDs():
+            print('FOBJID', fobj.getId())
             print(
                 '\nWARNING: a flux objective with id \"{}\" already exists ... not adding!\n'.format(
                     fobj.getId()
@@ -3642,35 +3965,46 @@ class Objective(Fbase):
             return
         if not override:
             self.__objref__().__pushGlobalId__(fobj.getId(), fobj)
-        self.fluxObjectives.append(fobj)
+        self.flux_objectives.append(fobj)
 
     def createFluxObjectives(self, fluxlist):
         """
         Create and add flux objective objects to this objective function.
 
-         - *fluxlist* a list of one or more ('coefficient', 'rid') pairs
+         - *fluxlist* a list of one or more ('coefficient', 'rid', 'type') triples
 
         """
         FOreact = self.getFluxObjectiveReactions()
         for J in fluxlist:
             if J[1] not in FOreact:
                 fid = '{}_{}_fobj'.format(self.getId(), J[1])
-                self.addFluxObjective(FluxObjective(fid, J[1], J[0]))
+                if len(J) > 2:
+                    ctype = J[2]
+                else:
+                    ctype = 'linear'
+                self.addFluxObjective(FluxObjective(fid, J[1], J[0], ctype))
             else:
-                print(
-                    '\nObjective {} already contains flux {} ... skipping!\n'.format(
-                        self.getId(), J[1]
-                    )
-                )
+                print('\nObjective {} already contains flux {} ... skipping!\n'.format(self.getId(), J[1]))
+
+    def createQuadraticFluxObjectives(self, fluxlist):
+        """
+        Create and add quadratic flux objective objects to this objective function.
+
+         - *fluxlist* a list of one or more ('coefficient', 'rid', 'rid2', 'type') triples
+
+        """
+        for J in fluxlist:
+            fid = '{}_{}_{}_fobj'.format(self.getId(), J[1], J[2])
+            self.addFluxObjective(FluxObjectiveQuadratic(fid, J[1], J[2], J[0], 'quadratic'))
 
     def deleteAllFluxObjectives(self):
         """
         Delete all flux objectives
 
         """
-        for fo in self.fluxObjectives:
+        for fo in self.flux_objectives:
             self.__objref__().__popGlobalId__(fo.getId())
-        self.fluxObjectives = []
+        self.flux_objectives = []
 
     def getFluxObjectiveIDs(self):
         """
@@ -3678,7 +4012,7 @@ class Objective(Fbase):
         or for coefficient, fluxobjective pairs use *getFluxObjectiveData()*
 
         """
-        return [f.getId() for f in self.fluxObjectives]
+        return [f.getId() for f in self.flux_objectives]
 
     def getFluxObjectiveForReaction(self, rid):
         """
@@ -3689,36 +4023,36 @@ class Objective(Fbase):
 
         """
         fo = None
-        for fo_ in self.fluxObjectives:
-            if fo_.reaction == rid:
+        for fo_ in self.flux_objectives:
+            if fo_.reaction == rid and type(fo_) != FluxObjectiveQuadratic:
                 if fo == None:
                     fo = fo_
                 elif type(fo) == list:
                     fo.append(fo_)
                     print(
-                        '\nWARNING: multiple fluxObjectives match rid: {}\n'.format(rid)
+                        '\nWARNING: multiple flux_objectives match rid: {}\n'.format(rid)
                     )
                 else:
                     fo = [fo]
                     fo.append(fo_)
                     print(
-                        '\nWARNING: multiple fluxObjectives match rid: {}\n'.format(rid)
+                        '\nWARNING: multiple flux_objectives match rid: {}\n'.format(rid)
                     )
         return fo
 
     def getFluxObjectiveReactions(self):
         """
-        Returns a list of reactions that are used as FluxObjectives
+        Returns a list of reactions that are used as flux_objectives
 
         """
-        return [f.reaction for f in self.fluxObjectives]
+        return [f.reaction for f in self.flux_objectives]
 
     def getFluxObjectiveData(self):
         """
-        Returns a list of ObjectiveFunction components as (coefficient, flux) pairs
+        Returns a list of ObjectiveFunction components as (coefficient, flux, type) pairs
 
         """
-        return [(f.coefficient, f.reaction) for f in self.fluxObjectives]
+        return [(f.coefficient, f.reaction, f.ctype) for f in self.flux_objectives]
 
     def getFluxObjective(self, foid):
         """
@@ -3728,7 +4062,7 @@ class Objective(Fbase):
 
         """
         fo = None
-        for fo_ in self.fluxObjectives:
+        for fo_ in self.flux_objectives:
             if fo_.getId() == foid:
                 if fo == None:
                     fo = fo_
@@ -3746,7 +4080,7 @@ class Objective(Fbase):
         Returns the list of FluxObjective objects.
 
         """
-        return self.fluxObjectives
+        return self.flux_objectives
 
     def getValue(self):
         """
@@ -3760,6 +4094,101 @@ class Objective(Fbase):
         """
         self.value = value
 
+    def getLinearFluxObjectives(self):
+        """
+        Returns a list of linear variable flux objective objects
+
+        """
+        out = []
+        for fo in self.flux_objectives:
+            if fo.getType() is None or fo.getType() == 'linear':
+                out.append(fo)
+        return out
+
+    def getQuadraticFluxObjectives(self):
+        """
+        Returns a list of quadratic variable flux objective objects
+
+        """
+        out = []
+        for fo in self.flux_objectives:
+            if fo.getType() == 'quadratic':
+                out.append(fo)
+        return out
+
+    def getQuadraticBivariateFluxObjectives(self):
+        """
+        Returns a list of bivariate quadratic variable flux objective objects
+
+        """
+        out = []
+        for fo in self.flux_objectives:
+            if fo.getType() == 'quadratic' and type(fo) == FluxObjectiveQuadratic:
+                out.append(fo)
+        return out
+
+
+class FluxObjectiveQuadratic(Fbase):
+    """
+    A weighted quadratic flux that appears in an objective function, this fluxobjective contains
+    two reaction terms to define "quadratic" fluxobjectives of the type <coefficient>*<variable1>*<variable2>
+    For example 2*R1*R2
+
+    NOTE: reaction is a string containing a reaction id
+    """
+
+    reaction = None
+    reaction2 = None
+    coefficient = None
+    ctype = None
+    ctypes = ('quadratic')
+
+    def __init__(self, pid, reaction, reaction2, coefficient=1, ctype='quadratic'):
+        pid = str(pid)
+        self.setId(pid)
+        self.ctype = ctype
+
+        self.reaction = reaction
+        self.reaction2 = reaction2
+        self.coefficient = coefficient
+        self.annotation = {}
+        self.compartment = None
+        self.__delattr__('compartment')
+
+    def getReactionIds(self):
+        return (self.reaction, self.reaction2)
+
+    def getReactionId(self):
+        return self.reaction
+
+    def getReactionId2(self):
+        return self.reaction2
+
+    def getCoefficient(self):
+        return self.coefficient
+
+    def setReactionId(self, reaction):
+        self.reaction = reaction
+
+    def setReactionId2(self, reaction2):
+        self.reaction2 = reaction2
+
+    def setReactionIds(self, reaction, reaction2):
+        self.reaction = reaction
+        self.reaction2 = reaction2
+
+    def setCoefficient(self, coefficient):
+        self.coefficient = coefficient
+
+    def getType(self):
+        return self.ctype
+
+    def setType(self, ctype):
+        if ctype in self.ctypes:
+            self.ctype = ctype
+        else:
+            raise TypeError('FluxObjective type must be one of:' + str(self.ctypes))
+
 
 class FluxObjective(Fbase):
     """
@@ -3770,10 +4199,13 @@ class FluxObjective(Fbase):
 
     reaction = None
     coefficient = None
+    ctype = None
+    ctypes = ('linear', 'quadratic')
 
-    def __init__(self, pid, reaction, coefficient=1):
+    def __init__(self, pid, reaction, coefficient=1, ctype='linear'):
         pid = str(pid)
         self.setId(pid)
+        self.ctype = ctype
 
         self.reaction = reaction
         self.coefficient = coefficient
@@ -3792,6 +4224,205 @@ class FluxObjective(Fbase):
 
     def setCoefficient(self, coefficient):
         self.coefficient = coefficient
+
+    def getType(self):
+        return self.ctype
+
+    def setType(self, ctype):
+        if ctype in self.ctypes:
+            self.ctype = ctype
+        else:
+            raise TypeError('FluxObjective type must be one of:' + str(self.ctypes))
+
+
+class UserDefinedConstraint(Fbase):
+    """
+    This is an FBCv3 class that defines a set of user defined constraints, it is similar to an objective constraint except allows parameters as
+    coefficients and values in the constraint components
+
+    """
+
+    constraint_components = None
+    solution = None
+    ub = None
+    lb = None
+
+    def __init__(self, pid, lb, ub):
+        pid = str(pid)
+        self.setId(pid)
+
+        self.constraint_components = []
+        self.compartment = None
+        self.__delattr__('compartment')
+        self.annotation = {}
+        self.annotation_ext = {}
+
+    def setLowerBound(self, bnd):
+        self.lb = bnd
+
+    def setUppperBound(self, bnd):
+        self.ub = bnd
+
+    def getUpperBound(self):
+        if type(self.ub) is Parameter:
+            return self.ub.getValue()
+        else:
+            return self.ub
+
+    def getUpperBound(self):
+        if type(self.ub) is Parameter:
+            return self.ub.getValue()
+        else:
+            return self.ub
+
+    def getLowerBound(self):
+        if type(self.lb) is Parameter:
+            return self.lb.getValue()
+        else:
+            return self.lb
+
+    def getConstraintComponentIDs(self):
+        """
+
+        """
+        return [f.getId() for f in self.constraint_components]
+
+    def getConstraintComponentForVariable(self, rid):
+        """
+
+         *rid* a component id
+
+        """
+        fo = []
+        for fo_ in self.constraint_components:
+            if fo_.variable == rid:
+                fo.append(fo_)
+        if len(fo) == 1:
+            return fo[0]
+        else:
+            print('WARNING: Multiple matches, possible but not correct, returning list')
+            return fo
+
+    def getConstraintComponentVariables(self):
+        """
+
+
+        """
+        return [f.variable for f in self.constraint_components]
+
+    def getConstraintComponentVariableTypes(self):
+        """
+
+
+        """
+        try:
+            return [type(self.getModel().getObject(f.variable)) for f in self.constraint_components]
+        except (KeyError, AttributeError):
+            return [None] * len(self.constraint_components)
+
+    def getConstraintComponentData(self):
+        """
+
+
+        """
+        return [(f.coefficient, f.variable, f.ctype) for f in self.constraint_components]
+
+    def getConstraintComponent(self, cid):
+        """
+
+         - *cid* get a constraint component that matches cid
+
+        """
+        if self.getModel().hasObject(cid):
+            return self.getModel().getObject(cid)
+        else:
+            return None
+
+    def getConstraintComponents(self):
+        """
+
+
+        """
+        return self.constraint_components
+
+    def createConstraintComponent(self, pid, coefficient, variable, ctype):
+        """
+
+
+        """
+        return ConstraintComponent(pid, coefficient, variable, ctype)
+
+    def addConstraintComponent(self, cc):
+        """
+        - *cc* UserConstraintComponent
+
+        """
+        self.constraint_components.append(cc)
+
+    def setObjRefOnComponents(self):
+        for c in self.constraint_components:
+            c.__objref__ = weakref.ref(self.__objref__())
+            c.getModel().registerObjectInGlobalStore(c)
+
+
+class ConstraintComponent(Fbase):
+    """
+    A weighted flux that appears in an user defined constraint
+
+    """
+
+    variable = None
+    coefficient = None
+    ctype = None
+    ctypes = ('linear', 'quadratic')
+
+    def __init__(self, pid, coefficient, variable, ctype='linear'):
+        pid = str(pid)
+        self.setId(pid)
+
+        self.variable = variable
+        self.coefficient = coefficient
+        if ctype in self.ctypes:
+            self.ctype = ctype
+        else:
+            print('Invalid ctype:', ctype)
+
+        self.annotation = {}
+        self.compartment = None
+        self.__delattr__('compartment')
+
+    def getVariable(self):
+        if type(self.variable) is Parameter:
+            return self.variable.getId()
+        else:
+            return self.variable
+
+    def getCoefficient(self):
+        if type(self.coefficient) is Parameter:
+            return self.coefficient.getValue()
+        else:
+            return self.coefficient
+
+    def setVariable(self, variable):
+        self.variable = variable
+
+    def setCoefficient(self, coefficient):
+        self.coefficient = coefficient
+
+    def setType(self, ctype):
+        if ctype in self.ctypes:
+            self.ctype = ctype
+        else:
+            raise ValueError('FluxObjective type must be one of:' + str(self.ctypes))
+
+    def getType(self):
+        return self.ctype
+
+    def getVariableType(self):
+        try:
+            return type(self.getModel().getObject(self.variable))
+        except (KeyError, AttributeError):
+            return None
 
 
 class Compartment(Fbase):
@@ -4348,7 +4979,11 @@ class FluxBound(Fbase):
         """
         Returns the current value of the attribute (input/solution)
         """
-        return self.value
+        if self.value is None:
+            print('Warning fluxbound: {} has no value'.format(self.getId()))
+            return None
+        else:
+            return float(self.value)
 
     def setValue(self, value):
         """
@@ -4358,8 +4993,10 @@ class FluxBound(Fbase):
             self.value = value
         elif numpy.isinf(value):
             self.value = value
-        else:
-            self.value = float(value)
+        elif value is None:
+            self.value = value
+        # else:
+            # self.value = float(value)
 
 
 class FluxBoundBase(Fbase):
@@ -4525,7 +5162,8 @@ class Parameter(Fbase):
         """
         pid = str(pid)
         self.setId(pid)
-
+        if name is None:
+            name = pid
         self.name = name
         self.setValue(value)
         self.constant = constant
@@ -4592,8 +5230,10 @@ class Reaction(Fbase):
     __bound_history__ = None
     __is_active__ = True
     _modifiers_ = None
+    __lower_bound_id__ = None
+    __upper_bound_id__ = None
     """
-    # TODO: next major revision 0.8 is to get rid of fluxbound array
+    # TODO: next major revision 0.9 is to get rid of fluxbound array
     # by adding fluxbound objects directly to the reactions this should simplify the
     # data structure but will mean a major rewrite of existing code and potentially breaking
     # backwards compatability
@@ -4768,7 +5408,7 @@ class Reaction(Fbase):
                     if gpr_.getProtein() == oldId:
                         gpr_.setProtein(fid)
                 for obj in self.__objref__().objectives:
-                    for fo in obj.fluxObjectives:
+                    for fo in obj.flux_objectives:
                         if fo.getReactionId() == oldId:
                             fo.setReactionId(fid)
             else:
@@ -4948,11 +5588,29 @@ class Reaction(Fbase):
         Get the value of the reactions lower bound
 
         """
+        out = None
+        if self.__lower_bound_id__ is not None:
+            if __DEBUG__:
+                print('Using getLowerBound shortcut')
+            try:
+                return self.getModel().getObject(self.__lower_bound_id__).getValue()
+            except KeyError:
+                pass
         try:
-            return self.__objref__().getReactionLowerBound(self.id)
+            lb = self.getModel().getFluxBoundByReactionID(self.getId(), 'lower')
+            if lb != None:
+                self.__lower_bound_id__ = lb.getId()
+                out = lb.getValue()
+            else:
+                eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
+                if eq != None:
+                    self.__lower_bound_id__ = eq.getId()
+                    # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+                    out = eq.getValue()
+            return out
         except AttributeError as why:
             print(
-                'WARNING: This function requires that this reaction object be added to a CBMPy instance to work.'
+                'WARNING: getLowerBound requires that this reaction object be added to a CBMPy instance to work.'
             )
             return None
 
@@ -4961,12 +5619,29 @@ class Reaction(Fbase):
         Get the value of the reactions upper bound
 
         """
+        out = None
+        if self.__upper_bound_id__ is not None:
+            if __DEBUG__:
+                print('Using getUpperBound shortcut')
+            try:
+                return self.getModel().getObject(self.__upper_bound_id__).getValue()
+            except KeyError:
+                pass
         try:
-            return self.__objref__().getReactionUpperBound(self.id)
+            ub = self.getModel().getFluxBoundByReactionID(self.getId(), 'upper')
+            if ub is not None:
+                self.__upper_bound_id__ = ub.getId()
+                out = ub.getValue()
+            else:
+                eq = self.getModel().getFluxBoundByReactionID(self.getId(), 'equality')
+                if eq is not None:
+                    self.__upper_bound_id__ = eq.getId()
+                    # print('\nINFO: Lower bound defined as an equality ({})'.format(rid))
+                    out = eq.getValue()
+            return out
         except AttributeError as why:
-            print(
-                'WARNING: This function requires that this reaction object be added to a CBMPy instance to work.'
-            )
+            print(why)
+            print('WARNING: getUpperBound requires that this reaction object be added to a CBMPy instance to work.')
             return None
 
     def setLowerBound(self, value):
@@ -5083,31 +5758,19 @@ class Reaction(Fbase):
             eq = '{} {} {}'.format(sub[:-3], irreverse_symb, prod[:-2])
         return eq
 
-
+# This needs to be finished and allow the use of parameters as UB/LB
 class ReactionNew(Reaction):
     """Extended reaction class with new upper/lower bound structure"""
 
     ub = None
     lb = None
 
-    def __init__(
-        self, pid, name=None, lb=-float('inf'), ub=float('inf'), reversible=True
-    ):
+    def __init__(self, pid, name=None, lb=-float('inf'), ub=float('inf'), reversible=True):
         super(ReactionNew, self).__init__(pid, name, reversible)
-        self.ub = FluxBoundUpper(self, ub)
-        self.lb = FluxBoundLower(self, lb)
 
-    def createUpperBound(self, value):
-        if self.ub is None:
-            self.ub = FluxBoundUpper(self, value)
-        else:
-            print('UpperBound exists, try use setUpperBound')
 
-    def createLowerBound(self, value):
-        if self.lb is None:
-            self.lb = FluxBoundLower(self, value)
-        else:
-            print('LowerBound exists, try use setLowerBound')
+        self.ub = Parameter("{}_ub".format(pid), ub)
+        self.lb = Parameter("{}_lb".format(pid), lb)
 
     def setId(self, fid):
         """
@@ -5133,22 +5796,15 @@ class ReactionNew(Reaction):
             if fid not in self.__objref__().__global_id__:
                 self.id = fid
                 self.__objref__().__changeGlobalId__(oldId, self.id, self)
-                # for fb in self.__objref__().getFluxBoundsByReactionID(oldId):
-                # if fb is not None:
-                # fb.setReactionId(fid)
                 for gpr_ in self.__objref__().gpr:
                     if gpr_.getProtein() == oldId:
                         gpr_.setProtein(fid)
                 for obj in self.__objref__().objectives:
-                    for fo in obj.fluxObjectives:
+                    for fo in obj.flux_objectives:
                         if fo.getReactionId() == oldId:
                             fo.setReactionId(fid)
             else:
-                print(
-                    'ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(
-                        fid
-                    )
-                )
+                print('ERROR: setId() - object with id \"{}\" already exists ... ID *not* set.'.format(fid))
         else:
             self.id = fid
         # no matter if the reaction has a model ref or not setId resets reagent refs to new id
@@ -5160,14 +5816,14 @@ class ReactionNew(Reaction):
         Get the value of the reactions lower bound
 
         """
-        return self.lb.value
+        return self.lb.getValue()
 
     def getUpperBound(self):
         """
         Get the value of the reactions upper bound
 
         """
-        return self.ub.value
+        return self.ub.getValue()
 
     def setLowerBound(self, value):
         """
@@ -5176,7 +5832,7 @@ class ReactionNew(Reaction):
          - *value* a floating point value
 
         """
-        self.lb.value = value
+        self.lb.setValue(value)
 
     def setUpperBound(self, value):
         """
@@ -5185,7 +5841,7 @@ class ReactionNew(Reaction):
          - *value* a floating point value
 
         """
-        self.ub.value = value
+        self.ub.setValue(value)
 
     def deactivateReaction(self, lower=0.0, upper=0.0, silent=True):
         """
@@ -5214,11 +5870,16 @@ class ReactionNew(Reaction):
             self.__bound_history__ = None
             self.__is_active__ = True
             if not silent:
-                print(
-                    'Reaction {} bounds set to [{} : {}]'.format(
-                        self.id, self.__bound_history__[0], self.__bound_history__[1]
-                    )
-                )
+                print('Reaction {} bounds set to [{} : {}]'.format(self.id, self.__bound_history__[0], self.__bound_history__[1]))
+
+    def setObjRefOnComponents(self):
+        self.ub.__objref__ = weakref.ref(self.__objref__())
+        self.ub.getModel().registerObjectInGlobalStore(self.ub)
+        self.lb.__objref__ = weakref.ref(self.__objref__())
+        self.lb.getModel().registerObjectInGlobalStore(self.lb)
+
+
+
 
     def __setstate__(self, dic):
         """
@@ -5261,7 +5922,7 @@ class Species(Fbase):
          - **name** [default=''] the species name
          - **value** [default=nan] the value *not currently used*
          - **compartment** [default=None] the compartment the species is located in
-         - **charge** [default=None] the species charge
+         - **charge** [default=None] the species charge, from v3 a float
          - **chemFormula** [default=None] the chemical formula
 
         """

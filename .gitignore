@@ -1,4 +1,5 @@
 .svn
+build
 cbmpy.egg-info
 __pycache__
 wing-cbmpy.wpr 
