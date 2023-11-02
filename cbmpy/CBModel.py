@@ -1570,7 +1570,7 @@ class Model(Fbase):
 
             ucnew = self.createUserDefinedConstraint(u, lb, ub, components)
             self.addUserDefinedConstraint(ucnew)
-        print("Markging up model V2 --> V3")
+        print("Marking up model V2 --> V3")
         self.__FBC_VERSION__ = 3
 
         self.user_constraints.clear()
@@ -1596,7 +1596,7 @@ class Model(Fbase):
                 ub = numpy.Inf
                 lb = rhs = udc.getLowerBound()
             elif udc.getLowerBound() == numpy.NINF:
-                operator == "L"
+                operator = "L"
                 lb = numpy.NINF
                 ub = rhs = udc.getUpperBound()
             else:

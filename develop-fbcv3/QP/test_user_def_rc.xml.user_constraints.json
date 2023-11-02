@@ -36,5 +36,16 @@
     ],
     "operator": "G",
     "rhs": 0.1
+  },
+  "cons4": {
+    "fluxes": [
+      [
+        1,
+        "R15",
+        "linear"
+      ]
+    ],
+    "operator": "L",
+    "rhs": 1.0
   }
 }
