@@ -26,6 +26,7 @@ Subject To
  cons1: R16 + R15  = 0.8
  cons2: R15 >= 0.1
  cons3: R14 >= 0.1
+ cons4: R15 <= 1
 Bounds
  0 <= R01 <= 1
  0 <= R10 <= 1000

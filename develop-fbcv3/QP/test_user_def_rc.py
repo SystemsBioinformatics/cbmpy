@@ -11,6 +11,7 @@ test = fbase.clone()
 test.addUserConstraint('cons1', fluxes=[(1, 'R16'), (1, 'R15')], operator='=', rhs=0.8)
 test.addUserConstraint('cons2', fluxes=[(1, 'R15')], operator='>=', rhs=0.1)
 test.addUserConstraint('cons3', fluxes=[(1, 'R14')], operator='>=', rhs=0.1)
+test.addUserConstraint('cons4', fluxes=[(1, 'R15')], operator='<=', rhs=1.0)
 
 lp = cbmpy.CBSolver.cplx_analyzeModel(
     test,

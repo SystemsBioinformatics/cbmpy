@@ -39,6 +39,7 @@ print(old_cons[1] - new_cons[1] == 0)
 print(old_cons[2] - new_cons[2] == 0)
 
 
+
 for uc in ucmod.user_defined_constraints:
     uc.setAnnotation('secret', uc.getId())
     for var in uc.constraint_components:
