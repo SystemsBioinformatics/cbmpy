@@ -99,8 +99,57 @@ __version__ = __CBCONFIG__['VERSION']
 
 class Fbase(object):
     """
-    Base class for CB Model objects
+    Base class for CB Model objects.
 
+    This class is designed to provide a foundation for defining computational biology model components.
+    It includes methods for setting and getting object IDs, names, annotations, and notes, along with serialization capabilities.
+
+    Attributes
+    ----------
+    id : None or str
+        The unique identifier for the object.
+    name : None or str
+        Name of the object.
+    annotation : None or dict
+        Dictionary of annotations associated with the object.
+    annotation_ext : None or dict
+        Extended annotation dictionary, typically including fields like 'id', 'name', and 'uri'.
+    compartment : None or str
+        Identifier of the compartment where the object belongs.
+    miriam : None or `MIRIAMannotation`
+        MIRIAM annotations associated with the object.
+    notes : str
+        Textual notes linked to the object.
+    __metaid__ : None or str
+        Optionally store a metadata ID, if not provided defaults based on `id`.
+    __sbo_term__ : None or str
+        SBO term associated with the object.
+    __text_encoding__ : str
+        Encoding used for text data. Defaults to 'utf8'.
+
+    Examples
+    --------
+    Creating an instance of `Fbase`:
+
+    >>> obj = Fbase()
+    >>> obj.setId("example_id")
+    >>> obj.setName("Example Object")
+    >>> obj.setAnnotation("key1", "value1")
+    >>> print(obj.getId())
+    'example_id'
+    >>> print(obj.getName())
+    'Example Object'
+    >>> print(obj.getAnnotation("key1"))
+    'value1'
+
+    See Also
+    --------
+    Model, FluxBound, Group : Other model components that extend `Fbase`.
+
+    Notes
+    -----
+    This class primarily acts as a base class. For concrete usages and further capabilities,
+    including serialization and ensuring ID uniqueness, look at its derived classes like `Model` or `Species`.
     """
 
     id = None
@@ -3901,108 +3950,91 @@ class Model(Fbase):
 
 class Objective(Fbase):
     """
-    Represents an optimization objective in a biochemical model, which could be a maximization or minimization of certain
-    biochemical fluxes. This class supports the management of flux objectives and their respective operations within the model.
+    Represents an optimization objective in a biochemical model, intended for either maximizing or
+    minimizing specific biochemical fluxes. Supports management of multiple types of flux objectives.
 
-    Attributes:
-        flux_objectives (list): A list of FluxObjective instances that are part of this objective function.
-        operation (str): The operation type of the objective ('maximize' or 'minimize').
-        value (float): The current value of the objective, typically used to store results from optimization operations.
-        solution (NoneType): Placeholder for storing the solution of the objective; not implemented.
+    Attributes
+    ----------
+    flux_objectives : list of FluxObjective
+        A list of FluxObjective instances that are part of this objective function.
+    operation : str
+        The operation type of the objective, either 'maximize' or 'minimize'.
+    value : float
+        The current value of the objective, usually results from optimization operations.
+    solution : NoneType
+        Placeholder for storing the solution of the objective; currently not implemented.
 
-    Methods:
-        __init__(pid, operation):
-            Constructs an Objective instance.
-            - pid (str): Unique identifier for the Objective instance.
-            - operation (str): Specifies the optimization operation, accepts 'maximize', 'minimize'.
+    Methods
+    -------
+    __init__(self, pid, operation)
+        Constructs an Objective instance.
 
-        setOperation(operation):
-            Sets the operation (objective sense) for optimization.
-            - operation (str): The optimization operation (one of 'maximize', 'minimise', 'max', 'minimize', 'minimise', 'min').
+    setOperation(operation)
+        Sets the operation for this objective function.
 
-        getOperation():
-            Retrieves the current operation of the objective.
-            Returns:
-                str: Current optimization operation.
+    getOperation()
+        Retrieves the current operation set for the objective.
 
-        addFluxObjective(fobj, override=False):
-            Adds a flux objective to this objective function.
-            - fobj (FluxObjective): The flux objective to be added.
-            - override (bool): If set to True, forcibly adds the flux objective without regard to duplicates (not recommended).
+    addFluxObjective(fobj, override=False)
+        Adds a flux objective to this objective function.
 
-        createFluxObjectives(fluxlist):
-            Creates and adds multiple flux objectives based on a provided list of details.
-            - fluxlist (list): A list of tuples (coefficient, reaction_id, ctype).
+    createFluxObjectives(fluxlist)
+        Creates and adds multiple flux objectives based on details provided in a list of tuples.
 
-        createQuadraticFluxObjectives(fluxlist):
-            Specifically creates and adds quadratic flux objectives.
-            - fluxlist (list): A list of tuples (coefficient, reaction_id_1, reaction_id_2, ctype).
+    createQuadraticFluxObjectives(fluxlist)
+        Specifically creates and adds quadratic flux objectives.
 
-        deleteAllFluxObjectives():
-            Removes all flux objectives from this objective function.
+    deleteAllFluxObjectives()
+        Removes all flux objectives from this objective function.
 
-        getFluxObjectiveIDs():
-            Retrieves IDs of all flux objectives within the objective function.
-            Returns:
-                list: A list of flux objective IDs.
+    getFluxObjectiveIDs()
+        Retrieves IDs of all flux objectives within the objective function.
 
-        getFluxObjectiveForReaction(rid):
-            Retrieves the flux objective associated with a specific reaction ID.
-            - rid (str): The reaction ID.
-            Returns:
-                FluxObjective or list: The corresponding flux objective(s). Multiple returns signify an issue.
+    getFluxObjectiveForReaction(rid)
+        Retrieves the flux objective associated with a specific reaction ID.
 
-        getFluxObjectiveReactions():
-            Retrieves the reaction IDs associated with all flux objectives.
-            Returns:
-                list: A list of reaction IDs.
+    getFluxObjectiveReactions()
+        Retrieves the reaction IDs associated with all flux objectives.
 
-        getFluxObjectiveData():
-            Retrieves detailed data for all flux objectives as tuples.
-            Returns:
-                list: A list of tuples (coefficient, reaction, ctype).
+    getFluxObjectiveData()
+        Retrieves detailed data for all flux objectives as tuples.
 
-        getFluxObjective(foid):
-            Retrieves a flux objective by its ID.
-            - foid (str): The flux objective ID.
-            Returns:
-                FluxObjective or list: The flux objective if unique; a list if duplicates are found.
+    getFluxObjective(foid)
+        Retrieves a flux objective by its ID.
 
-        getFluxObjectives():
-            Retrieves all flux objectives part of this objective.
-            Returns:
-                list: A list of FluxObjective instances.
+    getFluxObjectives()
+        Retrieves all flux objectives that are part of this objective.
 
-        getValue():
-            Gets the current computed value of the objective.
-            Returns:
-                float: The current value.
+    getValue()
+        Retrieves the current computed value of the objective.
 
-        setValue(value):
-            Sets or updates the value of the objective.
-            - value (float): The new value to set.
+    setValue(value)
+        Sets or updates the value of the objective.
 
-        getLinearFluxObjectives():
-            Retrieves all linear-type flux objectives.
-            Returns:
-                list: A list of linear flux objectives.
+    getLinearFluxObjectives()
+        Retrieves all linear-type flux objectives.
 
-        getQuadraticFluxObjectives():
-            Retrieves all quadratic-type flux objectives.
-            Returns:
-                list: A list of quadratic flux objectives.
+    getQuadraticFluxObjectives()
+        Retrieves all quadratic-type flux objectives.
 
-        getQuadraticBivariateFluxObjectives():
-            Retrieves all bivariate quadratic flux objectives, where each consists of products of two distinct reactions.
-            Returns:
-                list: A list of bivariate quadratic flux objectives.
+    getQuadraticBivariateFluxObjectives()
+        Retrieves all bivariate quadratic flux objectives which consist of products of two distinct reactions.
 
-    Note:
-        The management of flux objectives involves handling multiple types of mathematical operations that determine how
-        reaction fluxes contribute to the set objective of the model, which could be either to maximize or minimize certain
-        properties or outputs.
+    Notes
+    -----
+    The management of flux objectives involves handling various mathematical operations that determine the
+    contribution of reaction fluxes to the objective of the model, which can either maximize or minimize specific properties.
+
+    Example
+    -------
+    >>> model_objective = Objective(pid="001", operation="maximize")
+    >>> model_objective.addFluxObjective(FluxObjective("FO001", "R001", 1.0, "linear"))
+    >>> print(model_objective.getOperation())
+    'maximize'
+    >>> model_objective.setValue(100.0)
+    >>> print(model_objective.getValue())
+    100.0
     """
-
     flux_objectives = None
     operation = None
     value = None
@@ -4228,81 +4260,79 @@ class Objective(Fbase):
 
 class FluxObjectiveQuadratic(Fbase):
     """
-    Represents a quadratic flux objective component for a metabolic model, specifically designed
-    to handle objective functions involving products of two different reaction fluxes. This class
-    is primarily used to construct objective functions of the form:
-    <coefficient> * <reaction1_flux> * <reaction2_flux>, for example, 2 * R1 * R2.
+    Represents a quadratic flux objective component for a metabolic model. This class is
+    specifically designed for objective functions involving products of two distinct reaction fluxes,
+    typically modeled as `<coefficient> * <reaction1_flux> * <reaction2_flux>` (e.g., `2 * R1 * R2`).
 
-    Attributes:
-        reaction (str): The ID of the first reaction associated with this flux objective.
-        reaction2 (str): The ID of the second reaction associated with this flux objective.
-        coefficient (float): A scaling factor applied to the product of the two reaction fluxes.
-        ctype (str): The type of the flux objective, limited to 'quadratic' for this class.
-        ctypes (tuple): A tuple containing allowable types of flux objectives, which is ('quadratic',) for this class.
+    Attributes
+    ----------
+    reaction : str
+        The ID of the first reaction associated with this flux objective.
+    reaction2 : str
+        The ID of the second reaction associated with this flux objective.
+    coefficient : float
+        A scaling factor applied to the product of the two reaction fluxes.
+    ctype : str
+        The type of the flux objective, limited to 'quadratic' for this class.
+    ctypes : tuple
+        A tuple containing allowable types of flux objectives for this class, which is ('quadratic',).
 
-    Methods:
-        __init__(pid, reaction, reaction2, coefficient=1, ctype='quadratic'):
-            Initializes a new FluxObjectiveQuadratic instance.
-            - pid (str): The unique identifier for the FluxObjectiveQuadratic instance.
-            - reaction (str): The ID of the first reaction.
-            - reaction2 (str): The ID of the second reaction.
-            - coefficient (float, optional): Scaling coefficient for the quadratic flux objective (default is 1).
-            - ctype (str, optional): Type of the flux objective, must be 'quadratic' for this instance (default is 'quadratic').
+    Methods
+    -------
+    __init__(self, pid, reaction, reaction2, coefficient=1, ctype='quadratic')
+        Initializes a new instance of `FluxObjectiveQuadratic`.
 
-        getReactionIds():
-            Retrieves the reaction IDs of both reactions associated with this flux objective.
-            Returns:
-                tuple: A tuple containing the reaction IDs (reaction, reaction2).
+    getReactionIds(self)
+        Retrieves the reaction IDs of both reactions associated with this flux objective.
 
-        getReactionId():
-            Retrieves the ID of the first reaction associated with this flux objective.
-            Returns:
-                str: The first reaction ID.
+    getReactionId(self)
+        Retrieves the ID of the first reaction associated with this flux objective.
 
-        getReactionId2():
-            Retrieves the ID of the second reaction associated with this flux objective.
-            Returns:
-                str: The second reaction ID.
+    getReactionId2(self)
+        Retrieves the ID of the second reaction associated with this flux objective.
 
-        getCoefficient():
-            Retrieves the coefficient applied to the product of the two reaction fluxes.
-            Returns:
-                float: The coefficient value.
+    getCoefficient(self)
+        Retrieves the coefficient applied to the product of the two reaction fluxes.
 
-        setReactionId(reaction):
-            Sets or updates the ID for the first reaction of this flux objective.
-            - reaction (str): The new reaction ID to set.
+    setReactionId(self, reaction)
+        Sets or updates the ID for the first reaction of this flux objective.
 
-        setReactionId2(reaction2):
-            Sets or updates the ID for the second reaction of this flux objective.
-            - reaction2 (str): The new reaction ID to set.
+    setReactionId2(self, reaction2)
+        Sets or updates the ID for the second reaction of this flux objective.
 
-        setReactionIds(reaction, reaction2):
-            Sets or updates the IDs for both reactions of this flux objective simultaneously.
-            - reaction (str): The new ID for the first reaction.
-            - reaction2 (str): The new ID for the second reaction.
+    setReactionIds(self, reaction, reaction2)
+        Sets or updates the IDs for both reactions of this flux objective simultaneously.
 
-        setCoefficient(coefficient):
-            Sets or updates the coefficient applied to the product of the fluxes of the two reactions.
-            - coefficient (float): The new coefficient value.
+    setCoefficient(self, coefficient)
+        Sets or updates the coefficient applied to the product of the fluxes of the two reactions.
 
-        getType():
-            Retrieves the type of the flux objective.
-            Returns:
-                str: The type of the flux objective ('quadratic').
+    getType(self)
+        Retrieves the type of the flux objective.
 
-        setType(ctype):
-            Sets or updates the type of the flux objective. Since this class supports only 'quadratic',
-            attempts to set any other type will raise an exception.
-            - ctype (str): The type to set for the flux objective, must be 'quadratic'.
-            Raises:
-                TypeError: If the type provided is not 'quadratic'.
+    setType(self, ctype)
+        Sets or updates the type of the flux objective, raising an exception if not 'quadratic'.
 
-    Note:
-        This class assumes that interactions of flux products are central to defining the behavior
-        of complex biological systems in objective functions of metabolic models.
+    Raises
+    ------
+    TypeError
+        If an attempt is made to set `ctype` to anything other than 'quadratic'.
+
+    Notes
+    -----
+    This class assumes that interactions of flux products are central to defining the behavior of
+    complex biological systems in objective functions of metabolic models.
+
+    Examples
+    --------
+    >>> flux_obj_quad = FluxObjectiveQuadratic(pid='FO1001', reaction='R1', reaction2='R2', coefficient=2)
+    >>> print(flux_obj_quad.getCoefficient())
+    2
+    >>> print(flux_obj_quad.getReactionIds())
+    ('R1', 'R2')
+    >>> flux_obj_quad.setCoefficient(3)
+    >>> print(flux_obj_quad.getCoefficient())
+    3
     """
-
     reaction = None
     reaction2 = None
     coefficient = None
@@ -4358,57 +4388,73 @@ class FluxObjectiveQuadratic(Fbase):
 
 class FluxObjective(Fbase):
     """
-    Represents a flux objective component in a metabolic model, encapsulating the details of a reaction
-    that plays a role in the optimization of a model's objective function.
+    Represents a flux objective component in a metabolic model, encapsulating the details
+    of a reaction that plays a role in the optimization of a model's objective function.
 
-    Attributes:
-        reaction (str): The ID of the reaction associated with this flux objective.
-        coefficient (float): A scaling factor applied to the flux of the reaction in the objective function.
-        ctype (str): The type of the coefficient, defining how it contributes to the objective function.
-        ctypes (tuple): Defines allowable types of coefficients (e.g., 'linear', 'quadratic').
+    Parameters
+    ----------
+    pid : str
+        Unique identifier for the FluxObjective instance.
+    reaction : str
+        Reaction ID associated with this flux objective.
+    coefficient : float, optional
+        Scaling coefficient for the reaction's flux, by default 1.
+    ctype : str, optional
+        Type of the scaling coefficient within the objective function, by default 'linear'.
 
-    Methods:
-        __init__(pid, reaction, coefficient=1, ctype='linear'):
-            Initializes a new FluxObjective instance.
-            - pid (str): Unique identifier for the FluxObjective instance.
-            - reaction (str): Reaction ID associated with the flux objective.
-            - coefficient (float, optional): Scaling coefficient for the reaction's flux (default is 1).
-            - ctype (str, optional): Type of the scaling coefficient within the objective function (default is 'linear').
+    Attributes
+    ----------
+    reaction : str
+        The ID of the reaction associated with this flux objective.
+    coefficient : float
+        A scaling factor applied to the flux of the reaction in the objective function.
+    ctype : str
+        The type of the coefficient, defining how it contributes to the objective function.
+    ctypes : tuple
+        Defines allowable types of coefficients ('linear', 'quadratic').
 
-        getReactionId():
-            Retrieves the reaction ID associated with this flux objective.
-            Returns:
-                str: The reaction ID.
+    Methods
+    -------
+    getReactionId()
+        Retrieves the reaction ID associated with this flux objective.
 
-        getCoefficient():
-            Retrieves the coefficient applied to the reaction's flux in the objective function.
-            Returns:
-                float: The coefficient value.
+    getCoefficient()
+        Retrieves the coefficient applied to the reaction's flux in the objective function.
 
-        setReactionId(reaction):
-            Sets or updates the reaction ID for this flux objective.
-            - reaction (str): The new reaction ID to associate with the flux objective.
+    setReactionId(reaction)
+        Sets or updates the reaction ID for this flux objective.
 
-        setCoefficient(coefficient):
-            Sets or updates the coefficient applied to the reaction's flux.
-            - coefficient (float): The new coefficient value.
+    setCoefficient(coefficient)
+        Sets or updates the coefficient applied to the reaction's flux.
 
-        getType():
-            Retrieves the type of the coefficient used in the objective function.
-            Returns:
-                str: The coefficient type ('linear', 'quadratic').
+    getType()
+        Retrieves the type of the coefficient used in the objective function.
 
-        setType(ctype):
-            Sets or updates the type of the coefficient.
-            - ctype (str): The new coefficient type, must be one of the values specified in `ctypes`.
-            Raises:
-                TypeError: If the provided ctype is not in the allowed `ctypes`.
+    setType(ctype)
+        Sets or updates the type of the coefficient, ensuring it is one of the allowed types.
 
-    Note:
-        This class supports versatility in defining objective functions in metabolic models, allowing
-        adjustments in how reaction fluxes contribute to the overall model objectives using linear or quadratic terms.
+    Raises
+    ------
+    TypeError
+        If the `ctype` provided is not in the allowed `ctypes`.
+
+    Notes
+    -----
+    This class supports versatility in defining objective functions in metabolic models,
+    allowing adjustments in how reaction fluxes contribute to the overall model objectives
+    using linear or quadratic terms.
+
+    Examples
+    --------
+    >>> flux_obj = FluxObjective(pid='FObj_001', reaction='R001', coefficient=2, ctype='linear')
+    >>> print(flux_obj.getReactionId())
+    R001
+    >>> print(flux_obj.getCoefficient())
+    2
+    >>> flux_obj.setCoefficient(2.5)
+    >>> print(flux_obj.getCoefficient())
+    2.5
     """
-
     reaction = None
     coefficient = None
     ctype = None
@@ -4449,74 +4495,89 @@ class FluxObjective(Fbase):
 
 class UserDefinedConstraint(Fbase):
     """
-    Implements a custom constraint facility for an FBCv3 model. Unlike standard objective constraints,
-    this class supports dynamic inclusion of parameters as coefficients and variable values in the constraints,
-    offering robust customization capabilities tailored for complex systems modeling.
+    Implements a custom constraint facility for an FBCv3 model. This class supports dynamic inclusion
+    of parameters as coefficients and variable values in the constraints, offering robust customization
+    capabilities tailored for complex systems modeling.
 
-    Attributes:
-        constraint_components (list): A list of ConstraintComponent objects defining the components of this custom constraint.
-        solution (NoneType): Placeholder for the solution of the constraint; not implemented.
-        ub (Union[Parameter, Number, NoneType]): Upper boundary for the constraint, can be a numerical value or a parameter.
-        lb (Union[Parameter, Number, NoneType]): Lower boundary for the constraint, can be a numerical value or a parameter.
+    Parameters
+    ----------
+    pid : str
+        ID of the constraint.
+    lb : Union[Parameter, Number]
+        Lower bound of the constraint.
+    ub : Union[Parameter, Number]
+        Upper bound of the constraint.
 
-    Methods:
-        __init__(pid, lb, ub): Constructor for UserDefinedConstraint class.
-            - pid (str): ID of the constraint.
-            - lb (Union[Parameter, Number]): Lower bound of the constraint.
-            - ub (Union[Parameter, Number]): Upper bound of the constraint.
+    Attributes
+    ----------
+    constraint_components : list of ConstraintComponent
+        A list of ConstraintComponent objects defining the components of this custom constraint.
+    solution : NoneType
+        Placeholder for the solution of the constraint; not implemented.
+    ub : Union[Parameter, Number, NoneType]
+        Upper boundary for the constraint, can be a numerical value or a parameter.
+    lb : Union[Parameter, Number, NoneType]
+        Lower boundary for the constraint, can be a numerical value or a parameter.
 
-        setLowerBound(bnd): Sets the lower boundary of the constraint.
-            - bnd (Union[Parameter, Number]): The value to set as the lower bound.
+    Methods
+    -------
+    setLowerBound(bnd)
+        Sets the lower boundary of the constraint.
 
-        setUpperBound(bnd): Sets the upper boundary of the constraint.
-            - bnd (Union[Parameter, Number]): The value to set as the upper bound.
+    setUpperBound(bnd)
+        Sets the upper boundary of the constraint.
 
-        getUpperBound(): Retrieves the value of the upper boundary of the constraint.
-            Returns the numerical value or evaluates the parameter if the upper bound is a parameter.
+    getUpperBound()
+        Retrieves the value of the upper boundary of the constraint.
 
-        getLowerBound(): Retrieves the value of the lower boundary of the constraint.
-            Returns the numerical value or evaluates the parameter if the lower bound is a parameter.
+    getLowerBound()
+        Retrieves the value of the lower boundary of the constraint.
 
-        getConstraintComponentIDs(): Retrieves the IDs of all constraint components associated with this constraint.
-            Returns a list of component IDs.
+    getConstraintComponentIDs()
+        Retrieves the IDs of all constraint components associated with this constraint.
 
-        getConstraintComponentForVariable(rid): Fetches the constraint component associated with a specific variable ID.
-            - rid (str): The ID of the variable to query.
-            Returns a ConstraintComponent object or a list of objects if multiple matches are found, along with a warning.
+    getConstraintComponentForVariable(rid)
+        Fetches the constraint component associated with a specific variable ID.
 
-        getConstraintComponentVariables(): Retrieves the variables associated with all constraint components.
-            Returns a list of variables.
+    getConstraintComponentVariables()
+        Retrieves the variables associated with all constraint components.
 
-        getConstraintComponentVariableTypes(): Attempts to retrieve the types of variables for the constraint components from the model.
-            Returns a list of types or [None] if retrieval is not possible due to errors.
+    getConstraintComponentVariableTypes()
+        Attempts to retrieve the types of variables for the constraint components from the model.
 
-        getConstraintComponentData(): Gathers and packages data from all constraint components.
-            Returns a list of tuples, each consisting of (coefficient, variable, ctype) for each component.
+    getConstraintComponentData()
+        Gathers and packages data from all constraint components.
 
-        getConstraintComponent(cid): Retrieves a specific constraint component matching a given ID.
-            - cid (str): The constraint component ID.
-            Returns the associated ConstraintComponent object or None if it is not found.
+    getConstraintComponent(cid)
+        Retrieves a specific constraint component matching a given ID.
 
-        getConstraintComponents(): Returns all constraint components associated with this constraint.
+    getConstraintComponents()
+        Returns all constraint components associated with this constraint.
 
-        createConstraintComponent(pid, coefficient, variable, ctype): Creates a new ConstraintComponent.
-            - pid (str): The ID for the new component.
-            - coefficient (Any): The coefficient for the variable in the constraint.
-            - variable (Any): The variable part of the constraint.
-            - ctype (str): The type of the constraint component.
-            Returns a newly created ConstraintComponent object.
+    createConstraintComponent(pid, coefficient, variable, ctype)
+        Creates a new ConstraintComponent.
 
-        addConstraintComponent(cc): Adds an existing ConstraintComponent to the constraint.
-            - cc (ConstraintComponent): The constraint component to add.
+    addConstraintComponent(cc)
+        Adds an existing ConstraintComponent to the constraint.
 
-        setObjRefOnComponents(): Sets a weak reference to self on all contained ConstraintComponents and registers
-                                 them in the global model's store.
+    setObjRefOnComponents()
+        Sets a weak reference to self on all contained ConstraintComponents and registers them in the global model's store.
 
-    Notes:
-        This class assumes a complex manipulation and interaction of model components and parameters. Adequate error handling
-        and cross-referencing checks should be implemented when integrating into complex systems.
+    Raises
+    ------
+    TypeError
+        If an attempt is made to set a constraint type that is not in the allowed ctypes.
+
+    Examples
+    --------
+    >>> uc = UserDefinedConstraint(pid="UC01", lb=0, ub=100)
+    >>> cc = ConstraintComponent(pid="CC01", coefficient=1.5, variable="x", ctype="linear")
+    >>> uc.addConstraintComponent(cc)
+    >>> print(uc.getUpperBound())
+    100
+    >>> print(uc.getConstraintComponentIDs())
+    ['CC01']
     """
-
     constraint_components = None
     solution = None
     ub = None
@@ -4642,66 +4703,74 @@ class UserDefinedConstraint(Fbase):
 
 class ConstraintComponent(Fbase):
     """
-    Represents a component of a constraint within a biochemical or metabolic model,
-    encapsulating a variable and a coefficient, potentially used in optimizing or simulating the model.
+    Represents a component of a constraint within a biochemical or metabolic model. This component
+    encapsulates a variable, a coefficient, and a type, potentially used in optimizing or simulating the model.
 
-    Attributes:
-        variable: An identifier for a model variable, typically a reaction ID or another parameter that may be subject to constraints.
-        coefficient (float): Numeric coefficient that scales the variable in the constraint equation.
-        ctype (str): Describes the type of the constraint ('linear' or 'quadratic').
-        ctypes (tuple): Allowed types of constraints.
+    Parameters
+    ----------
+    pid : str
+        Unique identifier for the constraint component.
+    coefficient : float
+        Scaling factor for the constraint, affecting the variable's influence.
+    variable : str or Parameter
+        The model variable or parameter that this constraint component relates to.
+    ctype : str, optional
+        Type of the constraint; default is 'linear'. Must be either 'linear' or 'quadratic'.
 
-    Initialization Parameters:
-        pid (str): Unique identifier for the constraint component.
-        coefficient (float): Scaling factor for the constraint, affecting the variable's influence.
-        variable (str or Parameter): The variable or parameter that this constraint component relates to.
-        ctype (str, optional): Type of the constraint; default is 'linear'. Must be either 'linear' or 'quadratic'.
+    Attributes
+    ----------
+    variable : any
+        An identifier for a model variable, typically a reaction ID or another parameter that may be subject
+        to constraints.
+    coefficient : float
+        Numeric coefficient that scales the variable in the constraint equation.
+    ctype : str
+        Describes the type of the constraint ('linear' or 'quadratic').
+    ctypes : tuple
+        Allowed types of constraints which are ('linear', 'quadratic').
 
-    Methods:
-        setId(self, fid):
-            Sets the identifier for the ConstraintComponent. Overrides `Fbase.setId`.
-            Parameters:
-                fid (str): The new identifier to be set.
+    Methods
+    -------
+    setId(self, fid)
+        Sets the identifier for the ConstraintComponent.
 
-        getVariable(self) -> str:
-            Returns the ID of the variable associated with this component.
+    getVariable(self)
+        Returns the ID of the variable associated with this component.
 
-        getCoefficient(self) -> float:
-            Retrieves the coefficient value. If the coefficient is a `Parameter` instance, returns the parameter's value; otherwise, returns the coefficient directly.
+    getCoefficient(self)
+        Retrieves the coefficient value.
 
-        setVariable(self, variable):
-            Sets or updates the variable for this constraint component.
-            Parameters:
-                variable: A valid model variable identifier or a `Parameter` instance.
+    setVariable(self, variable)
+        Sets or updates the variable for this constraint component.
 
-        setCoefficient(self, coefficient):
-            Sets or updates the coefficient of the constraint component.
-            Parameters:
-                coefficient (float): The new coefficient value to set.
+    setCoefficient(self, coefficient)
+        Sets or updates the coefficient of the constraint component.
 
-        setType(self, ctype):
-            Sets the type of the constraint.
-            Parameters:
-                ctype (str): Must be either 'linear' or 'quadratic'.
-            Raises:
-                ValueError: If an invalid type is specified.
+    setType(self, ctype)
+        Sets the type of the constraint.
 
-        getType(self) -> str:
-            Returns the type of the constraint ('linear' or 'quadratic').
+    getType(self)
+        Returns the type of the constraint ('linear' or 'quadratic').
 
-        getVariableType(self) -> type:
-            Attempts to determine the type of the variable (e.g., Reaction, Metabolite) linked to this component.
-            Returns `None` if unable to retrieve the object or its type.
+    getVariableType(self)
+        Attempts to determine the type of the variable linked to this component.
 
-    Example:
-        >>> comp = ConstraintComponent('c1', coefficient=1.5, variable='R001', ctype='linear')
-        >>> print(f"Component for {comp.getVariable()} has a coefficient of {comp.getCoefficient()} and is of type {comp.getType()}")
-        'Component for R001 has a coefficient of 1.5 and is of type linear'
+    Raises
+    ------
+    ValueError
+        If an invalid type is specified when setting the constraint type.
 
-    Note:
-        Constraint components are building blocks for constructing more complex user-defined constraints that may control the behavior of simulation or optimization procedures.
+    Examples
+    --------
+    >>> comp = ConstraintComponent(pid='c1', coefficient=1.5, variable='R001', ctype='linear')
+    >>> print(f"Component for {comp.getVariable()} has a coefficient of {comp.getCoefficient()}, and is of type {comp.getType()}.")
+    Component for R001 has a coefficient of 1.5, and is of type linear.
+
+    Notes
+    -----
+    Constraint components are basic building blocks for constructing complex user-defined constraints that
+    can control the behavior of simulation or optimization procedures in metabolic models.
     """
-
     variable = None
     coefficient = None
     ctype = None
@@ -4758,65 +4827,65 @@ class ConstraintComponent(Fbase):
 
 class Compartment(Fbase):
     """
-    Represents a biological compartment within the context of a metabolic or biochemical model.
-    Compartments are used to spatially organize the various biochemical species and reactions, modeling distinct
-    environments such as cell cytoplasm, mitochondria, etc.
+    Represents a biological compartment within the context of a metabolic or biochemical model,
+    such as cell cytoplasm or mitochondria. Compartments help organize biochemical species and reactions
+    by modeling distinct environments.
 
-    Attributes:
-        size (float): Represents the relative size of the compartment.
-        dimensions (int): Spatial dimensions of the compartment. Default is 3 (suggesting a three-dimensional space).
-        volume (float or None): The volume of the compartment, optionally specified, defaults to the size if not provided.
+    Parameters
+    ----------
+    pid : str
+        Unique identifier for the compartment.
+    name : str, optional
+        Human-readable name of the compartment, defaults to the identifier if not provided.
+    size : float, optional
+        Relative size of the compartment, default is 1.
+    dimensions : int, optional
+        Spatial dimensions of the compartment, default is 3.
+    volume : float, optional
+        Explicit specification of the compartment's volume, defaults to the size if not specified.
 
-    Initialization Parameters:
-        pid (str): Unique identifier for the compartment.
-        name (str, optional): Human-readable name of the compartment.
-        size (float, optional): Size of the compartment, default is 1.
-        dimensions (int, optional): Number of dimensions of the compartment, default is 3.
-        volume (float, optional): Explicit specification of the compartment's volume.
+    Attributes
+    ----------
+    size : float
+        Relative size of the compartment.
+    dimensions : int
+        Spatial dimensions of the compartment.
+    volume : float
+        Volume of the compartment, may be specified explicitly or equal to size by default.
 
-    Methods:
-        setId(self, fid):
-            Sets or updates the identifier of the compartment.
-            Parameters:
-                fid (str): The new identifier for the compartment.
+    Methods
+    -------
+    setId(fid)
+        Sets or updates the identifier of the compartment.
 
-        containsSpecies(self):
-            Provides a list of species IDs contained within this compartment.
-            Returns:
-                list: A list of species identifiers.
+    containsSpecies()
+        Provides a list of species IDs contained within this compartment.
 
-        containsReactions(self):
-            Provides a list of reaction IDs associated with this compartment.
-            Returns:
-                list: A list of reaction identifiers.
+    containsReactions()
+        Provides a list of reaction IDs associated with this compartment.
 
-        getSize(self):
-            Retrieves the current size of the compartment.
-            Returns:
-                float: The size of the compartment.
+    getSize()
+        Retrieves the current size of the compartment.
 
-        getDimensions(self):
-            Retrieves the spatial dimensions of the compartment.
-            Returns:
-                int: The dimensional attribute of the compartment.
+    getDimensions()
+        Retrieves the spatial dimensions of the compartment.
 
-        setSize(self, size):
-            Sets the size of the compartment.
-            Parameters:
-                size (float): The new size to set for the compartment.
+    setSize(size)
+        Sets the size of the compartment.
 
-        setDimensions(self, dimensions):
-            Updates the spatial dimensions of the compartment.
-            Parameters:
-                dimensions (int): The new dimensions to set.
+    setDimensions(dimensions)
+        Updates the spatial dimensions of the compartment.
 
-    Example Usage:
-        >>> comp = Compartment(pid='cytoplasm', name='Cytoplasm', size=3.0, dimensions=3)
-        >>> print(f"Compartment ID: {comp.getId()}, Dimensions: {comp.getDimensions()}")
-        'Compartment ID: cytoplasm, Dimensions: 3'
+    Example
+    -------
+    >>> comp = Compartment(pid='cytoplasm', name='Cytoplasm', size=3.0, dimensions=3)
+    >>> print(f"Compartment ID: {comp.getId()}, Size: {comp.getSize()}, Dimensions: {comp.getDimensions()}")
+    Compartment ID: cytoplasm, Size: 3.0, Dimensions: 3
 
-    Note:
-        Validation of identifier uniqueness and correct dimensions should be managed outside of this class implementation.
+    Notes
+    -----
+    Validation of identifier uniqueness and correct spatial dimensions should be managed outside
+    of this class implementation to maintain modular design.
     """
     size = None
     dimensions = None
@@ -4956,80 +5025,76 @@ class GroupMemberAttributes(Fbase):
 
 class Group(Fbase):
     """
-    Represents a collection of CBMPy objects, often used to group related reactions or species within a metabolic model.
-    The groups can handle different kinds of collections, such as simple collections, partonomies, or classifications.
+    Represents a collection of CBMPy objects, which may include reactions or species within a metabolic model.
+    The group can be classified into types like 'collection', 'partonomy', or 'classification', which define
+    its interaction and relationship among its members.
 
-    Attributes:
-        members (list): A list of weak references to member CBMPy objects.
-        member_ids (list): A list of string identifiers corresponding to the members in the group.
-        kind (str): Type of the group designated by one of the predetermined kinds - 'collection', 'partonomy', 'classification'.
-        _kinds_ (tuple): A predefined tuple of possible group kinds.
-        _group_member_ids_ (list): List of member IDs that are themselves groups.
-        _member_attributes_ (GroupMemberAttributes): Custom attributes applied to all members of the group.
+    Parameters
+    ----------
+    pid : str
+        Unique identifier for the group instance.
 
-    Initialization Parameters:
-        pid (str): Unique identifier for the group instance.
+    Attributes
+    ----------
+    members : list of weakref
+        A list of weak references to the CBMPy objects that are members of the group.
+    member_ids : list of str
+        Identifiers corresponding to the members in the group.
+    kind : str
+        The type of group, can be 'collection', 'partonomy', or 'classification'.
+    _kinds_ : tuple of str
+        Predefined tuple of possible group types.
+    _group_member_ids_ : list of str
+        List of member IDs that are themselves group identifiers.
+    _member_attributes_ : GroupMemberAttributes
+        Custom attributes applied to all members of the group.
 
-    Methods:
-        addMember(self, obj):
-            Adds a CBMPy object, or several objects, to the group.
-            Parameters:
-                obj (CBMPy object or list/tuple of CBMPy objects): The object(s) to be added to the group.
+    Methods
+    -------
+    addMember(obj)
+        Adds a CBMPy object, or several objects, to the group.
 
-        deleteMember(self, oid):
-            Removes a member from the group by its identifier.
-            Parameters:
-                oid (str): Identifier of the group member to be removed.
+    deleteMember(oid)
+        Removes a member from the group by its identifier.
 
-        hasMember(self, mid):
-            Checks if the specified ID is a member of the group.
-            Returns:
-                bool: True if the member exists, False otherwise.
+    hasMember(mid)
+        Checks if the specified ID is a member of the group.
 
-        getMembers(self, as_set=False):
-            Retrieves all member objects of the group, optionally as a set.
-            Parameters:
-                as_set (bool): If True, returns a set; otherwise, returns a list.
+    getMembers(as_set=False)
+        Retrieves all member objects of the group, optionally as a set.
 
-        getMember(self, mid):
-            Retrieves a specific member of the group by ID.
-            Parameters:
-                mid (str): The identifier of the member to retrieve.
+    getMember(mid)
+        Retrieves a specific member of the group by ID.
 
-        getMemberIDs(self, as_set=False):
-            Returns the identifiers of all members, optionally as a set.
+    getMemberIDs(as_set=False)
+        Returns the identifiers of all members, optionally as a set.
 
-        getKind(self):
-            Retrieves the 'kind' attribute of the group.
+    getKind()
+        Retrieves the 'kind' attribute of the group.
 
-        setKind(self, kind):
-            Sets the kind of the group.
-            Parameters:
-                kind (str): Must be one of 'collection', 'partonomy', 'classification'.
+    setKind(kind)
+        Sets the kind of the group to specified type.
 
-        addSharedMIRIAMannotation(self, qual, entity, mid):
-            Adds a qualified MIRIAM annotation to all members of the group.
-            Parameters:
-                qual (str): A Biomodels biological qualifier.
-                entity (str): A MIRIAM resource entity.
-                mid (str): The entity identifier.
+    Examples
+    --------
+    >>> group = Group('G001')
+    >>> reaction1 = Reaction('R001')
+    >>> reaction2 = Reaction('R002')
+    >>> group.addMember([reaction1, reaction2])
+    >>> members = group.getMembers()
+    >>> print([member.getId() for member in members])
+    ['R001', 'R002']
+    >>> print(group.getKind())
+    'collection'
+    >>> group.setKind('classification')
+    >>> print(group.getKind())
+    'classification'
 
-        assignAllSharedPropertiesToMembers(self, overwrite=False):
-            Applies all shared properties (annotations, MIRIAM annotations, SBO terms, notes) to individual members.
-            Parameters:
-                overwrite (bool): If True, the existing properties on members will be overwritten.
-
-    Example Usage:
-        >>> group = Group('G001')
-        >>> reaction1 = Reaction('R001')
-        >>> reaction2 = Reaction('R002')
-        >>> group.addMember(reaction1)
-        >>> group.addMember(reaction2)
-        >>> print(group.getMembers())
-        >>> group.setKind('collection')
-        >>> print(group.getType())
+    Notes
+    -----
+    A group's 'kind' directly influences how its members are interpreted or related within the model.
+    Validation for group existence to ensure use of valid member_ids should be considered outside of this class.
     """
-
     members = None
     member_ids = None
     kind = 'collection'
@@ -5362,51 +5427,60 @@ class Group(Fbase):
 
 class FluxBound(Fbase):
     """
-    Represents a flux boundary condition for a specific reaction within a metabolic model. This class
-    allows for setting upper, lower, or exact constraints on the flux through a reaction, aiding in the simulation
-    and analysis of metabolic pathways.
+    Represents a flux boundary condition for a specific reaction within a metabolic model. It allows for setting
+    upper, lower, or exact constraints on the flux through a reaction, aiding in the simulation and analysis
+    of metabolic pathways.
 
-    Attributes:
-        reaction (str): Identifier for the reaction associated with this flux bound.
-        operation (str): Describes the type of flux bound ('greaterEqual', 'lessEqual', or 'equal').
-        value (float or None): The numerical value of the flux bound.
-        is_bound (str or None): A derived attribute indicating the type of bound (i.e., 'lower', 'upper', or 'equality').
-        __param__ (None): Reserved for future use, potentially for parameterized simulation settings.
-        compartment (None): Currently unused; included for potential future expansion to handle compartment-specific bounds.
+    Parameters
+    ----------
+    pid : str
+        Unique identifier for the flux bound instance.
+    reaction : str
+        The identifier of the reaction to which the bound is applied.
+    operation : str
+        The operator indicating the bound type, accepts varied input conventions (e.g. '>=', 'lessEqual').
+    value : float
+        Value specifying the flux limit or exact value.
 
-    Initialization Parameters:
-        pid (str): Unique identifier for the flux bound instance.
-        reaction (str): The identifier of the reaction to which the bound is applied.
-        operation (str): The operator indicating the bound type, accepts varied input conventions (e.g., '>=', 'lessEqual').
-        value (float): Value specifying the flux limit or exact value.
+    Attributes
+    ----------
+    reaction : str
+        Identifier for the reaction associated with this flux bound.
+    operation : str
+        Describes the type of flux bound ('greaterEqual', 'lessEqual', 'equal').
+    value : float or None
+        The numerical value of the flux bound.
+    is_bound : str or None
+        A derived attribute indicating the type of bound (i.e., 'lower', 'upper' or 'equality').
 
-    Methods:
-        getType(self) -> str:
-            Determines and returns the bound type based on the operation attribute: 'lower', 'upper', or 'equality'.
+    Methods
+    -------
+    getType() -> str
+        Determines and returns the bound type based on the operation attribute: 'lower', 'upper', or 'equality'.
+    getReactionId() -> str
+        Retrieves the identifier of the associated reaction.
+    setReactionId(react: str)
+        Sets or updates the reaction identifier associated with this bound.
+    getValue() -> float
+        Returns the current value of the flux bound if set; otherwise, issues a warning and returns None.
+    setValue(value: float or None)
+        Validates and sets the value of the flux bound. If the value is not a real number or None, raises a warning.
 
-        getReactionId(self) -> str:
-            Retrieves the identifier of the associated reaction.
+    Raises
+    ------
+    AssertionError
+        If the `operation` provided during initialization is not in the approved list.
+    RuntimeError
+        If an invalid type of bound (i.e., not 'greater', 'less', or 'equal') is attempted to be created.
 
-        setReactionId(self, react: str) -> None:
-            Sets or updates the reaction identifier associated with this bound.
+    Example
+    -------
+    >>> fb = FluxBound(pid='fb001', reaction='R_EX_glc__e', operation='>=', value=0.0)
+    >>> print(fb.getType())  # Expected Output: 'lower'
+    >>> print(fb.getReactionId())  # Expected Output: 'R_EX_glc__e'
+    >>> print(fb.getValue())  # Expected Output: 0.0
 
-        getValue(self) -> float:
-            Returns the current value of the flux bound if set; otherwise, issues a warning and returns None.
-
-        setValue(self, value: float or None) -> None:
-            Validates and sets the value of the flux bound. If the value is not a real number or None, it raises a warning.
-
-    Raises:
-        AssertionError: If the `operation` provided during initialization is not in the approved list.
-        RuntimeError: If an invalid type of bound (i.e., not 'greater', 'less', or 'equal') is attempted to be created.
-
-    Example:
-        >>> fb = FluxBound(pid='fb001', reaction='R_EX_glc__e', operation='>=', value=0.0)
-        >>> print(fb.getType())  # Expected Output: 'lower'
-        >>> print(fb.getReactionId())  # Expected Output: 'R_EX_glc__e'
-        >>> print(fb.getValue())  # Expected Output: 0.0
     """
-
     reaction = None
     operation = None
     value = None
@@ -5681,52 +5755,54 @@ class FluxBoundLower(FluxBoundBase):
 
 class Parameter(Fbase):
     """
-    Represents a parameter within a model, capable of holding various associations to other objects
-    within the model and maintaining a value that can be optionally constant or variable during simulations.
+    Represents a parameter within a biochemical model, capable of holding associations with other objects
+    in the model and maintaining a value that may be constant or variable during simulations.
 
-    The Parameter object serves as a container for storing the value of parameters that may affect model
-    behavior and properties. It supports association with arbitrary objects, making it flexible
-    for modeling diverse systems.
+    Parameters
+    ----------
+    pid : str
+        The unique parameter identifier.
+    value : float
+        The initial value for the parameter.
+    name : str, optional
+        Human-readable name for the parameter. If not provided, `pid` is used as the name.
+    constant : bool, optional
+        Indicates whether the parameter's value is constant or can change during a simulation. Default is True.
 
-    Attributes:
-        constant (bool): Indicates whether the parameter's value is constant or can change
-            during a simulation. Default is True.
-        value (any): The parameter's value, which can be set to any numerical value.
-        _associations_ (list): Internal storage for associated object IDs.
+    Attributes
+    ----------
+    constant : bool
+        Indicates if the parameter's value is fixed (True) or can change in simulations (False).
+    value : any
+        The current value of the parameter, which can be any numeric type.
+    _associations_ : list
+        A private list storing identifiers of associated objects.
 
-    Methods:
-        __init__(self, pid, value, name=None, constant=True):
-            Initializes a new Parameter instance.
-            - *pid* (str): The unique parameter identifier.
-            - *value* (float): The initial value for the parameter.
-            - *name* (str, optional): Human-readable name for the parameter. If not provided, `pid` is used.
-            - *constant* (bool, optional): Sets whether the parameter is constant. Default is True.
+    Methods
+    -------
+    getValue()
+        Retrieves the current numeric value of the parameter.
+    setValue(value)
+        Sets a new numeric value for the parameter.
+    getAssociations()
+        Provides a list of identifiers for objects associated with this parameter.
+    addAssociation(assoc)
+        Adds an association by object identifier to this parameter.
+    deleteAssociation(assoc)
+        Removes an association by object identifier from this parameter.
 
-        getValue(self):
-            Retrieves the current value of the parameter.
-            Returns:
-                value (float): The current value of the parameter.
-
-        setValue(self, value):
-            Sets the value of the parameter.
-            - *value* (float): A numerical value to set as the parameter's value.
-            Returns:
-                bool: True if the value is set successfully, False otherwise.
-
-        getAssociations(self):
-            Retrieves a list of associated object IDs.
-            Returns:
-                list: The list of associated object IDs.
-
-        addAssociation(self, assoc):
-            Adds an object ID to the list of associations.
-            - *assoc* (str): The object ID to associate with the parameter.
-
-        deleteAssociation(self, assoc):
-            Removes an object ID from the list of associations.
-            - *assoc* (str): The object ID to disassociate.
+    Example
+    -------
+    >>> param = Parameter(pid='p001', value=0.5)
+    >>> print(param.getValue())
+    0.5
+    >>> param.setValue(0.75)
+    >>> print(param.getValue())
+    0.75
+    >>> param.addAssociation('rxn001')
+    >>> print(param.getAssociations())
+    ['rxn001']
     """
-
     _associations_ = None
     constant = True
     value = None
@@ -5790,70 +5866,85 @@ class Parameter(Fbase):
 
 class Reaction(Fbase):
     """
-    Represents a biochemical reaction within a metabolic or biochemical network. This class manages the
-    reagents involved in the reaction, controls its reversibility, and incorporates various attributes
-    relevant to flux balance analysis and other metabolic studies.
+    Represents a biochemical reaction within a metabolic or biochemical network.
 
-    Attributes:
-        reagents (list): A collection of `Reagent` objects that participate in the reaction.
-        reversible (bool): A flag indicating if the reaction can proceed in both forward and backward directions.
-        is_exchange (bool): Indicates if the reaction is an exchange reaction.
-        value (float, optional): Current value of the reaction flux, typically set or computed during simulations.
-        reduced_cost (float, optional): Reduced cost of the reaction derived from optimization algorithms.
-        is_balanced (bool, optional): Checks if the reaction maintains stoichiometric balance.
-        fva_min (float, optional): Minimum possible flux through the reaction as computed by Flux Variability Analysis.
-        fva_max (float, optional): Maximum possible flux through the reaction as computed by Flux Variability Analysis.
-        fva_status (optional): Reserved for future use, possibly to store the FVA computation status.
-        __bound_history__ (list): Records historical changes to flux boundaries of the reaction.
-        __is_active__ (bool): Shows whether the reaction is actively considered in the current model configuration.
-        _modifiers_ (list): Modifiers that affect the reaction kinetics, sourced from SBML model components.
-        __lower_bound_id__ (str, optional): Links to the object that maintains lower flux boundary data.
-        __upper_bound_id__ (str, optional): Links to the object that maintains upper flux boundary data.
+    This class manages the reagents involved in the reaction, controls its reversibility,
+    and incorporates various attributes relevant to flux balance analysis and other metabolic studies.
 
-    Methods:
-        addReagent(self, reag: Reagent) -> None:
-            Adds a pre-defined Reagent object to the collection of reagents involved in this reaction.
+    Parameters
+    ----------
+    pid : str
+        Identifier for the reaction.
+    name : str, optional
+        Human-readable name for the reaction.
+    reversible : bool, default True
+        Flag indicating if the reaction can proceed in both forward and backward directions.
 
-        createReagent(self, metabolite: str, coefficient: float) -> None:
-            Constructs and adds a new Reagent to the reaction based on the provided metabolite and stoichiometric coefficient.
+    Attributes
+    ----------
+    reagents : list of `Reagent`
+        Collection of `Reagent` objects that participate in the reaction.
+    reversible : bool
+        Flag indicating if the reaction is reversible.
+    is_exchange : bool, default False
+        Indicates if the reaction is an exchange reaction.
+    value : float, optional
+        Current value of the reaction flux, typically set or computed during simulations.
+    reduced_cost : float, optional
+        Reduced cost of the reaction derived from optimization algorithms.
+    is_balanced : bool, optional
+        Checks if the reaction maintains stoichiometric balance.
+    fva_min : float, optional
+        Minimum possible flux through the reaction as computed by Flux Variability Analysis.
+    fva_max : float, optional
+        Maximum possible flux through the reaction as computed by Flux Variability Analysis.
+    fva_status : optional
+        Reserved for future use, might store the FVA computation status.
+    __bound_history__ : list
+        Records historical changes to flux boundaries of the reaction.
+    __is_active__ : bool, default True
+        Shows whether the reaction is actively considered in the current model configuration.
+    _modifiers_ : list
+        Modifiers that affect the reaction kinetics, sourced from SBML model components.
+    __lower_bound_id__ : str, optional
+        Links to the object that maintains lower flux boundary data.
+    __upper_bound_id__ : str, optional
+        Links to the object that maintains upper flux boundary data.
 
-        getSpeciesIds(self) -> list:
-            Fetches a list of unique identifiers for all species involved as reagents in this reaction.
+    Methods
+    -------
+    addReagent(reag: Reagent) -> None
+        Adds a pre-defined Reagent object to the collection of reagents involved in this reaction.
+    createReagent(metabolite: str, coefficient: float) -> None
+        Constructs and adds a new Reagent to the reaction based on the provided metabolite and stoichiometric coefficient.
+    getSpeciesIds() -> list
+        Fetches a list of unique identifiers for all species involved as reagents in this reaction.
+    getReagentObjIds() -> list
+        Retrieves object identifiers for all Reagents participating in this reaction.
+    setValue(value: float) -> None
+        Sets the reaction's current flux value.
+    getValue() -> float
+        Retrieves the current reaction flux value.
+    setLowerBound(value: float) -> None
+        Defines the minimum flux value permissible for this reaction.
+    setUpperBound(value: float) -> None
+        Defines the maximum flux value permissible for this reaction.
 
-        getReagentObjIds(self) -> list:
-            Retrieves object identifiers for all Reagents participating in this reaction.
+    Examples
+    --------
+    >>> reaction = Reaction('R001', 'Water Formation', reversible=False)
+    >>> reaction.addReagent(Reagent('H2', 'Hydrogen', -2))
+    >>> reaction.addReagent(Reagent('O2', 'Oxygen', -1))
+    >>> reaction.addReagent(Reagent('H2O', 'Water', 2))
+    >>> print(reaction.getEquation())
+    H2 + O2 => 2 H2O
 
-        setValue(self, value: float) -> None:
-            Sets the reaction's current flux value.
-
-        getValue(self) -> float:
-            Retrieves the current reaction flux value.
-
-        setLowerBound(self, value: float) -> None:
-            Defines the minimum flux value permissible for this reaction.
-
-        setUpperBound(self, value: float) -> None:
-            Defines the maximum flux value permissible for this reaction.
-
-        deactivateReaction(self, lower=0.0, upper=0.0, silent=True) -> None:
-            Temporarily disables the reaction by setting stringent flux bounds.
-
-        reactivateReaction(self, silent=True) -> None:
-            Reactivates a previously deactivated reaction by restoring original flux bounds.
-
-        getEquation(self, reverse_symb: str='=', irreverse_symb: str='>', use_names=False) -> str:
-            Provides a human-readable string representation of the chemical reaction equation.
-
-    Raises:
-        RuntimeError: Errors related to identifier validation or duplicated reagent entries.
-
-    Example:
-        >>> reaction = Reaction('R001', 'Water Formation', reversible=False)
-        >>> reaction.addReagent(Reagent('H2', 'Hydrogen', -2))
-        >>> reaction.addReagent(Reagent('O2', 'Oxygen', -1))
-        >>> reaction.addReagent(Reagent('H2O', 'Water', 2))
-        >>> print(reaction.getEquation())
-        H2 + O2 => 2 H2O
+    Raises
+    ------
+    RuntimeError
+        Raised if duplicate reagent entries are detected or invalid identifiers are set.
+    DeprecationWarning
+        Raised if deprecated methods are used.
     """
     reagents = None
     reversible = None
@@ -6398,8 +6489,69 @@ class Reaction(Fbase):
 
 # This needs to be finished and allow the use of parameters as UB/LB
 class ReactionNew(Reaction):
-    """Extended reaction class with new upper/lower bound structure"""
+    """
+    Extended reaction class with new upper and lower bound structure that uses parameters.
 
+    This class inherits from `Reaction` and introduces the concept of using parameters
+    as bounds, allowing for more dynamic and flexible reaction modeling.
+
+    Parameters
+    ----------
+    pid : str
+        Identifier for the reaction.
+    name : str, optional
+        Human-readable name for the reaction, defaults to None.
+    lb : float, optional
+        Initial lower bound of the reaction, defaults to negative infinity.
+    ub : float, optional
+        Initial upper bound of the reaction, defaults to positive infinity.
+    reversible : bool, optional
+        Indicates whether the reaction is reversible, defaults to True.
+
+    Attributes
+    ----------
+    ub : Parameter
+        A parameter object that holds the upper bound value.
+    lb : Parameter
+        A parameter object that holds the lower bound value.
+
+    Methods
+    -------
+    getLowerBound()
+        Retrieves the value of the reaction's lower bound.
+    getUpperBound()
+        Retrieves the value of the reaction's upper bound.
+    setLowerBound(value)
+        Sets the reaction's lower bound to the specified value.
+    setUpperBound(value)
+        Sets the reaction's upper bound to the specified value.
+    deactivateReaction(lower=0.0, upper=0.0, silent=True)
+        Temporarily deactivates the reaction by setting the bounds to the specified values.
+    reactivateReaction(silent=True)
+        Reactivate a previously deactivated reaction by restoring its original bounds.
+    setObjRefOnComponents()
+        Sets references to the model on the bounded parameters, ensuring they can interact with the model context.
+
+    Examples
+    --------
+    >>> from cbmpy import CbModel, Reaction, Reagent, Parameter
+    >>> model = CbModel.CBModel('Model1')
+    >>> reaction = ReactionNew('R001', 'Glucose Transport', lb=0, ub=100, reversible=False)
+    >>> model.addReaction(reaction)
+    >>> print(reaction.getLowerBound(), reaction.getUpperBound())
+    0 100
+    >>> reaction.setLowerBound(-10)
+    >>> reaction.setUpperBound(120)
+    >>> print(reaction.getLowerBound(), reaction.getUpperBound())
+    -10 120
+    >>> reaction.deactivateReaction()
+    >>> print(reaction.getLowerBound(), reaction.getUpperBound())
+    0.0 0.0
+    >>> reaction.reactivateReaction()
+    >>> print(reaction.getLowerBound(), reaction.getUpperBound())
+    -10 120
+
+    """
     ub = None
     lb = None
 
@@ -6531,100 +6683,80 @@ class ReactionNew(Reaction):
 
 class Species(Fbase):
     """
-    Represents a biochemical or chemical species in a metabolic or biochemical model. The `Species` class
-    encapsulates relevant biochemical attributes like chemical formula, charge, and compartmentalization, and
-    it manages the species' roles in various reactions within the model.
+    Represents a biochemical or chemical species in a metabolic or biochemical model.
 
-    Each species can be marked as a boundary species, be part of multiple reactions, and can be associated
-    with specific compartments within the biochemical model.
+    The `Species` class encapsulates attributes such as chemical formula, charge, and compartmentalization,
+    and manages the species' roles in various reactions within the model. Each species can be marked as
+    a boundary species, partaking in multiple reactions, and associated with specific compartments in the model.
 
-    :ivar chemFormula: (None or str) Chemical formula of the species.
-    :ivar charge: (None or float) Electric charge of the species.
-    :ivar value: (float) Placeholder for various numeric properties; defaults to NaN.
-    :ivar is_boundary: (bool) Indicates if the species acts as a boundary in the model.
-    :ivar reagent_of: (None or list of str) List of reaction IDs where the species acts as a reagent.
-    :ivar shadow_price: (None or float) Used in economic or other types of modeling analyses.
+    Parameters
+    ----------
+    pid : str
+        The unique identifier for the species.
+    boundary : bool, optional
+        Indicates if the species is a boundary species, defaults to False.
+    name : str, optional
+        Human-friendly name of the species.
+    value : float, optional
+        Numeric value associated with the species; defaults to NaN.
+    compartment : str, optional
+        Identifier of the compartment where the species is located.
+    charge : float, optional
+        Electric charge of the species.
+    chemFormula : str, optional
+        Chemical formula of the species.
 
-    :param pid: The unique identifier for the species.
-    :type pid: str
-    :param boundary: Indicates if the species is a boundary species, defaults to False.
-    :type boundary: bool, optional
-    :param name: Human-friendly name of the species.
-    :type name: str, optional
-    :param value: Numeric value associated with the species; defaults to NaN.
-    :type value: float, optional
-    :param compartment: Identifier of the compartment where the species is located.
-    :type compartment: str, optional
-    :param charge: Electric charge of the species.
-    :type charge: float, optional
-    :param chemFormula: Chemical formula of the species.
-    :type chemFormula: str, optional
+    Attributes
+    ----------
+    chemFormula : str or None
+        Chemical formula of the species.
+    charge : float or None
+        Electric charge of the species.
+    value : float
+        Placeholder for various numeric properties; initially set to NaN.
+    is_boundary : bool
+        Indicates if the species acts as a boundary in the model.
+    reagent_of : list of str or None
+        List of reaction IDs where the species acts as a reagent.
+    shadow_price : float or None
+        Used in economic or other types of modeling analyses.
 
-    :raises RuntimeError: If an invalid species ID is provided during initialization or if ID setting methods are misused.
+    Methods
+    -------
+    setId(fid, allow_rename=False)
+        Set or update the species ID. Raises RuntimeError if the new ID is invalid or already in use.
+    getValue()
+        Return the current value attribute.
+    setValue(value)
+        Update the species' value.
+    isReagentOf()
+        Retrieve a dynamic list of reaction IDs where this species is a reagent.
+    setChemFormula(cf)
+        Set the species' chemical formula.
+    getChemFormula()
+        Get the current chemical formula for the species.
+    setCharge(charge)
+        Set the electric charge of the species.
+    getCharge()
+        Retrieve the current electric charge of the species.
+    setBoundary()
+        Marks the species as a boundary species.
+    unsetBoundary()
+        Removes the boundary status from the species.
 
-    Examples:
-        Creating a species and setting its properties:
+    Raises
+    ------
+    RuntimeError
+        If an invalid species ID is provided during initialization or in setId methods.
 
-        >>> glucose = Species(pid='glucose', name='Glucose', chemFormula='C6H12O6', compartment='cytoplasm')
-        >>> glucose.setCharge(-3)
-        >>> print(glucose.getCharge())
-        -3
-
-    Methods:
-        setId(self, fid, allow_rename=False):
-            Set or update the species ID.
-            :param fid: New identifier to set.
-            :type fid: str
-            :param allow_rename: If True, allows renaming the species in linked reactions.
-            :type allow_rename: bool
-            :raises RuntimeError: If the new ID is invalid or already in use.
-
-        getValue(self):
-            Return the current value attribute.
-            :returns: Current value of the species.
-            :rtype: float
-
-        setValue(self, value):
-            Update the species' value.
-            :param value: New value to set.
-            :type value: float
-
-        isReagentOf(self):
-            Retrieve a dynamic list of reaction IDs where this species is a reagent.
-            :returns: List of reaction IDs.
-            :rtype: list of str
-
-        setReagentOf(self, rid):
-            Deprecated method, raises a RuntimeError.
-
-        getReagentOf(self):
-            Deprecated, use isReagentOf instead.
-
-        setChemFormula(self, cf):
-            Set the species' chemical formula.
-            :param cf: Chemical formula string to assign.
-            :type cf: str
-
-        getChemFormula(self):
-            Get the current chemical formula for the species.
-            :returns: Chemical formula of the species.
-            :rtype: str
-
-        setCharge(self, charge):
-            Set the electric charge of the species.
-            :param charge: Charge value to set.
-            :type charge: float
-
-        getCharge(self):
-            Retrieve the current electric charge of the species.
-            :returns: Current electric charge.
-            :rtype: float
-
-        setBoundary(self):
-            Marks the species as a boundary species.
-
-        unsetBoundary(self):
-            Removes the boundary status from the species.
+    Examples
+    --------
+    >>> glucose = Species(pid='glucose', name='Glucose', chemFormula='C6H12O6', compartment='cytoplasm')
+    >>> glucose.setCharge(-3)
+    >>> print(glucose.getCharge())
+    -3
+    >>> print(glucose.isReagentOf())
+    ['R001', 'R002']  # Assuming glucose is a reagent in reactions 'R001' and 'R002'
     """
     chemFormula = None
     charge = None
@@ -6821,52 +6953,73 @@ class Species(Fbase):
 
 class Reagent(Fbase):
     """
-    Represents a reagent in a biochemical reaction. This class manages the reagent's role, which is determined based on
-    its stoichiometric coefficient, along with references to the corresponding biochemical species.
+    Represents a reagent in a biochemical reaction.
 
-    Attributes:
-        coefficient (int, float, or Parameter): A numeric value or a `Parameter` object defining the stoichiometric
-                                                coefficient. Zero coefficients are currently not supported and will raise a RuntimeError.
-        role (str): Role of the reagent in the reaction, such as 'substrate', 'product', or None, determined by the coefficient's sign.
-        species_ref (Species or str): Reference to a `Species` object or a species identifier representing the biochemical species.
-        _value_is_ref_ (bool): Indicator if the coefficient value is a reference to a `Parameter` object.
+    This class manages the reagent's role within the reaction, which is determined by
+    its stoichiometric coefficient. It also maintains references to the corresponding biochemical species.
 
-    Parameters:
-        pid (str): Unique identifier for the reagent.
-        species_ref (Species or str): A reference to a Species object or a species identifier.
-        coef (int, float, or Parameter): The stoichiometric coefficient of the reagent.
+    Parameters
+    ----------
+    pid : str
+        Unique identifier for the reagent.
+    species_ref : Species or str
+        A reference to a Species object or a species identifier.
+    coef : int, float or Parameter
+        The stoichiometric coefficient of the reagent. Zero coefficients are currently unsupported and raise a RuntimeError.
 
-    Methods:
-        __init__(self, pid, species_ref, coef): Initializes the Reagent object with the specified parameters.
-        setCoefficient(self, coef): Sets the stoichiometric coefficient and updates the role based on its sign.
-            Args:
-                coef (int, float, or Parameter): The coefficient to set.
-        getCoefficient(self): Returns the current stoichiometric coefficient.
-            Returns:
-                float or int: Current coefficient, or None if it is a referenced `Parameter` object.
-        setSpecies(self, spe): Sets the species that this reagent references.
-            Args:
-                spe (Species): The species instance that this reagent will refer to.
-        getSpecies(self): Returns the species that this reagent refers to.
-            Returns:
-                Species or str: The species reference.
-        getRole(self): Returns the role of this reagent.
-            Returns:
-                str: Role of the reagent ('substrate', 'product', or None).
+    Attributes
+    ----------
+    coefficient : int, float, or Parameter
+        A numeric value or a `Parameter` object defining the stoichiometric coefficient. Zero coefficients are not supported.
+    role : str
+        Role of the reagent in the reaction, such as 'substrate', 'product', or None, determined by the coefficient's sign.
+    species_ref : Species or str
+        Reference to a `Species` object or a species identifier representing the biochemical species.
+    _value_is_ref_ : bool
+        Indicator if the coefficient value is a reference to a `Parameter` object.
 
-    Raises:
-        RuntimeError: Raised if an attempt is made to set a zero coefficient, which is currently not supported.
+    Methods
+    -------
+    setCoefficient(self, coef)
+        Sets the stoichiometric coefficient and updates the role based on its sign.
+        Parameters:
+            coef : int, float, or Parameter
+                The new coefficient to set.
 
-    Examples:
-        >>> water = Reagent('r001', 'H2O', -2)
-        >>> print(water.getRole())
-        'substrate'
-        >>> water.setCoefficient(2)
-        >>> print(water.getRole())
-        'product'
+    getCoefficient()
+        Returns the current stoichiometric coefficient if not a `Parameter` object; otherwise returns the value referenced.
+        Returns:
+            float or int
 
-    Note:
-        Modification of chemical or numerical properties should be handled with care to ensure integrity of the underlying model.
+    setSpecies(self, spe)
+        Sets the species that this reagent references.
+        Parameters:
+            spe : Species
+                The species instance that this reagent will refer to.
+
+    getSpecies()
+        Returns the species that this reagent refers to.
+        Returns:
+            Species or str
+
+    getRole()
+        Returns the role of this reagent based on the sign of the coefficient.
+        Returns:
+            str
+
+    Raises
+    ------
+    RuntimeError
+        Raised if an attempt is made to set a zero coefficient, which is currently not supported.
+
+    Examples
+    --------
+    >>> water = Reagent('r001', 'H2O', -2)
+    >>> print(water.getRole())
+    'substrate'
+    >>> water.setCoefficient(2)
+    >>> print(water.getRole())
+    'product'
     """
     coefficient = None
     role = None
@@ -6952,58 +7105,74 @@ class Reagent(Fbase):
 
 class Gene(Fbase):
     """
-    Represents a gene, a fundamental unit of hereditary, within a biological model. Capable of being activated or deactivated,
-    this class handles administrative aspects of a gene including its identifiers and active state.
+    Represents a gene, a fundamental unit of heredity within a biological model.
 
-    Attributes:
-        active0 (bool): Initiates the gene's active state. Used to reset the gene to its original state.
-        active (bool): Current active state of the gene, can be altered through setActive() or setInactive().
-        label (str): A human-readable label for the gene, which may correspond to an official gene identifier.
+    This class manages administrative aspects such as gene identifiers and active states, capable of being activated or deactivated.
 
-    Parameters:
-        pid (str): Unique identifier for the gene within the model's context.
-        label (str, optional): Descriptive label for the gene, defaults to the value of `pid` if not provided.
-        active (bool, optional): Initial active state of the gene, defaults to True.
+    Parameters
+    ----------
+    pid : str
+        Unique identifier for the gene within the model's context.
+    label : str, optional
+        Descriptive label for the gene, which may initially default to the value of `pid` if not provided.
+    active : bool, optional
+        Initial active state of the gene, defaults to True.
 
-    Methods:
-        __init__(self, pid, label=None, active=True): Constructor to initiate a Gene object.
-            Args:
-                pid (str): Primary identifier for the gene.
-                label (str, optional): Label for the gene.
-                active (bool, optional): Initial active state of the gene.
-            Raises:
-                RuntimeError: Raised when an invalid `pid` is provided.
-        setId(self, fid): Set a new identifier for the gene.
-            Args:
-                fid (str): The new identifier to set.
-            Raises:
-                RuntimeError: Raised when `fid` is not a valid identifier or if it's in use.
-        getLabel(self): Retrieves the gene's current label.
-            Returns:
-                str: The label of the gene.
-        setLabel(self, label): Assigns a new label to the gene, ensuring it's unique within the model.
-            Args:
-                label (str): New label for the gene.
-        setActive(self): Sets the gene's state to active.
-        setInactive(self): Sets the gene's state to inactive.
-        isActive(self): Returns the current active state of the gene.
-            Returns:
-                bool: True if the gene is active, else False.
-        resetActivity(self): Resets the gene's activity to its original state upon initialization.
+    Attributes
+    ----------
+    active0 : bool
+        Initial active state of the gene; used to reset the gene to its original state from initialization.
+    active : bool
+        Current active state of the gene; can be altered using `setActive()` or `setInactive()`.
+    label : str
+        A human-readable label for the gene, which may correspond to an official gene identifier.
 
-    Raises:
-        RuntimeError: If the provided `pid` or `fid` does not pass validation checks or if duplication is detected.
+    Methods
+    -------
+    setId(fid)
+        Set a new identifier for the gene.
+        Parameters:
+            fid : str
+                The new identifier to set for the gene.
+        Raises:
+            RuntimeError : If `fid` is not a valid identifier or already in use.
+    getLabel()
+        Retrieves the gene's current label.
+        Returns:
+            str : The label of the gene.
+    setLabel(label)
+        Assigns a new label to the gene, ensuring it's unique within the model.
+        Parameters:
+            label : str
+                The new label for the gene.
+    setActive()
+        Sets the gene's state to active.
+    setInactive()
+        Sets the gene's state to inactive.
+    isActive()
+        Returns the current active state of the gene.
+        Returns:
+            bool : True if the gene is active, else False.
+    resetActivity()
+        Resets the gene's activity to its original state upon initialization.
 
-    Examples:
-        >>> gene_instance = Gene("gene001", "GenX", True)
-        >>> print(gene_instance.isActive())
-        True
-        >>> gene_instance.setInactive()
-        >>> print(gene_instance.isActive())
-        False
+    Raises
+    ------
+    RuntimeError
+        If the provided `pid` or `fid` does not pass validation checks, or if duplication is detected.
 
-    Note:
-        Ensure that gene identifiers are unique and valid as per the model's requirements to prevent runtime errors.
+    Examples
+    --------
+    >>> gene_instance = Gene("gene001", "GenX", True)
+    >>> print(gene_instance.isActive())
+    True
+    >>> gene_instance.setInactive()
+    >>> print(gene_instance.isActive())
+    False
+
+    Note
+    ----
+    Ensure that gene identifiers are unique and valid as per the model's requirements to prevent runtime errors.
     """
     active0 = False
     active = False
@@ -7121,79 +7290,67 @@ class Gene(Fbase):
 
 class GeneProteinAssociation(Fbase):
     """
-    Manages the gene-protein-reaction (GPR) associations within a biological model, providing methods for defining and evaluating relationships between genes, proteins, and reactions. This class handles the logical formulation of how genes lead to protein expression and, by extension, reaction activity.
+    Manages gene-protein-reaction (GPR) associations within a biological model,
+    facilitating the definition and evaluation of relationships between genes, proteins, and reactions.
+    It uses logical expressions to represent how genes contribute to protein expression which in turn controls
+    reaction activity.
 
-    Attributes:
-        assoc (str or None): The string representation of the gene association logic.
-        protein (str or None): The identifier of the protein or reaction controlled by this GPR association.
-        generefs (list of str): A list containing identifiers of genes involved in this association.
-        tree (dict): A tree structure representing the logical GPR which might contain nested 'and/or' logic expressions.
-        __evalass__(str or None): The evaluated string or compiled function of the association logic.
-        __evalass_compiled__(code or None): The compiled version of evalass if used.
-        __evalass_result__(int or None): The result of the executed evalass if compiled.
-        use_compiled (bool): A flag indicating whether to use the compiled evalass for evaluation purposes.
-        _gene_id_ucntr_ (int): A counter used for generating unique gene identifiers.
+    Parameters
+    ----------
+    pid : str
+        The unique identifier within the model for this association.
+    protein : str
+        Link to the protein or reaction that genes are associated with.
+    use_compiled : bool, optional
+        Specifies whether to use compiled expressions for evaluation. Defaults to False.
 
-    Methods:
-        __init__(self, pid, protein, use_compiled=False): Constructor for the GeneProteinAssociation class.
-            Args:
-                pid (str): The unique identifier within the model for this association.
-                protein (str): Link to the protein or reaction that genes are associated with.
-                use_compiled (bool, optional): Specifies if compiled expressions are used for evaluation (default is False).
+    Attributes
+    ----------
+    assoc : str or None
+        String representation of the gene association logic.
+    protein : str or None
+        Identifier of the controlled protein or reaction.
+    generefs : list of str
+        Identifiers of the genes involved in this association.
+    tree : dict
+        Tree structure representing the association's logic, which may contain nested 'and/or' logic.
+    use_compiled : bool
+        Indicates whether to use a compiled version of 'evalass' for evaluation.
 
-        evalAssociation(self): Evaluates the GPR logic to return an integer indicating association outcome.
-            Returns:
-                int or None: The result of the association logic.
+    Methods
+    -------
+    evalAssociation()
+        Evaluates the association's logical expressions to determine the outcome.
+        Returns an integer indicating the result.
+    addGeneref(geneid)
+        Adds a gene identifier to the association.
+    deleteGeneref(gid)
+        Removes a gene identifier from the association.
+    createAssociationAndGeneRefsFromTree(gprtree, altlabels=None)
+        Processes a GPR tree into a definable association structure with involved gene references.
+    getGenes()
+        Fetches the gene objects involved in this association.
+        Returns a list of Gene objects.
+    isProteinActive()
+        Evaluates the association logic and determines if the associated protein is active based on gene activity.
+        Returns True if active, False otherwise.
 
-        buildEvalFunc(self): Builds the evaluation function from provided GPR association logic.
+    Raises
+    ------
+    RuntimeError
+        If the object is interacted with out of model context or with invalid data.
 
-        addGeneref(self, geneid): Adds a gene identifier to the association.
-            Args:
-                geneid (str): A valid gene identifier within the model.
+    Examples
+    --------
+    >>> gpa = GeneProteinAssociation(pid='GPA001', protein='enzyme_reaction', use_compiled=False)
+    >>> gpa.evalAssociation()  # This will depend on the setting of the association
+    1  # Assuming the association condition is met
+    >>> gpa.isProteinActive()
+    True  # This is True if the protein's activation conditions, defined by GPA, are satisfied
 
-        deleteGeneref(self, gid): Removes a gene identifier from the association.
-            Args:
-                gid (str): A valid gene identifier within the model.
-
-        createAssociationAndGeneRefsFromTree(self, gprtree, altlabels=None): Processes a GPR tree to define association and involved genes.
-            Args:
-                gprtree (dict): Dictionary representing the GPR logic tree.
-                altlabels (dict, optional): Alternate labels for gene identifiers.
-
-        createAssociationAndGeneRefsFromString(self, assoc, altlabels=None): Parses a COBRA-style string to define GPR association and involved genes.
-            Args:
-                assoc (str or None): COBRA-style GPR association string.
-                altlabels (dict, optional): Alternate labels for gene identifiers.
-
-        getGenes(self): Fetches the list of gene objects involved in this association.
-            Returns:
-                list: List of Gene objects.
-
-        getGeneLabels(self): Fetches the list of labels of genes involved in this association.
-            Returns:
-                list: List of gene labels.
-
-        getGene(self, gid): Fetches a gene object based on its identifier.
-            Args:
-                gid (str): Gene identifier.
-            Returns:
-                Gene or None: The gene object if found, None otherwise.
-
-        getAssociationStr(self, use_labels=False): Constructs the string representation of gene association.
-            Args:
-                use_labels (bool, optional): True to use gene labels instead of IDs in the association string.
-            Returns:
-                str: The gene association string.
-
-        isProteinActive(self): Evaluates the GPR and indicates if the associated protein is active based on gene activity.
-            Returns:
-                bool: True if the protein is active, False otherwise.
-
-    Inherited Methods:
-        - All methods from Fbase are inherited and can be used or overridden as necessary.
-
-    Raises:
-        RuntimeError: If object initialization or interaction is done out of model context or with invalid data.
+    Note
+    ----
+    For efficient processing and accurate evaluations, ensure that the gene and protein identifiers are correctly managed.
     """
     # _MODIFIED_ASSOCIATION_ = False
     assoc = None
