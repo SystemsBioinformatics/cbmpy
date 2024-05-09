@@ -78,30 +78,13 @@ except ImportError:
 
 def saveModel(model, filename, compress=False):
     """
-    Saves the model to an SBML file using the latest SBML3 FBC version.
+    Saves the model to an SBML file using the lates SBML3 FBC version.
 
-    This function writes the given CBMPy model to an SBML file, potentially compressing the model if desired.
-    The function leverages the SBML3 FBC Version 2 standard to encode the model. Additional options allow for
-    including GPR data from annotations, adding proprietary CBMPy and COBRA annotations, and more. By default,
-    the model's bounds are also compressed to reduce file size unless specified otherwise.
+    - *model* the CBMPy model
+    - *filename* the filename to write
 
-    Parameters
-    ----------
-    model : CBModel
-        The CBMPy model to save.
-    filename : str
-        The filename or path to the file where the model should be saved.
-    compress : bool, optional
-        If True, compress the saved model using ZIP compression (default is False).
-
-    Examples
-    --------
-    >>> saveModel(my_model, 'my_saved_model.xml', compress=True)
-
-    Notes
-    -----
-    The model file is saved in the current working directory unless a path is specified in the filename.
     """
+
     writeSBML3FBCV2(
         model,
         filename,
@@ -128,43 +111,25 @@ def writeSBML3FBC(
     xoptions={'fbc_version': 1, 'validate': False, 'compress_bounds': True},
 ):
     """
-    Write an FBA model to an SBML L3 FBC file.
+    Takes an FBA model object and writes it to file as SBML L3 FBC:
 
-    This function exports an FBA model into an SBML (Systems Biology Markup Language) Level 3 File with FBC (Flux Balance Constraints) package annotations. It allows for additional options such as adding gene-protein-reaction (GPR) annotations, adding groups, and including COBRA and CBMPy specific annotations. Optionally, the model can be validated, and the bounds can be compressed to reduce file size.
+     - *fba* an fba model object
+     - *fname* the model will be written as XML to *fname*
+     - *directory* [default=None] if defined it is prepended to fname
+     - *gpr_from_annot* [default=True] if enabled will attempt to add the gene protein associations from the annotations
+       if no gene protein association objects exist
+     - *add_groups* [default=True] add SBML3 groups (if supported by libSBML)
+     - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
+     - *add_cobra_annot* [default=True] add COBRA <notes> annotation
+     - *xoptions* extended options
 
-    Parameters
-    ----------
-    fba : FBA model
-        The FBA model object to be written to file.
-    fname : str
-        The name of the file where the FBA model will be saved.
-    directory : str, optional
-        The directory where the file will be saved. If not specified, the current directory is used.
-    gpr_from_annot : bool, optional
-        If True, gene protein associations are added from the annotations. Default is False.
-    add_groups : bool, optional
-        If True, adds SBML3 groups to the file. Default is True.
-    add_cbmpy_annot : bool, optional
-        If True, adds CBMPy KeyValueData annotations. Default is True.
-    add_cobra_annot : bool, optional
-        If True, adds COBRA-style annotations. Default is False.
-    xoptions : dict, optional
-        A dictionary of extended options including 'fbc_version' (1 or 2), 'validate' (True or False for output validation), 'compress_bounds' (True or False), and 'zip_model' (True or False for PKZIP compression), 'return_model_string' (True or False).
+       - *fbc_version* [default=1] write SBML3FBC using version 1 (2013) or version 2 (2015)
+       - *validate* [default=False] validate the output SBML file
+       - *compress_bounds* [default=False] try compress output flux bound parameters
+       - *zip_model* [default=False] compress the model using PKZIP encoding
+       - *return_model_string* [default=False] return the SBML XML file as a string
 
-    Returns
-    -------
-    None
-        The function writes the FBA model to an SBML file but does not return any value.
 
-    Examples
-    --------
-    >>> my_fba_model = create_some_fba_model()
-    >>> writeSBML3FBC(my_fba_model, "my_model.sbml", directory="/path/to/save/", gpr_from_annot=True, add_groups=True, add_cbmpy_annot=True, add_cobra_annot=False, xoptions={'fbc_version': 2, 'validate': True})
-
-    Notes
-    -----
-    - The function relies on `CBXML.sbml_writeSBML3FBC` for writing the file.
-    - Directory must exist, the function will not create it.
 
     """
     sbml_level_version = (3, 1)
@@ -184,6 +149,7 @@ def writeSBML3FBC(
         xoptions,
     )
 
+
 def writeSBML3FBCV2(
     fba,
     fname,
@@ -198,50 +164,20 @@ def writeSBML3FBCV2(
     return_model_string=False,
 ):
     """
-    Export an FBA model to an SBML Level 3 file with FBC version 2 annotations.
+    Takes an FBA model object and writes it to file as SBML L3 FBCv2 :
 
-    This function writes a given FBA model to an SBML (Systems Biology Markup Language) Level 3 file, incorporating Flux Balance Constraints (FBC) version 2 annotations. It includes options for adding gene-protein-reaction annotations, SBML groups, proprietary CBMPy and COBRA annotations, and for model validation. Additionally, it supports output compression and conversion of the model to a string format.
+     - *fba* an fba model object
+     - *fname* the model will be written as XML to *fname*
+     - *directory* [default=None] if defined it is prepended to fname
+     - *gpr_from_annot* [default=False] if enabled will attempt to add the gene protein associations from the annotations
+     - *add_groups* [default=True] add SBML3 groups (if supported by libSBML)
+     - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
+     - *add_cobra_annot* [default=False] add COBRA <notes> annotation
+     - *validate* [default=False] validate the output SBML file
+     - *compress_bounds* [default=True] try compress output flux bound parameters
+     - *zip_model* [default=False] compress the model using ZIP encoding
+     - *return_model_string* [default=False] return the SBML XML file as a string
 
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model to be exported.
-    fname : str
-        Filename or path for the output SBML file.
-    directory : str, optional
-        Directory path where the file is to be saved. By default, saves in the current directory.
-    gpr_from_annot : bool, optional
-        Whether to add gene-protein-reaction annotations from model annotations. Default is False.
-    add_groups : bool, optional
-        Whether to add SBML Level 3 groups to the file. Default is True.
-    add_cbmpy_annot : bool, optional
-        Whether to add CBMPy-specific KeyValueData annotations. Default is True.
-    add_cobra_annot : bool, optional
-        Whether to add COBRA-style annotations. Default is False.
-    validate : bool, optional
-        Whether to validate the generated SBML file. Default is False.
-    compress_bounds : bool, optional
-        Whether to compress the output flux bound parameters. Default is False.
-    zip_model : bool, optional
-        Whether to compress the model using ZIP compression. Default is False.
-    return_model_string : bool, optional
-        Whether to return the SBML XML file as a string instead of writing it to a file. Default is False.
-
-    Returns
-    -------
-    None or str
-        If `return_model_string` is False, the function writes to a file and returns None.
-        If `return_model_string` is True, it returns the SBML model as a string.
-
-    Examples
-    --------
-    >>> writeSBML3FBCV2(my_model, "my_model_fbcv2.sbml",
-    ...                 directory="/path/to/save", gpr_from_annot=True,
-    ...                 add_groups=True, validate=True, zip_model=True)
-
-    Notes
-    -----
-    The function leverages the `CBXML.sbml_writeSBML3FBC` function for the actual file writing process.
     """
 
     xoptions = {
@@ -254,6 +190,8 @@ def writeSBML3FBCV2(
     sbml_level_version = (3, 1)
     autofix = (True,)
     return_fbc = False
+    # if fbc_version == 2:
+    # add_cobra_annot = False
     return CBXML.sbml_writeSBML3FBC(
         fba,
         fname,
@@ -281,55 +219,24 @@ def writeSBML3FBCV3(
     compress_bounds=False,
     zip_model=False,
     return_model_string=False,
-    ):
+):
+    """
+    Takes an FBA model object and writes it to file as SBML L3 FBCv3 :
+
+     - *fba* an fba model object
+     - *fname* the model will be written as XML to *fname*
+     - *directory* [default=None] if defined it is prepended to fname
+     - *gpr_from_annot* [default=False] if enabled will attempt to add the gene protein associations from the annotations
+     - *add_groups* [default=True] add SBML3 groups (if supported by libSBML)
+     - *add_cbmpy_annot* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
+     - *add_cobra_annot* [default=False] add COBRA <notes> annotation
+     - *validate* [default=False] validate the output SBML file
+     - *compress_bounds* [default=True] try compress output flux bound parameters
+     - *zip_model* [default=False] compress the model using ZIP encoding
+     - *return_model_string* [default=False] return the SBML XML file as a string
 
     """
-    Export an FBA model to an SBML Level 3 file with FBC version 3 annotations.
 
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model to be exported.
-    fname : str
-        Filename or path for the output SBML file.
-    directory : str, optional
-        Directory path where the file is to be saved. By default, saves in the current directory.
-    gpr_from_annot : bool, optional
-        Whether to add gene-protein-reaction annotations from model annotations. Default is False.
-    add_groups : bool, optional
-        Whether to add SBML Level 3 groups to the file. Default is True.
-    add_cbmpy_annot : bool, optional
-        Whether to add CBMPy-specific KeyValueData annotations. Default is True.
-    add_cobra_annot : bool, optional
-        Whether to add COBRA-style annotations. Default is False.
-    validate : bool, optional
-        Whether to validate the generated SBML file. Default is False.
-    compress_bounds : bool, optional
-        Whether to compress the output flux bound parameters. Default is False.
-    zip_model : bool, optional
-        Whether to compress the model using ZIP compression. Default is False.
-    return_model_string : bool, optional
-        Whether to return the SBML model as a string instead of writing it to a file. Default is False.
-
-    Returns
-    -------
-    None or str
-        If `return_model_string` is True, returns the SBML model as a string.
-        Otherwise, writes the model to an SBML file and returns None.
-
-    Examples
-    --------
-    >>> writeSBML3FBCV3(my_model, "my_model_fbcv3.sbml",
-    ...                 directory="/path/to/save", gpr_from_annot=True,
-    ...                 add_groups=True, add_cbmpy_annot=True, add_cobra_annot=False,
-    ...                 validate=True, compress_bounds=True, zip_model=True, return_model_string=False)
-
-    Notes
-    -----
-    The model is saved using SBML Level 3 Version 1 standards with FBC Version 3 annotations.
-    If `add_cobra_annot` is True, COBRA-style annotations are added unless `fbc_version` is set to 3, in which case COBRA annotations are not supported and will be set to False.
-
-    """
     xoptions = {
         'fbc_version': 3,
         'validate': validate,
@@ -359,90 +266,43 @@ def writeSBML3FBCV3(
 
 def writeCOBRASBML(fba, fname, directory=None):
     """
-    Export an FBA model to a file in COBRA-compatible SBML format.
+    Takes an FBA model object and writes it to file as a COBRA compatible :
 
-    This function takes an FBA model object and writes it to a file using the old pre 2009 COBRA SBML dialect, allowing the model
-    to be compatible with legacy pre 2009 COBRA-based tools and workflows.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model to be exported.
-    fname : str
-        The filename for the output SBML file.
-    directory : str, optional
-        If provided, specifies the directory where the output file will be saved. Otherwise, the current directory is used.
-
-    Returns
-    -------
-    None.
-
-    Examples
-    --------
-    >>> my_fba_model = create_fba_model()
-    >>> writeCOBRASBML(my_fba_model, 'my_model.xml', directory='/path/to/save')
-
-    Notes
-    -----
-    The model is saved in SBML format, which is a standard format for representing computational models in systems biology.
+     - *fba* an fba model object
+     - *fname* the model will be written as XML to *fname*
+     - *directory* [default=None] if defined it is prepended to fname
 
     """
     return CBXML.sbml_writeCOBRASBML(fba, fname, directory)
-def writeSBML2FBA(fba, fname, directory=None, sbml_level_version=None):
+
+
+def writeSBML2FBA(fba, fname, directory=None, sbml_level_version=None):
     """
-    Write an FBA model to an SBML Level 2 file with FBA-specific annotations.
+    Takes an FBA model object and writes it to file as SBML L2 with FBA annotations.
+    Note if you want to write BiGG/FAME style annotations then you must use *sbml_level_version=(2,1)*
 
-    This function exports an FBA model into an SBML (Systems Biology Markup Language) Level 2 file, incorporating FBA (Flux Balance Analysis) annotations. Users have the option to include BiGG/FAME-style annotations by specifying the SBML level and version. It serves as a utility wrapper for `CBXML.sbml_writeSBML2FBA`, simplifying the process of SBML L2 FBA model export.
+     - *fba* an fba model object
+     - *fname* the model will be written as XML to *fname*
+     - *sbml_level_version* [default=None] a tuple containing the SBML level and version e.g. (2,1)
 
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model to be exported.
-    fname : str
-        The filename or path where the SBML file will be saved.
-    directory : str, optional
-        The directory where the file will be saved. If not specified, uses the current working directory.
-    sbml_level_version : tuple, optional
-        Specifies the SBML level and version for the output file, e.g., (2, 1) for BiGG/FAME style annotations. Default is None, which uses the library's default settings.
+    This is a utility wrapper for the function `CBXML.sbml_writeSBML2FBA`
 
-    Examples
-    --------
-    >>> my_fba_model = create_fba_model()
-    >>> writeSBML2FBA(my_fba_model, 'my_fba_model.sbml', directory='/path/to/save', sbml_level_version=(2, 1))
-
-    Notes
-    -----
-    This function relies on the `CBXML.sbml_writeSBML2FBA` for the actual file writing process, ensuring compatibility and adherence to SBML L2 standards for FBA modeling.
     """
     CBXML.sbml_writeSBML2FBA(fba, fname, directory, sbml_level_version)
 
 
 def writeSensitivitiesToCSV(sensitivities, fname):
     """
-    Exports sensitivity analysis results to CSV files.
+    Write out a sensitivity report using the objective sensitivities and
+    bound sensitivity dictionaries created by e.g. cplx_getSensitivities().
 
-    This function processes and writes two CSV files based on the provided sensitivity analysis data:
-    one for flux sensitivities and another for constraint sensitivities.
+     - *sensitivity* tuple containing
 
-    Parameters
-    ----------
-    sensitivities : tuple
-        A tuple containing three elements:
-        - obj_sens: A dictionary of objective coefficient sensitivities per flux.
-        - rhs_sens: A dictionary of right-hand side (RHS) sensitivities per constraint.
-        - bound_sens: A dictionary of bound sensitivities per flux.
-    fname : str
-        The base filename to which the '.csv' extension will be appended for each sensitivity report.
-        Two files will be created, one with '_flux_sensitivity.csv' and another with '_constraint_sensitivity.csv'.
+      - *obj_sens* dictionary of objective coefficient sensitivities (per flux)
+      - *rhs_sens* dictionary of constraint rhs sensitivities (per constraint)
+      - *bound_sens* dictionary of bound sensitivities (per flux)
 
-    Examples
-    --------
-    >>> sensitivities = (obj_sens, rhs_sens, bound_sens)
-    >>> writeSensitivitiesToCSV(sensitivities, 'sensitivity_output')
-
-    This will create 'sensitivity_output_flux_sensitivity.csv' and
-    'sensitivity_output_constraint_sensitivity.csv' files containing the flux
-    and constraint sensitivities, respectively.
+     - *fname* output filename e.g. fname.csv
 
     """
     obj_sens = sensitivities[0]
@@ -497,34 +357,8 @@ def writeSensitivitiesToCSV(sensitivities, fname):
 
 def WriteModelRaw(fba, work_dir=cDir):
     """
-    Deprecated wrapper for `writeModelRaw`.
-
-    This function is a legacy support wrapper function for the newer `writeModelRaw`
-    function. It prints a deprecation warning and then calls `writeModelRaw` with the
-    provided arguments.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model to write out.
-    work_dir : str, optional
-        The directory where the output file will be written. If not specified,
-        uses a default directory defined by `cDir`.
-
-    See Also
-    --------
-    writeModelRaw : The preferred function for writing the FBA model data to a file.
-
-    Examples
-    --------
-    >>> WriteModelRaw(my_fba_model, '/path/to/directory')
-
-    Notes
-    -----
-    This function will be removed in future versions. Users are encouraged to update
-    their scripts to use `writeModelRaw` directly for future compatibility.
+    INFO: this method will be deprecated please update your scripts to use \"writeModelRaw()\"
     """
-
     print(
         '\nINFO: this method will be deprecated please update your scripts to use \"writeModelRaw()\"\n'
     )
@@ -534,32 +368,10 @@ def WriteModelRaw(fba, work_dir=cDir):
 
 def writeModelRaw(fba, work_dir=cDir):
     """
-    Writes detailed information about an FBA model into a text file.
+    Writes a fba (actually just dumps it) to a text file.
 
-    This function takes a Flux Balance Analysis (FBA) model and writes detailed
-    information about species, reactions, constraints, objectives, and the
-    stoichiometric matrix (if available) to a text file for easy inspection.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        An instantiated FBA model from which data will be extracted.
-    work_dir : str, optional
-        The directory where the output file will be written. If not specified,
-        the current working directory will be used.
-
-    Returns
-    -------
-    None
-        A text file named 'WriteModelRawOutput.txt' is written in the specified directory.
-
-    Examples
-    --------
-    >>> fba = FBAModel(...)
-    >>> writeModelRaw(fba, work_dir='/path/to/output')
-
-    This will create a file '/path/to/output/WriteModelRawOutput.txt' containing detailed
-    information about the `fba` model.
+     - *fba* an instantiated FBAmodel instance
+     - *work_dir* directory designated for output
 
     """
     if work_dir == None:
@@ -605,31 +417,7 @@ def writeModelRaw(fba, work_dir=cDir):
 
 def BuildLPFluxBounds(fba, use_rational=False):
     """
-    Constructs and returns a StringIO object that contains the representation of flux bounds in Linear Programming (LP) format.
-
-    This method processes the flux bounds defined in an FBA model and formats them into constraints suitable for input to LP solvers, optionally using rational numbers for precision.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        An FBA model object containing the flux bounds definitions.
-    use_rational : bool, optional
-        If True, uses sympy to output rational numbers instead of floating-point. This requires sympy to be installed.
-
-    Returns
-    -------
-    io.StringIO
-        A StringIO object containing the LP-formatted representation of flux bounds.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> lp_flux_bounds = BuildLPFluxBounds(fba_model, use_rational=True)
-    >>> print(lp_flux_bounds.getvalue())  # Example usage of the returned object.
-
-    Notes
-    -----
-    If the use_rational parameter is set to True but sympy is not installed, the method will revert to using floating-point numbers and issue a warning.
+    Build and return a csio that contains the flux bounds in LP format
     """
     if not _HAVE_SYMPY_ and use_rational:
         use_rational = False
@@ -716,40 +504,11 @@ def BuildLPFluxBounds(fba, use_rational=False):
 
 def BuildLPConstraints(fba, use_rational=False):
     """
-    Generate a StringIO object representing the FBA model's constraints in LP format.
+    Build and return a csio that contains constraint constructed from
+    the StoichiometeryLP object
 
-    This function examines the FBA model's stoichiometry and converts the defined flux bounds
-    into constraints suitable for linear programming solvers. The constraints are formatted as strings
-    and contained within a StringIO object, which can then be used directly by LP solvers. Optionally,
-    the function can output constraints using rational numbers to provide exact representations,
-    assuming the sympy library is available.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        An already instantiated Flux Balance Analysis (FBA) model object containing stoichiometric data and flux bounds.
-    use_rational : bool, optional
-        A boolean flag indicating whether to use rational numbers for the constraints.
-        If True and sympy is installed, outputs constraints using rational numbers instead of floating points.
-        Defaults to False.
-
-    Returns
-    -------
-    io.StringIO
-        A StringIO object filled with the LP-formatted constraints representing the FBA model's stoichiometry and flux bounds.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> lp_constraints = BuildLPConstraints(fba_model, use_rational=True)
-    >>> print(lp_constraints.getvalue())
-    # Outputs the constraints as a string in LP format, optionally using rational numbers.
-
-    Notes
-    -----
-    - If `use_rational` is True but sympy is not installed, a warning is printed and the function falls back to using floating-point numbers.
-    - The function automatically rebuilds the stoichiometric matrix if it finds inconsistencies in the provided FBA model object.
-
+     - *fba* an fba model object which has a stoichiometry
+     - *use_rational* write rational number output [default=False]
     """
 
     if not _HAVE_SYMPY_ and use_rational:
@@ -821,36 +580,11 @@ def BuildLPConstraints(fba, use_rational=False):
 
 def BuildLPUserConstraints(fba, use_rational=False):
     """
-    Generates a StringIO object with LP-format constraints based on user-defined constraints in an FBA model.
+    Build and return a csio that contains constraint constructed from
+    the StoichiometeryLP object
 
-    Constructs a set of linear programming (LP) constraints from the user-defined constraints stored
-    in a Flux Balance Analysis (FBA) model's 'CM' attribute. These constraints are formatted as strings
-    and compiled into a StringIO object. This object can then be used as input to LP solvers. If selected,
-    the output can utilize rational numbers for coefficients, provided the 'sympy' library is available.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model object containing user-defined constraints.
-    use_rational : bool, optional
-        Determines whether to use sympy to format constraint coefficients as rational numbers.
-        If True, requires sympy to be installed. Defaults to False.
-
-    Returns
-    -------
-    io.StringIO
-        A StringIO object containing the LP-formatted user constraints.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> lp_user_constraints = BuildLPUserConstraints(fba_model, use_rational=True)
-    >>> print(lp_user_constraints.getvalue())
-    # This will print the LP-formatted constraints using rational numbers if sympy is installed.
-
-    Notes
-    -----
-    This function will rebuild the user constraints matrix if it detects inconsistencies, such as a missing 'CM' attribute.
+     - *fba* an fba model object which has a stoichiometry
+     - *use_rational* write rational number output [default=False]
     """
 
     if not _HAVE_SYMPY_ and use_rational:
@@ -919,32 +653,8 @@ def BuildLPUserConstraints(fba, use_rational=False):
 
 def BuildLPConstraintsRelaxed(fba):
     """
-    Constructs and returns a StringIO object with the LP-formatted constraints for relaxed Flux Balance Analysis (FBA) models.
-
-    In a relaxed FBA model, the constraints on the stoichiometric matrix allow for accumulation of metabolites, thus setting the flux balance inequality to greater than or equal to zero (\(dS/dt \geq 0\)). This function reads the FBA model's stoichiometric matrix ('N'), constructs constraints reflecting each metabolite's net production or consumption, and formats these constraints into a form suitable for linear programming solvers.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model object containing the stoichiometric matrix and other relevant information.
-
-    Returns
-    -------
-    io.StringIO
-        A StringIO object containing the LP-formatted constraints, where each line represents a constraint
-        allowing for metabolite accumulation and is formatted as `metabolite_id: linear_expression >= 0`.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> lp_constraints_relaxed = BuildLPConstraintsRelaxed(fba_model)
-    >>> print(lp_constraints_relaxed.getvalue())
-    # This will print the relaxed LP constraints, one per line.
-
-    Notes
-    -----
-    This function is particularly useful when modeling scenarios where metabolite accumulation is permissible, such as in open systems or under conditions of growth.
-
+    Build and return a csio that contains the constaints in LP format
+    Relaxed refers to dS/dt >= 0
     """
     raise DeprecationWarning("\nThis method is deprecated")
     if not hasattr(fba, 'N') or fba.N == None:
@@ -982,40 +692,10 @@ def BuildLPConstraintsRelaxed(fba):
 
 def BuildLPConstraintsStrict(fba, use_rational=False):
     """
-    Generates a StringIO object with LP-formatted strict constraints for an FBA model.
-
-    Constructs a set of strict (dS/dt = 0) linear programming (LP) constraints for a given Flux Balance Analysis (FBA) model.
-    These constraints are based on the stoichiometric matrix of the model. Optionally, coefficients in the constraints can be formatted
-    as rational numbers using the sympy library. The resulting LP constraints are encapsulated in a StringIO object for further processing
-    or output.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model object containing the stoichiometric matrix (`N`) and other attributes necessary for constraint construction.
-    use_rational : bool, optional
-        If True and the sympy library is available, the constraint coefficients will be formatted as rational numbers.
-        Defaults to False.
-
-    Returns
-    -------
-    io.StringIO
-        A StringIO object containing the LP-formatted constraints, with each constraint reflecting the zero net accumulation
-        or depletion of metabolites in the system (strict constraint).
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> constraints_strict = BuildLPConstraintsStrict(fba_model, use_rational=True)
-    >>> print(constraints_strict.getvalue())
-    # This example prints the strict LP constraints with coefficients as rational numbers, where available.
-
-    Notes
-    -----
-    - This function is essential for creating LP problems that strictly preserve mass balance across reactions
-      in closed systems.
-
+    Build and return a csio that contains the constaints in LP format
+    Strict refers to dS/dt = 0
     """
+    ##  print "Consider using the new BuildLPConstraints() method"
 
     if not _HAVE_SYMPY_ and use_rational:
         use_rational = False
@@ -1040,9 +720,11 @@ def BuildLPConstraintsStrict(fba, use_rational=False):
     FFS = csio.StringIO()
     constrsk = list(constr)
     constrsk.sort()
+    ##  for r in constrsk:
     for r in fba.N.row:
         if len(constr[r]) > 0:
             FFS.write(' %s: ' % r)
+            ##  FFS.write(' ')
             for col in constr[r]:
                 if use_rational:
                     if col[0] > 0.0:
@@ -1070,39 +752,8 @@ def BuildLPConstraintsStrict(fba, use_rational=False):
 
 def BuildLPConstraintsMath(fba, use_rational=False):
     """
-    Generate LP-format constraints as a StringIO object encapsulating both lower and upper bounds for metabolite fluxes in FBA models.
-
-    This function addresses the creation of mathematical constraints where each metabolite's flux is required to either be greater
-    than or equal to 0 (indicating consumption or inflow) or less than or equal to 0 (indicating production or outflow). The constraints
-    are thus reflective of scenarios where metabolite accumulation or depletion is considered. The output is suitable for linear programming
-    solvers that accept constraints in string format.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model object representing the metabolic network, containing the stoichiometric matrix and other necessary details.
-    use_rational : bool, optional
-        Specifies whether to format the coefficients of constraints as rational numbers. This requires the sympy library to be installed.
-        The default is False, which uses floating point representation.
-
-    Returns
-    -------
-    io.StringIO
-        A StringIO object containing the constraints in LP format, with metabolite flux constraints specified for both inflow and
-        outflow directions.
-
-    Examples
-    --------
-    >>> from cobrapy import FBAModel
-    >>> fba_model = FBAModel(...)
-    >>> constraints_math = BuildLPConstraintsMath(fba_model, use_rational=True)
-    >>> print(constraints_math.getvalue())
-    '...'
-
-    Note
-    ----
-    - This method has been deprecated and may be removed in future releases.
-    - If sympy is not installed and use_rational is True, the function will revert to using floating-point arithmetic.
+    Build and return a csio that contains the constaints in LP format
+    Strict refers to dS/dt => 0 and dS/dt <= 0
     """
     raise DeprecationWarning("\nThis method is deprecated")
     if not _HAVE_SYMPY_ and use_rational:
@@ -1131,11 +782,13 @@ def BuildLPConstraintsMath(fba, use_rational=False):
     for r in fba.N.row:
         if len(constr[r]) > 0:
             FFS.write('%sn1: ' % r)
+            ##  FFS.write(' ')
             for col in constr[r]:
                 if col[0] > 0.0:
                     FFS.write('+%s %s ' % (col[0], col[1]))
                 else:
                     FFS.write('%s %s ' % (col[0], col[1]))
+            # This is a fudge
             FFS.write('>= 0\n')
 
     for r in fba.N.row:
@@ -1146,6 +799,7 @@ def BuildLPConstraintsMath(fba, use_rational=False):
                     FFS.write('+%s %s ' % (-col[0], col[1]))
                 else:
                     FFS.write('%s %s ' % (-col[0], col[1]))
+            # This is a fudge
             FFS.write('>= 0\n')
     return FFS
 
@@ -1160,35 +814,8 @@ def WriteModelLPOld(
     format='%s',
 ):
     """
-    This method writes an FBA model to a file in LP (Linear Program) format. It is a wrapper for the `writeModelLPOld` function with the same parameters.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        An instantiated FBAmodel instance.
-    work_dir : str, optional
-        The directory where the output file will be saved. If not provided, the current directory is used.
-    multisymb : str, optional
-        The symbol used for multiplication. Defaults to a space.
-    lpt : bool, optional
-        If True, output in .lpt format; otherwise, output in .lp format. Defaults to True.
-    constraint_mode : str, optional
-        Specifies the mode for constraints. Should be 'strict' for strict constraints. Defaults to 'strict'.
-    use_rational : bool, optional
-        If True, uses rational numbers for coefficients; requires sympy. Defaults to False.
-    format : str, optional
-        The format string for numbers. Defaults to '%s'.
-
-    Notes
-    -----
-    This function is deprecated and users are encouraged to switch to the newer `writeModelLPOld` function for future compatibility.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> WriteModelLPOld(fba_model, work_dir='path/to/output', use_rational=True)
+    INFO: this method will be deprecated please update your scripts to use \"writeModelLPOld()\"
     """
-
     print(
         '\nINFO: this method will be deprecated please update your scripts to use \"writeModelLPOld()\"\n'
     )
@@ -1208,39 +835,13 @@ def writeModelLPOld(
     format='%s',
 ):
     """
-    Writes an FBA model's objective function and constraints to a file in LP or LPT format, handling rational coefficients if specified.
+    Writes a fba as an LP/LPT
 
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model object for which the LP file is to be generated.
-    work_dir : str, optional
-        Directory where the output LP file is to be saved. Defaults to the current directory if not provided.
-    multisymb : str, optional
-        Symbol used for multiplication in the objective function. Defaults to ' ' (space).
-    lpt : bool, optional
-        Output format flag. True writes the file in LPT format; False writes in LP format. Default is True.
-    constraint_mode : str, optional
-        Mode of constraints to be written ('strict', 'math', or 'relaxed'). Default is 'strict'.
-    use_rational : bool, optional
-        If True, coefficients are formatted as rational numbers. Requires the sympy library. Default is False.
-    format : str, optional
-        Format string for numbers. Defaults to '%s'.
+     - *fba* an instantiated FBAmodel instance
+     - *work_dir* directory designated for output
+     - *multisymb* the multiplication symbol (default: <space>)
+     - *lpt* the file format (default: True for lpt) or False for lp
 
-    Returns
-    -------
-    str
-        The path to the written LP or LPT file.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> writeModelLPOld(fba_model, work_dir='./output', lpt=True, use_rational=True)
-    './output/fba_model.lp'
-
-    Notes
-    -----
-    This function is declared deprecated and may be removed in future releases. Users are encouraged to transition to more recent functions.
     """
 
     print("\nTHIS FUNCTION IS DEPRECATED\n")
@@ -1283,14 +884,18 @@ def writeModelLPOld(
             sign = '+'
         else:
             sign = '-'
+        # TODO: if use_rational is not used simply try and evaluate the coefficient string with
+        # sympy.Rational.evalf()  and use this as the value for nc ... also remove use_rational case
         if use_rational:
             objStr += ' %s%s%s' % (
                 sympy.Rational(fObj.coefficient),
                 multisymb,
                 fObj.reaction,
             )
+            ##  FF.write('%s: %s%s%s\n' % (fobj0.reaction, sympy.Rational(fobj0.coefficient), multisymb, fobj0.reaction))
         else:
             objStr += ' %s %s%s%s' % (sign, abs(nc), multisymb, fObj.reaction)
+            ##  FF.write('%s: %s%s%s\n' % (fobj0.reaction, fobj0.coefficient, multisymb, fobj0.reaction))
     FF.write('%s\n' % objStr)
     if constraint_mode == 'math':
         CONST = BuildLPConstraintsMath(fba)
@@ -1315,7 +920,7 @@ def writeModelLPOld(
     FF.write(BOUNDS.read())
     FF.write('\nEND\n')
     FF.close()
-    print('writeModelLP has written a file to {}'.format(FNAME))
+    print('writeModelLP has written a file to {}'.format(NAME))
     return FNAME
 
 
@@ -1330,37 +935,7 @@ def WriteModelLP(
     quiet=False,
 ):
     """
-    Writes an FBA (Flux Balance Analysis) model to a file in CPLEX LP format. This function is a wrapper that invokes `writeModelLP`
-    with the same parameters to maintain backward compatibility.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        An instance of the FBA model to be written to file.
-    work_dir : str, optional
-        The directory where the LP file will be saved. If none is provided, the current directory is used.
-    fname : str, optional
-        The name of the output file. If none is provided, the ID of the FBA model is used.
-    multisymb : str, optional
-        The symbol used to denote multiplication in the LP file. Defaults to a space (' ').
-    format : str, optional
-        The format specifier for numbers in the output file. Defaults to '%s'.
-    use_rational : bool, optional
-        If true, coefficients are written as rational numbers. Requires SymPy. Defaults to False.
-    constraint_mode : str, optional
-        This parameter is deprecated and has no effect.
-    quiet : bool, optional
-        If true, suppresses the printing of informational messages. Defaults to False.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> WriteModelLP(fba_model, work_dir='./output', fname='model_output', use_rational=True)
-
-    Notes
-    -----
-    - This method is deprecated and may be removed in future releases. Users are encouraged to use `writeModelLP()` directly.
-    - The `constraint_mode` parameter is maintained for backward compatibility but is no longer functional.
+    INFO: this method will be deprecated please update your scripts to use \"writeModelLP()\"
     """
     print(
         '\nINFO: this method will be deprecated please update your scripts to use \"writeModelLP()\"\n'
@@ -1382,43 +957,16 @@ def writeModelLP(
     quiet=False,
 ):
     """
-    Writes an FBA model to a LP file using CPLEX LP format.
+    Writes an FBA object as an LP in CPLEX LP format
 
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model instance to write to the LP file.
-    work_dir : str, optional
-        The directory where the LP file will be created. Uses current directory if None.
-    fname : str, optional
-        The name of the LP file. Uses the FBA model ID if None.
-    multisymb : str, optional
-        The symbol used for multiplication. Defaults to a space (' ').
-    format : str, optional
-        The number format in the output file. Defaults to '%s'.
-    use_rational : bool, optional
-        Whether to use rational numbers for coefficients. SymPy required. Defaults to False.
-    constraint_mode : str, optional
-        Deprecated parameter.
-    quiet : bool, optional
-        If True, suppress informational outputs. Defaults to False.
+     - *fba* an instantiated FBAmodel instance
+     - *work_dir* directory designated for output
+     - *fname* the file name [default=fba.getId()]
+     - *multisymb* the multiplication symbol (default: <space>)
+     - *format* the number format of the output
+     - *use_rational* output rational numbers [default=False]
+     - *quiet* [default=False] supress information messages
 
-    Returns
-    -------
-    str
-        The path to the generated LP file.
-
-    Notes
-    -----
-    The function checks for the deprecated `constraint_mode` parameter and warns if it's used.
-    If SymPy is not available and `use_rational`=True, it falls back to floating-point numbers,
-    issuing a warning.
-
-    Example
-    -------
-    >>> fba_model = FBAModel(...)
-    >>> lp_file_path = writeModelLP(fba_model, work_dir='./models', fname='model.lp', use_rational=True)
-    >>> print(f"LP file written to: {lp_file_path}")
     """
     if constraint_mode != None:
         print("\nConstraint_mode has been deprecated")
@@ -1465,7 +1013,7 @@ def writeModelLP(
                 if _HAVE_SYMPY_:
                     nc = sympy.Rational(fObj.coefficient).evalf()
                 else:
-                    raise ValueError(
+                    raise ValuError(
                         'Invalid coefficient (%s) detected in fluxObjective %s'
                         % (fObj.coefficient, fObj.getId())
                     )
@@ -1516,43 +1064,11 @@ def writeModelLP(
 
 def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
     """
-    Builds a matrix and a vector representing the flux bounds in H format for an FBA model.
+    Build and return a csio that contains the flux bounds in H format
 
-    This function constructs the less than or equal constraints for lower and upper bounds
-    on the fluxes of a given FBA (Flux Balance Analysis) model object. The bounds are
-    represented in a matrix (LHS) and a vector (RHS) form ready to be used in linear
-    programming problems.
+     - *fba* a PySCeS-CBM FBA object
+     - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
 
-    Parameters
-    ----------
-    fba : FBAModel
-        A PySCeS-CBM FBA model object.
-    infinity_replace : float, optional
-        A numeric value to replace +-infinity in the bounds. If None (default),
-        infinity values in the model are kept as is.
-    use_rational : bool, optional
-        If True, bounds are expressed in rational numbers, requiring the SymPy package.
-        Defaults to False.
-
-    Returns
-    -------
-    tuple
-        A tuple of two items (LHS, RHS) where:
-        - LHS (numpy.ndarray or sympy.Matrix): The coefficient matrix representing the flux bounds.
-        - RHS (list): The right-hand side vector representing the flux bounds.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> LHS, RHS = BuildHformatFluxBounds(fba_model, infinity_replace=1000, use_rational=True)
-    >>> print(LHS)
-    >>> print(RHS)
-
-    Notes
-    -----
-    - The function internally converts bound constraints of fluxes from the model into
-      LHS * x <= RHS form, where x is the vector of flux variables.
-    - This is used in preparation for linear programming or optimization tasks.
     """
     LBs = {}
     UBs = {}
@@ -1686,41 +1202,13 @@ def WriteModelHFormatFBA(
     infinity_replace=None,
 ):
     """
-    Writes an FBA model to a file in the polynomial H-Format, denoting flux constraints and objectives.
-
-    This method acts as a wrapper for `writeModelHFormatFBA2`, retained for backward compatibility and
-    will be deprecated. Users are advised to switch to `writeModelHFormatFBA2` for future implementations.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA (Flux Balance Analysis) model to be written into the file.
-    work_dir : str, optional
-        The directory to write the output file into. Defaults to the current directory if not provided.
-    use_rational : bool, optional
-        Specifies if the output should use rational numbers for coefficients. Requires SymPy if True. Defaults to False.
-    fullLP : bool, optional
-        If True, includes the default objective function as a maximization target within the output file. Defaults to True.
-    format : str, optional
-        The number format string to use for outputting numbers. Defaults to '%s'.
-    infinity_replace : float, optional
-        A numeric value to replace +-infinity in flux bounds. If not provided, infinity values are kept as is.
-
-    Notes
-    -----
-    - The function immediately redirects to `writeModelHFormatFBA2` with the same parameters, indicating its deprecation.
-
-    Example
-    -------
-    >>> fba_model = FBAModel(...)
-    >>> WriteModelHFormatFBA(fba_model, work_dir='./models', use_rational=True, fullLP=True, format='%.2f', infinity_replace=1000)
-
+    INFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"
     """
     print(
         '\nINFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"\n'
     )
     time.sleep(1)
-    writeModelHFormatFBA2(fba, work_dir=work_dir, use_rational=use_rational, fullLP=fullLP, format=format, infinity_replace=infinity_replace)
+    writeModelHFormatFBA(fba, work_dir, use_rational, fullLP, format, infinity_replace)
 
 
 def writeModelHFormatFBA(
@@ -1732,37 +1220,15 @@ def writeModelHFormatFBA(
     infinity_replace=None,
 ):
     """
-    Generate a polynomial H-Format file for an FBA model reflecting flux constraints and objectives.
+    Write an FBA-LP in polynomial H-Format file. This version has been replaced by `writeModelHFormatFBA2()`
+    but is kept for backwards compatability.
 
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model object for which the H-Format file is to be generated.
-    work_dir : str, optional
-        Directory where the output file will be saved. If not specified, uses the current directory.
-    use_rational : bool, optional
-        If True, outputs coefficients as rational numbers using the SymPy library. Defaults to False.
-    fullLP : bool, optional
-        If True, includes the objective function in the H-Format file for maximization. Defaults to True.
-    format : str, optional
-        A format string specifying the numeric format for coefficients in the output file. Defaults to '%s'.
-    infinity_replace : float, optional
-        A replacement value for +/- infinity in flux bounds. If not specified, infinity values are preserved.
-
-    Returns
-    -------
-    str
-        The path to the generated H-Format file.
-
-    Notes
-    -----
-    This function is deprecated and has been replaced by `writeModelHFormatFBA2()`. It is maintained for backward compatibility.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> hformat_file_path = writeModelHFormatFBA(fba_model, work_dir='./output', use_rational=True)
-    >>> print(f"H-Format file saved to: {hformat_file_path}")
+     - *fba* a PySCeS-CBM FBA object
+     - *Work_dir* [default=None] the output directory
+     - *use_rational* [default=false] use rational numbers in output (requires sympy)
+     - *fullLP* [default=True] include the default objective function as a maximization target
+     - *format* [default='%s'] the number format string
+     - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
 
     """
 
@@ -1877,36 +1343,7 @@ def WriteModelHFormatFBA2(
     infinity_replace=None,
 ):
     """
-    Writes the Flux Balance Analysis (FBA) model in polynomial H-Format, incorporating flux constraints and objectives.
-
-    This function generates a file representing the FBA model suitable for linear programming solvers that support the H-Format.
-    It can output coefficients as rational numbers and includes an option to represent infinity values with a specified numerical value.
-
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model to be written out.
-    fname : str, optional
-        Filename for the output file. If not given, derived from the FBA model ID.
-    work_dir : str, optional
-        The directory where the output file will be saved. If None, uses the current directory.
-    use_rational : bool, optional
-        If True, outputs coefficients as rational numbers. Requires SymPy.
-    fullLP : bool, optional
-        If True, includes the default objective function in the output.
-    format : str, optional
-        Format string for numerical output.
-    infinity_replace : float, optional
-        A value to replace +infinity or -infinity in bounds. If None, infinity is not replaced.
-
-    Notes
-    -----
-    This method is a wrapper for `writeModelHFormatFBA2` to maintain backward compatibility. It may be deprecated in future releases.
-
-    Example
-    -------
-    >>> fba_model = FBAModel(...)
-    >>> WriteModelHFormatFBA2(fba_model, work_dir='./models', use_rational=True, fullLP=True, format='%.2f', infinity_replace=1000)
+    INFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"
     """
     print(
         '\nINFO: this method will be deprecated please update your scripts to use \"writeModelHFormatFBA2()\"\n'
@@ -1927,37 +1364,17 @@ def writeModelHFormatFBA2(
     infinity_replace=None,
 ):
     """
-    Generates an H-Format file representing an FBA model for linear programming solvers, with options for rational coefficients and custom infinity values.
+    Write an FBA-LP in polynomial H-Format file. This is an improved version of `WriteModelHFormatFBA()`
+    which it replaces. Note that if a SymPy matrix is used as input then use_rational is automatically enabled.
 
-    This procedure takes a Flux Balance Analysis (FBA) model object as input and produces a polynomial H-Format file. This file format is compatible with linear programming solvers that support H-Format. The function allows for the coefficients to be represented as rational numbers, uses the SymPy library if rational output is enabled, and allows specifying a replacement for infinite bounds in flux constraints.
+     - *fba* a PySCeS-CBM FBA object
+     - *fname* [default=None] the output filename, fba.getId() if not defined
+     - *Work_dir* [default=None] the output directory
+     - *use_rational* [default=false] use rational numbers in output (requires sympy)
+     - *fullLP* [default=True] include the default objective function as a maximization target
+     - *format* [default='%s'] the number format string
+     - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
 
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model from which to generate the H-Format file.
-    fname : str, optional
-        Name of the output file. If omitted, uses the ID of the FBA model.
-    work_dir : str, optional
-        Output directory where the file will be saved. Defaults to the current directory if not specified.
-    use_rational : bool, optional
-        Flag indicating whether to represent numbers as rationals using the SymPy library. Defaults to False.
-    fullLP : bool, optional
-        If True, include the objective function in the output. Defaults to True.
-    format : str, optional
-        Printf-style number format string. Defaults to '%s', which uses the default string representation.
-    infinity_replace : float, optional
-        A numerical value to replace infinite values in flux bounds. If not specified, infinite values are maintained.
-
-    Returns
-    -------
-    str
-        The path to the generated H-Format file.
-
-    Example
-    -------
-    >>> fba_model = FBAModel(...)  # Assume FBAModel is defined elsewhere
-    >>> file_path = writeModelHFormatFBA2(fba_model, use_rational=True)
-    >>> print(f"H-Format file saved to: {file_path}")
     """
     use_rational_old = use_rational
     if _HAVE_SYMPY_ and fba.N.__array_type__ == sympy.MutableDenseMatrix:
@@ -1965,6 +1382,7 @@ def writeModelHFormatFBA2(
         print('INFO: using rational matrix')
     M = fba
     LHS = M.N.array.copy()
+    # RHS = [0.0 for e in range(M.N.shape[0])]
     RHS = M.N.RHS.tolist()
     if __DEBUG__:
         print(LHS)
@@ -2002,6 +1420,7 @@ def writeModelHFormatFBA2(
     RHS.shape = (len(RHS), 1)
     if __DEBUG__:
         print(RHS)
+    ##  LP = numpy.hstack([LHS, RHS])
 
     OBJ_FUNC = numpy.zeros(LHS.shape[1] + 1)
     objIdx = M.activeObjIdx
@@ -2010,7 +1429,9 @@ def writeModelHFormatFBA2(
             if M.objectives[objIdx].flux_objectives[fo].reaction == M.N.col[j]:
                 print(M.objectives[objIdx].flux_objectives[fo].reaction, M.N.col[j])
                 OBJ_FUNC[j] = float(M.objectives[objIdx].flux_objectives[fo].coefficient)
+    ##  print OBJ_FUNC
 
+    # for Ax >= B Hformat wants -B A >= 0
     LP = numpy.hstack([-RHS, LHS])
     OBJ_FUNC = numpy.hstack([-OBJ_FUNC[-1], OBJ_FUNC[:-1]])
 
@@ -2020,35 +1441,71 @@ def writeModelHFormatFBA2(
     del LHS, RHS
 
     if work_dir != None:
-        assert os.path.exists(work_dir), 'The specified work directory does not exist.'
+        assert os.path.exists(work_dir), '\nJanee ...'
         fname = os.path.join(work_dir, fname)
 
     if fname == None:
         fname = M.getId().replace('.xml', '')
-    fname += '.ine' if not use_rational else '_r.ine'
+    if not use_rational:
+        fname += '.ine'
+    else:
+        fname += '_r.ine'
 
     F = open(fname, 'w')
     F.write('* %s\n' % os.path.split(fname)[-1])
     F.write('H-representation\nbegin\n')
-    NUM_TYPE = 'real' if not use_rational else 'rational'
+    NUM_TYPE = 'real'
+    if use_rational:
+        NUM_TYPE = 'rational'
     F.write('%s  %s  %s\n' % (LP.shape[0], LP.shape[1], NUM_TYPE))
 
     strW = format + ' '
 
     for r in range(LP.shape[0]):
         for c in range(LP.shape[1]):
-            F.write(('%s ' % sympy.Rational(format % LP[r, c])) if use_rational or use_rational_old else (strW % LP[r, c]))
+            if use_rational or use_rational_old:
+                F.write('%s ' % LP[r, c])
+            else:
+                if LP[r, c] == 0.0 or LP[r, c] == -0.0:
+                    LP[r, c] = 0.0
+                F.write(strW % LP[r, c])
         F.write('\n')
 
-    F.write('end\n')
     if fullLP:
-        F.write('lponly\n')
-        F.write('maximize\n')
+        F.write('end\nlponly\n')
+        F.write('maximize\n')  # check if Hformat has a minimize kw
         for o in OBJ_FUNC:
-            F.write(('%s ' % sympy.Rational(format % o)) if use_rational or use_rational_old else (strW % o))
+            # if not use_rational:
+            # F.write(strW % o)
+            # else:
+            # F.write('%s ' % sympy.Rational(format % o))
+
+            if use_rational or use_rational_old:
+                F.write('%s ' % sympy.Rational(format % o))
+            else:
+                if o == 0.0 or o == -0.0:
+                    LP[r, c] = 0.0
+                F.write(strW % o)
+
+        # then we can use use this
+        ##  F.write('%s\n' % M.objectives[M.activeObjIdx].operation)
+        ##  if M.activeObjIdx].operation == 'maximize':
+        ##  for o in OBJ_FUNC:
+        ##  if not use_rational:
+        ##  F.write(strW % o)
+        ##  else:
+        ##  F.write('%s ' % sympy.Rational(format % o))
+        ##  else:
+        ##  for o in OBJ_FUNC:
+        ##  o = -o
+        ##  if not use_rational:
+        ##  F.write(strW % o)
+        ##  else:
+        ##  F.write('%s ' % sympy.Rational(format % o))
+    else:
+        F.write('end\n')
     F.write('\n')
     F.close()
-
     F = open(fname.replace('.ine', '') + '.columns.txt', 'w')
     for j in range(M.N.array.shape[1]):
         F.write('%s,%s\n' % (j, M.N.col[j]))
@@ -2067,37 +1524,17 @@ def writeStoichiometricMatrix(
     infinity_replace=None,
 ):
     """
-    Writes the stoichiometric matrix of an FBA model into a file in H-Format.
+    Write an FBA-LP in polynomial H-Format file. This is an improved version of `WriteModelHFormatFBA()`
+    which it replaces but is kept for backwards compatability.
 
-    This function generates an H-Format file from the stoichiometric matrix of a provided Flux Balance Analysis (FBA) model. It supports outputting the numeric values as rational numbers and includes options for handling infinite bounds in flux constraints. The function is primarily intended as a means of exporting model data for use with linear programming solvers or other analytical tools.
+     - *fba* a PySCeS-CBM FBA object
+     - *fname* [default=None] the output filename, fba.getId() if not defined
+     - *Work_dir* [default=None] the output directory
+     - *use_rational* [default=false] use rational numbers in output (requires sympy)
+     - *fullLP* [default=True] include the default objective function as a maximization target
+     - *format* [default='%s'] the number format string
+     - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
 
-    Parameters
-    ----------
-    fba : FBAModel
-        The FBA model from which the stoichiometric matrix will be exported.
-    fname : str, optional
-        The filename for the exported H-Format file. If not provided, the FBA model ID is used as a basis for the filename.
-    work_dir : str, optional
-        The directory where the output file will be saved. If None, the current working directory is used.
-    use_rational : bool, optional
-        If True, exports numerical values as rational numbers using the SymPy library. Defaults to False.
-    fullLP : bool, optional
-        This parameter is kept for API compatibility but is not used in this function.
-    format : str, optional
-        A Python string format specifier for numeric output. Defaults to '%s', which uses the standard string representation.
-    infinity_replace : float, optional
-        A numeric value to use in place of infinity for flux bounds. If not specified, infinity bounds are kept as is.
-
-    Returns
-    -------
-    str
-        The path to the generated file containing the stoichiometric matrix in H-Format.
-
-    Examples
-    --------
-    >>> fba_model = FBAModel(...)
-    >>> matrix_file_path = writeStoichiometricMatrix(fba_model, work_dir='./data', use_rational=True)
-    >>> print(f"Stoichiometric matrix saved to: {matrix_file_path}")
     """
     if not _HAVE_SYMPY_ and use_rational:
         use_rational = False
@@ -2108,26 +1545,67 @@ def writeStoichiometricMatrix(
     if __DEBUG__:
         print(LHS)
         print(RHS)
+    # LHS = numpy.vstack([LHS, -M.N.array.copy()])
     RHS += [0.0 for e in range(M.N.shape[0])]
     if __DEBUG__:
         print(LHS)
         print(RHS)
+    # BsLHS, BsRHS = BuildHformatFluxBounds(M, infinity_replace=infinity_replace)
+    if __DEBUG__:
+        print(BsLHS)
+        print(BsRHS)
+    # LHS = numpy.vstack([LHS, BsLHS])
+    # RHS += BsRHS
+    # del BsLHS, BsRHS
     if __DEBUG__:
         print(LHS)
         print(RHS)
+
+    # RHS = numpy.array(RHS,'d')
+    # RHS.shape = (len(RHS), 1)
     if __DEBUG__:
         print(RHS)
+    ##  LP = numpy.hstack([LHS, RHS])
+
+    # OBJ_FUNC = numpy.zeros(LHS.shape[1]+1)
+    objIdx = M.activeObjIdx
+    # for j in range(LHS.shape[1]):
+    # for fo in range(len(M.objectives[objIdx].getFluxObjectiveReactions())):
+    # if M.objectives[objIdx].flux_objectives[fo].reaction == M.N.col[j]:
+    # print(M.objectives[objIdx].flux_objectives[fo].reaction, M.N.col[j])
+    # OBJ_FUNC[j] = float(M.objectives[objIdx].flux_objectives[fo].coefficient)
+    ###  print OBJ_FUNC
+
+    # for Ax >= B Hformat wants -B A >= 0
+    # LP = numpy.hstack([-RHS, LHS])
+    # OBJ_FUNC = numpy.hstack([-OBJ_FUNC[-1], OBJ_FUNC[:-1]])
+
     LP = LHS
+
     if __DEBUG__:
+        print(OBJ_FUNC)
         print(LP)
     del LHS, RHS
+
     if work_dir != None:
-        assert os.path.exists(work_dir), 'The specified work directory does not exist.'
+        assert os.path.exists(work_dir), '\nJanee ...'
         fname = os.path.join(work_dir, fname)
+
     if fname == None:
         fname = M.getId().replace('.xml', '')
-    fname += '.ine' if not use_rational else '_r.ine'
+    if not use_rational:
+        fname += '.ine'
+    else:
+        fname += '_r.ine'
+
     F = open(fname, 'w')
+    # F.write('* %s\n' % os.path.split(fname)[-1])
+    # F.write('H-representation\nbegin\n')
+    # NUM_TYPE = 'real'
+    # if use_rational:
+    # NUM_TYPE = 'rational'
+    # F.write('%s  %s  %s\n' % (LP.shape[0], LP.shape[1], NUM_TYPE))
+
     strW = format + ' '
     for r in range(LP.shape[0]):
         for c in range(LP.shape[1]):
@@ -2136,8 +1614,36 @@ def writeStoichiometricMatrix(
                     LP[r, c] = 0.0
                 F.write(strW % LP[r, c])
             else:
+                ##  print LP[r,c]
                 F.write('%s ' % sympy.Rational(format % LP[r, c]))
         F.write('\n')
+
+    # if fullLP:
+    # F.write('end\nlponly\n')
+    # F.write('maximize\n') # check if Hformat has a minimize kw
+    # for o in OBJ_FUNC:
+    # if not use_rational:
+    # F.write(strW % o)
+    # else:
+    # F.write('%s ' % sympy.Rational(format % o))
+    # then we can use use this
+    ##  F.write('%s\n' % M.objectives[M.activeObjIdx].operation)
+    ##  if M.activeObjIdx].operation == 'maximize':
+    ##  for o in OBJ_FUNC:
+    ##  if not use_rational:
+    ##  F.write(strW % o)
+    ##  else:
+    ##  F.write('%s ' % sympy.Rational(format % o))
+    ##  else:
+    ##  for o in OBJ_FUNC:
+    ##  o = -o
+    ##  if not use_rational:
+    ##  F.write(strW % o)
+    ##  else:
+    ##  F.write('%s ' % sympy.Rational(format % o))
+    # else:
+    # F.write('end\n')
+    # F.write('\n')
     F.close()
     F = open(fname.replace('.ine', '') + '.columns.txt', 'w')
     for j in range(M.N.array.shape[1]):
@@ -2147,35 +1653,9 @@ def writeStoichiometricMatrix(
     return fname
 
 
-def writeListToLP(fname, obj=None, const=None, bnds=None, work_dir=None, objtype='maximize'):
-    """
-    Writes a linear programming (LP) problem to a file in LP format given the objective, constraints, bounds, and other options.
-
-    Parameters
-    ----------
-    fname : str
-        The base filename for the output LP file.
-    obj : list of str, optional
-        The objective function as a list where each item represents a term in the objective.
-    const : list of str, optional
-        The list of constraints, where each constraint is a string.
-    bnds : list of str, optional
-        The list of bounds for the variables in the LP problem.
-    work_dir : str, optional
-        The directory where the LP file will be saved. If None, uses the current working directory.
-    objtype : str, optional
-        The type of optimization, either 'maximize' or 'minimize'. Defaults to 'maximize'.
-
-    Returns
-    -------
-    str
-        The path to the generated LP file.
-
-    Examples
-    --------
-    >>> writeListToLP('example', obj=['2x1 + 3x2'], const=['x1 + x2 <= 4', 'x1 - x2 >= 2'], bnds=['x1 >= 0', 'x2 >= 0'], objtype='maximize')
-    'path/to/work_dir/example.lp'
-    """
+def writeListToLP(
+    fname, obj=None, const=None, bnds=None, work_dir=None, objtype='maximize'
+):
     if work_dir == None:
         work_dir = os.getcwd()
     F = open(os.path.join(work_dir, fname + '.lp'), 'w')

@@ -105,21 +105,9 @@ __example_models__ = {
 
 def loadModel(sbmlfile):
     """
-    Load an SBML model file in various formats.
+    Loads any SBML model in COBRA, FAME (SBML2FBA), SBML3FBCv1, SBML3FBCv2 format.
 
-    Parameters
-    ----------
-    sbmlfile : str
-        The path to the SBML model file.
-
-    Returns
-    -------
-    mod : CBModel or None
-        The loaded model as a CBModel object, or None if loading failed.
-
-    Examples
-    --------
-    >>> model = loadModel('path/to/model.xml')
+     - *sbmlfile* an SBML model file
 
     """
     mod = res = None
@@ -157,30 +145,26 @@ def readSBML3FBC(
     scan_notes_gpr=True,
 ):
     """
-    Read and convert an SBML Level 3 file with FBC annotation to a CBM model.
+    Read in an SBML Level 3 file with FBC annotation where and return a CBM model object
 
-    Parameters
-    ----------
-    fname : str
-        Filename of the SBML model to load.
-    work_dir : str, optional
-        Working directory for relative file paths.
-    xoptions : dict, optional
-        Special loading options:
-        - "validate" (bool) : Whether to validate the model before loading.
-        - "read_model_string" (bool) : If `True`, treat `fname` as SBML formatted string.
-        - "nmatrix_type" (str): Define the type of stoichiometric matrix to build.
-    scan_notes_gpr : bool, optional
-        Whether to scan the notes field for gene-protein-reaction associations if no genes are detected.
+     - *fname* is the filename
+     - *work_dir* is the working directory
+     - *return_sbml_model* deprecated and ignored please update code
+     - *xoptions* special load options, enable with option=True except for nmatrix_type which has a type.
 
-    Returns
-    -------
-    xmod : CBModel
-        The loaded model as a CBModel object.
+       - *nogenes* do not load/process genes
+       - *noannot* do not load/process any annotations
+       - *validate* validate model and display errors and warnings before loading
+       - *readcobra* read the cobra annotation
+       - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
+       - *nmatrix_type* [default='normal'] define the type of stoichiometrich matrix to be built
 
-    Examples
-    --------
-    >>> model = readSBML3FBC('model.xml')
+         - 'numpy' dense numpy array (best performance)
+         - 'scipy_csr' scipy sparse matrix (lower performance, low memory)
+         - 'sympy' a sympy rational matrix (low performance, high memory, cast to dense to analyse)
+         - None do not build matrix
+
+    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected scan the <notes> field for GPR associationa
 
     """
     if fname in __example_models__:
@@ -211,33 +195,16 @@ def readCOBRASBML(
     scan_notes_gpr=True,
 ):
     """
-    Read a COBRA-format SBML Level 2 file and return a CBM model object.
+    Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
+    or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
 
-    Parameters
-    ----------
-    fname : str
-        Filename of the SBML model to load.
-    work_dir : str, optional
-        Working directory for relative file paths.
-    delete_intermediate : bool, optional
-        Whether to delete the intermediate SBML Level 3 FBC file.
-    fake_boundary_species_search : bool, optional
-        Attempt to detect boundary species by ID suffix '_b'.
-    output_dir : str, optional
-        Directory to output intermediate SBML L3 files (default to input directory).
-    skip_genes : bool, optional
-        Whether to skip loading GPR data.
-    scan_notes_gpr : bool, optional
-        Scan the notes field for GPR associations if no genes are detected.
-
-    Returns
-    -------
-    xmod : CBModel
-        The loaded model as a CBModel object.
-
-    Examples
-    --------
-    >>> model = readCOBRASBML('cobra_model.xml')
+     - *fname* is the filename
+     - *work_dir* is the working directory
+     - *delete_intermediate* [default=False] delete the intermediate SBML Level 3 FBC file
+     - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
+     - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
+     - *skip_genes* [default=False] do not load GPR data
+     - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
 
     """
     xmod = CBXML.sbml_readCOBRASBML(
@@ -262,29 +229,16 @@ def readSBML2FBA(
     scan_notes_gpr=True,
 ):
     """
-    Read an SBML Level 2 file with FBA annotation and return a CBM model.
+    Read in an SBML Level 2 file with FBA annotation where:
 
-    Parameters
-    ----------
-    fname : str
-        The filename of the SBML model to load.
-    work_dir : str, optional
-        Working directory if different from `fname` path.
-    fake_boundary_species_search : bool, optional
-        Search for fake boundary species by ID suffix '_b'.
-    scan_notes_gpr : bool, optional
-        Scan the notes field for GPR associations if no genes are detected.
-
-    Returns
-    -------
-    xmod : CBModel
-        The loaded model as a CBModel object.
-
-    Examples
-    --------
-    >>> model = readSBML2FBA('model_l2.xml')
+     - *fname* is the filename
+     - *work_dir* is the working directory if None then only fname is used
+     - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
+     - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
+     - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
 
     """
+
     xmod = CBXML.sbml_readSBML2FBA(
         fname,
         work_dir,
@@ -297,26 +251,6 @@ def readSBML2FBA(
 
 
 def readLPtoList(fname, work_dir):
-    """
-    Read a Linear Programming (LP) file and extract objectives, constraints, and bounds.
-
-    Parameters
-    ----------
-    fname : str
-        Filename of the LP file to read.
-    work_dir : str
-        Working directory containing the LP file.
-
-    Returns
-    -------
-    Object : list of str
-        List containing objective function(s).
-    Constr : list of str
-        List containing constraints.
-    Bounds : list of str
-        List containing bounds.
-
-    """
     NEW = False
     TYPE = None
     Object = []
@@ -362,24 +296,11 @@ def readLPtoList(fname, work_dir):
 
 def readSK_FVA(filename):
     """
-    Read FVA results from a file and return them as a list of dictionaries.
-
-    Parameters
-    ----------
-    filename : str
-        Filename of the FVA result file.
-
-    Returns
-    -------
-    vari : list of dict
-        List of dictionaries, each containing 'name', 'min', 'max', and 'status' keys for each reaction.
-
-    Examples
-    --------
-    >>> fva_results = readSK_FVA('opt.fva')
+    Read Stevens FVA results (opt.fva) file and return a list of dictionaries
 
     """
-    assert os.path.exists(filename), 'File does not exist: {}'.format(filename)
+    assert os.path.exists(filename), '\nGive me a break!\n'
+    ##  name = []
     vari = []
     F = open(filename, 'r')
     for l in F:
@@ -390,58 +311,151 @@ def readSK_FVA(filename):
         V = V.split('--')
         Vmax = V[0].strip()
         Vstat = V[1].strip()
-
+        ##  name.append((Jn, Vstat))
+        ##  vari.append((Vmin, Vmax))
         vari.append({'name': Jn, 'min': Vmin, 'max': Vmax, 'status': Vstat})
         if __DEBUG__:
             print(Jn, Vmin, Vmax, Vstat)
     return vari
 
 
+##  def readSK_vertexOld(fname, bigfile=False):
+##  """
+##  Reads in Stevens vertex analysis file and returns:
+
+##  - a list of vertex vectors
+##  - a list of ray vectors
+##  - the basis of the lineality space as a list of vectors
+
+##  all vectors in terms of the column space of N
+
+##  """
+
+##  assert _HAVE_SYMPY_, 'Install Sympy for rational IO support'
+
+##  assert os.path.exists(fname), 'Uhm exqueeze me ...'
+##  SK_vert_file = open(fname, 'r')
+##  VertOut = []
+##  LinOut = []
+##  RayOut = []
+##  if bigfile:
+##  VertTmp = gzip.open('_vtx_.tmp.gz','wb', compresslevel=3)
+##  LinTmp = gzip.open('_lin_.tmp.gz','wb', compresslevel=3)
+##  RayTmp = gzip.open('_ray_.tmp.gz','wb', compresslevel=3)
+##  GOvert = False
+##  GOray = False
+##  GOlin = False
+##  lcntr = 0
+##  lcntrtmp = 0
+##  for l in SK_vert_file:
+##  lcntr += 1
+##  if lcntr == 1000:
+##  print 'Processing vertex: %s' % (lcntr + lcntrtmp)
+##  lcntrtmp += lcntr
+##  lcntr = 0
+##  if '* Lineality basis ' in l:
+##  GOvert = False
+##  GOray = False
+##  GOlin = True
+##  if '* Rays ' in l:
+##  GOvert = False
+##  GOray = True
+##  GOlin = False
+##  if '* Vertices ' in l:
+##  GOvert = True
+##  GOray = False
+##  GOlin = False
+##  if l[:2] != '* ':
+##  L = l.split()
+##  rowL = []
+##  for c in L:
+##  c = c.strip()
+##  if c == '0':
+##  rnum = '0'
+##  rowL.append(0.0)
+##  else:
+##  rnum = sympy.Rational('%s' % c)
+##  rowL.append(rnum.evalf())
+##  del rnum
+##  del L
+##  if GOlin:
+##  if bigfile:
+##  rowEnd = len(rowL)
+##  cntr = 0
+##  for e in rowL:
+##  cntr += 1
+##  if e == 0.0:
+##  LinTmp.write('0.0')
+##  else:
+##  LinTmp.write('%.14f' % e)
+##  if cntr == rowEnd:
+##  LinTmp.write('\n')
+##  else:
+##  LinTmp.write(',')
+##  else:
+##  LinOut.append(rowL)
+##  elif GOray:
+##  if bigfile:
+##  rowEnd = len(rowL)
+##  cntr = 0
+##  for e in rowL:
+##  cntr += 1
+##  if e == 0.0:
+##  RayTmp.write('0.0')
+##  else:
+##  RayTmp.write('%.14f' % e)
+##  if cntr == rowEnd:
+##  RayTmp.write('\n')
+##  else:
+##  RayTmp.write(',')
+##  else:
+##  RayOut.append(rowL)
+##  elif GOvert:
+##  if bigfile:
+##  rowEnd = len(rowL)
+##  cntr = 0
+##  for e in rowL:
+##  cntr += 1
+##  if e == 0.0:
+##  VertTmp.write('0.0')
+##  else:
+##  VertTmp.write('%.14f' % e)
+##  if cntr == rowEnd:
+##  VertTmp.write('\n')
+##  else:
+##  VertTmp.write(',')
+##  else:
+##  VertOut.append(rowL)
+##  del rowL
+##  print '\nProcessed %s vertices.\n' % (lcntr + lcntrtmp)
+##  SK_vert_file.close()
+##  if bigfile:
+##  VertTmp.close()
+##  RayTmp.close()
+##  LinTmp.close()
+##  VertTmp = gzip.open('_vtx_.tmp.gz','rb')
+##  LinTmp = gzip.open('_lin_.tmp.gz','rb')
+##  RayTmp = gzip.open('_ray_.tmp.gz','rb')
+##  return VertTmp, RayTmp, LinTmp
+##  else:
+##  print 'Lineality basis: %s' % len(LinOut)
+##  print 'Number of rays: %s' % len(RayOut)
+##  print 'Number of vertices: %s' % len(VertOut)
+##  return VertOut, RayOut, LinOut
+
+
 def readSK_vertexOld(
     fname, bigfile=False, fast_rational=False, nformat='%.14f', compresslevel=3
 ):
     """
-    Read Stevens vertex analysis file optimized for large datasets.
+    Reads in Stevens vertex analysis file and returns, even more optimized for large datasets than the original.
 
-    Parameters
-    ----------
-    fname : str
-        The filename of the Stevens vertex analysis file to be read.
-    bigfile : bool, optional
-        If True, utilize file handling optimized for large datasets. Defaults to False.
-    fast_rational : bool, optional
-        If True, use fast rational to float conversion which may slightly decrease in accuracy.
-        Defaults to False.
-    nformat : str, optional
-        The number format used for output, represented as a string. Defaults to '%.14f'.
-    compresslevel : int, optional
-        The compression level used when creating gzip files for bigfile handling. Defaults to 3.
+     - a list of vertex vectors
+     - a list of ray vectors
+     - the basis of the lineality space as a list of vectors
 
-    Returns
-    -------
-    tuple
-        A tuple containing three elements:
-        1. VertOut : list of tuples or file pointer
-            A list of vertex vectors or a pointer to a gzip file containing vertices.
-        2. RayOut : list of tuples or file pointer
-            A list of ray vectors or a pointer to a gzip file containing rays.
-        3. LinOut : list of tuples or file pointer
-            A list representing the basis of the lineality space or a pointer to a gzip file.
+    all vectors in terms of the column space of N
 
-    Raises
-    ------
-    AssertionError
-        If the file specified by fname does not exist.
-
-    Examples
-    --------
-    >>> VertOut, RayOut, LinOut = readSK_vertexOld('example.all')
-
-    Notes
-    -----
-    This function reads Stevens vertex analysis files and is optimized for handling large datasets
-    when bigfile is set to True. For large files, it stores the data temporarily in gzip files to
-    conserve memory. All vectors are in terms of the column space of N.
     """
     import gzip
 
@@ -599,45 +613,22 @@ def readSK_vertex(
     hdf5file=None,
 ):
     """
-    Reads in Stevens vertex analysis file and processes its contents to map vertices,
-    lineality basis, and rays, optionally outputting the results to an HDF5 file format.
+    Reads in Stevens vertex analysis file:
 
-    This function processes a specific formatted file (.all file) output from the Stevens pipeline, organizing the vertex analysis data for
-    metabolic network analysis or other applications. It provides options for large dataset handling, number formatting, and output compression.
+     - *fname* the input filename (.all file that results from Stevens pipeline)
+     - *bigfile* [default=True] this option is now always true and is left in for backwards compatability
+     - *fast_rational* [default=False] by default off and uses SymPy for rational-->float conversion, when on uses float decomposition with a slight (2th decimal) decrease in accuracy
+     - *nformat* [default='%.14f'] the number format used in output files
+     - *compression* [default=None] compression to be used in hdf5 files can be one of [None, 'lzf', 'gz?', 'szip']
+     - *hdf5file* [default=None] if None then generic filename '_vtx_.tmp.hdf5' is uses otherwise <hdf5file>.hdf5
 
-    Parameters
-    ----------
-    fname : str
-        The input filename (.all file that results from Stevens pipeline)
-    bigfile : bool, optional
-        This option is now always true and is left in for backward compatibility, by default True.
-    fast_rational : bool, optional
-        If False, uses SymPy for rational to float conversion for higher accuracy, but slower speed. When True, uses faster but slightly less accurate float decomposition, by default False.
-    nformat : str, optional
-        The number format used in output files, by default '%.14f'.
-    compression : str, optional
-        Compression method used in hdf5 files; one of [None, 'lzf', 'gz?', 'szip'], by default None.
-    hdf5file : str, optional
-        If provided, specifies the name of the output HDF5 file, otherwise, a default name is used, by default None.
+    and returns an hdf5 *filename* of the results with a single group named **data** which countains datasets
 
-    Returns
-    -------
-    str
-        The filename of the generated HDF5 file containing the processed data, if `bigfile` is True. Otherwise, returns tuple of lists (vertices, rays, lineality).
+     - vertices
+     - rays
+     - lin
 
-    See Also
-    --------
-    h5py : For HDF5 file format and compression methods.
-
-    Examples
-    --------
-    ```python
-    hdf5_filename = readSK_vertex("path/to/vertex_file.all", fast_rational=True, hdf5file="my_vertex_data", compression="lzf")
-    ```
-
-    Notes
-    -----
-    Requires installation of auxiliary libraries: SymPy for rational number support and h5py for HDF5 file handling when processing large datasets.
+    where all vectors are in terms of the column space of N.
 
     """
 
@@ -831,37 +822,16 @@ def readSK_vertex(
 
 def readExcel97Model(xlname, write_sbml=True, sbml_level=3, return_dictionaries=False):
     """
-    Reads an Excel97 workbook encoding of a CBMPy model and optionally writes it to an SBML file.
+    Reads a model encoded as an Excel97 workbook and returns it as a CBMPy model object and SBML file. Note the workbook must be formatted
+    exactly like those produced by cbm.writeModelToExcel97(). Note that reactions have to be defined in **both** the *reaction*
+    and *network_react* sheets to be included in the model.
 
-    This function is designed to process Excel97 workbook files that conform to a specific format, as generated by the cbm.writeModelToExcel97() function, to extract and construct a CBMPy model object. The workbook needs to have the reactions detailed in both "reaction" and "network_react" sheets to be successfully incorporated into the model.
+     - *xlpath* the filename of the Excel workbook
+     - *return_model* [default=True] construct and return the CBMPy model
+     - *write_sbml* [default=True] write the SBML file to fname
+     - *return_dictionaries* [default=False] return the dictionaries constructed when reading the Excel file (in place of the model)
+     - *sbml_level* [default=3] write the SBML file as either SBML L2 FBA or SBML L3 FBC file.
 
-    Parameters
-    ----------
-    xlname : str
-        The path to the Excel workbook to be read.
-    write_sbml : bool, optional
-        If True (default), writes the constructed CBMPy model to an SBML file.
-    sbml_level : int, optional
-        The SBML level for the output file. Default is 3.
-        It specifies the SBML file to be written as either SBML Level 2 FBA or SBML Level 3 FBC.
-    return_dictionaries : bool, optional
-        If True, returns dictionaries created from reading the Excel file instead of the CBMPy model object. Default is False.
-
-    Returns
-    -------
-    CBMPy model object, str, and/or dict
-        Depending on the selection of `write_sbml` and `return_dictionaries`, this function may return
-        a CBMPy model object, the path to the written SBML file, and/or dictionaries constructed from the Excel file.
-
-    Examples
-    --------
-    >>> model, sbml_path = readExcel97Model('model_workbook.xls', write_sbml=True, sbml_level=3)
-    >>> model = readExcel97Model('model_workbook.xls', write_sbml=False)
-
-    Notes
-    -----
-    - The Excel workbook must be specifically formatted as per cbm.writeModelToExcel97() output.
-    - Reactions must exist in both "reaction" and "network_react" sheets for inclusion in the model.
 
     """
 
@@ -1232,6 +1202,23 @@ def readExcel97Model(xlname, write_sbml=True, sbml_level=3, return_dictionaries=
                         x_.miriam = CBModel.MIRIAMannotation()
                     x_.miriam.addIDorgURI(q_, i_)
 
+    # ok lets play
+    # try:
+    # cmod.createGeneAssociationsFromAnnotations()
+    # geneerrors = cmod.testGeneProteinAssociations()
+    # logMsg('Successfully created gene associations from annotations.')
+    # except Exception as ex:
+    # logMsg(ex)
+    # try:
+    # cbm.analyzeModel(cmod)
+    # logMsg('Successfully optimized model.')
+    # except Exception as ex:
+    # logMsg(ex)
+    # try:
+    # cbm.writeModelToExcel97(cmod, xlname.replace('.xls','')+'.new')
+    # logMsg('Successfully wrote model to new Excel spreadsheet: "{}"'.format(xlname.replace('.xls','')+'.DEBUG.new.xls'))
+    # except Exception as ex:
+    # logMsg(ex)
     if write_sbml:
         try:
             if sbml_level == 3:
@@ -1251,6 +1238,13 @@ def readExcel97Model(xlname, write_sbml=True, sbml_level=3, return_dictionaries=
         except Exception as ex:
             logMsg(ex)
 
+    # write log to file
+    """
+    F = open(os.path.join(cDir,'{}.log'.format(xlname)),'w')
+    MSGLog.seek(0)
+    F.write(MSGLog.read())
+    F.close()
+    """
     print('\n*****\nExcel97 Read Log\n*****\n')
     MSGLog.seek(0)
     print(MSGLog.read())
