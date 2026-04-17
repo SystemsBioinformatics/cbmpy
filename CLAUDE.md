@@ -85,6 +85,80 @@ The project uses pylint with custom disable comments for:
 
 Code is formatted with standard Python conventions (no AI auto-formatting).
 
+### Docstring formatting
+
+All docstrings must follow the **numpydoc** format to be compatible with Sphinx documentation generation.
+
+**Docstring structure:**
+
+```python
+def function_name(param1, param2):
+    """
+    Short description of the function.
+
+    Extended description (if needed).
+
+    Parameters
+    ----------
+    param1 : type
+        Description of param1.
+    param2 : type
+        Description of param2.
+
+    Returns
+    -------
+    return_type
+        Description of return value.
+
+    Raises
+    ------
+    ExceptionType
+        Description of when and why this exception is raised.
+
+    Notes
+    -----
+    Any important notes or warnings.
+
+    Examples
+    --------
+    >>> example_code_here()
+    """
+```
+
+**Formatting commands:**
+
+```bash
+# Format all docstrings to numpydoc style
+docformatter --in-place --recursive --style=numpy cbmpy/
+
+# Check docstring formatting (should have no output)
+docformatter --diff --recursive cbmpy/
+
+# Format specific file
+docformatter --in-place cbmpy/module_name.py
+```
+
+### Building and packaging
+```bash
+# Build source distribution
+python setup.py sdist
+
+# Build wheel
+python setup.py bdist_wheel
+
+# Clean and rebuild
+rm -rf build dist *.egg-info
+python setup.py sdist bdist_wheel
+```
+
+### Code style and linting
+The project uses pylint with custom disable comments for:
+- C0103 (invalid variable name)
+- C0301 (line too long)
+- E1101 (module has no member)
+
+Code is formatted with standard Python conventions (no AI auto-formatting).
+
 ## Project Architecture
 
 ### Main Package: `cbmpy/`
@@ -155,12 +229,12 @@ Advanced analyses for module decomposition:
 ```python
 class Fbase:
     - metabolites: list of metabolite objects
-    - reactions: list of reaction objects  
+    - reactions: list of reaction objects
     - compartments: dictionary of compartments
     - gene_products: gene to metabolite associations
     - sbml_file: SBML file source
     - solution: LP solver results
-    
+
     Methods:
     - doFBA() - Flux Balance Analysis
     - doFVA() - Flux Variability Analysis
@@ -195,6 +269,25 @@ Write functions:
 - `writeSBML3FBC()` - Standard FBC
 - `writeSBML3FBCV3()` - FBC V3 with FBC annotations
 - `writeSBML3FBCV2()` - FBC V2 (legacy)
+
+## Sphinx Documentation
+
+To build Sphinx documentation:
+
+```bash
+# Install sphinx dependencies
+pip install -e ".[dev]"
+
+# Generate API documentation from docstrings
+sphinx-apidoc -o docs/source cbmpy/
+
+# Build the documentation
+cd docs
+make html
+
+# Open the generated docs in browser
+xdg-open build/html/index.html
+```
 
 ## License
 
