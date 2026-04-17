@@ -1,0 +1,21 @@
+name: cbmpy3
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.8
+  - numpy>=1.17.0
+  - packaging
+  - pyparsing
+  - python-libsbml>=5.18.0
+  - lxml
+  - xlrd
+  - xlwt
+  - swiglpk
+  - scipy
+  - XlsxWriter
+  - sympy>=1.7.1
+  - cplex>=22.1.0  # or install pyglpk if you prefer open source
+  - pip
+  - pip:
+    - cbmpy
