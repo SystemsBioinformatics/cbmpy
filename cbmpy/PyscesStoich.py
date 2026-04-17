@@ -65,11 +65,9 @@ __psyco_active__ = 0
 
 
 class StructMatrix:
-    """
-    This class is specifically designed to store structural matrix information
-    give it an array and row/col index permutations it can generate its own
-    row/col labels given the label src.
-    """
+    """This class is specifically designed to store structural matrix information give
+    it an array and row/col index permutations it can generate its own row/col labels
+    given the label src."""
 
     array = None
     ridx = None
@@ -79,9 +77,8 @@ class StructMatrix:
     shape = None
 
     def __init__(self, array, ridx, cidx, row=None, col=None):
-        """
-        Instantiate with array and matching row/col index arrays, optional label arrays
-        """
+        """Instantiate with array and matching row/col index arrays, optional label
+        arrays."""
         self.array = array
         self.ridx = ridx
         self.cidx = cidx
@@ -101,19 +98,15 @@ class StructMatrix:
         return self.array.take(args, axis=1)
 
     def setRow(self, src):
-        """
-        Assuming that the row index array is a permutation (full/subset)
-        of a source label array by supplying that source to setRow it
-        maps the row labels to ridx and creates self.row (row label list)
-        """
+        """Assuming that the row index array is a permutation (full/subset) of a source
+        label array by supplying that source to setRow it maps the row labels to ridx
+        and creates self.row (row label list)"""
         self.row = [src[r] for r in self.ridx]
 
     def setCol(self, src):
-        """
-        Assuming that the col index array is a permutation (full/subset)
-        of a source label array by supplying that src to setCol
-        maps the row labels to cidx and creates self.col (col label list)
-        """
+        """Assuming that the col index array is a permutation (full/subset) of a source
+        label array by supplying that src to setCol maps the row labels to cidx and
+        creates self.col (col label list)"""
 
         self.col = [src[c] for c in self.cidx]
 
@@ -138,7 +131,7 @@ class StructMatrix:
             return None
 
     def getLabels(self, axis='all'):
-        """Return the matrix labels ([rows],[cols]) where axis='row'/'col'/'all'"""
+        """Return the matrix labels ([rows],[cols]) where axis='row'/'col'/'all'."""
         if axis == 'row':
             return self.row
         elif axis == 'col':
@@ -147,7 +140,7 @@ class StructMatrix:
             return self.row, self.col
 
     def getIndexes(self, axis='all'):
-        """Return the matrix indexes ([rows],[cols]) where axis='row'/'col'/'all'"""
+        """Return the matrix indexes ([rows],[cols]) where axis='row'/'col'/'all'."""
         if axis == 'row':
             return self.ridx
         elif axis == 'col':
@@ -177,7 +170,7 @@ class StructMatrix:
 
 
 class MathArrayFunc(object):
-    """A class of basic array functions some LAPACK based"""
+    """A class of basic array functions some LAPACK based."""
 
     __doc__ = '''PySCeS array functions - used by Stoich'''
 
@@ -187,15 +180,13 @@ class MathArrayFunc(object):
     LinAlgError = 'LinearAlgebraError'
 
     def commonType(self, *arrays):
-        """
-        commonType(\*arrays)
+        """CommonType(\*arrays)
 
         Numeric detect and set array precision (will be replaced with new scipy.core compatible code when ready)
 
         Arguments:
 
         \*arrays: input arrays
-
         """
         kind = 0
         #    precision = 0
@@ -209,8 +200,7 @@ class MathArrayFunc(object):
         return self.array_type[kind][precision]
 
     def castCopyAndTranspose(self, type, *arrays):
-        """
-        castCopyAndTranspose(type, \*arrays)
+        """CastCopyAndTranspose(type, \*arrays)
 
         Cast numeric arrays to required type and transpose
 
@@ -218,7 +208,6 @@ class MathArrayFunc(object):
 
         type: the required type to cast to
         \*arrays: the arrays to be processed
-
         """
         cast_arrays = ()
         for a in arrays:
@@ -234,23 +223,20 @@ class MathArrayFunc(object):
             return cast_arrays
 
     def assertRank2(self, *arrays):
-        """
-        assertRank2(\*arrays)
+        """AssertRank2(\*arrays)
 
         Check that we are using a 2D array
 
         Arguments:
 
         \*arrays: input array(s)
-
         """
         for a in arrays:
             if len(a.shape) != 2:
                 raise LinAlgError('Array must be two-dimensional')
 
     def SwapCol(self, res_a, r1, r2):
-        """
-        SwapCol(res_a,r1,r2)
+        """SwapCol(res_a,r1,r2)
 
         Swap two columns using BLAS swap, arrays can be (or are upcast to) type double (d) or double complex (D).
         Returns the colswapped array
@@ -260,7 +246,6 @@ class MathArrayFunc(object):
         res_a: the input array
         r1: the first column to be swapped
         r2: the second column to be swapped
-
         """
         if (
             self.array_kind[self.commonType(res_a)] == 1
@@ -272,8 +257,7 @@ class MathArrayFunc(object):
             return self.SwapCold(res_a, r1, r2)
 
     def SwapRow(self, res_a, r1, r2):
-        """
-        SwapRow(res_a,r1,r2)
+        """SwapRow(res_a,r1,r2)
 
         Swaps two rows using BLAS swap, arrays can be (or are upcast to) type double (d) or double complex (D).
         Returns the rowswapped array.
@@ -283,7 +267,6 @@ class MathArrayFunc(object):
         res_a: the input array
         r1: the first row index to be swapped
         r2:  the second row index to be swapped
-
         """
         if (
             self.array_kind[self.commonType(res_a)] == 1
@@ -295,8 +278,7 @@ class MathArrayFunc(object):
             return self.SwapRowd(res_a, r1, r2)
 
     def SwapElem(self, res_a, r1, r2):
-        """
-        SwapElem(res_a,r1,r2)
+        """SwapElem(res_a,r1,r2)
 
         Swaps two elements in a 1D vector
 
@@ -305,14 +287,12 @@ class MathArrayFunc(object):
         res_a: the input vector
         r1: index 1
         r2: index 2
-
         """
         res_a[r1], res_a[r2] = res_a[r2], res_a[r1]
         return res_a
 
     def SwapCold(self, res_a, c1, c2):
-        """
-        SwapCold(res_a,c1,c2)
+        """SwapCold(res_a,c1,c2)
 
         Swaps two double (d) columns in an array using BLAS DSWAP. Returns the colswapped array.
 
@@ -321,15 +301,13 @@ class MathArrayFunc(object):
         res_a: input array
         c1: column index 1
         c2: column index 2
-
         """
         res_a = res_a.astype('d')
         res_a[:, c1], res_a[:, c2] = myfblas.dswap(res_a[:, c1], res_a[:, c2])
         return res_a
 
     def SwapRowd(self, res_a, r1, r2):
-        """
-        SwapRowd(res_a,c1,c2)
+        """SwapRowd(res_a,c1,c2)
 
         Swaps two double (d) rows in an array using BLAS DSWAP. Returns the rowswapped array.
 
@@ -338,15 +316,13 @@ class MathArrayFunc(object):
         res_a: input array
         c1: row index 1
         c2: row index 2
-
         """
         res_a = res_a.astype('d')
         res_a[r1, :], res_a[r2, :] = myfblas.dswap(res_a[r1, :], res_a[r2, :])
         return res_a
 
     def SwapColz(self, res_a, c1, c2):
-        """
-        SwapColz(res_a,c1,c2)
+        """SwapColz(res_a,c1,c2)
 
         Swaps two double complex (D) columns in an array using BLAS ZSWAP. Returns the colswapped array.
 
@@ -355,15 +331,13 @@ class MathArrayFunc(object):
         res_a: input array
         c1: column index 1
         c2: column index 2
-
         """
         res_a = res_a.astype('D')
         res_a[:, c1], res_a[:, c2] = myfblas.zswap(res_a[:, c1], res_a[:, c2])
         return res_a
 
     def SwapRowz(self, res_a, r1, r2):
-        """
-        SwapRowz(res_a,c1,c2)
+        """SwapRowz(res_a,c1,c2)
 
         Swaps two double complex (D) rows in an array using BLAS ZSWAP. Returns the rowswapped array.
 
@@ -372,15 +346,13 @@ class MathArrayFunc(object):
         res_a: input array
         c1: row index 1
         c2: row index 2
-
         """
         res_a = res_a.astype('D')
         res_a[r1, :], res_a[r2, :] = myfblas.zswap(res_a[r1, :], res_a[r2, :])
         return res_a
 
     def MatrixFloatFix(self, mat, val=1.0e-15):
-        """
-        MatrixFloatFix(mat,val=1.e-15)
+        """MatrixFloatFix(mat,val=1.e-15)
 
         Clean an array removing any floating point artifacts defined as being smaller than a specified value.
         Processes an array inplace
@@ -389,7 +361,6 @@ class MathArrayFunc(object):
 
         mat: the input 2D array
         val [default=1.e-15]: the threshold value (effective zero)
-
         """
         zero_vals = abs(mat) < val
 
@@ -405,8 +376,7 @@ class MathArrayFunc(object):
         del zero_vals
 
     def MatrixValueCompare(self, matrix):
-        """
-        MatrixValueCompare(matrix)
+        """MatrixValueCompare(matrix)
 
         Finds the largest/smallest abs(value) > 0.0 in a matrix.
         Returns a tuple containing (smallest,largest) values
@@ -414,7 +384,6 @@ class MathArrayFunc(object):
         Arguments:
 
         matrix: the input 2D array
-
         """
         val_B = 0.0
         val_S = 1.0e30
@@ -437,7 +406,7 @@ class Stoich(MathArrayFunc):
     info_moiety_conserve = False
 
     def __init__(self, input):
-        """Initialize class variables"""
+        """Initialize class variables."""
 
         self.nmatrix = input
         row, col = self.nmatrix.shape
@@ -459,15 +428,13 @@ class Stoich(MathArrayFunc):
         self.reactions = None
 
     def AnalyseK(self):
-        """
-        AnalyseK()
+        """AnalyseK()
 
         Evaluate the stoichiometric matrix and calculate the nullspace using LU decomposition and backsubstitution .
         Generates the MCA K and Ko arrays and associated row and column vectors
 
         Arguments:
         None
-
         """
         print('Calculating K matrix .',)
 
@@ -520,15 +487,13 @@ class Stoich(MathArrayFunc):
         print(' done.')
 
     def AnalyseL(self):
-        """
-        AnalyseL()
+        """AnalyseL()
 
         Evaluate the stoichiometric matrix and calculate the left nullspace using LU factorization and backsubstitution.
         Generates the MCA L, Lo, Nr and Conservation matrix and associated row and column vectors
 
         Arguments:
         None
-
         """
         print('Calculating L matrix .',)
 
@@ -598,8 +563,7 @@ class Stoich(MathArrayFunc):
         print(' done.')
 
     def PivotSort(self, a, row_vector, column_vector):
-        """
-        PivotSort(a,row_vector,column_vector)
+        """PivotSort(a,row_vector,column_vector)
 
         This is a sorting routine that accepts a matrix and row/colum vectors
         and then sorts them so that: there are no zero rows (by swapping with first
@@ -611,7 +575,6 @@ class Stoich(MathArrayFunc):
         a: the input array
         row_vector: row tracking vector
         column_vector: column tracking vector
-
         """
         t = self.commonType(a)
         row, col = a.shape
@@ -667,8 +630,7 @@ class Stoich(MathArrayFunc):
         return (a, row_vector, column_vector)
 
     def PivotSort_initial(self, a, row_vector, column_vector):
-        """
-        PivotSort_initial(a,row_vector,column_vector)
+        """PivotSort_initial(a,row_vector,column_vector)
 
         This is a sorting routine that accepts a matrix and row/colum vectors
         and then sorts them so that: the abs(largest) pivots are moved onto the diagonal to maintain
@@ -680,7 +642,6 @@ class Stoich(MathArrayFunc):
         a: the input array
         row_vector: row tracking vector
         column_vector: column tracking vector
-
         """
 
         # SAME AS THE ABOVE JUST DOES ALL VALUES NOT ONLY NON_ZERO ONES
@@ -730,8 +691,7 @@ class Stoich(MathArrayFunc):
         return (a, row_vector, column_vector)
 
     def PLUfactorize(self, a_in):
-        """
-        PLUfactorize(a_in)
+        """PLUfactorize(a_in)
 
         Performs an LU factorization using LAPACK D/ZGetrf. Now optimized for FLAPACK interface.
         Returns LU - combined factorization, IP - rowswap information and info - Getrf error control.
@@ -739,7 +699,6 @@ class Stoich(MathArrayFunc):
         Arguments:
 
         a_in: the matrix to be factorized
-
         """
         print('.',)
 
@@ -940,8 +899,7 @@ class Stoich(MathArrayFunc):
     # return(result,results[1],results[2]) #scipy cblas (ATLAS?) 20030506
 
     def SplitLU(self, plu, row, col, t=None):
-        """
-        SplitLU(plu,row,col,t)
+        """SplitLU(plu,row,col,t)
 
         PLU takes the combined LU factorization computed by PLUfactorize and extracts the upper matrix.
         Returns U.
@@ -952,7 +910,6 @@ class Stoich(MathArrayFunc):
         row: row tracking vector
         col: column tracking vector
         t [default=None)]: typecode argument (currently not used)
-
         """
         print('.',)
 
@@ -963,8 +920,7 @@ class Stoich(MathArrayFunc):
         return plu
 
     def GetUpperMatrix(self, a):
-        """
-        GetUpperMatrix(a)
+        """GetUpperMatrix(a)
 
         Core analysis algorithm; an input is preconditioned using PivotSort_initial and then cycles of PLUfactorize and
         PivotSort are run until the factorization is completed. During this process the matrix is reordered by
@@ -974,7 +930,6 @@ class Stoich(MathArrayFunc):
         Arguments:
 
         a: a stoichiometric matrix
-
         """
         print('.',)
 
@@ -1009,7 +964,6 @@ class Stoich(MathArrayFunc):
         upper_out, row_vector, column_vector = self.PivotSort(
             upper_out, row_vector, column_vector
         )
-
         '''20/09/2000 This bit sorts out the echelon matrix by running (if needed) cycles of
         self.PLUfactorize, self.GetUpperMatrix, and pivsort until only a staircase matrix remains. It uses both the error
         generated by self.PLUfactorize(info) and go_flag to control itself'''
@@ -1084,8 +1038,7 @@ class Stoich(MathArrayFunc):
         return (p_out, upper_out_r, row_vector_r, column_vector)
 
     def GetUpperMatrixUsingQR(self, a):
-        """
-        GetUpperMatrix(a)
+        """GetUpperMatrix(a)
 
         Core analysis algorithm; an input is preconditioned using PivotSort_initial and then cycles of PLUfactorize and
         PivotSort are run until the factorization is completed. During this process the matrix is reordered by
@@ -1095,7 +1048,6 @@ class Stoich(MathArrayFunc):
         Arguments:
 
         a: a stoichiometric matrix
-
         """
         print('.',)
 
@@ -1114,7 +1066,6 @@ class Stoich(MathArrayFunc):
         self.MatrixFloatFix(
             upper_out, val=self.stoichiometric_analysis_lu_precision * 10.0
         )
-
         '''This bit will get rid of any zero rows so that we will hopefully only have to work with a
         reduced matrix after this, for completeness the row_vector will also be sliced'''
 
@@ -1130,21 +1081,18 @@ class Stoich(MathArrayFunc):
         return (p_out, upper_out_r, row_vector_r, column_vector)
 
     def ScalePivots(self, a_one):
-        """
-        ScalePivots(a_one)
+        """ScalePivots(a_one)
 
         Given an upper triangular matrix U, this method scales the diagonal (pivot values) to one.
 
         Arguments:
 
         a_one: an upper triangular matrix U
-
         """
         print('.',)
 
         t = self.commonType(a_one)
         row, col = a_one.shape
-
         '''13/09/2000 We now assume that the matrix has the correct shape ie. the pivots are in a
         perfect staircase'''
 
@@ -1160,8 +1108,7 @@ class Stoich(MathArrayFunc):
         return a_one
 
     def BackSubstitution(self, res_a, row_vector, column_vector):
-        """
-        BackSubstitution(res_a,row_vector,column_vector)
+        """BackSubstitution(res_a,row_vector,column_vector)
 
         Jordan reduction of a scaled upper triangular matrix. The returned array is now in the form [I R] and can
         be used for nullspace determination. Modified row and column tracking vetors are also returned.
@@ -1171,13 +1118,11 @@ class Stoich(MathArrayFunc):
         res_a: unitary pivot upper triangular matrix
         row_vector: row tracking vector
         column_vector: column tracking vector
-
         """
         print('.',)
 
         t = self.commonType(res_a)
         row, col = res_a.shape
-
         '''13/09/2000 removed the copy thing, and eliminated the divnumb variable. Because we
         are now working with a row reduced matrix upward elimination only works on the pivot cols'''
 
@@ -1220,8 +1165,7 @@ class Stoich(MathArrayFunc):
         return (res_a, row_vector, column_vector)
 
     def K_split_R(self, R_a, row_vector, column_vector):
-        """
-        K_split_R(R_a,row_vector,column_vector)
+        """K_split_R(R_a,row_vector,column_vector)
 
         Using the R factorized form of the stoichiometric matrix we now form the K and Ko matrices. Returns
         the r_ipart,Komatrix,Krow,Kcolumn,Kmatrix,Korow,info
@@ -1231,26 +1175,22 @@ class Stoich(MathArrayFunc):
         R_a: the Gauss-Jordan reduced stoichiometric matrix
         row_vector: row tracking vector
         column_vector: column tracking vector
-
         """
         print('.',)
 
         t = self.commonType(R_a)
         row, col = R_a.shape
-
         '''14/09/2000 Seeing as we now should have a perfect staircase in a reduced matrix we do
         not have to search for the last pivot it will exist at min(row,col)-1 so the pos_holder
         finding code has been removed (actually moved into self.GetUpperMatrix)'''
 
         pos_holder = min(row, col) - 1
-
         '''This bit extracts the identity part from R (future note this could be replaced by an I matrix formed by min(row,col))'''
 
         r_ipart = scipy.zeros((pos_holder + 1, pos_holder + 1)).astype(t)
         r_ipart = R_a[: pos_holder + 1, : pos_holder + 1]
 
         row_i, col_i = r_ipart.shape
-
         '''If there are free variables, then this bit will extract them and form the row/col vectors'''
 
         empty_rf = 0
@@ -1302,8 +1242,7 @@ class Stoich(MathArrayFunc):
         )
 
     def L_split_R(self, Nfull, R_a, row_vector, column_vector):
-        """
-        L_split_R(Nfull,R_a,row_vector,column_vector)
+        """L_split_R(Nfull,R_a,row_vector,column_vector)
 
         Takes the Gauss-Jordan factorized N^T and extract the L, Lo, conservation (I -Lo) and reduced stoichiometric matrices. Returns: lmatrix_col_vector, lomatrix, lomatrix_row, lomatrix_co, nrmatrix, Nred_vector_row, Nred_vector_col, info
 
@@ -1313,7 +1252,6 @@ class Stoich(MathArrayFunc):
         R_a: gauss-jordan factorized form of N^T
         row_vector: row tracking vector
         column_vector: column tracking vector
-
         """
         print('.',)
 
@@ -1321,13 +1259,11 @@ class Stoich(MathArrayFunc):
         # print str(R_a)
         t = self.commonType(R_a)
         row, col = R_a.shape
-
         '''14/09/2000 Seeing as we now should have a perfect staircase in a reduced matrix we do
         not have to search for the last pivot it will exist at min(row,col)-1 so the pos_holder
         finding code has been removed (actually moved into self.GetUpperMatrix)'''
 
         pos_holder = min(row, col) - 1
-
         '''Here we extract the identity matrix from R (future note this could be replaced by an I matrix formed by min(row,col))'''
 
         r_ipart = scipy.zeros((pos_holder + 1, pos_holder + 1)).astype(t)
@@ -1338,7 +1274,6 @@ class Stoich(MathArrayFunc):
         #    exit1 = 'no' # 2001/04/26 changed for Python21 and future compatibility
         exit1 = 0
         L_switch = False  # added 20020416 class attribute for conservation detection 0 = none, 1 = exists
-
         '''If there are free variable then they are extracted and packaged, row/col vectors are formed'''
 
         if col - col_i > self.stoichiometric_analysis_fp_zero:
@@ -1412,7 +1347,6 @@ class Stoich(MathArrayFunc):
 
             id = scipy.identity(col).astype(t)
             lmatrix = scipy.concatenate((id, r_fpart), 0).astype(t)
-
             '''This bit creates Nr. The transpose is only necessary if Nfull is already transposed in the input function'''
 
             Nfull = scipy.transpose(Nfull)
@@ -1439,8 +1373,7 @@ class Stoich(MathArrayFunc):
             )
 
     def SVD_Rank_Check(self, matrix=None, factor=1.0e4, resultback=0):
-        """
-        SVD_Rank_Check(matrix=None,factor=1.0e4,resultback=0)
+        """SVD_Rank_Check(matrix=None,factor=1.0e4,resultback=0)
 
         Calculates the dimensions of L/L0/K/K) by way of SVD and compares them to the Guass-Jordan results. Please note that for LARGE ill conditioned matrices the SVD can become numerically unstable when used for nullspace determinations
 
@@ -1449,7 +1382,6 @@ class Stoich(MathArrayFunc):
         matrix [default=None]: the stoichiometric matrix default is self.Nmatrix
         factor [default=1.0e4]: factor used to calculate the 'zero pivot' mask = mach_eps*factor
         resultback [default=0]: return the SVD results, U, S, vh
-
         """
         if matrix == None:
             matrix = self.nmatrix

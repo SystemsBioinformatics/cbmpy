@@ -68,25 +68,16 @@ class NetDBbase(object):
     text_encoding = 'utf8'
 
     def URLEncode(self, txt):
-        """
-        URL encodes a string.
-
-        """
+        """URL encodes a string."""
         return urlquote(txt.encode(self.text_encoding))
 
     def URLDecode(self, txt):
-        """
-        Decodes a URL encoded string
-
-        """
+        """Decodes a URL encoded string."""
         return urlunquote(txt)
 
 
 class DBTools(NetDBbase):
-    """
-    Tools to work with SQLite DB's (optimized, no SQL required).
-
-    """
+    """Tools to work with SQLite DB's (optimized, no SQL required)."""
 
     sqlite = None
     sqlite_version = None
@@ -107,12 +98,10 @@ class DBTools(NetDBbase):
         self.db_tables = []
 
     def connectSQLiteDB(self, db_name, work_dir=None):
-        """
-        Connect to a sqlite database.
+        """Connect to a sqlite database.
 
         - *db_name* the name of the sqlite database
         - *work_dir* the optional database path
-
         """
         # connect to DB
         if work_dir != None:
@@ -123,9 +112,7 @@ class DBTools(NetDBbase):
         self.db_cursor = self.db_conn.cursor()
 
     def commitDB(self):
-        """
-        Commits all curent changes to DB, returns a boolean.
-        """
+        """Commits all curent changes to DB, returns a boolean."""
         try:
             self.db_cursor.connection.commit()
             return True
@@ -198,17 +185,15 @@ class DBTools(NetDBbase):
             return False
 
     def updateData(self, table, col, rid, data, commit=True):
-        """
-        Update already defined data
+        """Update already defined data.
 
-         - *table* the table name
-         - *col* the column name
-         - *rid* the row id to update
-         - *data* a dictionary of {id:value} pairs
-         - *commit* whether to commit the data updates
+        - *table* the table name
+        - *col* the column name
+        - *rid* the row id to update
+        - *data* a dictionary of {id:value} pairs
+        - *commit* whether to commit the data updates
 
-         UPDATE COMPANY SET ADDRESS = 'Texas' WHERE ID = 6;
-
+        UPDATE COMPANY SET ADDRESS = 'Texas' WHERE ID = 6;
         """
 
         sql = 'UPDATE {} SET '.format(table)
@@ -226,13 +211,11 @@ class DBTools(NetDBbase):
             return False
 
     def checkEntryInColumn(self, table, col, rid):
-        """
-        Check if an entry exists in a table
+        """Check if an entry exists in a table.
 
         - *table* the table name
         - *col* the column name
         - *rid* the row to search for
-
         """
         self.db_cursor.execute(
             "SELECT count(*) FROM {} WHERE {}=\"{}\"".format(table, col, rid)
@@ -261,12 +244,10 @@ class DBTools(NetDBbase):
             return False
 
     def getColumns(self, table, cols):
-        """
-        Fetch the contents of one or more columns of data in a table
+        """Fetch the contents of one or more columns of data in a table.
 
-         - *table* the database table
-         - *cols* a list of one or more column id's
-
+        - *table* the database table
+        - *cols* a list of one or more column id's
         """
         sql = "SELECT "
         for c in cols:
@@ -288,14 +269,12 @@ class DBTools(NetDBbase):
             return dout
 
     def getRow(self, table, col, rid):
-        """
-        Get the table row(s) which correspond to rid in column. Returns the row(s) as a list, if the column is the primary key
-        this is always a single entry.
+        """Get the table row(s) which correspond to rid in column. Returns the row(s) as
+        a list, if the column is the primary key this is always a single entry.
 
-         - *table* the database table
-         - *col* the column id
-         - *rid* the row index id
-
+        - *table* the database table
+        - *col* the column id
+        - *rid* the row index id
         """
         sql = "SELECT * FROM {} WHERE {}=\"{}\"".format(table, col, rid)
         # print(sql)
@@ -317,14 +296,13 @@ class DBTools(NetDBbase):
             return dout
 
     def getCell(self, table, col, rid, cell):
-        """
-        Get the table cell which correspond to rid in column. Returns the value or None
+        """Get the table cell which correspond to rid in column. Returns the value or
+        None.
 
-         - *table* the database table
-         - *col* the column id
-         - *rid* the row index id
-         - *cell* the column of the cell you want tp extract
-
+        - *table* the database table
+        - *col* the column id
+        - *rid* the row index id
+        - *cell* the column of the cell you want tp extract
         """
         sql = "SELECT {} FROM {} WHERE {}=\"{}\"".format(cell, table, col, rid)
         # print(sql)
@@ -339,12 +317,10 @@ class DBTools(NetDBbase):
         return data
 
     def getTable(self, table, colOut=False):
-        """
-        Returns an entire database table
+        """Returns an entire database table.
 
-         - *table* the table name
-         - *colOut* optionally return a tuple of (data,ColNames)
-
+        - *table* the table name
+        - *colOut* optionally return a tuple of (data,ColNames)
         """
         sql = 'SELECT * FROM %s' % table
         sql2 = "PRAGMA table_info( %s )" % table
@@ -364,12 +340,10 @@ class DBTools(NetDBbase):
             return r
 
     def dumpTableToTxt(self, table, filename):
-        """
-        Save a table as tab separated txt file
+        """Save a table as tab separated txt file.
 
-         - *table* the table to export
-         - *filename* the filename of the table dump
-
+        - *table* the table to export
+        - *filename* the filename of the table dump
         """
         data, head = self.getTable(table, colOut=True)
         data.insert(0, head)
@@ -378,12 +352,10 @@ class DBTools(NetDBbase):
         exportLabelledLinkedList(data, fname=filename, names=None, sep='\t')
 
     def dumpTableToCSV(self, table, filename):
-        """
-        Save a table as tab separated txt file
+        """Save a table as tab separated txt file.
 
-         - *table* the table to export
-         - *filename* the filename of the table dump
-
+        - *table* the table to export
+        - *filename* the filename of the table dump
         """
         data, head = self.getTable(table, colOut=True)
         data.insert(0, head)
@@ -395,7 +367,7 @@ class DBTools(NetDBbase):
         del csvw
 
     def fetchAll(self, sql):
-        """Raw SQL query e.g. 'SELECT id FROM gene WHERE gene=\"G\"' """
+        """Raw SQL query e.g. 'SELECT id FROM gene WHERE gene=\"G\"'."""
         # print(sql)
         r = None
         try:
@@ -405,7 +377,8 @@ class DBTools(NetDBbase):
         return r
 
     def closeDB(self):
-        """Close the DB connection and reset the DBTools instance (can be reconnected)"""
+        """Close the DB connection and reset the DBTools instance (can be
+        reconnected)"""
         self.db_conn.close()
         self.db_conn = None
         self.db_cursor = None
@@ -413,9 +386,8 @@ class DBTools(NetDBbase):
 
 
 class KeGGTools(object):
-    """
-    Class that holds useful methods for querying KeGG via a SUDS provided soap client
-    """
+    """Class that holds useful methods for querying KeGG via a SUDS provided soap
+    client."""
 
     Kclient = None
 
@@ -425,9 +397,7 @@ class KeGGTools(object):
         self.Kclient = suds.client.Client(url)
 
     def fetchSeqfromKeGG(self, k_gene):
-        """
-        Given a gene name try and retrieve the gene and amino acid sequence
-        """
+        """Given a gene name try and retrieve the gene and amino acid sequence."""
         g2 = 'None'
         p2 = 'None'
         try:
@@ -458,9 +428,8 @@ class KeGGTools(object):
 
 
 class KeGGSequenceTools(object):
-    """
-    Using the KeGG connector this class provides tools to construct an organims specific sequence database
-    """
+    """Using the KeGG connector this class provides tools to construct an organims
+    specific sequence database."""
 
     DB = None
     KEGG = None
@@ -549,9 +518,8 @@ class KeGGSequenceTools(object):
 
 
 class RESTClient(NetDBbase):
-    """
-    Class that provides the basis for application specific connectors to REST web services
-    """
+    """Class that provides the basis for application specific connectors to REST web
+    services."""
 
     site_root = None
     conn = None
@@ -565,25 +533,20 @@ class RESTClient(NetDBbase):
         self.urllib2 = urllib2
 
     def Log(self, txt):
-        """
-        Add txt to logfile history
+        """Add txt to logfile history.
 
-         - *txt* a string
+        - *txt* a string
         """
         self.history += '%s - %s\n' % (time.strftime('%H:%M:%S'), str(txt))
 
     def GetLog(self):
-        """
-        Return the logged history
-        """
+        """Return the logged history."""
         return self.history
 
     def Connect(self, root):
-        """
-        Establish HTTP connection to
+        """Establish HTTP connection to.
 
-         - *root* the site root "www.google.com"
-
+        - *root* the site root "www.google.com"
         """
         try:
             self.site_root = root
@@ -625,9 +588,7 @@ class RESTClient(NetDBbase):
         return data1
 
     def Close(self):
-        """
-        Close the currently active connection
-        """
+        """Close the currently active connection."""
         if self.CONNECTED:
             self.conn.close()
             self.conn = None
@@ -637,9 +598,7 @@ class RESTClient(NetDBbase):
 
 
 class MIRIAMTools(object):
-    """
-    Tools dealing with MIRIAM annotations
-    """
+    """Tools dealing with MIRIAM annotations."""
 
     def MiriamURN2IdentifiersURL(self, urn):
         urn = urn.replace('urn:miriam:', '').split(':', 1)
@@ -649,10 +608,7 @@ class MIRIAMTools(object):
 
 
 class SemanticSBML(RESTClient, MIRIAMTools):
-    """
-    REST client for connecting to SemanticSBML services
-
-    """
+    """REST client for connecting to SemanticSBML services."""
 
     data = None
     item_re = re.compile('<item>.+?</item>')
@@ -661,12 +617,11 @@ class SemanticSBML(RESTClient, MIRIAMTools):
         RESTClient.__init__(self)
 
     def quickLookup(self, txt):
-        """
-        Do a quick lookpup for txt using SemanticSBML (connectic if required) and return results. Returns
-        a list of identifiers.org id's in descending priority (as return)
+        """Do a quick lookpup for txt using SemanticSBML (connectic if required) and
+        return results. Returns a list of identifiers.org id's in descending priority
+        (as return)
 
-         - *txt* the string to lookup
-
+        - *txt* the string to lookup
         """
 
         if not self.CONNECTED:
@@ -678,11 +633,10 @@ class SemanticSBML(RESTClient, MIRIAMTools):
         return self.data
 
     def viewDataInWebrowser(self, maxres=10):
-        """
-        Attempt to view #maxres results returned by SemanticSBML in the default browser
+        """Attempt to view #maxres results returned by SemanticSBML in the default
+        browser.
 
-         - *maxres* default maximum number of results to display.
-
+        - *maxres* default maximum number of results to display.
         """
         cntr = 0
         for u_ in self.data:
@@ -696,11 +650,9 @@ class SemanticSBML(RESTClient, MIRIAMTools):
                 break
 
     def parseXMLtoText(self, xml):
-        """
-        Parse the xml output by quickLookup() into a list of URL
+        """Parse the xml output by quickLookup() into a list of URL.
 
-         - *xml* XML returns from SemanticSBML
-
+        - *xml* XML returns from SemanticSBML
         """
         return [
             i.replace('<item>', '').replace('</item>', '').strip()

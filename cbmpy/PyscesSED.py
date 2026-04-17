@@ -34,10 +34,8 @@ except ImportError:
 
 
 class SBWSEDMLWebApps:
-    """
-    Class that holds useful methods for using SBW Webapps via a SUDS provided soap client
-
-    """
+    """Class that holds useful methods for using SBW Webapps via a SUDS provided soap
+    client."""
 
     Kclient = None
     SBWSEDMLURI = "http://sysbioapps.dyndns.org/SED-ML%20Web%20Tools/Services/SedMLService.asmx?WSDL"
@@ -45,11 +43,9 @@ class SBWSEDMLWebApps:
     _SED_CURRENT_ = False
 
     def __init__(self, url=None):
-        """
-        Attempt to create a connector if SUDS is install
+        """Attempt to create a connector if SUDS is install.
 
         - *url* the url to the SBW SED-ML SOAP web services only set if the default doesn't work
-
         """
         if url == None:
             url = self.SBWSEDMLURI
@@ -75,10 +71,7 @@ class SBWSEDMLWebApps:
             self.HAVE_SUDS = False
 
     def GetVersion(self):
-        """
-        The ubiquitous connection test, returns the webservices version
-
-        """
+        """The ubiquitous connection test, returns the webservices version."""
         if not self.HAVE_SUDS or self.Kclient == None:
             print(
                 '\nERROR: No suds client or connection, cannot comply with your request\n'
@@ -141,12 +134,11 @@ class SED(object):
     __pysces__ = None
 
     def __init__(self, id, sedpath, libSEDMLpath=None, sbwsedmluri=None):
-        """
-        Try to establish whether we have access to libSEDML locally installed or the SBW SEDML webservices
+        """Try to establish whether we have access to libSEDML locally installed or the
+        SBW SEDML webservices.
 
-         - *libSEDMLpath* [default=None] uses the default path to "SedMLConsole.exe" unless specified
-         - *sbwsedmluri* [default=None] uses the default uri for the SBW webservices unless specified
-
+        - *libSEDMLpath* [default=None] uses the default path to "SedMLConsole.exe" unless specified
+        - *sbwsedmluri* [default=None] uses the default uri for the SBW webservices unless specified
         """
         if libSEDMLpath == None:
             self.libSEDMLpath = (
@@ -836,10 +828,7 @@ class SEDCBMPY(SED):
 
 
 def storeObj(obj, filename):
-    """
-    Stores a Python *obj* as a serialised binary object in *filename*.dat
-
-    """
+    """Stores a Python *obj* as a serialised binary object in *filename*.dat."""
     filename = filename + '.dat'
     F = open(filename, 'wb')
     pickle.dump(obj, F, protocol=2)
@@ -848,10 +837,7 @@ def storeObj(obj, filename):
 
 
 def loadObj(filename):
-    """
-    Loads a serialised Python pickle from *filename* returns the Python object(s)
-
-    """
+    """Loads a serialised Python pickle from *filename* returns the Python object(s)"""
     assert os.path.exists(filename), '\nTry again mate!'
     F = open(filename, 'rb')
     obj = pickle.load(F)

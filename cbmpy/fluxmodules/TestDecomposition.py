@@ -40,7 +40,7 @@ from .sparserationals import Matrix
 class TestDecomposition(unittest.TestCase):
 
     def setUp(self):
-        """ create test matroid """
+        """Create test matroid."""
         mat = Matrix([[-2, -1, 1, 0, 0, 0, 0, 0, 0],
                       [1, 0, 0, -1, 0, 0, 0, 0, 0],
                       [0, 1, -1, 1, -1, -1, 0, 0, 0],

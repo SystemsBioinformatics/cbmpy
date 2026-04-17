@@ -69,9 +69,7 @@ __version__ = __CBCONFIG__['VERSION']
 
 
 def createTempFileName():
-    """
-    Return a temporary filename
-    """
+    """Return a temporary filename."""
     return str(time.time()).split('.')[0]
 
 
@@ -79,13 +77,11 @@ def createTempFileName():
 
 
 def storeObj(obj, filename, compress=False):
-    """
-    Stores a Python *obj* as a serialised binary object in *filename*.dat
+    """Stores a Python *obj* as a serialised binary object in *filename*.dat.
 
     - *obj* a python object
     - *filename* the base filename
     - *compress* [False] use gzip compression not *implemented*
-
     """
     if filename[-4:] != '.dat':
         filename = filename + '.dat'
@@ -96,10 +92,8 @@ def storeObj(obj, filename, compress=False):
 
 
 def loadObj(filename):
-    """
-    Loads a serialised Python pickle from *filename*.dat returns the Python object(s)
-
-    """
+    """Loads a serialised Python pickle from *filename*.dat returns the Python
+    object(s)"""
     if filename[-4:] != '.dat':
         filename = filename + '.dat'
     assert os.path.exists(filename), '\nFile \"{}\" does not exist'.format(filename)
@@ -110,18 +104,12 @@ def loadObj(filename):
 
 
 def deSerialize(s):
-    """
-    Deserializes a serialised object contained in a string
-
-    """
+    """Deserializes a serialised object contained in a string."""
     return pickle.loads(s)
 
 
 def deSerializeFromDisk(filename):
-    """
-    Loads a serialised Python pickle from *filename* returns the Python object(s)
-
-    """
+    """Loads a serialised Python pickle from *filename* returns the Python object(s)"""
     assert os.path.exists(filename), '\nFile \"{}\" does not exist'.format(filename)
     F = open(filename, 'rb')
     obj = pickle.load(F)
@@ -137,14 +125,12 @@ def addStoichToFBAModel(fm):
 
 
 def addSinkReaction(fbam, species, lb=0.0, ub=1000.0):
-    """
-    Adds a sink reactions that consumes a model *species* so that X -->
+    """Adds a sink reactions that consumes a model *species* so that X -->
 
-     - *fbam* an fba model object
-     - *species* a valid species name
-     - *lb* lower flux bound [default = 0.0]
-     - *ub* upper flux bound [default = 1000.0]
-
+    - *fbam* an fba model object
+    - *species* a valid species name
+    - *lb* lower flux bound [default = 0.0]
+    - *ub* upper flux bound [default = 1000.0]
     """
     assert species in fbam.getSpeciesIds(), '\n%s is not a valid species' % species
     if lb < 0.0:
@@ -175,8 +161,7 @@ def addSinkReaction(fbam, species, lb=0.0, ub=1000.0):
 
 # TODO: check this
 def addSourceReaction(fbam, species, lb=0.0, ub=1000.0):
-    """
-    Adds a source reactions that produces a model *species* so that --> X
+    """Adds a source reactions that produces a model *species* so that --> X.
 
      - *fbam* an fba model object
      - *species* a valid species name
@@ -185,7 +170,6 @@ def addSourceReaction(fbam, species, lb=0.0, ub=1000.0):
 
     Note reversiblity is determined by the lower bound, default 0 = irreversible. If
     negative then reversible.
-
     """
     assert species in fbam.getSpeciesIds(), '\n%s is not a valid species' % species
     if lb < 0.0:
@@ -215,10 +199,8 @@ def addSourceReaction(fbam, species, lb=0.0, ub=1000.0):
 
 
 def findDeadEndMetabolites(fbam):
-    """
-    Finds dead-end (single reaction) metabolites rows in N with a single entry), returns a list of (metabolite, reaction) ids
-
-    """
+    """Finds dead-end (single reaction) metabolites rows in N with a single entry),
+    returns a list of (metabolite, reaction) ids."""
     fbam.buildStoichMatrix()
     orphaned_list = []
     for rr in range(fbam.N.array.shape[0]):
@@ -234,10 +216,8 @@ def findDeadEndMetabolites(fbam):
 
 
 def findDeadEndReactions(fbam):
-    """
-    Finds dead-end (single substrate/product) reactions (cols in N with a single entry), returns a list of (metabolite, reaction) ids
-
-    """
+    """Finds dead-end (single substrate/product) reactions (cols in N with a single
+    entry), returns a list of (metabolite, reaction) ids."""
     fbam.buildStoichMatrix()
     orphaned_list = []
     for cc in range(fbam.N.array.shape[1]):
@@ -255,15 +235,13 @@ def findDeadEndReactions(fbam):
 def setSpeciesPropertiesFromAnnotations(
     fbam, overwriteCharge=False, overwriteChemFormula=False
 ):
-    """
-    This will attempt to set the model Species properties from the annotation. With the default options
-    it will only replace missing data. With ChemicalFormula this is easy to detect however charge may
-    have an "unknown value" of 0. Setting the optional values to true will replace any existing value
-    with any valid annotation.
+    """This will attempt to set the model Species properties from the annotation. With
+    the default options it will only replace missing data. With ChemicalFormula this is
+    easy to detect however charge may have an "unknown value" of 0. Setting the optional
+    values to true will replace any existing value with any valid annotation.
 
-     - *overwriteChemFormula* [default=False]
-     - *overwriteCharge* [default=False]
-
+    - *overwriteChemFormula* [default=False]
+    - *overwriteCharge* [default=False]
     """
     for s_ in fbam.species:
         try:
@@ -282,12 +260,10 @@ def setSpeciesPropertiesFromAnnotations(
 
 
 def fixReversibility(fbam, auto_correct=False):
-    """
-    Set fluxbound lower bound from reactions reversibility information.
+    """Set fluxbound lower bound from reactions reversibility information.
 
-     - *fbam* and FBAModel instance
-     - *auto_correct* (default=False) if True automatically sets lower bound to zero if required, otherwise prints a warning if false.
-
+    - *fbam* and FBAModel instance
+    - *auto_correct* (default=False) if True automatically sets lower bound to zero if required, otherwise prints a warning if false.
     """
     for c in fbam.flux_bounds:
         R = c.reaction
@@ -317,8 +293,8 @@ def fixReversibility(fbam, auto_correct=False):
 
 
 def splitReversibleReactions(fba, selected_reactions=None):
-    """
-    Split a (set of) reactions into reversible reactions returns a copy of the original model
+    """Split a (set of) reactions into reversible reactions returns a copy of the
+    original model.
 
     R1: A = B
     R1f: A -> B
@@ -326,7 +302,6 @@ def splitReversibleReactions(fba, selected_reactions=None):
 
      - *fba* an instantiated CBMPy model object
      - *selected_reactions* if a reversible reaction id is in here split it
-
     """
     if selected_reactions is None:
         selected_reactions = []
@@ -342,9 +317,8 @@ def splitReversibleReactions(fba, selected_reactions=None):
 
 
 def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
-    """
-    Split a single reversible reaction into two irreversible reactions, returns the original reversible reaction and bounds
-    while deleting them from model.
+    """Split a single reversible reaction into two irreversible reactions, returns the
+    original reversible reaction and bounds while deleting them from model.
 
     R1: A = B
     R1_fwd: A -> B
@@ -354,7 +328,6 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
      - *rid* a valid reaction id
      - *fwd_id* [default=None] the new forward reaction id, defaults to rid_fwd
      - *rev_id* [default=None] the new forward reaction id, defaults to rid_rev
-
     """
     R = fba.getReaction(rid)
 
@@ -448,15 +421,13 @@ def splitSingleReversibleReaction(fba, rid, fwd_id=None, rev_id=None):
 
 
 def exportLabelledArray(arr, fname, names=None, sep=',', fmt='%f'):
-    """
-    Write a 2D array type object to file
+    """Write a 2D array type object to file.
 
-     - *arr* the an array like object
-     - *names* [default=None] the list of row names
-     - *fname* the output filename
-     - *sep* [default=','] the column separator
-     - *fmt* [default='%s'] the output number format
-
+    - *arr* the an array like object
+    - *names* [default=None] the list of row names
+    - *fname* the output filename
+    - *sep* [default=','] the column separator
+    - *fmt* [default='%s'] the output number format
     """
     if names != None:
         assert arr.shape[0] == len(names), '\n ...  rows must equal number of names!'
@@ -483,17 +454,15 @@ def exportLabelledArray(arr, fname, names=None, sep=',', fmt='%f'):
 def exportLabelledArrayWithHeader(
     arr, fname, names=None, header=None, sep=',', fmt='%f'
 ):
-    """
-    Export an array with row names and header
+    """Export an array with row names and header.
 
-     - *arr* the an array like object
-     - *names* [default=None] the list of row names
-     - *header* [default=None] the list of column names
-     - *fname* the output filename
-     - *sep* [default=','] the column separator
-     - *fmt* [default='%s'] the output number format
-     - *appendlist* [default=False] if True append the array to *fname* otherwise create a new file
-
+    - *arr* the an array like object
+    - *names* [default=None] the list of row names
+    - *header* [default=None] the list of column names
+    - *fname* the output filename
+    - *sep* [default=','] the column separator
+    - *fmt* [default='%s'] the output number format
+    - *appendlist* [default=False] if True append the array to *fname* otherwise create a new file
     """
     if names != None:
         assert arr.shape[0] == len(names), '\n ...  rows must equal number of names!'
@@ -587,95 +556,81 @@ def exportLabelledLinkedList(
 
 
 def exportLabelledArrayWithHeader2CSV(arr, fname, names=None, header=None):
-    """
-    Export an array with row names and header to fname.csv
+    """Export an array with row names and header to fname.csv.
 
-     - *arr* the an array like object
-     - *fname* the output filename
-     - *names* [default=None] the list of row names
-     - *header* [default=None] the list of column names
-
+    - *arr* the an array like object
+    - *fname* the output filename
+    - *names* [default=None] the list of row names
+    - *header* [default=None] the list of column names
     """
     fname += '.csv'
     exportLabelledArrayWithHeader(arr, fname, names, header, sep=',', fmt='%f')
 
 
 def exportLabelledArray2CSV(arr, fname, names=None):
-    """
-    Export an array with row names to fname.csv
+    """Export an array with row names to fname.csv.
 
-     - *arr* the an array like object
-     - *fname* the output filename
-     - *names* [default=None] the list of row names
-
+    - *arr* the an array like object
+    - *fname* the output filename
+    - *names* [default=None] the list of row names
     """
     fname += '.csv'
     exportLabelledArray(arr, fname, names, sep=',', fmt='%f')
 
 
 def exportArray2CSV(arr, fname):
-    """
-    Export an array to fname.csv
+    """Export an array to fname.csv.
 
-     - *arr* the an array like object
-     - *fname* the output filename
-     - *sep* [default=','] the column separator
-
+    - *arr* the an array like object
+    - *fname* the output filename
+    - *sep* [default=','] the column separator
     """
     fname += '.csv'
     exportLabelledArray(arr, fname, None, sep=',', fmt='%f')
 
 
 def exportLabelledArrayWithHeader2TXT(arr, fname, names=None, header=None):
-    """
-    Export an array with row names and header to fname.txt
+    """Export an array with row names and header to fname.txt.
 
-     - *arr* the an array like object
-     - *names* the list of row names
-     - *header* the list of column names
-     - *fname* the output filename
-
+    - *arr* the an array like object
+    - *names* the list of row names
+    - *header* the list of column names
+    - *fname* the output filename
     """
     fname += '.txt'
     exportLabelledArrayWithHeader(arr, fname, names, header, sep='\t', fmt='%f')
 
 
 def exportLabelledArray2TXT(arr, fname, names=None):
-    """
-    Export an array with row names to fname.txt
+    """Export an array with row names to fname.txt.
 
-     - *arr* the an array like object
-     - *names* [default=None] the list of row names
-     - *fname* the output filename
-
+    - *arr* the an array like object
+    - *names* [default=None] the list of row names
+    - *fname* the output filename
     """
     fname += '.txt'
     exportLabelledArray(arr, fname, names, sep='\t', fmt='%f')
 
 
 def exportArray2TXT(arr, fname):
-    """
-    Export an array to fname.txt
+    """Export an array to fname.txt.
 
-     - *arr* the an array like object
-     - *fname* the output filename
-     - *sep* [default=','] the column separator
-
+    - *arr* the an array like object
+    - *fname* the output filename
+    - *sep* [default=','] the column separator
     """
     fname += '.txt'
     exportLabelledArray(arr, fname, None, sep='\t', fmt='%f')
 
 
 def stringReplace(fbamod, old, new, target):
-    """
-    This is alpha stuff, target can be:
+    """This is alpha stuff, target can be:
 
-     - 'species'
-     - 'reactions'
-     - 'constraints'
-     - 'objectives'
-     - 'all'
-
+    - 'species'
+    - 'reactions'
+    - 'constraints'
+    - 'objectives'
+    - 'all'
     """
     print('stringReplace is relatively new and UNTESTED')
     fbamod.id = fbamod.id.replace(old, new)
@@ -701,9 +656,7 @@ def stringReplace(fbamod, old, new, target):
 
 
 def getBoundsDict(fbamod, substring=None):
-    """
-    Return a dictionary of reactions&bounds
-    """
+    """Return a dictionary of reactions&bounds."""
     rBdic = {}
     for r in fbamod.getReactionIds(substring=substring):
         name, lb, ub, eq = fbamod.getReactionBounds(r)
@@ -712,11 +665,10 @@ def getBoundsDict(fbamod, substring=None):
 
 
 def getExchBoundsDict(fbamod):
-    """
-    Return a dictionary of all exchange reactions (as determined by the is_exchange attribute of Reaction)
+    """Return a dictionary of all exchange reactions (as determined by the is_exchange
+    attribute of Reaction)
 
     - *fbamod* a CBMPy model
-
     """
     rBdic = {}
     for r in fbamod.getReactionIds(substring=None):
@@ -729,12 +681,10 @@ def getExchBoundsDict(fbamod):
 
 
 def processBiGGchemFormula(fba):
-    """
-    Disambiguates the overloaded BiGG name NAME_CHEMFORMULA into
+    """Disambiguates the overloaded BiGG name NAME_CHEMFORMULA into.
 
-     - *species.name* NAME
-     - *species.chemFormula* CHEMFORMULA
-
+    - *species.name* NAME
+    - *species.chemFormula* CHEMFORMULA
     """
     for s in fba.species:
         # print s.name
@@ -759,12 +709,11 @@ def processBiGGchemFormula(fba):
 
 
 def processBiGGannotationNote(fba, annotation_key='note'):
-    """
-    Parse the HTML formatted reaction information stored in the BiGG notes field.
-    This function is being deprecated and replaced by `CBTools.processSBMLAnnotationNotes()`
+    """Parse the HTML formatted reaction information stored in the BiGG notes field.
+    This function is being deprecated and replaced by
+    `CBTools.processSBMLAnnotationNotes()`
 
-     - requires an *annotation_key* which contains a BiGG HTML fragment
-
+    - requires an *annotation_key* which contains a BiGG HTML fragment
     """
     print(
         '\nDeprecation warning:\nCBTools.processBiGGannotationNote() is being replaced with CBTools.processSBMLAnnotationNotes'
@@ -793,13 +742,11 @@ def processBiGGannotationNote(fba, annotation_key='note'):
 
 
 def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
-    """
-    Parse the HTML formatted reaction information stored in the SBML notes field currently
-    processes BiGG and PySCeSCBM style annotations it looks for the the annotation indexed
-    with the *annotation_key*
+    """Parse the HTML formatted reaction information stored in the SBML notes field
+    currently processes BiGG and PySCeSCBM style annotations it looks for the the
+    annotation indexed with the *annotation_key*
 
-     - *annotation_key* [default='note'] which contains a HTML/XHTML fragment in BiGG/PySCeSCBM format (ignored in L3)
-
+    - *annotation_key* [default='note'] which contains a HTML/XHTML fragment in BiGG/PySCeSCBM format (ignored in L3)
     """
 
     # if hasattr(fba, '_SBML_LEVEL_') and fba._SBML_LEVEL_ != None:
@@ -969,12 +916,10 @@ def processSBMLAnnotationNotes(fba, annotation_key='note', level=3):
 
 
 def processExchangeReactions(fba, key):
-    """
-    Extract exchange reactions from model using *key* and return:
+    """Extract exchange reactions from model using *key* and return:
 
-     - a dictionary of all exchange reactions without *medium* reactions
-     - a dictionary of *medium* exchange reactions (negative lower bound)
-
+    - a dictionary of all exchange reactions without *medium* reactions
+    - a dictionary of *medium* exchange reactions (negative lower bound)
     """
     # extract all exchange bounds
     if key is None:
@@ -1064,10 +1009,8 @@ def getAllReactionsAssociatedWithGene(
 
 
 def scanForReactionDuplicates(f, ignore_coefficients=False):
-    """
-    This method uses uses a brute force apprach to finding reactions with matching
-    stoichiometry
-    """
+    """This method uses uses a brute force apprach to finding reactions with matching
+    stoichiometry."""
     duplicates = []
     for r in f.reactions:
         Rref = r.getSpeciesIds()
@@ -1129,15 +1072,14 @@ def countedPause(Tsec):
 
 
 def addGenesFromAnnotations(fba, annotation_key='GENE ASSOCIATION', gene_pattern=None):
-    """
-    THIS METHOD IS DERPRECATED PLEASE USE cmod.createGeneAssociationsFromAnnotations()
+    """THIS METHOD IS DERPRECATED PLEASE USE
+    cmod.createGeneAssociationsFromAnnotations()
 
     Add genes to the model using the definitions stored in the annotation key
 
      - *fba* and fba object
      - *annotation_key* the annotation dictionary key that holds the gene association for the protein/enzyme
      - *gene_pattern* deprecated, not needed anymore
-
     """
 
     print(
@@ -1151,15 +1093,14 @@ def addGenesFromAnnotations(fba, annotation_key='GENE ASSOCIATION', gene_pattern
 def getModelGenesPerReaction(
     fba, gene_pattern=None, gene_annotation_key='GENE ASSOCIATION'
 ):
-    '''
-    Parse a BiGG style gene annotation string using default gene_pattern='(\(\W*\w*\W*\))' or
-    (<any non-alphanum><any alphanum><any non-alphanum>)
+    """Parse a BiGG style gene annotation string using default
+    gene_pattern='(\(\W*\w*\W*\))' or (<any non-alphanum><any alphanum><any non-
+    alphanum>)
 
     Old eColi specific pattern '(b\w*\W)'
 
     It is advisable to use the model methods directly rather than this function
-
-    '''
+    """
 
     react_gene = {}
     # gene_re = re.compile(gene_pattern)
@@ -1217,13 +1158,12 @@ def getReactionsPerGene(react_gene):
 
 
 def removeFixedSpeciesReactions(f):
-    """
-    This function is a hack that removes reactions which only have boundary species as reactants
-    and products. These are typically gene associations encoded in the Manchester style and there
-    is probably a better way of working around this problem ...
+    """This function is a hack that removes reactions which only have boundary species
+    as reactants and products. These are typically gene associations encoded in the
+    Manchester style and there is probably a better way of working around this problem
+    ...
 
-     - *f* an instantiated fba model object
-
+    - *f* an instantiated fba model object
     """
     c_react = []
     for rea in f.reactions:
@@ -1237,13 +1177,11 @@ def removeFixedSpeciesReactions(f):
 
 
 def addFluxAsActiveObjective(f, reaction_id, osense, coefficient=1):
-    """
-    Adds a flux as an active objective function
+    """Adds a flux as an active objective function.
 
-     - *reaction_id* a string containing a reaction id
-     - *osense* objective sense must be **maximize** or **minimize**
-     - *coefficient* the objective funtion coefficient [default=1]
-
+    - *reaction_id* a string containing a reaction id
+    - *osense* objective sense must be **maximize** or **minimize**
+    - *coefficient* the objective funtion coefficient [default=1]
     """
     osense = osense.lower()
     if osense == 'max':
@@ -1267,15 +1205,13 @@ def addFluxAsActiveObjective(f, reaction_id, osense, coefficient=1):
 
 
 def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
-    """
-    Check if the reaction is balanced using the chemical formula
+    """Check if the reaction is balanced using the chemical formula.
 
      - *f* the FBA object
      - *Rid* [default = None] the reaction to check, defaults to all
      - *zero_tol* [default=1.0e-12] the floating point zero used for elemental balancing
 
     This function is derived from the code found here: http://pyparsing.wikispaces.com/file/view/chemicalFormulas.py
-
     """
     assert HAVE_PYPARSING, '\nPyParsing needs to be installed for this method'
     if Rid is None:
@@ -1360,14 +1296,13 @@ def checkReactionBalanceElemental(f, Rid=None, zero_tol=1.0e-12):
 
 
 def scanForUnbalancedReactions(f, output='all'):
-    """
-    Scan a model for unbalanced reactions, returns a tuple of dictionaries balanced and unbalanced:
+    """Scan a model for unbalanced reactions, returns a tuple of dictionaries balanced
+    and unbalanced:
 
-     - *f* an FBA model instance
-     - *output* [default='all'] can be one of ['all','charge','element']
-     - *charge* return all charge **un** balanced reactions
-     - *element* return all element **un** balanced reactions
-
+    - *f* an FBA model instance
+    - *output* [default='all'] can be one of ['all','charge','element']
+    - *charge* return all charge **un** balanced reactions
+    - *element* return all element **un** balanced reactions
     """
     bcheck = checkReactionBalanceElemental(f)
     badD = bcheck.copy()
@@ -1394,14 +1329,12 @@ def scanForUnbalancedReactions(f, output='all'):
 
 
 def createZipArchive(zipname, files, move=False, compression='normal'):
-    """
-    Create a zip archive which contains one or more files
+    """Create a zip archive which contains one or more files.
 
-     - *zipname* the name of the zip archive to create (fully qualified)
-     - *files* either a valid filename or a list of filenames (fully qualified)
-     - *move* [default=False] attempt to delete input files after zip-archive creation
-     - *compression* [default='normal'] normal zip compression, set as None for no compression only store files (zlib not required)
-
+    - *zipname* the name of the zip archive to create (fully qualified)
+    - *files* either a valid filename or a list of filenames (fully qualified)
+    - *move* [default=False] attempt to delete input files after zip-archive creation
+    - *compression* [default='normal'] normal zip compression, set as None for no compression only store files (zlib not required)
     """
 
     if compression is None:
@@ -1434,13 +1367,11 @@ def createZipArchive(zipname, files, move=False, compression='normal'):
 
 
 def checkExchangeReactions(fba, autocorrect=True):
-    """
-    Scan all reactions for exchange reactions (reactions containing a boundary species), return a list of
-    inconsistent reactions or correct automatically.
+    """Scan all reactions for exchange reactions (reactions containing a boundary
+    species), return a list of inconsistent reactions or correct automatically.
 
     - *fba* a CBMPy model
     - *autocorrect* [default=True] correctly set the "is_exchange" attribute on a reaction
-
     """
     badR = []
     for r_ in fba.reactions:
@@ -1471,13 +1402,11 @@ def checkExchangeReactions(fba, autocorrect=True):
 
 
 def checkIds(fba, items='all'):
-    """
-    Checks the id's of the specified model attributes to see if the name is legal and if there are duplicates.
-    Returns a list of items with errors.
+    """Checks the id's of the specified model attributes to see if the name is legal and
+    if there are duplicates. Returns a list of items with errors.
 
     - *fba* a CBMPy model instance
     - *items* [default='all'] 'all' means 'species,reactions,flux_bounds,objectives' of which one or more can be specified
-
     """
 
     if items == 'all':
@@ -1537,10 +1466,10 @@ def checkIds(fba, items='all'):
 
 
 def checkFluxBoundConsistency(fba):
-    """
-    Check flux bound consistency checks for multiply defined bounds, bounds without a reaction, inconsistent bounds with respect to each other
-    and reaction reversbility. Returns a dictionary of bounds/reactions where errors occur.
+    """Check flux bound consistency checks for multiply defined bounds, bounds without a
+    reaction, inconsistent bounds with respect to each other and reaction reversbility.
 
+    Returns a dictionary of bounds/reactions where errors occur.
     """
 
     dupIDs = checkIds(fba, items='flux_bounds')['flux_bounds']
@@ -1690,13 +1619,12 @@ def checkFluxBoundConsistency(fba):
 
 
 def roundOffWithSense(val, osense='max', tol=1e-8):
-    """
-    Round of a value in a way that takes into consideration the sense of the operation that generated it
+    """Round of a value in a way that takes into consideration the sense of the
+    operation that generated it.
 
-     - *val* the value
-     - *osense* [default='max'] the sense
-     - *tol* [default=1e-8] the tolerance of the roundoff factor
-
+    - *val* the value
+    - *osense* [default='max'] the sense
+    - *tol* [default=1e-8] the tolerance of the roundoff factor
     """
     if osense.lower() in ['min', 'minimize', 'minimise']:
         val = numpy.ceil(val / tol) * tol
@@ -1706,15 +1634,13 @@ def roundOffWithSense(val, osense='max', tol=1e-8):
 
 
 def mergeGroups(m, groups, new_id, new_name='', auto_delete=False):
-    """
-    Merge a list of groups into a new group. Note, annotations are not merged!
+    """Merge a list of groups into a new group. Note, annotations are not merged!
 
-     - *m* the model containing the source groups
-     - *groups* a list of groups
-     - *new_id* the new, merged, group id
-     - *new_name* [default=''] the new group name, the default behaviour is to merge the old names
-     - *auto_delete* [default=False] delete the source groups
-
+    - *m* the model containing the source groups
+    - *groups* a list of groups
+    - *new_id* the new, merged, group id
+    - *new_name* [default=''] the new group name, the default behaviour is to merge the old names
+    - *auto_delete* [default=False] delete the source groups
     """
     if type(groups) == list and len(groups) > 1:
         badgid = []
@@ -1757,10 +1683,10 @@ def mergeGroups(m, groups, new_id, new_name='', auto_delete=False):
 
 
 def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
-    """
-    Merge 2 models, this method does a raw merge of model 2 into model 1 without any model checking.
-    Component id's in ignore are ignored in both models and the first objective of model 1 is arbitrarily
-    set as active. Compartments are also merged and a new "OuterMerge" compartment is also created.
+    """Merge 2 models, this method does a raw merge of model 2 into model 1 without any
+    model checking. Component id's in ignore are ignored in both models and the first
+    objective of model 1 is arbitrarily set as active. Compartments are also merged and
+    a new "OuterMerge" compartment is also created.
 
     In all cases duplicate id's are tracked and ignored, essentially using the object id encountered first -
     usually that of model 1. Duplicate checking can be disabled by setting the *ignore_duplicate_ids* flag.
@@ -1771,7 +1697,6 @@ def merge2Models(m1, m2, ignore=None, ignore_duplicate_ids=False):
     - *ignore_duplicate_ids* [False] default behaviour that can be enabled
 
     In development: merging genes and gpr's.
-
     """
     if ignore is None:
         ignore = []

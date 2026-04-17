@@ -27,14 +27,13 @@ import numpy
 
 
 class Matrix:
-    """ sparse matrix of rational numbers (fractions)
+    """Sparse matrix of rational numbers (fractions)
 
     The matrix grows by demand.
     """
 
     def __init__(self, listRep=None):
-        """" Creates empty matrix.
-        """
+        """ " Creates empty matrix."""
         self.__cols = []
         self.__nrows = 0
 
@@ -48,7 +47,7 @@ class Matrix:
         return len(self.__cols)
 
     def getCol(self, idx):
-        """ returns the column at index idx as a frozen set of key-value pairs
+        """Returns the column at index idx as a frozen set of key-value pairs.
 
         The returned dictionary does not contain any superfluous zeros.
         """
@@ -75,10 +74,10 @@ class Matrix:
             out.__cols.append(col)
 
     def transpose(self, scalar=1):
-        """ creates a transpose of the matrix
+        """Creates a transpose of the matrix.
 
-        Optionally, the values can be multiplied by a scalar.
-        This is for example used to compute the dual matroid.
+        Optionally, the values can be multiplied by a scalar. This is for example used
+        to compute the dual matroid.
         """
         assert self.checkRows()
         out = Matrix()
@@ -94,7 +93,7 @@ class Matrix:
         return out
 
     def copy(self):
-        """ copies this matrix """
+        """Copies this matrix."""
         assert self.checkRows()
         out = Matrix()
         for c in self.__cols:
@@ -105,13 +104,12 @@ class Matrix:
         return out
 
     def __getitem__(self, indices):
-        """ fetch entries of this matrix
+        """Fetch entries of this matrix.
 
-        indices must be a 2-tuple indexing rows and columns.
-        This returns a matrix.
+        indices must be a 2-tuple indexing rows and columns. This returns a matrix.
 
-        If the index is a 2-tuple of ints, a Fraction is returned.
-        Otherwise, a Matrix is returned.
+        If the index is a 2-tuple of ints, a Fraction is returned. Otherwise, a Matrix
+        is returned.
         """
         assert len(indices) == 2
         assert self.checkRows()
@@ -175,7 +173,7 @@ class Matrix:
         assert self.checkRows()
 
     def reset(self, rows, cols):
-        """ reset all elements in rows x __cols to zero
+        """Reset all elements in rows x __cols to zero.
 
         This is equivalent (but a bit faster) to self[rows, __cols] = 0
         """
@@ -192,7 +190,7 @@ class Matrix:
         assert self.checkRows()
 
     def __iadd__(self, other):
-        """ += operation """
+        """+= operation."""
         assert self.checkRows()
         assert other.checkRows()
         mcol = other.cols()
@@ -234,7 +232,7 @@ class Matrix:
         return self
 
     def __idiv__(self, scalar):
-        """ /= operation """
+        """/= operation."""
         assert self.checkRows()
         for c in self.__cols:
             for r, v in c.items():
@@ -245,7 +243,7 @@ class Matrix:
         return self.__idiv__(scalar)
 
     def __imul__(self, v):
-        """ *= operation
+        """*= operation.
 
         works for scalars and matrices.
         """
@@ -325,7 +323,7 @@ class Matrix:
         return out
 
     def __div__(self, scalar):
-        """ / operation (for division by scalars)"""
+        """/ operation (for division by scalars)"""
         assert self.checkRows()
         out = Matrix()
         out.__iadd__(self)
@@ -333,7 +331,7 @@ class Matrix:
         return out
 
     def coladd(self, col, v, scalar=1):
-        """ computes self[:,col] += scalar * v
+        """Computes self[:,col] += scalar * v.
 
         col can only be a single index
         """
@@ -437,7 +435,7 @@ class Matrix:
         assert self.checkRows()
 
     def __neg__(self):
-        """ return -self """
+        """Return -self."""
         out = Matrix()
         out.__isub__(self)
         return out
@@ -473,10 +471,10 @@ class Matrix:
         return not self.__eq__(other)
 
     def addMetabolicNetwork(self, cmod):
-        """ adds the stoichiometric matrix of a metabolic network
+        """Adds the stoichiometric matrix of a metabolic network.
 
-        This is the default method to load the stoichiometric matrix into
-        ths matrix. Just create an empty matrix and call this function.
+        This is the default method to load the stoichiometric matrix into ths matrix.
+        Just create an empty matrix and call this function.
 
         A list of column names is returned.
         """
@@ -496,7 +494,7 @@ class Matrix:
         return labels, var_spec_id
 
     def addListRep(self, matrix):
-        """ adds matrix in list representation (ordered by rows) """
+        """Adds matrix in list representation (ordered by rows)"""
         self.__nrows = max(self.__nrows, len(matrix))
         for ri, r in enumerate(matrix):
             while len(r) > self.cols():
@@ -509,7 +507,7 @@ class Matrix:
         assert self.checkRows()
 
     def toNumpy(self):
-        """ returns floating point numpy representation.
+        """Returns floating point numpy representation.
 
         The numpy matrix is a full matrix!
         """

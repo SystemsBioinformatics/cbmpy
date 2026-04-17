@@ -53,11 +53,10 @@ except ImportError as ex:
 if __HAVE_WX__:
 
     def loadCBGUI(mod, version=2):
-        """
-        Load an FBA model instance into the quick editor to view or change basic model properties
+        """Load an FBA model instance into the quick editor to view or change basic
+        model properties.
 
-         - *mod* a PySCeS CBMPy model instance
-
+        - *mod* a PySCeS CBMPy model instance
         """
         if version == 2:
             loadCBGUI = CBWx.runModelEditor(mod)
@@ -73,31 +72,25 @@ else:
 if __HAVE_QT4__:
 
     def createReaction(mod):
-        """
-        Load the QT4 reaction creator widget
+        """Load the QT4 reaction creator widget.
 
-         - *mod* a PySCeS CBMPy model instance
-
+        - *mod* a PySCeS CBMPy model instance
         """
         CBQt4.createReaction(mod)
 
     def openFileName(work_dir=None):
-        """
-        Load the QT4 file open selection dialogue
+        """Load the QT4 file open selection dialogue.
 
-         - *work_dir* the optional initial directory
-
+        - *work_dir* the optional initial directory
         """
         if work_dir == None:
             work_dir = os.getcwd()
         return CBQt4.fileDialogue(work_dir, 'open', None)
 
     def saveFileName(work_dir=None):
-        """
-        Load the QT4 file save selection dialogue
+        """Load the QT4 file save selection dialogue.
 
-         - *work_dir* the optional initial directory
-
+        - *work_dir* the optional initial directory
         """
         if work_dir == None:
             work_dir = os.getcwd()

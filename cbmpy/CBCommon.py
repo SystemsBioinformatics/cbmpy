@@ -236,11 +236,9 @@ ptElements = (
 
 
 def parseGeneAssociation(gs):
-    """
-    Parse a COBRA style gene association into a nested list.
+    """Parse a COBRA style gene association into a nested list.
 
-     - *gs* a string containing a gene association
-
+    - *gs* a string containing a gene association
     """
     # gs = '(b0810) and ( b0811 ) or ( b1234.0) and(b0809)and ( b7643 )OR(b0812 )AND( b0876)'
     gl = pp_gene_unnester.parseString('(' + gs + ')').asList()
@@ -299,12 +297,11 @@ def checkChemFormula(cf, quiet=False):
 
 
 def extractGeneIdsFromString(g, return_clean_gpr=False):
-    """
-    Extract and return a list of gene names from a gene association string formulation
+    """Extract and return a list of gene names from a gene association string
+    formulation.
 
     - *g* a COBRA style gene association string
     - *return_clean_gpr* [default=False] in addition to the list returns the "cleaned" GPR string
-
     """
     # print('\n{}'.format(g))
     g2 = g
@@ -352,15 +349,13 @@ def extractGeneIdsFromString(g, return_clean_gpr=False):
 
 
 def createAssociationDictFromNode(node, out, model, useweakref=True, cntr=0):
-    """
-    Converts a GPR string '((g1 and g2) or g3)' to a dictionary via a Python AST.
-    In future I will get rid of all the string elements and work only with AST's.
+    """Converts a GPR string '((g1 and g2) or g3)' to a dictionary via a Python AST. In
+    future I will get rid of all the string elements and work only with AST's.
 
-     - *node* a Python AST node (e.g. body)
-     - *out* a gpr dictionary
-     - *model* a CBMPy model instance
-     - *useweakref* [default=True] use a weakref as the gene object or alternatively the label
-
+    - *node* a Python AST node (e.g. body)
+    - *out* a gpr dictionary
+    - *model* a CBMPy model instance
+    - *useweakref* [default=True] use a weakref as the gene object or alternatively the label
     """
     if isinstance(node, ast.Name):
         gene = model.getGene(node.id)
@@ -406,13 +401,12 @@ def createAssociationDictFromNode(node, out, model, useweakref=True, cntr=0):
 
 
 def func_getAssociationStrFromGprDict(gprd, out, parent=''):
-    """
-    Get a old school GPR association string from a CBMPy gprDict, e.g. obtained from gpr.getTree()
+    """Get a old school GPR association string from a CBMPy gprDict, e.g. obtained from
+    gpr.getTree()
 
-     - *gprd* the gprDictionary
-     - *out* the output string
-     - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
-
+    - *gprd* the gprDictionary
+    - *out* the output string
+    - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
     """
     out2 = '('
     for k in gprd:
@@ -438,12 +432,10 @@ def func_getAssociationStrFromGprDict(gprd, out, parent=''):
 
 
 def getGPRasDictFromString(node, out):
-    """
-    Converts a GPR string '((g1 and g2) or g3)' to a gprDict which is returned
+    """Converts a GPR string '((g1 and g2) or g3)' to a gprDict which is returned.
 
-     - *node* a Python AST note (e.g. `ast.parse(gprstring).body[0]`)
-     - *out* a new dictionary that will be be created in place
-
+    - *node* a Python AST note (e.g. `ast.parse(gprstring).body[0]`)
+    - *out* a new dictionary that will be be created in place
     """
 
     if isinstance(node, ast.Name):
@@ -484,10 +476,7 @@ def getGPRasDictFromString(node, out):
 
 
 class ComboGen(object):
-    """
-    Generate sets of unique combinations
-
-    """
+    """Generate sets of unique combinations."""
 
     combo = None
     combo_int = None
@@ -518,14 +507,12 @@ class ComboGen(object):
 def processSpeciesChargeChemFormulaAnnot(
     s, getFromName=False, overwriteChemFormula=False, overwriteCharge=False
 ):
-    """
-    Disambiguate the chemical formula from either the Notes or the overloaded name
+    """Disambiguate the chemical formula from either the Notes or the overloaded name.
 
-     - *s* a species object
-     - *getFromName* [default=False] whether to try strip the chemical formula from the name (old COBRA style)
-     - *overwriteChemFormula* [default=False]
-     - *overwriteCharge* [default=False]
-
+    - *s* a species object
+    - *getFromName* [default=False] whether to try strip the chemical formula from the name (old COBRA style)
+    - *overwriteChemFormula* [default=False]
+    - *overwriteCharge* [default=False]
     """
     tempF = ''
     if overwriteChemFormula:
@@ -598,13 +585,11 @@ def binHash(keys, d):
 
 
 def fixId(s, replace=None):
-    """
-    Checks a string (Sid) to see if it is a valid C style variable. first letter must be an underscore or letter,
-    the rest should be alphanumeric or underscore.
+    """Checks a string (Sid) to see if it is a valid C style variable. first letter must
+    be an underscore or letter, the rest should be alphanumeric or underscore.
 
     - *s* the string to test
     - *replace* [None] default is to leave out offensive character, otherwise replace with this one
-
     """
 
     if s[0].isdigit():
@@ -624,11 +609,10 @@ def fixId(s, replace=None):
 
 
 def checkId(s):
-    """
-    Checks the validity of the string to see if it conforms to a C variable. Returns true/false
+    """Checks the validity of the string to see if it conforms to a C variable. Returns
+    true/false.
 
     - *s* a string
-
     """
     cntr = 0
     for c in s:
@@ -644,11 +628,9 @@ def checkId(s):
 
 
 class StructMatrix:
-    """
-    This class is specifically designed to store structural matrix information
-    give it an array and row/col index permutations it can generate its own
-    row/col labels given the label src.
-    """
+    """This class is specifically designed to store structural matrix information give
+    it an array and row/col index permutations it can generate its own row/col labels
+    given the label src."""
 
     array = None
     ridx = None
@@ -658,9 +640,8 @@ class StructMatrix:
     shape = None
 
     def __init__(self, array, ridx, cidx, row=None, col=None):
-        """
-        Instantiate with array and matching row/col index arrays, optional label arrays
-        """
+        """Instantiate with array and matching row/col index arrays, optional label
+        arrays."""
         self.array = array
         self.ridx = ridx
         self.cidx = cidx
@@ -680,19 +661,15 @@ class StructMatrix:
         return self.array.take(args, axis=1)
 
     def setRow(self, src):
-        """
-        Assuming that the row index array is a permutation (full/subset)
-        of a source label array by supplying that source to setRow it
-        maps the row labels to ridx and creates self.row (row label list)
-        """
+        """Assuming that the row index array is a permutation (full/subset) of a source
+        label array by supplying that source to setRow it maps the row labels to ridx
+        and creates self.row (row label list)"""
         self.row = [src[r] for r in self.ridx]
 
     def setCol(self, src):
-        """
-        Assuming that the col index array is a permutation (full/subset)
-        of a source label array by supplying that src to setCol
-        maps the row labels to cidx and creates self.col (col label list)
-        """
+        """Assuming that the col index array is a permutation (full/subset) of a source
+        label array by supplying that src to setCol maps the row labels to cidx and
+        creates self.col (col label list)"""
 
         self.col = [src[c] for c in self.cidx]
 
@@ -717,7 +694,7 @@ class StructMatrix:
             return None
 
     def getLabels(self, axis='all'):
-        """Return the matrix labels ([rows],[cols]) where axis='row'/'col'/'all'"""
+        """Return the matrix labels ([rows],[cols]) where axis='row'/'col'/'all'."""
         if axis == 'row':
             return self.row
         elif axis == 'col':
@@ -726,7 +703,7 @@ class StructMatrix:
             return self.row, self.col
 
     def getIndexes(self, axis='all'):
-        """Return the matrix indexes ([rows],[cols]) where axis='row'/'col'/'all'"""
+        """Return the matrix indexes ([rows],[cols]) where axis='row'/'col'/'all'."""
         if axis == 'row':
             return self.ridx
         elif axis == 'col':
@@ -756,24 +733,23 @@ class StructMatrix:
 
 
 class StructMatrixLP(StructMatrix):
-    """Adds some stuff to StructMatrix that makes it LP friendly"""
+    """Adds some stuff to StructMatrix that makes it LP friendly."""
 
     RHS = None
     operators = None
     __array_type__ = None
 
     def __init__(self, array, ridx, cidx, row=None, col=None, rhs=None, operators=None):
-        """
-        Object that holds an LP, stoichiometric constraints, operators, RHS, names etc
+        """Object that holds an LP, stoichiometric constraints, operators, RHS, names
+        etc.
 
-         - *array* stoichiometric matrix (linear constraints)
-         - *ridx* a list of indexes typically range(shape[0])
-         - *cidx* a list of indexes typically range(shape[1])
-         - *row* a list of row names
-         - *col* a list of col names
-         - *rhs* [default=None] a list of rhs values defaults to 0
-         - *operators* [default=None] a list of constraint senses defaults to 'E' =
-
+        - *array* stoichiometric matrix (linear constraints)
+        - *ridx* a list of indexes typically range(shape[0])
+        - *cidx* a list of indexes typically range(shape[1])
+        - *row* a list of row names
+        - *col* a list of col names
+        - *rhs* [default=None] a list of rhs values defaults to 0
+        - *operators* [default=None] a list of constraint senses defaults to 'E' =
         """
         StructMatrix.__init__(self, array, ridx, cidx, row=row, col=col)
         self.__array_type__ = type(array)
@@ -791,12 +767,11 @@ class StructMatrixLP(StructMatrix):
             self.operators = operators
 
     def getCopy(self, attr_str, deep=False):
-        """
-        Return a copy of the attribute with name attr_str. Uses the copy module `copy.copy` or `copy.deepcopy`
+        """Return a copy of the attribute with name attr_str. Uses the copy module
+        `copy.copy` or `copy.deepcopy`
 
         - *attr_str* a string of the attribute name: 'row', 'col'
         - *deep* [default=False] try to do a deepcopy. Use with caution see copy module docstring for details
-
         """
         if attr_str == 'array' or attr_str == 'rhs':
             return getattr(self, attr_str).copy()
@@ -918,11 +893,9 @@ class MIRIAMannotation(object):
         # print(self.getAllMIRIAMUris())
 
     def checkEntityPattern(self, entity):
-        """
-        For an entity key compile the pattern to a regex, if necessary.
+        """For an entity key compile the pattern to a regex, if necessary.
 
-         - *entity* a MIRIAM resource entity
-
+        - *entity* a MIRIAM resource entity
         """
 
         if type(self.MIRIAM[entity]['pattern']) == RE_PATTERN_TYPE:
@@ -940,11 +913,9 @@ class MIRIAMannotation(object):
                 return False
 
     def checkId(self, entity, mid):
-        """
-        Check that a entity id e.g. CHEBI:17158
+        """Check that a entity id e.g. CHEBI:17158.
 
-         - *mid* the entity id e.g. CHEBI:17158
-
+        - *mid* the entity id e.g. CHEBI:17158
         """
         if self.checkEntityPattern(entity):
             res = re.findall(self.MIRIAM[entity]['pattern'], mid)
@@ -954,13 +925,12 @@ class MIRIAMannotation(object):
         return False
 
     def checkEntity(self, entity):
-        """
-        Check an entity entry, this is a MIRIAM resource name: "chEBI". The test is case insensitive and will correct the case
-        of wrongly capitalised entities automatically. If the entity is not recognised then a list of possible candidates
-        based on the first letters of the input is displayed.
+        """Check an entity entry, this is a MIRIAM resource name: "chEBI". The test is
+        case insensitive and will correct the case of wrongly capitalised entities
+        automatically. If the entity is not recognised then a list of possible
+        candidates based on the first letters of the input is displayed.
 
         - *entity* a MIRIAM resource entity e.g. "ChEBI"
-
         """
         if entity.lower() not in self.MIDSlc:
             print(
@@ -1074,11 +1044,10 @@ class MIRIAMannotation(object):
             return ()
 
     def getAndViewUrisForQualifier(self, qual):
-        """
-        Retrieve all url's associated with qualifier and attempt to open them all in a new browser tab
+        """Retrieve all url's associated with qualifier and attempt to open them all in
+        a new browser tab.
 
-         - *qual* the qualifier e.g. "is" or "isEncoded"
-
+        - *qual* the qualifier e.g. "is" or "isEncoded"
         """
         Q = self.getMIRIAMUrisForQualifier(qual)
         if Q != None:
@@ -1086,9 +1055,7 @@ class MIRIAMannotation(object):
                 self.viewURL(q_)
 
     def getAllMIRIAMUris(self):
-        """
-        Return a dictionary of qualifiers that contain ID.org URL'S
-        """
+        """Return a dictionary of qualifiers that contain ID.org URL'S."""
         out = {}
         for q_ in self.QUALIFIERS:
             Q = self.__getattribute__(q_)
@@ -1102,10 +1069,8 @@ class MIRIAMannotation(object):
         return out
 
     def viewURL(self, url):
-        """
-        This will try to open the URL in a new tab of the default webbrowser
+        """This will try to open the URL in a new tab of the default webbrowser.
 
-         - *url* the url
-
+        - *url* the url
         """
         webbrowser.open_new_tab(url)

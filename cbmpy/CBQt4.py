@@ -589,11 +589,9 @@ class ReactionCreator(QtGui.QWidget):
 
 
 def createReaction(mod):
-    """
-    Create a reaction using the graphical Reaction Creator
+    """Create a reaction using the graphical Reaction Creator.
 
-     - *mod* a CBMPy model object
-
+    - *mod* a CBMPy model object
     """
     cfdict = {}
     cndict = {}

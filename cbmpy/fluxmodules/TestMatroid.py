@@ -36,10 +36,10 @@ from . import matroid
 
 
 class TestMatroid(unittest.TestCase):
-    """ Test methods in matroid.py """
+    """Test methods in matroid.py."""
 
     def setUp(self):
-        """ create test matroid """
+        """Create test matroid."""
         mat = Matrix([[-2, -1, 1, 0, 0, 0, 0, 0, 0],
                       [1, 0, 0, -1, 0, 0, 0, 0, 0],
                       [0, 1, -1, 1, -1, -1, 0, 0, 0],
@@ -51,7 +51,7 @@ class TestMatroid(unittest.TestCase):
         self.matroid = matroid.fromMatrix(mat, elems)
 
     def tearDown(self):
-        """ nothing to do"""
+        """Nothing to do."""
         pass
 
     def testElems(self):

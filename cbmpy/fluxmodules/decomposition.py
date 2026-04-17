@@ -32,15 +32,15 @@ from .random_color import generate_new_color
 
 
 class Edge:
-    """ Every edge connects two vertices """
+    """Every edge connects two vertices."""
 
     def __init__(self, a, b):
-        """ initialize edge connecting vertices a and b """
+        """Initialize edge connecting vertices a and b."""
         self.a = a
         self.b = b
 
     def getOther(self, vertex):
-        """ give the other vertex then the specified one
+        """Give the other vertex then the specified one.
 
         The specified vertex must be one of this edges vertices
         """
@@ -52,10 +52,13 @@ class Edge:
 
 
 class AbstractVertex:
-    """ A vertex in a graph. It can be a leaf or an inner node """
+    """A vertex in a graph.
+
+    It can be a leaf or an inner node
+    """
 
     maxId = 0
-    """ for giving unique ids for hashing """
+    """For giving unique ids for hashing."""
 
     def __init__(self):
         self.__id = AbstractVertex.maxId
@@ -69,25 +72,25 @@ class AbstractVertex:
         return self.__id
 
     def __eq__(self, other):
-        """ two abstract vertices are only the same if they are identical """
+        """Two abstract vertices are only the same if they are identical."""
         return self is other
 
     def label(self):
         print("subclasses must override this")
 
     def replaceAdjacent(self, old, new):
-        """ replace the adjacent node old by new """
+        """Replace the adjacent node old by new."""
         print('subclasses must override this')
         assert False
 
     def getAdjacent(self):
-        """ list adjacent nodes """
+        """List adjacent nodes."""
         print('subclasses must override this')
         assert False
 
     def getLeaves(self, fromVertex):
-        """ enumerates all the leaves of this vertex that are reachable without
-        using fromVertex
+        """Enumerates all the leaves of this vertex that are reachable without using
+        fromVertex.
 
         fromVertex must be a vertex adjacent to this vertex
         """
@@ -96,7 +99,7 @@ class AbstractVertex:
 
 
 class Vertex(AbstractVertex):
-    """ represents an inner vertex (i.e., not a leaf)
+    """Represents an inner vertex (i.e., not a leaf)
 
     Every Vertex contains a map (edges) of adjacent edges resp. vertices.
     Each Edge has a list of elements associated to it (the interface).
@@ -121,10 +124,9 @@ class Vertex(AbstractVertex):
         return self.__str__()
 
     def setUpRoot(self, matroid):
-        """ set ups this vertex as the root node for the given matroid.
+        """Set ups this vertex as the root node for the given matroid.
 
-        This means we add leaves for all the elements of the matroid to this
-        vertex
+        This means we add leaves for all the elements of the matroid to this vertex
         """
         for e in matroid.elems:
             l = Leaf(e, self)
@@ -132,10 +134,10 @@ class Vertex(AbstractVertex):
         self.matroid = matroid
 
     def splitOff(self, adjacent):
-        """ splits of a list of adjacent vertices.
+        """Splits of a list of adjacent vertices.
 
-        adjacent must be a list of vertices that are adjacent to this node.
-        The ist adjacent must contain more than one element
+        adjacent must be a list of vertices that are adjacent to this node. The ist
+        adjacent must contain more than one element
         """
         assert len(adjacent) >= 2, 'splitting off would have no effect'
 
@@ -210,7 +212,7 @@ class Vertex(AbstractVertex):
         del self.edges[old]
 
     def __simplifyInterface(self, toSplit):
-        """ reduces the interface of the elements to split off
+        """Reduces the interface of the elements to split off.
 
         For this method we assume:
         No fundamental circuit of a non-basis element outside of toSplit must
@@ -255,11 +257,11 @@ class Vertex(AbstractVertex):
         return frozenset(self.edges.keys())
 
     def getLeaves(self, fromVertex):
-        """ enumerates all the leaves of this vertex that are reachable without
-        using fromVertex
+        """Enumerates all the leaves of this vertex that are reachable without using
+        fromVertex.
 
-        If fromVertex is not a vertex incident to this vertex, then all leaves
-        are enumerated.
+        If fromVertex is not a vertex incident to this vertex, then all leaves are
+        enumerated.
         """
         leaves = set()
         for v in self.edges.keys():
@@ -291,10 +293,10 @@ class Vertex(AbstractVertex):
 class Leaf(AbstractVertex):
 
     def __init__(self, element, adjacent):
-        """ creates leaf representing an matroid element
+        """Creates leaf representing an matroid element.
 
-        element is the matroid element to represent
-        adjacent is the vertex to which this leaf is added
+        element is the matroid element to represent adjacent is the vertex to which this
+        leaf is added
         """
         AbstractVertex.__init__(self)
         self.elem = element
@@ -322,7 +324,7 @@ class Leaf(AbstractVertex):
 
 
 class Decomposition:
-    """ Hierarchical branch decomposition
+    """Hierarchical branch decomposition.
 
     Actually can also represent a partial branch decomposition as intermediate
     results.
@@ -335,13 +337,13 @@ class Decomposition:
     """
 
     def __init__(self, matroid):
-        """ initializes as star branch decomposition """
+        """Initializes as star branch decomposition."""
         self.matroid = matroid
         self.root = Vertex()
         self.root.setUpRoot(matroid)
 
     def listNonLeaves(self):
-        """ list all non-leaf vertices """
+        """List all non-leaf vertices."""
         return self.listNonLeavesRec(self.root, None)
 
     def listNonLeavesRec(self, vertex, source):
@@ -355,7 +357,7 @@ class Decomposition:
         return result
 
     def getVertex(self, vertexid):
-        """ returns the vertex with the given id
+        """Returns the vertex with the given id.
 
         If no vertex with the given id exists, None is returned.
         """
@@ -365,7 +367,7 @@ class Decomposition:
         return None
 
     def splitZeroModules(self, vertex):
-        """ branch given vertex into 0 modules
+        """Branch given vertex into 0 modules.
 
         Requires that all adjacent vertices have at most 1-dimensional interface
         """
@@ -392,7 +394,7 @@ class Decomposition:
                     vertex.matroid = vertex.matroid.delete([e])
 
     def splitSimple(self):
-        """ split all vertices into 0-modules and 1-modules """
+        """Split all vertices into 0-modules and 1-modules."""
         for v in self.listNonLeaves():
             self.splitZeroModules(v)
 
@@ -400,7 +402,7 @@ class Decomposition:
             self.splitOneModules(v)
 
     def splitOneModules(self, vertex):
-        """ branch given vertex into 1 modules
+        """Branch given vertex into 1 modules.
 
         TODO:we have to deal with grouped elements
         """
@@ -455,7 +457,7 @@ class Decomposition:
         print('TODO: more complicated 1-modules')
 
     def makeSubcubic(self):
-        """ split all nodes that have degree >= 4 in an arbitrary manner."""
+        """Split all nodes that have degree >= 4 in an arbitrary manner."""
         for v in self.listNonLeaves():
             assert isinstance(v, Vertex)
             while len(v.getAdjacent()) >= 4:
@@ -465,7 +467,7 @@ class Decomposition:
                 v.splitOff([aiter.next(), aiter.next()])
 
     def isParallelSeries(self):
-        """ checks if all nodes have only parallel or only coparallel elems.
+        """Checks if all nodes have only parallel or only coparallel elems.
 
         This does not check if the matroid is parallel-series.
         """
@@ -495,7 +497,7 @@ class Decomposition:
         return True
 
     def verifyFullyBranched(self):
-        """ verifies that this branch decomposition is fully branched
+        """Verifies that this branch decomposition is fully branched.
 
         The branch decomposition is considered fully branched if all vertices
         satisfy:
@@ -539,10 +541,9 @@ class Decomposition:
         return True
 
     def verifyEdgeWidth(self):
-        """ verifies if the edge with really coincides with the interfaces.
+        """Verifies if the edge with really coincides with the interfaces.
 
-        In case of success, true is returned.
-        Otherwise an EdgeWidthException is raised.
+        In case of success, true is returned. Otherwise an EdgeWidthException is raised.
         """
         for v in self.listNonLeaves():
             for (w, interface) in v.edges.items():
@@ -555,8 +556,7 @@ class Decomposition:
         return True
 
     def getWidth(self):
-        """ computes the width of this branch decomposition.
-        """
+        """Computes the width of this branch decomposition."""
         width = 0
         for v in self.listNonLeaves():
             for (w, interface) in v.edges.items():
@@ -564,16 +564,15 @@ class Decomposition:
         return width
 
     def poolmanMethod(self, vertex, similarity=None):
-        """ decomposes the matroid using the method suggested by Poolman et al.
+        """Decomposes the matroid using the method suggested by Poolman et al.
 
-        This method iteratively groups these elements together that are most
-        similar. Similarity by sets of nodes is done via the mean.
-        For more details see doi:10.1016/j.jtbi.2007.08.005
+        This method iteratively groups these elements together that are most similar.
+        Similarity by sets of nodes is done via the mean. For more details see
+        doi:10.1016/j.jtbi.2007.08.005
 
-        This method takes a similarity matrix as input, which allows it to
-        also apply the method to other similarity matrices then those suggested
-        in the original work.
-        If no similarity matrix is given, then a row similarity matrix is used,
+        This method takes a similarity matrix as input, which allows it to also apply
+        the method to other similarity matrices then those suggested in the original
+        work. If no similarity matrix is given, then a row similarity matrix is used,
         which corresponds to the matrix suggested by Poolman et al.
         """
 
@@ -657,7 +656,7 @@ class Decomposition:
             vertexIndices[j] = None
 
     def makeGraphViz(self, cmod=None):
-        """ create graphviz string to draw this decomposition """
+        """Create graphviz string to draw this decomposition."""
         out = "graph G {\n"
         found = set()
         for v in self.listNonLeaves():
@@ -694,7 +693,7 @@ class Decomposition:
         return out
 
     def write(self, filename):
-        """ writes this decomposition to file """
+        """Writes this decomposition to file."""
         fo = open(filename, mode='w')
         width = self.getWidth()
         variables = len(self.matroid.elems)
@@ -712,7 +711,7 @@ class Decomposition:
 
 
 class NotFullyBranchedException(Exception):
-    """ Thrown if the branch decomposition is not fully branched."""
+    """Thrown if the branch decomposition is not fully branched."""
 
     def __init__(self, vertex):
         self.vertex = vertex

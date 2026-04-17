@@ -81,7 +81,7 @@ __version__ = __CBCONFIG__['VERSION']
 
 
 class LPproperties:
-    """LP property class"""
+    """LP property class."""
 
     __m = None
     __id = None
@@ -113,21 +113,21 @@ class LPproperties:
 
 
 class LPbase(LPproperties):
-    """LP base class"""
+    """LP base class."""
 
     def __init__(self, pid):
         self.id = pid
 
 
 class LPcplex(LPbase):
-    """CPLEX interface"""
+    """CPLEX interface."""
 
     def __init__(self, pid):
         super().__init__(pid)
 
 
 class LPglpk(LPbase):
-    """GLPK interface"""
+    """GLPK interface."""
 
     def __init__(self, pid):
         super().__init__(pid)

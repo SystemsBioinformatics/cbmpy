@@ -67,16 +67,10 @@ __CBCONFIG__ = {
 
 
 def current_version():
-    """
-    Return the current CBMPy version as a string
-
-    """
+    """Return the current CBMPy version as a string."""
     return '{}.{}.{}'.format(__VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__)
 
 
 def current_version_tuple():
-    """
-    Return the current CBMPy version as a tuple (x, y, z)
-
-    """
+    """Return the current CBMPy version as a tuple (x, y, z)"""
     return (__VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__)

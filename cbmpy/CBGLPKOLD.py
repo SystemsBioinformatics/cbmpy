@@ -103,11 +103,10 @@ GLPK_INFINITY = 1.0e9
 
 
 def glpk_constructLPfromFBA(fba, fname=None):
-    """
-    Create a GLPK LP in memory.
+    """Create a GLPK LP in memory.
+
     - *fba* an FBA object
     - *fname* optional filename if defined writes out the constructed lp
-
     """
     _Stime = time.time()
 
@@ -244,13 +243,11 @@ def glpk_constructLPfromFBA(fba, fname=None):
 
 
 def glpk_Solve(lp, method='s'):
-    """
-    Solve the LP and create a status attribute with the solution status
+    """Solve the LP and create a status attribute with the solution status.
 
      - *method* [default='s'] 's' = simplex, 'i' = interior, 'e' = exact
 
     GLPK solver options can be set in the dictionary GLPK_CFG
-
     """
 
     if method == 'i':
@@ -319,27 +316,25 @@ def glpk_analyzeModel(
     oldlpgen=False,
     method='s',
 ):
-    """
-    Optimize a model and add the result of the optimization to the model object
-    (e.g. `reaction.value`, `objectiveFunction.value`). The stoichiometric
-    matrix is automatically generated. This is a common function available in all
-    solver interfaces. By default returns the objective function value
+    """Optimize a model and add the result of the optimization to the model object (e.g.
+    `reaction.value`, `objectiveFunction.value`). The stoichiometric matrix is
+    automatically generated. This is a common function available in all solver
+    interfaces. By default returns the objective function value.
 
-     - *f* an instantiated PySCeSCBM model object
-     - *lpFname* [default=None] the name of the intermediate LP file saved when this has a string value.
-     - *return_lp_obj* [default=False] off by default when enabled it returns the PyGLPK LP object
-     - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
-       or anything else which is interpreted as 'None'. Scaled means s_rcost = (r.reduced_cost*rval)/obj_value
-     - *with_sensitivity* [default=False] add solution sensitivity information (not yet implemented)
-     - *del_intermediate* [default=False] delete the intermediary files after updating model object, useful for server applications
-     - *build_n* [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)
-     - *quiet* [default=False] suppress glpk output
-     - *method* [default='s'] select the GLPK solver method, see the GLPK documentation for details
+    - *f* an instantiated PySCeSCBM model object
+    - *lpFname* [default=None] the name of the intermediate LP file saved when this has a string value.
+    - *return_lp_obj* [default=False] off by default when enabled it returns the PyGLPK LP object
+    - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
+      or anything else which is interpreted as 'None'. Scaled means s_rcost = (r.reduced_cost*rval)/obj_value
+    - *with_sensitivity* [default=False] add solution sensitivity information (not yet implemented)
+    - *del_intermediate* [default=False] delete the intermediary files after updating model object, useful for server applications
+    - *build_n* [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)
+    - *quiet* [default=False] suppress glpk output
+    - *method* [default='s'] select the GLPK solver method, see the GLPK documentation for details
 
-       - 's': simplex
-       - 'i': interior
-       - 'e': exact
-
+      - 's': simplex
+      - 'i': interior
+      - 'e': exact
     """
 
     if build_n:
@@ -385,10 +380,7 @@ def glpk_analyzeModel(
 
 
 def glpk_setSolutionStatusToModel(m, lp):
-    """
-    Sets the lp solutions status to the CBMPy model
-
-    """
+    """Sets the lp solutions status to the CBMPy model."""
     m.SOLUTION_STATUS = glpk_getSolutionStatus(lp)
     # TODO: need to synchronise all solvers to same integer system
     if m.SOLUTION_STATUS == 'LPS_OPT':
@@ -398,14 +390,12 @@ def glpk_setSolutionStatusToModel(m, lp):
 
 
 def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
-    """
-    Sets the FBA solution from a CPLEX solution to an FBA object
+    """Sets the FBA solution from a CPLEX solution to an FBA object.
 
-     - *fba* and fba object
-     - *lp* a CPLEX LP object
-     - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
-       or anything else which is interpreted as None. Scaled is: s_rcost = (r.reduced_cost*rval)/obj_value
-
+    - *fba* and fba object
+    - *lp* a CPLEX LP object
+    - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
+      or anything else which is interpreted as None. Scaled is: s_rcost = (r.reduced_cost*rval)/obj_value
     """
     sol, objname, objval = glpk_getOptimalSolution(lp)
     if glpk_getSolutionStatus(lp) == 'LPS_OPT':
@@ -442,9 +432,7 @@ def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
 
 
 def glpk_getOptimalSolution(c):
-    """
-    From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal
-    """
+    """From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal."""
     s_val = []
     s_name = []
     fba_sol = {}
@@ -467,12 +455,10 @@ def glpk_getOptimalSolution(c):
 
 
 def glpk_getReducedCosts(c, scaled=False):
-    """
-    Extract ReducedCosts from LP and return as a dictionary 'Rid' : reduced cost
+    """Extract ReducedCosts from LP and return as a dictionary 'Rid' : reduced cost.
 
-     - *c* a GLPK LP object
-     - *scaled* scale the reduced cost by the optimal flux value
-
+    - *c* a GLPK LP object
+    - *scaled* scale the reduced cost by the optimal flux value
     """
     s_name = []
     r_costs = []
@@ -751,9 +737,8 @@ def glpk_func_GetCPXandPresolve(
     with_reduced_costs='unscaled',
     method='s',
 ):
-    """
-    This is a utility function that does a presolve for FVA, MSAF etc. Generates properly formatted
-    empty objects if pre_opt == False
+    """This is a utility function that does a presolve for FVA, MSAF etc. Generates
+    properly formatted empty objects if pre_opt == False.
 
      - *pre_opt* a boolean
      - *fba* a CBModel object
@@ -768,7 +753,6 @@ def glpk_func_GetCPXandPresolve(
 
 
     Returns: pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS
-
     """
 
     cpx = glpk_constructLPfromFBA(fba, fname=None)
@@ -820,14 +804,13 @@ def glpk_func_GetCPXandPresolve(
 def glpk_func_SetObjectiveFunctionAsConstraint(
     cpx, rhs_sense, oval, tol, optPercentage
 ):
-    """
-    Take the objective function and "optimum" value and add it as a constraint
-     - *cpx* a cplex object
-     - *oval* the objective value
-     - *tol*  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
-     - *rhs_sense* [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
-     - *optPercentage* [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
+    """Take the objective function and "optimum" value and add it as a constraint.
 
+    - *cpx* a cplex object
+    - *oval* the objective value
+    - *tol*  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
+    - *rhs_sense* [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
+    - *optPercentage* [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
     """
 
     # generate new constraint from old objective value (use non-zero coefficients)
@@ -882,15 +865,13 @@ def glpk_func_SetObjectiveFunctionAsConstraint(
 
 
 def glpk_setSingleConstraint(c, cid, expr=[], sense='E', rhs=0.0):
-    """
-    Sets a new sigle constraint to a GLPK model
+    """Sets a new sigle constraint to a GLPK model.
 
-     - *c* a GLPK instance
-     - *cid* the constraint id
-     - *expr* a list of (coefficient, name) pairs
-     - *sense* [default='G'] LGE
-     - *rhs* [default=0.0] the right hand side
-
+    - *c* a GLPK instance
+    - *cid* the constraint id
+    - *expr* a list of (coefficient, name) pairs
+    - *sense* [default='G'] LGE
+    - *rhs* [default=0.0] the right hand side
     """
 
     baseRows = len(c.rows)
@@ -922,17 +903,15 @@ def glpk_setSingleConstraint(c, cid, expr=[], sense='E', rhs=0.0):
 
 
 def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
-    """
-    Set a new objective function note that there is a major memory leak in
-    `c.variables.get_names()` whch is used when reset=True. If this is a problem
-    use cplx_setObjective2 which takes *names* as an input:
+    """Set a new objective function note that there is a major memory leak in
+    `c.variables.get_names()` whch is used when reset=True. If this is a problem use
+    cplx_setObjective2 which takes *names* as an input:
 
-     - *c* a GLPK LP object
-     - *oid* the r_id of the flux to be optimized
-     - *expr* a list of (coefficient, flux) pairs
-     - *sense* 'maximize'/'minimize'
-     - *reset* [default=True] reset all objective function coefficients to zero
-
+    - *c* a GLPK LP object
+    - *oid* the r_id of the flux to be optimized
+    - *expr* a list of (coefficient, flux) pairs
+    - *sense* 'maximize'/'minimize'
+    - *reset* [default=True] reset all objective function coefficients to zero
     """
     sense = sense.lower()
     if sense == 'max':
@@ -970,10 +949,7 @@ def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
 
 
 def getReducedCosts(fba):
-    """
-    Get a dictionary of reduced costs for each reaction/flux
-
-    """
+    """Get a dictionary of reduced costs for each reaction/flux."""
     output = {}
     for r in fba.reactions:
         output.update({r.getId(): r.reduced_cost})
@@ -981,13 +957,11 @@ def getReducedCosts(fba):
 
 
 def setReducedCosts(fba, reduced_costs):
-    """
-    For each reaction/flux, sets the attribute "reduced_cost" from a dictionary of
-    reduced costs
+    """For each reaction/flux, sets the attribute "reduced_cost" from a dictionary of
+    reduced costs.
 
-     - *fba* an fba object
-     - *reduced_costs* a dictionary of {reaction : value} pairs
-
+    - *fba* an fba object
+    - *reduced_costs* a dictionary of {reaction : value} pairs
     """
     if len(reduced_costs) == 0:
         pass
@@ -1256,10 +1230,7 @@ def glpk_MinimizeSumOfAbsFluxes(
 
 
 def glpk_writeLPtoLPTfile(c, filename, title=None, Dir=None):
-    """
-    Write out a GLPK model as an LP format file
-
-    """
+    """Write out a GLPK model as an LP format file."""
     if Dir != None:
         filename = os.path.join(Dir, filename)
     # if title != None:

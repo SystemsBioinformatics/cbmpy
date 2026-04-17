@@ -1,8 +1,7 @@
-'''
-Created on Nov 11, 2014
+"""Created on Nov 11, 2014.
 
 @author: arne
-'''
+"""
 
 from __future__ import division, print_function
 from __future__ import absolute_import
@@ -16,15 +15,13 @@ from . import matroid
 
 
 class EFMEnumerator():
-    '''
-    classdocs
-    '''
+    """classdocs."""
 
     def __init__(self, mnet, node, excluded):
-        """Creates a new EFMEnumerator for the given network
+        """Creates a new EFMEnumerator for the given network.
 
-        We assume that all reactions in mnet are irreversible, i.e.
-        that all lower flux bounds are greater or equal zero.
+        We assume that all reactions in mnet are irreversible, i.e. that all lower flux
+        bounds are greater or equal zero.
         """
         self.mnet = mnet
         self.node = node
@@ -47,7 +44,7 @@ class EFMEnumerator():
         self.__buildLP()
 
     def __buildLP(self):
-        """ build the LP for the computations """
+        """Build the LP for the computations."""
         self.lp = CBSolver.createSolver(self.mnet)
         self.fixed = set()
         for r in self.mnet.reactions:
@@ -72,12 +69,11 @@ class EFMEnumerator():
 #         self.decomp = decomposition
 
     def isFeasible(self, face):
-        """ checks if face is a feasible face of the module
+        """Checks if face is a feasible face of the module.
 
-        A face is feasible if there exists a point in the polyhedron
-        (maybe, we generalize this a bit?) where the
-        reactions of the face are the only reactions used from the reactions in
-        the module.
+        A face is feasible if there exists a point in the polyhedron (maybe, we
+        generalize this a bit?) where the reactions of the face are the only reactions
+        used from the reactions in the module.
         """
         bounds = {}
         for r in self.module:
@@ -110,7 +106,7 @@ class EFMEnumerator():
                 return True  # if we keep it, we don't miss solutions
 
     def isMinimal(self, face):
-        """ checks if face is a minimal face of the module """
+        """Checks if face is a minimal face of the module."""
         #var = self.getVariable(face)
         var = face.difference(self.fixed)  # this assumes that the face is feasible
         return self.matroid.isIndependent(var)
@@ -123,10 +119,10 @@ class EFMEnumerator():
 #             return False
 
     def getVariable(self, face):
-        """run some kind of FVA on the reactions in the face
+        """Run some kind of FVA on the reactions in the face.
 
-        we remark that reactions not in the face are fixed to 0 and hence
-        have no variability.
+        we remark that reactions not in the face are fixed to 0 and hence have no
+        variability.
         """
         sol = self.lp.getSolution()  # fetch old solution
 
@@ -212,10 +208,10 @@ class EFMEnumerator():
         return variable
 
     def enumerateVertices(self):
-        """enumerate the vertices of the subnetwork reachable from node
+        """Enumerate the vertices of the subnetwork reachable from node.
 
-        The subnetwork reachable from node consists of the leaves that can be
-        reached in the decomposition from node without passing through excluded.
+        The subnetwork reachable from node consists of the leaves that can be reached in
+        the decomposition from node without passing through excluded.
         """
 
     def test(self, face):
@@ -232,7 +228,7 @@ class EFMEnumerator():
         return True
 
     def enumerateMinimal(self):
-        """ enumerates minimal A-faces
+        """Enumerates minimal A-faces.
 
         otherwise the same as enumerateVertices.
 

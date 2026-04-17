@@ -148,8 +148,6 @@ __solver_version__ = cplex.__version__
 # def addRHSsensitivity(self, rhsense):
 ##  self.__setattr__(rhsense.species, rhsense)
 # self.species_ids.append(rhsense.species)
-
-
 """
 Sets the noise level of the solver CPLX_RESULT_STREAM can be::
 
@@ -171,11 +169,9 @@ CPLX_LP_PARAMETERS = {
 
 
 def cplx_fixConSense(operator):
-    """
-    Fixes the sense of inequality operators, returns corrected sense symbol
+    """Fixes the sense of inequality operators, returns corrected sense symbol.
 
     - *operator* the operator to check
-
     """
 
     if operator in ['<=', '<', 'L']:
@@ -190,12 +186,11 @@ def cplx_fixConSense(operator):
 
 
 def cplx_constructLPfromFBA(fba, fname=None):
-    '''
-    Create a CPLEX LP in memory.
+    """Create a CPLEX LP in memory.
+
     - *fba* an FBA object
     - *fname* optional filename if defined writes out the constructed lp
-
-    '''
+    """
     _Stime = time.time()
     # defines
     # csense = 'E' # constraint sense
@@ -390,32 +385,29 @@ def cplx_analyzeModel(
     oldlpgen=False,
     method='o',
 ):
-    """
-    Optimize a model and add the result of the optimization to the model object
-    (e.g. `reaction.value`, `objectiveFunction.value`). The stoichiometric
-    matrix is automatically generated. This is a common function available
-    in all solver interfaces. By default returns the objective function value
+    """Optimize a model and add the result of the optimization to the model object (e.g.
+    `reaction.value`, `objectiveFunction.value`). The stoichiometric matrix is
+    automatically generated. This is a common function available in all solver
+    interfaces. By default returns the objective function value.
 
-     - *f* an instantiated PySCeSCBM model object
-     - *lpFname* [default=None] the name of the intermediate LP file. If not specified no LP file is produced
-     - *return_lp_obj* [default=False] off by default when enabled it returns the CPLEX LP object
-     - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
-       or anything else which is interpreted as 'None'. Scaled means s_rcost = (r.reduced_cost*rval)/obj_value
-     - *with_sensitivity* [default=False] add solution sensitivity information (not yet implemented)
-     - *del_intermediate* [default=False] redundant except if output file is produced and deleted (not useful)
-     - *build_n* [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)
-     - *quiet* [default=False] suppress cplex output
-     - *method* [default='o'] choose the CPLEX method to use for solution, default is automatic. See CPLEX reference manual for details
+    - *f* an instantiated PySCeSCBM model object
+    - *lpFname* [default=None] the name of the intermediate LP file. If not specified no LP file is produced
+    - *return_lp_obj* [default=False] off by default when enabled it returns the CPLEX LP object
+    - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
+      or anything else which is interpreted as 'None'. Scaled means s_rcost = (r.reduced_cost*rval)/obj_value
+    - *with_sensitivity* [default=False] add solution sensitivity information (not yet implemented)
+    - *del_intermediate* [default=False] redundant except if output file is produced and deleted (not useful)
+    - *build_n* [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)
+    - *quiet* [default=False] suppress cplex output
+    - *method* [default='o'] choose the CPLEX method to use for solution, default is automatic. See CPLEX reference manual for details
 
-       - 'o': auto
-       - 'p': primal
-       - 'd': dual
-       - 'b': barrier (no crossover)
-       - 'h': barrier
-       - 's': sifting
-       - 'c': concurrent
-
-
+      - 'o': auto
+      - 'p': primal
+      - 'd': dual
+      - 'b': barrier (no crossover)
+      - 'h': barrier
+      - 's': sifting
+      - 'c': concurrent
     """
 
     if build_n:
@@ -474,14 +466,12 @@ def cplx_analyzeModel(
 
 
 def cplx_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
-    """
-    Sets the FBA solution from a CPLEX solution to an FBA object
+    """Sets the FBA solution from a CPLEX solution to an FBA object.
 
-     - *fba* and fba object
-     - *lp* a CPLEX LP object
-     - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
-       or anything else which is interpreted as None. Scaled is: s_rcost = (r.reduced_cost*rval)/obj_value
-
+    - *fba* and fba object
+    - *lp* a CPLEX LP object
+    - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
+      or anything else which is interpreted as None. Scaled is: s_rcost = (r.reduced_cost*rval)/obj_value
     """
     sol, objname, objval = cplx_getOptimalSolution(lp)
     if not CPLX_SILENT_MODE:
@@ -520,10 +510,7 @@ def cplx_setFBAsolutionToModel(fba, lp, with_reduced_costs='unscaled'):
 
 
 def getReducedCosts(fba):
-    """
-    Get a dictionary of reduced costs for each reaction/flux
-
-    """
+    """Get a dictionary of reduced costs for each reaction/flux."""
     output = {}
     for r in fba.reactions:
         output.update({r.getId(): r.reduced_cost})
@@ -531,13 +518,11 @@ def getReducedCosts(fba):
 
 
 def setReducedCosts(fba, reduced_costs):
-    """
-    For each reaction/flux, sets the attribute "reduced_cost" from a dictionary of
-    reduced costs
+    """For each reaction/flux, sets the attribute "reduced_cost" from a dictionary of
+    reduced costs.
 
-     - *fba* an fba object
-     - *reduced_costs* a dictionary of {reaction : value} pairs
-
+    - *fba* an fba object
+    - *reduced_costs* a dictionary of {reaction : value} pairs
     """
     if len(reduced_costs) == 0:
         pass
@@ -550,13 +535,12 @@ def setReducedCosts(fba, reduced_costs):
 
 
 def cplx_setOutputStreams(lp, mode='default'):
-    """
-    Sets the noise level of the solver, mode can be one of:
+    """Sets the noise level of the solver, mode can be one of:
 
-     - *None* silent i.e. no output
-     - *'file'* set solver to silent and output logs to *CPLX_RESULT_STREAM_FILE* cplex_output.log
-     - *'iostream'* set solver to silent and output logs to *CPLX_RESULT_STREAM_IO* csio
-     - *'default'* or anything else noisy with full output closes STREAM_IO and STREAM_FILE (default)
+    - *None* silent i.e. no output
+    - *'file'* set solver to silent and output logs to *CPLX_RESULT_STREAM_FILE* cplex_output.log
+    - *'iostream'* set solver to silent and output logs to *CPLX_RESULT_STREAM_IO* csio
+    - *'default'* or anything else noisy with full output closes STREAM_IO and STREAM_FILE (default)
     """
     global CPLX_RESULT_STREAM
     global CPLX_SILENT_MODE
@@ -600,12 +584,10 @@ def cplx_setOutputStreams(lp, mode='default'):
 
 
 def cplx_getModelFromLP(lptFile, Dir=None):
-    """
-    Load a LPT (CPLEX format) file and return a CPLX LP model
+    """Load a LPT (CPLEX format) file and return a CPLX LP model.
 
-     - *lptfile* an CPLEX LP format file
-     - *Dir* an optional directory
-
+    - *lptfile* an CPLEX LP format file
+    - *Dir* an optional directory
     """
     if Dir != None:
         assert os.path.exists(Dir), '\nIncorrect path'
@@ -622,20 +604,16 @@ def cplx_getModelFromLP(lptFile, Dir=None):
 
 
 def cplx_getCPLEXModelFromLP(lptFile, Dir=None):
-    """
-    Load a LPT (CPLEX format) file and return a CPLX LP model
+    """Load a LPT (CPLEX format) file and return a CPLX LP model.
 
-     - *lptfile* an CPLEX LP format file
-     - *Dir* an optional directory
-
+    - *lptfile* an CPLEX LP format file
+    - *Dir* an optional directory
     """
     return cplx_getModelFromLP(lptFile, Dir)
 
 
 def cplx_getModelFromObj(fba):
-    """
-    Return a CPLEX object from a FBA model object (via LP file)
-    """
+    """Return a CPLEX object from a FBA model object (via LP file)"""
     _Stime = time.time()
     modId = fba.id
     ##  fba.id = '_cplxtmp_%s_.tmp' % random.randint(0,5)
@@ -710,9 +688,7 @@ def cplx_Solve(c, method='o'):
 
 
 def cplx_setMIPGapTolerance(c, tol):
-    """
-    Sets the the relative MIP gap tolerance
-    """
+    """Sets the the relative MIP gap tolerance."""
     c.parameters.mip.tolerances.mipgap.set(tol)
     print('New MIP gap tolerance', c.parameters.mip.tolerances.mipgap.get())
 
@@ -723,11 +699,9 @@ def cplx_setMIPGapTolerance(c, tol):
 
 
 def cplx_SolveMILP(c, auto_mipgap=False):
-    """
-    Solve and MILP
+    """Solve and MILP.
 
-     - *auto_mipgap* auto decrease mipgap until mipgap == absmipgap
-
+    - *auto_mipgap* auto decrease mipgap until mipgap == absmipgap
     """
     try:
         c.solve()
@@ -759,9 +733,7 @@ def cplx_SolveMILP(c, auto_mipgap=False):
 
 
 def cplx_getOptimalSolution(c):
-    """
-    From a CPLX model extract a tuple of solution, ObjFuncName and ObjFuncVal
-    """
+    """From a CPLX model extract a tuple of solution, ObjFuncName and ObjFuncVal."""
     s_val = []
     s_name = []
     fba_sol = {}
@@ -786,9 +758,7 @@ def cplx_getOptimalSolution(c):
 
 
 def cplx_getOptimalSolution2(c, names):
-    """
-    From a CPLX model extract a tuple of solution, ObjFuncName and ObjFuncVal
-    """
+    """From a CPLX model extract a tuple of solution, ObjFuncName and ObjFuncVal."""
     s_val = []
     s_name = []
     fba_sol = None
@@ -809,15 +779,14 @@ def cplx_getOptimalSolution2(c, names):
 
 
 def cplx_writeLPsolution(fba_sol, objf_name, fname, Dir=None, separator=','):
-    """
-    This function writes the optimal solution, produced wth `cplx_getOptimalSolution` to file
+    """This function writes the optimal solution, produced wth `cplx_getOptimalSolution`
+    to file.
 
-     - *fba_sol* a dictionary of Flux : value pairs
-     - *objf_name* the objective function flux id
-     - *fname* the output filename
-     - *Dir* [default=None] use directory if not None
-     - *separator* [default=','] the column separator
-
+    - *fba_sol* a dictionary of Flux : value pairs
+    - *objf_name* the objective function flux id
+    - *fname* the output filename
+    - *Dir* [default=None] use directory if not None
+    - *separator* [default=','] the column separator
     """
     if Dir != None:
         assert os.path.exists(Dir), '\nPath does not exist'
@@ -833,11 +802,9 @@ def cplx_writeLPsolution(fba_sol, objf_name, fname, Dir=None, separator=','):
 
 
 def cplx_getShadowPrices(c):
-    """
-    Returns a dictionary of shadow prices containing 'N_row_id' : (lb, rhs, ub)
+    """Returns a dictionary of shadow prices containing 'N_row_id' : (lb, rhs, ub)
 
-     - *c* a cplex LP object
-
+    - *c* a cplex LP object
     """
     print(
         'cplx_getShadowPrices: This function returns a RHS sensitivity and may or may not be realted to what is known as a shadow price.'
@@ -852,12 +819,10 @@ def cplx_getShadowPrices(c):
 
 
 def cplx_getReducedCosts(c, scaled=False):
-    """
-    Extract ReducedCosts from LP and return as a dictionary 'Rid' : reduced cost
+    """Extract ReducedCosts from LP and return as a dictionary 'Rid' : reduced cost.
 
-     - *c* a cplex LP object
-     - *scaled* scale the reduced cost by the optimal flux value
-
+    - *c* a cplex LP object
+    - *scaled* scale the reduced cost by the optimal flux value
     """
     s_name = c.variables.get_names()
     r_costs = c.solution.get_reduced_costs()
@@ -880,8 +845,7 @@ def cplx_getReducedCosts(c, scaled=False):
 
 
 def cplx_getSensitivities(c):
-    """
-    Get the sensitivities of each constraint on the objective function with inpt
+    """Get the sensitivities of each constraint on the objective function with inpt.
 
      - *c* a CPLEX LP
 
@@ -896,7 +860,6 @@ def cplx_getSensitivities(c):
      - *objective coefficient sensitivity* {flux : (reduced_cost, lower_obj_sensitivity, coeff_value, upper_obj_sensitivity)}
      - *rhs sensitivity* {constraint : (low, value, high)}
      - *bound sensitivity ranges* {flux : (lb_low, lb_high, ub_low, ub_high)}
-
     """
     SENSE_RHS = {}
     SENSE_BND = {}
@@ -933,13 +896,11 @@ def cplx_getSensitivities(c):
 
 
 def cplx_getDualValues(c):
-    """
-    Get the get the dual values of the solution
+    """Get the get the dual values of the solution.
 
      - *c* a CPLEX LP
 
     Output is a dictionary of {name : value} pairs
-
     """
     d_names = c.linear_constraints.get_names()
     d_values = c.solution.get_dual_values()
@@ -1013,17 +974,15 @@ def cplx_getSolutionStatus(c):
 
 
 def cplx_setObjective(c, pid, expr=None, sense='maximize', reset=True):
-    """
-    Set a new objective function note that there is a major memory leak in
-    `c.variables.get_names()` whch is used when reset=True. If this is a problem
-    use cplx_setObjective2 which takes *names* as an input:
+    """Set a new objective function note that there is a major memory leak in
+    `c.variables.get_names()` whch is used when reset=True. If this is a problem use
+    cplx_setObjective2 which takes *names* as an input:
 
-     - *c* a CPLEX LP object
-     - *pid* the r_id of the flux to be optimized
-     - *expr* a list of (coefficient, flux) pairs
-     - *sense* 'maximize'/'minimize'
-     - *reset* [default=True] reset all objective function coefficients to zero
-
+    - *c* a CPLEX LP object
+    - *pid* the r_id of the flux to be optimized
+    - *expr* a list of (coefficient, flux) pairs
+    - *sense* 'maximize'/'minimize'
+    - *reset* [default=True] reset all objective function coefficients to zero
     """
     sense = sense.lower()
     if sense == 'max':
@@ -1062,11 +1021,10 @@ def cplx_setObjective(c, pid, expr=None, sense='maximize', reset=True):
 
 
 def cplx_setObjective2(c, pid, names, expr=None, sense='maximize', reset=True):
-    """
-    Set a new objective function. This is a workaround function to avoid the
-    e is a major memory leak in `c.variables.get_names()` whch is used
-    in cplx_setObjective()  when reset=True.
+    """Set a new objective function.
 
+    This is a workaround function to avoid the e is a major memory leak in
+    `c.variables.get_names()` whch is used in cplx_setObjective()  when reset=True.
     """
     sense = sense.lower()
     if sense == 'max':
@@ -1122,10 +1080,7 @@ def cplx_setBounds(c, pid, lb=None, ub=None):
 
 
 def cplx_writeLPtoLPTfile(c, filename, title=None, Dir=None):
-    """
-    Write out a CPLEX model as an LP format file
-
-    """
+    """Write out a CPLEX model as an LP format file."""
     if Dir != None:
         filename = os.path.join(Dir, filename)
     if title != None:
@@ -1143,10 +1098,7 @@ def cplx_runInputScan(
     writeHformat=False,
     rationalLPout=False,
 ):
-    """
-    scans all inputs
-
-    """
+    """Scans all inputs."""
     debug_dir = os.path.join(wDir, 'lpt')
     ine_dir = os.path.join(wDir, 'ine')
     rat_dir = os.path.join(wDir, 'eslv')
@@ -1260,9 +1212,8 @@ def cplx_func_GetCPXandPresolve(
     with_reduced_costs='unscaled',
     method='o',
 ):
-    """
-    This is a utility function that does a presolve for FVA, MSAF etc. Generates properly formatted
-    empty objects if pre_opt == False
+    """This is a utility function that does a presolve for FVA, MSAF etc. Generates
+    properly formatted empty objects if pre_opt == False.
 
      - *pre_opt* a boolean
      - *fba* a CBModel object
@@ -1281,7 +1232,6 @@ def cplx_func_GetCPXandPresolve(
 
 
     Returns: pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS
-
     """
     # debug write out lp file
     fname = None
@@ -1338,14 +1288,13 @@ def cplx_func_GetCPXandPresolve(
 def cplx_func_SetObjectiveFunctionAsConstraint(
     cpx, rhs_sense, oval, tol, optPercentage
 ):
-    """
-    Take the objective function and "optimum" value and add it as a constraint
-     - *cpx* a cplex object
-     - *oval* the objective value
-     - *tol*  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
-     - *rhs_sense* [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
-     - *optPercentage* [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
+    """Take the objective function and "optimum" value and add it as a constraint.
 
+    - *cpx* a cplex object
+    - *oval* the objective value
+    - *tol*  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
+    - *rhs_sense* [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
+    - *optPercentage* [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
     """
 
     # generate new constraint from old objective value (use non-zero coefficients)
@@ -1627,10 +1576,7 @@ def cplx_MinimizeSumOfAbsFluxes(
 
 
 def cplx_setSolutionStatusToModel(m, lp):
-    """
-    Sets the lp solutions status to the CBMPy model
-
-    """
+    """Sets the lp solutions status to the CBMPy model."""
     m.SOLUTION_STATUS_INT = lp.solution.get_status()
     m.SOLUTION_STATUS = cplx_getSolutionStatus(lp)
 
@@ -2106,8 +2052,7 @@ def cplx_MultiFluxVariabilityAnalysis(
     work_dir=None,
     debug=False,
 ):
-    """
-    Perform a flux variability analysis on a multistate LP
+    """Perform a flux variability analysis on a multistate LP.
 
      - *lp* a multistate LP
      - *selected reactions* [default=None] means use all reactions otherwise use the reactions listed here
@@ -2351,15 +2296,13 @@ def cplx_MultiFluxVariabilityAnalysis(
 
 
 def cplx_singleGeneScan(fba, r_off_low=0.0, r_off_upp=0.0, optrnd=8, altout=False):
-    """
-    Perform a single gene deletion scan
+    """Perform a single gene deletion scan.
 
-     - *fba* a model object
-     - *r_off_low* the lower bound of a deactivated reaction
-     - *r_off_upp* the upper bound of a deactivated reaction
-     - *optrnd* [default=8] round off the optimal value
-     - *altout* [default=False] by default return a list of gene:opt pairs, alternatively (True) return an extended result set including gene groups, optima and effect map
-
+    - *fba* a model object
+    - *r_off_low* the lower bound of a deactivated reaction
+    - *r_off_upp* the upper bound of a deactivated reaction
+    - *optrnd* [default=8] round off the optimal value
+    - *altout* [default=False] by default return a list of gene:opt pairs, alternatively (True) return an extended result set including gene groups, optima and effect map
     """
     # cplex optimization
     if fba.__single_gene_effect_map__ == None:
@@ -2452,14 +2395,12 @@ def cplx_singleGeneScan(fba, r_off_low=0.0, r_off_upp=0.0, optrnd=8, altout=Fals
 
 
 def cplx_singleReactionDeletionScan(fba, r_off_low=0.0, r_off_upp=0.0, optrnd=8):
-    """
-    Perform a single reaction deletion scan
+    """Perform a single reaction deletion scan.
 
-     - *fba* a model object
-     - *r_off_low* the lower bound of a deactivated reaction
-     - *r_off_upp* the upper bound of a deactivated reaction
-     - *optrnd* [default=8] round off the optimal value
-
+    - *fba* a model object
+    - *r_off_low* the lower bound of a deactivated reaction
+    - *r_off_upp* the upper bound of a deactivated reaction
+    - *optrnd* [default=8] round off the optimal value
     """
 
     lpx = cplx_constructLPfromFBA(fba)
@@ -2501,16 +2442,14 @@ def cplx_singleReactionDeletionScan(fba, r_off_low=0.0, r_off_upp=0.0, optrnd=8)
 
 
 def cplx_WriteFVAtoCSV(pid, fva, names, Dir=None, fbaObj=None):
-    """
-    Takes the resuls of a FluxVariabilityAnalysis method and writes it to a nice
-    csv file. Note this method has been refactored to `CBWrite.WriteFVAtoCSV()`.
+    """Takes the resuls of a FluxVariabilityAnalysis method and writes it to a nice csv
+    file. Note this method has been refactored to `CBWrite.WriteFVAtoCSV()`.
 
-     - *pid* filename_base for the CSV output
-     - *fva* FluxVariabilityAnalysis() OUTPUT_ARRAY
-     - *names* FluxVariabilityAnalysis() OUTPUT_NAMES
-     - *Dir* [default=None] if set the output directory for the csv files
-     - *fbaObj* [default=None] if supplied adds extra model information into the output tables
-
+    - *pid* filename_base for the CSV output
+    - *fva* FluxVariabilityAnalysis() OUTPUT_ARRAY
+    - *names* FluxVariabilityAnalysis() OUTPUT_NAMES
+    - *Dir* [default=None] if set the output directory for the csv files
+    - *fbaObj* [default=None] if supplied adds extra model information into the output tables
     """
 
     print(

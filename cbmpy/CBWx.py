@@ -1077,9 +1077,7 @@ if HAVE_WX:
                     grid.SetColMinimalWidth(c, 40)
 
         def UpdateRGridData(self):
-            """
-            Updates Rgrid numeric data
-            """
+            """Updates Rgrid numeric data."""
             grid = self.RGrid
             reactions = self._cmod_.reactions
             if self._cmod_.getActiveObjective() != None:
@@ -1226,7 +1224,7 @@ if HAVE_WX:
             dlg.Destroy()
 
         def MENUOnSave(self, e):
-            """ Open a file"""
+            """Open a file."""
             dlg = wx.FileDialog(
                 self,
                 "Enter filename",
@@ -1250,7 +1248,7 @@ if HAVE_WX:
             dlg.Destroy()
 
         def MENUAnalyseBalances(self, e):
-            ''' Check the reaction balances'''
+            """Check the reaction balances."""
             wait = wx.BusyCursor()
             rids = self._cmod_.getReactionIds()
             self.ReactionBalanceInfo = self._cbm_.CBTools.checkReactionBalanceElemental(
@@ -1565,10 +1563,7 @@ if HAVE_WX:
             ##  wx.CallAfter(self.FCanvas_met.Draw)
 
     class HtmlWindowMod(wx.html.HtmlWindow):
-        """
-        Overrides 'OnLinkClicked' to open links in external browser
-
-        """
+        """Overrides 'OnLinkClicked' to open links in external browser."""
 
         def __init__(self, *args, **kwargs):
             wx.html.HtmlWindow.__init__(*args, **kwargs)
@@ -1707,11 +1702,11 @@ if HAVE_WX:
             matchFunction=None,
             **therest,
         ):
-            '''
-            Constructor works just like wx.TextCtrl except you can pass in a
-            list of choices.  You can also change the choice list at any time
-            by calling setChoices.
-            '''
+            """Constructor works just like wx.TextCtrl except you can pass in a list of
+            choices.
+
+            You can also change the choice list at any time by calling setChoices.
+            """
 
             if 'style' in therest:
                 therest['style'] = wx.TE_PROCESS_ENTER | therest['style']
@@ -1940,8 +1935,7 @@ if HAVE_WX:
 
         # -- Interfaces methods
         def SetMultipleChoices(self, choices, colSearch=0, colFetch=-1):
-            ''' Set multi-column choice
-            '''
+            """Set multi-column choice."""
             self._multiChoices = choices
             self._choices = None
             if not isinstance(self._multiChoices, list):
@@ -1988,10 +1982,10 @@ if HAVE_WX:
             self._colFetch = colFetch
 
         def SetChoices(self, choices):
-            '''
-            Sets the choices available in the popup wx.ListBox.
+            """Sets the choices available in the popup wx.ListBox.
+
             The items will be sorted case insensitively.
-            '''
+            """
             self._choices = choices
             self._multiChoices = None
             flags = (
@@ -2043,10 +2037,10 @@ if HAVE_WX:
 
         # -- Internal methods
         def _setValueFromSelected(self):
-            '''
-            Sets the wx.TextCtrl value from the selected wx.ListCtrl item.
+            """Sets the wx.TextCtrl value from the selected wx.ListCtrl item.
+
             Will do nothing if no item is selected in the wx.ListCtrl.
-            '''
+            """
             sel = self.dropdownlistbox.GetFirstSelected()
             if sel > -1:
                 if self._colFetch != -1:
@@ -2069,9 +2063,8 @@ if HAVE_WX:
                 self._showDropDown(False)
 
         def _showDropDown(self, show=True):
-            '''
-            Either display the drop down list (show = True) or hide it (show = False).
-            '''
+            """Either display the drop down list (show = True) or hide it (show =
+            False)."""
             if show:
                 size = self.dropdown.GetSize()
                 width, height = self.GetSizeTuple()
@@ -2089,9 +2082,8 @@ if HAVE_WX:
             self.dropdown.Show(show)
 
         def _listItemVisible(self):
-            '''
-            Moves the selected item to the top of the list ensuring it is always visible.
-            '''
+            """Moves the selected item to the top of the list ensuring it is always
+            visible."""
             toSel = self.dropdownlistbox.GetFirstSelected()
             if toSel == -1:
                 return

@@ -198,8 +198,6 @@ SBML_NS = [
     ('http://www.sbml.org/sbml/level2/version4', 'L2'),
     ('http://www.sbml.org/sbml/level2', 'L2'),
 ]
-
-
 """
 print libsbml.BQB_ENCODES            , 8  # "encodes",
 print libsbml.BQB_HAS_PART           , 1  # "hasPart",
@@ -262,17 +260,13 @@ re_html_span = re.compile("<span>.*?</span>")
 
 
 class MLStripper(HTMLParser):
-    """
-    Class for stripping a string of HTML/XML used from:
-    http://stackoverflow.com/questions/753052/strip-html-from-strings-in-python
+    """Class for stripping a string of HTML/XML used from:
 
+    http://stackoverflow.com/questions/753052/strip-html-from-strings-in-python
     """
 
     def __init__(self):
-        """
-        Strip a string of HTML/XML tags
-
-        """
+        """Strip a string of HTML/XML tags."""
         HTMLParser.__init__(self)
         self.reset()
         self.fed = []
@@ -298,11 +292,9 @@ except AttributeError as err:
 
 
 def xml_stripTags(html):
-    """
-    Strip a string of HTML/XML, returns a string
+    """Strip a string of HTML/XML, returns a string.
 
-     - *html* the string containing html
-
+    - *html* the string containing html
     """
     __tagStripper__.feed(html)
     return __tagStripper__.get_data()
@@ -323,15 +315,13 @@ def formatSbmlId(s):
 def sbml_readSBML2FBA(
     fname, work_dir=None, return_sbml_model=False, fake_boundary_species_search=False
 ):
-    """
-    Read in an SBML Level 2 file with FBA annotation where and return either a CBM model object
-    or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
+    """Read in an SBML Level 2 file with FBA annotation where and return either a CBM
+    model object or a (cbm_mod, sbml_mod) pair if return_sbml_model=True.
 
-     - *fname* is the filename
-     - *work_dir* is the working directory (only used if not None)
-     - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
-     - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
-
+    - *fname* is the filename
+    - *work_dir* is the working directory (only used if not None)
+    - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
+    - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
     """
 
     assert (
@@ -803,11 +793,9 @@ def sbml_readSBML2FBA(
 
 
 def xml_createSBML2FBADoc():
-    """
-    Create a 'document' to store the SBML2FBA annotation, returns:
+    """Create a 'document' to store the SBML2FBA annotation, returns:
 
-     - *DOC* a minidom document
-
+    - *DOC* a minidom document
     """
     DOM = getDOMImplementation()
     DOC = DOM.createDocument(FBA_NS, 'fba:fluxBalance', None)
@@ -821,12 +809,10 @@ def xml_createSBML2FBADoc():
 
 
 def xml_viewSBML2FBAXML(document, fname=None):
-    """
-    Print a minidom XML document to screen or file, arguments:
+    """Print a minidom XML document to screen or file, arguments:
 
-     - *document* a minidom XML document
-     - *fname* [default=None] by default print to screen or write to file fname
-
+    - *document* a minidom XML document
+    - *fname* [default=None] by default print to screen or write to file fname
     """
     ##  print DOC.toxml('UTF-8')
     ##  print document.toprettyxml(indent=' ',newl='\n',encoding='UTF-8')
@@ -1063,13 +1049,11 @@ def sbml_setCompartmentsL2(model, compartments):
 
 
 def sbml_setCompartmentsL3(model, fba):
-    '''
-    Sets the model compartments.
+    """Sets the model compartments.
 
-     - *model* a libSBML model instance
-     - *fba* a PySCeSCBM model instance
-
-    '''
+    - *model* a libSBML model instance
+    - *fba* a PySCeSCBM model instance
+    """
     for cs in fba.compartments:
         comp_def = model.createCompartment()
         comp_def.setId(cs.getId())
@@ -1107,12 +1091,10 @@ def sbml_setCompartmentsL3(model, fba):
 
 
 def sbml_setParametersL3Fbc(fbcmod, add_cbmpy_anno=True, fbc_version=2):
-    """
-    Add non fluxbound related parameters to the model
+    """Add non fluxbound related parameters to the model.
 
-     - *fbcmod* a CBM2SBML instance
-     - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation.
-
+    - *fbcmod* a CBM2SBML instance
+    - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation.
     """
 
     cntr = 0
@@ -1125,16 +1107,14 @@ def sbml_setParametersL3Fbc(fbcmod, add_cbmpy_anno=True, fbc_version=2):
 
 
 def sbml_setAnnotationsL3Fbc(cbmo, sbmlo):
-    """
-    Add CBMPy Fbase annotations to an SBML object, MIRIAM, SBO, Notes. Should
-    be called last when creating SBML objects.
+    """Add CBMPy Fbase annotations to an SBML object, MIRIAM, SBO, Notes. Should be
+    called last when creating SBML objects.
 
-     - *cbmo* the CBMPy object
-     - *sbmlo* SBML object
+    - *cbmo* the CBMPy object
+    - *sbmlo* SBML object
 
-     Note: this function should be used for new code, old code still needs to be
-     refactored.
-
+    Note: this function should be used for new code, old code still needs to be
+    refactored.
     """
 
     if len(cbmo.getAnnotations()) > 0:
@@ -1153,13 +1133,12 @@ def sbml_setAnnotationsL3Fbc(cbmo, sbmlo):
 
 
 def sbml_setDescription(model, fba):
-    '''
-    Sets the model description as a <note> containing `txt` in an HTML paragraph on the model object.
+    """Sets the model description as a <note> containing `txt` in an HTML paragraph on
+    the model object.
 
-     - *model* a libSBML model instance
-     - *fba* a PySCeSCBM model instance
-
-    '''
+    - *model* a libSBML model instance
+    - *fba* a PySCeSCBM model instance
+    """
     ##  try: UseR = getuser()
     ##  except: UseR = ''
     notes = ''
@@ -1185,12 +1164,10 @@ def sbml_setDescription(model, fba):
 
 
 def sbml_setNotes3(obj, s):
-    """
-    Formats the CBMPy notes as an SBML note and adds it to the SBMl object
+    """Formats the CBMPy notes as an SBML note and adds it to the SBMl object.
 
-     - *obj* an SBML object
-     - *s* a string that should be added as a note
-
+    - *obj* an SBML object
+    - *s* a string that should be added as a note
     """
     s = s.replace('<notes>', '').replace('</notes>', '')
     if '</html:body>' not in s and '</body>' not in s:
@@ -1211,11 +1188,9 @@ def sbml_setNotes3(obj, s):
 
 
 def sbml_getNotes(obj):
-    """
-    Returns the SBML objects notes
+    """Returns the SBML objects notes.
 
     - *obj* an SBML object
-
     """
     notes = ''
     try:
@@ -1276,10 +1251,7 @@ def sbml_setUnits(model, units=None, give_default=False, L3=True):
 
 
 def sbml_writeAnnotationsAsCOBRANote(annotations):
-    """
-    Writes the annotations dictionary as a COBRA compatible SBML <note>
-
-    """
+    """Writes the annotations dictionary as a COBRA compatible SBML <note>"""
     annoSTR = ''
     for K in annotations:
         # this is to keep COBRA happy
@@ -1401,13 +1373,11 @@ def sbml_setSpeciesL2(model, fba, return_dicts=False):
 
 
 def sbml_setReactionsL2(model, fba, return_dict=False):
-    """
-    Add the FBA instance reactions to the SBML model
+    """Add the FBA instance reactions to the SBML model.
 
-     - *model* an SBML model instance
-     - *fba* a PySCeSCBM model instance
-     - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
-
+    - *model* an SBML model instance
+    - *fba* a PySCeSCBM model instance
+    - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
     """
 
     SBML_LEVEL = 2
@@ -1508,14 +1478,13 @@ def sbml_setReactionsL2(model, fba, return_dict=False):
 def sbml_exportSBML2FBAModel(
     document, filename, directory=None, return_doc=False, remove_note_body=False
 ):
-    """
-    Writes an SBML model object to file. Note this is an internal SBML method use `sbml_writeSBML2FBA()` to write an FBA model:
+    """Writes an SBML model object to file. Note this is an internal SBML method use
+    `sbml_writeSBML2FBA()` to write an FBA model:
 
-     - *model* a libSBML model instance
-     - *filename* the output filename
-     - *directory* [default=None] by default use filename otherwise join, <dir><filename>
-     - *return_doc* [default=False] return the SBML document used to write the XML
-
+    - *model* a libSBML model instance
+    - *filename* the output filename
+    - *directory* [default=None] by default use filename otherwise join, <dir><filename>
+    - *return_doc* [default=False] return the SBML document used to write the XML
     """
     if directory != None:
         assert os.path.exists(directory), '\n%s does not exist.' % directory
@@ -1625,13 +1594,11 @@ class FBCconnect(object):
     groupList = None
 
     def __init__(self, fbc_version=2, fbc_strict=True, enable_groups=False):
-        """
-        Connect SBML Packages
+        """Connect SBML Packages.
 
-         - *fbc_version* [default=2] fbc version
-         - *fbc_strict* [default=True] if using FBC V2 set the strict flag
-         - *enable_groups* [default=False] use the Groups package if possible
-
+        - *fbc_version* [default=2] fbc version
+        - *fbc_strict* [default=True] if using FBC V2 set the strict flag
+        - *enable_groups* [default=False] use the Groups package if possible
         """
         assert _HAVE_SBML_, '\nERROR: libSBML required for SBML support'
         self.sbml = libsbml
@@ -1678,21 +1645,18 @@ class FBCconnect(object):
         return pkg in pkgs
 
     def createGroup(self, grp):
-        """
-        Adds a group to the SBML model.
+        """Adds a group to the SBML model.
 
-         - *grp* the cbmpy group object
-
+        - *grp* the cbmpy group object
         """
         raise NotImplementedError
 
     def createGroupLegacy(self, gid, group, name=None):
-        """
-        Tries to add a group to the model if (assuming the groups package is available).
+        """Tries to add a group to the model if (assuming the groups package is
+        available).
 
-         - *gid* the group name
-         - *groups* a list of strings that refer to model SId's
-
+        - *gid* the group name
+        - *groups* a list of strings that refer to model SId's
         """
 
         gl = self.groups.getListOfGroups()
@@ -1745,15 +1709,13 @@ class FBCconnect(object):
 
 
     def createObjective(self, oid, osense, flux_objs, name=None, active=True):
-        """
-        Create and add the FBC Objective function. Returns the SBML objective object
+        """Create and add the FBC Objective function. Returns the SBML objective object.
 
-         - *oid* objective id
-         - *osense* objective sense
-         - *flux_objs* [(reaction, coefficient, type)]
-         - *name*
-         - *active*
-
+        - *oid* objective id
+        - *osense* objective sense
+        - *flux_objs* [(reaction, coefficient, type)]
+        - *name*
+        - *active*
         """
         O = self.fbc.createObjective()
         O.setId(oid)
@@ -1784,12 +1746,10 @@ class FBCconnect(object):
 
 
     def createGeneAssociationV1(self, rid, assoc, gprid=None):
-        """
-        Create a gene association for a specified reaction and an association string
+        """Create a gene association for a specified reaction and an association string.
 
-         - *rid* a reaction id
-         - *assoc* the association string e.g.(b0698 and b0697) or (b0696)
-
+        - *rid* a reaction id
+        - *assoc* the association string e.g.(b0698 and b0697) or (b0696)
         """
         GPR = self.fbc.createGeneAssociation()
         if gprid == None:
@@ -1854,10 +1814,7 @@ class CBMtoSBML3(FBCconnect):
     parameter_cntr = 0
 
     def __init__(self, fba, fbc_version=2, fbc_strict=True, enable_groups=False):
-        """
-        Convert a CBM model to SBML level 3 with FBC
-
-        """
+        """Convert a CBM model to SBML level 3 with FBC."""
         super(CBMtoSBML3, self).__init__(fbc_version, fbc_strict, enable_groups)
         self.fba = fba
         self.parameter_map = {}
@@ -1887,10 +1844,7 @@ class CBMtoSBML3(FBCconnect):
                 sbml_setCVterms(self.model, miriam, model=True)
 
     def addModelHistory(self):
-        """
-        If they exist add CBM model history information to SBML model
-
-        """
+        """If they exist add CBM model history information to SBML model."""
         sbmh = self.sbml.ModelHistory()
         GO = False
         if self.fba.DATE_CREATED not in [None, '']:
@@ -1918,12 +1872,10 @@ class CBMtoSBML3(FBCconnect):
         del sbmh
 
     def addBoundsV2(self, compress_bounds=False, sig_dig=20):
-        """
-        Add FBC V2 style fluxbounds to model
+        """Add FBC V2 style fluxbounds to model.
 
-         - *compress_bounds* [default=False] enable parameter compression
-         - *sig_dig* [default=20] round off to significant digits
-
+        - *compress_bounds* [default=False] enable parameter compression
+        - *sig_dig* [default=20] round off to significant digits
         """
         if compress_bounds:
             print('INFO: V2 bounds compression enabled')
@@ -1983,11 +1935,9 @@ class CBMtoSBML3(FBCconnect):
                     print('ERROR: strange flux bound assigment type error (CBXML:1635)', btype, self.parameter_map[rid])
 
     def addBoundsV1(self, autofix=False):
-        """
-        Add the CBM fluxbounds to SBML
+        """Add the CBM fluxbounds to SBML.
 
-         - *autofix* convert '< >' to '<= >=' default = False
-
+        - *autofix* convert '< >' to '<= >=' default = False
         """
         self.bound_registry = []
         for fb_ in self.fba.flux_bounds:
@@ -2011,10 +1961,7 @@ class CBMtoSBML3(FBCconnect):
                 print('Bound %s already exists, skipping ...' % (rid))
 
     def addObjectives(self, add_cbmpy_anno=True,):
-        """
-        Add the CBM objective function to SBML
-
-        """
+        """Add the CBM objective function to SBML."""
 #         add_cbmpy_anno = True
         for ob_ in self.fba.objectives:
             active = False
@@ -2057,15 +2004,13 @@ class CBMtoSBML3(FBCconnect):
         annotation_key='GENE ASSOCIATION',
         add_cbmpy_anno=True,
     ):
-        """
-        Create genes and add to SBML models (FBC V2)
+        """Create genes and add to SBML models (FBC V2)
 
-         - *parse_from_annotation* [default=False] if the gpr_assoc list is empty e.g. the GPR associations have
-            not been parsed enabling this will do so.
-         - *annotation_key* [default='GENE ASSOCIATION'] the key to use for the gene association if parse_from_annotation is True
-           by default it will try one of GENE ASSOCIATION, GENE_ASSOCIATION, gene_association, gene association.
-         - *add_cbmpy_anno* [default=True] add PySCeS CBMPy annotation
-
+        - *parse_from_annotation* [default=False] if the gpr_assoc list is empty e.g. the GPR associations have
+           not been parsed enabling this will do so.
+        - *annotation_key* [default='GENE ASSOCIATION'] the key to use for the gene association if parse_from_annotation is True
+          by default it will try one of GENE ASSOCIATION, GENE_ASSOCIATION, gene_association, gene association.
+        - *add_cbmpy_anno* [default=True] add PySCeS CBMPy annotation
         """
         if len(self.fba.gpr) == 0 and parse_from_annotation:
             self.fba.createGeneAssociationsFromAnnotations(annotation_key)
@@ -2109,15 +2054,13 @@ class CBMtoSBML3(FBCconnect):
         annotation_key='GENE ASSOCIATION',
         add_cbmpy_anno=True,
     ):
-        """
-        Add the CBM geneProtein associations to SBML from the gpr_assoc list (FBC V1)
+        """Add the CBM geneProtein associations to SBML from the gpr_assoc list (FBC V1)
 
-         - *parse_from_annotation* [default=False] if the gpr_assoc list is empty e.g. the GPR associations have
-            not been parsed enabling this will do so.
-         - *annotation_key* [default='GENE ASSOCIATION'] the key to use for the gene association if parse_from_annotation is True
-           by default it will try one of GENE ASSOCIATION, GENE_ASSOCIATION, gene_association, gene association.
-         - *add_cbmpy_anno* add PySCeS CBMPy annotation (still to be implemented)
-
+        - *parse_from_annotation* [default=False] if the gpr_assoc list is empty e.g. the GPR associations have
+           not been parsed enabling this will do so.
+        - *annotation_key* [default='GENE ASSOCIATION'] the key to use for the gene association if parse_from_annotation is True
+          by default it will try one of GENE ASSOCIATION, GENE_ASSOCIATION, gene_association, gene association.
+        - *add_cbmpy_anno* add PySCeS CBMPy annotation (still to be implemented)
         """
         if len(self.fba.gpr) == 0 and parse_from_annotation:
             print(
@@ -2147,10 +2090,7 @@ class CBMtoSBML3(FBCconnect):
 
 
     def addUserDefinedConstraintsV3(self, add_cbmpy_anno=True):
-        """
-        Add FBC V3 user defined constraints
-
-        """
+        """Add FBC V3 user defined constraints."""
         assert (self.fbcversion >= 3), "UserDefinedConstraints support require FBCv3"
 
         for u in self.fba.user_defined_constraints:
@@ -2206,12 +2146,10 @@ class CBMtoSBML3(FBCconnect):
 
 
     def createParParameter(self, param, add_cbmpy_anno=True):
-        """
-        Create a generic SBML parameter from a CBMPy parameter
+        """Create a generic SBML parameter from a CBMPy parameter.
 
-         - *param* a CBMPy parameter object
-         - *add_cbmpy_anno* [default=True] add annotation to SBML object
-
+        - *param* a CBMPy parameter object
+        - *add_cbmpy_anno* [default=True] add annotation to SBML object
         """
         # print('createParParameter', param.getId())
         par = self.model.createParameter()
@@ -2241,11 +2179,9 @@ class CBMtoSBML3(FBCconnect):
         return par
 
     def createFbParameterV2(self, bnd, add_cbmpy_anno=True):
-        """
-        Create SBML V2 flux bound parameters for reaction
+        """Create SBML V2 flux bound parameters for reaction.
 
-         - *bnd* object
-
+        - *bnd* object
         """
         #print('createFbParameterV2', bnd.getId(), add_cbmpy_anno)
 
@@ -2275,14 +2211,12 @@ class CBMtoSBML3(FBCconnect):
         return bid
 
     def createFbParameterSharedV2(self, pid, value):
-        """
-        Create SBML V2 flux bound parameters for reaction
+        """Create SBML V2 flux bound parameters for reaction.
 
-         - *value* parameter value
-         - *pid* optional parameter id
+        - *value* parameter value
+        - *pid* optional parameter id
 
-         returns parameter id
-
+        returns parameter id
         """
 
         par = self.model.createParameter()
@@ -2373,11 +2307,9 @@ def sbml_readKeyValueDataAnnotation(annotations):
 
 
 def sbml_readFBCv3KeyValuePairs(fbcp):
-    """
-    Reads FBCv3 KeyValue pair annotation and returns a dictionary of key:value pairs
+    """Reads FBCv3 KeyValue pair annotation and returns a dictionary of key:value pairs.
 
     - *fbcp* an FBC plugin
-
     """
     #print("sbml_readFBCv3KeyValuePairs coming to a reader near you.", fbcp)
 
@@ -2561,15 +2493,13 @@ def sbml_setSpeciesL3(
 
 def sbml_setReactionsL3Fbc(
     fbcmod, return_dict=False, add_cobra_anno=False, add_cbmpy_anno=True, fbc_version=2):
-    """
-    Add the FBA instance reactions to the SBML model
+    """Add the FBA instance reactions to the SBML model.
 
-     - *fbcmod* a CBM2SBML instance
-     - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
-     - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
-     - *add_cobra_anno* [default=False] add COBRA <notes> annotation
-     - *fbc_version* [default=2] writes either FBC v1 (2013) or v2 (2015) or v3 (2023)
-
+    - *fbcmod* a CBM2SBML instance
+    - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
+    - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
+    - *add_cobra_anno* [default=False] add COBRA <notes> annotation
+    - *fbc_version* [default=2] writes either FBC v1 (2013) or v2 (2015) or v3 (2023)
     """
 
     fba = fbcmod.fba
@@ -2720,12 +2650,10 @@ def sbml_setReactionsL3Fbc(
 
 
 def sbml_setFBCv3KeyValuePairs(fbcp, kv_pairs):
-    """
-    Adds key value pairs to any FBCv3 SBase derived object
+    """Adds key value pairs to any FBCv3 SBase derived object.
 
     - *fbcp* an FBCv3 plugin
     - *kv_pairs* a dictionary of CBMPy Key Value pairs (format will be upgraded over next few versions)
-
     """
     for kv_ in kv_pairs:
         kvp = fbcp.createKeyValuePair()
@@ -2736,12 +2664,10 @@ def sbml_setFBCv3KeyValuePairs(fbcp, kv_pairs):
 
 
 def sbml_setGroupsL3(cs, fba):
-    """
-    add groups to the SBML model
+    """Add groups to the SBML model.
 
-     - *cs* a CBMLtoSBML instance
-     - *fba* a CBMPy model instance
-
+    - *cs* a CBMLtoSBML instance
+    - *fba* a CBMPy model instance
     """
     if not cs.GROUPS_AVAILABLE:
         print('\nWARNING: Groups package not available.')
@@ -2842,10 +2768,7 @@ def sbml_writeCOBRASBML(fba, fname, directory=None):
 
 
 def sbml_getGeneRefs(association, out):
-    """
-    Walk through a gene association and extract GeneRefs inspired by Frank
-
-    """
+    """Walk through a gene association and extract GeneRefs inspired by Frank."""
     if isinstance(association, libsbml.GeneProductRef):
         ref = association.getGeneProduct()
         if ref not in out:
@@ -2856,21 +2779,17 @@ def sbml_getGeneRefs(association, out):
 
 
 def sbml_getGPRasDictFBCv1(node, out):
-    """
-    Converts a GPR string '((g1 and g2) or g3)' to a gprDict which is returned
+    """Converts a GPR string '((g1 and g2) or g3)' to a gprDict which is returned.
 
-     - *node* a Python AST note (e.g. `ast.parse(gprstring).body[0]`)
-     - *out* a new dictionary that will be be created in place
-
+    - *node* a Python AST note (e.g. `ast.parse(gprstring).body[0]`)
+    - *out* a new dictionary that will be be created in place
     """
     return getGPRasDictFromString(node, out)
 
 
 def sbml_getGPRasDictFBCv2(association, out, cntr):
-    """
-    Walk through an SBML L3FBCV2 gene protein association and return a dictionary/tree representation
-
-    """
+    """Walk through an SBML L3FBCV2 gene protein association and return a
+    dictionary/tree representation."""
     key = cntr
     # print(association)
     if isinstance(association, libsbml.GeneProductRef):
@@ -2899,14 +2818,12 @@ def sbml_getGPRasDictFBCv2(association, out, cntr):
 
 
 def sbml_createAssociationFromAST(node, out):
-    """
-    Converts a GPR string '((g1 and g2) or g3)' to an association via a Python AST.
+    """Converts a GPR string '((g1 and g2) or g3)' to an association via a Python AST.
     In future I will get rid of all the string elements and work only with associations
     and AST's.
 
-     - *node* a Python AST note (e.g. body)
-     - *out* a new shiny FBC V2 GeneProductAssociation
-
+    - *node* a Python AST note (e.g. body)
+    - *out* a new shiny FBC V2 GeneProductAssociation
     """
     if isinstance(node, ast.Name):
         ref = out.createGeneProductRef()
@@ -2939,12 +2856,10 @@ def sbml_createAssociationFromAST(node, out):
 
 
 def sbml_createAssociationFromTreeV2(tree, out):
-    """
-    Converts a GPR tree to an association
+    """Converts a GPR tree to an association.
 
-     - *tree* a GPR dict tree
-     - *out* a new shiny FBC V2 GeneProductAssociation
-
+    - *tree* a GPR dict tree
+    - *out* a new shiny FBC V2 GeneProductAssociation
     """
     for c in tree:
         if c.startswith('_AND_'):
@@ -3160,16 +3075,14 @@ def sbml_writeSBML3FBC(
 
 
 def sbml_setValidationOptions(D, level):
-    """
-    set the validation level of an SBML document
+    """Set the validation level of an SBML document.
 
-     - *D* an SBML document
-     - *level* the level of consistency check can be either one of:
+    - *D* an SBML document
+    - *level* the level of consistency check can be either one of:
 
-      - 'normal' basic id checking only
-      - 'full' all checks enabled
-      - None disable all validation
-
+     - 'normal' basic id checking only
+     - 'full' all checks enabled
+     - None disable all validation
     """
 
     if level == 'normal':
@@ -3211,19 +3124,17 @@ def sbml_readCOBRASBML(
     speciesAnnotationFix=True,
     skip_genes=False,
 ):
-    """
-    Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
-    or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
+    """Read in a COBRA format SBML Level 2 file with FBA annotation where and return
+    either a CBM model object or a (cbm_mod, sbml_mod) pair if return_sbml_model=True.
 
-     - *fname* is the filename
-     - *work_dir* is the working directory
-     - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
-     - *delete_intermediate* [default=False] delete the intermediate SBML Level 3 FBC file
-     - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
-     - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
-     - *speciesAnnotationFix* [default=True]
-     - *skip_genes* [default=False] convert GPR associations
-
+    - *fname* is the filename
+    - *work_dir* is the working directory
+    - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
+    - *delete_intermediate* [default=False] delete the intermediate SBML Level 3 FBC file
+    - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
+    - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
+    - *speciesAnnotationFix* [default=True]
+    - *skip_genes* [default=False] convert GPR associations
     """
     try:
         new_file = sbml_convertCOBRASBMLtoFBC(
@@ -3277,9 +3188,8 @@ def sbml_readCOBRASBML(
 
 
 def sbml_convertCOBRASBMLtoFBC(fname, outname=None, work_dir=None, output_dir=None):
-    """
-    Read in a COBRA SBML Level 2 file and return the name of the created SBML Level 3 with FBC
-    file that is created in the output directory
+    """Read in a COBRA SBML Level 2 file and return the name of the created SBML Level 3
+    with FBC file that is created in the output directory.
 
      - *fname* is the filename
      - *outname* the name of the output file. If not specified then <filename>.l3fbc.xml is used as default
@@ -3288,7 +3198,6 @@ def sbml_convertCOBRASBMLtoFBC(fname, outname=None, work_dir=None, output_dir=No
 
     This method is based on code from libSBML (http://sbml.org) in the file "convertCobra.py"
     written by Frank T. Bergmann.
-
     """
     assert (
         _HAVE_SBML_
@@ -3363,9 +3272,8 @@ def sbml_convertCOBRASBMLtoFBC(fname, outname=None, work_dir=None, output_dir=No
 
 
 def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=None):
-    """
-    Read in a SBML Level 3 file and return the name of the created COBRA
-    file that is created in the output directory
+    """Read in a SBML Level 3 file and return the name of the created COBRA file that is
+    created in the output directory.
 
      - *fname* is the filename
      - *outname* the name of the output file. If not specified then <filename>.cobra.xml is used as default
@@ -3374,7 +3282,6 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
 
     This method is based on code from libSBML (http://sbml.org) in the file "convertFbcToCobra.py"
     written by Frank T. Bergmann.
-
     """
     assert (
         _HAVE_SBML_
@@ -3465,12 +3372,11 @@ def sbml_convertSBML3FBCToCOBRA(fname, outname=None, work_dir=None, output_dir=N
 
 
 def sbml_validateDocument(D, fullmsg=False, docread=False):
-    """
-    Validates and SBML document returns three dictionaries, errors, warnings, other and a boolean indicating an invalid document:
+    """Validates and SBML document returns three dictionaries, errors, warnings, other
+    and a boolean indicating an invalid document:
 
-     - *D* and SBML document
-     - *fullmsg* [default=False] optionally display the full error message
-
+    - *D* and SBML document
+    - *fullmsg* [default=False] optionally display the full error message
     """
 
     warnings = {}
@@ -3576,12 +3482,10 @@ def sbml_validateDocument(D, fullmsg=False, docread=False):
 
 
 def sbml_fileValidate(f, level="normal"):
-    """
-    Validate an SBML file and model
+    """Validate an SBML file and model.
 
-     - *f* the SBML file
-     - *level* [default='normal'] the level of validation "normal" or "full"
-
+    - *f* the SBML file
+    - *level* [default='normal'] the level of validation "normal" or "full"
     """
     if not os.path.exists(f):
         print('ERROR: invalid file')
@@ -3603,11 +3507,9 @@ def sbml_fileValidate(f, level="normal"):
 
 
 def sbml_fileFindVersion(f):
-    """
-    Try and find the SBML version and FBC support
+    """Try and find the SBML version and FBC support.
 
-     - *f* the SBML file
-
+    - *f* the SBML file
     """
     if not os.path.exists(f):
         print('ERROR: invalid file')
@@ -3658,12 +3560,10 @@ def sbml_fileFindVersion(f):
 
 
 def setCBSBOterm(sbo, obj):
-    """
-    Given an SBOterm from libSBML, add it to a CBMPy object
+    """Given an SBOterm from libSBML, add it to a CBMPy object.
 
-     - *sbo* the sbo term string
-     - *obj* the CBMPy Fbase derived object
-
+    - *sbo* the sbo term string
+    - *obj* the CBMPy Fbase derived object
     """
     if sbo is not None and sbo != '':
         try:
@@ -3679,8 +3579,8 @@ def setCBSBOterm(sbo, obj):
 
 
 def with_metaclass(meta, *bases):
-    """
-    Create a base class with a metaclass.
+    """Create a base class with a metaclass.
+
     Usage is: NewClass(with_metaclass(MetaClass, BaseClass*)
     """
 
@@ -3700,29 +3600,27 @@ def with_metaclass(meta, *bases):
 
 
 def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}):
-    """
-    Read in an SBML Level 3 file with FBC annotation where and return either a CBM model object
-    or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
+    """Read in an SBML Level 3 file with FBC annotation where and return either a CBM
+    model object or a (cbm_mod, sbml_mod) pair if return_sbml_model=True.
 
-     - *fname* is the filename
-     - *work_dir* is the working directory
-     - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
-     - *xoptions* special load options enable with option = True
+    - *fname* is the filename
+    - *work_dir* is the working directory
+    - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
+    - *xoptions* special load options enable with option = True
 
-       - *nogenes* do not load/process genes
-       - *noannot* do not load/process any annotations
-       - *validate* validate model and display errors and warnings before loading
-       - *readcobra* read the cobra annotation
-       - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
-       - *nmatrix_type* [default='normal'] define the type of stoichiometrich matrix to be built
-       - *model_extension_class* extend CBModel class with new class (experimental, Python 3 only)
-       - *model_metaclass* add a custom metaclass to CBModel (experimental, Python 3 only)
+      - *nogenes* do not load/process genes
+      - *noannot* do not load/process any annotations
+      - *validate* validate model and display errors and warnings before loading
+      - *readcobra* read the cobra annotation
+      - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
+      - *nmatrix_type* [default='normal'] define the type of stoichiometrich matrix to be built
+      - *model_extension_class* extend CBModel class with new class (experimental, Python 3 only)
+      - *model_metaclass* add a custom metaclass to CBModel (experimental, Python 3 only)
 
-         - 'numpy' dense numpy array (best performance)
-         - 'scipy_csr' scipy sparse matrix (lower performance, low memory)
-         - 'sympy' a sympy rational matrix (low performance, high memory, cast to dense to analyse)
-         - None do not build matrix
-
+        - 'numpy' dense numpy array (best performance)
+        - 'scipy_csr' scipy sparse matrix (lower performance, low memory)
+        - 'sympy' a sympy rational matrix (low performance, high memory, cast to dense to analyse)
+        - None do not build matrix
     """
 
     time00 = time.time()
@@ -4931,11 +4829,9 @@ def sbml_readSBML3FBC(fname, work_dir=None, return_sbml_model=False, xoptions={}
 
 
 def sbml_readCOBRANote(s):
-    """
-    Parses a COBRA style note from a XML string
+    """Parses a COBRA style note from a XML string.
 
-     - *s* an XML string
-
+    - *s* an XML string
     """
 
     new_ann = {}
@@ -4988,12 +4884,10 @@ def sbml_readCOBRANote(s):
 
 
 def sbml_getCVterms(sb, model=False):
-    """
-    Get the MIRIAM compliant CV terms and return a MIRIAMAnnotation or None
+    """Get the MIRIAM compliant CV terms and return a MIRIAMAnnotation or None.
 
-     - *sb* a libSBML SBase derived object
-     - *model* is this a BQmodel term
-
+    - *sb* a libSBML SBase derived object
+    - *model* is this a BQmodel term
     """
     out = {}
     if sb.getNumCVTerms() > 0:
@@ -5020,13 +4914,11 @@ def sbml_getCVterms(sb, model=False):
 
 
 def sbml_setCVterms(sb, uridict, model=False):
-    """
-    Add MIRIAM compliant CV terms to a sbml object from a CBM object
+    """Add MIRIAM compliant CV terms to a sbml object from a CBM object.
 
-     - *sb* a libSBML SBase derived object
-     - *uridict* a dictionary of uri's as produced by getAllMIRIAMUris()
-     - *model* is this a BQmodel term [deprecated attribute, ignored and autodetected]
-
+    - *sb* a libSBML SBase derived object
+    - *uridict* a dictionary of uri's as produced by getAllMIRIAMUris()
+    - *model* is this a BQmodel term [deprecated attribute, ignored and autodetected]
     """
     for t_ in uridict:
         if len(uridict[t_]) > 0:

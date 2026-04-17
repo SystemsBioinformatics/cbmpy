@@ -42,14 +42,12 @@ __version__ = __CBCONFIG__['VERSION']
 
 
 def copySpecies(m_src, m_targ, sid, is_boundary=False):
-    """
-    Copy a species from a source model to a target model
+    """Copy a species from a source model to a target model.
 
-     - *m_src* the source model
-     - *m_targ* the target model
-     - *sid* the species to copy
-     - *is_boundary* [default] add the species as a variable metabolite or boundary if True
-
+    - *m_src* the source model
+    - *m_targ* the target model
+    - *sid* the species to copy
+    - *is_boundary* [default] add the species as a variable metabolite or boundary if True
     """
     out = {}
     if m_targ.getSpecies(sid) is not None:
@@ -74,15 +72,14 @@ def copySpecies(m_src, m_targ, sid, is_boundary=False):
 
 
 def copyReaction(m_src, m_targ, rid, altrid=None):
-    """
-    Copy a reaction from a source model to a target model, if the required species exist in the target
-    then they are mapped as reagents, otherwise new metabolites are added as boundary species.
+    """Copy a reaction from a source model to a target model, if the required species
+    exist in the target then they are mapped as reagents, otherwise new metabolites are
+    added as boundary species.
 
-     - *m_src* the source model
-     - *m_targ* the target model
-     - *rid* the reaction id to copy
-     - *altrid* if the reaction name exists in the target, try use this one instead
-
+    - *m_src* the source model
+    - *m_targ* the target model
+    - *rid* the reaction id to copy
+    - *altrid* if the reaction name exists in the target, try use this one instead
     """
     out = {}
     targ_exists = False

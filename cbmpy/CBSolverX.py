@@ -62,10 +62,7 @@ print('HAVE_GUROBI:', HAVE_GUROBI)
 
 
 class LPBase(object):
-    """
-    The base of all LP's
-
-    """
+    """The base of all LP's."""
 
     obj = None
     id = None
@@ -77,20 +74,16 @@ class LPBase(object):
     _objective_senses_ = ('MIN', 'MAX')
 
     def addObjective(self, arr):
-        """
-        Add objective as a list of (coefficient, variable) tuples
+        """Add objective as a list of (coefficient, variable) tuples.
 
-         - *arr* a list of one or more (coefficient, variable) tuples
-
+        - *arr* a list of one or more (coefficient, variable) tuples
         """
         self.objective = arr
 
     def setObjectiveSense(self, sense):
-        """
-        Set the objective sense.
+        """Set the objective sense.
 
-         - *sense* is the string 'MAX' or 'MIN'
-
+        - *sense* is the string 'MAX' or 'MIN'
         """
         assert (
             sense in self._objective_senses_
@@ -100,15 +93,13 @@ class LPBase(object):
         self.objective_sense = sense
 
     def addLinearConstraint(self, cid, arr, sense, rhs, overwrite=False):
-        """
-        Add linear constraint as a list of (coefficient, variable) tuples
+        """Add linear constraint as a list of (coefficient, variable) tuples.
 
-         - *cid* the constraint id
-         - *arr* a list of (coefficient, variable) tuples
-         - *sense* GE, LE, EQ (>=, <=, ==)
-         - *rhs* the floating point value of the rhs
-         - *overwrite* [default=False] if a cid already exists overwrite it
-
+        - *cid* the constraint id
+        - *arr* a list of (coefficient, variable) tuples
+        - *sense* GE, LE, EQ (>=, <=, ==)
+        - *rhs* the floating point value of the rhs
+        - *overwrite* [default=False] if a cid already exists overwrite it
         """
         assert (
             len(arr) > 0
@@ -127,31 +118,19 @@ class LPBase(object):
 
 
 class MILPBase(object):
-    """
-    The base of all MILP's
-
-    """
+    """The base of all MILP's."""
 
 
 class QPbase(object):
-    """
-    The base of all QP's
-
-    """
+    """The base of all QP's."""
 
 
 class LPCPLEX(LPBase):
-    """
-    CPLEX LP implimentation
-
-    """
+    """CPLEX LP implimentation."""
 
 
 class LPECYGLPKI(LPBase):
-    """
-    ECYGLPKI LP implimentation
-
-    """
+    """ECYGLPKI LP implimentation."""
 
 
 c = LPCPLEX()

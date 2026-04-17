@@ -104,11 +104,9 @@ __example_models__ = {
 
 
 def loadModel(sbmlfile):
-    """
-    Loads any SBML model in COBRA, FAME (SBML2FBA), SBML3FBCv1, SBML3FBCv2 format.
+    """Loads any SBML model in COBRA, FAME (SBML2FBA), SBML3FBCv1, SBML3FBCv2 format.
 
-     - *sbmlfile* an SBML model file
-
+    - *sbmlfile* an SBML model file
     """
     mod = res = None
     print('Attempting to load SBML file: {}'.format(sbmlfile))
@@ -144,8 +142,8 @@ def readSBML3FBC(
     xoptions={'validate': False},
     scan_notes_gpr=True,
 ):
-    """
-    Read in an SBML Level 3 file with FBC annotation where and return a CBM model object
+    """Read in an SBML Level 3 file with FBC annotation where and return a CBM model
+    object.
 
      - *fname* is the filename
      - *work_dir* is the working directory
@@ -165,7 +163,6 @@ def readSBML3FBC(
          - None do not build matrix
 
     - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected scan the <notes> field for GPR associationa
-
     """
     if fname in __example_models__:
         from . import CBDefaultModels
@@ -194,18 +191,16 @@ def readCOBRASBML(
     skip_genes=False,
     scan_notes_gpr=True,
 ):
-    """
-    Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object
-    or a (cbm_mod, sbml_mod) pair if return_sbml_model=True
+    """Read in a COBRA format SBML Level 2 file with FBA annotation where and return
+    either a CBM model object or a (cbm_mod, sbml_mod) pair if return_sbml_model=True.
 
-     - *fname* is the filename
-     - *work_dir* is the working directory
-     - *delete_intermediate* [default=False] delete the intermediate SBML Level 3 FBC file
-     - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
-     - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
-     - *skip_genes* [default=False] do not load GPR data
-     - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
-
+    - *fname* is the filename
+    - *work_dir* is the working directory
+    - *delete_intermediate* [default=False] delete the intermediate SBML Level 3 FBC file
+    - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
+    - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
+    - *skip_genes* [default=False] do not load GPR data
+    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
     """
     xmod = CBXML.sbml_readCOBRASBML(
         fname,
@@ -295,10 +290,7 @@ def readLPtoList(fname, work_dir):
 
 
 def readSK_FVA(filename):
-    """
-    Read Stevens FVA results (opt.fva) file and return a list of dictionaries
-
-    """
+    """Read Stevens FVA results (opt.fva) file and return a list of dictionaries."""
     assert os.path.exists(filename), '\nGive me a break!\n'
     ##  name = []
     vari = []
@@ -447,15 +439,14 @@ def readSK_FVA(filename):
 def readSK_vertexOld(
     fname, bigfile=False, fast_rational=False, nformat='%.14f', compresslevel=3
 ):
-    """
-    Reads in Stevens vertex analysis file and returns, even more optimized for large datasets than the original.
+    """Reads in Stevens vertex analysis file and returns, even more optimized for large
+    datasets than the original.
 
      - a list of vertex vectors
      - a list of ray vectors
      - the basis of the lineality space as a list of vectors
 
     all vectors in terms of the column space of N
-
     """
     import gzip
 
@@ -821,18 +812,16 @@ def readSK_vertex(
 
 
 def readExcel97Model(xlname, write_sbml=True, sbml_level=3, return_dictionaries=False):
-    """
-    Reads a model encoded as an Excel97 workbook and returns it as a CBMPy model object and SBML file. Note the workbook must be formatted
-    exactly like those produced by cbm.writeModelToExcel97(). Note that reactions have to be defined in **both** the *reaction*
-    and *network_react* sheets to be included in the model.
+    """Reads a model encoded as an Excel97 workbook and returns it as a CBMPy model
+    object and SBML file. Note the workbook must be formatted exactly like those
+    produced by cbm.writeModelToExcel97(). Note that reactions have to be defined in
+    **both** the *reaction* and *network_react* sheets to be included in the model.
 
-     - *xlpath* the filename of the Excel workbook
-     - *return_model* [default=True] construct and return the CBMPy model
-     - *write_sbml* [default=True] write the SBML file to fname
-     - *return_dictionaries* [default=False] return the dictionaries constructed when reading the Excel file (in place of the model)
-     - *sbml_level* [default=3] write the SBML file as either SBML L2 FBA or SBML L3 FBC file.
-
-
+    - *xlpath* the filename of the Excel workbook
+    - *return_model* [default=True] construct and return the CBMPy model
+    - *write_sbml* [default=True] write the SBML file to fname
+    - *return_dictionaries* [default=False] return the dictionaries constructed when reading the Excel file (in place of the model)
+    - *sbml_level* [default=3] write the SBML file as either SBML L2 FBA or SBML L3 FBC file.
     """
 
     if not _HAVE_XLRD_:
@@ -844,19 +833,14 @@ def readExcel97Model(xlname, write_sbml=True, sbml_level=3, return_dictionaries=
     assert os.path.exists(xlname), '\nERROR: File "{}" does not exist'.format(xlpath)
 
     def c2s(c):
-        """
-        Utility function converting a XLRD cell to a string
-        """
+        """Utility function converting a XLRD cell to a string."""
         # return str(c.value.strip())
         return str(c.value)
 
     MSGLog = csio.StringIO()
 
     def logMsg(msg):
-        """
-        Message logging utility
-
-        """
+        """Message logging utility."""
         print(msg)
         MSGLog.write('{}\n'.format(msg))
 

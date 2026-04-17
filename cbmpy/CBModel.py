@@ -98,10 +98,7 @@ __version__ = __CBCONFIG__['VERSION']
 
 
 class Fbase(object):
-    """
-    Base class for CB Model objects
-
-    """
+    """Base class for CB Model objects."""
 
     id = None
     name = None
@@ -121,11 +118,9 @@ class Fbase(object):
     ##  __post__ = ''
 
     def __getstate__(self):
-        """
-        Internal method that should allow our weakrefs to be 'picklable'
+        """Internal method that should allow our weakrefs to be 'picklable'.
 
         # overwritten by Model, FluxBound and Group
-
         """
 
         if '__objref__' not in self.__dict__:
@@ -136,26 +131,22 @@ class Fbase(object):
             return cpy
 
     def __setObjRef__(self, o):
-        """
-        Sets a weakref to another object
+        """Sets a weakref to another object.
 
-         - *o* the referred to object
-
+        - *o* the referred to object
         """
         self.__objref__ = weakref.ref(o)
 
     def __unsetObjRef__(self):
-        """
-        UnSets a weakref to another object
+        """UnSets a weakref to another object.
 
-         - *o* the referred to object
-
+        - *o* the referred to object
         """
         self.__objref__ = None
 
     def getModel(self):
-        """
-        Get the parent model object linked to in objref, can return model or None for unlinked object
+        """Get the parent model object linked to in objref, can return model or None for
+        unlinked object.
 
         # Overwritten by Model
         """
@@ -165,48 +156,30 @@ class Fbase(object):
             return None
 
     def getPid(self):
-        """
-        Return the object ID.
-
-        """
+        """Return the object ID."""
         return self.getId()
 
     def getId(self):
-        """
-        Return the object ID.
-
-        """
+        """Return the object ID."""
         return self.id
 
     def getMetaId(self):
-        """
-        Return the object metaId.
-
-        """
+        """Return the object metaId."""
         if self.__metaid__ == None:
             self.__metaid__ = 'meta_{}'.format(self.id)
         return self.__metaid__
 
     def getName(self):
-        """
-        Return the object name.
-
-        """
+        """Return the object name."""
         return self.name
 
     def getNotes(self):
-        """
-        Return the object's notes
-
-        """
+        """Return the object's notes."""
         # return self.__urlDecode(self.notes)
         return self.notes
 
     def getAnnotations(self):
-        """
-        Return the object annotation dictionary
-
-        """
+        """Return the object annotation dictionary."""
         return self.annotation
 
     def getAnnotation(self, key):
@@ -222,11 +195,10 @@ class Fbase(object):
             return None
 
     def hasAnnotation(self, key):
-        """
-        Returns a boolean representing the presence/absence of the key in the objext annotation
+        """Returns a boolean representing the presence/absence of the key in the objext
+        annotation.
 
-         - *key* the annotation key
-
+        - *key* the annotation key
         """
         if key in self.annotation:
             return True
@@ -243,11 +215,9 @@ class Fbase(object):
         self.name = str(name)
 
     def setNotes(self, notes):
-        """
-        Sets the object's notes:
+        """Sets the object's notes:
 
-         - *notes* the note string, should preferably be (X)HTML for SBML
-
+        - *notes* the note string, should preferably be (X)HTML for SBML
         """
         # self.notes = self.__urlEncode(notes)
         # try:
@@ -276,21 +246,18 @@ class Fbase(object):
 
 
     def deleteAnnotation(self, key):
-        """
-        Unsets (deltes) an objects annotation with key
+        """Unsets (deltes) an objects annotation with key.
 
-         - *key* the annotation key
-
+        - *key* the annotation key
         """
         assert key != self.annotation, '\nAnnotation key {} does not exist'.format(key)
         self.annotation.pop(key)
 
     def __checkId__(self, cid=None):
-        """
-        Checks the validity of the object id unless cid is provided, in which case it checks the provided id
+        """Checks the validity of the object id unless cid is provided, in which case it
+        checks the provided id.
 
-         - *cid* [default=None] an optional Id to test for validity, if None then the object id is used
-
+        - *cid* [default=None] an optional Id to test for validity, if None then the object id is used
         """
         if cid is None:
             cid = self.id
@@ -316,23 +283,19 @@ class Fbase(object):
         return True
 
     def setPid(self, fid):
-        """
-        Sets the object Id
+        """Sets the object Id.
 
-         - *fid* a valid c variable style id string
-
+        - *fid* a valid c variable style id string
         """
         self.setId(fid)
 
     def setId(self, fid):
-        """
-        Sets the object Id
+        """Sets the object Id.
 
-         - *fid* a valid c variable style id string
+        - *fid* a valid c variable style id string
 
 
-         Reimplemented by @Reaction, @Species, @Compartment, @Gene
-
+        Reimplemented by @Reaction, @Species, @Compartment, @Gene
         """
         fid = str(fid)
         if fid == self.id:
@@ -357,11 +320,9 @@ class Fbase(object):
             self.id = fid
 
     def setMetaId(self, mid=None):
-        """
-        Sets the object Id
+        """Sets the object Id.
 
-         - *mid* [default=None] a valid c variable style metaid string, if None it will be set as meta+id
-
+        - *mid* [default=None] a valid c variable style metaid string, if None it will be set as meta+id
         """
         if mid == None:
             self.__metaid__ = 'meta_{}'.format(self.id)
@@ -369,12 +330,12 @@ class Fbase(object):
             self.__metaid__ = str(mid)
 
     def clone(self):
-        """
-        Return a clone of this object. Cloning performs a deepcop on the object which will also clone
-        any objects that exist as attributes of this object, in other words an independent copy of the
-        original. If this is not the desired behaviour override this method when subclassing or implement
-        your own.
+        """Return a clone of this object.
 
+        Cloning performs a deepcop on the object which will also clone any objects that
+        exist as attributes of this object, in other words an independent copy of the
+        original. If this is not the desired behaviour override this method when
+        subclassing or implement your own.
         """
         if type(self.__TRASH__) == dict:
             self.__TRASH__.clear()
@@ -383,14 +344,12 @@ class Fbase(object):
         return copy.deepcopy(self)
 
     def serialize(self, protocol=0):
-        """
-        Serialize object, returns a string by default
+        """Serialize object, returns a string by default.
 
          - *protocol* [default=0] serialize to a string or binary if required,
                       see pickle module documentation for details
 
         # Reimplemented in Model
-
         """
         return pickle.dumps(self, protocol=protocol)
 
@@ -435,11 +394,8 @@ class Fbase(object):
         self.miriam.addIDorgURI(qual, uri)
 
     def getMIRIAMannotations(self):
-        """
-        Returns a dictionary of all MIRIAM annotations associated with this object
-        or None of there are none defined.
-
-        """
+        """Returns a dictionary of all MIRIAM annotations associated with this object or
+        None of there are none defined."""
         if self.miriam != None:
             try:
                 return self.miriam.getAllMIRIAMUris()
@@ -461,32 +417,21 @@ class Fbase(object):
         self.miriam.deleteMIRIAMannotation(qual, entity, mid)
 
     def getCompartmentId(self):
-        """
-        Return the compartment id where this element is located
-
-        """
+        """Return the compartment id where this element is located."""
         return self.compartment
 
     def setCompartmentId(self, compartment):
-        """
-        Set the compartment id where this element is located
-
-        """
+        """Set the compartment id where this element is located."""
         self.compartment = compartment
 
     def getSBOterm(self):
-        """
-        Return the SBO term for this object.
-
-        """
+        """Return the SBO term for this object."""
         return self.__sbo_term__
 
     def setSBOterm(self, sbo):
-        """
-        Set the SBO term for this object.
+        """Set the SBO term for this object.
 
-         - *sbo* the SBOterm with format: SBO:nnnnnnn"
-
+        - *sbo* the SBOterm with format: SBO:nnnnnnn"
         """
         assert (
             sbo.startswith('SBO:') and len(sbo.split(':')[1]) == 7
@@ -494,10 +439,7 @@ class Fbase(object):
         self.__sbo_term__ = sbo
 
     def __urlEncode(self, txt):
-        """
-        URL encodes a string.
-
-        """
+        """URL encodes a string."""
         try:
             txt = urlquote(
                 txt.encode(self.__text_encoding__, errors='replace'), safe=''
@@ -508,26 +450,21 @@ class Fbase(object):
         return txt
 
     def __urlDecode(self, txt):
-        """
-        Decodes a URL encoded string
-
-        """
+        """Decodes a URL encoded string."""
         return urlunquote(txt)
 
 
 class Model(Fbase):
-    """
-    Container for constraint based model, adds methods for manipulating:
+    """Container for constraint based model, adds methods for manipulating:
 
-     - objectives
-     - constraints
-     - reactions
-     - species
-     - compartments
-     - groups
-     - parameters
-     - N a structmatrix object
-
+    - objectives
+    - constraints
+    - reactions
+    - species
+    - compartments
+    - groups
+    - parameters
+    - N a structmatrix object
     """
 
     prefix = ''
@@ -572,8 +509,7 @@ class Model(Fbase):
     __CUSTOM_MODEL_METACLASS__ = None
 
     def __init__(self, pid):
-        """
-        Container for constraint based model.
+        """Container for constraint based model.
 
          - *pid* a string with the model ID
 
@@ -586,7 +522,6 @@ class Model(Fbase):
          - compartments
          - groups
          - N a structmatrix object
-
         """
         pid = str(pid)
         self.setId(pid)
@@ -611,10 +546,8 @@ class Model(Fbase):
         self.__setGlobalIdStore__()
 
     def __setGlobalIdStore__(self):
-        """
-        Does exactly what the function name says (creates/replaces the globalId store)
-
-        """
+        """Does exactly what the function name says (creates/replaces the globalId
+        store)"""
         # testing weakref dictionary, needs work ...
         if self.__ENABLE_GLOBAL_WEAKREF__:
             self.__global_id__ = weakref.WeakValueDictionary({self.getId(): self})
@@ -648,17 +581,11 @@ class Model(Fbase):
 
 
     def getModel(self):
-        """
-        Overrides the FBase inherited method, returns own instance.
-
-        """
+        """Overrides the FBase inherited method, returns own instance."""
         return self
 
     def clone(self):
-        """
-        Return a clone of this object.
-
-        """
+        """Return a clone of this object."""
         tzero = time.time()
         if type(self.__TRASH__) == dict:
             self.__TRASH__.clear()
@@ -678,11 +605,10 @@ class Model(Fbase):
         return cpy
 
     def __populateGlobalIdStore__(self):
-        """
-        This method populates the globalID store after a clone This is a utility function that comes into play when a model is cloned.
+        """This method populates the globalID store after a clone This is a utility
+        function that comes into play when a model is cloned.
 
         NB: synch with __setModelSelf__()
-
         """
         for r in self.reactions:
             r.__setObjRef__(self)
@@ -727,12 +653,11 @@ class Model(Fbase):
             return False
 
     def __setModelSelf__(self):
-        """
-        This method sets the model reference (updates the weakref) to the current instance. This is a
-        utility function that mostly comes into play when a model is cloned or objects are mixed between models.
+        """This method sets the model reference (updates the weakref) to the current
+        instance. This is a utility function that mostly comes into play when a model is
+        cloned or objects are mixed between models.
 
         NB: synch with __unsetModelSelf__() and __populateGlobalIdStore__()
-
         """
         for r in self.reactions:
             r.__setObjRef__(self)
@@ -759,12 +684,11 @@ class Model(Fbase):
             gr.__setObjRef__(self)
 
     def __unsetModelSelf__(self):
-        """
-        This method unsets the model reference (deletes the weakref). This is a
-        utility function that mostly comes into play when a model is cloned or objects are mixed between models.
+        """This method unsets the model reference (deletes the weakref). This is a
+        utility function that mostly comes into play when a model is cloned or objects
+        are mixed between models.
 
         NB: synch with __setModelSelf__() and __populateGlobalIdStore__()
-
         """
         for r in self.reactions:
             r.__unsetObjRef__()
@@ -791,11 +715,9 @@ class Model(Fbase):
             gr.__unsetObjRef__()
 
     def __getstate__(self):
-        """
-        Internal method that should allow our weakrefs to be 'picklable'
+        """Internal method that should allow our weakrefs to be 'picklable'.
 
         # overloaded by Model, FluxBound and Group
-
         """
 
         self.__global_id__ = None
@@ -815,10 +737,7 @@ class Model(Fbase):
             return cpy
 
     def __setstate__(self, dic):
-        """
-        Internal method that allows our weakrefs to be 'picklable'
-
-        """
+        """Internal method that allows our weakrefs to be 'picklable'."""
         self.__dict__ = dic
         self.__setModelSelf__()
         self.__setGlobalIdStore__()
@@ -833,14 +752,12 @@ class Model(Fbase):
                 )
 
     def serialize(self, protocol=0):
-        """
-        Serialize object, returns a string by default
+        """Serialize object, returns a string by default.
 
          - *protocol* [default=0] serialize to a string or binary if required,
                       see pickle module documentation for details
 
         # overloaded in CBModel
-
         """
         s = pickle.dumps(self, protocol=protocol)
         self.__setGlobalIdStore__()
@@ -878,30 +795,23 @@ class Model(Fbase):
         self.miriam.addMIRIAMannotation(qual, entity, mid)
 
     def setDescription(self, html):
-        """
-        Sets the model description which translates into the SBML <notes> field.
+        """Sets the model description which translates into the SBML <notes> field.
 
-         - *html* any valid html or the empty string to clear ''
-
+        - *html* any valid html or the empty string to clear ''
         """
         self.description = html
         # self.notes = self.__urlEncode(html)
 
     def getDescription(self):
-        """
-        Returns the model description which was stored in the SBML <notes> field
-
-        """
+        """Returns the model description which was stored in the SBML <notes> field."""
 
         # return self.__urlDecode(self.notes)
         return self.notes
 
     def setCreatedDate(self, date=None):
-        """
-        Set the model created date tuple(year, month, day, hour, minute, second)
+        """Set the model created date tuple(year, month, day, hour, minute, second)
 
         - *date* [default=None] default is now (automatic) otherwise (year, month, day, hour, minute, second) e.g. (2012, 09, 24, 13, 34, 00)
-
         """
         if date == None:
             lt = time.gmtime()
@@ -943,14 +853,13 @@ class Model(Fbase):
             self.setCreatedDate()
 
     def addModelCreator(self, firstname, lastname, organisation=None, email=None):
-        """
-        Add a model creator to the list of model creators, only the first and fmaily names are mandatory:
+        """Add a model creator to the list of model creators, only the first and fmaily
+        names are mandatory:
 
-         - *firstname*
-         - *lastname*
-         - *organisation* [default=None]
-         - *email*  [default=None]
-
+        - *firstname*
+        - *lastname*
+        - *organisation* [default=None]
+        - *email*  [default=None]
         """
         self.MODEL_CREATORS.update(
             {
@@ -965,10 +874,7 @@ class Model(Fbase):
         )
 
     def getModelCreators(self):
-        """
-        Return model creator information
-
-        """
+        """Return model creator information."""
         out = []
         mc = self.MODEL_CREATORS
         for c_ in mc:
@@ -983,12 +889,10 @@ class Model(Fbase):
         return tuple(out)
 
     def addObjective(self, obj, active=False):
-        """
-        Add an instantiated Objective object to the FBA model
+        """Add an instantiated Objective object to the FBA model.
 
         - *obj* an instance of the Objective class
         - *active* [default=False] flag this objective as the active objective (fba.activeObjIdx)
-
         """
         assert (
             type(obj) == Objective
@@ -1073,15 +977,13 @@ class Model(Fbase):
         self.addSpecies(S)
 
     def createCompartment(self, cid, name=None, size=1, dimensions=3, volume=None):
-        """
-        Create a new compartment and add it to the model if the id does not exist
+        """Create a new compartment and add it to the model if the id does not exist.
 
         - *cid* compartment id
         - *name* [None] compartment name
         - *size* [1] compartment size
         - *dimensions* [3] compartment size dimensions
         - *volume* [None] compartment volume
-
         """
         if cid not in self.getCompartmentIds():
             C = Compartment(cid, name, size, dimensions, volume)
@@ -1090,10 +992,7 @@ class Model(Fbase):
             print('Error: compartment id \"{}\"'.format(cid))
 
     def createParameter(self, pid, value, constant=True):
-        """
-        Instantiates a parameter
-
-        """
+        """Instantiates a parameter."""
         p = Parameter(pid, value, None, constant)
         return p
 
@@ -1153,13 +1052,12 @@ class Model(Fbase):
 
 
     def createReactionReagent(self, reaction, metabolite, coefficient, silent=False):
-        """
-        Add a reagent to an existing reaction, both reaction and metabolites must exist
+        """Add a reagent to an existing reaction, both reaction and metabolites must
+        exist.
 
-         - *reaction* a reaction id
-         - *metabolite* a species/metabolite id
-         - *coefficient* the reagent coefficient
-
+        - *reaction* a reaction id
+        - *metabolite* a species/metabolite id
+        - *coefficient* the reagent coefficient
         """
         R = self.getReaction(reaction)
         S = self.getSpecies(metabolite)
@@ -1230,8 +1128,7 @@ class Model(Fbase):
 
 
     def createUserDefinedConstraint(self, pid, lb, ub, components=None):
-        """
-        Create an FBCv3 UserDefinedConstraint
+        """Create an FBCv3 UserDefinedConstraint.
 
         - *pid* unique id
         - *lb* lower bound float/parameter
@@ -1239,7 +1136,6 @@ class Model(Fbase):
         - *componentents* optional, the user defined constraint componenents in the form of a list
            [(coefficient, variable, type, id), ...] and coefficient and variable can be parameters
            id is optional
-
         """
 
         udc =  UserDefinedConstraint(pid, lb, ub)
@@ -1267,11 +1163,9 @@ class Model(Fbase):
 
 
     def addUserDefinedConstraint(self, udc):
-        """
-        Add a  User Defined Constraint object to the FBA model
+        """Add a  User Defined Constraint object to the FBA model.
 
         - *obj* an instance of the UserDefinedConstraint class
-
         """
         assert (
             type(udc) == UserDefinedConstraint
@@ -1297,8 +1191,7 @@ class Model(Fbase):
 
 
     def addFluxBound(self, fluxbound, fbexists=None):
-        """
-        Add an instantiated FluxBound object to the FBA model
+        """Add an instantiated FluxBound object to the FBA model.
 
         - *fluxbound* an instance of the FluxBound class
         - *fbexists* [default=None] this is a list of strings which contains fluxbounds that have been added to the model, see sample code below.
@@ -1317,7 +1210,6 @@ class Model(Fbase):
         ```python
         fbexists = ["{}_{}".format(fluxbound.getReactionId(), fluxbound.getType()) for fluxbound in model.flux_bounds]
         ```
-
         """
         assert (
             type(fluxbound) == FluxBound
@@ -1380,11 +1272,9 @@ class Model(Fbase):
                 )
 
     def addSpecies(self, species):
-        """
-        Add an instantiated Species object to the FBA model
+        """Add an instantiated Species object to the FBA model.
 
         - *species* an instance of the Species class
-
         """
         assert isinstance(
             species, Species
@@ -1408,11 +1298,9 @@ class Model(Fbase):
         self.species.append(species)
 
     def addGene(self, gene):
-        """
-        Add an instantiated Gene object to the FBA model
+        """Add an instantiated Gene object to the FBA model.
 
         - *gene* an instance of the G class
-
         """
         # TODO: fix this whole gene thing, genes must use labels for gene names and id's for object search
         assert isinstance(gene, Gene), '\nERROR: requires a Gene object, not something of type {}'.format(type(gene))
@@ -1432,11 +1320,9 @@ class Model(Fbase):
         self.genes.append(gene)
 
     def addParameter(self, par):
-        """
-        Add an instantiated Parameter object to the model
+        """Add an instantiated Parameter object to the model.
 
         - *par* an instance of the Parameter class
-
         """
         assert isinstance(par, Parameter ), '\nERROR: requires a Parameter object, not something of type {}'.format( type(par))
         assert (par.__objref__ is None), 'ERROR: object already bound to \"{}\", add a clone instead'.format(str(par.__objref__).split('to')[1][1:-1])
@@ -1453,11 +1339,9 @@ class Model(Fbase):
         self.parameters.append(par)
 
     def addCompartment(self, comp):
-        """
-        Add an instantiated Compartment object to the CBM model
+        """Add an instantiated Compartment object to the CBM model.
 
         - *comp* an instance of the Compartment class
-
         """
         assert isinstance(
             comp, Compartment
@@ -1479,13 +1363,11 @@ class Model(Fbase):
         self.compartments.append(comp)
 
     def addReaction(self, reaction, create_default_bounds=False, silent=False):
-        """
-        Adds a reaction object to the model
+        """Adds a reaction object to the model.
 
         - *reaction* an instance of the Reaction class
         - *create_default_bounds* create default reaction bounds, irreversible 0 <= J <= INF, reversable -INF <= J <= INF
         - *silent* [default=False] if enabled this disables the printing of information messages
-
         """
         assert isinstance(
             reaction, Reaction
@@ -1542,11 +1424,9 @@ class Model(Fbase):
                     )
 
     def convertUserConstraintsToUserDefinedConstraints(self):
-        """
-        If a model is loaded with the old CBMPy specific constraint data structures json files and dictionaries, this function will
-        upmark it to the new FBCv3 data structures
-
-        """
+        """If a model is loaded with the old CBMPy specific constraint data structures
+        json files and dictionaries, this function will upmark it to the new FBCv3 data
+        structures."""
         for u in self.user_constraints:
             print('Converting constraint', u)
             if self.user_constraints[u]['operator'] == 'E':
@@ -1577,11 +1457,7 @@ class Model(Fbase):
 
 
     def copyUserDefinedConstraintsToUserConstraints(self):
-
-        """
-        This is a workaround until I complete full UserDefinedConstraints support
-
-        """
+        """This is a workaround until I complete full UserDefinedConstraints support."""
         # TODO bgoli ... this is a hack get rid of it!
         out = {}
         for udc in self.user_defined_constraints:
@@ -1613,14 +1489,13 @@ class Model(Fbase):
 
 
     def addUserConstraint(self, pid, fluxes=None, operator='>=', rhs=0.0):
-        """
-        Add a user defined constraint to FBA model, this is additional to the automatically determined Stoichiometric constraints.
+        """Add a user defined constraint to FBA model, this is additional to the
+        automatically determined Stoichiometric constraints.
 
-         - *pid* user constraint name/id, use `None` for auto-assign
-         - *fluxes* a list of (coefficient, reaction id) pairs where coefficient is a float
-         - *operator* is one of '=', '>=' or '<=' (< and > will be interpreted as >= or <=)
-         - *rhs* a float
-
+        - *pid* user constraint name/id, use `None` for auto-assign
+        - *fluxes* a list of (coefficient, reaction id) pairs where coefficient is a float
+        - *operator* is one of '=', '>=' or '<=' (< and > will be interpreted as >= or <=)
+        - *rhs* a float
         """
 
         print('\nThis method is being deprecated ... use cmod.createUserDefinedConstraint and cmod.addUserDefinedConstraint instead.\n')
@@ -1665,11 +1540,9 @@ class Model(Fbase):
 
 
     def deleteReactionAndBounds(self, rid):
-        """
-        Delete all reaction and bounds connected to reaction
+        """Delete all reaction and bounds connected to reaction.
 
-         - *rid* a valid reaction id
-
+        - *rid* a valid reaction id
         """
 
         Ridx = None
@@ -1731,13 +1604,11 @@ class Model(Fbase):
     # self.addObjective(self.__TRASH__[objective_id])
 
     def deleteBoundsForReactionId(self, rid, lower=True, upper=True):
-        """
-        Delete bounds connected to reaction, rid
+        """Delete bounds connected to reaction, rid.
 
-         - *rid* a valid reaction id
-         - *upper* [default=True] delete the upper bound
-         - *lower* [default=True] delete the lower bound
-
+        - *rid* a valid reaction id
+        - *upper* [default=True] delete the upper bound
+        - *lower* [default=True] delete the lower bound
         """
         ##  Ridx = None
         ##  Robj = None
@@ -1830,11 +1701,9 @@ class Model(Fbase):
         )
 
     def addGPRAssociation(self, gpr, update_idx=True):
-        """
-        Add a GeneProteinAssociation instance to the model
+        """Add a GeneProteinAssociation instance to the model.
 
-         - *gpr* an instantiated GeneProteinAssociation object
-
+        - *gpr* an instantiated GeneProteinAssociation object
         """
         assert (
             gpr.__objref__ is None
@@ -1864,17 +1733,16 @@ class Model(Fbase):
         update_idx=True,
         altlabels=None,
     ):
-        """
-        Create and add a gene protein relationship to the model, note genes are mapped on protein objects which may or may not be reactions
+        """Create and add a gene protein relationship to the model, note genes are
+        mapped on protein objects which may or may not be reactions.
 
-         - *protein* in this case the reaction
-         - *assoc* the COBRA style gene protein association
-         - *gid* the unique id
-         - *name* the optional name
-         - *gene_pattern* deprecated, not needed anymore
-         - *update_idx* update the model gene index, not used
-         - *altlabels* [default=None] alternative labels for genes, default uses geneIds
-
+        - *protein* in this case the reaction
+        - *assoc* the COBRA style gene protein association
+        - *gid* the unique id
+        - *name* the optional name
+        - *gene_pattern* deprecated, not needed anymore
+        - *update_idx* update the model gene index, not used
+        - *altlabels* [default=None] alternative labels for genes, default uses geneIds
         """
         if altlabels is None:
             altlabels = {}
@@ -1898,17 +1766,16 @@ class Model(Fbase):
         update_idx=True,
         altlabels=None,
     ):
-        """
-        Create and add a gene protein relationship to the model, note genes are mapped on protein objects which may or may not be reactions
+        """Create and add a gene protein relationship to the model, note genes are
+        mapped on protein objects which may or may not be reactions.
 
-         - *protein* in this case the reaction
-         - *gprtree* the CBMPy GPR dictionary tree
-         - *gid* the unique id
-         - *name* the optional name
-         - *gene_pattern* deprecated, not needed anymore
-         - *update_idx* update the model gene index, not used
-         - *altlabels* [default=None] alternative labels for genes, default uses geneIds
-
+        - *protein* in this case the reaction
+        - *gprtree* the CBMPy GPR dictionary tree
+        - *gid* the unique id
+        - *name* the optional name
+        - *gene_pattern* deprecated, not needed anymore
+        - *update_idx* update the model gene index, not used
+        - *altlabels* [default=None] alternative labels for genes, default uses geneIds
         """
         if altlabels is None:
             altlabels = {}
@@ -1923,18 +1790,13 @@ class Model(Fbase):
             gpr.createAssociationAndGeneRefsFromTree(gprtree, altlabels)
 
     def __updateGeneIdx__(self):
-        """
-        Update the gene name index
-
-        """
+        """Update the gene name index."""
         self.__genes_idx__ = [g.getId() for g in self.genes]
 
     def getAllProteinGeneAssociations(self, use_labels=False):
-        """
-        Returns a dictionary of the proteins associated with each gene
+        """Returns a dictionary of the proteins associated with each gene.
 
-         - *use_labels* use V2 gene labels rather than ID's
-
+        - *use_labels* use V2 gene labels rather than ID's
         """
         prg = {}
         for gpr in self.gpr:
@@ -1950,11 +1812,9 @@ class Model(Fbase):
         return prg
 
     def getAllGeneProteinAssociations(self, use_labels=False):
-        """
-        Returns a dictionary of genes associated with each protein
+        """Returns a dictionary of genes associated with each protein.
 
-         - *use_labels* use V2 gene labels rather than ID's
-
+        - *use_labels* use V2 gene labels rather than ID's
         """
         gprmap = {}
         for gpr in self.gpr:
@@ -2039,11 +1899,9 @@ class Model(Fbase):
         return gprDict
 
     def getGPRIdAssociatedWithGeneId(self, gid):
-        """
-        Return the GPR(s) associated with the gene id:
+        """Return the GPR(s) associated with the gene id:
 
-         - *gid* a gene id
-
+        - *gid* a gene id
         """
         if self.getGene(gid) is None:
             print('INFO: invalid gene id: {}'.format(gid))
@@ -2057,11 +1915,9 @@ class Model(Fbase):
         return out
 
     def getGPRIdAssociatedWithGeneLabel(self, label):
-        """
-        Return the GPR Id's associated with the gene label:
+        """Return the GPR Id's associated with the gene label:
 
-         - *label* a gene label
-
+        - *label* a gene label
         """
         gl = self.getGeneByLabel(label)
         if gl is None:
@@ -2070,12 +1926,11 @@ class Model(Fbase):
         return self.getGPRIdAssociatedWithGeneId(gl.getId())
 
     def getReactionActivity(self, rid):
-        """
-        If there is a GPR and genes associated with the reaction ID then return either active=True or inactive=False
-        Note if there is no gene associated information then this will return active.
+        """If there is a GPR and genes associated with the reaction ID then return
+        either active=True or inactive=False Note if there is no gene associated
+        information then this will return active.
 
-         - *rid* a reaction id
-
+        - *rid* a reaction id
         """
         out = True
         GPR = self.getGPRforReaction(rid)
@@ -2084,11 +1939,10 @@ class Model(Fbase):
         return out
 
     def getGeneIds(self, substring=None):
-        """
-        Returns a list of gene Ids, applies a substring search if substring is defined
+        """Returns a list of gene Ids, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring is None:
             return [g.getId() for g in self.genes]
@@ -2096,11 +1950,10 @@ class Model(Fbase):
             return [g.getId() for g in self.genes if substring in g.getId()]
 
     def getGeneObjects(self, substring=None):
-        """
-        Returns a list of gene objects, applies a substring search if substring is defined
+        """Returns a list of gene objects, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring is None:
             return [g for g in self.genes]
@@ -2108,11 +1961,10 @@ class Model(Fbase):
             return [g for g in self.genes if substring in g.getId()]
 
     def getGeneObjectsByLabel(self, substring=None):
-        """
-        Returns a list of gene objects, applies a substring search if substring is defined
+        """Returns a list of gene objects, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the label
-
+        - *substring* search for this pattern anywhere in the label
         """
         if substring == None:
             return [g for g in self.genes]
@@ -2120,11 +1972,10 @@ class Model(Fbase):
             return [g for g in self.genes if substring in g.getLabel()]
 
     def getGPRIds(self, substring=None):
-        """
-        Returns a list of GPR Id's, applies a substring search if substring is defined
+        """Returns a list of GPR Id's, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring is None:
             return [g.getId() for g in self.gpr]
@@ -2132,11 +1983,10 @@ class Model(Fbase):
             return [g.getId() for g in self.gpr if substring in g.getId()]
 
     def getGPRObjects(self, substring=None):
-        """
-        Returns a list of GPR objects, applies a substring search if substring is defined
+        """Returns a list of GPR objects, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring is None:
             return [g for g in self.gpr]
@@ -2144,11 +1994,10 @@ class Model(Fbase):
             return [g for g in self.gpr if substring in g.getId()]
 
     def getGeneLabels(self, substring=None):
-        """
-        Returns a list of gene labels (locus tags), applies a substring search if substring is defined
+        """Returns a list of gene labels (locus tags), applies a substring search if
+        substring is defined.
 
-         - *substring* search for this pattern anywhere in the label
-
+        - *substring* search for this pattern anywhere in the label
         """
         if substring == None:
             return [g.getLabel() for g in self.genes]
@@ -2156,32 +2005,28 @@ class Model(Fbase):
             return [g.getLabel() for g in self.genes if substring in g.getLabel()]
 
     def getAllGeneActivities(self):
-        """
-        Returns a dictionary of genes (if defined) and whether they are active or not
-        """
+        """Returns a dictionary of genes (if defined) and whether they are active or
+        not."""
         out = {}
         for g_ in self.genes:
             out[g_.getId()] = g_.isActive()
         return out
 
     def getAllProteinActivities(self):
-        """
-        Returns a dictionary of reactions (if genes and GPR's are defined) and whether they are active or not
-
-        """
+        """Returns a dictionary of reactions (if genes and GPR's are defined) and
+        whether they are active or not."""
         out = {}
         for g_ in self.gpr:
             out[g_.getProtein()] = g_.isProteinActive()
         return out
 
     def setAllProteinActivities(self, activites, lower=0.0, upper=0.0):
-        """
-        Given a dictionary of activities [rid : boolean] pairs set all the corresponding reactions:
+        """Given a dictionary of activities [rid : boolean] pairs set all the
+        corresponding reactions:
 
-         - *activities* a dictionary of [rid : boolean] pairs
-         - *lower* [default=0.0] the lower bound of the deactivated flux
-         - *upper* [default=0.0] the upper bound of the deactivated flux
-
+        - *activities* a dictionary of [rid : boolean] pairs
+        - *lower* [default=0.0] the lower bound of the deactivated flux
+        - *upper* [default=0.0] the upper bound of the deactivated flux
         """
         for r_ in activites:
             R = self.getReaction(r_)
@@ -2191,12 +2036,11 @@ class Model(Fbase):
                 R.deactivateReaction(lower, upper)
 
     def setAllInactiveGPRBounds(self, lower=0.0, upper=0.0):
-        """
-        Set all reactions that are inactive (as determined by gene and gpr evaluation) to bounds:
+        """Set all reactions that are inactive (as determined by gene and gpr
+        evaluation) to bounds:
 
-         - *lower* [default=0.0] the new lower bound
-         - *upper* [default=0.0] the new upper bound
-
+        - *lower* [default=0.0] the new lower bound
+        - *upper* [default=0.0] the new upper bound
         """
         gpract = self.getAllProteinActivities()
         for r_ in gpract:
@@ -2206,22 +2050,18 @@ class Model(Fbase):
                 print('Setting reaction {} bounds to [{}, {}]'.format(r_, lower, upper))
 
     def resetAllInactiveGPRBounds(self):
-        """
-        Resets all reaction bounds modified by the ``cmod.setAllInactiveGeneReactionBounds()`` method to their previous values
-
-        """
+        """Resets all reaction bounds modified by the
+        ``cmod.setAllInactiveGeneReactionBounds()`` method to their previous values."""
         for r_ in self.__gene_deactivated_reactions__:
             r = self.__gene_deactivated_reactions__.pop(r_)
             self.setReactionBounds(r_, r[1], r[2])
             print('Resetting reaction {} bounds to [{}, {}]'.format(r_, r[1], r[2]))
 
     def changeAllFluxBoundsWithValue(self, old, new):
-        """
-        Replaces all flux bounds with value "old" with a new value "new":
+        """Replaces all flux bounds with value "old" with a new value "new":
 
-         - *old* value
-         - *new* value
-
+        - *old* value
+        - *new* value
         """
         cntr = 0
         if new in ['inf', 'INF', 'INFINITY', '-inf', '-INF', '-INFINITY']:
@@ -2250,14 +2090,13 @@ class Model(Fbase):
         print('\nDeleted {} \"{}\" bounds'.format(cntr, value))
 
     def deleteCompartment(self, sid, check_components=True):
-        """
-        Deletes a compartment object with id. Returns True if the compartment is deleted, False if not. In addition if components were checked
-        a list of id's that reference the compartment are also returned.
+        """Deletes a compartment object with id. Returns True if the compartment is
+        deleted, False if not. In addition if components were checked a list of id's
+        that reference the compartment are also returned.
 
         - *sid* the compartment id
         - *check_components* [default=True] if  enabled check that no species or reactions makes
         use of the compartment, fail if it does.
-
         """
 
         if sid not in self.getCompartmentIds():
@@ -2299,15 +2138,13 @@ class Model(Fbase):
             return out, sc + mc + pc + rc
 
     def deleteSpecies(self, sid, also_delete=None):
-        """
-        Deletes a species object with id
+        """Deletes a species object with id.
 
         - *sid* the species id
         - *also_delete* [default=None] only delete the species
 
         -- 'reagents' delete the species from the reactions it participates in as a **reagent**
         -- 'reactions' deletes the **reactions** that the species participates in
-
         """
         if also_delete is not None:
             rids = [r[0] for r in self.getFluxesAssociatedWithSpecies(sid)]
@@ -2337,13 +2174,11 @@ class Model(Fbase):
     # self.addSpecies(self.__TRASH__[sid])
 
     def deleteGene(self, gid, also_delete_gpr=True):
-        """
-        Deletes the gene object with gid. Note if you want to delete a gene by label (locus tag etc)
-        use the deleteGeneByLabel() function.
+        """Deletes the gene object with gid. Note if you want to delete a gene by label
+        (locus tag etc) use the deleteGeneByLabel() function.
 
         - *gid* the gene Id
         - *also_delete_gpr* [default=True] automatically delete GPR's that contain no gene references
-
         """
         print('DeleteGene is processing gene: {} ...'.format(gid))
         G = self.getGene(gid)
@@ -2364,12 +2199,10 @@ class Model(Fbase):
             print('INFO: Gene Id \"{}\" does not exist'.format(gid))
 
     def deleteGeneByLabel(self, label, also_delete_gpr=True):
-        """
-        Deletes the gene object with label (b2003 etc).
+        """Deletes the gene object with label (b2003 etc).
 
         - *label* the gene with label to be deleted
         - *also_delete_gpr* [default=True] automatically delete GPR's that contain no gene references
-
         """
 
         gid = self.getGeneIdFromLabel(label)
@@ -2379,11 +2212,9 @@ class Model(Fbase):
             print('INFO: Gene label \"{}\" does not exist'.format(label))
 
     def deleteGPRAssociation(self, gprid):
-        """
-        Delete a GPR association with id
+        """Delete a GPR association with id.
 
         - *gprid* the GPR association id
-
         """
         GPR = self.getGPRassociation(gprid)
         if GPR is not None:
@@ -2412,12 +2243,11 @@ class Model(Fbase):
             self.__global_id__.pop(old)
 
     def deleteNonReactingSpecies(self, simulate=True):
-        """
-        Deletes all species that are not reagents (do not to take part in a reaction).
-        *Warning* this deletion is permanent and greedy (not selective). Returns a list of (would be) deleted species
+        """Deletes all species that are not reagents (do not to take part in a
+        reaction). *Warning* this deletion is permanent and greedy (not selective).
+        Returns a list of (would be) deleted species.
 
-         - *simulate* [default=True] only return a list of the speciesId's that would have been deleted if False
-
+        - *simulate* [default=True] only return a list of the speciesId's that would have been deleted if False
         """
         active_reagents = []
         for R in self.reactions:
@@ -2443,11 +2273,9 @@ class Model(Fbase):
         return deleted_species
 
     def getCompartment(self, cid):
-        """
-        Returns a compartment object with *cid*
+        """Returns a compartment object with *cid*
 
-         - *cid* compartment ID
-
+        - *cid* compartment ID
         """
         try:
             return self.getObject(cid)
@@ -2468,11 +2296,9 @@ class Model(Fbase):
         #return out
 
     def getReaction(self, rid):
-        """
-        Returns a reaction object with *id*
+        """Returns a reaction object with *id*
 
-         - *rid* reaction ID
-
+        - *rid* reaction ID
         """
         try:
             return self.getObject(rid)
@@ -2480,11 +2306,9 @@ class Model(Fbase):
             return None
 
     def getSpecies(self, sid):
-        """
-        Returns a species object with *sid*
+        """Returns a species object with *sid*
 
-         - *sid* a specied ID
-
+        - *sid* a specied ID
         """
         try:
             return self.getObject(sid)
@@ -2492,10 +2316,7 @@ class Model(Fbase):
             return None
 
     def getParameter(self, pid):
-        """
-        Returns a parameter object with pid
-
-        """
+        """Returns a parameter object with pid."""
         try:
             return self.getObject(pid)
         except KeyError:
@@ -2503,11 +2324,10 @@ class Model(Fbase):
 
 
     def getReactionBounds(self, rid):
-        """
-        Get the bounds of a reaction, returns a tuple of rid, lowerbound value, upperbound value and equality value (None means bound does not exist).
+        """Get the bounds of a reaction, returns a tuple of rid, lowerbound value,
+        upperbound value and equality value (None means bound does not exist).
 
-         - *rid* the reaction ID
-
+        - *rid* the reaction ID
         """
         # TODO SORT THIS MESS OUT ...
         lb = ub = eq = None
@@ -2549,11 +2369,9 @@ class Model(Fbase):
         return rid, lb, ub, eq
 
     def getReactionLowerBound(self, rid):
-        """
-        Returns the lower bound of a reaction (it it exists) or None
+        """Returns the lower bound of a reaction (it it exists) or None.
 
-         - *rid* the reaction ID
-
+        - *rid* the reaction ID
         """
         # lb = eq = None
         try:
@@ -2584,11 +2402,9 @@ class Model(Fbase):
 #        return lb
 
     def getReactionUpperBound(self, rid):
-        """
-        Returns the upper bound of a reaction (it it exists) or None
+        """Returns the upper bound of a reaction (it it exists) or None.
 
-         - *rid* the reaction ID
-
+        - *rid* the reaction ID
         """
         try:
             return self.getObject(rid).getUpperBound()
@@ -2617,11 +2433,9 @@ class Model(Fbase):
 #        return ub
 
     def getFluxBoundByID(self, fid):
-        """
-        Returns a FluxBound/Parameter with id
+        """Returns a FluxBound/Parameter with id.
 
-         - *fid* the fluxBound ID
-
+        - *fid* the fluxBound ID
         """
         #return self.getObject(fid)
         try:
@@ -2637,12 +2451,10 @@ class Model(Fbase):
         #return c_
 
     def getFluxBoundByReactionID(self, rid, bound):
-        """
-        Returns a FluxBound/Parameter instance
+        """Returns a FluxBound/Parameter instance.
 
-         - *rid* the reaction ID
-         - *bound* the bound: 'upper', 'lower', 'equality'
-
+        - *rid* the reaction ID
+        - *bound* the bound: 'upper', 'lower', 'equality'
         """
 
 #         print('This function will change in 0.9.0 to only return a value')
@@ -2658,14 +2470,13 @@ class Model(Fbase):
                 return c_
 
     def getFluxBoundsByReactionID(self, rid):
-        """
-        Returns all FluxBound instances connected to a reactionId as a tuple of valid
-        (lower, upper, None) or (None, None, equality) or alternatively invalid (lower, upper, equality).
+        """Returns all FluxBound instances connected to a reactionId as a tuple of valid
+        (lower, upper, None) or (None, None, equality) or alternatively invalid (lower,
+        upper, equality).
 
-         - *rid* the reaction ID
+        - *rid* the reaction ID
 
-         *under evaluation*
-
+        *under evaluation*
         """
         lower = None
         upper = None
@@ -2689,11 +2500,10 @@ class Model(Fbase):
         return (lower, upper, equality)
 
     def getCompartmentIds(self, substring=None):
-        """
-        Returns a list of compartment Ids, applies a substring search if substring is defined
+        """Returns a list of compartment Ids, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring == None:
             return [c.getId() for c in self.compartments]
@@ -2701,11 +2511,10 @@ class Model(Fbase):
             return [c.getId() for c in self.compartments if substring in c.getId()]
 
     def getCompartmentObjects(self, substring=None):
-        """
-        Returns a list of compartment objects, applies a substring search if substring is defined
+        """Returns a list of compartment objects, applies a substring search if
+        substring is defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring == None:
             return [c for c in self.compartments]
@@ -2713,11 +2522,10 @@ class Model(Fbase):
             return [c for c in self.compartments if substring in c.getId()]
 
     def getSpeciesIds(self, substring=None):
-        """
-        Returns a list of species Ids, applies a substring search if substring is defined
+        """Returns a list of species Ids, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring is None:
             return [s.getId() for s in self.species]
@@ -2725,11 +2533,10 @@ class Model(Fbase):
             return [s.getId() for s in self.species if substring in s.getId()]
 
     def getSpeciesObjects(self, substring=None):
-        """
-        Returns a list of species objects, applies a substring search if substring is defined
+        """Returns a list of species objects, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring is None:
             return [s for s in self.species]
@@ -2737,11 +2544,10 @@ class Model(Fbase):
             return [s for s in self.species if substring in s.getId()]
 
     def getReactionIds(self, substring=None):
-        """
-        Returns a list of reaction Ids, applies a substring search if substring is defined
+        """Returns a list of reaction Ids, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring == None:
             return [r.getId() for r in self.reactions]
@@ -2749,11 +2555,10 @@ class Model(Fbase):
             return [r.getId() for r in self.reactions if substring in r.getId()]
 
     def getReactionObjects(self, substring=None):
-        """
-        Returns a list of reaction objects, applies a substring search if substring is defined
+        """Returns a list of reaction objects, applies a substring search if substring
+        is defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring == None:
             return [r for r in self.reactions]
@@ -2761,11 +2566,10 @@ class Model(Fbase):
             return [r for r in self.reactions if substring in r.getId()]
 
     def getReactionNames(self, substring=None):
-        """
-        Returns a list of reaction names, applies a substring search if substring is defined
+        """Returns a list of reaction names, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the name
-
+        - *substring* search for this pattern anywhere in the name
         """
         if substring == None:
             return [r.name for r in self.reactions]
@@ -2773,11 +2577,10 @@ class Model(Fbase):
             return [r.name for r in self.reactions if substring in r.name]
 
     def getFluxBoundIds(self, substring=None):
-        """
-        Returns a list of fluxbound Ids, applies a substring search if substring is defined
+        """Returns a list of fluxbound Ids, applies a substring search if substring is
+        defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring == None:
             return [s.getId() for s in self.flux_bounds]
@@ -2785,11 +2588,10 @@ class Model(Fbase):
             return [s.getId() for s in self.flux_bounds if substring in s.getId()]
 
     def getObjectiveIds(self, substring=None):
-        """
-        Returns a list of objective function Ids, applies a substring search if substring is defined
+        """Returns a list of objective function Ids, applies a substring search if
+        substring is defined.
 
-         - *substring* search for this pattern anywhere in the id
-
+        - *substring* search for this pattern anywhere in the id
         """
         if substring == None:
             return [s.getId() for s in self.objectives]
@@ -2797,28 +2599,19 @@ class Model(Fbase):
             return [s.getId() for s in self.objectives if substring in s.getId()]
 
     def getOptimalValue(self):
-        """
-        Returns the optimal value of the objective function
-
-        """
+        """Returns the optimal value of the objective function."""
         AO = self.getActiveObjective()
         print('Objective {}: \"{}\"'.format(AO.getId(), AO.operation))
         return AO.getValue()
 
     def getObjFuncValue(self):
-        """
-        Returns the objective function value
-
-        """
+        """Returns the objective function value."""
         AO = self.getActiveObjective()
         print('Objective {}: \"{}\"'.format(AO.getId(), AO.operation))
         return AO.getValue()
 
     def getActiveObjective(self):
-        """
-        Returns the active objective object.
-
-        """
+        """Returns the active objective object."""
         out = None
         try:
             out = self.objectives[self.activeObjIdx]
@@ -2827,10 +2620,7 @@ class Model(Fbase):
         return out
 
     def getActiveObjectiveStoichiometry(self):
-        """
-        Returns a list of (coefficient, flux_objective) tuples
-
-        """
+        """Returns a list of (coefficient, flux_objective) tuples."""
         out = None
         try:
             out = self.objectives[self.activeObjIdx].getFluxObjectiveData()
@@ -2839,10 +2629,7 @@ class Model(Fbase):
         return out
 
     def getActiveObjectiveReactionIds(self):
-        """
-        Returns the active objective flux objective reaction id's
-
-        """
+        """Returns the active objective flux objective reaction id's."""
         out = None
         try:
             out = self.objectives[self.activeObjIdx].getFluxObjectiveReactions()
@@ -2860,24 +2647,20 @@ class Model(Fbase):
             print('Invalid ObjectiveId: {}'.format(objId))
 
     def setBoundValueByName(self, rid, value, bound):
-        """
-        Deprecated use setReactionBound
+        """Deprecated use setReactionBound.
 
         Set a reaction bound
          - *rid* the reactions id
          - *value* the new value
          - *bound* this is either 'lower' or 'upper'
-
         """
         print("Deprecated: use *setReactionBound*")
         self.setReactionBound(rid, value, bound)
 
     def getGeneIdFromLabel(self, label):
-        """
-        Given a gene label it returns the corresponding Gene id or None
+        """Given a gene label it returns the corresponding Gene id or None.
 
-         - *label*
-
+        - *label*
         """
         for g_ in self.genes:
             if g_.label == label:
@@ -2885,11 +2668,9 @@ class Model(Fbase):
         return None
 
     def getGeneByLabel(self, label):
-        """
-        Given a gene label return the corresponding Gene object
+        """Given a gene label return the corresponding Gene object.
 
-         - *label*
-
+        - *label*
         """
         for g_ in self.genes:
             if g_.label == label:
@@ -2897,14 +2678,13 @@ class Model(Fbase):
         return None
 
     def setGeneInactive(self, g_id, update_reactions=False, lower=0.0, upper=0.0):
-        """
-        Effectively deletes a gene by setting it's inactive flag while optionally updating the GPR associated reactions
+        """Effectively deletes a gene by setting it's inactive flag while optionally
+        updating the GPR associated reactions.
 
-         - *g_id* a gene ID
-         - *update_reactions* [default=False] update the associated reactions fluxbounds
-         - *lower* [default=0.0] the deactivated reaction lower bound
-         - *upper* [default=0.0] the deactivated reaction upper bound
-
+        - *g_id* a gene ID
+        - *update_reactions* [default=False] update the associated reactions fluxbounds
+        - *lower* [default=0.0] the deactivated reaction lower bound
+        - *upper* [default=0.0] the deactivated reaction upper bound
         """
         g = self.getGene(g_id)
         if g != None:
@@ -2919,12 +2699,10 @@ class Model(Fbase):
             return False
 
     def setGeneActive(self, g_id, update_reactions=False):
-        """
-        Effectively restores a gene by setting it's active flag
+        """Effectively restores a gene by setting it's active flag.
 
-         - *g_id* a gene ID
-         - *update_reactions* [default=False] update the associated reactions fluxbounds from the gene deletion bounds if they exist
-
+        - *g_id* a gene ID
+        - *update_reactions* [default=False] update the associated reactions fluxbounds from the gene deletion bounds if they exist
         """
         g = self.getGene(g_id)
         if g != None:
@@ -2939,12 +2717,11 @@ class Model(Fbase):
             return False
 
     def updateNetwork(self, lower=0.0, upper=0.0, silent=False):
-        """
-        Update the reaction network based on gene activity. If reaction is deactivated then lower and upper bounds are used
+        """Update the reaction network based on gene activity. If reaction is
+        deactivated then lower and upper bounds are used.
 
-         - *lower* [default=0.0] deactivated lower bound
-         - *upper* [default=0.0] deactivated upper bound
-
+        - *lower* [default=0.0] deactivated lower bound
+        - *upper* [default=0.0] deactivated upper bound
         """
         for g_ in self.gpr:
             active = g_.isProteinActive()
@@ -2959,24 +2736,20 @@ class Model(Fbase):
         # self.__check_gene_activity__ = False
 
     def resetAllGenes(self, update_reactions=False):
-        """
-        Resets all genes to their default activity state (normally on)
+        """Resets all genes to their default activity state (normally on)
 
         - *update_reactions* [default=False] update the associated reactions fluxbounds from the gene deletion bounds if they exist
-
         """
         for g_ in self.genes:
             g_.resetActivity()
         self.updateNetwork()
 
     def setReactionBound(self, rid, value, bound):
-        """
-        Set a reaction bound
+        """Set a reaction bound.
 
-         - *rid* the reactions id
-         - *value* the new value
-         - *bound* this is either 'lower' or 'upper', or 'equal'
-
+        - *rid* the reactions id
+        - *value* the new value
+        - *bound* this is either 'lower' or 'upper', or 'equal'
         """
 #         R = self.getObject(rid)
 #
@@ -3024,31 +2797,23 @@ class Model(Fbase):
         self.setReactionBound(rid, upper, 'upper')
 
     def setReactionLowerBound(self, rid, value):
-        """
-        Set a reactions lower bound (if it exists)
+        """Set a reactions lower bound (if it exists)
 
-         - *rid* the reactions id
-         - *value* the new value
-
+        - *rid* the reactions id
+        - *value* the new value
         """
         self.setReactionBound(rid, value, 'lower')
 
     def setReactionUpperBound(self, rid, value):
-        """
-        Set a reactions upper bound (if it exists)
+        """Set a reactions upper bound (if it exists)
 
-         - *rid* the reaction id
-         - *value* the new value
-
+        - *rid* the reaction id
+        - *value* the new value
         """
         self.setReactionBound(rid, value, 'upper')
 
     def getAllFluxBounds(self):
-        """
-        DEPRECATED
-        Returns a dictionary of all flux bounds [id:value]
-
-        """
+        """DEPRECATED Returns a dictionary of all flux bounds [id:value]"""
         print('Deprecation warning: This method will be changed in CBMPy 0.9.0')
         out = {}
         for f_ in self.flux_bounds:
@@ -3059,13 +2824,11 @@ class Model(Fbase):
         return out
 
     def setAllFluxBounds(self, bounds):
-        """
-        DEPRECATED! use setFluxBoundsFromDict()
+        """DEPRECATED! use setFluxBoundsFromDict()
 
         Sets all the fluxbounds present in bounds
 
          - *bounds* a dictionary of [fluxbound_id : value] pairs (not per reaction!!!)
-
         """
         print(
             '\nDEPRECATION WARNING: use setFluxBoundsFromDict instead of setAllFluxBounds\n'
@@ -3074,12 +2837,10 @@ class Model(Fbase):
         self.setFluxBoundsFromDict(bounds)
 
     def setFluxBoundsFromDict(self, bounds):
-        """
-        DEPRECATED! This method will be modified to use reaction Idin CBMPy 0.9.0
-        Sets all the fluxbounds present in bounds
+        """DEPRECATED! This method will be modified to use reaction Idin CBMPy 0.9.0
+        Sets all the fluxbounds present in bounds.
 
-         - *bounds* a dictionary of [fluxbound_id : value] pairs (not per reaction!!!)
-
+        - *bounds* a dictionary of [fluxbound_id : value] pairs (not per reaction!!!)
         """
         print('Deprecation warning: This method will be changed in CBMPy 0.9.0')
 
@@ -3089,22 +2850,21 @@ class Model(Fbase):
                 f_.setValue(bounds[f_.getId()])
 
     def renameObjectIds(self, prefix=None, suffix=None, target='all', ignore=None):
-        """
-        This method is designed for target="all" other use may result in inconsistent models. Update: "species" and "reactions"
-        should also work as advertised, please check results.
+        """This method is designed for target="all" other use may result in inconsistent
+        models. Update: "species" and "reactions" should also work as advertised, please
+        check results.
 
-         - *prefix* [None] if supplied add as a prefix
-         - *suffix* [None] if supplied add as a suffix
-         - *target* ['all'] specify what class of objects to rename
+        - *prefix* [None] if supplied add as a prefix
+        - *suffix* [None] if supplied add as a suffix
+        - *target* ['all'] specify what class of objects to rename
 
-          - 'species'
-          - 'reactions'
-          - 'bounds'
-          - 'objectives'
-          - 'all'
+         - 'species'
+         - 'reactions'
+         - 'bounds'
+         - 'objectives'
+         - 'all'
 
-         - *ignore* [default=None] a list of id's to ignore
-
+        - *ignore* [default=None] a list of id's to ignore
         """
 
         if ignore is None:
@@ -3172,15 +2932,13 @@ class Model(Fbase):
         self.buildStoichMatrix()
 
     def setPrefix(self, prefix, target):
-        """
-        This is alpha stuff, target can be:
+        """This is alpha stuff, target can be:
 
-         - 'species'
-         - 'reactions'
-         - 'constraints'
-         - 'objectives'
-         - 'all'
-
+        - 'species'
+        - 'reactions'
+        - 'constraints'
+        - 'objectives'
+        - 'all'
         """
 
         print(
@@ -3193,15 +2951,13 @@ class Model(Fbase):
         self.renameObjectIds(prefix=prefix, suffix=None, target=target, ignore=[])
 
     def setSuffix(self, suffix, target):
-        """
-        This is alpha stuff, target can be:
+        """This is alpha stuff, target can be:
 
-         - 'species'
-         - 'reactions'
-         - 'constraints'
-         - 'objectives'
-         - 'all'
-
+        - 'species'
+        - 'reactions'
+        - 'constraints'
+        - 'objectives'
+        - 'all'
         """
 
         print(
@@ -3216,13 +2972,12 @@ class Model(Fbase):
     def setObjectiveFlux(
         self, rid, coefficient=1, osense='maximize', delete_objflx=True
     ):
-        """
-        Set single target reaction flux for the current active objective function.
+        """Set single target reaction flux for the current active objective function.
 
-         - *rid* a string containing a reaction id
-         - *coefficient* [default=1] an objective flux coefficient
-         - *osense* the optimization sense must be **maximize** or **minimize**
-         - *delete_objflx* [default=True] delete all existing fluxObjectives in the active objective function
+        - *rid* a string containing a reaction id
+        - *coefficient* [default=1] an objective flux coefficient
+        - *osense* the optimization sense must be **maximize** or **minimize**
+        - *delete_objflx* [default=True] delete all existing fluxObjectives in the active objective function
         """
         assert rid in self.getReactionIds(), '\n%s is not a reaction\n%s' % (
             rid,
@@ -3249,10 +3004,7 @@ class Model(Fbase):
         self.objectives[self.activeObjIdx].operation = osense
 
     def sortReactionsById(self):
-        """
-        Sorts the reactions by Reaction.id uses the python string sort
-
-        """
+        """Sorts the reactions by Reaction.id uses the python string sort."""
 
         reactions2 = []
         reactId = self.getReactionIds()
@@ -3266,25 +3018,20 @@ class Model(Fbase):
         del reactions2
 
     def sortSpeciesById(self):
-        """
-        Sorts the reaction list by Reaction.id uses the python string sort
-
-        """
+        """Sorts the reaction list by Reaction.id uses the python string sort."""
         raise NotImplementedError("\nCall developer about this")
 
     def getExchangeReactions(self):
-        """
-        Returns reaction instances where the 'is_exchange' attribute set to True. This is by default
-        reactions that contain a boundary species.
+        """Returns reaction instances where the 'is_exchange' attribute set to True.
 
+        This is by default reactions that contain a boundary species.
         """
         return [r for r in self.reactions if r.is_exchange]
 
     def getExchangeReactionIds(self):
-        """
-        Returns id's of reactions where the 'is_exchange' attribute set to True. This is by default
-        reactions that contain a boundary species.
+        """Returns id's of reactions where the 'is_exchange' attribute set to True.
 
+        This is by default reactions that contain a boundary species.
         """
         return [r.getId() for r in self.reactions if r.is_exchange]
 
@@ -3305,11 +3052,9 @@ class Model(Fbase):
         return out
 
     def getSolutionVector(self, names=False):
-        """
-        Return a vector of solution values
+        """Return a vector of solution values.
 
-         - *names* [default=False] if True return a solution vector and list of names
-
+        - *names* [default=False] if True return a solution vector and list of names
         """
         self.buildStoichMatrix()
         J = numpy.array([self.getReaction(r).getValue() for r in self.N.col])
@@ -3319,10 +3064,7 @@ class Model(Fbase):
             return J, tuple(self.N.col)
 
     def getReversibleReactionIds(self):
-        """
-        Return a list of reversible reaction Id's
-
-        """
+        """Return a list of reversible reaction Id's."""
         output = []
         for r_ in self.reactions:
             if r_.reversible:
@@ -3330,10 +3072,7 @@ class Model(Fbase):
         return output
 
     def getIrreversibleReactionIds(self):
-        """
-        Return a list of irreversible reaction Id's
-
-        """
+        """Return a list of irreversible reaction Id's."""
         output = []
         for r_ in self.reactions:
             if not r_.reversible:
@@ -3341,11 +3080,9 @@ class Model(Fbase):
         return output
 
     def getBoundarySpeciesIds(self, rid=None):
-        """
-        Return all boundary species associated with reaction
+        """Return all boundary species associated with reaction.
 
-         - rid [default=None] by default return all boundary species in a model, alternatively a string containing a reaction id or list of reaction id's
-
+        - rid [default=None] by default return all boundary species in a model, alternatively a string containing a reaction id or list of reaction id's
         """
         if rid is None:
             rid = self.getReactionIds()
@@ -3362,22 +3099,20 @@ class Model(Fbase):
         return bspec
 
     def findFluxesForConnectedSpecies(self, metab):
-        """
-        Returns a list of (reaction, flux value) pairs that this metabolite appears as a reagent of
+        """Returns a list of (reaction, flux value) pairs that this metabolite appears
+        as a reagent of.
 
-         - *metab* the metabolite name
-
+        - *metab* the metabolite name
         """
         print('DEPRECATION WARNING: please use cmod.getFluxesAssociatedWithSpecies()')
         print('Deprecation warning: This method will be deleted in CBMPy 0.9.0')
         return self.getFluxesAssociatedWithSpecies(metab)
 
     def getFluxesAssociatedWithSpecies(self, metab):
-        """
-        Returns a list of (reaction, flux value) pairs that this metabolite appears as a reagent in
+        """Returns a list of (reaction, flux value) pairs that this metabolite appears
+        as a reagent in.
 
-         - *metab* the metabolite name
-
+        - *metab* the metabolite name
         """
         output = []
         assert self.getSpecies(metab) is not None, (
@@ -3390,11 +3125,10 @@ class Model(Fbase):
         return output
 
     def getReactionIdsAssociatedWithSpecies(self, metab):
-        """
-        Returns a list of (reaction, flux value) pairs that this metabolite appears as a reagent in
+        """Returns a list of (reaction, flux value) pairs that this metabolite appears
+        as a reagent in.
 
-         - *metab* the metabolite name
-
+        - *metab* the metabolite name
         """
         output = []
         assert self.getSpecies(metab) != None, (
@@ -3407,21 +3141,19 @@ class Model(Fbase):
         return output
 
     def getFluxesAssociatedWithCompartments(self, compartments):
+        """Determines all reactions and flux values associated with a list of
+        compartments. This function can be used to find all transport reactions between
+        compartments, e.g. the cytosol and mitochondria. If the compartment IDs are
+        'cyt' and 'mit', respectively, you can call
+        "your_model.getFluxesAssociatedWithCompartments(['cyt', 'mit'])" to get all
+        fluxes between these compartments.
 
-        """
-        Determines all reactions and flux values associated with a list of
-        compartments. This function can be used to find all transport reactions
-        between compartments, e.g. the cytosol and mitochondria. If the
-        compartment IDs are 'cyt' and 'mit', respectively, you can call
-        "your_model.getFluxesAssociatedWithCompartments(['cyt', 'mit'])"
-        to get all fluxes between these compartments.
+        *compartments*: a list or set of compartment IDs.                 To check the
+        existing compartment IDs in your model                 call
+        "your_model.getCompartmentIds()"
 
-        *compartments*: a list or set of compartment IDs.
-                        To check the existing compartment IDs in your model
-                        call "your_model.getCompartmentIds()"
-
-        :returns a dictionary with reaction IDs as keys and corresponding
-        flux values as values
+        :returns a dictionary with reaction IDs as keys and corresponding flux values as
+        values
         """
 
         # check whether provided compartment ID's are valid
@@ -3445,10 +3177,7 @@ class Model(Fbase):
         }
 
     def splitEqualityFluxBounds(self):
-        """
-        Splits any equalit flux bounds into lower and upper bounds.
-
-        """
+        """Splits any equalit flux bounds into lower and upper bounds."""
         ebs = []
         for b_ in self.flux_bounds:
             if b_.getType() == 'equality':
@@ -3463,8 +3192,8 @@ class Model(Fbase):
         del ebs
 
     def buildStoichMatrix(self, matrix_type='numpy', only_return=False):
-        """
-        Build the stoichiometric matrix N and additional constraint matrix CN (if required)
+        """Build the stoichiometric matrix N and additional constraint matrix CN (if
+        required)
 
          - *matrix_type* [default='numpy'] the type of matrix to use to generate constraints
 
@@ -3474,7 +3203,6 @@ class Model(Fbase):
 
         - *only_return* [default=False] **IMPORTANT** only returns the stoichiometric matrix and constraint matrix (if required),
           does not update the model
-
         """
         if __DEBUG__:
             print('Species:', self.getSpeciesIds())
@@ -3689,16 +3417,17 @@ class Model(Fbase):
                 return N
 
     def createSingleGeneEffectMap(self):
-        """
-        This takes a model and analyses the logical gene expression patterns. This only needs to be done once,
-        the result is a dictionary that has boolean effect patterns as keys and the (list of) genes that give rise to
-        those patterns as values. This map is used by the single gene deletion method for further analysis.
+        """This takes a model and analyses the logical gene expression patterns. This
+        only needs to be done once, the result is a dictionary that has boolean effect
+        patterns as keys and the (list of) genes that give rise to those patterns as
+        values. This map is used by the single gene deletion method for further
+        analysis.
 
-        Note this dictionary can also be stored and retrieved separately as long as the model structure is not changed i.e.
-        the gene associations themselves or order of reactions (stored as the special entry 'keyJ').
+        Note this dictionary can also be stored and retrieved separately as long as the
+        model structure is not changed i.e. the gene associations themselves or order of
+        reactions (stored as the special entry 'keyJ').
 
         Stored as self.__single_gene_effect_map__
-
         """
         fba2 = self.clone()
         # cbm.analyzeModel(fba2)
@@ -3740,10 +3469,8 @@ class Model(Fbase):
         del geneidcache, fba2, cpress
 
     def testGeneProteinAssociations(self):
-        """
-        This method will test the GeneProtein associations and return a list of protein, association pairs
-
-        """
+        """This method will test the GeneProtein associations and return a list of
+        protein, association pairs."""
         out = []
         for g_ in self.gpr:
             try:
@@ -3754,19 +3481,13 @@ class Model(Fbase):
         return out
 
     def exportFVAdata(self):
-        """
-        Export the fva data as an array and list of reaction id's
-
-        """
+        """Export the fva data as an array and list of reaction id's."""
 
         # investigate the use of numpy index arrays here
         raise NotImplementedError
 
     def importUserConstraints(self, filename):
-        """
-        Exports user constraints in json
-
-        """
+        """Exports user constraints in json."""
         if filename is None:
             return False
         F = open(filename, 'r')
@@ -3781,10 +3502,7 @@ class Model(Fbase):
         return True
 
     def exportUserConstraints(self, filename):
-        """
-        Exports user constraints in json
-
-        """
+        """Exports user constraints in json."""
         for uc in self.user_constraints:
             fluxes2 = []
             for ucc in self.user_constraints[uc]['fluxes']:
@@ -3802,20 +3520,16 @@ class Model(Fbase):
         F.close()
 
     def createGroup(self, gid):
-        """
-        Create an empty group with
+        """Create an empty group with.
 
-         - *gid* the unique group id
-
+        - *gid* the unique group id
         """
         self.addGroup(Group(gid))
 
     def addGroup(self, obj):
-        """
-        Add an instantiated group object to the model
+        """Add an instantiated group object to the model.
 
-         - *obj* the Group instance
-
+        - *obj* the Group instance
         """
         assert (
             obj.__objref__ is None
@@ -3836,11 +3550,9 @@ class Model(Fbase):
             del obj
 
     def deleteGroup(self, gid):
-        """
-        Delete a group with
+        """Delete a group with.
 
-         - *gid* the unique group id
-
+        - *gid* the unique group id
         """
         gids = self.getGroupIds()
         if gid in gids:
@@ -3851,11 +3563,9 @@ class Model(Fbase):
             print('ERROR: Group with id \"{}\" does not exist.'.format(gid))
 
     def getGroup(self, gid):
-        """
-        Return a group with
+        """Return a group with.
 
-         - *gid* the unique group id
-
+        - *gid* the unique group id
         """
         for g_ in self.groups:
             if g_.getId() == gid:
@@ -3863,23 +3573,17 @@ class Model(Fbase):
         return None
 
     def getGroupIds(self):
-        """
-        Get all group ids
-
-        """
+        """Get all group ids."""
         return [g.getId() for g in self.groups]
 
     def getGroupNames(self):
-        """
-        Get all group names
-
-        """
+        """Get all group names."""
         return [g.getName() for g in self.groups]
 
     def getGroupMembership(self):
-        """
-        Returns group membership of items in groups. Returns {object_id: ['group_id1', 'group_id2']}
+        """Returns group membership of items in groups.
 
+        Returns {object_id: ['group_id1', 'group_id2']}
         """
         grps = {}
         for g in self.groups:
@@ -3892,18 +3596,12 @@ class Model(Fbase):
         return grps
 
     def emptyUndelete(self):
-        """
-        Empties the undelete cache
-
-        """
+        """Empties the undelete cache."""
         self.__TRASH__.clear()
 
 
 class Objective(Fbase):
-    """
-    An objective function
-
-    """
+    """An objective function."""
 
     flux_objectives = None
     operation = None
@@ -3928,11 +3626,9 @@ class Objective(Fbase):
         self.annotation_ext = {}
 
     def setOperation(self, operation):
-        """
-        Sets the objective operation (sense)
+        """Sets the objective operation (sense)
 
-         - *operation* [default='maximize'] one of 'maximize', 'maximise', 'max', 'minimize', 'minimise', 'min'
-
+        - *operation* [default='maximize'] one of 'maximize', 'maximise', 'max', 'minimize', 'minimise', 'min'
         """
         if operation.lower() in ['maximize', 'maximise', 'max']:
             self.operation = 'maximize'
@@ -3942,18 +3638,14 @@ class Objective(Fbase):
             print('WARNING: Invalid operation: {}'.format(operation))
 
     def getOperation(self):
-        """
-        Returns the operation or sense of the objective
-        """
+        """Returns the operation or sense of the objective."""
         return self.operation
 
     def addFluxObjective(self, fobj, override=False):
-        """
-        Adds a FluxObjective instance to the Objective
+        """Adds a FluxObjective instance to the Objective.
 
-         - *fobj* the FluxObjective object
-         - *override* [default=False] override pushing the global id map, this should never be used
-
+        - *fobj* the FluxObjective object
+        - *override* [default=False] override pushing the global id map, this should never be used
         """
         if fobj.getId() in self.getFluxObjectiveIDs():
             print('FOBJID', fobj.getId())
@@ -3968,11 +3660,9 @@ class Objective(Fbase):
         self.flux_objectives.append(fobj)
 
     def createFluxObjectives(self, fluxlist):
-        """
-        Create and add flux objective objects to this objective function.
+        """Create and add flux objective objects to this objective function.
 
-         - *fluxlist* a list of one or more ('coefficient', 'rid', 'type') triples
-
+        - *fluxlist* a list of one or more ('coefficient', 'rid', 'type') triples
         """
         FOreact = self.getFluxObjectiveReactions()
         for J in fluxlist:
@@ -3987,40 +3677,32 @@ class Objective(Fbase):
                 print('\nObjective {} already contains flux {} ... skipping!\n'.format(self.getId(), J[1]))
 
     def createQuadraticFluxObjectives(self, fluxlist):
-        """
-        Create and add quadratic flux objective objects to this objective function.
+        """Create and add quadratic flux objective objects to this objective function.
 
-         - *fluxlist* a list of one or more ('coefficient', 'rid', 'rid2', 'type') triples
-
+        - *fluxlist* a list of one or more ('coefficient', 'rid', 'rid2', 'type') triples
         """
         for J in fluxlist:
             fid = '{}_{}_{}_fobj'.format(self.getId(), J[1], J[2])
             self.addFluxObjective(FluxObjectiveQuadratic(fid, J[1], J[2], J[0], 'quadratic'))
 
     def deleteAllFluxObjectives(self):
-        """
-        Delete all flux objectives
-
-        """
+        """Delete all flux objectives."""
         for fo in self.flux_objectives:
             self.__objref__().__popGlobalId__(fo.getId())
         self.flux_objectives = []
 
     def getFluxObjectiveIDs(self):
-        """
-        Returns a list of ObjectiveFlux ids, for the reaction id's use *getFluxObjectiveReactions()*
-        or for coefficient, fluxobjective pairs use *getFluxObjectiveData()*
-
-        """
+        """Returns a list of ObjectiveFlux ids, for the reaction id's use
+        *getFluxObjectiveReactions()* or for coefficient, fluxobjective pairs use
+        *getFluxObjectiveData()*"""
         return [f.getId() for f in self.flux_objectives]
 
     def getFluxObjectiveForReaction(self, rid):
-        """
-        Returns the FluxObjective associated with the suplied rid. If there is more than fluxObjective associated with a reaction (illegal)
-        then a list of fluxObjectives is returned.
+        """Returns the FluxObjective associated with the suplied rid. If there is more
+        than fluxObjective associated with a reaction (illegal) then a list of
+        fluxObjectives is returned.
 
-         *rid* a reaction id
-
+        *rid* a reaction id
         """
         fo = None
         for fo_ in self.flux_objectives:
@@ -4041,25 +3723,18 @@ class Objective(Fbase):
         return fo
 
     def getFluxObjectiveReactions(self):
-        """
-        Returns a list of reactions that are used as flux_objectives
-
-        """
+        """Returns a list of reactions that are used as flux_objectives."""
         return [f.reaction for f in self.flux_objectives]
 
     def getFluxObjectiveData(self):
-        """
-        Returns a list of ObjectiveFunction components as (coefficient, flux, type) pairs
-
-        """
+        """Returns a list of ObjectiveFunction components as (coefficient, flux, type)
+        pairs."""
         return [(f.coefficient, f.reaction, f.ctype) for f in self.flux_objectives]
 
     def getFluxObjective(self, foid):
-        """
-        Return the flux objective with id.
+        """Return the flux objective with id.
 
-         - *foid* the flux objective id returns either an object or a list if there are multiply defined flux objectives
-
+        - *foid* the flux objective id returns either an object or a list if there are multiply defined flux objectives
         """
         fo = None
         for fo_ in self.flux_objectives:
@@ -4076,29 +3751,19 @@ class Objective(Fbase):
         return fo
 
     def getFluxObjectives(self):
-        """
-        Returns the list of FluxObjective objects.
-
-        """
+        """Returns the list of FluxObjective objects."""
         return self.flux_objectives
 
     def getValue(self):
-        """
-        Returns the current value of the attribute (input/solution)
-        """
+        """Returns the current value of the attribute (input/solution)"""
         return self.value
 
     def setValue(self, value):
-        """
-        Sets the attribute ''value''
-        """
+        """Sets the attribute ''value''."""
         self.value = value
 
     def getLinearFluxObjectives(self):
-        """
-        Returns a list of linear variable flux objective objects
-
-        """
+        """Returns a list of linear variable flux objective objects."""
         out = []
         for fo in self.flux_objectives:
             if fo.getType() is None or fo.getType() == 'linear':
@@ -4106,10 +3771,7 @@ class Objective(Fbase):
         return out
 
     def getQuadraticFluxObjectives(self):
-        """
-        Returns a list of quadratic variable flux objective objects
-
-        """
+        """Returns a list of quadratic variable flux objective objects."""
         out = []
         for fo in self.flux_objectives:
             if fo.getType() == 'quadratic':
@@ -4117,10 +3779,7 @@ class Objective(Fbase):
         return out
 
     def getQuadraticBivariateFluxObjectives(self):
-        """
-        Returns a list of bivariate quadratic variable flux objective objects
-
-        """
+        """Returns a list of bivariate quadratic variable flux objective objects."""
         out = []
         for fo in self.flux_objectives:
             if fo.getType() == 'quadratic' and type(fo) == FluxObjectiveQuadratic:
@@ -4129,10 +3788,9 @@ class Objective(Fbase):
 
 
 class FluxObjectiveQuadratic(Fbase):
-    """
-    A weighted quadratic flux that appears in an objective function, this fluxobjective contains
-    two reaction terms to define "quadratic" fluxobjectives of the type <coefficient>*<variable1>*<variable2>
-    For example 2*R1*R2
+    """A weighted quadratic flux that appears in an objective function, this
+    fluxobjective contains two reaction terms to define "quadratic" fluxobjectives of
+    the type <coefficient>*<variable1>*<variable2> For example 2*R1*R2.
 
     NOTE: reaction is a string containing a reaction id
     """
@@ -4191,8 +3849,7 @@ class FluxObjectiveQuadratic(Fbase):
 
 
 class FluxObjective(Fbase):
-    """
-    A weighted flux that appears in an objective function
+    """A weighted flux that appears in an objective function.
 
     NOTE: reaction is a string containing a reaction id
     """
@@ -4236,11 +3893,9 @@ class FluxObjective(Fbase):
 
 
 class UserDefinedConstraint(Fbase):
-    """
-    This is an FBCv3 class that defines a set of user defined constraints, it is similar to an objective constraint except allows parameters as
-    coefficients and values in the constraint components
-
-    """
+    """This is an FBCv3 class that defines a set of user defined constraints, it is
+    similar to an objective constraint except allows parameters as coefficients and
+    values in the constraint components."""
 
     constraint_components = None
     solution = None
@@ -4282,17 +3937,11 @@ class UserDefinedConstraint(Fbase):
             return self.lb
 
     def getConstraintComponentIDs(self):
-        """
-
-        """
+        """"""
         return [f.getId() for f in self.constraint_components]
 
     def getConstraintComponentForVariable(self, rid):
-        """
-
-         *rid* a component id
-
-        """
+        """*rid* a component id."""
         fo = []
         for fo_ in self.constraint_components:
             if fo_.variable == rid:
@@ -4304,27 +3953,18 @@ class UserDefinedConstraint(Fbase):
             return fo
 
     def getConstraintComponentVariables(self):
-        """
-
-
-        """
+        """"""
         return [f.variable for f in self.constraint_components]
 
     def getConstraintComponentVariableTypes(self):
-        """
-
-
-        """
+        """"""
         try:
             return [type(self.getModel().getObject(f.variable)) for f in self.constraint_components]
         except (KeyError, AttributeError):
             return [None] * len(self.constraint_components)
 
     def getConstraintComponentData(self):
-        """
-
-
-        """
+        """"""
         return [(f.coefficient, f.variable, f.ctype) for f in self.constraint_components]
 
     def getConstraintComponent(self, cid):
@@ -4339,17 +3979,11 @@ class UserDefinedConstraint(Fbase):
             return None
 
     def getConstraintComponents(self):
-        """
-
-
-        """
+        """"""
         return self.constraint_components
 
     def createConstraintComponent(self, pid, coefficient, variable, ctype):
-        """
-
-
-        """
+        """"""
         return ConstraintComponent(pid, coefficient, variable, ctype)
 
     def addConstraintComponent(self, cc):
@@ -4366,10 +4000,7 @@ class UserDefinedConstraint(Fbase):
 
 
 class ConstraintComponent(Fbase):
-    """
-    A weighted flux that appears in an user defined constraint
-
-    """
+    """A weighted flux that appears in an user defined constraint."""
 
     variable = None
     coefficient = None
@@ -4426,7 +4057,7 @@ class ConstraintComponent(Fbase):
 
 
 class Compartment(Fbase):
-    """A compartment"""
+    """A compartment."""
 
     size = None
     dimensions = None
@@ -4461,13 +4092,11 @@ class Compartment(Fbase):
         self.annotation = {}
 
     def setId(self, fid):
-        """
-        Sets the object Id
+        """Sets the object Id.
 
-         - *fid* a valid c variable style id string
+        - *fid* a valid c variable style id string
 
-         Reimplements @FBase.setId()
-
+        Reimplements @FBase.setId()
         """
 
         fid = str(fid)
@@ -4500,10 +4129,7 @@ class Compartment(Fbase):
             self.id = fid
 
     def containsSpecies(self):
-        """
-        Lists the species contained in this compartment
-
-        """
+        """Lists the species contained in this compartment."""
         out = []
         if self.__objref__ != None:
             out = [
@@ -4514,10 +4140,7 @@ class Compartment(Fbase):
         return out
 
     def containsReactions(self):
-        """
-        Lists the species contained in this compartment
-
-        """
+        """Lists the species contained in this compartment."""
         out = []
         if self.__objref__ != None:
             out = [
@@ -4528,53 +4151,38 @@ class Compartment(Fbase):
         return out
 
     def getSize(self):
-        """
-        Get the compartment size
-
-        """
+        """Get the compartment size."""
         return self.size
 
     def getDimensions(self):
-        """
-        Get the compartment dimensions
-
-        """
+        """Get the compartment dimensions."""
         return self.dimensions
 
     def setSize(self, size):
-        """
-        Set the compartment size
+        """Set the compartment size.
 
-         - *size* the new compartment size
-
+        - *size* the new compartment size
         """
         self.size = size
 
     def setDimensions(self, dimensions):
-        """
-        Get the compartment dimensions
+        """Get the compartment dimensions.
 
-         - *dimensions* set the new compartment dimensions
-
+        - *dimensions* set the new compartment dimensions
         """
         self.dimensions = dimensions
 
 
 class GroupMemberAttributes(Fbase):
-    """
-    Contains the shared attributes of the group members (equivalent to SBML annotation on ListOfMembers)
-
-    """
+    """Contains the shared attributes of the group members (equivalent to SBML
+    annotation on ListOfMembers)"""
 
     def __init__(self):
         self.annotation = {}
 
 
 class Group(Fbase):
-    """
-    Container for SBML groups
-
-    """
+    """Container for SBML groups."""
 
     members = None
     member_ids = None
@@ -4594,10 +4202,10 @@ class Group(Fbase):
         self._member_attributes_ = GroupMemberAttributes()
 
     def clone(self):
-        """
-        Return a clone of this object. Note the for Groups this is a shallow copy, in that the reference
-        objects themselves are not cloned only the group (and attributes)
+        """Return a clone of this object.
 
+        Note the for Groups this is a shallow copy, in that the reference objects
+        themselves are not cloned only the group (and attributes)
         """
         if type(self.__TRASH__) == dict:
             self.__TRASH__.clear()
@@ -4609,11 +4217,9 @@ class Group(Fbase):
         return cpy
 
     def addMember(self, obj):
-        """
-        Add member CBMPy object(s) to the group
+        """Add member CBMPy object(s) to the group.
 
-         - *obj* either a single, tuple or list of CBMPy objects
-
+        - *obj* either a single, tuple or list of CBMPy objects
         """
         if not isinstance(obj, (list, tuple)):
             obj = [obj]
@@ -4633,11 +4239,9 @@ class Group(Fbase):
                 print('ERROR: object {} is not a valid CBMPy object .\n'.format(o_))
 
     def deleteMember(self, oid):
-        """
-        Deletes a group member with group id.
+        """Deletes a group member with group id.
 
-         - *oid* group member id
-
+        - *oid* group member id
         """
         if oid in self.member_ids:
             oidx = self.member_ids.index(oid)
@@ -4651,20 +4255,16 @@ class Group(Fbase):
             print('\nError object {} is not a member of group.\n'.format(oid))
 
     def hasMember(self, mid):
-        """
-        Returns a boolean indicating whether a member is in the group.
+        """Returns a boolean indicating whether a member is in the group.
 
-         - *mid* the id to check
-
+        - *mid* the id to check
         """
         return mid in self.member_ids
 
     def getMembers(self, as_set=False):
-        """
-        Return the member objects of the group.
+        """Return the member objects of the group.
 
-         - *as_set* return objects as a set rather than a list
-
+        - *as_set* return objects as a set rather than a list
         """
         if not as_set:
             return [m() for m in self.members]
@@ -4672,11 +4272,9 @@ class Group(Fbase):
             return set([m() for m in self.members])
 
     def getMember(self, mid):
-        """
-        Returns the group member object that corresponds to mid
+        """Returns the group member object that corresponds to mid.
 
-         - *mid* the id of the requested object
-
+        - *mid* the id of the requested object
         """
         if self.hasMember(mid):
             return self.members[self.member_ids.index(mid)]()
@@ -4684,11 +4282,9 @@ class Group(Fbase):
             return None
 
     def getMemberIDs(self, as_set=False):
-        """
-        Return the ids of the member objects.
+        """Return the ids of the member objects.
 
-         - *as_set* return id's as a set rather than a list
-
+        - *as_set* return id's as a set rather than a list
         """
         if not as_set:
             return self.member_ids
@@ -4696,94 +4292,71 @@ class Group(Fbase):
             return set(self.member_ids)
 
     def getKind(self):
-        """
-        Return the group kind
-
-        """
+        """Return the group kind."""
         return self.kind
 
     def setKind(self, kind):
-        """
-        Sets the kind or type of the group, this must be one of: 'collection', 'partonomy', 'classification'.
+        """Sets the kind or type of the group, this must be one of: 'collection',
+        'partonomy', 'classification'.
 
-         - *kind* the kind
-
+        - *kind* the kind
         """
         assert kind in self._kinds_, '\nKind must be one of: {}\n'.format(self._kinds_)
         self.kind = kind
 
     def addSharedMIRIAMannotation(self, qual, entity, mid):
-        """
-        Add a qualified MIRIAM annotation or entity to the list of members (all) rather than the group itself:
+        """Add a qualified MIRIAM annotation or entity to the list of members (all)
+        rather than the group itself:
 
-         - *qual* a Biomodels biological qualifier e.g. "is" "isEncodedBy"
-         - *entity* a MIRIAM resource entity e.g. "ChEBI"
-         - *mid* the entity id e.g. CHEBI:17158 or fully qualifies url (if only_qual_uri)
-
+        - *qual* a Biomodels biological qualifier e.g. "is" "isEncodedBy"
+        - *entity* a MIRIAM resource entity e.g. "ChEBI"
+        - *mid* the entity id e.g. CHEBI:17158 or fully qualifies url (if only_qual_uri)
         """
         self._member_attributes_.addMIRIAMannotation(qual, entity, mid)
 
     def setSharedAnnotation(self, key, value):
-        """
-        Sets the list of members (all) annotation as a key : value pair.
+        """Sets the list of members (all) annotation as a key : value pair.
 
-         - *key* the annotation key
-         - *value* the annotation value
-
+        - *key* the annotation key
+        - *value* the annotation value
         """
         self._member_attributes_.setAnnotation(key, value)
 
     def setSharedSBOterm(self, sbo):
-        """
-        Set the SBO term for the the members of the group (all).
+        """Set the SBO term for the the members of the group (all).
 
-         - *sbo* the SBOterm with format: "SBO:<7 digit integer>"
-
+        - *sbo* the SBOterm with format: "SBO:<7 digit integer>"
         """
         self._member_attributes_.setSBOterm(sbo)
 
     def setSharedNotes(self, notes):
-        """
-        Sets the group of objects notes attribute (all):
+        """Sets the group of objects notes attribute (all):
 
-         - *notes* the note string, should preferably be (X)HTML for SBML
-
+        - *notes* the note string, should preferably be (X)HTML for SBML
         """
         self._member_attributes_.setNotes(notes)
 
     def getSharedMIRIAMannotations(self):
-        """
-        Return a dictionary of the shared member MIRIAM annotations (rather than the group attribute).
-
-        """
+        """Return a dictionary of the shared member MIRIAM annotations (rather than the
+        group attribute)."""
         return self._member_attributes_.getMIRIAMannotations()
 
     def getSharedAnnotations(self):
-        """
-        Return a dictionary of the shared member annotations (rather than the group attribute).
-
-        """
+        """Return a dictionary of the shared member annotations (rather than the group
+        attribute)."""
         return self._member_attributes_.getAnnotations()
 
     def getSharedSBOterm(self):
-        """
-        Return the shared member SBO term (rather than the group attribute).
-
-        """
+        """Return the shared member SBO term (rather than the group attribute)."""
         return self._member_attributes_.getSBOterm()
 
     def getSharedNotes(self):
-        """
-        Return the shared member notes (rather than the group attribute).
-
-        """
+        """Return the shared member notes (rather than the group attribute)."""
         return self._member_attributes_.getNotes()
 
     def assignSharedAnnotationToMembers(self):
-        """
-        This function merges or updates the group member objects annotations with the group shared annotation.
-
-        """
+        """This function merges or updates the group member objects annotations with the
+        group shared annotation."""
         print(
             'INFO: Assigning shared CBMPy annotation to members, this cannot be undone.'
         )
@@ -4792,10 +4365,8 @@ class Group(Fbase):
                 m_().annotation.update(self._member_attributes_.annotation)
 
     def assignSharedMIRIAMannotationToMembers(self):
-        """
-        This function merges or updates the group member objects MIRIAM annotations with the group shared MIRIAM annotation.
-
-        """
+        """This function merges or updates the group member objects MIRIAM annotations
+        with the group shared MIRIAM annotation."""
         print(
             'INFO: Assigning shared MIRIAM annotation to members, this cannot be undone.'
         )
@@ -4808,11 +4379,9 @@ class Group(Fbase):
                             m_().addMIRIAMuri(k_, u_)
 
     def assignSharedSBOtermsToMembers(self, overwrite=False):
-        """
-        Assigns the group shared member SBO term to the group members.
+        """Assigns the group shared member SBO term to the group members.
 
-         - *overwrite* [default=False] overwrite the target SBO term if it is defined
-
+        - *overwrite* [default=False] overwrite the target SBO term if it is defined
         """
         print('INFO: Assigning shared SBOterm to members, this cannot be undone.')
         sbo = self._member_attributes_.getSBOterm()
@@ -4822,11 +4391,9 @@ class Group(Fbase):
                     m_().setSBOterm(sbo)
 
     def assignSharedNotesToMembers(self, overwrite=False):
-        """
-        Assigns the group shared notes to the group members.
+        """Assigns the group shared notes to the group members.
 
-         - *overwrite* [default=False] overwrite the target notes if they are defined
-
+        - *overwrite* [default=False] overwrite the target notes if they are defined
         """
         print('INFO: Assigning shared Notes to members, this cannot be undone.')
         if self._member_attributes_.notes != '':
@@ -4835,11 +4402,10 @@ class Group(Fbase):
                     m_().notes = self._member_attributes_.notes
 
     def assignAllSharedPropertiesToMembers(self, overwrite=False):
-        """
-        Assigns all group shared properties (notes, annotations, MIRIAM annotations, SBO) to the group members.
+        """Assigns all group shared properties (notes, annotations, MIRIAM annotations,
+        SBO) to the group members.
 
-         - *overwrite* [default=False] overwrite the target notes if they are defined
-
+        - *overwrite* [default=False] overwrite the target notes if they are defined
         """
         self.assignSharedSBOtermsToMembers(overwrite)
         self.assignSharedNotesToMembers(overwrite)
@@ -4847,14 +4413,12 @@ class Group(Fbase):
         self.assignSharedMIRIAMannotationToMembers()
 
     def serialize(self, protocol=0):
-        """
-        Serialize object, returns a string by default
+        """Serialize object, returns a string by default.
 
          - *protocol* [default=0] serialize to a string or binary if required,
                       see pickle module documentation for details
 
         # Reimplemented in Model
-
         """
         # return pickle.dumps(self, protocol=protocol)
         print('Group serialization disabled.')
@@ -4907,7 +4471,7 @@ class Group(Fbase):
 
 
 class FluxBound(Fbase):
-    """A reaction fluxbound"""
+    """A reaction fluxbound."""
 
     reaction = None
     operation = None
@@ -4951,10 +4515,7 @@ class FluxBound(Fbase):
         self.__delattr__('compartment')
 
     def getType(self):
-        """
-        Returns the *type* of FluxBound: 'lower', 'upper', 'equality' or None
-
-        """
+        """Returns the *type* of FluxBound: 'lower', 'upper', 'equality' or None."""
         if self.operation in ['greater', 'greaterEqual', '>=']:
             self.is_bound = 'lower'
         elif self.operation in ['less', 'lessEqual', '<=']:
@@ -4969,16 +4530,11 @@ class FluxBound(Fbase):
         return self.reaction
 
     def setReactionId(self, react):
-        """
-        Sets the reaction attribute of the FluxBound
-
-        """
+        """Sets the reaction attribute of the FluxBound."""
         self.reaction = react
 
     def getValue(self):
-        """
-        Returns the current value of the attribute (input/solution)
-        """
+        """Returns the current value of the attribute (input/solution)"""
         if self.value is None:
             print('Warning fluxbound: {} has no value'.format(self.getId()))
             return None
@@ -4986,9 +4542,7 @@ class FluxBound(Fbase):
             return float(self.value)
 
     def setValue(self, value):
-        """
-        Sets the attribute ''value''
-        """
+        """Sets the attribute ''value''."""
         if numpy.isreal(value):
             self.value = value
         elif numpy.isinf(value):
@@ -5000,7 +4554,8 @@ class FluxBound(Fbase):
 
 
 class FluxBoundBase(Fbase):
-    """A refactored and streamlined FluxBound base class that can be a generic bound, superclass to FluxBoundUpper and FluxBoundLower"""
+    """A refactored and streamlined FluxBound base class that can be a generic bound,
+    superclass to FluxBoundUpper and FluxBoundLower."""
 
     _parent = None
     operator = None
@@ -5038,10 +4593,7 @@ class FluxBoundBase(Fbase):
     # return self.value
 
     def getType(self):
-        """
-        Returns the *type* of FluxBound: 'lower', 'upper'
-
-        """
+        """Returns the *type* of FluxBound: 'lower', 'upper'."""
         if self.operator == '>=':
             return 'lower'
         else:
@@ -5055,9 +4607,7 @@ class FluxBoundBase(Fbase):
             return None
 
     def getValue(self):
-        """
-        Returns the current value of the attribute (input/solution)
-        """
+        """Returns the current value of the attribute (input/solution)"""
         return self._value
 
     def setValue(self, value):
@@ -5077,11 +4627,9 @@ class FluxBoundBase(Fbase):
     value = property(getValue, setValue)
 
     def __getstate__(self):
-        """
-        Internal method that should allow our weakrefs to be 'picklable'
+        """Internal method that should allow our weakrefs to be 'picklable'.
 
         # overloaded by Model, FluxBound and Group
-
         """
 
         # self.__global_id__ = None # this is the global id dictionary so not relevant to fb
@@ -5106,12 +4654,11 @@ class FluxBoundBase(Fbase):
 
 class FluxBoundUpper(FluxBoundBase):
     def __init__(self, reaction, value=float('inf')):
-        """
-        Upper Bound class, less flexible than generic superclass (no input checking) for model instantiation.
+        """Upper Bound class, less flexible than generic superclass (no input checking)
+        for model instantiation.
 
         - *value* [default=inf] a float
         - *reaction* the parent Reaction
-
         """
         self.setId('{}_upper_bnd'.format(reaction.getId()))
         self.operator = '<='
@@ -5125,12 +4672,11 @@ class FluxBoundUpper(FluxBoundBase):
 
 class FluxBoundLower(FluxBoundBase):
     def __init__(self, reaction, value=-float('inf')):
-        """
-        Lower Bound Class, less flexible than generic superclass (no input checking) for model instantiation.
+        """Lower Bound Class, less flexible than generic superclass (no input checking)
+        for model instantiation.
 
         - *value* [default=-inf] a float
         - *reaction* the parent Reaction
-
         """
         self.setId('{}_lower_bnd'.format(reaction.getId()))
         self.operator = '>='
@@ -5143,7 +4689,7 @@ class FluxBoundLower(FluxBoundBase):
 
 
 class Parameter(Fbase):
-    """Holds parameter information"""
+    """Holds parameter information."""
 
     _associations_ = None
     constant = True
@@ -5151,14 +4697,12 @@ class Parameter(Fbase):
     _is_fluxbound_ = False
 
     def __init__(self, pid, value, name=None, constant=True):
-        """
-        Parameter definition class
+        """Parameter definition class.
 
-         - *pid* the unique parameter pid
-         - *value* the value
-         - *name* [default=''] the parameter name
-         - *constant* [default=True] is the paramter constant or can it be changed by a simulation/solver
-
+        - *pid* the unique parameter pid
+        - *value* the value
+        - *name* [default=''] the parameter name
+        - *constant* [default=True] is the paramter constant or can it be changed by a simulation/solver
         """
         pid = str(pid)
         self.setId(pid)
@@ -5171,9 +4715,7 @@ class Parameter(Fbase):
         self.annotation = {}
 
     def getValue(self):
-        """
-        Returns the current value of the attribute (input/solution)
-        """
+        """Returns the current value of the attribute (input/solution)"""
         return self._value
 
     def setValue(self, value):
@@ -5193,30 +4735,21 @@ class Parameter(Fbase):
     value = property(getValue, setValue)
 
     def getAssociations(self):
-        """
-        Return the Object ID's associated with this parameter
-
-        """
+        """Return the Object ID's associated with this parameter."""
         return self._associations_
 
     def addAssociation(self, assoc):
-        """
-        Add an object ID to associate with this object
-
-        """
+        """Add an object ID to associate with this object."""
         self._associations_.append(assoc)
 
     def deleteAssociation(self, assoc):
-        """
-        Delete the object id associated with this object
-
-        """
+        """Delete the object id associated with this object."""
         if assoc in self._associations_:
             self._associations_.remove(assoc)
 
 
 class Reaction(Fbase):
-    """Holds reaction information"""
+    """Holds reaction information."""
 
     reagents = None
     reversible = None
@@ -5232,14 +4765,10 @@ class Reaction(Fbase):
     _modifiers_ = None
     __lower_bound_id__ = None
     __upper_bound_id__ = None
-    """
-    # TODO: next major revision 0.9 is to get rid of fluxbound array
-    # by adding fluxbound objects directly to the reactions this should simplify the
-    # data structure but will mean a major rewrite of existing code and potentially breaking
-    # backwards compatability
-    upper_bound = numpy.Inf
-    lower_bound = -numpy.Inf
-    """
+    """# TODO: next major revision 0.9 is to get rid of fluxbound array # by adding
+    fluxbound objects directly to the reactions this should simplify the # data
+    structure but will mean a major rewrite of existing code and potentially breaking #
+    backwards compatability upper_bound = numpy.Inf lower_bound = -numpy.Inf"""
 
     def __init__(self, pid, name=None, reversible=True):
         pid = str(pid)
@@ -5259,10 +4788,7 @@ class Reaction(Fbase):
         self._modifiers_ = []  # reaction modifiers from SBML, read/write only
 
     def addReagent(self, reag):
-        """
-        Adds an instantiated Reagent object to the reaction
-
-        """
+        """Adds an instantiated Reagent object to the reaction."""
         if self.__objref__ is not None:
             if reag.getId() in self.__objref__().__global_id__:
                 raise RuntimeError('Duplicate obj ID detected: {}'.format(reag.getId()))
@@ -5291,31 +4817,22 @@ class Reaction(Fbase):
         self.addReagent(rr)
 
     def getReagentObjIds(self):
-        """
-        Returns a list of the reagent id's. For the name of the reagents/metabolites use *<reaction>.getSpeciesIds()*
+        """Returns a list of the reagent id's.
 
+        For the name of the reagents/metabolites use *<reaction>.getSpeciesIds()*
         """
         return [r.getId() for r in self.reagents]
 
     def getReagentRefs(self):
-        """
-        Returns a list of the reagents/metabolites
-
-        """
+        """Returns a list of the reagents/metabolites."""
         raise DeprecationWarning('DEPRECATED: please use <reaction>.getSpeciesIds')
 
     def getSpeciesIds(self):
-        """
-        Returns a list of the reagents/metabolites
-
-        """
+        """Returns a list of the reagents/metabolites."""
         return [r.species_ref for r in self.reagents]
 
     def getSpeciesObj(self):
-        """
-        Returns a list of the species objects that are reagents
-
-        """
+        """Returns a list of the species objects that are reagents."""
         if self.__objref__ == None:
             print('INFO: Only works when part of a model.')
             return []
@@ -5354,11 +4871,9 @@ class Reaction(Fbase):
         return tuple(out)
 
     def getReagent(self, rid):
-        """
-        Return the one or more reagent objects which have *rid*:
+        """Return the one or more reagent objects which have *rid*:
 
-         - *rid* a reagent *rid*
-
+        - *rid* a reagent *rid*
         """
 
         rgnt = [r for r in self.reagents if r.getId() == rid]
@@ -5371,20 +4886,15 @@ class Reaction(Fbase):
             return rgnt
 
     def changeId(self, pid):
-        """
-        Changes the Id of the reaction and updates associated FluxBounds
-
-        """
+        """Changes the Id of the reaction and updates associated FluxBounds."""
         self.setId(pid)
 
     def setId(self, fid):
-        """
-        Sets the object Id
+        """Sets the object Id.
 
-         - *fid* a valid c variable style id string
+        - *fid* a valid c variable style id string
 
-         Reimplements @FBase.setId()
-
+        Reimplements @FBase.setId()
         """
 
         fid = str(fid)
@@ -5424,26 +4934,18 @@ class Reaction(Fbase):
             reag.setId('{}_{}'.format(fid, reag.getSpecies()))
 
     def getValue(self):
-        """
-        Returns the current value of the flux.
-
-        """
+        """Returns the current value of the flux."""
         return self.value
 
     def setValue(self, value):
-        """
-        Sets the attribute *value* in this case the flux.
-
-        """
+        """Sets the attribute *value* in this case the flux."""
         self.value = value
 
     def getReagentWithSpeciesRef(self, sid):
-        """
-        Return the reagent object which refers to the *species* id. If there are multiple reagents that
-        refer to the same species a list is returned.
+        """Return the reagent object which refers to the *species* id. If there are
+        multiple reagents that refer to the same species a list is returned.
 
-         - *sid* the species/metabolite id
-
+        - *sid* the species/metabolite id
         """
         rgnt = [r for r in self.reagents if r.species_ref == sid]
         if len(rgnt) == 0:
@@ -5455,13 +4957,12 @@ class Reaction(Fbase):
             return rgnt
 
     def setStoichCoefficient(self, sid, value):
-        """
-        Sets the stoichiometric coefficient of a reagent that refers to a metabolite. Note *negative coefficients* are *substrates*
-        while *positive* ones are *products*. At this point zero coefficients are not allowed
+        """Sets the stoichiometric coefficient of a reagent that refers to a metabolite.
+        Note *negative coefficients* are *substrates* while *positive* ones are
+        *products*. At this point zero coefficients are not allowed.
 
         - *sid* the species/metabolite id
         - *value* a floating point value != 0
-
         """
         S = self.getReagentWithSpeciesRef(sid)
         if S != None and not type(S) == list:
@@ -5476,12 +4977,10 @@ class Reaction(Fbase):
             print('ERROR: setStoichCoefficient: species {} does not exist'.format(sid))
 
     def getStoichiometry(self, use_names=False, altout=False):
-        """
-        Returns a list of (coefficient, species) pairs for this reaction
+        """Returns a list of (coefficient, species) pairs for this reaction.
 
         - *use_names* [default = False] use species names rather than id's
         - *altout* [default = False] returns a dictionary [DEPRECATED]
-
         """
         if not use_names:
             out = [(r.getCoefficient(), r.species_ref) for r in self.reagents]
@@ -5503,11 +5002,9 @@ class Reaction(Fbase):
                 raise RuntimeError('getStoichiometry(altout=True) has been deprecated')
 
     def getSubstrateIds(self, use_names=False):
-        """
-        Returns a list of the reaction substrates, species identifiers
+        """Returns a list of the reaction substrates, species identifiers.
 
         - *use_names* [defualt = False] use species names rather than id's
-
         """
         if not use_names:
             return [r.species_ref for r in self.reagents if r.getCoefficient() < 0.0]
@@ -5519,11 +5016,9 @@ class Reaction(Fbase):
             ]
 
     def getProductIds(self, use_names=False):
-        """
-        Returns a list of the reaction products, species identifiers
+        """Returns a list of the reaction products, species identifiers.
 
         - *use_names* [default = False] use species names rather than id's
-
         """
         if not use_names:
             return [r.species_ref for r in self.reagents if r.getCoefficient() > 0.0]
@@ -5535,11 +5030,10 @@ class Reaction(Fbase):
             ]
 
     def getGPRassociationString(self, use_labels=True):
-        """
-        Return the GPR string associated with this reaction (assuming it exists) or None.
+        """Return the GPR string associated with this reaction (assuming it exists) or
+        None.
 
         - *use_labels* [default=True] return string with lab
-
         """
         out = None
         try:
@@ -5552,11 +5046,9 @@ class Reaction(Fbase):
         return out
 
     def deleteReagentWithSpeciesRef(self, sid):
-        """
-        Delete a reagent (or reagents) that refers to the species id:
+        """Delete a reagent (or reagents) that refers to the species id:
 
-         - *sid* a species/metabolite id
-
+        - *sid* a species/metabolite id
         """
         reags = self.getSpeciesIds()
         assert sid in reags, '\nThats not a good metabolite/species ref'
@@ -5584,10 +5076,7 @@ class Reaction(Fbase):
     # self.addReagent(self.__TRASH__.pop(rg))
 
     def getLowerBound(self):
-        """
-        Get the value of the reactions lower bound
-
-        """
+        """Get the value of the reactions lower bound."""
         out = None
         if self.__lower_bound_id__ is not None:
             if __DEBUG__:
@@ -5615,10 +5104,7 @@ class Reaction(Fbase):
             return None
 
     def getUpperBound(self):
-        """
-        Get the value of the reactions upper bound
-
-        """
+        """Get the value of the reactions upper bound."""
         out = None
         if self.__upper_bound_id__ is not None:
             if __DEBUG__:
@@ -5645,11 +5131,9 @@ class Reaction(Fbase):
             return None
 
     def setLowerBound(self, value):
-        """
-        Set the value of the reactions lower bound
+        """Set the value of the reactions lower bound.
 
-         - *value* a floating point value
-
+        - *value* a floating point value
         """
         try:
             self.__objref__().setReactionLowerBound(self.id, value)
@@ -5659,11 +5143,9 @@ class Reaction(Fbase):
             )
 
     def setUpperBound(self, value):
-        """
-        Set the value of the reactions upper bound
+        """Set the value of the reactions upper bound.
 
-         - *value* a floating point value
-
+        - *value* a floating point value
         """
         try:
             self.__objref__().setReactionUpperBound(self.id, value)
@@ -5673,12 +5155,11 @@ class Reaction(Fbase):
             )
 
     def deactivateReaction(self, lower=0.0, upper=0.0, silent=True):
-        """
-        Deactivates a reaction by setting its bounds to lower and upper. Restore with reactivateReaction()
+        """Deactivates a reaction by setting its bounds to lower and upper. Restore with
+        reactivateReaction()
 
-         - *lower* [default=0.0] bound
-         - *upper* [default=0.0] bound
-
+        - *lower* [default=0.0] bound
+        - *upper* [default=0.0] bound
         """
         self.__bound_history__ = None
         lb = self.getLowerBound()
@@ -5691,10 +5172,7 @@ class Reaction(Fbase):
             print('Reaction {} bounds set to [{} : {}]'.format(self.id, lower, upper))
 
     def reactivateReaction(self, silent=True):
-        """
-        Activates a reaction deactivated with deactivateReaction
-
-        """
+        """Activates a reaction deactivated with deactivateReaction."""
         if self.__bound_history__ != None:
             self.setLowerBound(self.__bound_history__[0])
             self.setUpperBound(self.__bound_history__[1])
@@ -5708,13 +5186,11 @@ class Reaction(Fbase):
                 )
 
     def getEquation(self, reverse_symb='=', irreverse_symb='>', use_names=False):
-        """
-        Return a pretty printed string containing the reaction equation
+        """Return a pretty printed string containing the reaction equation.
 
-         - *reverse_symb* [default = '='] the symbol to use for reversible reactions
-         - *irreverse_symb* [default = '>'] the symbol to use for irreversible reactions
-         - *use_names* [defualt = False] use species names rather than id's
-
+        - *reverse_symb* [default = '='] the symbol to use for reversible reactions
+        - *irreverse_symb* [default = '>'] the symbol to use for irreversible reactions
+        - *use_names* [defualt = False] use species names rather than id's
         """
         sub = ''
         prod = ''
@@ -5760,7 +5236,7 @@ class Reaction(Fbase):
 
 # This needs to be finished and allow the use of parameters as UB/LB
 class ReactionNew(Reaction):
-    """Extended reaction class with new upper/lower bound structure"""
+    """Extended reaction class with new upper/lower bound structure."""
 
     ub = None
     lb = None
@@ -5773,13 +5249,11 @@ class ReactionNew(Reaction):
         self.lb = Parameter("{}_lb".format(pid), lb)
 
     def setId(self, fid):
-        """
-        Sets the object Id
+        """Sets the object Id.
 
-         - *fid* a valid c variable style id string
+        - *fid* a valid c variable style id string
 
-         Reimplements @FBase.setId()
-
+        Reimplements @FBase.setId()
         """
 
         fid = str(fid)
@@ -5812,44 +5286,33 @@ class ReactionNew(Reaction):
             reag.setId('{}_{}'.format(fid, reag.getSpecies()))
 
     def getLowerBound(self):
-        """
-        Get the value of the reactions lower bound
-
-        """
+        """Get the value of the reactions lower bound."""
         return self.lb.getValue()
 
     def getUpperBound(self):
-        """
-        Get the value of the reactions upper bound
-
-        """
+        """Get the value of the reactions upper bound."""
         return self.ub.getValue()
 
     def setLowerBound(self, value):
-        """
-        Set the value of the reactions lower bound
+        """Set the value of the reactions lower bound.
 
-         - *value* a floating point value
-
+        - *value* a floating point value
         """
         self.lb.setValue(value)
 
     def setUpperBound(self, value):
-        """
-        Set the value of the reactions upper bound
+        """Set the value of the reactions upper bound.
 
-         - *value* a floating point value
-
+        - *value* a floating point value
         """
         self.ub.setValue(value)
 
     def deactivateReaction(self, lower=0.0, upper=0.0, silent=True):
-        """
-        Deactivates a reaction by setting its bounds to lower and upper. Restore with reactivateReaction()
+        """Deactivates a reaction by setting its bounds to lower and upper. Restore with
+        reactivateReaction()
 
-         - *lower* [default=0.0] bound
-         - *upper* [default=0.0] bound
-
+        - *lower* [default=0.0] bound
+        - *upper* [default=0.0] bound
         """
         self.__bound_history__ = None
         self.__bound_history__ = (self.lb(), self.ub())
@@ -5860,10 +5323,7 @@ class ReactionNew(Reaction):
             print('Reaction {} bounds set to [{} : {}]'.format(self.id, lower, upper))
 
     def reactivateReaction(self, silent=True):
-        """
-        Activates a reaction deactivated with deactivateReaction
-
-        """
+        """Activates a reaction deactivated with deactivateReaction."""
         if self.__bound_history__ != None:
             self.lb.setValue(self.__bound_history__[0])
             self.ub.setValue(self.__bound_history__[1])
@@ -5882,20 +5342,14 @@ class ReactionNew(Reaction):
 
 
     def __setstate__(self, dic):
-        """
-        Internal method that allows our weakrefs to be 'picklable'
-
-        """
+        """Internal method that allows our weakrefs to be 'picklable'."""
         self.__dict__ = dic
         self.ub._parent = weakref.ref(self)
         self.lb._parent = weakref.ref(self)
 
 
 class Species(Fbase):
-    """
-    Holds species/metabolite information
-
-    """
+    """Holds species/metabolite information."""
 
     chemFormula = None
     charge = None
@@ -5914,17 +5368,15 @@ class Species(Fbase):
         charge=None,
         chemFormula=None,
     ):
-        """
-        Species/metabolite definition class
+        """Species/metabolite definition class.
 
-         - **pid** the unique species pid
-         - **boundary** [default=False] whether the species is a variable (False) or is a boundary parameter (fixed)
-         - **name** [default=''] the species name
-         - **value** [default=nan] the value *not currently used*
-         - **compartment** [default=None] the compartment the species is located in
-         - **charge** [default=None] the species charge, from v3 a float
-         - **chemFormula** [default=None] the chemical formula
-
+        - **pid** the unique species pid
+        - **boundary** [default=False] whether the species is a variable (False) or is a boundary parameter (fixed)
+        - **name** [default=''] the species name
+        - **value** [default=nan] the value *not currently used*
+        - **compartment** [default=None] the compartment the species is located in
+        - **charge** [default=None] the species charge, from v3 a float
+        - **chemFormula** [default=None] the chemical formula
         """
         pid = str(pid)
         if not self.__checkId__(pid):
@@ -5944,13 +5396,11 @@ class Species(Fbase):
         self.annotation = {}
 
     def setId(self, fid, allow_rename=False):
-        """
-        Sets the object Id
+        """Sets the object Id.
 
-         - *fid* a valid c variable style id string
+        - *fid* a valid c variable style id string
 
-         Reimplements @FBase.setId()
-
+        Reimplements @FBase.setId()
         """
 
         fid = str(fid)
@@ -5999,24 +5449,16 @@ class Species(Fbase):
             self.__objref__().species.pop(self.__objref__().species.index(self))
 
     def getValue(self):
-        """
-        Returns the current value of the attribute (input/solution)
-
-        """
+        """Returns the current value of the attribute (input/solution)"""
         return self.value
 
     def setValue(self, value):
-        """
-        Sets the attribute ''value''
-
-        """
+        """Sets the attribute ''value''."""
         self.value = value
 
     def isReagentOf(self):
-        """
-        Returns a dynamically generated list of reactions that this species occurs as a reagent
-
-        """
+        """Returns a dynamically generated list of reactions that this species occurs as
+        a reagent."""
         assert (
             self.__objref__ != None
         ), "\nWARNING: needs to be added to a model (cmod.addSpecies()) to work"
@@ -6028,32 +5470,26 @@ class Species(Fbase):
         return self.reagent_of
 
     def getReagentOf(self):
-        """
-        Returns a list of reaction id's that this metabolite occurs in
-
-        """
+        """Returns a list of reaction id's that this metabolite occurs in."""
         print(
             'INFO: The static .getReagentOf() method is deprecated, please update your code to use: \".isReagentOf()\"'
         )
         return self.isReagentOf()
 
     def setReagentOf(self, rid):
-        """
-        Adds the supplied reaction id to the reagent_of list (if it isn't one already)
+        """Adds the supplied reaction id to the reagent_of list (if it isn't one
+        already)
 
-         - *rid* a valid reaction id
-
+        - *rid* a valid reaction id
         """
         raise RuntimeError(
             '\nINFO: The static .setReagentOf() method is deprecated, please update your code to use: \".isReagentOf()\"'
         )
 
     def setChemFormula(self, cf):
-        """
-        Sets the species chemical formula
+        """Sets the species chemical formula.
 
-         - *cf* a chemical formula e.g. CH3NO2
-
+        - *cf* a chemical formula e.g. CH3NO2
         """
         if cf != '' and not checkChemFormula(cf, quiet=True):
             print(
@@ -6064,10 +5500,7 @@ class Species(Fbase):
         self.chemFormula = cf
 
     def getChemFormula(self):
-        """
-        Returns the species chemical formula
-
-        """
+        """Returns the species chemical formula."""
         return self.chemFormula
 
     def setCharge(self, charge):
@@ -6081,24 +5514,17 @@ class Species(Fbase):
         self.charge = charge
 
     def getCharge(self):
-        """
-        Returns the species charge
-
-        """
+        """Returns the species charge."""
         return self.charge
 
     def setBoundary(self):
-        """
-        Sets the species so it is a boundary metabolite or fixed which does not occur in the stoichiometric matrix N
-
-        """
+        """Sets the species so it is a boundary metabolite or fixed which does not occur
+        in the stoichiometric matrix N."""
         self.is_boundary = True
 
     def unsetBoundary(self):
-        """
-        Unsets the species boundary attribute so that the metabolite is free and therefore occurs in the stoichiometric matrix N
-
-        """
+        """Unsets the species boundary attribute so that the metabolite is free and
+        therefore occurs in the stoichiometric matrix N."""
         self.is_boundary = False
 
     ## this functionality is part of setId()
@@ -6136,14 +5562,13 @@ class Reagent(Fbase):
     _value_is_ref_ = False
 
     def __init__(self, pid, species_ref, coef):
-        """
-        Instantiates a reagent from a metatabolite and coefficient, note that now the coefficient
-        can be a Parameter object in which case a connection is made to the linked Parameter
+        """Instantiates a reagent from a metatabolite and coefficient, note that now the
+        coefficient can be a Parameter object in which case a connection is made to the
+        linked Parameter.
 
-         - *pid* a unique id
-         - *species_ref* a reference to a species id
-         - *coefficient* the stoichiometric coefficient, a non-zero integer or Parameter
-
+        - *pid* a unique id
+        - *species_ref* a reference to a species id
+        - *coefficient* the stoichiometric coefficient, a non-zero integer or Parameter
         """
         self.setId(pid)
         self.species_ref = species_ref
@@ -6153,11 +5578,10 @@ class Reagent(Fbase):
         self.__delattr__('compartment')
 
     def setCoefficient(self, coef):
-        """
-        Sets the reagent coefficient and role, negative coefficients are substrates and positive ones are products
+        """Sets the reagent coefficient and role, negative coefficients are substrates
+        and positive ones are products.
 
-         - *coeff* the new coefficient
-
+        - *coeff* the new coefficient
         """
         if type(coef) is Parameter:
             self.coefficient = weakref.ref(coef)
@@ -6182,10 +5606,7 @@ class Reagent(Fbase):
             # raise RuntimeError('Zero coefficient detected and are currently not supported: ({}) {}!' % (value, self.getId()))
 
     def getCoefficient(self):
-        """
-        Returns the reagent coefficient
-
-        """
+        """Returns the reagent coefficient."""
 
         if not self._value_is_ref_:
             value = self.coefficient
@@ -6195,24 +5616,15 @@ class Reagent(Fbase):
         return value
 
     def setSpecies(self, spe):
-        """
-        Sets the metabolite/species that the reagent reference refers to
-
-        """
+        """Sets the metabolite/species that the reagent reference refers to."""
         self.species_ref = spe
 
     def getSpecies(self):
-        """
-        Returns the metabolite/species that the reagent reference refers to
-
-        """
+        """Returns the metabolite/species that the reagent reference refers to."""
         return self.species_ref
 
     def getRole(self):
-        """
-        Returns the reagents role, "substrate", "product" or None
-
-        """
+        """Returns the reagents role, "substrate", "product" or None."""
         # if self.coefficient < 0.0:
         # self.role = 'substrate'
         # elif self.coefficient > 0.0:
@@ -6250,23 +5662,19 @@ class Reagent(Fbase):
 
 
 class Gene(Fbase):
-    """
-    Contains all the information about a gene (or gene+protein construct depending on your philosophy)
-
-    """
+    """Contains all the information about a gene (or gene+protein construct depending on
+    your philosophy)"""
 
     active0 = False
     active = False
     label = None
 
     def __init__(self, pid, label=None, active=True):
-        """
-        A gene construct
+        """A gene construct.
 
-         - *pid* the gene id
-         - *label* the gene label this may or may not be a legal Sid
-         - *active* is the gene is active or not (boolean)
-
+        - *pid* the gene id
+        - *label* the gene label this may or may not be a legal Sid
+        - *active* is the gene is active or not (boolean)
         """
         pid = str(pid)
         if not self.__checkId__(pid):
@@ -6287,13 +5695,11 @@ class Gene(Fbase):
         self.annotation = {}
 
     def setId(self, fid):
-        """
-        Sets the object Id
+        """Sets the object Id.
 
-         - *fid* a valid c variable style id string
+        - *fid* a valid c variable style id string
 
-         Reimplements Fbase method
-
+        Reimplements Fbase method
         """
         fid = str(fid)
         if fid == self.id:
@@ -6326,17 +5732,11 @@ class Gene(Fbase):
             self.id = fid
 
     def getLabel(self):
-        """
-        Returns the gene label
-
-        """
+        """Returns the gene label."""
         return self.label
 
     def setLabel(self, label):
-        """
-        Sets the gene label, checks that the new label is unique
-
-        """
+        """Sets the gene label, checks that the new label is unique."""
         if self.__objref__ is not None:
             if label in [g.getLabel() for g in self.__objref__().genes]:
                 print(
@@ -6350,38 +5750,27 @@ class Gene(Fbase):
             self.label = label
 
     def setActive(self):
-        """
-        Set the gene to be active
-        """
+        """Set the gene to be active."""
         self.active = True
         self.__objref__().__check_gene_activity__ = True
 
     def setInactive(self):
-        """
-        Set the gene to be inactive
-        """
+        """Set the gene to be inactive."""
         self.active = False
         self.__objref__().__check_gene_activity__ = True
 
     def isActive(self):
-        """
-        Returns whether the gene is active or not
-        """
+        """Returns whether the gene is active or not."""
         return self.active
 
     def resetActivity(self):
-        """
-        Reset the gene to its default activity state
-        """
+        """Reset the gene to its default activity state."""
         self.active = self.active0
         self.__objref__().__check_gene_activity__ = True
 
 
 class GeneProteinAssociation(Fbase):
-    """
-    This class associates genes to proteins.
-
-    """
+    """This class associates genes to proteins."""
 
     # _MODIFIED_ASSOCIATION_ = False
     assoc = None
@@ -6396,13 +5785,11 @@ class GeneProteinAssociation(Fbase):
     tree = None
 
     def __init__(self, pid, protein, use_compiled=False):
-        """
-        Create a GeneProteinAssociation
+        """Create a GeneProteinAssociation.
 
-         - *pid* a unique id
-         - *protein* the protein the gene association referes to, in most cases this should be a reaction id
-         - *use_compiled* [default=False] used compiled expressions for evaluation, potentially less portable
-
+        - *pid* a unique id
+        - *protein* the protein the gene association referes to, in most cases this should be a reaction id
+        - *use_compiled* [default=False] used compiled expressions for evaluation, potentially less portable
         """
         self.setPid(pid)
         self.generefs = []
@@ -6426,10 +5813,7 @@ class GeneProteinAssociation(Fbase):
     # return out
 
     def evalAssociation(self):
-        """
-        Returns an integer value representing the logical associations or None.
-
-        """
+        """Returns an integer value representing the logical associations or None."""
         out = None
         if not self.use_compiled:
             try:
@@ -6463,41 +5847,33 @@ class GeneProteinAssociation(Fbase):
             )
 
     def addGeneref(self, geneid):
-        """
-        Add a gene reference to the list of gene references
+        """Add a gene reference to the list of gene references.
 
-         - *geneid* a valid model Gene id
-
+        - *geneid* a valid model Gene id
         """
         if geneid not in self.generefs:
             self.generefs.append(geneid)
 
     def deleteGeneref(self, gid):
-        """
-        Deletes a gene reference
+        """Deletes a gene reference.
 
         - *geneid* a valid model Gene id
-
         """
         if gid in self.generefs:
             self.generefs.remove(gid)
 
     def addAssociation(self, assoc):
-        """
-        Add a gene/protein association expression
-
-        """
+        """Add a gene/protein association expression."""
         # self.assoc = assoc
         raise RuntimeError('\nThis method has ceased to exist')
 
     def createAssociationAndGeneRefsFromTree(self, gprtree, altlabels=None):
-        """
-        Evaluate the GPR tree and add the genes necessary to evaluate it
-        Note that this GPR should be added to a model with cmod.addGPRAssociation() before calling this method
+        """Evaluate the GPR tree and add the genes necessary to evaluate it Note that
+        this GPR should be added to a model with cmod.addGPRAssociation() before calling
+        this method.
 
-         - *gprtree* the CBMPy GPR tree data structure
-         - *altlabels* [default=None] a dictionary containing a label<-->id mapping
-
+        - *gprtree* the CBMPy GPR tree data structure
+        - *altlabels* [default=None] a dictionary containing a label<-->id mapping
         """
         if self.__objref__() == None:
             raise RuntimeError(
@@ -6549,13 +5925,12 @@ class GeneProteinAssociation(Fbase):
         raise RuntimeError("\n\nDEPRECATED CHANGE NOW!")
 
     def createAssociationAndGeneRefsFromString(self, assoc, altlabels=None):
-        """
-        Evaluate the gene/protein association and add the genes necessary to evaluate it
-        Note that this GPR should be added to a model with cmod.addGPRAssociation() before calling this method
+        """Evaluate the gene/protein association and add the genes necessary to evaluate
+        it Note that this GPR should be added to a model with cmod.addGPRAssociation()
+        before calling this method.
 
-         - *assoc* the COBRA style gene protein association
-         - *altlabels* [default=None] a dictionary containing a label<-->id mapping
-
+        - *assoc* the COBRA style gene protein association
+        - *altlabels* [default=None] a dictionary containing a label<-->id mapping
         """
         if self.__objref__() == None:
             raise RuntimeError(
@@ -6676,22 +6051,15 @@ class GeneProteinAssociation(Fbase):
     ##self.__evalass__ = compile(self.__evalass__, 'GeneAss', 'exec')
 
     def getGenes(self):
-        """
-        Return a list of gene objects associated with this GPRass
-        """
+        """Return a list of gene objects associated with this GPRass."""
         return [self.__objref__().getGene(g) for g in self.generefs]
 
     def getGeneLabels(self):
-        """
-        Return a list of gene labels associated with this GPRass
-        """
+        """Return a list of gene labels associated with this GPRass."""
         return [self.__objref__().getGene(g).getLabel() for g in self.generefs]
 
     def getGene(self, gid):
-        """
-        Return a gene object with id
-
-        """
+        """Return a gene object with id."""
         if gid in self.generefs:
             return self.__objref__().getGene(gid)
         else:
@@ -6699,11 +6067,9 @@ class GeneProteinAssociation(Fbase):
             return None
 
     def getAssociationStr(self, use_labels=False):
-        """
-        Return the gene association string, alternatively return string with labels
+        """Return the gene association string, alternatively return string with labels.
 
         - *use_lablels* [default=False] return the gene association string with labels rather than geneId's (FBCv2 issue)
-
         """
         out = self.__getAssociationStrFromGprDict__(self.getTree(), '', parent='')
         if use_labels:
@@ -6717,13 +6083,12 @@ class GeneProteinAssociation(Fbase):
         return out
 
     def __getAssociationStrFromGprDict__(self, gprd, out, parent=''):
-        """
-        Get a old school GPR association string from a CBMPy gprDict, e.g. obtained from gpr.getTree()
+        """Get a old school GPR association string from a CBMPy gprDict, e.g. obtained
+        from gpr.getTree()
 
-         - *gprd* the gprDictionary
-         - *out* the output string
-         - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
-
+        - *gprd* the gprDictionary
+        - *out* the output string
+        - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
         """
         out2 = '('
         for k in gprd:
@@ -6748,12 +6113,10 @@ class GeneProteinAssociation(Fbase):
         return out
 
     def __getGeneRefsfromGPRDict__(self, gprd, out):
-        """
-        Extract the gene id references from the GPR tree
+        """Extract the gene id references from the GPR tree.
 
         - *gprd* the gprTree
         - *out* the output list
-
         """
         for k in gprd:
             if k.startswith('_AND_'):
@@ -6766,13 +6129,11 @@ class GeneProteinAssociation(Fbase):
         return out
 
     def __renameGeneIdRefsInGPRTree__(self, gprd, old, new):
-        """
-        Rename gene ids in the gpr Tree, works inplace
+        """Rename gene ids in the gpr Tree, works inplace.
 
         - *gprd* the gprTree
         - *old* the old gene id
         - *new* the new gene id
-
         """
         for k in list(gprd):
             if k.startswith('_AND_'):
@@ -6784,16 +6145,11 @@ class GeneProteinAssociation(Fbase):
                 gprd[new] = new
 
     def getGeneIds(self):
-        """
-        Return a list of gene id's
-        """
+        """Return a list of gene id's."""
         return self.generefs
 
     def getActiveGenes(self):
-        """
-        Return a list of active gene objects
-
-        """
+        """Return a list of active gene objects."""
         out = []
         for g_ in self.generefs:
             G = self.__objref__().getGene(g_)
@@ -6802,60 +6158,46 @@ class GeneProteinAssociation(Fbase):
         return out
 
     def getProtein(self):
-        """
-        Return the protein associated with this set of genes
-
-        """
+        """Return the protein associated with this set of genes."""
         return self.protein
 
     def setProtein(self, protein):
-        """
-        Sets the protein associated with this set of genes
-
-        """
+        """Sets the protein associated with this set of genes."""
         self.protein = protein
 
     def setGeneInactive(self, gid):
-        """
-        Set a gene to be inactive
-        """
+        """Set a gene to be inactive."""
         try:
             self.getGene(gid).setInactive()
         except Exception as ex:
             print('\nGene {} does not exist'.format(gid))
 
     def setGeneActive(self, gid):
-        """
-        Set a gene to be inactive
-        """
+        """Set a gene to be inactive."""
         try:
             self.getGene(gid).setActive()
         except Exception as ex:
             print('\nGene {} does not exist'.format(gid))
 
     def setAllGenesActive(self):
-        """
-        Activate all genes in association
-
-        """
+        """Activate all genes in association."""
         for g_ in self.generefs:
             G = self.__objref__().getGene(g_)
             G.setActive()
 
     def setAllGenesInactive(self):
-        """
-        Deactivates all genes in association
-
-        """
+        """Deactivates all genes in association."""
         for g_ in self.generefs:
             G = self.__objref__().getGene(g_)
             G.setInactive()
 
     def isProteinActive(self):
-        """
-        This returns a boolean which indicates the result of evaluating the gene association. If the result is positive
-        then the protein is expressed and *True* is returned, otherwise if the expression evaluates to a value of 0 then
-        the protein is not expressed and  *False* is returned.
+        """This returns a boolean which indicates the result of evaluating the gene
+        association.
+
+        If the result is positive then the protein is expressed and *True* is returned,
+        otherwise if the expression evaluates to a value of 0 then the protein is not
+        expressed and  *False* is returned.
         """
         res = self.evalAssociation()
         if res == 0:
@@ -6864,37 +6206,28 @@ class GeneProteinAssociation(Fbase):
             return True
 
     def setTree(self, tree):
-        """
-        Add a GPR dictionary/tree representation to the GPR.
+        """Add a GPR dictionary/tree representation to the GPR.
 
-         - *tree* a dictionary representation of a GPR.
-
+        - *tree* a dictionary representation of a GPR.
         """
         self.tree = tree
 
     def getTree(self):
-        """
-        Return the dictionary/tree representation of the GPR
-
-        """
+        """Return the dictionary/tree representation of the GPR."""
         return self.tree
 
     def getTreeCopy(self):
-        """
-        Return a copy of the dictionary/tree representation of the GPR
-
-        """
+        """Return a copy of the dictionary/tree representation of the GPR."""
         return copy.deepcopy(self.tree)
 
     def __getAssociationEvalFromGprDict__(self, gprd, out, parent=''):
-        """
-        Get a GPR evaluation string from a CBMPy gprDict, e.g. obtained from gpr.getTree()
+        """Get a GPR evaluation string from a CBMPy gprDict, e.g. obtained from
+        gpr.getTree()
 
-         - *gprd* the gprDictionary
-         - *out* the output string
-         - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
-         - *model* an FBA model with gene information
-
+        - *gprd* the gprDictionary
+        - *out* the output string
+        - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
+        - *model* an FBA model with gene information
         """
 
         out2 = '('
@@ -6922,11 +6255,10 @@ class GeneProteinAssociation(Fbase):
         return out
 
     def deleteGeneFromAssociation(self, gid):
-        """
-        Deletes a gene id from the gene association. *WARNING* this process is irreversible!!
+        """Deletes a gene id from the gene association. *WARNING* this process is
+        irreversible!!
 
         - *gid* a valid gene identifier (not label)
-
         """
         # print('DeleteGene is processing gene: {}'.format(gid))
         if gid in self.generefs:
@@ -6941,10 +6273,10 @@ class GeneProteinAssociation(Fbase):
             print('Gene Id {} is not part of GPR {}'.format(gid, self.getId()))
 
     def __deleteGeneFromTree__(self, D, delid):
-        """
-        Recursively delete a gene Id from a gprTree. This is a newer refactored version of the previous method
-        that requires a call to __
+        """Recursively delete a gene Id from a gprTree.
 
+        This is a newer refactored version of the previous method that requires a call
+        to __
         """
         for k in list(D):
             if k.startswith('_AND_') or k.startswith('_OR_'):
@@ -6983,10 +6315,7 @@ class GeneProteinAssociation(Fbase):
     # return D
 
     def __pruneTree__(self, D):
-        """
-        Recursively checks the tree for the correct number of children
-
-        """
+        """Recursively checks the tree for the correct number of children."""
         for k in list(D):
             if k.startswith('_AND_') and len(D[k]) == 1:
                 D.update(D.pop(k))

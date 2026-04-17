@@ -36,7 +36,7 @@ from .sparserationals import Matrix
 
 
 class Matroid:
-    """A linear matroid
+    """A linear matroid.
 
     It has the fields:
     elems - lists the names of the elements
@@ -53,10 +53,10 @@ class Matroid:
     #    self.buildRepresentation()
 
     def __init__(self, rep, basis, nbasis):
-        """create matroid from given reduced representation matrix.
+        """Create matroid from given reduced representation matrix.
 
-        The names of the rows are given by basis.
-        The names of the columns are given by nbasis.
+        The names of the rows are given by basis. The names of the columns are given by
+        nbasis.
         """
         self.elems = basis + nbasis
         self.basis = basis
@@ -64,7 +64,7 @@ class Matroid:
         self.rep = rep
 
     def findModules(self):
-        """computes the separators (modules) of this matroid
+        """Computes the separators (modules) of this matroid.
 
         Each module is returned as a matroid.
         """
@@ -100,7 +100,7 @@ class Matroid:
         return modules
 
     def __dfs(self, start):
-        """performs a dfs to find the connected component of basis elem start"""
+        """Performs a dfs to find the connected component of basis elem start."""
         basisFound = set([start])
         nbasisFound = set()
         todo = [start]
@@ -119,7 +119,7 @@ class Matroid:
         return {'basis': basisFound, 'nbasis': nbasisFound}
 
     def dual(self):
-        """ returns the dual matroid
+        """Returns the dual matroid.
 
         By this operation the original coefficient matrix is lost for the dual.
         """
@@ -128,17 +128,17 @@ class Matroid:
         return m
 
     def copy(self):
-        """ copies this matroid """
+        """Copies this matroid."""
         m = Matroid(self.rep.copy(), list(self.basis), list(self.nbasis))
         if hasattr(self, 'matrix'):
             m.matrix = self.matrix.copy()
         return m
 
     def contract(self, toContract):
-        """ computes self / toContract
+        """Computes self / toContract.
 
-        The matroid with toContract contracted is returned.
-        This instance is not modified.
+        The matroid with toContract contracted is returned. This instance is not
+        modified.
         """
         # put as many elements from toDelete into basis
         self.rank(toContract)
@@ -159,10 +159,10 @@ class Matroid:
         return m
 
     def exchange(self, a, b):
-        """ exchanges a basis element with a non-basis element.
+        """Exchanges a basis element with a non-basis element.
 
-        requirement is that the fundamental circuit of the non-basis element
-        uses the basis element
+        requirement is that the fundamental circuit of the non-basis element uses the
+        basis element
         """
         if a in self.basis:
             be = a
@@ -206,11 +206,10 @@ class Matroid:
         self.nbasis[nbidx] = be
 
     def delete(self, toDelete):
-        """ computes self \ toDelete
+        """Computes self \ toDelete.
 
-        The matroid with toDelete deleted is returned.
-        No elements of this instance are deleted. However, the current basis
-        can change.
+        The matroid with toDelete deleted is returned. No elements of this instance are
+        deleted. However, the current basis can change.
         """
 
         # put as many elements from toDelete into non-basis
@@ -307,10 +306,10 @@ class Matroid:
         return m
 
     def parallel(self):
-        """ list all groups of parallel elements
+        """List all groups of parallel elements.
 
-        The result is a set of frozen sets, each set listing the ids of the
-        parallel elements
+        The result is a set of frozen sets, each set listing the ids of the parallel
+        elements
         """
         # basis elements are never parallel, unless there exists a
         # non-basis element with a single non-zero entry for the basis element
@@ -379,13 +378,13 @@ class Matroid:
         return par_groups
 
     def coparallel(self):
-        """ list all groups of coparallel elements
+        """List all groups of coparallel elements.
 
-        In metabolic network terminology the coparallel elements are the
-        fully coupled reactions.
+        In metabolic network terminology the coparallel elements are the fully coupled
+        reactions.
 
-        The result is a set of frozensets, each set listing the ids of the
-        coparallel elements
+        The result is a set of frozensets, each set listing the ids of the coparallel
+        elements
         """
         return self.dual().parallel()
 
@@ -412,13 +411,13 @@ class Matroid:
             return False
 
     def fundamentalCircuit(self, e):
-        """ returns the fundamental circuit of an element
+        """Returns the fundamental circuit of an element.
 
-        If e is a non-basis element, the fundamental circuit, i.e. the
-        support of the column of e, is returned.
+        If e is a non-basis element, the fundamental circuit, i.e. the support of the
+        column of e, is returned.
 
-        If e is a basis element, the cofundamental circuit, i.e. the support of
-        the row of e, is returned.
+        If e is a basis element, the cofundamental circuit, i.e. the support of the row
+        of e, is returned.
 
         The returned fundamental circuit does not contain e itself
         """
@@ -440,16 +439,16 @@ class Matroid:
         return fcircuit
 
     def fundamentalCircuitValues(self, e):
-        """ returns the fundamental circuit of an element with the coefficients
+        """Returns the fundamental circuit of an element with the coefficients.
 
-        If e is a non-basis element, the fundamental circuit, i.e. the
-        support of the column of e, is returned.
+        If e is a non-basis element, the fundamental circuit, i.e. the support of the
+        column of e, is returned.
 
-        If e is a basis element, the cofundamental circuit, i.e. the support of
-        the row of e, is returned.
+        If e is a basis element, the cofundamental circuit, i.e. the support of the row
+        of e, is returned.
 
-        The returned fundamental circuit does not contain e itself. If needed,
-        it should be added manually afterwards with a coefficient of 1.
+        The returned fundamental circuit does not contain e itself. If needed, it should
+        be added manually afterwards with a coefficient of 1.
         """
         fcircuit = {}
 
@@ -469,7 +468,7 @@ class Matroid:
         return fcircuit
 
     def rank(self, elems):
-        """ computes the rank of elems
+        """Computes the rank of elems.
 
         This method puts as many elements of elems into the basis. The number of
         elements from elems in the final basis is returned.
@@ -491,10 +490,10 @@ class Matroid:
         return numBasis
 
     def corank(self, elems):
-        """ computes the corank of elems
+        """Computes the corank of elems.
 
-        This method puts as many elements of elems into the non-basis. The
-        number of elements from elems in the final non-basis is returned.
+        This method puts as many elements of elems into the non-basis. The number of
+        elements from elems in the final non-basis is returned.
         """
         # try to make as many nbasis elements of elems basis-elements
         for i in range(len(self.basis)):
@@ -513,11 +512,10 @@ class Matroid:
         return numNBasis
 
     def isIndependent(self, elems):
-        """ checks if the given set of elements is independent.
+        """Checks if the given set of elements is independent.
 
-        This does not modify this matroid, but may change its internal basis.
-        If this method returns true, the current basis contains all elements of
-        elems
+        This does not modify this matroid, but may change its internal basis. If this
+        method returns true, the current basis contains all elements of elems
         """
         # no independent set can have more elements than any basis
         if len(elems) > len(self.basis):
@@ -539,11 +537,10 @@ class Matroid:
         return True
 
     def isCoIndependent(self, elems):
-        """ checks if the given set of elements is coindependent.
+        """Checks if the given set of elements is coindependent.
 
-        This does not modify this matroid, but may change its internal basis.
-        If this method returns true, the current basis contains all no elements
-        of elems
+        This does not modify this matroid, but may change its internal basis. If this
+        method returns true, the current basis contains all no elements of elems
 
         This is the same as isIndependent, only on the dual
         """
@@ -567,10 +564,10 @@ class Matroid:
         return True
 
     def connectivity(self, separation):
-        """ evaluate the connectivity function for the given separation.
+        """Evaluate the connectivity function for the given separation.
 
-            separation is a set of elements encoding one side of the separation.
-            The other side is implied.
+        separation is a set of elements encoding one side of the separation. The other
+        side is implied.
         """
         # for the computation we do the following:
         # put as many elements as possible from separation into the basis
@@ -586,8 +583,8 @@ class Matroid:
         return r1 + r2 - r
 
     def getInterface(self, separation):
-        """ compute a list of circuits that define the interface of the
-        given separation """
+        """Compute a list of circuits that define the interface of the given
+        separation."""
 
         # theoretically the following would be sufficient:
         # self.rank(separation)
@@ -704,7 +701,7 @@ class Matroid:
         return interface
 
     def similarityMatrix(self, stype):
-        """ computes a similarity matrix on the elements
+        """Computes a similarity matrix on the elements.
 
         For each pair of elements the similarity matrix has an entry that
         gives the similarity.
@@ -830,14 +827,14 @@ class Matroid:
 
 
 def fromMatrix(matrix, cols):
-    """ builds the reduced representation matrix
+    """Builds the reduced representation matrix.
 
-        Given a matrix of columns (self.matrix) it builds the reduced
-        representation matrix (self.rep) that has rows for each basis
-        element and columns for each non-basis element.
+    Given a matrix of columns (self.matrix) it builds the reduced representation matrix
+    (self.rep) that has rows for each basis element and columns for each non-basis
+    element.
 
-        From this form the fundamental cycles can easily be read of and
-        other operations like deletion and contraction are easy.
+    From this form the fundamental cycles can easily be read of and other operations
+    like deletion and contraction are easy.
     """
     assert matrix.cols() <= len(cols), 'for each column a name is needed'
     inv_list = []  # basis vectors in (transformed) triangular form
@@ -969,10 +966,9 @@ def fromMatrix(matrix, cols):
 class SimilarityMatrix:
 
     def __init__(self, matrix, elems):
-        """ builds a similarity matrix out of a matrix and element names.
+        """Builds a similarity matrix out of a matrix and element names.
 
-        the matrix must be square and have as many rows/columns as elems has
-        entries
+        the matrix must be square and have as many rows/columns as elems has entries
         """
         self.matrix = matrix
         self.elems = elems

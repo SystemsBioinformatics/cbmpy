@@ -36,7 +36,7 @@ from . import fluxmodules
 
 
 class TestToy(unittest.TestCase):
-    """ uses a simple toy model to test correctness """
+    """Uses a simple toy model to test correctness."""
 
     def setUp(self):
         cDir = os.path.dirname(__file__)
@@ -74,7 +74,7 @@ class TestToy(unittest.TestCase):
 
 
 class TestEcoli(unittest.TestCase):
-    """ uses a genome-scale metabolic networks """
+    """Uses a genome-scale metabolic networks."""
 
     def setUp(self):
         cDir = os.path.dirname(__file__)
@@ -145,7 +145,7 @@ class TestEcoli(unittest.TestCase):
 
 
 class TestITM686(unittest.TestCase):
-    """ uses a simple toy model to test correctness """
+    """Uses a simple toy model to test correctness."""
 
     def setUp(self):
         cDir = os.path.dirname(__file__)

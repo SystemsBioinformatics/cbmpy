@@ -77,12 +77,10 @@ except ImportError:
 
 
 def saveModel(model, filename, compress=False):
-    """
-    Saves the model to an SBML file using the lates SBML3 FBC version.
+    """Saves the model to an SBML file using the lates SBML3 FBC version.
 
     - *model* the CBMPy model
     - *filename* the filename to write
-
     """
 
     writeSBML3FBCV2(
@@ -277,33 +275,30 @@ def writeCOBRASBML(fba, fname, directory=None):
 
 
 def writeSBML2FBA(fba, fname, directory=None, sbml_level_version=None):
-    """
-    Takes an FBA model object and writes it to file as SBML L2 with FBA annotations.
-    Note if you want to write BiGG/FAME style annotations then you must use *sbml_level_version=(2,1)*
+    """Takes an FBA model object and writes it to file as SBML L2 with FBA annotations.
+    Note if you want to write BiGG/FAME style annotations then you must use
+    *sbml_level_version=(2,1)*
 
      - *fba* an fba model object
      - *fname* the model will be written as XML to *fname*
      - *sbml_level_version* [default=None] a tuple containing the SBML level and version e.g. (2,1)
 
     This is a utility wrapper for the function `CBXML.sbml_writeSBML2FBA`
-
     """
     CBXML.sbml_writeSBML2FBA(fba, fname, directory, sbml_level_version)
 
 
 def writeSensitivitiesToCSV(sensitivities, fname):
-    """
-    Write out a sensitivity report using the objective sensitivities and
-    bound sensitivity dictionaries created by e.g. cplx_getSensitivities().
+    """Write out a sensitivity report using the objective sensitivities and bound
+    sensitivity dictionaries created by e.g. cplx_getSensitivities().
 
-     - *sensitivity* tuple containing
+    - *sensitivity* tuple containing
 
-      - *obj_sens* dictionary of objective coefficient sensitivities (per flux)
-      - *rhs_sens* dictionary of constraint rhs sensitivities (per constraint)
-      - *bound_sens* dictionary of bound sensitivities (per flux)
+     - *obj_sens* dictionary of objective coefficient sensitivities (per flux)
+     - *rhs_sens* dictionary of constraint rhs sensitivities (per constraint)
+     - *bound_sens* dictionary of bound sensitivities (per flux)
 
-     - *fname* output filename e.g. fname.csv
-
+    - *fname* output filename e.g. fname.csv
     """
     obj_sens = sensitivities[0]
     rhs_sens = sensitivities[1]
@@ -367,12 +362,10 @@ def WriteModelRaw(fba, work_dir=cDir):
 
 
 def writeModelRaw(fba, work_dir=cDir):
-    """
-    Writes a fba (actually just dumps it) to a text file.
+    """Writes a fba (actually just dumps it) to a text file.
 
-     - *fba* an instantiated FBAmodel instance
-     - *work_dir* directory designated for output
-
+    - *fba* an instantiated FBAmodel instance
+    - *work_dir* directory designated for output
     """
     if work_dir == None:
         work_dir = os.getcwd()
@@ -416,9 +409,7 @@ def writeModelRaw(fba, work_dir=cDir):
 
 
 def BuildLPFluxBounds(fba, use_rational=False):
-    """
-    Build and return a csio that contains the flux bounds in LP format
-    """
+    """Build and return a csio that contains the flux bounds in LP format."""
     if not _HAVE_SYMPY_ and use_rational:
         use_rational = False
         print('Warning: install Sympy for rational IO')
@@ -503,12 +494,11 @@ def BuildLPFluxBounds(fba, use_rational=False):
 
 
 def BuildLPConstraints(fba, use_rational=False):
-    """
-    Build and return a csio that contains constraint constructed from
-    the StoichiometeryLP object
+    """Build and return a csio that contains constraint constructed from the
+    StoichiometeryLP object.
 
-     - *fba* an fba model object which has a stoichiometry
-     - *use_rational* write rational number output [default=False]
+    - *fba* an fba model object which has a stoichiometry
+    - *use_rational* write rational number output [default=False]
     """
 
     if not _HAVE_SYMPY_ and use_rational:
@@ -579,12 +569,11 @@ def BuildLPConstraints(fba, use_rational=False):
 
 
 def BuildLPUserConstraints(fba, use_rational=False):
-    """
-    Build and return a csio that contains constraint constructed from
-    the StoichiometeryLP object
+    """Build and return a csio that contains constraint constructed from the
+    StoichiometeryLP object.
 
-     - *fba* an fba model object which has a stoichiometry
-     - *use_rational* write rational number output [default=False]
+    - *fba* an fba model object which has a stoichiometry
+    - *use_rational* write rational number output [default=False]
     """
 
     if not _HAVE_SYMPY_ and use_rational:
@@ -652,10 +641,8 @@ def BuildLPUserConstraints(fba, use_rational=False):
 
 
 def BuildLPConstraintsRelaxed(fba):
-    """
-    Build and return a csio that contains the constaints in LP format
-    Relaxed refers to dS/dt >= 0
-    """
+    """Build and return a csio that contains the constaints in LP format Relaxed refers
+    to dS/dt >= 0."""
     raise DeprecationWarning("\nThis method is deprecated")
     if not hasattr(fba, 'N') or fba.N == None:
         print('\nWarning FBA object has no stoichiometric matrix constructing it now.')
@@ -691,10 +678,8 @@ def BuildLPConstraintsRelaxed(fba):
 
 
 def BuildLPConstraintsStrict(fba, use_rational=False):
-    """
-    Build and return a csio that contains the constaints in LP format
-    Strict refers to dS/dt = 0
-    """
+    """Build and return a csio that contains the constaints in LP format Strict refers
+    to dS/dt = 0."""
     ##  print "Consider using the new BuildLPConstraints() method"
 
     if not _HAVE_SYMPY_ and use_rational:
@@ -751,10 +736,8 @@ def BuildLPConstraintsStrict(fba, use_rational=False):
 
 
 def BuildLPConstraintsMath(fba, use_rational=False):
-    """
-    Build and return a csio that contains the constaints in LP format
-    Strict refers to dS/dt => 0 and dS/dt <= 0
-    """
+    """Build and return a csio that contains the constaints in LP format Strict refers
+    to dS/dt => 0 and dS/dt <= 0."""
     raise DeprecationWarning("\nThis method is deprecated")
     if not _HAVE_SYMPY_ and use_rational:
         use_rational = False
@@ -834,14 +817,12 @@ def writeModelLPOld(
     use_rational=False,
     format='%s',
 ):
-    """
-    Writes a fba as an LP/LPT
+    """Writes a fba as an LP/LPT.
 
-     - *fba* an instantiated FBAmodel instance
-     - *work_dir* directory designated for output
-     - *multisymb* the multiplication symbol (default: <space>)
-     - *lpt* the file format (default: True for lpt) or False for lp
-
+    - *fba* an instantiated FBAmodel instance
+    - *work_dir* directory designated for output
+    - *multisymb* the multiplication symbol (default: <space>)
+    - *lpt* the file format (default: True for lpt) or False for lp
     """
 
     print("\nTHIS FUNCTION IS DEPRECATED\n")
@@ -956,17 +937,15 @@ def writeModelLP(
     constraint_mode=None,
     quiet=False,
 ):
-    """
-    Writes an FBA object as an LP in CPLEX LP format
+    """Writes an FBA object as an LP in CPLEX LP format.
 
-     - *fba* an instantiated FBAmodel instance
-     - *work_dir* directory designated for output
-     - *fname* the file name [default=fba.getId()]
-     - *multisymb* the multiplication symbol (default: <space>)
-     - *format* the number format of the output
-     - *use_rational* output rational numbers [default=False]
-     - *quiet* [default=False] supress information messages
-
+    - *fba* an instantiated FBAmodel instance
+    - *work_dir* directory designated for output
+    - *fname* the file name [default=fba.getId()]
+    - *multisymb* the multiplication symbol (default: <space>)
+    - *format* the number format of the output
+    - *use_rational* output rational numbers [default=False]
+    - *quiet* [default=False] supress information messages
     """
     if constraint_mode != None:
         print("\nConstraint_mode has been deprecated")
@@ -1063,12 +1042,10 @@ def writeModelLP(
 
 
 def BuildHformatFluxBounds(fba, infinity_replace=None, use_rational=False):
-    """
-    Build and return a csio that contains the flux bounds in H format
+    """Build and return a csio that contains the flux bounds in H format.
 
-     - *fba* a PySCeS-CBM FBA object
-     - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
-
+    - *fba* a PySCeS-CBM FBA object
+    - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
     """
     LBs = {}
     UBs = {}
@@ -1219,17 +1196,15 @@ def writeModelHFormatFBA(
     format='%s',
     infinity_replace=None,
 ):
-    """
-    Write an FBA-LP in polynomial H-Format file. This version has been replaced by `writeModelHFormatFBA2()`
-    but is kept for backwards compatability.
+    """Write an FBA-LP in polynomial H-Format file. This version has been replaced by
+    `writeModelHFormatFBA2()` but is kept for backwards compatability.
 
-     - *fba* a PySCeS-CBM FBA object
-     - *Work_dir* [default=None] the output directory
-     - *use_rational* [default=false] use rational numbers in output (requires sympy)
-     - *fullLP* [default=True] include the default objective function as a maximization target
-     - *format* [default='%s'] the number format string
-     - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
-
+    - *fba* a PySCeS-CBM FBA object
+    - *Work_dir* [default=None] the output directory
+    - *use_rational* [default=false] use rational numbers in output (requires sympy)
+    - *fullLP* [default=True] include the default objective function as a maximization target
+    - *format* [default='%s'] the number format string
+    - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
     """
 
     print('\nwriteModelHFormatFBA is deprecated please use: writeModelHFormatFBA2\n')
@@ -1363,18 +1338,17 @@ def writeModelHFormatFBA2(
     format='%s',
     infinity_replace=None,
 ):
-    """
-    Write an FBA-LP in polynomial H-Format file. This is an improved version of `WriteModelHFormatFBA()`
-    which it replaces. Note that if a SymPy matrix is used as input then use_rational is automatically enabled.
+    """Write an FBA-LP in polynomial H-Format file. This is an improved version of
+    `WriteModelHFormatFBA()` which it replaces. Note that if a SymPy matrix is used as
+    input then use_rational is automatically enabled.
 
-     - *fba* a PySCeS-CBM FBA object
-     - *fname* [default=None] the output filename, fba.getId() if not defined
-     - *Work_dir* [default=None] the output directory
-     - *use_rational* [default=false] use rational numbers in output (requires sympy)
-     - *fullLP* [default=True] include the default objective function as a maximization target
-     - *format* [default='%s'] the number format string
-     - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
-
+    - *fba* a PySCeS-CBM FBA object
+    - *fname* [default=None] the output filename, fba.getId() if not defined
+    - *Work_dir* [default=None] the output directory
+    - *use_rational* [default=false] use rational numbers in output (requires sympy)
+    - *fullLP* [default=True] include the default objective function as a maximization target
+    - *format* [default='%s'] the number format string
+    - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
     """
     use_rational_old = use_rational
     if _HAVE_SYMPY_ and fba.N.__array_type__ == sympy.MutableDenseMatrix:
@@ -1523,18 +1497,16 @@ def writeStoichiometricMatrix(
     format='%s',
     infinity_replace=None,
 ):
-    """
-    Write an FBA-LP in polynomial H-Format file. This is an improved version of `WriteModelHFormatFBA()`
-    which it replaces but is kept for backwards compatability.
+    """Write an FBA-LP in polynomial H-Format file. This is an improved version of
+    `WriteModelHFormatFBA()` which it replaces but is kept for backwards compatability.
 
-     - *fba* a PySCeS-CBM FBA object
-     - *fname* [default=None] the output filename, fba.getId() if not defined
-     - *Work_dir* [default=None] the output directory
-     - *use_rational* [default=false] use rational numbers in output (requires sympy)
-     - *fullLP* [default=True] include the default objective function as a maximization target
-     - *format* [default='%s'] the number format string
-     - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
-
+    - *fba* a PySCeS-CBM FBA object
+    - *fname* [default=None] the output filename, fba.getId() if not defined
+    - *Work_dir* [default=None] the output directory
+    - *use_rational* [default=false] use rational numbers in output (requires sympy)
+    - *fullLP* [default=True] include the default objective function as a maximization target
+    - *format* [default='%s'] the number format string
+    - *infinity_replace* [default=None] if defined this is the abs(value) of +-<infinity>
     """
     if not _HAVE_SYMPY_ and use_rational:
         use_rational = False
@@ -2168,9 +2140,7 @@ def writeMinDistanceLP_absL1(
 def writeMinDistanceLPwithCost(
     fname, fbas, work_dir=None, ignoreDistance=[], constraint_mode='strict'
 ):
-    """
-    For backwards compatability only
-    """
+    """For backwards compatability only."""
     print(
         "\n\n**********\nDeprecation warning!\nPlease use writeMinDistanceLP(with_protein_cost=True) instead of writeMinDistanceLPwithCost()\n\n**********\n"
     )
@@ -2345,15 +2315,13 @@ def writeMinDistanceLPwithCost(fname, fbas, work_dir=None, ignoreDistance=[], co
 
 
 def writeOptimalSolution(fba, fname, Dir=None, separator=',', only_exchange=False):
-    """
-    This function writes the optimal solution to file
+    """This function writes the optimal solution to file.
 
-     - *fba* an instance of an PySCeSCBM model
-     - *fname* the output filename
-     - *Dir* [default=None] use current directory if not None
-     - *separator* [default=','] the column separator
-     - *only_exchange* [default=False] only output fluxes labelled as exchange reactions
-
+    - *fba* an instance of an PySCeSCBM model
+    - *fname* the output filename
+    - *Dir* [default=None] use current directory if not None
+    - *separator* [default=','] the column separator
+    - *only_exchange* [default=False] only output fluxes labelled as exchange reactions
     """
     if Dir != None:
         assert os.path.exists(Dir), '\nPath does not exist'
@@ -2446,16 +2414,14 @@ def writeOptimalSolution(fba, fname, Dir=None, separator=',', only_exchange=Fals
 def writeModelInfoToFile(
     fba, fname, Dir=None, separator=',', only_exchange=False, met_type='all'
 ):
-    """
-    This function writes a CBModel to file
+    """This function writes a CBModel to file.
 
-     - *fba* an instance of an PySCeSCBM model
-     - *fname* the output filename
-     - *Dir* [default=None] use directory if not None
-     - *separator* [default=','] the column separator
-     - *only_exchange* [default=False] only output fluxes labelled as exchange reactions
-     - *type* [default='all'] only output certain type of species: 'all','boundary' or 'variable'
-
+    - *fba* an instance of an PySCeSCBM model
+    - *fname* the output filename
+    - *Dir* [default=None] use directory if not None
+    - *separator* [default=','] the column separator
+    - *only_exchange* [default=False] only output fluxes labelled as exchange reactions
+    - *type* [default='all'] only output certain type of species: 'all','boundary' or 'variable'
     """
     writeReactionInfoToFile(
         fba, fname, Dir=Dir, separator=separator, only_exchange=only_exchange
@@ -2464,15 +2430,13 @@ def writeModelInfoToFile(
 
 
 def writeReactionInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=False):
-    """
-    This function writes a CBModel to file
+    """This function writes a CBModel to file.
 
-     - *fba* an instance of an PySCeSCBM model
-     - *fname* the output filename
-     - *Dir* [default=None] use directory if not None
-     - *separator* [default=','] the column separator
-     - *only_exchange* [default=False] only output fluxes labelled as exchange reactions
-
+    - *fba* an instance of an PySCeSCBM model
+    - *fname* the output filename
+    - *Dir* [default=None] use directory if not None
+    - *separator* [default=','] the column separator
+    - *only_exchange* [default=False] only output fluxes labelled as exchange reactions
     """
     if Dir != None:
         assert os.path.exists(Dir), '\nPath does not exist'
@@ -2579,15 +2543,13 @@ def writeReactionInfoToFile(fba, fname, Dir=None, separator=',', only_exchange=F
 
 
 def writeSpeciesInfoToFile(fba, fname, Dir=None, separator=',', met_type='all'):
-    """
-    This function writes a CBModel to file
+    """This function writes a CBModel to file.
 
-     - *fba* an instance of an PySCeSCBM model
-     - *fname* the output filename
-     - *Dir* [default=None] use directory if not None
-     - *separator* [default=','] the column separator
-     - *met_type* [default='all'] only output certain type of species: 'all','boundary' or 'variable'
-
+    - *fba* an instance of an PySCeSCBM model
+    - *fname* the output filename
+    - *Dir* [default=None] use directory if not None
+    - *separator* [default=','] the column separator
+    - *met_type* [default='all'] only output certain type of species: 'all','boundary' or 'variable'
     """
     if Dir != None:
         assert os.path.exists(Dir), '\nPath does not exist'
@@ -2683,12 +2645,10 @@ def writeSpeciesInfoToFile(fba, fname, Dir=None, separator=',', met_type='all'):
 
 
 def printFBASolution(fba, include_all=False):
-    """
-    Prints the FBA optimal solution to the screen.
+    """Prints the FBA optimal solution to the screen.
 
-     - *fba* an FBA model object
-     - *include_all* include all variables
-
+    - *fba* an FBA model object
+    - *include_all* include all variables
     """
     OFflux = fba.objectives[fba.activeObjIdx].flux_objectives[0].reaction
     OFvalue = fba.objectives[fba.activeObjIdx].value
@@ -2734,12 +2694,10 @@ def exportModel(fba, fname=None, fmt='lp', work_dir=None, use_rational='both'):
 
 
 def writeProteinCostToCSV(fba, fname):
-    """
-    Writes the protein costs 'CBM_PEPTIDE_COST' annotation toa csv file.
+    """Writes the protein costs 'CBM_PEPTIDE_COST' annotation toa csv file.
 
-     - *fba* an instantiated FBA object
-     - *fname* the exported file name
-
+    - *fba* an instantiated FBA object
+    - *fname* the exported file name
     """
     F = open(fname + '.costs.csv', 'w')
     F.write('rid,minL,maxL,avgL,cost\n')
@@ -2789,16 +2747,14 @@ def WriteFVAtoCSV(id, fva, names, Dir=None, fbaObj=None):
 
 
 def writeFVAtoCSV(fvadata, names, fname, Dir=None, fbaObj=None):
-    """
-    Takes the resuls of a FluxVariabilityAnalysis method and writes it to a nice
-    csv file. Note this method replaces the glpk/cplx_WriteFVAtoCSV methods.
+    """Takes the resuls of a FluxVariabilityAnalysis method and writes it to a nice csv
+    file. Note this method replaces the glpk/cplx_WriteFVAtoCSV methods.
 
-     - *fvadata* FluxVariabilityAnalysis() OUTPUT_ARRAY
-     - *names* FluxVariabilityAnalysis() OUTPUT_NAMES
-     - *fname* filename_base for the CSV output
-     - *Dir* [default=None] if set the output directory for the csv files
-     - *fbaObj* [default=None] if supplied adds extra model information into the output tables
-
+    - *fvadata* FluxVariabilityAnalysis() OUTPUT_ARRAY
+    - *names* FluxVariabilityAnalysis() OUTPUT_NAMES
+    - *fname* filename_base for the CSV output
+    - *Dir* [default=None] if set the output directory for the csv files
+    - *fbaObj* [default=None] if supplied adds extra model information into the output tables
     """
     if Dir != None:
         Dir = os.path.join(Dir, fname + '.fva.csv')
@@ -2993,15 +2949,13 @@ def writeFVAdata(
 
 
 def writeSolutions(fname, sols=[], sep=',', extra_output=None, fba=None):
-    """
-    Write 2 or more solutions where a solution is a dictionary of flux:value pairs:
+    """Write 2 or more solutions where a solution is a dictionary of flux:value pairs:
 
-     - *fname* the export filename
-     - *sols* a list of dictionaries containing flux:value pairs (e.g. output by cmod.getReactionValues())
-     - *sep* [default=','] the column separator
-     - *extra_output* [default=None] add detailed information to output e.g. reaction names by giving a CBModel object as an argument to *extra_output*.
-     - *fba* an fba model that canbe used for extra_output
-
+    - *fname* the export filename
+    - *sols* a list of dictionaries containing flux:value pairs (e.g. output by cmod.getReactionValues())
+    - *sep* [default=','] the column separator
+    - *extra_output* [default=None] add detailed information to output e.g. reaction names by giving a CBModel object as an argument to *extra_output*.
+    - *fba* an fba model that canbe used for extra_output
     """
     assert len(sols) >= 2, "\nThere must be two or more solutions to work with"
 
@@ -3040,11 +2994,11 @@ def writeSolutions(fname, sols=[], sep=',', extra_output=None, fba=None):
 
 
 def generateBGID(num, prefix):
-    """
-    Create a BGID generator, which is <prefix><num> where perfix is two letters num is padded to 6 figures
-     - *num* the starting number
-     - *prefix* the two letter prefix
+    """Create a BGID generator, which is <prefix><num> where perfix is two letters num
+    is padded to 6 figures.
 
+    - *num* the starting number
+    - *prefix* the two letter prefix
     """
     assert prefix[0].isalpha() and prefix[1].isalpha(), '\nInvalid prefix'
     while True:
@@ -3053,12 +3007,10 @@ def generateBGID(num, prefix):
 
 
 def convertFloatToExcel(num, roundoff):
-    """
-    Converts a float to Excel compatible "number"
+    """Converts a float to Excel compatible "number".
 
-     - *num* a number
-     - *roundoff* the number of roundoff digits for round()
-
+    - *num* a number
+    - *roundoff* the number of roundoff digits for round()
     """
     ## keep this in sync with convertExcelToFloat
     if num is None:
@@ -3075,11 +3027,9 @@ def convertFloatToExcel(num, roundoff):
 
 
 def convertExcelToFloat(num):
-    """
-    Converts an Excel "number" to a float
+    """Converts an Excel "number" to a float.
 
-     - *num* a number
-
+    - *num* a number
     """
     ## keep this in sync with convertFloatToExcel
     if num == '':
@@ -3096,13 +3046,11 @@ def convertExcelToFloat(num):
 
 
 def writeModelToExcel97(fba, filename, roundoff=6):
-    """
-    Exports the model as an Excel 97 spreadsheet
+    """Exports the model as an Excel 97 spreadsheet.
 
-     - *fba* a CBMPy model instance
-     - *filename* the filename of the workbook
-     - *roundoff* [default=6] the number of digits to round off to
-
+    - *fba* a CBMPy model instance
+    - *filename* the filename of the workbook
+    - *roundoff* [default=6] the number of digits to round off to
     """
 
     if not _HAVE_XLWT_:

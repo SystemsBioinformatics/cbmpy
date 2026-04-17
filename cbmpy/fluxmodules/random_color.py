@@ -24,9 +24,8 @@ def color_distance(c1, c2):
 
 
 def generate_new_color(existing_colors):
-    """ creates a new random color (in hsv scheme) that is most different
-    to the existing colors.
-    """
+    """Creates a new random color (in hsv scheme) that is most different to the existing
+    colors."""
     max_distance = None
     best_color = None
     for i in range(0, 100):

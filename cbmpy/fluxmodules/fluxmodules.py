@@ -125,7 +125,7 @@ def computeModulesMatroid(cmod, variable):
 
 
 def getInterface(cmod, matroid, separation):
-    """ compute the interface of the separation in the given metabolic network
+    """Compute the interface of the separation in the given metabolic network.
 
     We assume that the matroid is describing the variable reactions of cmod.
     TODO: Allow separation to also contain reactions with fixed flux rate
