@@ -130,7 +130,7 @@ class Matrix:
             rows = [rows]
 
         if isinstance(rows, slice):
-            rlen = len(xrange(*rows.indices(self.rows())))
+            rlen = len(range(*rows.indices(self.rows())))
         else:
             rlen = len(rows)
 

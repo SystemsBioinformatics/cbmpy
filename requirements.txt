@@ -1,16 +1,16 @@
-biopython
+# Core dependencies for CBMPy
+numpy>=1.17.0
 packaging
-ipython
-nose-py3
-numpy
-matplotlib
-python-libsbml
-scipy
-swiglpk
-sympy
-xlrd
-XlsxWriter
-xlwt
 pyparsing
+python-libsbml>=5.18.0
+lxml
+xlrd
+xlwt
+swiglpk
+scipy
+XlsxWriter
 
-
+# Testing dependencies
+pytest>=7.0
+pytest-cov
+nose-py3

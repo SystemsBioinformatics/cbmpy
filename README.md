@@ -39,42 +39,97 @@ needs CBMPy supports user interaction via:
 
 For more information on the development and use of CBMPy (https://systemsbioinformatics.github.io/cbmpy/)
 
+## System Requirements
+
+**Python 3.8 - 3.12** is required for CBMPy.
+
 CBMPy has been tested on Windows 7 and 8.1, 10, 11, Mac OSX and Ubuntu Linux 12.04, 14.04, 16.04, 20.04, 22.04
-CBMPy is currently developed on Python 3.10 and Python 3.8 or newer is highly recommended
 
-## Install
-The best way to get the basic CBMPy running is to install from **PyPI** or create an Anaconda environment. CBMPy is developed on GitHub (https://systemsbioinformatics.github.io/cbmpy/)
+## Installation
 
-### Install with pip using requirements.txt
-From a terrminal or command prompt try to install the required packages
+### Option 1: Conda (Recommended)
 
-`pip install -r requirements.txt`
+From a terminal or command prompt:
 
-### Then install CBMPy
-`pip install cbmpy`
-
-### Install by creating an Anaconda environment using environment.yml
-From a terminal or command prompt try:
-
-`conda env create -f=environment.yml`
+```bash
+conda env create -f=environment.yml
+conda activate cbmpy3
+```
 
 This creates an environment **cbmpy3** that can be accessed from the command line using `conda activate cbmpy3`
 
-### Check the basic installation
-To check you installation follow the installation try the following in a Python shell:
+### Option 2: pip
 
+```bash
+pip install -e ".[dev]"
 ```
+
+Or from requirements.txt:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Activate the environment
+
+```bash
+conda activate cbmpy3
+# or
+source .venv/bin/activate  # for virtualenv
+```
+
+After activation, verify the installation by running:
+
+```python
 import cbmpy
 cmod = cbmpy.readSBML3FBC('cbmpy_test_core')
 cbmpy.doFBA(cmod)
 ```
+
+### Check the basic installation
+
+To check your installation try the following in a Python shell:
+
+```python
+import cbmpy
+cmod = cbmpy.readSBML3FBC('cbmpy_test_core')
+cbmpy.doFBA(cmod)
+```
+
 ## Updating CBMPy
-Once you have installed CBMPy it can be easily upgraded.
 
-### Pip update
-`pip install --upgrade cbmpy`
+Once installed, CBMPy can be upgraded using:
 
-### Anaconda update
-`conda update cbmpy`
+```bash
+conda activate cbmpy3
+conda update cbmpy
+```
+
+Or for pip installation:
+
+```bash
+pip install --upgrade cbmpy
+```
+
+## Development Setup
+
+### Install development dependencies
+
+```bash
+conda activate cbmpy3
+pip install -e ".[dev]"
+```
+
+### Run tests
+
+```bash
+pytest -v
+```
+
+### Build source distribution
+
+```bash
+python setup.py sdist bdist_wheel
+```
 
 (c) Brett G. Olivier, Amsterdam, 2014-2024

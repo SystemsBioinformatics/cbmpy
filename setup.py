@@ -1,121 +1,91 @@
 """
 CBMPy: setup.py
 ===============
-PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)
-Copyright (C) 2010-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands
+PySCeS Constraint Based Modelling (https://systemsbioinformatics.github.io/cbmpy/)
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>
-
-Author: Brett G. Olivier PhD
-Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues
-Last edit: $Author: bgoli $ ($Id: setup.py 698 2019-07-30 14:03:26Z bgoli $)
-
+This setup.py reads from pyproject.toml for pyproject.toml-based builds.
+This file is kept for backward compatibility with legacy setup.py tools.
 """
 
-import os
-import time
+from setuptools import setup
 
-local_path = os.path.dirname(os.path.abspath(os.sys.argv[0]))
+# Read version from CBConfig
+import os
+import sys
+
+local_path = os.path.dirname(os.path.abspath(os.path.join(os.getcwd(), 'cbmpy', 'CBConfig.py')))
 
 try:
     from setuptools import setup
+
+    # Read version from CBConfig
+    vmaj = vmin = vmic = ''
+    with open(os.path.join(local_path, 'cbmpy', 'CBConfig.py')) as F:
+        for l in F:
+            if l.startswith('__VERSION_MAJOR__'):
+                vmaj = l.split('=')[1].strip()
+            elif l.startswith('__VERSION_MINOR__'):
+                vmin = l.split('=')[1].strip()
+            elif l.startswith('__VERSION_MICRO__'):
+                vmic = l.split('=')[1].strip()
 
     install_requires_src = ['numpy', 'packaging', 'pyparsing', 'python_libsbml', 'lxml', 'xlrd', 'xlwt', 'swiglpk', 'scipy', 'XlsxWriter']
     extras_require_src = {
         'all': ['sympy', 'numpy', 'packaging', 'pyparsing', 'python_libsbml', 'lxml', 'xlrd', 'xlwt', 'swiglpk', 'scipy', 'nose_py3', 'XlsxWriter'],
     }
     tests_require_src = ['numpy', 'packaging', 'pyparsing', 'python_libsbml', 'lxml', 'numpy', 'nose_py3']
-except:
+
+    mydata_files = []
+    mypackages = ['cbmpy', 'cbmpy.fluxmodules']
+
+    description = """CBMPy: https://systemsbioinformatics.github.io/cbmpy/ is a platform for constraint based modelling. It implements popular FBA analyses, model editing and supports the latest SBML3FBC standards."""
+
+    setup(
+        package_dir={'cbmpy': 'cbmpy'},
+        packages=mypackages,
+        data_files=mydata_files,
+        long_description=description,
+        name="cbmpy",
+        summary="CBMPy: Constraint Based Modelling in Python",
+        version='{}.{}.{}'.format(vmaj, vmin, vmic),
+        maintainer='Brett G. Olivier',
+        author='Brett G. Olivier',
+        author_email='b.g.olivier@vu.nl',
+        maintainer_email='b.g.olivier@vu.nl',
+        url="https://systemsbioinformatics.github.io/cbmpy/",
+        download_url="https://github.com/SystemsBioinformatics/cbmpy/releases",
+        license="GNU General Public License (GPL)",
+        keywords="computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming",
+        install_requires=install_requires_src,
+        extras_require=extras_require_src,
+        tests_require=tests_require_src,
+        classifiers=[
+            'Development Status :: 5 - Production/Stable',
+            'Environment :: Console',
+            'Environment :: MacOS X',
+            'Environment :: Win32 (MS Windows)',
+            'Environment :: X11 Applications',
+            'Intended Audience :: Education',
+            'Intended Audience :: Science/Research',
+            'License :: OSI Approved :: GNU General Public License (GPL)',
+            'Natural Language :: English',
+            'Operating System :: OS Independent',
+            'Operating System :: POSIX',
+            'Operating System :: POSIX :: Linux',
+            'Programming Language :: Python :: 3',
+            'Programming Language :: Python :: 3.8',
+            'Programming Language :: Python :: 3.9',
+            'Programming Language :: Python :: 3.10',
+            'Programming Language :: Python :: 3.11',
+            'Programming Language :: Python :: 3.12',
+            'Topic :: Scientific/Engineering :: Bio-Informatics',
+            'Topic :: Scientific/Engineering :: Chemistry',
+            'Topic :: Scientific/Engineering :: Mathematics',
+            'Topic :: Software Development :: Libraries :: Python Modules',
+        ],
+        description=description,
+    )
+except Exception as e:
+    print(f"Error reading version from CBConfig: {e}")
     from distutils.core import setup
-
-    install_requires_src = []
-    extras_require_src = {}
-    tests_require_src = []
-
-mydata_files = []
-
-# release get version
-vmaj = vmin = vmic = ''
-with open(os.path.join(local_path, 'cbmpy', 'CBConfig.py')) as F:
-    for l in F:
-        if l.startswith('__VERSION_MAJOR__'):
-            vmaj = l.split('=')[1].strip()
-        elif l.startswith('__VERSION_MINOR__'):
-            vmin = l.split('=')[1].strip()
-        elif l.startswith('__VERSION_MICRO__'):
-            vmic = l.split('=')[1].strip()
-
-mypackages = ['cbmpy', 'cbmpy.fluxmodules']
-
-readme = """
-CBMPy (https://systemsbioinformatics.github.io/cbmpy/) is a platform for constraint
-based modelling and analysis. Its architecture is both extensible and flexible using
-data structures that are intuitive to the biologist (metabolites, reactions, compartments)
-while transparently translating these into the underlying mathematical structures used in
-advanced analysis (LP's, MILP's).
-
-CBMPy is fully compatible with the latest SBML3 Flux Balance Constraints (FBC) interoperability
-specifications and implements popular analyses such as FBA, FVA, element/charge
-balancing, network analysis and model editing as well as advanced methods
-developed specifically for the ecosystem modelling: minimal distance methods,
-flux minimization and input selection.
-"""
-
-description="""CBMPy: https://systemsbioinformatics.github.io/cbmpy/ is a platform for constraint based modelling. It implements popular FBA analyses, model editing and supports the latest SBML3FBC standards."""
-
-setup(
-    package_dir={'cbmpy': 'cbmpy'},
-    packages=mypackages,
-    data_files=mydata_files,
-    long_description=description,
-    name="cbmpy",
-    summary="CBMPy: Constraint Based Modelling in Python",
-    version='{}.{}.{}'.format(vmaj, vmin, vmic),
-    maintainer='Brett G. Olivier',
-    author='Brett G. Olivier',
-    author_email='b.g.olivier@vu.nl',
-    maintainer_email='b.g.olivier@vu.nl',
-    url="https://systemsbioinformatics.github.io/cbmpy/",
-    download_url="https://github.com/SystemsBioinformatics/cbmpy/releases",
-    license="GNU General Public License (GPL)",
-    keywords="computational systems biology, modelling, simulation, genome scale models, sbml, constraint-based modelling, fbc, linear programming, groups, standard",
-    # zip_safe = False,
-    install_requires=install_requires_src,
-    extras_require=extras_require_src,
-    tests_require=tests_require_src,
-    platforms=["Windows", "Linux", "Mac"],
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Environment :: Console',
-        'Intended Audience :: End Users/Desktop',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU General Public License (GPL)',
-        'Natural Language :: English',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2',
-        'Topic :: Scientific/Engineering :: Bio-Informatics',
-        'Topic :: Scientific/Engineering :: Chemistry',
-    ],
-    description=description,
-)
-try:
-    os.chdir(os.path.join(local_path, 'cbmpy', 'fluxmodules'))
-    print(os.getcwd())
-    import cbmpy
-
-    print(cbmpy.__version__)
-    os.chdir(local_path)
-except ImportError:
-    pass
-
+    setup()

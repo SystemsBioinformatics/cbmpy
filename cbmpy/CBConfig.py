@@ -40,15 +40,14 @@ import platform
 __VERSION_MAJOR__ = 0
 __VERSION_MINOR__ = 8
 __VERSION_MICRO__ = 9
+__VERSION__ = '0.8.9'
 
 __CBCONFIG__ = {
     'VERSION_MAJOR': __VERSION_MAJOR__,
     'VERSION_MINOR': __VERSION_MINOR__,
     'VERSION_MICRO': __VERSION_MICRO__,
     'VERSION_STATUS': '',
-    'VERSION': '{}.{}.{}'.format(
-        __VERSION_MAJOR__, __VERSION_MINOR__, __VERSION_MICRO__
-    ),
+    'VERSION': __VERSION__,
     'DEBUG': False,
     'SOLVER_PREF': 'CPLEX',
     #'SOLVER_PREF': 'GLPK',

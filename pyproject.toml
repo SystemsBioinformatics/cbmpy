@@ -1,0 +1,110 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cbmpy"
+version = "0.8.9"
+description = "CBMPy: Constraint Based Modelling in Python - A platform for constraint based modelling and analysis of biological systems"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {text = "GNU General Public License v3 or later"}
+authors = [
+    {name = "Brett G. Olivier", email = "b.g.olivier@vu.nl"}
+]
+maintainers = [
+    {name = "Brett G. Olivier", email = "b.g.olivier@vu.nl"}
+]
+keywords = ["computational systems biology", "modelling", "simulation", "genome scale models", "sbml", "constraint-based modelling", "fbc", "linear programming"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: MacOS X",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Operating System :: POSIX",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.17.0",
+    "packaging",
+    "pyparsing",
+    "python-libsbml>=5.18.0",
+    "lxml",
+    "xlrd",
+    "xlwt",
+    "swiglpk",
+    "scipy",
+    "XlsxWriter",
+]
+
+[project.optional-dependencies]
+all = [
+    "sympy>=1.7.1",
+    "nose-py3",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "tox",
+]
+
+[project.urls]
+Homepage = "https://systemsbioinformatics.github.io/cbmpy/"
+Download = "https://github.com/SystemsBioinformatics/cbmpy/releases"
+Documentation = "https://systemsbioinformatics.github.io/cbmpy/"
+Repository = "https://github.com/SystemsBioinformatics/cbmpy"
+Issues = "https://github.com/SystemsBioinformatics/cbmpy/issues"
+
+[project.scripts]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cbmpy*", "cbmpy.fluxmodules*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
+
+[tool.coverage.run]
+branch = false
+source = ["cbmpy"]
+omit = [
+    "*/__pycache__/*",
+    "*/test_*",
+    "*/setup.py",
+    "*/setup.cfg",
+    "*/tox.ini",
+    "*/pyproject.toml",
+    "*/CLAUDE.md",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if DEBUG:",
+]
