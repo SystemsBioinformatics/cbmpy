@@ -8,6 +8,10 @@ CBMPy Documentation
    installation
    api/modules
    api/core
+   api/solvers
+   api/io
+   api/networking
+   api/visualization
    fluxmodules
 
 .. note::
@@ -50,11 +54,52 @@ For more examples, see the :doc:`installation` guide.
 API Documentation
 -----------------
 
+Core Classes
+^^^^^^^^^^^
+
 .. toctree::
    :maxdepth: 2
 
-   api/modules
    api/core
+
+Solver Implementations
+^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 2
+
+   api/solvers
+
+File I/O
+^^^^^^^
+
+.. toctree::
+   :maxdepth: 2
+
+   api/io
+
+Network Analysis
+^^^^^^^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 2
+
+   api/networking
+
+Visualization
+^^^^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 2
+
+   api/visualization
+
+Flux Module Analysis
+^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 2
+
    fluxmodules
 
 Release Notes

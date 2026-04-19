@@ -1,13 +1,13 @@
 Installation Guide
-============
+============-=-=
 
 Installing CBMPy
----------------
+---=-=------=
 
 CBMPy supports Python 3.8 through 3.12. You can install it using conda or pip.
 
 Prerequisites
-------------
+-=-=--=--=-
 
 **System Requirements:**
 
@@ -16,9 +16,11 @@ Prerequisites
   - IBM CPLEX (commercial)
   - GLPK (open source, via `swiglpk`)
 - numpy >= 1.17.0
+- python-libsbml >= 5.18.0 (for SBML support)
+- scipy (for numerical operations)
 
 Using Conda (Recommended)
---------------------
+-=-=------=--=--=-=-=
 
 1. Create a conda environment:
 
@@ -45,7 +47,7 @@ Alternatively, create an environment with all dependencies:
    conda env create -f environment.yml
 
 Using pip
---------
+---=-=---
 
 1. Create a virtual environment:
 
@@ -68,7 +70,7 @@ Or from the requirements file:
    pip install -r requirements.txt
 
 Verification
------------
+--=----=-=
 
 Verify the installation by running:
 
@@ -79,7 +81,7 @@ Verify the installation by running:
    cbmpy.doFBA(cmod)
 
 Troubleshooting
---------------
+-=-=--=--=--=-
 
 **Error: "No linear solver present"**
 
@@ -105,7 +107,7 @@ Install python-libsbml:
 3. Install CBMPy
 
 Update CBMPy
-------------
+--=-=--=-=
 
 After installation, you can update CBMPy using:
 
@@ -124,9 +126,7 @@ Or update in-place:
    pip install -e ".[dev]"
 
 Dependencies
-------------
-
-CBMPy requires the following packages:
+--=--------
 
 Core dependencies:
 - numpy >= 1.17.0
@@ -148,4 +148,6 @@ Development dependencies:
 - pytest-cov
 - docformatter >= 1.7.7
 - sphinx >= 7.0
+- sphinx_rtd_theme
+- myst-parser
 - tox
