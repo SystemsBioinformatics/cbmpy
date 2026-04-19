@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools >= 61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,14 +7,25 @@ name = "cbmpy"
 version = "0.8.9"
 description = "CBMPy: Constraint Based Modelling in Python - A platform for constraint based modelling and analysis of biological systems"
 readme = {file = "README.md", content-type = "text/markdown"}
-license = {text = "GNU General Public License v3 or later"}
+license = "GPL-3.0-or-later"
+license-files = ["LICENCE_GPLv3.txt"]
+requires-python = ">=3.8"
 authors = [
     {name = "Brett G. Olivier", email = "b.g.olivier@vu.nl"}
 ]
 maintainers = [
     {name = "Brett G. Olivier", email = "b.g.olivier@vu.nl"}
 ]
-keywords = ["computational systems biology", "modelling", "simulation", "genome scale models", "sbml", "constraint-based modelling", "fbc", "linear programming"]
+keywords = [
+    "computational systems biology",
+    "modelling",
+    "simulation",
+    "genome scale models",
+    "sbml",
+    "constraint-based modelling",
+    "fbc",
+    "linear programming",
+]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -23,7 +34,6 @@ classifiers = [
     "Environment :: X11 Applications",
     "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: GNU General Public License (GPL)",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Operating System :: POSIX",
@@ -39,12 +49,11 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Mathematics",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-requires-python = ">=3.8"
 dependencies = [
-    "numpy>=1.17.0",
+    "numpy >= 1.17.0",
     "packaging",
     "pyparsing",
-    "python-libsbml>=5.18.0",
+    "python-libsbml >= 5.18.0",
     "lxml",
     "xlrd",
     "xlwt",
@@ -55,17 +64,23 @@ dependencies = [
 
 [project.optional-dependencies]
 all = [
-    "sympy>=1.7.1",
-    "nose-py3",
+    "sympy >= 1.7.1",
 ]
 dev = [
-    "pytest>=7.0",
+    "pytest >= 7.0",
     "pytest-cov",
-    "tox",
-    "docformatter>=1.7.7",
-    "sphinx>=7.0",
-    "sphinx-autodoc-typehints>=1.21",
-    "sphinx-issues>=3.0",
+    "tox >= 4.0",
+    "docformatter >= 1.7.7",
+    "pylint >= 2.17",
+    "black >= 23.0",
+    "sphinx >= 7.0",
+    "sphinx-rtd-theme",
+    "sphinx-autodoc-typehints >= 1.21",
+    "sphinx-issues >= 3.0",
+    "myst-parser",
+    "build >= 1.0",
+    "twine >= 4.0",
+    "wheel",
 ]
 
 [project.urls]
@@ -73,13 +88,15 @@ Homepage = "https://systemsbioinformatics.github.io/cbmpy/"
 Download = "https://github.com/SystemsBioinformatics/cbmpy/releases"
 Documentation = "https://systemsbioinformatics.github.io/cbmpy/"
 Repository = "https://github.com/SystemsBioinformatics/cbmpy"
-Issues = "https://github.com/SystemsBioinformatics/cbmpy/issues"
-
-[project.scripts]
+"Issues" = "https://github.com/SystemsBioinformatics/cbmpy/issues"
+"Source" = "https://github.com/SystemsBioinformatics/cbmpy"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["cbmpy*", "cbmpy.fluxmodules*"]
+
+[tool.setuptools.package-data]
+cbmpy = ["*.xml", "LICENCE_GPLv3.txt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

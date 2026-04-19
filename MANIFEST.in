@@ -1,8 +1,38 @@
+# License and documentation
 include LICENCE_GPLv3.txt
 include README.md
 include RELEASES.md
 include CONTRIBUTORS.md
+include CLAUDE.md
+
+# Environment and requirements files
 include environment.yml
 include requirements.txt
-include cbmpy/*
-include cbmpy/fluxmodules/*
+
+# Include all CBMPy package files recursively (except cache/pyc)
+recursive-include cbmpy **
+include cbmpy/fluxmodules/**
+global-exclude __pycache__
+global-exclude *.pyc
+global-exclude *.pyo
+
+# Test data files for development
+recursive-include develop-fbcv3/QP *.xml
+recursive-include develop-fbcv3/QP *.fbc3.xml
+
+# Test files
+recursive-include tests **
+
+# Exclude build artifacts
+global-exclude *.egg-info
+global-exclude .DS_Store
+global-exclude *.egg
+
+# Exclude development directories from distribution
+prune .github
+prune .tox
+prune .venv
+prune docs/_build
+prune dist
+prune build
+prune node_modules
