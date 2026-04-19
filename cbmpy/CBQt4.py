@@ -74,6 +74,15 @@ class ReactionCreator(QtGui.QWidget):
     _Bupper = 'inf'
 
     def __init__(self, rlist, mlist, flist, cfdict, cndict, ccdict):
+        """Initialize the ReactionCreator widget.
+
+        - *rlist* list of reaction IDs in the model
+        - *mlist* list of metabolite IDs in the model
+        - *flist* list of flux variable metabolite IDs
+        - *cfdict* dictionary of chemical formulas for metabolites
+        - *cndict* dictionary of metabolite names
+        - *ccdict* dictionary of metabolite compartments
+        """
         super(ReactionCreator, self).__init__()
         self.mousePos = self.cursor().pos()
         rlist.sort()
@@ -93,6 +102,11 @@ class ReactionCreator(QtGui.QWidget):
         self.initUI()
 
     def addSubstrate(self, coeff, sid):
+        """Add a substrate to the reaction.
+
+        - *coeff* stoichiometric coefficient for the substrate
+        - *sid* substrate (metabolite) ID
+        """
         self.tblSub.insertRow(self.tblSubRow)
         self.tblSub.setItem(
             self.tblSubRow, 0, QtGui.QTableWidgetItem('{}'.format(coeff))
@@ -108,6 +122,8 @@ class ReactionCreator(QtGui.QWidget):
         self.tblSubRow += 1
 
     def addSelectedSubstrates(self):
+        """Add selected metabolites to the substrate table.
+        """
         self.IGNORECHECK = True
         items = [str(it_.text()) for it_ in self.lstSub.selectedItems()]
         self.setFocus(PyQt4.QtCore.Qt.OtherFocusReason)
@@ -121,6 +137,11 @@ class ReactionCreator(QtGui.QWidget):
         self.checkBalance()
 
     def addProduct(self, coeff, sid):
+        """Add a product to the reaction.
+
+        - *coeff* stoichiometric coefficient for the product
+        - *sid* product (metabolite) ID
+        """
         self.tblProd.insertRow(self.tblProdRow)
         self.tblProd.setItem(
             self.tblProdRow, 0, QtGui.QTableWidgetItem('{}'.format(coeff))
@@ -138,6 +159,8 @@ class ReactionCreator(QtGui.QWidget):
         self.tblProdRow += 1
 
     def addSelectedProducts(self):
+        """Add selected metabolites to the product table.
+        """
         self.IGNORECHECK = True
         items = [str(it_.text()) for it_ in self.lstProd.selectedItems()]
         self.setFocus(PyQt4.QtCore.Qt.OtherFocusReason)
@@ -156,12 +179,18 @@ class ReactionCreator(QtGui.QWidget):
     # print('You pressed the delete key')
 
     def deleteSubstrates(self):
+        """Delete all reagents from the substrate table.
+        """
         self.deleteReagents('substrate')
 
     def deleteProducts(self):
+        """Delete all reagents from the product table.
+        """
         self.deleteReagents('product')
 
     def deleteAllSubstrates(self):
+        """Clear all reagents from the substrate table.
+        """
         self.tblSub.clear()
         for r_ in range(self.tblSubRow - 1, -1, -1):
             self.tblSub.removeRow(r_)
@@ -169,6 +198,8 @@ class ReactionCreator(QtGui.QWidget):
         self.checkBalance()
 
     def deleteAllProducts(self):
+        """Clear all reagents from the product table.
+        """
         self.tblProd.clear()
         for r_ in range(self.tblProdRow - 1, -1, -1):
             self.tblProd.removeRow(r_)
@@ -176,6 +207,10 @@ class ReactionCreator(QtGui.QWidget):
         self.checkBalance()
 
     def deleteReagents(self, reagentType):
+        """Delete selected reagents from the reaction.
+
+        - *reagentType* either 'substrate' or 'product'
+        """
         selected = None
         PRODACTIVE = False
         SUBACTIVE = False
@@ -231,6 +266,8 @@ class ReactionCreator(QtGui.QWidget):
         self.checkBalance()
 
     def checkBalance(self):
+        """Check if the reaction is balanced based on chemical formulas.
+        """
         if self.IGNORECHECK:
             return
         output = {}
@@ -287,6 +324,12 @@ class ReactionCreator(QtGui.QWidget):
         # self.txtBal.setText(str(output))
 
     def updateBalance(self, bdict, left, right):
+        """Update the balance table with current stoichiometry.
+
+        - *bdict* dictionary of balanced elements
+        - *left* dictionary of elements on the left side
+        - *right* dictionary of elements on the right side
+        """
         colHead = []
         keys = list(bdict)
         if self.tblBalCol > 0:
@@ -325,6 +368,11 @@ class ReactionCreator(QtGui.QWidget):
         self.tblBal.setHorizontalHeaderLabels(QtCore.QStringList(keys))
 
     def showErrorMessage(self, errorMsg, title="Reaction Creator"):
+        """Show an error message dialog.
+
+        - *errorMsg* error message to display
+        - *title* dialog title, defaults to 'Reaction Creator'
+        """
         QtGui.QMessageBox.critical(
             None,
             title,
@@ -335,6 +383,8 @@ class ReactionCreator(QtGui.QWidget):
         self.statusBar.showMessage(errorMsg)
 
     def getNewReaction(self):
+        """Create and return a new balanced reaction from the form data.
+        """
         reversible = self.btReverse.isChecked()
         if not reversible and self._Blower == '-inf':
             self._Blower = 0.0
@@ -430,6 +480,8 @@ class ReactionCreator(QtGui.QWidget):
             self.NewReaction = None
 
     def initUI(self):
+        """Initialize and set up the GUI interface.
+        """
         # create labels
         lblSub = QtGui.QLabel('Substrates')
         lblSub.setAlignment(QtCore.Qt.AlignCenter)
@@ -634,6 +686,12 @@ class CBFileDialogue(QtGui.QWidget):
     mode = None
 
     def __init__(self, work_dir, mode='open', filters=None):
+        """Initialize the file dialog.
+
+        - *work_dir* working directory for file operations
+        - *mode* either 'open' or 'save'
+        - *filters* file type filters
+        """
         super(CBFileDialogue, self).__init__()
         self.mousePos = self.cursor().pos()
         self.work_dir = work_dir
@@ -643,6 +701,8 @@ class CBFileDialogue(QtGui.QWidget):
         self.initUI()
 
     def initUI(self):
+        """Initialize and set up the GUI interface.
+        """
         # self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
         # self.setHidden(True)
         self.__dlg__ = QtGui.QFileDialog(self)
@@ -660,6 +720,12 @@ class CBFileDialogue(QtGui.QWidget):
 
 
 def fileDialogue(work_dir=None, mode='open', filters=None):
+    """Open a file dialog for saving or opening models.
+
+    - *work_dir* working directory (defaults to current directory)
+    - *mode* either 'open' or 'save'
+    - *filters* file type filters
+    """
     if work_dir == None:
         work_dir = os.getcwd()
     if mode in ['open', 'save']:
@@ -681,6 +747,10 @@ class ViewSVG(QtGui.QWidget):
     _appTitle = 'ViewSVG'
 
     def __init__(self, filename):
+        """Initialize the SVG viewer.
+
+        - *filename* path to the SVG file to display
+        """
         super(ViewSVG, self).__init__()
         self.mousePos = self.cursor().pos()
         self._fixColour = QtGui.QColor(0, 0, 153, alpha=255)
@@ -691,6 +761,8 @@ class ViewSVG(QtGui.QWidget):
         self.initUI()
 
     def initUI(self):
+        """Initialize and set up the GUI interface.
+        """
         # create panels
         self.txtId = QtGui.QTextEdit()
 
@@ -741,6 +813,10 @@ class ViewSVG(QtGui.QWidget):
 
 
 def loadViewSVG(filename):
+    """Load and display an SVG file.
+
+    - *filename* path to the SVG file to display
+    """
     app = QtGui.QApplication([])
     ex = ViewSVG(filename)
     app.exec_()
@@ -753,6 +829,8 @@ class ValueSlider(QtGui.QWidget):
     _appTitle = 'ValueSlider'
 
     def __init__(self):
+        """Initialize the value slider widget.
+        """
         super(ValueSlider, self).__init__()
         self.mousePos = self.cursor().pos()
         self._fixColour = QtGui.QColor(0, 0, 153, alpha=255)
@@ -761,7 +839,8 @@ class ValueSlider(QtGui.QWidget):
         self.initUI()
 
     def initUI(self):
-
+        """Initialize and set up the GUI interface.
+        """
         # create panels
         # self.txtId = QtGui.QTextEdit()
 
@@ -801,10 +880,16 @@ class ValueSlider(QtGui.QWidget):
         self.show()
 
     def changeValue(self, value):
+        """Update the slider value display.
+
+        - *value* current slider value
+        """
         getattr(self, 'l1b').setText('{}'.format(value))
 
 
 def loadSlider():
+    """Load and display the value slider widget.
+    """
     app = QtGui.QApplication([])
     ex = ValueSlider()
     app.exec_()
@@ -823,14 +908,23 @@ if __name__ == '__main__':
 
 
 # template widget
-"""
+'''
     class SmallAppBasicGrid(QtGui.QWidget):
+        """Small application GUI template widget.
+
+        - *fixColour* color for fixed elements
+        - *errColour* color for error elements
+        - *goodColour* color for good elements
+        - *appTitle* title for the application window
+        """
         _fixColour = None
         _errColour = None
         _goodColour = None
         _appTitle = 'SmallAppBaseGrid'
 
         def __init__(self):
+            """Initialize the SmallAppBasicGrid widget.
+            """
             super(SmallAppBasicGrid, self).__init__()
             self.mousePos = self.cursor().pos()
             self._fixColour = QtGui.QColor(0,0,153,alpha=255)
@@ -840,6 +934,8 @@ if __name__ == '__main__':
 
 
         def initUI(self):
+            """Initialize and set up the GUI interface.
+            """
 
             # create panels
             self.txtId = QtGui.QTextEdit()
@@ -872,17 +968,27 @@ if __name__ == '__main__':
             self.show()
 
     def loadBasicApp(mod):
+        """Load a basic small application.
+
+        - *mod* a CBMPy model object
+        """
         app = QtGui.QApplication([])
         ex = SmallAppBasicGrid()
         app.exec_()
-"""
-
-# template microGUI
-"""
+'''
+'''
     class MicroGUI(QtGui.QWidget):
+        """MicroGUI widget for small applications.
+
+        - *appTitle* title for the application window
+        """
         _appTitle = 'MicroGUI'
 
         def __init__(self):
+            """Initialize the MicroGUI widget.
+
+            - *work_dir* working directory for file operations
+            """
             super(MicroGUI, self).__init__()
             self.mousePos = self.cursor().pos()
             self.work_dir = work_dir
@@ -890,6 +996,8 @@ if __name__ == '__main__':
 
 
         def initUI(self):
+            """Initialize and set up the GUI interface.
+            """
             self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
             self.setHidden(True)
 
@@ -899,14 +1007,17 @@ if __name__ == '__main__':
 
 
     def loadMicroGUI(*args):
+        """Load a MicroGUI widget.
+
+        - *args* arguments passed to the function (unused)
+        """
         app = QtGui.QApplication([])
         mGUI = OpenFileDialogue()
         appTitle = mGUI._appTitle
         del mGUI, app
         return
-"""
-
-"""
+'''
+'''
 import sys
 from PyQt4 import QtCore, QtGui, QtSvg
 from PyQt4.QtWebKit import QGraphicsWebView
@@ -929,4 +1040,4 @@ if __name__ == "__main__":
     view.resize(br.width()+10, br.height()+10)
     view.show()
     sys.exit(app.exec_())
-"""
+'''

@@ -292,15 +292,27 @@ except AttributeError as err:
 
 
 def xml_stripTags(html):
-    """Strip a string of HTML/XML, returns a string.
+    """Strip HTML/XML tags from a string.
 
-    - *html* the string containing html
+    - *html* the string containing HTML
+
+    Returns a string with all HTML/XML tags removed.
     """
     __tagStripper__.feed(html)
     return __tagStripper__.get_data()
 
 
 def formatSbmlId(s):
+    """Format a string to be a valid SBML identifier.
+
+    Convert a string to a valid SBML identifier by replacing non-alphanumeric
+    characters with underscores and prefixing with underscore if it doesn't
+    start with a letter or underscore.
+
+    - *s* the string to format
+
+    Returns a valid SBML identifier.
+    """
     out = ''
     for x in s:
         if x.isalnum():
@@ -880,15 +892,15 @@ def xml_addSBML2FBAFluxBound(document, rid, operator, value, fbid=None):
 
 
 def xml_createListOfFluxObjectives(document, l):
-    """
-    Create a list of fluxObjectives to add to an Objective:
+    """Create a list of fluxObjectives to add to an Objective.
 
-     - *document* a minidom XML document created by xml_createSBML2FBADoc
-     - *fluxobjs* a list of (rid, coefficient) tuples
+    - *document* a minidom XML document created by xml_createSBML2FBADoc
+    - *l* a list of (reaction_id, coefficient) tuples to add as flux objectives
 
+    Returns the listOfFluxes element.
     """
     LoF = document.createElementNS(FBA_NS, 'fba:listOfFluxes')
-    for F in fluxObjectives:
+    for F in l:
         FO = document.createElementNS(FBA_NS, 'fba:fluxObjective')
         FO.setAttributeNS(FBA_NS, 'fba:reaction', F[0])
         FO.setAttributeNS(FBA_NS, 'fba:coefficient', F[1])
@@ -897,14 +909,16 @@ def xml_createListOfFluxObjectives(document, l):
 
 
 def xml_createSBML2FBAObjective(document, oid, sense, fluxObjectives):
-    """
-    Create a list of fluxObjectives to add to an Objective:
+    """Create an SBML objective element with fluxObjectives.
 
-     - *document* a minidom XML document created by xml_createSBML2FBADoc
-     - *oid* the objective id
-     - *sense* a string containing the objective sense either: **maximize** or **minimize**
-     - *fluxObjectives* a list of (rid, coefficient) tuples
+    Create an objective element with a list of fluxObjectives added to it.
 
+    - *document* a minidom XML document created by xml_createSBML2FBADoc
+    - *oid* the objective ID
+    - *sense* a string containing the objective sense ('maximize' or 'minimize')
+    - *fluxObjectives* a list of (reaction_id, coefficient) tuples
+
+    Returns the objective element.
     """
     sense = sense.lower()
     if sense == 'max':
@@ -1133,11 +1147,15 @@ def sbml_setAnnotationsL3Fbc(cbmo, sbmlo):
 
 
 def sbml_setDescription(model, fba):
-    """Sets the model description as a <note> containing `txt` in an HTML paragraph on
-    the model object.
+    """Set the model description as an HTML paragraph in a <note> element.
+
+    Sets the model description as a <note> containing HTML in a paragraph
+    element on the model object.
 
     - *model* a libSBML model instance
     - *fba* a PySCeSCBM model instance
+
+    Returns None (modifies model in place).
     """
     ##  try: UseR = getuser()
     ##  except: UseR = ''
@@ -1164,10 +1182,14 @@ def sbml_setDescription(model, fba):
 
 
 def sbml_setNotes3(obj, s):
-    """Formats the CBMPy notes as an SBML note and adds it to the SBMl object.
+    """Set notes for an SBML object.
+
+    Formats the CBMPy notes as an SBML note and adds it to the SBML object.
 
     - *obj* an SBML object
     - *s* a string that should be added as a note
+
+    Returns True if notes were set successfully, False otherwise.
     """
     s = s.replace('<notes>', '').replace('</notes>', '')
     if '</html:body>' not in s and '</body>' not in s:
@@ -1188,9 +1210,11 @@ def sbml_setNotes3(obj, s):
 
 
 def sbml_getNotes(obj):
-    """Returns the SBML objects notes.
+    """Get the notes from an SBML object.
 
     - *obj* an SBML object
+
+    Returns the notes string, or an empty string if no notes exist.
     """
     notes = ''
     try:
@@ -1211,14 +1235,16 @@ def sbml_getNotes(obj):
 
 
 def sbml_setUnits(model, units=None, give_default=False, L3=True):
-    """
-    Adds units to the model:
+    """Set units for the model.
+
+    Adds units to the model or returns the default unit dictionary.
 
     - *model* a libSBML model instance
-    - *units* [default=None] a dictionary of units, if None default units are used
-    - *give_default* [default=False] if true method returns the default unit dictionary
-    - *L3* [default=True] use the L3 defaults
+    - *units* [default=None] a dictionary of units (if None, default units are used)
+    - *give_default* [default=False] if True, returns the default unit dictionary
+    - *L3* [default=True] use SBML Level 3 defaults
 
+    Returns the units dictionary if give_default is True, otherwise None.
     """
 
     if units is None:
@@ -1251,7 +1277,12 @@ def sbml_setUnits(model, units=None, give_default=False, L3=True):
 
 
 def sbml_writeAnnotationsAsCOBRANote(annotations):
-    """Writes the annotations dictionary as a COBRA compatible SBML <note>"""
+    """Write a COBRA-compatible SBML <note> element from an annotations dictionary.
+
+    - *annotations* a dictionary of annotation keys to values
+
+    Returns the formatted annotation string.
+    """
     annoSTR = ''
     for K in annotations:
         # this is to keep COBRA happy
@@ -1268,17 +1299,13 @@ def sbml_writeAnnotationsAsCOBRANote(annotations):
 
 
 def sbml_setSpeciesL2(model, fba, return_dicts=False):
-    """
-    Add the species definitions to the SBML object:
+    """Add species definitions to an SBML Level 2 model.
 
-     - *model* [default=''] a libSBML model instance or can be None if *return_dicts* == True
-     - *fba* a PySCeSCBM model instance
-     - *return_dicts* [default=False] only returns the compartment and species dictionaries without updated the SBML
+    - *model* a libSBML model instance (or None if return_dicts=True)
+    - *fba* a PySCeSCBM model instance
+    - *return_dicts* [default=False] if True, only return compartments and species dicts
 
-    returns:
-
-     - *compartments* a dictionary of compartments (except when give *return_dicts* argument)
-
+    Returns the compartments dictionary (or (compartments, species) tuple if return_dicts=True).
     """
 
     compartments = {}
@@ -1373,11 +1400,13 @@ def sbml_setSpeciesL2(model, fba, return_dicts=False):
 
 
 def sbml_setReactionsL2(model, fba, return_dict=False):
-    """Add the FBA instance reactions to the SBML model.
+    """Add FBA instance reactions to an SBML Level 2 model.
 
     - *model* an SBML model instance
     - *fba* a PySCeSCBM model instance
-    - *return_dict* [default=False] if True do not add reactions to SBML document instead return a dictionary description of the reactions
+    - *return_dict* [default=False] if True, return reaction dictionaries without adding to SBML
+
+    Returns reaction dictionaries if return_dict is True, otherwise None.
     """
 
     SBML_LEVEL = 2
@@ -2343,21 +2372,17 @@ def sbml_setSpeciesL3(
     substance_units=True,
     fbc_version=2
 ):
-    """
-    Add the species definitions to the SBML object:
+    """Add species definitions to an SBML Level 3 FBC model.
 
-     - *model* and SBML model instance or can be None if *return_dicts* == True
-     - *fba* a PySCeSCBM model instance
-     - *return_dicts* [default=False] only returns the compartment and species dictionaries without updating the SBML
-     - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation. Replaces <notes>
-     - *add_cobra_anno* [default=False] add COBRA <notes> annotation
-     - *substance_units* [default=True] defines the species in amounts rather than concentrations (necessary for default mmol/gdw.h)
-     - *fbc_version* [default=2] the FBC version to use
+    - *model* an SBML model instance (or None if return_dicts=True)
+    - *fba* a PySCeSCBM model instance
+    - *return_dicts* [default=False] if True, only return compartments and species dicts
+    - *add_cbmpy_anno* [default=True] add CBMPy KeyValueData annotation
+    - *add_cobra_anno* [default=False] add COBRA <notes> annotation
+    - *substance_units* [default=True] use amounts instead of concentrations
+    - *fbc_version* [default=2] the FBC version to use
 
-    returns:
-
-     - *compartments* a dictionary of compartments (except when given *return_dicts* argument)
-
+    Returns the compartments dictionary (or (compartments, species) tuple if return_dicts=True).
     """
 
     compartments = fba.getCompartmentIds()
@@ -2742,13 +2767,16 @@ def sbml_setGroupsL3(cs, fba):
 
 
 def sbml_writeCOBRASBML(fba, fname, directory=None):
-    """
-    Takes an FBA model object and writes it to file as a COBRA compatible :
+    """Write an FBA model as COBRA-compatible SBML.
 
-     - *fba* an fba model object
-     - *fname* the model will be written as XML to *fname*
-     - *directory* [default=None] if defined it is prepended to fname
+    Takes an FBA model object and writes it to a file as COBRA-compatible SBML
+    by first writing as SBML L3 FBC, then converting to COBRA format.
 
+    - *fba* an FBA model object
+    - *fname* the output filename
+    - *directory* [default=None] if provided, prepended to fname
+
+    Returns None (writes to file).
     """
     print(
         '\nWARNING: saving in COBRA format may result in a loss of model information!\n'
