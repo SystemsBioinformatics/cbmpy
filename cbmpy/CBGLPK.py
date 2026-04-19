@@ -121,10 +121,15 @@ GLPK_INFINITY = 1.0e9
 
 
 def glpk_constructLPfromFBA(fba, fname=None):
-    """Create a GLPK LP in memory.
-
-    - *fba* an FBA object
-    - *fname* optional filename if defined writes out the constructed lp
+    """
+    Create a GLPK LP in memory.
+    
+    Parameters
+    ----------
+    fba
+        an FBA object
+    fname
+        optional filename if defined writes out the constructed lp
     """
 
     print('\nCBGLPK based on swiglpk: not all methods implimented yet!')
@@ -313,11 +318,13 @@ def glpk_constructLPfromFBA(fba, fname=None):
 
 
 def glpk_Solve(lp, method='s'):
-    """Solve the LP and create a status attribute with the solution status.
-
-     - *method* [default='s'] 's' = simplex, 'i' = interior, 'e' = exact
-
-    GLPK solver options can be set in the GLPK_<METHOD>_CFG objects
+    """
+    Solve the LP and create a status attribute with the solution status.
+    
+    Parameters
+    ----------
+    method
+        [default='s'] 's' = simplex, 'i' = interior, 'e' = exact
     """
 
     global GLPK_SOLUTION_STATUS
@@ -360,14 +367,21 @@ def glpk_Solve(lp, method='s'):
 def glpk_getSolutionStatus(lp):
     """
     Returns one of:
-
-     - *LPS_OPT*: solution is optimal;
-     - *LPS_FEAS*: solution is feasible;
-     - *LPS_INFEAS*: solution is infeasible;
-     - *LPS_NOFEAS*: problem has no feasible solution;
-     - *LPS_UNBND*: problem has unbounded solution;
-     - *LPS_UNDEF*: solution is undefined.
-
+    
+    Parameters
+    ----------
+    LPS_OPT
+        : solution is optimal;
+    LPS_FEAS
+        : solution is feasible;
+    LPS_INFEAS
+        : solution is infeasible;
+    LPS_NOFEAS
+        : problem has no feasible solution;
+    LPS_UNBND
+        : problem has unbounded solution;
+    LPS_UNDEF
+        : solution is undefined.
     """
     return GLPK_STATUS[sw.glp_get_status(lp)]
 
@@ -384,26 +398,31 @@ def glpk_analyzeModel(
     oldlpgen=False,
     method='s',
 ):
-    """Optimize a model and add the result of the optimization to the model object (e.g.
-    `reaction.value`, `objectiveFunction.value`). The stoichiometric matrix is
-    automatically generated. This is a common function available in all solver
-    interfaces. By default returns the objective function value.
-
-    - *f* an instantiated PySCeSCBM model object
-    - *lpFname* [default=None] the name of the intermediate LP file saved when this has a string value.
-    - *return_lp_obj* [default=False] off by default when enabled it returns the PyGLPK LP object
-    - *with_reduced_costs* [default='scaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
-      or anything else which is interpreted as 'None'. Scaled means s_rcost = (r.reduced_cost*rval)/obj_value
-    - *with_sensitivity* [default=False] add solution sensitivity information (not yet implemented)
-    - *del_intermediate* [default=False] delete the intermediary files after updating model object, useful for server applications
-    - *build_n* [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)
-    - *quiet* [default=False] suppress glpk output
-    - *oldlpgen* [default=False] not used anymore
-    - *method* [default='s'] select the GLPK solver method, see the GLPK documentation for details
-
-      - 's': simplex
-      - 'i': interior
-      - 'e': exact
+    """
+    Optimize a model and add the result of the optimization to the model object (e.g. `reaction.value`, `objectiveFunction.value`). The stoichiometric matrix is automatically generated. This is a common function available in all solver interfaces. By default returns the objective function value.
+    
+    Parameters
+    ----------
+    f
+        an instantiated PySCeSCBM model object
+    lpFname
+        [default=None] the name of the intermediate LP file saved when this has a string value.
+    return_lp_obj
+        [default=False] off by default when enabled it returns the PyGLPK LP object
+    with_reduced_costs
+        [default='scaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
+    with_sensitivity
+        [default=False] add solution sensitivity information (not yet implemented)
+    del_intermediate
+        [default=False] delete the intermediary files after updating model object, useful for server applications
+    build_n
+        [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)
+    quiet
+        [default=False] suppress glpk output
+    oldlpgen
+        [default=False] not used anymore
+    method
+        [default='s'] select the GLPK solver method, see the GLPK documentation for details
     """
 
     if build_n:
@@ -459,12 +478,17 @@ def glpk_setSolutionStatusToModel(m, lp):
 
 
 def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='scaled'):
-    """Sets the FBA solution from a CPLEX solution to an FBA object.
-
-    - *fba* and fba object
-    - *lp* a CPLEX LP object
-    - *with_reduced_costs* [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
-      or anything else which is interpreted as None. Scaled is: s_rcost = (r.reduced_cost*rval)/obj_value
+    """
+    Sets the FBA solution from a CPLEX solution to an FBA object.
+    
+    Parameters
+    ----------
+    fba
+        and fba object
+    lp
+        a CPLEX LP object
+    with_reduced_costs
+        [default='unscaled'] calculate and add reduced cost information to mode this can be: 'unscaled' or 'scaled'
     """
     sol, objname, objval = glpk_getOptimalSolution(lp)
     if glpk_getSolutionStatus(lp) == 'LPS_OPT':
@@ -501,9 +525,13 @@ def glpk_setFBAsolutionToModel(fba, lp, with_reduced_costs='scaled'):
 
 
 def glpk_getOptimalSolution(c):
-    """From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal.
-
-    - *c* a GLPK object
+    """
+    From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal.
+    
+    Parameters
+    ----------
+    c
+        a GLPK object
     """
     s_val = []
     s_name = []
@@ -530,10 +558,15 @@ def glpk_getOptimalSolution(c):
 
 
 def glpk_getReducedCosts(c, scaled=False):
-    """Extract ReducedCosts from LP and return as a dictionary 'Rid' : reduced cost.
-
-    - *c* a GLPK LP object
-    - *scaled* scale the reduced cost by the optimal flux value
+    """
+    Extract ReducedCosts from LP and return as a dictionary 'Rid' : reduced cost.
+    
+    Parameters
+    ----------
+    c
+        a GLPK LP object
+    scaled
+        scale the reduced cost by the optimal flux value
     """
     s_name = []
     r_costs = []
@@ -574,11 +607,15 @@ def getReducedCosts(fba):
 
 
 def setReducedCosts(fba, reduced_costs):
-    """For each reaction/flux, sets the attribute "reduced_cost" from a dictionary of
-    reduced costs.
-
-    - *fba* an fba object
-    - *reduced_costs* a dictionary of {reaction : value} pairs
+    """
+    For each reaction/flux, sets the attribute "reduced_cost" from a dictionary of reduced costs.
+    
+    Parameters
+    ----------
+    fba
+        an fba object
+    reduced_costs
+        a dictionary of {reaction : value} pairs
     """
     if len(reduced_costs) == 0:
         pass
@@ -609,30 +646,39 @@ def glpk_FluxVariabilityAnalysis(
 ):
     """
     Perform a flux variability analysis on an fba model:
-
-     - *fba* an FBA model object
-     - *selected reactions* [default=None] means use all reactions otherwise use the reactions listed here
-     - *pre_opt* [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and *objF2constr* is True then the vid/value of the current active objective is used
-     - *tol*  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
-     - *rhs_sense* [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
-     - *optPercentage* [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
-     - *work_dir* [default=None] the FVA working directory for temporary files default = cwd+fva
-     - *debug* [default=False] if True write out all the intermediate FVA LP's into work_dir
-     - *quiet* [default=False] if enabled supress CPLEX output
-     - *objF2constr* [default=True] add the model objective function as a constraint using rhs_sense etc. If
-       this is True with pre_opt=False then the id/value of the active objective is used to form the constraint
-     - *markupmodel* [default=True] add the values returned by the fva to the reaction.fva_min and reaction.fva_max
-     - *default_on_fail* [default=False] if *pre_opt* is enabled replace a failed minimum/maximum with the solution value
-     - *roundoff_span* [default=10] number of digits is round off (not individual min/max values)
-     - *method* [default='s'] select the GLPK solver method, see the GLPK documentation for details
-
-       - 's': simplex
-       - 'i': interior
-       - 'e': exact
-
-
-    Returns an array with columns Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus and a list containing the row names.
-
+    
+    Parameters
+    ----------
+    fba
+        an FBA model object
+    pre_opt
+        [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and *objF2constr* is True then the vid/value of the current active objective is used
+    tol
+        [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
+    rhs_sense
+        [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
+    optPercentage
+        [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
+    work_dir
+        [default=None] the FVA working directory for temporary files default = cwd+fva
+    debug
+        [default=False] if True write out all the intermediate FVA LP's into work_dir
+    quiet
+        [default=False] if enabled supress CPLEX output
+    objF2constr
+        [default=True] add the model objective function as a constraint using rhs_sense etc. If
+    markupmodel
+        [default=True] add the values returned by the fva to the reaction.fva_min and reaction.fva_max
+    default_on_fail
+        [default=False] if *pre_opt* is enabled replace a failed minimum/maximum with the solution value
+    roundoff_span
+        [default=10] number of digits is round off (not individual min/max values)
+    method
+        [default='s'] select the GLPK solver method, see the GLPK documentation for details
+    
+    Returns
+    -------
+        an array with columns Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus and a list containing the row names.
     """
     if work_dir == None:
         work_dir = os.getcwd()
@@ -865,22 +911,23 @@ def glpk_func_GetCPXandPresolve(
     with_reduced_costs='unscaled',
     method='s',
 ):
-    """This is a utility function that does a presolve for FVA, MSAF etc. Generates
-    properly formatted empty objects if pre_opt == False.
-
-     - *pre_opt* a boolean
-     - *fba* a CBModel object
-     - *objF2constr* add objective function as constraint
-     - *quiet* [default=False] supress cplex output
-     - *with_reduced_costs* [default='unscaled'] can be 'scaled' or 'unscaled'
-     - *method* [default='s'] select the GLPK solver method, see the GLPK documentation for details
-
-       - 's': simplex
-       - 'i': interior
-       - 'e': exact
-
-
-    Returns: pre_sol, pre_oid, pre_oval, OPTIMAL_PRESOLUTION, REDUCED_COSTS
+    """
+    This is a utility function that does a presolve for FVA, MSAF etc. Generates properly formatted empty objects if pre_opt == False.
+    
+    Parameters
+    ----------
+    pre_opt
+        a boolean
+    fba
+        a CBModel object
+    objF2constr
+        add objective function as constraint
+    quiet
+        [default=False] supress cplex output
+    with_reduced_costs
+        [default='unscaled'] can be 'scaled' or 'unscaled'
+    method
+        [default='s'] select the GLPK solver method, see the GLPK documentation for details
     """
 
     cpx = glpk_constructLPfromFBA(fba, fname=None)
@@ -932,13 +979,21 @@ def glpk_func_GetCPXandPresolve(
 def glpk_func_SetObjectiveFunctionAsConstraint(
     cpx, rhs_sense, oval, tol, optPercentage
 ):
-    """Take the objective function and "optimum" value and add it as a constraint.
-
-    - *cpx* a cplex object
-    - *oval* the objective value
-    - *tol*  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
-    - *rhs_sense* [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
-    - *optPercentage* [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
+    """
+    Take the objective function and "optimum" value and add it as a constraint.
+    
+    Parameters
+    ----------
+    cpx
+        a cplex object
+    oval
+        the objective value
+    tol
+        [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
+    rhs_sense
+        [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
+    optPercentage
+        [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
     """
 
     # generate new constraint from old objective value (use non-zero coefficients)
@@ -993,13 +1048,21 @@ def glpk_func_SetObjectiveFunctionAsConstraint(
 
 
 def glpk_setSingleConstraint(c, cid, expr=[], sense='E', rhs=0.0):
-    """Sets a new single constraint to a GLPK model.
-
-    - *c* a GLPK instance
-    - *cid* the constraint id
-    - *expr* a list of (coefficient, name) pairs
-    - *sense* [default='G'] LGE
-    - *rhs* [default=0.0] the right hand side
+    """
+    Sets a new single constraint to a GLPK model.
+    
+    Parameters
+    ----------
+    c
+        a GLPK instance
+    cid
+        the constraint id
+    expr
+        a list of (coefficient, name) pairs
+    sense
+        [default='G'] LGE
+    rhs
+        [default=0.0] the right hand side
     """
 
     baseRows = len(c.rows)
@@ -1031,15 +1094,21 @@ def glpk_setSingleConstraint(c, cid, expr=[], sense='E', rhs=0.0):
 
 
 def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
-    """Set a new objective function note that there is a major memory leak in
-    `c.variables.get_names()` whch is used when reset=True. If this is a problem use
-    cplx_setObjective2 which takes *names* as an input:
-
-    - *c* a GLPK LP object
-    - *oid* the r_id of the flux to be optimized
-    - *expr* a list of (coefficient, flux) pairs
-    - *sense* 'maximize'/'minimize'
-    - *reset* [default=True] reset all objective function coefficients to zero
+    """
+    Set a new objective function note that there is a major memory leak in `c.variables.get_names()` whch is used when reset=True. If this is a problem use cplx_setObjective2 which takes *names* as an input:
+    
+    Parameters
+    ----------
+    c
+        a GLPK LP object
+    oid
+        the r_id of the flux to be optimized
+    expr
+        a list of (coefficient, flux) pairs
+    sense
+        'maximize'/'minimize'
+    reset
+        [default=True] reset all objective function coefficients to zero
     """
     sense = sense.lower()
     if sense == 'max':
@@ -1080,11 +1149,11 @@ def glpk_setObjective(c, oid, expr=None, sense='maximize', reset=True):
 def cplx_getDualValues(c):
     """
     Get the get the dual values of the solution
-
-    - *c* a CPLEX LP
-
-    Output is a dictionary of {name : value} pairs
-
+    
+    Parameters
+    ----------
+    c
+        a CPLEX LP
     """
     d_names = c.linear_constraints.get_names()
     d_values = c.solution.get_dual_values()
@@ -1097,21 +1166,11 @@ def cplx_getDualValues(c):
 def cplx_getSensitivities(c):
     """
     Get the sensitivities of each constraint on the objective function with input
-
-    - *c* a CPLEX LP
-
-    Output is a tuple of bound and objective sensitivities where the objective
-    sensitivity is described in the CPLEX reference manual as::
-
-    ... the objective sensitivity shows each variable, its reduced cost and the range over
-    which its objective function coefficient can vary without forcing a change
-    in the optimal basis. The current value of each objective coefficient is
-    also displayed for reference.
-
-    - *objective coefficient sensitivity* {flux : (reduced_cost, lower_obj_sensitivity, coeff_value, upper_obj_sensitivity)}
-    - *rhs sensitivity* {constraint : (low, value, high)}
-    - *bound sensitivity ranges* {flux : (lb_low, lb_high, ub_low, ub_high)}
-
+    
+    Parameters
+    ----------
+    c
+        a CPLEX LP
     """
     SENSE_RHS = {}
     SENSE_BND = {}
@@ -1165,46 +1224,38 @@ def glpk_MinimizeSumOfAbsFluxes(
     method='s',
 ):
     """
-    Minimize the sum of absolute fluxes sum(abs(J1) + abs(J2) + abs(J3) ... abs(Jn)) by adding two constraints per flux
-    and a variable representing the absolute value:
-
-     Min: Ci abs_Ji
-      Ji - abs_Ji <= 0
-      Ji + abs_Ji >= 0
-
-     Such that:
-      NJi = 0
-      Jopt = opt
-
-    returns the value of the flux minimization objective function (not the model objective function which remains unchanged from)
-
-    Arguments:
-
-     - *fba* an FBA model object
-     - *selected reactions* [default=None] means use all reactions otherwise use the reactions listed here
-     - *pre_opt* [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and *objF2constr* is True then the vid/value of the current active objective is used
-     - *tol*  [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
-     - *rhs_sense* [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
-     - *optPercentage* [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
-     - *work_dir* [default=None] the MSAF working directory for temporary files default = cwd+fva
-     - *debug* [default=False] if True write out all the intermediate MSAF LP's into work_dir
-     - *quiet* [default=False] if enabled supress CPLEX output
-     - *objF2constr* [default=True] add the model objective function as a constraint using rhs_sense etc. If
-       this is True with pre_opt=False then the id/value of the active objective is used to form the constraint
-     - *objective_coefficients* [default={}] a dictionary of (reaction_id : float) pairs that provide the are introduced as objective coefficients to the absolute flux value. Note that the default value of the coefficient (non-specified) is +1.
-     - *return_lp_obj* [default=False] off by default when enabled it returns the CPLEX LP object
-     - *with_reduced_costs* [default=None] if not None should be 'scaled' or 'unscaled'
-     - *method* [default='s'] select the GLPK solver method, see the GLPK documentation for details
-
-       - 's': simplex
-       - 'i': interior
-       - 'e': exact
-
-
-    With outputs:
-
-     - *fba* an update instance of a CBModel. Note that the FBA model objective function value is the original value set as a constraint
-
+    Minimize the sum of absolute fluxes sum(abs(J1) + abs(J2) + abs(J3) ... abs(Jn)) by adding two constraints per flux and a variable representing the absolute value: Min: Ci abs_Ji Ji - abs_Ji <= 0 Ji + abs_Ji >= 0 Such that: NJi = 0 Jopt = opt returns the value of the flux minimization objective function (not the model objective function which remains unchanged from) Arguments:
+    
+    Parameters
+    ----------
+    fba
+        an FBA model object
+    pre_opt
+        [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and *objF2constr* is True then the vid/value of the current active objective is used
+    tol
+        [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*
+    rhs_sense
+        [default='lower'] means objC >= objVal the inequality to use for the objective constraint can also be *upper* or *equal*
+    optPercentage
+        [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)
+    work_dir
+        [default=None] the MSAF working directory for temporary files default = cwd+fva
+    debug
+        [default=False] if True write out all the intermediate MSAF LP's into work_dir
+    quiet
+        [default=False] if enabled supress CPLEX output
+    objF2constr
+        [default=True] add the model objective function as a constraint using rhs_sense etc. If
+    objective_coefficients
+        [default={}] a dictionary of (reaction_id : float) pairs that provide the are introduced as objective coefficients to the absolute flux value. Note that the default value of the coefficient (non-specified) is +1.
+    return_lp_obj
+        [default=False] off by default when enabled it returns the CPLEX LP object
+    with_reduced_costs
+        [default=None] if not None should be 'scaled' or 'unscaled'
+    method
+        [default='s'] select the GLPK solver method, see the GLPK documentation for details
+    fba
+        an update instance of a CBModel. Note that the FBA model objective function value is the original value set as a constraint
     """
 
     if with_reduced_costs == 'scaled':
