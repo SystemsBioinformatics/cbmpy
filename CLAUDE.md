@@ -74,7 +74,7 @@ The project uses pylint with custom disable comments for:
 
 Configured in `pyproject.toml` under `[tool.pylint.messages_control]`.
 
-Docstrings use **numpydoc** style, configured in `pyproject.toml` under `[tool.docformatter]`.
+Docstrings use **numpy** style (compatible with numpydoc), configured in `pyproject.toml` under `[tool.docformatter]`.
 Format all docstrings:
 
 ```bash
@@ -97,14 +97,22 @@ docformatter --diff --recursive cbmpy/
 - **CBSolver.py** - Solver orchestrator. Loads GLPK and/or CPLEX at import time (controlled by `CBMPY_USE_GLPK`/`CBMPY_USE_CPLX` env vars). Main entry points: `analyzeModel` (FBA), `FluxVariabilityAnalysis` (FVA).
 - **CBConfig.py** - Single configuration dict (`__CBCONFIG__`) with version, solver prefs, and global constants.
 - **CBRead.py / CBWrite.py** - SBML file I/O. `readSBML3FBC`, `readSBML2FBA`, `readCOBRASBML` for reading. `writeSBML3FBC`, `writeSBML3FBCV2`, `writeSBML3FBCV3`, `writeCOBRASBML` for writing.
+- **CBReadtxt.py** - Text file model reading (H-Format, L-P format).
 - **CBCommon.py** - Common utilities: `StructMatrixLP`, MIRIAM annotation parsing, ID checking/fixing.
 - **CBSolverX.py** - Extended solver with QP (quadratic objective) support and additional constraint types.
 - **CBTools.py** - General utility functions (serialization, deSerialization).
 - **CBXML.py** - SBML handling layer over python-libsbml.
-- **CBNetDB.py** - Network analysis utilities.
+- **CBNetDB.py** - Network analysis utilities with SQLite database backend.
 - **CBPlot.py** - Visualization.
+- **CBDataStruct.py** - Data structure utilities for SBML models.
+- **CBModelTools.py** - Model analysis and manipulation tools.
 - **CBMultiCore.py / CBMultiModel.py / CBMultiEnv.py** - Multi-processing support for parallel FBA/FVA and batch model operations.
 - **CBGUI.py / CBWx.py / CBQt4.py** - GUI frontends (wxWidgets and Qt4).
+- **CBSolve.py** - High-level FBA/FVA analysis wrappers (`doFBA`, `doFVA`).
+- **CBDefaultModels.py** - Built-in test models (e.g., `cbmpy_test_core`).
+- **CBSandBox.py** - Sandbox for experimental features.
+- **miriamids.py** - MIRIAM identifier database mappings.
+- **PyscesSED.py** - PySCeS Stoichiometric Engine integration.
 
 ### Flux Modules: `cbmpy/fluxmodules/`
 
