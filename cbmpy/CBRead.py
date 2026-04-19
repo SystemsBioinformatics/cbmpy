@@ -104,9 +104,13 @@ __example_models__ = {
 
 
 def loadModel(sbmlfile):
-    """Loads any SBML model in COBRA, FAME (SBML2FBA), SBML3FBCv1, SBML3FBCv2 format.
-
-    - *sbmlfile* an SBML model file
+    """
+    Loads any SBML model in COBRA, FAME (SBML2FBA), SBML3FBCv1, SBML3FBCv2 format.
+    
+    Parameters
+    ----------
+    sbmlfile
+        an SBML model file
     """
     mod = res = None
     print('Attempting to load SBML file: {}'.format(sbmlfile))
@@ -142,27 +146,33 @@ def readSBML3FBC(
     xoptions={'validate': False},
     scan_notes_gpr=True,
 ):
-    """Read in an SBML Level 3 file with FBC annotation where and return a CBM model
-    object.
-
-     - *fname* is the filename
-     - *work_dir* is the working directory
-     - *return_sbml_model* deprecated and ignored please update code
-     - *xoptions* special load options, enable with option=True except for nmatrix_type which has a type.
-
-       - *nogenes* do not load/process genes
-       - *noannot* do not load/process any annotations
-       - *validate* validate model and display errors and warnings before loading
-       - *readcobra* read the cobra annotation
-       - *read_model_string* [default=False] read the model from a string (instead of a filename) containing an SBML document
-       - *nmatrix_type* [default='normal'] define the type of stoichiometrich matrix to be built
-
-         - 'numpy' dense numpy array (best performance)
-         - 'scipy_csr' scipy sparse matrix (lower performance, low memory)
-         - 'sympy' a sympy rational matrix (low performance, high memory, cast to dense to analyse)
-         - None do not build matrix
-
-    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected scan the <notes> field for GPR associationa
+    """
+    Read in an SBML Level 3 file with FBC annotation where and return a CBM model object.
+    
+    Parameters
+    ----------
+    fname
+        is the filename
+    work_dir
+        is the working directory
+    return_sbml_model
+        deprecated and ignored please update code
+    xoptions
+        special load options, enable with option=True except for nmatrix_type which has a type.
+    nogenes
+        do not load/process genes
+    noannot
+        do not load/process any annotations
+    validate
+        validate model and display errors and warnings before loading
+    readcobra
+        read the cobra annotation
+    read_model_string
+        [default=False] read the model from a string (instead of a filename) containing an SBML document
+    nmatrix_type
+        [default='normal'] define the type of stoichiometrich matrix to be built
+    scan_notes_gpr
+        [default=True] if the model is loaded and no genes are detected scan the <notes> field for GPR associationa
     """
     if fname in __example_models__:
         from . import CBDefaultModels
@@ -191,16 +201,25 @@ def readCOBRASBML(
     skip_genes=False,
     scan_notes_gpr=True,
 ):
-    """Read in a COBRA format SBML Level 2 file with FBA annotation where and return
-    either a CBM model object or a (cbm_mod, sbml_mod) pair if return_sbml_model=True.
-
-    - *fname* is the filename
-    - *work_dir* is the working directory
-    - *delete_intermediate* [default=False] delete the intermediate SBML Level 3 FBC file
-    - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
-    - *output_dir* [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
-    - *skip_genes* [default=False] do not load GPR data
-    - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
+    """
+    Read in a COBRA format SBML Level 2 file with FBA annotation where and return either a CBM model object or a (cbm_mod, sbml_mod) pair if return_sbml_model=True.
+    
+    Parameters
+    ----------
+    fname
+        is the filename
+    work_dir
+        is the working directory
+    delete_intermediate
+        [default=False] delete the intermediate SBML Level 3 FBC file
+    fake_boundary_species_search
+        [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
+    output_dir
+        [default=None] the directory to output the intermediate SBML L3 files (if generated) default to input directory
+    skip_genes
+        [default=False] do not load GPR data
+    scan_notes_gpr
+        [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
     """
     xmod = CBXML.sbml_readCOBRASBML(
         fname,
@@ -225,13 +244,19 @@ def readSBML2FBA(
 ):
     """
     Read in an SBML Level 2 file with FBA annotation where:
-
-     - *fname* is the filename
-     - *work_dir* is the working directory if None then only fname is used
-     - *return_sbml_model* [default=False] return a a (cbm_mod, sbml_mod) pair
-     - *fake_boundary_species_search* [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
-     - *scan_notes_gpr* [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
-
+    
+    Parameters
+    ----------
+    fname
+        is the filename
+    work_dir
+        is the working directory if None then only fname is used
+    return_sbml_model
+        [default=False] return a a (cbm_mod, sbml_mod) pair
+    fake_boundary_species_search
+        [default=False] after looking for the boundary_condition of a species search for overloaded id's <id>_b
+    scan_notes_gpr
+        [default=True] if the model is loaded and no genes are detected the scan the <notes> field for GPR associationa
     """
 
     xmod = CBXML.sbml_readSBML2FBA(
@@ -605,22 +630,21 @@ def readSK_vertex(
 ):
     """
     Reads in Stevens vertex analysis file:
-
-     - *fname* the input filename (.all file that results from Stevens pipeline)
-     - *bigfile* [default=True] this option is now always true and is left in for backwards compatability
-     - *fast_rational* [default=False] by default off and uses SymPy for rational-->float conversion, when on uses float decomposition with a slight (2th decimal) decrease in accuracy
-     - *nformat* [default='%.14f'] the number format used in output files
-     - *compression* [default=None] compression to be used in hdf5 files can be one of [None, 'lzf', 'gz?', 'szip']
-     - *hdf5file* [default=None] if None then generic filename '_vtx_.tmp.hdf5' is uses otherwise <hdf5file>.hdf5
-
-    and returns an hdf5 *filename* of the results with a single group named **data** which countains datasets
-
-     - vertices
-     - rays
-     - lin
-
-    where all vectors are in terms of the column space of N.
-
+    
+    Parameters
+    ----------
+    fname
+        the input filename (.all file that results from Stevens pipeline)
+    bigfile
+        [default=True] this option is now always true and is left in for backwards compatability
+    fast_rational
+        [default=False] by default off and uses SymPy for rational-->float conversion, when on uses float decomposition with a slight (2th decimal) decrease in accuracy
+    nformat
+        [default='%.14f'] the number format used in output files
+    compression
+        [default=None] compression to be used in hdf5 files can be one of [None, 'lzf', 'gz?', 'szip']
+    hdf5file
+        [default=None] if None then generic filename '_vtx_.tmp.hdf5' is uses otherwise <hdf5file>.hdf5
     """
 
     bigfile = True
@@ -812,16 +836,21 @@ def readSK_vertex(
 
 
 def readExcel97Model(xlname, write_sbml=True, sbml_level=3, return_dictionaries=False):
-    """Reads a model encoded as an Excel97 workbook and returns it as a CBMPy model
-    object and SBML file. Note the workbook must be formatted exactly like those
-    produced by cbm.writeModelToExcel97(). Note that reactions have to be defined in
-    **both** the *reaction* and *network_react* sheets to be included in the model.
-
-    - *xlpath* the filename of the Excel workbook
-    - *return_model* [default=True] construct and return the CBMPy model
-    - *write_sbml* [default=True] write the SBML file to fname
-    - *return_dictionaries* [default=False] return the dictionaries constructed when reading the Excel file (in place of the model)
-    - *sbml_level* [default=3] write the SBML file as either SBML L2 FBA or SBML L3 FBC file.
+    """
+    Reads a model encoded as an Excel97 workbook and returns it as a CBMPy model object and SBML file. Note the workbook must be formatted exactly like those produced by cbm.writeModelToExcel97(). Note that reactions have to be defined in **both** the *reaction* and *network_react* sheets to be included in the model.
+    
+    Parameters
+    ----------
+    xlpath
+        the filename of the Excel workbook
+    return_model
+        [default=True] construct and return the CBMPy model
+    write_sbml
+        [default=True] write the SBML file to fname
+    return_dictionaries
+        [default=False] return the dictionaries constructed when reading the Excel file (in place of the model)
+    sbml_level
+        [default=3] write the SBML file as either SBML L2 FBA or SBML L3 FBC file.
     """
 
     if not _HAVE_XLRD_:
