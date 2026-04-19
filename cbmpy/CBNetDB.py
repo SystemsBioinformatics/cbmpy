@@ -98,10 +98,15 @@ class DBTools(NetDBbase):
         self.db_tables = []
 
     def connectSQLiteDB(self, db_name, work_dir=None):
-        """Connect to a sqlite database.
-
-        - *db_name* the name of the sqlite database
-        - *work_dir* the optional database path
+        """
+        Connect to a sqlite database.
+        
+        Parameters
+        ----------
+        db_name
+            the name of the sqlite database
+        work_dir
+            the optional database path
         """
         # connect to DB
         if work_dir != None:
@@ -122,11 +127,13 @@ class DBTools(NetDBbase):
     def createDBTable(self, table, sqlcols):
         """
         Create a database table if it does not exist:
-
-         - *table* the table name
-         - *sqlcols* a list containing the SQL definitions of the table columns: <id> <type> for example `['gene TEXT PRIMARY KEY', 'aa_seq TEXT', 'nuc_seq TEXT', 'aa_len INT', 'nuc_len INT']`
-
-        Effectively writes CREATE TABLE "table" (<id> <type>, gene TEXT PRIMARY KEY, aa_seq TEXT, nuc_seq TEXT, aa_len INT, nuc_len INT) % table
+        
+        Parameters
+        ----------
+        table
+            the table name
+        sqlcols
+            a list containing the SQL definitions of the table columns: <id> <type> for example `['gene TEXT PRIMARY KEY', 'aa_seq TEXT', 'nuc_seq TEXT', 'aa_len INT', 'nuc_len INT']`
         """
         SQL = 'CREATE TABLE "{}" ('.format(table)
         for c in sqlcols:
@@ -144,13 +151,16 @@ class DBTools(NetDBbase):
 
     def insertData(self, table, data, commit=True):
         """
-        Insert data into a table: "INSERT INTO %s (?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?)" % table,
-                                    (?, ?, ?, ?, ?)) )
-
-         - *table* the DB table name
-         - *data* a dictionary of {id:value} pairs
-         - *commit* whether to commit the data insertions
-
+        Insert data into a table: "INSERT INTO %s (?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?)" % table, (?, ?, ?, ?, ?)) )
+        
+        Parameters
+        ----------
+        table
+            the DB table name
+        data
+            a dictionary of {id:value} pairs
+        commit
+            whether to commit the data insertions
         """
         colstr = "("
         valstr = "VALUES ("
@@ -185,15 +195,21 @@ class DBTools(NetDBbase):
             return False
 
     def updateData(self, table, col, rid, data, commit=True):
-        """Update already defined data.
-
-        - *table* the table name
-        - *col* the column name
-        - *rid* the row id to update
-        - *data* a dictionary of {id:value} pairs
-        - *commit* whether to commit the data updates
-
-        UPDATE COMPANY SET ADDRESS = 'Texas' WHERE ID = 6;
+        """
+        Update already defined data.
+        
+        Parameters
+        ----------
+        table
+            the table name
+        col
+            the column name
+        rid
+            the row id to update
+        data
+            a dictionary of {id:value} pairs
+        commit
+            whether to commit the data updates
         """
 
         sql = 'UPDATE {} SET '.format(table)
@@ -211,11 +227,17 @@ class DBTools(NetDBbase):
             return False
 
     def checkEntryInColumn(self, table, col, rid):
-        """Check if an entry exists in a table.
-
-        - *table* the table name
-        - *col* the column name
-        - *rid* the row to search for
+        """
+        Check if an entry exists in a table.
+        
+        Parameters
+        ----------
+        table
+            the table name
+        col
+            the column name
+        rid
+            the row to search for
         """
         self.db_cursor.execute(
             "SELECT count(*) FROM {} WHERE {}=\"{}\"".format(table, col, rid)
@@ -231,9 +253,11 @@ class DBTools(NetDBbase):
     def executeSQL(self, sql):
         """
         Execute a SQL command:
-
-         - *sql* a string containing a SQL command
-
+        
+        Parameters
+        ----------
+        sql
+            a string containing a SQL command
         """
         try:
             self.db_cursor.execute(sql)
@@ -244,10 +268,15 @@ class DBTools(NetDBbase):
             return False
 
     def getColumns(self, table, cols):
-        """Fetch the contents of one or more columns of data in a table.
-
-        - *table* the database table
-        - *cols* a list of one or more column id's
+        """
+        Fetch the contents of one or more columns of data in a table.
+        
+        Parameters
+        ----------
+        table
+            the database table
+        cols
+            a list of one or more column id's
         """
         sql = "SELECT "
         for c in cols:
@@ -269,12 +298,17 @@ class DBTools(NetDBbase):
             return dout
 
     def getRow(self, table, col, rid):
-        """Get the table row(s) which correspond to rid in column. Returns the row(s) as
-        a list, if the column is the primary key this is always a single entry.
-
-        - *table* the database table
-        - *col* the column id
-        - *rid* the row index id
+        """
+        Get the table row(s) which correspond to rid in column. Returns the row(s) as a list, if the column is the primary key this is always a single entry.
+        
+        Parameters
+        ----------
+        table
+            the database table
+        col
+            the column id
+        rid
+            the row index id
         """
         sql = "SELECT * FROM {} WHERE {}=\"{}\"".format(table, col, rid)
         # print(sql)
@@ -296,13 +330,19 @@ class DBTools(NetDBbase):
             return dout
 
     def getCell(self, table, col, rid, cell):
-        """Get the table cell which correspond to rid in column. Returns the value or
-        None.
-
-        - *table* the database table
-        - *col* the column id
-        - *rid* the row index id
-        - *cell* the column of the cell you want tp extract
+        """
+        Get the table cell which correspond to rid in column. Returns the value or None.
+        
+        Parameters
+        ----------
+        table
+            the database table
+        col
+            the column id
+        rid
+            the row index id
+        cell
+            the column of the cell you want tp extract
         """
         sql = "SELECT {} FROM {} WHERE {}=\"{}\"".format(cell, table, col, rid)
         # print(sql)
@@ -317,10 +357,15 @@ class DBTools(NetDBbase):
         return data
 
     def getTable(self, table, colOut=False):
-        """Returns an entire database table.
-
-        - *table* the table name
-        - *colOut* optionally return a tuple of (data,ColNames)
+        """
+        Returns an entire database table.
+        
+        Parameters
+        ----------
+        table
+            the table name
+        colOut
+            optionally return a tuple of (data,ColNames)
         """
         sql = 'SELECT * FROM %s' % table
         sql2 = "PRAGMA table_info( %s )" % table
@@ -340,10 +385,15 @@ class DBTools(NetDBbase):
             return r
 
     def dumpTableToTxt(self, table, filename):
-        """Save a table as tab separated txt file.
-
-        - *table* the table to export
-        - *filename* the filename of the table dump
+        """
+        Save a table as tab separated txt file.
+        
+        Parameters
+        ----------
+        table
+            the table to export
+        filename
+            the filename of the table dump
         """
         data, head = self.getTable(table, colOut=True)
         data.insert(0, head)
@@ -352,10 +402,15 @@ class DBTools(NetDBbase):
         exportLabelledLinkedList(data, fname=filename, names=None, sep='\t')
 
     def dumpTableToCSV(self, table, filename):
-        """Save a table as tab separated txt file.
-
-        - *table* the table to export
-        - *filename* the filename of the table dump
+        """
+        Save a table as tab separated txt file.
+        
+        Parameters
+        ----------
+        table
+            the table to export
+        filename
+            the filename of the table dump
         """
         data, head = self.getTable(table, colOut=True)
         data.insert(0, head)
@@ -533,9 +588,13 @@ class RESTClient(NetDBbase):
         self.urllib2 = urllib2
 
     def Log(self, txt):
-        """Add txt to logfile history.
-
-        - *txt* a string
+        """
+        Add txt to logfile history.
+        
+        Parameters
+        ----------
+        txt
+            a string
         """
         self.history += '%s - %s\n' % (time.strftime('%H:%M:%S'), str(txt))
 
@@ -544,9 +603,13 @@ class RESTClient(NetDBbase):
         return self.history
 
     def Connect(self, root):
-        """Establish HTTP connection to.
-
-        - *root* the site root "www.google.com"
+        """
+        Establish HTTP connection to.
+        
+        Parameters
+        ----------
+        root
+            the site root "www.google.com"
         """
         try:
             self.site_root = root
@@ -563,12 +626,13 @@ class RESTClient(NetDBbase):
     def Get(self, query):
         """
         Perform an http GET using:
-
-         - *query* e.g.
-         - *reply_mode* [default=''] this is the reply mode
-
-        For example "/semanticSBML/annotate/search.xml?q=ATP"
-
+        
+        Parameters
+        ----------
+        query
+            e.g.
+        reply_mode
+            [default=''] this is the reply mode
         """
         data1 = None
         if self.CONNECTED:
@@ -617,11 +681,13 @@ class SemanticSBML(RESTClient, MIRIAMTools):
         RESTClient.__init__(self)
 
     def quickLookup(self, txt):
-        """Do a quick lookpup for txt using SemanticSBML (connectic if required) and
-        return results. Returns a list of identifiers.org id's in descending priority
-        (as return)
-
-        - *txt* the string to lookup
+        """
+        Do a quick lookpup for txt using SemanticSBML (connectic if required) and return results. Returns a list of identifiers.org id's in descending priority (as return)
+        
+        Parameters
+        ----------
+        txt
+            the string to lookup
         """
 
         if not self.CONNECTED:
@@ -633,10 +699,13 @@ class SemanticSBML(RESTClient, MIRIAMTools):
         return self.data
 
     def viewDataInWebrowser(self, maxres=10):
-        """Attempt to view #maxres results returned by SemanticSBML in the default
-        browser.
-
-        - *maxres* default maximum number of results to display.
+        """
+        Attempt to view #maxres results returned by SemanticSBML in the default browser.
+        
+        Parameters
+        ----------
+        maxres
+            default maximum number of results to display.
         """
         cntr = 0
         for u_ in self.data:
@@ -650,9 +719,13 @@ class SemanticSBML(RESTClient, MIRIAMTools):
                 break
 
     def parseXMLtoText(self, xml):
-        """Parse the xml output by quickLookup() into a list of URL.
-
-        - *xml* XML returns from SemanticSBML
+        """
+        Parse the xml output by quickLookup() into a list of URL.
+        
+        Parameters
+        ----------
+        xml
+            XML returns from SemanticSBML
         """
         return [
             i.replace('<item>', '').replace('</item>', '').strip()
