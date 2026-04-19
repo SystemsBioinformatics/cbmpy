@@ -8,7 +8,7 @@ CBMPy is a Python platform for constraint-based modelling and analysis of biolog
 
 ## Installation
 
-**Use conda environments only** - legacy pip installation is deprecated.
+**Prefer conda environments.**
 
 ```bash
 conda env create -f=environment.yml
@@ -34,43 +34,31 @@ pip install -e ".[dev]"
 
 # Run the test suite
 pytest
-```
-
-## Common Development Tasks
-
-### Running tests
-```bash
-# Install pytest
-pip install pytest pytest-cov
-
-# Run full test suite
-pytest
 
 # Run a specific test file
-pytest cbmpy/tests/test_specific.py
+pytest tests/test_specific.py
 
 # Run a specific test function
-pytest cbmpy/tests/test_specific.py::test_something
+pytest tests/test_specific.py::test_something
 
-# Run tests with verbose output and coverage
-pytest -v --cov=cbmpy
+# Run tests with coverage
+pytest --cov=cbmpy
 
-# Run tests with verbose output and coverage report
-pytest -v --cov=cbmpy --cov-report=html
-
-# Run tests excluding slow tests
+# Exclude slow tests
 pytest -m "not slow"
 
 # Run only integration tests
 pytest -m integration
 
-### Building and packaging
-```bash
-# Build source distribution
-python setup.py sdist
+# Test across Python versions via tox
+tox
+```
 
-# Build wheel
-python setup.py bdist_wheel
+### Building and packaging
+
+```bash
+# Build source distribution and wheel
+python setup.py sdist bdist_wheel
 
 # Clean and rebuild
 rm -rf build dist *.egg-info
@@ -78,86 +66,26 @@ python setup.py sdist bdist_wheel
 ```
 
 ### Code style and linting
+
 The project uses pylint with custom disable comments for:
 - C0103 (invalid variable name)
 - C0301 (line too long)
 - E1101 (module has no member)
 
-Code is formatted with standard Python conventions (no AI auto-formatting).
+Configured in `pyproject.toml` under `[tool.pylint.messages_control]`.
 
-### Docstring formatting
-
-All docstrings must follow the **numpydoc** format to be compatible with Sphinx documentation generation.
-
-**Docstring structure:**
-
-```python
-def function_name(param1, param2):
-    """
-    Short description of the function.
-
-    Extended description (if needed).
-
-    Parameters
-    ----------
-    param1 : type
-        Description of param1.
-    param2 : type
-        Description of param2.
-
-    Returns
-    -------
-    return_type
-        Description of return value.
-
-    Raises
-    ------
-    ExceptionType
-        Description of when and why this exception is raised.
-
-    Notes
-    -----
-    Any important notes or warnings.
-
-    Examples
-    --------
-    >>> example_code_here()
-    """
-```
-
-**Formatting commands:**
+Docstrings use **numpydoc** style, configured in `pyproject.toml` under `[tool.docformatter]`.
+Format all docstrings:
 
 ```bash
-# Format all docstrings to numpydoc style
 docformatter --in-place --recursive --style=numpy cbmpy/
-
-# Check docstring formatting (should have no output)
-docformatter --diff --recursive cbmpy/
-
-# Format specific file
-docformatter --in-place cbmpy/module_name.py
 ```
 
-### Building and packaging
+Check formatting:
+
 ```bash
-# Build source distribution
-python setup.py sdist
-
-# Build wheel
-python setup.py bdist_wheel
-
-# Clean and rebuild
-rm -rf build dist *.egg-info
-python setup.py sdist bdist_wheel
+docformatter --diff --recursive cbmpy/
 ```
-
-### Code style and linting
-The project uses pylint with custom disable comments for:
-- C0103 (invalid variable name)
-- C0301 (line too long)
-- E1101 (module has no member)
-
-Code is formatted with standard Python conventions (no AI auto-formatting).
 
 ## Project Architecture
 
@@ -165,129 +93,76 @@ Code is formatted with standard Python conventions (no AI auto-formatting).
 
 **Core modules:**
 
-- **CBModel.py** - Core model class representing metabolic networks
-  - Contains `Fbase` base class for all model objects
-  - Manages metabolites, reactions, and compartments
-  - Provides SBML read/write functionality
-
-- **CBSolver.py** - Solver implementations (CPLEX, GLPK)
-  - Implements LP/MILP solvers for FBA, FVA
-  - Main entry points: `analyzeModel`, `FluxVariabilityAnalysis`
-
-- **CBRead.py / CBWrite.py** - File I/O
-  - `readSBML3FBC`, `readSBML2FBA`, `readCOBRASBML`
-  - `writeSBML3FBC`, `writeSBML3FBCV3` (FBC v3 support)
-
-- **CBCommon.py** - Common utilities
-  - Matrix operations (`StructMatrixLP`)
-  - MIRIAM annotation parsing
-  - ID checking and fixing
-
-- **CBSolverX.py** - Extended solver (QP support)
-  - Handles quadratic objectives
-  - Additional constraint types
-
-**Supporting modules:**
-
-- **CBConfig.py** - Configuration and version info
-- **CBXML.py** - SBML handling (uses python-libsbml)
-- **CBNetDB.py** - Network analysis
-- **CBPlot.py** - Visualization
-- **CBTools.py** - Utility functions
-- **PyscesSED.py** - SED-ML support
+- **CBModel.py** - Core model class. Contains `Fbase` base class for all model objects. Manages metabolites, reactions, and compartments. Has SBML read/write functionality.
+- **CBSolver.py** - Solver orchestrator. Loads GLPK and/or CPLEX at import time (controlled by `CBMPY_USE_GLPK`/`CBMPY_USE_CPLX` env vars). Main entry points: `analyzeModel` (FBA), `FluxVariabilityAnalysis` (FVA).
+- **CBConfig.py** - Single configuration dict (`__CBCONFIG__`) with version, solver prefs, and global constants.
+- **CBRead.py / CBWrite.py** - SBML file I/O. `readSBML3FBC`, `readSBML2FBA`, `readCOBRASBML` for reading. `writeSBML3FBC`, `writeSBML3FBCV2`, `writeSBML3FBCV3`, `writeCOBRASBML` for writing.
+- **CBCommon.py** - Common utilities: `StructMatrixLP`, MIRIAM annotation parsing, ID checking/fixing.
+- **CBSolverX.py** - Extended solver with QP (quadratic objective) support and additional constraint types.
+- **CBTools.py** - General utility functions (serialization, deSerialization).
+- **CBXML.py** - SBML handling layer over python-libsbml.
+- **CBNetDB.py** - Network analysis utilities.
+- **CBPlot.py** - Visualization.
+- **CBMultiCore.py / CBMultiModel.py / CBMultiEnv.py** - Multi-processing support for parallel FBA/FVA and batch model operations.
+- **CBGUI.py / CBWx.py / CBQt4.py** - GUI frontends (wxWidgets and Qt4).
 
 ### Flux Modules: `cbmpy/fluxmodules/`
 
-Advanced analyses for module decomposition:
+Advanced flux decomposition analyses:
 
-- **fluxmodules.py** - Main flux module interface
-  - `computeModules()` - Compute flux modules
-  - `computeModulesMatroid()` - Matroid-based computation
-  - Requires prior FVA to identify variable reactions
-
-- **matroid.py** - Matroid theory implementation
-- **sparserationals.py** - Sparse rational number arithmetic
-- **enumeration.py** - Module enumeration algorithms
-
-- **Test*.py** files - Test modules for each algorithm
+- **fluxmodules.py** - Main entry point with `computeModules()` and `computeModulesMatroid()`. Requires prior FVA.
+- **matroid.py** - Matroid theory implementation.
+- **sparserationals.py** - Sparse rational number arithmetic.
+- **decomposition.py / enumerate.py** - Flux module decomposition and enumeration algorithms.
+- **random_color.py** - Graph coloring utilities.
 
 ### Solver Implementations
 
-- **CBCPLEX.py** - CPLEX solver (default)
-- **CBGLPK.py** - GLPK solver (open source alternative)
-- **CBGLPKOLD.py** - Legacy GLPK wrapper
+- **CBCPLEX.py** - IBM CPLEX solver (preferred, higher performance).
+- **CBGLPK.py** - GLPK solver (open source default, loaded first by default).
+- **CBGLPKOLD.py** - Legacy GLPK wrapper (kept for compatibility).
 
-### Multi-core support
+### Key Data Structures
 
-- **CBMultiCore.py** - Parallel FBA/FVA using multiprocessing
-- **CBMultiModel.py** - Batch model operations
-- **CBMultiEnv.py** - Environment management for parallel runs
+- **`Fbase`** (in CBModel.py) - Base class for metabolic models. Tracks metabolites, reactions, compartments, gene products. Core methods: `doFBA()`, `doFVA()`, `getFVAdata()`, `clone()`.
+- **Reaction** - Has `getId()`, `getLowerBound()`, `getUpperBound()`, `getFVAdata()`, `toggleReversibility()`.
+- **Metabolite** - Has `getId()`, `getCompartment()`, `getGeneIds()`.
 
-## Key Data Structures
+### Top-level API (`import cbmpy`)
 
-### Metabolic Model (`Fbase`)
+The package `__init__.py` flattens the API:
+
 ```python
-class Fbase:
-    - metabolites: list of metabolite objects
-    - reactions: list of reaction objects
-    - compartments: dictionary of compartments
-    - gene_products: gene to metabolite associations
-    - sbml_file: SBML file source
-    - solution: LP solver results
+import cbmpy
 
-    Methods:
-    - doFBA() - Flux Balance Analysis
-    - doFVA() - Flux Variability Analysis
-    - getFVAdata() - Get flux bounds for a reaction
-    - clone() - Clone model
-    - getMetabolites() / getReactions()
+# Reading models
+cmod = cbmpy.readSBML3FBC('model.xml')
+
+# Analyses
+cbmpy.doFBA(cmod)      # Flux Balance Analysis
+cbmpy.doFVA(cmod)      # Flux Variability Analysis
+
+# Writing models
+cbmpy.writeSBML3FBC(cmod, 'output.xml')
 ```
 
-### Reaction object
-```python
-- getId() - Reaction ID
-- getLowerBound() / getUpperBound() - Flux bounds
-- getFVAdata() - Returns [min_flux, max_flux, flux, span]
-- toggleReversibility() - Enable/disable reversibility
-```
+## Configuration
 
-### Metabolite object
-```python
-- getId() - Metabolite ID
-- getCompartment() - Compartment name
-- getGeneIds() - Associated gene products
-```
+All global config lives in `__CBCONFIG__` (CBConfig.py). Key entries:
+- `SOLVER_PREF` - Default solver preference (default: `'CPLEX'`)
+- `SOLVER_ACTIVE` - Currently loaded solver(s)
+- `DEBUG` - Debug flag
+- `SYMPY_DENOM_LIMIT` - Symbolic computation denominator limit
 
-## SBML Support
+Override solver via env vars: `CBMPY_USE_GLPK=1` or `CBMPY_USE_CPLX=1`.
 
-CBMPy supports:
-- SBML Level 2 (FBA) - `readSBML2FBA()`
-- SBML Level 3 FBC - `readSBML3FBC()`
-- FBC V3 (quadratic objectives) - via CBSolverX
+## pyproject.toml Configuration
 
-Write functions:
-- `writeSBML3FBC()` - Standard FBC
-- `writeSBML3FBCV3()` - FBC V3 with FBC annotations
-- `writeSBML3FBCV2()` - FBC V2 (legacy)
-
-## Sphinx Documentation
-
-To build Sphinx documentation:
-
-```bash
-# Install sphinx dependencies
-pip install -e ".[dev]"
-
-# Generate API documentation from docstrings
-sphinx-apidoc -o docs/source cbmpy/
-
-# Build the documentation
-cd docs
-make html
-
-# Open the generated docs in browser
-xdg-open build/html/index.html
-```
+Build, test, and tooling config is all in `pyproject.toml`:
+- `[tool.pytest.ini_options]` - Test paths (`tests/`), markers (`slow`, `integration`)
+- `[tool.coverage.run]` / `[tool.coverage.report]` - Coverage settings
+- `[tool.docformatter]` - numpydoc style, line width 79, black-compatible
+- `[tool.pylint.messages_control]` - Disabled linter codes
 
 ## License
 
@@ -295,6 +170,6 @@ GNU General Public License v3 or later (GPLv3+)
 
 ## Contact
 
-- Developer: Brett G. Olivier (b.g.olivier@vu.nl)
+- Developer: Brett G. Olivier (@bgoli)
 - GitHub: https://github.com/SystemsBioinformatics/cbmpy
 - Issue tracker: https://github.com/SystemsBioinformatics/cbmpy/issues

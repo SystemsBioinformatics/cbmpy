@@ -238,9 +238,15 @@ ptElements = (
 def parseGeneAssociation(gs):
     """Parse a COBRA style gene association into a nested list.
 
-    - *gs* a string containing a gene association
+    Parameters
+    ----------
+    gs : str
+        A string containing a gene association.
 
-    Returns a nested list representation.
+    Returns
+    -------
+    list
+        A nested list representation of the gene association.
     """
     # gs = '(b0810) and ( b0811 ) or ( b1234.0) and(b0809)and ( b7643 )OR(b0812 )AND( b0876)'
     gl = pp_gene_unnester.parseString('(' + gs + ')').asList()
@@ -264,10 +270,17 @@ def checkChemFormula(cf, quiet=False):
     Please see the SBML Level 3 specification and http://wikipedia.org/wiki/Hill_system
     for more information.
 
-    - *cf* a string that contains a formula to check
-    - *quiet* [default=False] do not print error messages
+    Parameters
+    ----------
+    cf : str
+        A string that contains a formula to check.
+    quiet : bool, optional
+        Do not print error messages. Default is False.
 
-    Returns True if valid chemical formula, False otherwise.
+    Returns
+    -------
+    bool
+        True if valid chemical formula, False otherwise.
     """
     if not HAVE_PYPARSING:
         print('\nChemical Formula parser requires PyParsing!')
@@ -301,12 +314,20 @@ def checkChemFormula(cf, quiet=False):
 
 
 def extractGeneIdsFromString(g, return_clean_gpr=False):
-    """Extract and return a list of gene names from a gene association string formulation.
+    """Extract and return a list of gene names from a gene association string
+    formulation.
 
-    - *g* a COBRA style gene association string
-    - *return_clean_gpr* [default=False] in addition to the list returns the "cleaned" GPR string
+    Parameters
+    ----------
+    g : str
+        A COBRA style gene association string.
+    return_clean_gpr : bool, optional
+        In addition to the list returns the "cleaned" GPR string. Default is False.
 
-    Returns a list of gene names, or a tuple of (names, cleaned_gpr) if return_clean_gpr=True.
+    Returns
+    -------
+    list or tuple
+        A list of gene names, or a tuple of (names, cleaned_gpr) if return_clean_gpr=True.
     """
     # print('\n{}'.format(g))
     g2 = g
@@ -354,14 +375,24 @@ def extractGeneIdsFromString(g, return_clean_gpr=False):
 
 
 def createAssociationDictFromNode(node, out, model, useweakref=True, cntr=0):
-    """Converts a GPR string '((g1 and g2) or g3)' to a dictionary via a Python AST.
+    """Convert a GPR string '((g1 and g2) or g3)' to a dictionary via a Python AST.
 
-    - *node* a Python AST node (e.g. body)
-    - *out* a gpr dictionary
-    - *model* a CBMPy model instance
-    - *useweakref* [default=True] use a weakref as the gene object or alternatively the label
+    Parameters
+    ----------
+    node : ast.AST
+        A Python AST node (e.g. body).
+    out : dict
+        A GPR dictionary (modified in place).
+    model : Fbase
+        A CBMPy model instance.
+    useweakref : bool, optional
+        Use a weakref as the gene object or alternatively the label. Default is True.
+    cntr : int, optional
+        Counter for unique key generation. Default is 0.
 
-    Returns None (modifies out dictionary in place).
+    Returns
+    -------
+    None
     """
     if isinstance(node, ast.Name):
         gene = model.getGene(node.id)
@@ -407,13 +438,22 @@ def createAssociationDictFromNode(node, out, model, useweakref=True, cntr=0):
 
 
 def func_getAssociationStrFromGprDict(gprd, out, parent=''):
-    """Get a old school GPR association string from a CBMPy gprDict.
+    """Get an old school GPR association string from a CBMPy gprDict.
 
-    - *gprd* the gprDictionary
-    - *out* the output string
-    - *parent* [default=''] the string representing the current nodes parent relationship, used for recursion
+    Parameters
+    ----------
+    gprd : dict
+        The GPR dictionary.
+    out : str
+        The output string accumulator.
+    parent : str, optional
+        The string representing the current node's parent relationship, used for recursion.
+        Default is ''.
 
-    Returns the GPR association string.
+    Returns
+    -------
+    str
+        The GPR association string.
     """
     out2 = '('
     for k in gprd:
@@ -439,12 +479,19 @@ def func_getAssociationStrFromGprDict(gprd, out, parent=''):
 
 
 def getGPRasDictFromString(node, out):
-    """Converts a GPR string '((g1 and g2) or g3)' to a gprDict.
+    """Convert a GPR string '((g1 and g2) or g3)' to a gprDict.
 
-    - *node* a Python AST node (e.g. `ast.parse(gprstring).body[0]`)
-    - *out* a new dictionary that will be created in place
+    Parameters
+    ----------
+    node : ast.AST
+        A Python AST node (e.g. ``ast.parse(gprstring).body[0]``).
+    out : dict
+        A new dictionary that will be created in place.
 
-    Returns the populated gpr dictionary.
+    Returns
+    -------
+    dict
+        The populated gpr dictionary.
     """
 
     if isinstance(node, ast.Name):
@@ -488,32 +535,56 @@ class ComboGen(object):
     """Generate sets of unique combinations.
 
     This class generates and manages combinations of elements.
+
+    Attributes
+    ----------
+    combo : list
+        List of stored combinations.
+    combo_int : list
+        Integer representation of combinations.
     """
 
     combo = None
     combo_int = None
 
     def __init__(self):
-        """Initialize the ComboGen instance."""
+        """Initialize the ComboGen instance.
+
+        Returns
+        -------
+        None
+        """
         self.combo = []
 
     def addCombination(self, data):
         """Add a combination to the internal list.
 
-        - *data* a list of elements to join into a string and add to combo
+        Parameters
+        ----------
+        data : list
+            A list of elements to join into a string and add to combo.
 
-        Returns None (modifies self.combo in place).
+        Returns
+        -------
+        None
         """
         self.combo.append(','.join(data))
 
     def uniqueCombinations(self, data, number, temp=None):
         """Generate unique combinations of the given data.
 
-        - *data* a list of elements to combine
-        - *number* the number of combinations to generate
-        - *temp* [default=None] temporary list used internally
+        Parameters
+        ----------
+        data : list
+            A list of elements to combine.
+        number : int
+            The number of elements per combination.
+        temp : list, optional
+            Temporary list used internally. Default is None.
 
-        Returns None (populates self.combo in place).
+        Returns
+        -------
+        None
         """
         if temp == None:
             temp = []
@@ -525,7 +596,12 @@ class ComboGen(object):
             temp.pop()
 
     def numberifyComb2Int(self):
-        """Convert string combinations to integer tuples."""
+        """Convert string combinations to integer tuples.
+
+        Returns
+        -------
+        None
+        """
         tmp = []
         for c in self.combo:
             tmp.append(tuple([int(x) for x in c.split(',')]))
@@ -537,12 +613,21 @@ def processSpeciesChargeChemFormulaAnnot(
 ):
     """Disambiguate the chemical formula and charge from species annotations.
 
-    - *s* a species object
-    - *getFromName* [default=False] whether to try strip the chemical formula from the name (old COBRA style)
-    - *overwriteChemFormula* [default=False] whether to overwrite existing chemical formula
-    - *overwriteCharge* [default=False] whether to overwrite existing charge
+    Parameters
+    ----------
+    s : object
+        A species object.
+    getFromName : bool, optional
+        Whether to try stripping the chemical formula from the name (old COBRA style).
+        Default is False.
+    overwriteChemFormula : bool, optional
+        Whether to overwrite existing chemical formula. Default is False.
+    overwriteCharge : bool, optional
+        Whether to overwrite existing charge. Default is False.
 
-    Returns None (modifies species s in place).
+    Returns
+    -------
+    None
     """
     tempF = ''
     if overwriteChemFormula:
@@ -607,10 +692,17 @@ def processSpeciesChargeChemFormulaAnnot(
 def binHash(keys, d):
     """Create a hash tuple for binning by checking keys against a dictionary.
 
-    - *keys* a list of keys to check
-    - *d* a dictionary
+    Parameters
+    ----------
+    keys : list
+        A list of keys to check.
+    d : dict
+        A dictionary.
 
-    Returns a tuple of values from d for keys present, or True for missing keys.
+    Returns
+    -------
+    tuple
+        A tuple of values from d for keys present, or True for missing keys.
     """
     out = []
     for k in keys:
@@ -626,10 +718,17 @@ def fixId(s, replace=None):
 
     The first letter must be an underscore or letter, and the rest should be alphanumeric or underscore.
 
-    - *s* the string to test
-    - *replace* [default=None] character to use for illegal characters, or None to remove them
+    Parameters
+    ----------
+    s : str
+        The string to test.
+    replace : str or None, optional
+        Character to use for illegal characters, or None to remove them. Default is None.
 
-    Returns a fixed string conforming to C variable naming rules.
+    Returns
+    -------
+    str
+        A fixed string conforming to C variable naming rules.
     """
 
     if s[0].isdigit():
@@ -651,11 +750,15 @@ def fixId(s, replace=None):
 def checkId(s):
     """Check if a string conforms to a C variable naming convention.
 
-    Returns True if the string is valid, False otherwise.
+    Parameters
+    ----------
+    s : str
+        A string.
 
-    - *s* a string
-
-    Returns True if the string is a valid C variable, False otherwise.
+    Returns
+    -------
+    bool
+        True if the string is a valid C variable name, False otherwise.
     """
     cntr = 0
     for c in s:
@@ -675,6 +778,21 @@ class StructMatrix:
 
     This class stores structural matrix data and uses row/column index permutations
     to generate labels from a source.
+
+    Attributes
+    ----------
+    array : ndarray
+        The structural matrix array.
+    ridx : list
+        Row indexes.
+    cidx : list
+        Column indexes.
+    row : list
+        Row labels.
+    col : list
+        Column labels.
+    shape : tuple
+        Shape of the matrix.
     """
 
     array = None
@@ -687,13 +805,22 @@ class StructMatrix:
     def __init__(self, array, ridx, cidx, row=None, col=None):
         """Instantiate a StructMatrix with array and matching row/col index arrays.
 
-        - *array* the structural matrix array
-        - *ridx* array of row indexes
-        - *cidx* array of column indexes
-        - *row* [default=None] optional array of row labels
-        - *col* [default=None] optional array of column labels
+        Parameters
+        ----------
+        array : ndarray
+            The structural matrix array.
+        ridx : list
+            Array of row indexes.
+        cidx : list
+            Array of column indexes.
+        row : list or None, optional
+            Optional array of row labels. Default is None.
+        col : list or None, optional
+            Optional array of column labels. Default is None.
 
-        Returns None (self.array, self.ridx, self.cidx, self.row, self.col, self.shape are set).
+        Returns
+        -------
+        None
         """
         self.array = array
         self.ridx = ridx
@@ -703,24 +830,42 @@ class StructMatrix:
         self.shape = array.shape
 
     def __call__(self):
-        """Return the stored array."""
+        """Return the stored array.
+
+        Returns
+        -------
+        ndarray
+            The stored array.
+        """
         return self.array
 
     def getRowsByIdx(self, *args):
         """Return the rows referenced by index.
 
-        - *args* indices of rows to retrieve (e.g. 1, 3, 5)
+        Parameters
+        ----------
+        *args : int
+            Indices of rows to retrieve (e.g. 1, 3, 5).
 
-        Returns a subset of rows from the array.
+        Returns
+        -------
+        ndarray
+            A subset of rows from the array.
         """
         return self.array.take(args, axis=0)
 
     def getColsByIdx(self, *args):
         """Return the columns referenced by index.
 
-        - *args* indices of columns to retrieve (e.g. 1, 3, 5)
+        Parameters
+        ----------
+        *args : int
+            Indices of columns to retrieve (e.g. 1, 3, 5).
 
-        Returns a subset of columns from the array.
+        Returns
+        -------
+        ndarray
+            A subset of columns from the array.
         """
         return self.array.take(args, axis=1)
 
@@ -730,9 +875,14 @@ class StructMatrix:
         Assuming that the row index array is a permutation of a source label array,
         this method maps the row labels to ridx and creates self.row (row label list).
 
-        - *src* a source array of row labels
+        Parameters
+        ----------
+        src : list
+            A source array of row labels.
 
-        Returns None (modifies self.row in place).
+        Returns
+        -------
+        None
         """
         self.row = [src[r] for r in self.ridx]
 
@@ -742,9 +892,14 @@ class StructMatrix:
         Assuming that the col index array is a permutation of a source label array,
         this method maps the row labels to cidx and creates self.col (col label list).
 
-        - *src* a source array of column labels
+        Parameters
+        ----------
+        src : list
+            A source array of column labels.
 
-        Returns None (modifies self.col in place).
+        Returns
+        -------
+        None
         """
 
         self.col = [src[c] for c in self.cidx]
@@ -752,9 +907,15 @@ class StructMatrix:
     def getRowsByName(self, *args):
         """Return the rows referenced by label.
 
-        - *args* row labels to retrieve (e.g. 's', 'x', 'd')
+        Parameters
+        ----------
+        *args : str
+            Row labels to retrieve (e.g. 's', 'x', 'd').
 
-        Returns a subset of rows from the array, or None if row labels are not set.
+        Returns
+        -------
+        ndarray or None
+            A subset of rows from the array, or None if row labels are not set.
         """
         assert self.row != None, "\nI need row labels"
         try:
@@ -767,9 +928,15 @@ class StructMatrix:
     def getColsByName(self, *args):
         """Return the columns referenced by label.
 
-        - *args* column labels to retrieve (e.g. 's', 'x', 'd')
+        Parameters
+        ----------
+        *args : str
+            Column labels to retrieve (e.g. 's', 'x', 'd').
 
-        Returns a subset of columns from the array, or None if column labels are not set.
+        Returns
+        -------
+        ndarray or None
+            A subset of columns from the array, or None if column labels are not set.
         """
         assert self.col != None, "\nI need column labels"
         try:
@@ -782,9 +949,15 @@ class StructMatrix:
     def getLabels(self, axis='all'):
         """Return the matrix labels.
 
-        - *axis* 'row'/'col'/'all' to specify which labels to return
+        Parameters
+        ----------
+        axis : str, optional
+            'row'/'col'/'all' to specify which labels to return. Default is 'all'.
 
-        Returns a single label list or a tuple of (row_labels, col_labels).
+        Returns
+        -------
+        list or tuple
+            A single label list or a tuple of (row_labels, col_labels).
         """
         if axis == 'row':
             return self.row
@@ -796,9 +969,15 @@ class StructMatrix:
     def getIndexes(self, axis='all'):
         """Return the matrix indexes.
 
-        - *axis* 'row'/'col'/'all' to specify which indexes to return
+        Parameters
+        ----------
+        axis : str, optional
+            'row'/'col'/'all' to specify which indexes to return. Default is 'all'.
 
-        Returns a single index list or a tuple of (row_indexes, col_indexes).
+        Returns
+        -------
+        list or tuple
+            A single index list or a tuple of (row_indexes, col_indexes).
         """
         if axis == 'row':
             return self.ridx
@@ -810,10 +989,17 @@ class StructMatrix:
     def getByIdx(self, row, col):
         """Return the array value at the given row and column index.
 
-        - *row* a row index
-        - *col* a column index
+        Parameters
+        ----------
+        row : int
+            A row index.
+        col : int
+            A column index.
 
-        Returns the value at self.array[row, col].
+        Returns
+        -------
+        float
+            The value at self.array[row, col].
         """
         assert row in self.ridx, '\n%s is an invalid index' % row
         assert col in self.cidx, '\n%s is an invalid index' % col
@@ -822,10 +1008,17 @@ class StructMatrix:
     def getByName(self, row, col):
         """Return the array value at the given row and column name.
 
-        - *row* a row name
-        - *col* a column name
+        Parameters
+        ----------
+        row : str
+            A row name.
+        col : str
+            A column name.
 
-        Returns the value at self.array[row, col].
+        Returns
+        -------
+        float
+            The value at self.array[row, col].
         """
         assert row in self.row, '\n%s is an invalid name' % row
         assert col in self.col, '\n%s is an invalid name' % col
@@ -834,11 +1027,18 @@ class StructMatrix:
     def setByIdx(self, row, col, val):
         """Set the array value at the given row and column index.
 
-        - *row* a row index
-        - *col* a column index
-        - *val* the value to set
+        Parameters
+        ----------
+        row : int
+            A row index.
+        col : int
+            A column index.
+        val : float
+            The value to set.
 
-        Returns None (modifies self.array in place).
+        Returns
+        -------
+        None
         """
         assert row in self.ridx, '\n%s is an invalid index' % row
         assert col in self.cidx, '\n%s is an invalid index' % col
@@ -847,11 +1047,18 @@ class StructMatrix:
     def setByName(self, row, col, val):
         """Set the array value at the given row and column name.
 
-        - *row* a row name
-        - *col* a column name
-        - *val* the value to set
+        Parameters
+        ----------
+        row : str
+            A row name.
+        col : str
+            A column name.
+        val : float
+            The value to set.
 
-        Returns None (modifies self.array in place).
+        Returns
+        -------
+        None
         """
         assert row in self.row, '\n%s is an invalid name' % row
         assert col in self.col, '\n%s is an invalid name' % col
@@ -863,6 +1070,15 @@ class StructMatrixLP(StructMatrix):
 
     This class extends StructMatrix to add LP (linear programming) support
     including RHS values, constraint operators, and stoichiometric constraints.
+
+    Attributes
+    ----------
+    RHS : ndarray
+        Right-hand side values for constraints.
+    operators : list
+        List of constraint senses ('G', 'L', 'E').
+    __array_type__ : type
+        Type of the underlying array.
     """
 
     RHS = None
@@ -875,15 +1091,26 @@ class StructMatrixLP(StructMatrix):
         Object that holds an LP (linear programming) model with stoichiometric constraints,
         operators, RHS values, and names.
 
-        - *array* stoichiometric matrix (linear constraints)
-        - *ridx* a list of indexes typically range(shape[0])
-        - *cidx* a list of indexes typically range(shape[1])
-        - *row* a list of row names
-        - *col* a list of col names
-        - *rhs* [default=None] a list of rhs values (defaults to 0)
-        - *operators* [default=None] a list of constraint senses (defaults to 'E')
+        Parameters
+        ----------
+        array : ndarray
+            Stoichiometric matrix (linear constraints).
+        ridx : list
+            A list of indexes typically range(shape[0]).
+        cidx : list
+            A list of indexes typically range(shape[1]).
+        row : list or None, optional
+            A list of row names. Default is None.
+        col : list or None, optional
+            A list of col names. Default is None.
+        rhs : array-like or None, optional
+            A list of RHS values (defaults to 0). Default is None.
+        operators : list or None, optional
+            A list of constraint senses (defaults to 'E'). Default is None.
 
-        Returns None (initializes LP model attributes).
+        Returns
+        -------
+        None
         """
         StructMatrix.__init__(self, array, ridx, cidx, row=row, col=col)
         self.__array_type__ = type(array)
@@ -903,12 +1130,19 @@ class StructMatrixLP(StructMatrix):
     def getCopy(self, attr_str, deep=False):
         """Return a copy of the specified attribute.
 
-        Uses the copy module `copy.copy` or `copy.deepcopy` depending on the deep flag.
+        Uses the copy module ``copy.copy`` or ``copy.deepcopy`` depending on the deep flag.
 
-        - *attr_str* a string of the attribute name (e.g. 'row', 'col')
-        - *deep* [default=False] if True, uses deepcopy; otherwise uses copy
+        Parameters
+        ----------
+        attr_str : str
+            A string of the attribute name (e.g. 'row', 'col').
+        deep : bool, optional
+            If True, uses deepcopy; otherwise uses copy. Default is False.
 
-        Returns a copy of the attribute.
+        Returns
+        -------
+        ndarray or list
+            A copy of the attribute.
         """
         if attr_str == 'array' or attr_str == 'rhs':
             return getattr(self, attr_str).copy()
@@ -920,7 +1154,10 @@ class StructMatrixLP(StructMatrix):
     def getLandRHS(self):
         """Return the stoichiometric matrix augmented with RHS column.
 
-        Returns a numpy array of [self.array, RHS].
+        Returns
+        -------
+        ndarray
+            A numpy array of [self.array, RHS].
         """
         RHS = self.RHS.copy()
         RHS.resize(len(RHS), 1)
@@ -929,10 +1166,16 @@ class StructMatrixLP(StructMatrix):
     def setRHSbyName(self, name, value):
         """Set the RHS value by row name.
 
-        - *name* a row name
-        - *value* the RHS value to set
+        Parameters
+        ----------
+        name : str
+            A row name.
+        value : float
+            The RHS value to set.
 
-        Returns None (modifies self.RHS in place).
+        Returns
+        -------
+        None
         """
         assert name in self.row, '\n%s is an invalid name' % name
         self.RHS[self.row.index(name)] = value
@@ -940,10 +1183,16 @@ class StructMatrixLP(StructMatrix):
     def setRHSbyIdx(self, idx, val):
         """Set the RHS value by row index.
 
-        - *idx* a row index
-        - *val* the RHS value to set
+        Parameters
+        ----------
+        idx : int
+            A row index.
+        val : float
+            The RHS value to set.
 
-        Returns None (modifies self.RHS in place).
+        Returns
+        -------
+        None
         """
         assert idx in self.ridx, '\n%s is an invalid index' % idx
         self.RHS[idx] = val
@@ -951,10 +1200,16 @@ class StructMatrixLP(StructMatrix):
     def setOperatorbyName(self, name, value):
         """Set the constraint operator by row name.
 
-        - *name* a row name
-        - *value* a constraint operator ('G', 'L', 'E')
+        Parameters
+        ----------
+        name : str
+            A row name.
+        value : str
+            A constraint operator ('G', 'L', 'E').
 
-        Returns None (modifies self.operators in place).
+        Returns
+        -------
+        None
         """
         assert name in self.row, '\n%s is an invalid name' % name
         value = value.strip()
@@ -964,10 +1219,16 @@ class StructMatrixLP(StructMatrix):
     def setOperatorbyIdx(self, idx, value):
         """Set the constraint operator by row index.
 
-        - *idx* a row index
-        - *value* a constraint operator ('G', 'L', 'E')
+        Parameters
+        ----------
+        idx : int
+            A row index.
+        value : str
+            A constraint operator ('G', 'L', 'E').
 
-        Returns None (modifies self.operators in place).
+        Returns
+        -------
+        None
         """
         assert idx in self.ridx, '\n%s is an invalid index' % idx
         value = value.strip()
@@ -977,9 +1238,15 @@ class StructMatrixLP(StructMatrix):
     def getRHSbyName(self, name):
         """Get the RHS value by row name.
 
-        - *name* a row name
+        Parameters
+        ----------
+        name : str
+            A row name.
 
-        Returns the RHS value for the given row.
+        Returns
+        -------
+        float
+            The RHS value for the given row.
         """
         assert name in self.row, '\n%s is an invalid name' % name
         return self.RHS[self.row.index(name)]
@@ -987,9 +1254,15 @@ class StructMatrixLP(StructMatrix):
     def getRHSbyIdx(self, idx):
         """Get the RHS value by row index.
 
-        - *idx* a row index
+        Parameters
+        ----------
+        idx : int
+            A row index.
 
-        Returns the RHS value for the given index.
+        Returns
+        -------
+        float
+            The RHS value for the given index.
         """
         assert idx in self.ridx, '\n%s is an invalid index' % idx
         return self.RHS[idx]
@@ -997,9 +1270,15 @@ class StructMatrixLP(StructMatrix):
     def getOperatorbyName(self, name):
         """Get the constraint operator by row name.
 
-        - *name* a row name
+        Parameters
+        ----------
+        name : str
+            A row name.
 
-        Returns the operator ('G', 'L', or 'E') for the given row.
+        Returns
+        -------
+        str
+            The operator ('G', 'L', or 'E') for the given row.
         """
         assert name in self.row, '\n%s is an invalid name' % name
         return self.operators[self.row.index(name)]
@@ -1007,9 +1286,15 @@ class StructMatrixLP(StructMatrix):
     def getOperatorbyIdx(self, idx):
         """Get the constraint operator by row index.
 
-        - *idx* a row index
+        Parameters
+        ----------
+        idx : int
+            A row index.
 
-        Returns the operator ('G', 'L', or 'E') for the given index.
+        Returns
+        -------
+        str
+            The operator ('G', 'L', or 'E') for the given index.
         """
         assert idx in self.ridx, '\n%s is an invalid index' % idx
         return self.operators[idx]
@@ -1023,6 +1308,45 @@ class MIRIAMannotation(object):
 
     This class handles MIRIAM (Mapping Identification Resource) annotations,
     which provide standardized identifiers for biological entities.
+
+    Attributes
+    ----------
+    MIRIAM : dict
+        MIRIAM resource identifiers.
+    MIDS : tuple
+        MIRIAM keys as tuple.
+    MIDSlc : tuple
+        Lowercase MIRIAM keys as tuple.
+    QUALIFIERS : tuple
+        Biomodels qualifier names.
+    isA : list or None
+        'is' qualifier entries.
+    isEncodedBy : list or None
+        'isEncodedBy' qualifier entries.
+    encodes : list or None
+        'encodes' qualifier entries.
+    hasPart : list or None
+        'hasPart' qualifier entries.
+    hasProperty : list or None
+        'hasProperty' qualifier entries.
+    hasTaxon : list or None
+        'hasTaxon' qualifier entries.
+    hasVersion : list or None
+        'hasVersion' qualifier entries.
+    isDescribedBy : list or None
+        'isDescribedBy' qualifier entries.
+    isHomologTo : list or None
+        'isHomologTo' qualifier entries.
+    isPartOf : list or None
+        'isPartOf' qualifier entries.
+    isPropertyOf : list or None
+        'isPropertyOf' qualifier entries.
+    isVersionOf : list or None
+        'isVersionOf' qualifier entries.
+    occursIn : list or None
+        'occursIn' qualifier entries.
+    isDerivedFrom : list or None
+        'isDerivedFrom' qualifier entries.
     """
 
     MIRIAM = None
@@ -1046,7 +1370,12 @@ class MIRIAMannotation(object):
     isDerivedFrom = None
 
     def __init__(self):
-        """Initialize the MIRIAMannotation instance."""
+        """Initialize the MIRIAMannotation instance.
+
+        Returns
+        -------
+        None
+        """
         self.MIRIAM = MIRIAM
         self.MIDS = MIRIAM_KEYS
         self.MIDSlc = MIRIAM_KEYSlc
@@ -1070,10 +1399,16 @@ class MIRIAMannotation(object):
     def addIDorgURI(self, qual, uri):
         """Add a URI directly into a qualifier collection.
 
-        - *qual* a Biomodels biological qualifier (e.g. 'is', 'isEncodedBy')
-        - *uri* the complete identifiers.org URI (e.g. http://identifiers.org/chebi/CHEBI:58088)
+        Parameters
+        ----------
+        qual : str
+            A Biomodels biological qualifier (e.g. 'is', 'isEncodedBy').
+        uri : str
+            The complete identifiers.org URI (e.g. 'http://identifiers.org/chebi/CHEBI:58088').
 
-        Returns None (modifies the qualifier collection in place).
+        Returns
+        -------
+        None
         """
         if qual == 'is':
             qual = 'isA'
@@ -1092,9 +1427,15 @@ class MIRIAMannotation(object):
 
         For an entity key, this compiles the pattern to a regex if necessary.
 
-        - *entity* a MIRIAM resource entity
+        Parameters
+        ----------
+        entity : str
+            A MIRIAM resource entity.
 
-        Returns True if the pattern is valid/compiled, False otherwise.
+        Returns
+        -------
+        bool
+            True if the pattern is valid/compiled, False otherwise.
         """
 
         if type(self.MIRIAM[entity]['pattern']) == RE_PATTERN_TYPE:
@@ -1114,10 +1455,17 @@ class MIRIAMannotation(object):
     def checkId(self, entity, mid):
         """Check that a MIRIAM entity ID is valid.
 
-        - *entity* a MIRIAM resource entity (e.g. 'CHEBI')
-        - *mid* the entity ID (e.g. 'CHEBI:17158')
+        Parameters
+        ----------
+        entity : str
+            A MIRIAM resource entity (e.g. 'CHEBI').
+        mid : str
+            The entity ID (e.g. 'CHEBI:17158').
 
-        Returns True if the ID matches the entity pattern, False otherwise.
+        Returns
+        -------
+        bool
+            True if the ID matches the entity pattern, False otherwise.
         """
         if self.checkEntityPattern(entity):
             res = re.findall(self.MIRIAM[entity]['pattern'], mid)
@@ -1134,9 +1482,15 @@ class MIRIAMannotation(object):
         the entity is not recognized, a list of possible candidates based on
         the first letters of the input is displayed.
 
-        - *entity* a MIRIAM resource entity (e.g. 'ChEBI')
+        Parameters
+        ----------
+        entity : str
+            A MIRIAM resource entity (e.g. 'ChEBI').
 
-        Returns the normalized entity name if valid, None otherwise.
+        Returns
+        -------
+        str or None
+            The normalized entity name if valid, None otherwise.
         """
         if entity.lower() not in self.MIDSlc:
             print(
@@ -1159,11 +1513,18 @@ class MIRIAMannotation(object):
     def addMIRIAMannotation(self, qual, entity, mid):
         """Add a qualified MIRIAM annotation.
 
-        - *qual* a Biomodels biological qualifier (e.g. 'is', 'isEncodedBy')
-        - *entity* a MIRIAM resource entity (e.g. 'ChEBI')
-        - *mid* the entity ID (e.g. 'CHEBI:17158')
+        Parameters
+        ----------
+        qual : str
+            A Biomodels biological qualifier (e.g. 'is', 'isEncodedBy').
+        entity : str
+            A MIRIAM resource entity (e.g. 'ChEBI').
+        mid : str
+            The entity ID (e.g. 'CHEBI:17158').
 
-        Returns None (modifies the qualifier collection in place).
+        Returns
+        -------
+        None
         """
         if qual == 'is':
             qual = 'isA'
@@ -1186,11 +1547,18 @@ class MIRIAMannotation(object):
     def deleteMIRIAMannotation(self, qual, entity, mid):
         """Delete a qualified MIRIAM annotation.
 
-        - *qual* a Biomodels biological qualifier (e.g. 'is', 'isEncodedBy')
-        - *entity* a MIRIAM resource entity (e.g. 'ChEBI')
-        - *mid* the entity ID (e.g. 'CHEBI:17158')
+        Parameters
+        ----------
+        qual : str
+            A Biomodels biological qualifier (e.g. 'is', 'isEncodedBy').
+        entity : str
+            A MIRIAM resource entity (e.g. 'ChEBI').
+        mid : str
+            The entity ID (e.g. 'CHEBI:17158').
 
-        Returns None (removes the annotation from the qualifier collection).
+        Returns
+        -------
+        None
         """
         if qual == 'is':
             qual = 'isA'
@@ -1232,9 +1600,15 @@ class MIRIAMannotation(object):
     def getMIRIAMUrisForQualifier(self, qual):
         """Return all URLs associated with a qualifier.
 
-        - *qual* the qualifier (e.g. 'is' or 'isEncoded')
+        Parameters
+        ----------
+        qual : str
+            The qualifier (e.g. 'is' or 'isEncoded').
 
-        Returns a tuple of URLs for the given qualifier, or () if not found.
+        Returns
+        -------
+        tuple
+            A tuple of URLs for the given qualifier, or () if not found.
         """
         if qual == 'is':
             qual = 'isA'
@@ -1252,9 +1626,14 @@ class MIRIAMannotation(object):
     def getAndViewUrisForQualifier(self, qual):
         """Retrieve all URLs associated with a qualifier and open them in browser tabs.
 
-        - *qual* the qualifier (e.g. 'is' or 'isEncoded')
+        Parameters
+        ----------
+        qual : str
+            The qualifier (e.g. 'is' or 'isEncoded').
 
-        Returns None (opens URLs in new browser tabs).
+        Returns
+        -------
+        None
         """
         Q = self.getMIRIAMUrisForQualifier(qual)
         if Q is not None:
@@ -1264,8 +1643,11 @@ class MIRIAMannotation(object):
     def getAllMIRIAMUris(self):
         """Return a dictionary of qualifiers that contain ID.org URLs.
 
-        Returns a dictionary mapping qualifier names to tuples of their associated
-        ID.org URLs.
+        Returns
+        -------
+        dict
+            A dictionary mapping qualifier names to tuples of their associated
+            ID.org URLs.
         """
         out = {}
         for q_ in self.QUALIFIERS:
@@ -1282,8 +1664,13 @@ class MIRIAMannotation(object):
     def viewURL(self, url):
         """Open a URL in a new browser tab.
 
-        - *url* the URL to open
+        Parameters
+        ----------
+        url : str
+            The URL to open.
 
-        Opens the given URL in a new browser tab.
+        Returns
+        -------
+        None
         """
         webbrowser.open_new_tab(url)
