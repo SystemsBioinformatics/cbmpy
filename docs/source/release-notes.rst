@@ -1,8 +1,8 @@
 Release Notes
--=-=--=-=----
+-------------
 
 0.8.9 (unreleased)
---=-=---------
+------------------
 
 Docstring improvements:
 
@@ -28,20 +28,20 @@ Improvements:
 - Fixed docstring style reference in CLAUDE.md (numpydoc -> numpy)
 
 0.8.8 (2023)
--==-=-=---
+------------
 
 - Support for Python 3.8 through 3.12
 - SBML FBCv3 support
 - Flux variability analysis improvements
 
 0.8.4 (2022)
--==-=-=--
+------------
 
 - Python 3.x compatibility update
 - SBML3 FBC standard support improvements
 
 0.8.2 (2021)
--==-=-=--
+------------
 
 - Bug fixes for SymPy compatibility
 - Improved requirements handling

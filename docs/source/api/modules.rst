@@ -1,10 +1,5 @@
-CBMPy Module Reference
-====================
-
-This section documents the main CBMPy module functions and classes.
-
 Flux Module Analysis
--===================
+=======
 
 .. automodule:: cbmpy.fluxmodules
    :members:
@@ -12,33 +7,30 @@ Flux Module Analysis
    :show-inheritance:
 
 Matroid Module
--============
+=======
 
 .. automodule:: cbmpy.fluxmodules.matroid
    :members:
    :undoc-members:
    :show-inheritance:
 
-Enumeration Module
--===============
+Decomposition Module
+=======
 
-.. automodule:: cbmpy.fluxmodules.enumeration
+.. automodule:: cbmpy.fluxmodules.decomposition
    :members:
    :undoc-members:
    :show-inheritance:
 
-Matroid Test Suite
--===============
-
-.. automodule:: cbmpy.fluxmodules.TestMatroid
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Sparse Rationals
----------------
+Sparse Rationals Module
+=======
 
 .. automodule:: cbmpy.fluxmodules.sparserationals
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. note::
+
+   The enumerate module is not documented here due to a missing dependency
+   (cbmpy.solver). See the source code in cbmpy/fluxmodules/enumerate.py.

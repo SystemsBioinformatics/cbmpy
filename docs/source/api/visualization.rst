@@ -1,8 +1,5 @@
 Visualization
--======-=-=
-
-CBPlot - Plotting Utilities
--===-=---=--=--------=-=--
+=======
 
 .. automodule:: cbmpy.CBPlot
    :members:
@@ -10,7 +7,7 @@ CBPlot - Plotting Utilities
    :show-inheritance:
 
 GUI Frontends
--=-=--=-=-----
+=======
 
 .. automodule:: cbmpy.CBGUI
    :members:
@@ -26,9 +23,14 @@ GUI Frontends
    :members:
    :undoc-members:
    :show-inheritance:
+   :noindex:
+
+.. note::
+
+   CBQt4 requires PyQT4 and may not be available in all environments.
 
 Multi-processing
--=---=-=--------
+=======
 
 .. automodule:: cbmpy.CBMultiCore
    :members:
@@ -46,17 +48,7 @@ Multi-processing
    :show-inheritance:
 
 Model Utilities
--======--=-----
-
-.. automodule:: cbmpy.CBTools
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: cbmpy.CBDataStruct
-   :members:
-   :undoc-members:
-   :show-inheritance:
+=======
 
 .. automodule:: cbmpy.CBModelTools
    :members:
