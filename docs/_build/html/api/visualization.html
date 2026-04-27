@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualization &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Release Notes" href="../release-notes.html" />
+    <link rel="prev" title="CBMPy: CBNetDB module" href="networking.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#matroid-module">Matroid Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#decomposition-module">Decomposition Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#sparse-rationals-module">Sparse Rationals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solvers.html">Solver Implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Visualization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbplot-module">CBMPy: CBPlot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBPlot.plotFluxVariability"><code class="docutils literal notranslate"><span class="pre">plotFluxVariability()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#gui-frontends">GUI Frontends</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbgui-module">CBMPy: CBGUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGUI.loadCBGUI"><code class="docutils literal notranslate"><span class="pre">loadCBGUI()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbwx-module">CBMPy: CBWx module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#multi-processing">Multi-processing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbmulticore-module">CBMPy: CBMultiCore module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBMultiCore.grouper"><code class="docutils literal notranslate"><span class="pre">grouper()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBMultiCore.runMultiCoreFVA"><code class="docutils literal notranslate"><span class="pre">runMultiCoreFVA()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbmultimodel-module">CBMPy: CBMultiModel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBMultiModel.copySpecies"><code class="docutils literal notranslate"><span class="pre">copySpecies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBMultiModel.copyReaction"><code class="docutils literal notranslate"><span class="pre">copyReaction()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbmultienv-module">CBMPy: CBMultiEnv module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBMultiEnv.addProteinCostAnnotation"><code class="docutils literal notranslate"><span class="pre">addProteinCostAnnotation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBMultiEnv.scaleProteinCostAnnotation"><code class="docutils literal notranslate"><span class="pre">scaleProteinCostAnnotation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBMultiEnv.runMultiStateFBA"><code class="docutils literal notranslate"><span class="pre">runMultiStateFBA()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#model-utilities">Model Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbmodeltools-module">CBMPy: CBModelTools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBModelTools.addReversibilityBounds"><code class="docutils literal notranslate"><span class="pre">addReversibilityBounds()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBModelTools.addReversibilityBoundsIgnoreReversible"><code class="docutils literal notranslate"><span class="pre">addReversibilityBoundsIgnoreReversible()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBModelTools.addSpecies"><code class="docutils literal notranslate"><span class="pre">addSpecies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBModelTools.addBounds"><code class="docutils literal notranslate"><span class="pre">addBounds()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBModelTools.addReactions"><code class="docutils literal notranslate"><span class="pre">addReactions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBModelTools.addObjectiveFunction"><code class="docutils literal notranslate"><span class="pre">addObjectiveFunction()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBModelTools.quickDefaultBuild"><code class="docutils literal notranslate"><span class="pre">quickDefaultBuild()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBModelTools.printSolution"><code class="docutils literal notranslate"><span class="pre">printSolution()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-default-model-module">CBMPy: default model module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Visualization</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/visualization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="visualization">
+<h1>Visualization<a class="headerlink" href="#visualization" title="Link to this heading"></a></h1>
+<section id="cbmpy-cbplot-module">
+<span id="module-cbmpy.CBPlot"></span><h2>CBMPy: CBPlot module<a class="headerlink" href="#cbmpy-cbplot-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBPlot.py 710 2020-04-27 14:22:34Z bgoli $)</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBPlot.plotFluxVariability">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBPlot.</span></span><span class="sig-name descname"><span class="pre">plotFluxVariability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fva_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fva_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ySlice</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minHeight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxHeight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roundec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoclose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fluxval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'png'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBPlot.html#plotFluxVariability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBPlot.plotFluxVariability" title="Link to this definition"></a></dt>
+<dd><p>Plots and saves as an image the flux variability results as generated by
+CBSolver.FluxVariabilityAnalysis.</p>
+<ul class="simple">
+<li><p><em>fva_data</em> FluxVariabilityAnalysis() FVA OUTPUT_ARRAY</p></li>
+<li><p><em>fva_names</em> FluxVariabilityAnalysis() FVA OUTPUT_NAMES</p></li>
+<li><p><em>fname</em> filename_base for the CSV output</p></li>
+<li><p><em>work_dir</em> [default=None] if set the output directory for the csv files</p></li>
+<li><p><em>title</em> [default=None] the user defined title for the graph</p></li>
+<li><p><em>ySlice</em> [default=None] this sets an absolute (fixed) limit on the Y-axis (+- ySlice)</p></li>
+<li><p><em>minHeight</em> [default=None] the minimum length that defined a span</p></li>
+<li><p><em>maxHeight</em> [default=None] the maximum length a span can obtain, bar will be limited to maxHeight and coloured yellow</p></li>
+<li><p><em>roundec</em> [default=None] an integer indicating at which decimal to round off output. Default is no rounding.</p></li>
+<li><p><em>autoclose</em> [default=True] autoclose plot after save</p></li>
+<li><p><em>fluxval</em> [default=True] plot the flux value</p></li>
+<li><p><em>type</em> [default=’png’] the output format, depends on matplotlib backend e.g. ‘png’, ‘pdf’, ‘eps’</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="gui-frontends">
+<h1>GUI Frontends<a class="headerlink" href="#gui-frontends" title="Link to this heading"></a></h1>
+<section id="cbmpy-cbgui-module">
+<span id="module-cbmpy.CBGUI"></span><h2>CBMPy: CBGUI module<a class="headerlink" href="#cbmpy-cbgui-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBGUI.py 710 2020-04-27 14:22:34Z bgoli $)</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGUI.loadCBGUI">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGUI.</span></span><span class="sig-name descname"><span class="pre">loadCBGUI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGUI.html#loadCBGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGUI.loadCBGUI" title="Link to this definition"></a></dt>
+<dd><p>Load an FBA model instance into the quick editor to view or change basic
+model properties.</p>
+<ul class="simple">
+<li><p><em>mod</em> a PySCeS CBMPy model instance</p></li>
+</ul>
+</dd></dl>
+
+<section id="cbmpy-cbwx-module">
+<span id="module-cbmpy.CBWx"></span><h2>CBMPy: CBWx module<a class="headerlink" href="#cbmpy-cbwx-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBWx.py 710 2020-04-27 14:22:34Z bgoli $)</p>
+</section>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CBQt4 requires PyQT4 and may not be available in all environments.</p>
+</div>
+</section>
+<section id="multi-processing">
+<h1>Multi-processing<a class="headerlink" href="#multi-processing" title="Link to this heading"></a></h1>
+<section id="cbmpy-cbmulticore-module">
+<span id="module-cbmpy.CBMultiCore"></span><h2>CBMPy: CBMultiCore module<a class="headerlink" href="#cbmpy-cbmulticore-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBMultiCore.py 710 2020-04-27 14:22:34Z bgoli $)</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBMultiCore.grouper">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBMultiCore.</span></span><span class="sig-name descname"><span class="pre">grouper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'abcdefg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'x')</span> <span class="pre">--&gt;</span> <span class="pre">('a'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'b'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'c')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">('d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'e'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'f')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">('g'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'x'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBMultiCore.html#grouper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBMultiCore.grouper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBMultiCore.runMultiCoreFVA">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBMultiCore.</span></span><span class="sig-name descname"><span class="pre">runMultiCoreFVA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_reactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_opt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objF2constr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs_sense</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lower'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optPercentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oldlpgen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markupmodel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">procs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_bin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBMultiCore.html#runMultiCoreFVA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBMultiCore.runMultiCoreFVA" title="Link to this definition"></a></dt>
+<dd><p>Run a multicore FVA where:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>fba</em> is an fba model instance</p></li>
+<li><p><em>procs</em> [default=2] number of processing threads (optimum seems to be about the number of physical cores)</p></li>
+<li><p><em>python_override_bin</em> allows customization of the Python bin used for the multicore process</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<section id="cbmpy-cbmultimodel-module">
+<span id="module-cbmpy.CBMultiModel"></span><h2>CBMPy: CBMultiModel module<a class="headerlink" href="#cbmpy-cbmultimodel-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBTools.py 544 2024-01-12 16:31:50Z bgoli $)</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBMultiModel.copySpecies">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBMultiModel.</span></span><span class="sig-name descname"><span class="pre">copySpecies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m_src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m_targ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBMultiModel.html#copySpecies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBMultiModel.copySpecies" title="Link to this definition"></a></dt>
+<dd><p>Copy a species from a source model to a target model.</p>
+<ul class="simple">
+<li><p><em>m_src</em> the source model</p></li>
+<li><p><em>m_targ</em> the target model</p></li>
+<li><p><em>sid</em> the species to copy</p></li>
+<li><p><em>is_boundary</em> [default] add the species as a variable metabolite or boundary if True</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBMultiModel.copyReaction">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBMultiModel.</span></span><span class="sig-name descname"><span class="pre">copyReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m_src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m_targ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altrid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBMultiModel.html#copyReaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBMultiModel.copyReaction" title="Link to this definition"></a></dt>
+<dd><p>Copy a reaction from a source model to a target model, if the required species
+exist in the target then they are mapped as reagents, otherwise new metabolites are
+added as boundary species.</p>
+<ul class="simple">
+<li><p><em>m_src</em> the source model</p></li>
+<li><p><em>m_targ</em> the target model</p></li>
+<li><p><em>rid</em> the reaction id to copy</p></li>
+<li><p><em>altrid</em> if the reaction name exists in the target, try use this one instead</p></li>
+</ul>
+</dd></dl>
+
+<section id="cbmpy-cbmultienv-module">
+<span id="module-cbmpy.CBMultiEnv"></span><h2>CBMPy: CBMultiEnv module<a class="headerlink" href="#cbmpy-cbmultienv-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBMultiEnv.py 710 2020-04-27 14:22:34Z bgoli $)</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBMultiEnv.addProteinCostAnnotation">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBMultiEnv.</span></span><span class="sig-name descname"><span class="pre">addProteinCostAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reaction_gene_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_peptide_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_annotation_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GENE</span> <span class="pre">ASSOCIATION'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBMultiEnv.html#addProteinCostAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBMultiEnv.addProteinCostAnnotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBMultiEnv.scaleProteinCostAnnotation">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBMultiEnv.</span></span><span class="sig-name descname"><span class="pre">scaleProteinCostAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBMultiEnv.html#scaleProteinCostAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBMultiEnv.scaleProteinCostAnnotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBMultiEnv.runMultiStateFBA">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBMultiEnv.</span></span><span class="sig-name descname"><span class="pre">runMultiStateFBA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofva</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fva_selected_reactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBMultiEnv.html#runMultiStateFBA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBMultiEnv.runMultiStateFBA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="model-utilities">
+<h1>Model Utilities<a class="headerlink" href="#model-utilities" title="Link to this heading"></a></h1>
+<section id="cbmpy-cbmodeltools-module">
+<span id="module-cbmpy.CBModelTools"></span><h2>CBMPy: CBModelTools module<a class="headerlink" href="#cbmpy-cbmodeltools-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A particular PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBModelTools.py 710 2020-04-27 14:22:34Z bgoli $)</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBModelTools.addReversibilityBounds">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBModelTools.</span></span><span class="sig-name descname"><span class="pre">addReversibilityBounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infinity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBModelTools.html#addReversibilityBounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBModelTools.addReversibilityBounds" title="Link to this definition"></a></dt>
+<dd><p>Add reversibility bounds to the bounds dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reactions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of reactions.</p></li>
+<li><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of bounds.</p></li>
+<li><p><strong>infinity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – The value for infinity, by default numpy.inf.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>dict</em> – The updated bounds dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBModelTools.addReversibilityBoundsIgnoreReversible">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBModelTools.</span></span><span class="sig-name descname"><span class="pre">addReversibilityBoundsIgnoreReversible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBModelTools.html#addReversibilityBoundsIgnoreReversible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBModelTools.addReversibilityBoundsIgnoreReversible" title="Link to this definition"></a></dt>
+<dd><p>Add reversibility bounds to the bounds dictionary, ignoring reversible reactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reactions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of reactions.</p></li>
+<li><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of bounds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>dict</em> – The updated bounds dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBModelTools.addSpecies">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBModelTools.</span></span><span class="sig-name descname"><span class="pre">addSpecies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBModelTools.html#addSpecies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBModelTools.addSpecies" title="Link to this definition"></a></dt>
+<dd><p>Add species to the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a>) – The model object.</p></li>
+<li><p><strong>species</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of species information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>None</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBModelTools.addBounds">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBModelTools.</span></span><span class="sig-name descname"><span class="pre">addBounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBModelTools.html#addBounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBModelTools.addBounds" title="Link to this definition"></a></dt>
+<dd><p>Add flux bounds to the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a>) – The model object.</p></li>
+<li><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of bounds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>None</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBModelTools.addReactions">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBModelTools.</span></span><span class="sig-name descname"><span class="pre">addReactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reactions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBModelTools.html#addReactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBModelTools.addReactions" title="Link to this definition"></a></dt>
+<dd><p>Add reactions to the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a>) – The model object.</p></li>
+<li><p><strong>reactions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of reactions information.</p></li>
+<li><p><strong>Returns</strong></p></li>
+<li><p><strong>else</strong></p></li>
+<li><p><strong>None</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBModelTools.addObjectiveFunction">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBModelTools.</span></span><span class="sig-name descname"><span class="pre">addObjectiveFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objective_function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBModelTools.html#addObjectiveFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBModelTools.addObjectiveFunction" title="Link to this definition"></a></dt>
+<dd><p>Add objective function to the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a>) – The model object.</p></li>
+<li><p><strong>objective_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of objective function information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>None</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBModelTools.quickDefaultBuild">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBModelTools.</span></span><span class="sig-name descname"><span class="pre">quickDefaultBuild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Reactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Objective_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infinity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBModelTools.html#quickDefaultBuild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBModelTools.quickDefaultBuild" title="Link to this definition"></a></dt>
+<dd><p>Quickly build a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name of the model.</p></li>
+<li><p><strong>Reactions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of reactions.</p></li>
+<li><p><strong>Species</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of species.</p></li>
+<li><p><strong>Bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of bounds.</p></li>
+<li><p><strong>Objective_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Dictionary of objective functions.</p></li>
+<li><p><strong>infinity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – The value for infinity, by default numpy.inf.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>object</em> – The built model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBModelTools.printSolution">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBModelTools.</span></span><span class="sig-name descname"><span class="pre">printSolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBModelTools.html#printSolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBModelTools.printSolution" title="Link to this definition"></a></dt>
+<dd><p>Print the solution to the console.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fba</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a>) – The model object containing the solution.</p></li>
+<li><p><strong>wait</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to wait for user input, by default False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>None</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="cbmpy-default-model-module">
+<span id="module-cbmpy.CBDefaultModels"></span><h2>CBMPy: default model module<a class="headerlink" href="#cbmpy-default-model-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBCommon.py 660 2024-09-24 14:57:04Z bgoli $)</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="networking.html" class="btn btn-neutral float-left" title="CBMPy: CBNetDB module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../release-notes.html" class="btn btn-neutral float-right" title="Release Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

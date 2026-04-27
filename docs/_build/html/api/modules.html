@@ -1,0 +1,1004 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flux Module Analysis &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CBMPy Core Classes" href="core.html" />
+    <link rel="prev" title="Installation Guide" href="../installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#matroid-module">Matroid Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-fluxmodules-matroid-module">CBMPy: fluxmodules matroid module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid"><code class="docutils literal notranslate"><span class="pre">Matroid</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.__init__"><code class="docutils literal notranslate"><span class="pre">Matroid.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.findModules"><code class="docutils literal notranslate"><span class="pre">Matroid.findModules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.dual"><code class="docutils literal notranslate"><span class="pre">Matroid.dual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.copy"><code class="docutils literal notranslate"><span class="pre">Matroid.copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.contract"><code class="docutils literal notranslate"><span class="pre">Matroid.contract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.exchange"><code class="docutils literal notranslate"><span class="pre">Matroid.exchange()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.delete"><code class="docutils literal notranslate"><span class="pre">Matroid.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.parallel"><code class="docutils literal notranslate"><span class="pre">Matroid.parallel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.coparallel"><code class="docutils literal notranslate"><span class="pre">Matroid.coparallel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.isParallel"><code class="docutils literal notranslate"><span class="pre">Matroid.isParallel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.isCoparallel"><code class="docutils literal notranslate"><span class="pre">Matroid.isCoparallel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.fundamentalCircuit"><code class="docutils literal notranslate"><span class="pre">Matroid.fundamentalCircuit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.fundamentalCircuitValues"><code class="docutils literal notranslate"><span class="pre">Matroid.fundamentalCircuitValues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.rank"><code class="docutils literal notranslate"><span class="pre">Matroid.rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.corank"><code class="docutils literal notranslate"><span class="pre">Matroid.corank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.isIndependent"><code class="docutils literal notranslate"><span class="pre">Matroid.isIndependent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.isCoIndependent"><code class="docutils literal notranslate"><span class="pre">Matroid.isCoIndependent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.connectivity"><code class="docutils literal notranslate"><span class="pre">Matroid.connectivity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.getInterface"><code class="docutils literal notranslate"><span class="pre">Matroid.getInterface()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.Matroid.similarityMatrix"><code class="docutils literal notranslate"><span class="pre">Matroid.similarityMatrix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.fromMatrix"><code class="docutils literal notranslate"><span class="pre">fromMatrix()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.SimilarityMatrix"><code class="docutils literal notranslate"><span class="pre">SimilarityMatrix</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.SimilarityMatrix.__init__"><code class="docutils literal notranslate"><span class="pre">SimilarityMatrix.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.matroid.SimilarityMatrix.max"><code class="docutils literal notranslate"><span class="pre">SimilarityMatrix.max()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#decomposition-module">Decomposition Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-fluxmodules-decomposiiton-module">CBMPy: fluxmodules decomposiiton module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Edge"><code class="docutils literal notranslate"><span class="pre">Edge</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Edge.__init__"><code class="docutils literal notranslate"><span class="pre">Edge.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Edge.getOther"><code class="docutils literal notranslate"><span class="pre">Edge.getOther()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex"><code class="docutils literal notranslate"><span class="pre">AbstractVertex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.maxId"><code class="docutils literal notranslate"><span class="pre">AbstractVertex.maxId</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.__init__"><code class="docutils literal notranslate"><span class="pre">AbstractVertex.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.id"><code class="docutils literal notranslate"><span class="pre">AbstractVertex.id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.label"><code class="docutils literal notranslate"><span class="pre">AbstractVertex.label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.replaceAdjacent"><code class="docutils literal notranslate"><span class="pre">AbstractVertex.replaceAdjacent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.getAdjacent"><code class="docutils literal notranslate"><span class="pre">AbstractVertex.getAdjacent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.getLeaves"><code class="docutils literal notranslate"><span class="pre">AbstractVertex.getLeaves()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex"><code class="docutils literal notranslate"><span class="pre">Vertex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex.__init__"><code class="docutils literal notranslate"><span class="pre">Vertex.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex.label"><code class="docutils literal notranslate"><span class="pre">Vertex.label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex.setUpRoot"><code class="docutils literal notranslate"><span class="pre">Vertex.setUpRoot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex.splitOff"><code class="docutils literal notranslate"><span class="pre">Vertex.splitOff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex.replaceAdjacent"><code class="docutils literal notranslate"><span class="pre">Vertex.replaceAdjacent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex.getAdjacent"><code class="docutils literal notranslate"><span class="pre">Vertex.getAdjacent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex.getLeaves"><code class="docutils literal notranslate"><span class="pre">Vertex.getLeaves()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Vertex.isSimple"><code class="docutils literal notranslate"><span class="pre">Vertex.isSimple()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Leaf"><code class="docutils literal notranslate"><span class="pre">Leaf</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Leaf.__init__"><code class="docutils literal notranslate"><span class="pre">Leaf.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Leaf.label"><code class="docutils literal notranslate"><span class="pre">Leaf.label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Leaf.replaceAdjacent"><code class="docutils literal notranslate"><span class="pre">Leaf.replaceAdjacent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Leaf.getAdjacent"><code class="docutils literal notranslate"><span class="pre">Leaf.getAdjacent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Leaf.getLeaves"><code class="docutils literal notranslate"><span class="pre">Leaf.getLeaves()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition"><code class="docutils literal notranslate"><span class="pre">Decomposition</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.__init__"><code class="docutils literal notranslate"><span class="pre">Decomposition.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.listNonLeaves"><code class="docutils literal notranslate"><span class="pre">Decomposition.listNonLeaves()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.listNonLeavesRec"><code class="docutils literal notranslate"><span class="pre">Decomposition.listNonLeavesRec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.getVertex"><code class="docutils literal notranslate"><span class="pre">Decomposition.getVertex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.splitZeroModules"><code class="docutils literal notranslate"><span class="pre">Decomposition.splitZeroModules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.splitSimple"><code class="docutils literal notranslate"><span class="pre">Decomposition.splitSimple()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.splitOneModules"><code class="docutils literal notranslate"><span class="pre">Decomposition.splitOneModules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.makeSubcubic"><code class="docutils literal notranslate"><span class="pre">Decomposition.makeSubcubic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.isParallelSeries"><code class="docutils literal notranslate"><span class="pre">Decomposition.isParallelSeries()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.verifyFullyBranched"><code class="docutils literal notranslate"><span class="pre">Decomposition.verifyFullyBranched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.verifyEdgeWidth"><code class="docutils literal notranslate"><span class="pre">Decomposition.verifyEdgeWidth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.getWidth"><code class="docutils literal notranslate"><span class="pre">Decomposition.getWidth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.poolmanMethod"><code class="docutils literal notranslate"><span class="pre">Decomposition.poolmanMethod()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.makeGraphViz"><code class="docutils literal notranslate"><span class="pre">Decomposition.makeGraphViz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.Decomposition.write"><code class="docutils literal notranslate"><span class="pre">Decomposition.write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.NotFullyBranchedException"><code class="docutils literal notranslate"><span class="pre">NotFullyBranchedException</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.NotFullyBranchedException.__init__"><code class="docutils literal notranslate"><span class="pre">NotFullyBranchedException.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.EdgeWidthException"><code class="docutils literal notranslate"><span class="pre">EdgeWidthException</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.decomposition.EdgeWidthException.__init__"><code class="docutils literal notranslate"><span class="pre">EdgeWidthException.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#sparse-rationals-module">Sparse Rationals Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-fluxmodules-sparse-rationals-module">CBMPy: fluxmodules sparse rationals module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix"><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.__init__"><code class="docutils literal notranslate"><span class="pre">Matrix.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.rows"><code class="docutils literal notranslate"><span class="pre">Matrix.rows()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.cols"><code class="docutils literal notranslate"><span class="pre">Matrix.cols()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.getCol"><code class="docutils literal notranslate"><span class="pre">Matrix.getCol()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.transpose"><code class="docutils literal notranslate"><span class="pre">Matrix.transpose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.copy"><code class="docutils literal notranslate"><span class="pre">Matrix.copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.reset"><code class="docutils literal notranslate"><span class="pre">Matrix.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.coladd"><code class="docutils literal notranslate"><span class="pre">Matrix.coladd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.addMetabolicNetwork"><code class="docutils literal notranslate"><span class="pre">Matrix.addMetabolicNetwork()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.addListRep"><code class="docutils literal notranslate"><span class="pre">Matrix.addListRep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.toNumpy"><code class="docutils literal notranslate"><span class="pre">Matrix.toNumpy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.checkRows"><code class="docutils literal notranslate"><span class="pre">Matrix.checkRows()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.Matrix.isZero"><code class="docutils literal notranslate"><span class="pre">Matrix.isZero()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.fluxmodules.sparserationals.revslice"><code class="docutils literal notranslate"><span class="pre">revslice()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solvers.html">Solver Implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#gui-frontends">GUI Frontends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#multi-processing">Multi-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#model-utilities">Model Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Flux Module Analysis</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="flux-module-analysis">
+<h1>Flux Module Analysis<a class="headerlink" href="#flux-module-analysis" title="Link to this heading"></a></h1>
+</section>
+<section id="matroid-module">
+<span id="module-cbmpy.fluxmodules"></span><h1>Matroid Module<a class="headerlink" href="#matroid-module" title="Link to this heading"></a></h1>
+<section id="cbmpy-fluxmodules-matroid-module">
+<span id="module-cbmpy.fluxmodules.matroid"></span><h2>CBMPy: fluxmodules matroid module<a class="headerlink" href="#cbmpy-fluxmodules-matroid-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Arne C. Reimers
+Contact email: <a class="reference external" href="mailto:arne&#46;c&#46;reimers&#37;&#52;&#48;gmail&#46;com">arne<span>&#46;</span>c<span>&#46;</span>reimers<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.matroid.</span></span><span class="sig-name descname"><span class="pre">Matroid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbasis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A linear matroid.</p>
+<p>It has the fields:
+elems - lists the names of the elements
+basis - lists the names of the basis elements
+nbasis - lists the names of the non-basis elements (dual basis)
+rep - reduced representation matrix,</p>
+<blockquote>
+<div><p>rows correspond to basis-elements and
+columns correspond to non-basis elements</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbasis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.__init__" title="Link to this definition"></a></dt>
+<dd><p>Create matroid from given reduced representation matrix.</p>
+<p>The names of the rows are given by basis. The names of the columns are given by
+nbasis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.findModules">
+<span class="sig-name descname"><span class="pre">findModules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.findModules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.findModules" title="Link to this definition"></a></dt>
+<dd><p>Computes the separators (modules) of this matroid.</p>
+<p>Each module is returned as a matroid.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.dual">
+<span class="sig-name descname"><span class="pre">dual</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.dual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.dual" title="Link to this definition"></a></dt>
+<dd><p>Returns the dual matroid.</p>
+<p>By this operation the original coefficient matrix is lost for the dual.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.copy" title="Link to this definition"></a></dt>
+<dd><p>Copies this matroid.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.contract">
+<span class="sig-name descname"><span class="pre">contract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">toContract</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.contract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.contract" title="Link to this definition"></a></dt>
+<dd><p>Computes self / toContract.</p>
+<p>The matroid with toContract contracted is returned. This instance is not
+modified.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.exchange">
+<span class="sig-name descname"><span class="pre">exchange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.exchange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.exchange" title="Link to this definition"></a></dt>
+<dd><p>Exchanges a basis element with a non-basis element.</p>
+<p>requirement is that the fundamental circuit of the non-basis element uses the
+basis element</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">toDelete</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.delete" title="Link to this definition"></a></dt>
+<dd><p>Computes self toDelete.</p>
+<p>The matroid with toDelete deleted is returned. No elements of this instance are
+deleted. However, the current basis can change.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.parallel">
+<span class="sig-name descname"><span class="pre">parallel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.parallel" title="Link to this definition"></a></dt>
+<dd><p>List all groups of parallel elements.</p>
+<p>The result is a set of frozen sets, each set listing the ids of the parallel
+elements</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.coparallel">
+<span class="sig-name descname"><span class="pre">coparallel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.coparallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.coparallel" title="Link to this definition"></a></dt>
+<dd><p>List all groups of coparallel elements.</p>
+<p>In metabolic network terminology the coparallel elements are the fully coupled
+reactions.</p>
+<p>The result is a set of frozensets, each set listing the ids of the coparallel
+elements</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.isParallel">
+<span class="sig-name descname"><span class="pre">isParallel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.isParallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.isParallel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.isCoparallel">
+<span class="sig-name descname"><span class="pre">isCoparallel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.isCoparallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.isCoparallel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.fundamentalCircuit">
+<span class="sig-name descname"><span class="pre">fundamentalCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.fundamentalCircuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.fundamentalCircuit" title="Link to this definition"></a></dt>
+<dd><p>Returns the fundamental circuit of an element.</p>
+<p>If e is a non-basis element, the fundamental circuit, i.e. the support of the
+column of e, is returned.</p>
+<p>If e is a basis element, the cofundamental circuit, i.e. the support of the row
+of e, is returned.</p>
+<p>The returned fundamental circuit does not contain e itself</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.fundamentalCircuitValues">
+<span class="sig-name descname"><span class="pre">fundamentalCircuitValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.fundamentalCircuitValues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.fundamentalCircuitValues" title="Link to this definition"></a></dt>
+<dd><p>Returns the fundamental circuit of an element with the coefficients.</p>
+<p>If e is a non-basis element, the fundamental circuit, i.e. the support of the
+column of e, is returned.</p>
+<p>If e is a basis element, the cofundamental circuit, i.e. the support of the row
+of e, is returned.</p>
+<p>The returned fundamental circuit does not contain e itself. If needed, it should
+be added manually afterwards with a coefficient of 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.rank">
+<span class="sig-name descname"><span class="pre">rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elems</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.rank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.rank" title="Link to this definition"></a></dt>
+<dd><p>Computes the rank of elems.</p>
+<p>This method puts as many elements of elems into the basis. The number of
+elements from elems in the final basis is returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.corank">
+<span class="sig-name descname"><span class="pre">corank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elems</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.corank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.corank" title="Link to this definition"></a></dt>
+<dd><p>Computes the corank of elems.</p>
+<p>This method puts as many elements of elems into the non-basis. The number of
+elements from elems in the final non-basis is returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.isIndependent">
+<span class="sig-name descname"><span class="pre">isIndependent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elems</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.isIndependent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.isIndependent" title="Link to this definition"></a></dt>
+<dd><p>Checks if the given set of elements is independent.</p>
+<p>This does not modify this matroid, but may change its internal basis. If this
+method returns true, the current basis contains all elements of elems</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.isCoIndependent">
+<span class="sig-name descname"><span class="pre">isCoIndependent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elems</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.isCoIndependent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.isCoIndependent" title="Link to this definition"></a></dt>
+<dd><p>Checks if the given set of elements is coindependent.</p>
+<p>This does not modify this matroid, but may change its internal basis. If this
+method returns true, the current basis contains all no elements of elems</p>
+<p>This is the same as isIndependent, only on the dual</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.connectivity">
+<span class="sig-name descname"><span class="pre">connectivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">separation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.connectivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.connectivity" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the connectivity function for the given separation.</p>
+<p>separation is a set of elements encoding one side of the separation. The other
+side is implied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.getInterface">
+<span class="sig-name descname"><span class="pre">getInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">separation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.getInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.getInterface" title="Link to this definition"></a></dt>
+<dd><p>Compute a list of circuits that define the interface of the given
+separation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.Matroid.similarityMatrix">
+<span class="sig-name descname"><span class="pre">similarityMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#Matroid.similarityMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.Matroid.similarityMatrix" title="Link to this definition"></a></dt>
+<dd><p>Computes a similarity matrix on the elements.</p>
+<p>For each pair of elements the similarity matrix has an entry that
+gives the similarity.</p>
+<p>stype gives what kind of similarity matrix should be computed.
+Possibilities are:
+direct - direct from the columns of the original coefficient matrix</p>
+<blockquote>
+<div><p>(needs the original coefficient matrix and in the case of
+contractions the result is not well defined)</p>
+</div></blockquote>
+<p>__cols - normalized from the columns (rows are orthogonal)
+rows - normalized from the rows (columns are orthogonal)
+combined - takes max(__cols, rows)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.fromMatrix">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.matroid.</span></span><span class="sig-name descname"><span class="pre">fromMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#fromMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.fromMatrix" title="Link to this definition"></a></dt>
+<dd><p>Builds the reduced representation matrix.</p>
+<p>Given a matrix of columns (self.matrix) it builds the reduced representation matrix
+(self.rep) that has rows for each basis element and columns for each non-basis
+element.</p>
+<p>From this form the fundamental cycles can easily be read of and other operations
+like deletion and contraction are easy.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.SimilarityMatrix">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.matroid.</span></span><span class="sig-name descname"><span class="pre">SimilarityMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elems</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#SimilarityMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.SimilarityMatrix" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.SimilarityMatrix.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elems</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#SimilarityMatrix.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.SimilarityMatrix.__init__" title="Link to this definition"></a></dt>
+<dd><p>Builds a similarity matrix out of a matrix and element names.</p>
+<p>the matrix must be square and have as many rows/columns as elems has entries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.matroid.SimilarityMatrix.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simmatrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/matroid.html#SimilarityMatrix.max"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.matroid.SimilarityMatrix.max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="decomposition-module">
+<h1>Decomposition Module<a class="headerlink" href="#decomposition-module" title="Link to this heading"></a></h1>
+<section id="cbmpy-fluxmodules-decomposiiton-module">
+<span id="module-cbmpy.fluxmodules.decomposition"></span><h2>CBMPy: fluxmodules decomposiiton module<a class="headerlink" href="#cbmpy-fluxmodules-decomposiiton-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Arne C. Reimers
+Contact email: <a class="reference external" href="mailto:arne&#46;c&#46;reimers&#37;&#52;&#48;gmail&#46;com">arne<span>&#46;</span>c<span>&#46;</span>reimers<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Edge">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.decomposition.</span></span><span class="sig-name descname"><span class="pre">Edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Edge" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Every edge connects two vertices.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Edge.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Edge.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Edge.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize edge connecting vertices a and b.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Edge.getOther">
+<span class="sig-name descname"><span class="pre">getOther</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Edge.getOther"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Edge.getOther" title="Link to this definition"></a></dt>
+<dd><p>Give the other vertex then the specified one.</p>
+<p>The specified vertex must be one of this edges vertices</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.AbstractVertex">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.decomposition.</span></span><span class="sig-name descname"><span class="pre">AbstractVertex</span></span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#AbstractVertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.AbstractVertex" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A vertex in a graph.</p>
+<p>It can be a leaf or an inner node</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.AbstractVertex.maxId">
+<span class="sig-name descname"><span class="pre">maxId</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.maxId" title="Link to this definition"></a></dt>
+<dd><p>For giving unique ids for hashing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.AbstractVertex.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#AbstractVertex.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.AbstractVertex.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#AbstractVertex.id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.AbstractVertex.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#AbstractVertex.label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.label" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.AbstractVertex.replaceAdjacent">
+<span class="sig-name descname"><span class="pre">replaceAdjacent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#AbstractVertex.replaceAdjacent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.replaceAdjacent" title="Link to this definition"></a></dt>
+<dd><p>Replace the adjacent node old by new.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.AbstractVertex.getAdjacent">
+<span class="sig-name descname"><span class="pre">getAdjacent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#AbstractVertex.getAdjacent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.getAdjacent" title="Link to this definition"></a></dt>
+<dd><p>List adjacent nodes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.AbstractVertex.getLeaves">
+<span class="sig-name descname"><span class="pre">getLeaves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fromVertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#AbstractVertex.getLeaves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.AbstractVertex.getLeaves" title="Link to this definition"></a></dt>
+<dd><p>Enumerates all the leaves of this vertex that are reachable without using
+fromVertex.</p>
+<p>fromVertex must be a vertex adjacent to this vertex</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.decomposition.</span></span><span class="sig-name descname"><span class="pre">Vertex</span></span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex" title="cbmpy.fluxmodules.decomposition.AbstractVertex"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractVertex</span></code></a></p>
+<p>Represents an inner vertex (i.e., not a leaf)</p>
+<p>Every Vertex contains a map (edges) of adjacent edges resp. vertices.
+Each Edge has a list of elements associated to it (the interface).
+Each Vertex stores a matroid, whoose elements are contributed by the edges.</p>
+<p>The map edges has the following form:
+The keys are the incident vertices.
+The values are the list of elements contributed by the edge</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex.label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex.label" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex.setUpRoot">
+<span class="sig-name descname"><span class="pre">setUpRoot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matroid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex.setUpRoot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex.setUpRoot" title="Link to this definition"></a></dt>
+<dd><p>Set ups this vertex as the root node for the given matroid.</p>
+<p>This means we add leaves for all the elements of the matroid to this vertex</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex.splitOff">
+<span class="sig-name descname"><span class="pre">splitOff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex.splitOff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex.splitOff" title="Link to this definition"></a></dt>
+<dd><p>Splits of a list of adjacent vertices.</p>
+<p>adjacent must be a list of vertices that are adjacent to this node. The ist
+adjacent must contain more than one element</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex.replaceAdjacent">
+<span class="sig-name descname"><span class="pre">replaceAdjacent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex.replaceAdjacent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex.replaceAdjacent" title="Link to this definition"></a></dt>
+<dd><p>Replace the adjacent node old by new.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex.getAdjacent">
+<span class="sig-name descname"><span class="pre">getAdjacent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex.getAdjacent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex.getAdjacent" title="Link to this definition"></a></dt>
+<dd><p>List adjacent nodes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex.getLeaves">
+<span class="sig-name descname"><span class="pre">getLeaves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fromVertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex.getLeaves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex.getLeaves" title="Link to this definition"></a></dt>
+<dd><p>Enumerates all the leaves of this vertex that are reachable without using
+fromVertex.</p>
+<p>If fromVertex is not a vertex incident to this vertex, then all leaves are
+enumerated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Vertex.isSimple">
+<span class="sig-name descname"><span class="pre">isSimple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Vertex.isSimple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Vertex.isSimple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Leaf">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.decomposition.</span></span><span class="sig-name descname"><span class="pre">Leaf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjacent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Leaf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Leaf" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbmpy.fluxmodules.decomposition.AbstractVertex" title="cbmpy.fluxmodules.decomposition.AbstractVertex"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractVertex</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Leaf.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjacent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Leaf.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Leaf.__init__" title="Link to this definition"></a></dt>
+<dd><p>Creates leaf representing an matroid element.</p>
+<p>element is the matroid element to represent adjacent is the vertex to which this
+leaf is added</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Leaf.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Leaf.label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Leaf.label" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Leaf.replaceAdjacent">
+<span class="sig-name descname"><span class="pre">replaceAdjacent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Leaf.replaceAdjacent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Leaf.replaceAdjacent" title="Link to this definition"></a></dt>
+<dd><p>Replace the adjacent node old by new.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Leaf.getAdjacent">
+<span class="sig-name descname"><span class="pre">getAdjacent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Leaf.getAdjacent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Leaf.getAdjacent" title="Link to this definition"></a></dt>
+<dd><p>List adjacent nodes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Leaf.getLeaves">
+<span class="sig-name descname"><span class="pre">getLeaves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fromVertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Leaf.getLeaves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Leaf.getLeaves" title="Link to this definition"></a></dt>
+<dd><p>Enumerates all the leaves of this vertex that are reachable without using
+fromVertex.</p>
+<p>fromVertex must be a vertex adjacent to this vertex</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.decomposition.</span></span><span class="sig-name descname"><span class="pre">Decomposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matroid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Hierarchical branch decomposition.</p>
+<p>Actually can also represent a partial branch decomposition as intermediate
+results.</p>
+<p>It has the following fields:
+matroid - the matroid of this branch decomposition
+root - a vertex of the graph representing the branch decomposition</p>
+<p>TODO: more details</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matroid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes as star branch decomposition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.listNonLeaves">
+<span class="sig-name descname"><span class="pre">listNonLeaves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.listNonLeaves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.listNonLeaves" title="Link to this definition"></a></dt>
+<dd><p>List all non-leaf vertices.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.listNonLeavesRec">
+<span class="sig-name descname"><span class="pre">listNonLeavesRec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.listNonLeavesRec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.listNonLeavesRec" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.getVertex">
+<span class="sig-name descname"><span class="pre">getVertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertexid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.getVertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.getVertex" title="Link to this definition"></a></dt>
+<dd><p>Returns the vertex with the given id.</p>
+<p>If no vertex with the given id exists, None is returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.splitZeroModules">
+<span class="sig-name descname"><span class="pre">splitZeroModules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.splitZeroModules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.splitZeroModules" title="Link to this definition"></a></dt>
+<dd><p>Branch given vertex into 0 modules.</p>
+<p>Requires that all adjacent vertices have at most 1-dimensional interface</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.splitSimple">
+<span class="sig-name descname"><span class="pre">splitSimple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.splitSimple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.splitSimple" title="Link to this definition"></a></dt>
+<dd><p>Split all vertices into 0-modules and 1-modules.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.splitOneModules">
+<span class="sig-name descname"><span class="pre">splitOneModules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.splitOneModules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.splitOneModules" title="Link to this definition"></a></dt>
+<dd><p>Branch given vertex into 1 modules.</p>
+<p>TODO:we have to deal with grouped elements</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.makeSubcubic">
+<span class="sig-name descname"><span class="pre">makeSubcubic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.makeSubcubic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.makeSubcubic" title="Link to this definition"></a></dt>
+<dd><p>Split all nodes that have degree &gt;= 4 in an arbitrary manner.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.isParallelSeries">
+<span class="sig-name descname"><span class="pre">isParallelSeries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.isParallelSeries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.isParallelSeries" title="Link to this definition"></a></dt>
+<dd><p>Checks if all nodes have only parallel or only coparallel elems.</p>
+<p>This does not check if the matroid is parallel-series.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.verifyFullyBranched">
+<span class="sig-name descname"><span class="pre">verifyFullyBranched</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.verifyFullyBranched"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.verifyFullyBranched" title="Link to this definition"></a></dt>
+<dd><p>Verifies that this branch decomposition is fully branched.</p>
+<p>The branch decomposition is considered fully branched if all vertices
+satisfy:
+- is degree 3 or
+- all elements are parallel
+- all elements are coparallel</p>
+<p>If successful, True is returned.
+Otherwise, a NotFullyBranchedException is raised</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.verifyEdgeWidth">
+<span class="sig-name descname"><span class="pre">verifyEdgeWidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.verifyEdgeWidth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.verifyEdgeWidth" title="Link to this definition"></a></dt>
+<dd><p>Verifies if the edge with really coincides with the interfaces.</p>
+<p>In case of success, true is returned. Otherwise an EdgeWidthException is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.getWidth">
+<span class="sig-name descname"><span class="pre">getWidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.getWidth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.getWidth" title="Link to this definition"></a></dt>
+<dd><p>Computes the width of this branch decomposition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.poolmanMethod">
+<span class="sig-name descname"><span class="pre">poolmanMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">similarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.poolmanMethod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.poolmanMethod" title="Link to this definition"></a></dt>
+<dd><p>Decomposes the matroid using the method suggested by Poolman et al.</p>
+<p>This method iteratively groups these elements together that are most similar.
+Similarity by sets of nodes is done via the mean. For more details see
+doi:10.1016/j.jtbi.2007.08.005</p>
+<p>This method takes a similarity matrix as input, which allows it to also apply
+the method to other similarity matrices then those suggested in the original
+work. If no similarity matrix is given, then a row similarity matrix is used,
+which corresponds to the matrix suggested by Poolman et al.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.makeGraphViz">
+<span class="sig-name descname"><span class="pre">makeGraphViz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.makeGraphViz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.makeGraphViz" title="Link to this definition"></a></dt>
+<dd><p>Create graphviz string to draw this decomposition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.Decomposition.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#Decomposition.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.Decomposition.write" title="Link to this definition"></a></dt>
+<dd><p>Writes this decomposition to file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.NotFullyBranchedException">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.decomposition.</span></span><span class="sig-name descname"><span class="pre">NotFullyBranchedException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#NotFullyBranchedException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.NotFullyBranchedException" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Thrown if the branch decomposition is not fully branched.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.NotFullyBranchedException.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#NotFullyBranchedException.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.NotFullyBranchedException.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.EdgeWidthException">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.decomposition.</span></span><span class="sig-name descname"><span class="pre">EdgeWidthException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#EdgeWidthException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.EdgeWidthException" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.decomposition.EdgeWidthException.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/decomposition.html#EdgeWidthException.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.decomposition.EdgeWidthException.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="sparse-rationals-module">
+<h1>Sparse Rationals Module<a class="headerlink" href="#sparse-rationals-module" title="Link to this heading"></a></h1>
+<section id="cbmpy-fluxmodules-sparse-rationals-module">
+<span id="module-cbmpy.fluxmodules.sparserationals"></span><h2>CBMPy: fluxmodules sparse rationals module<a class="headerlink" href="#cbmpy-fluxmodules-sparse-rationals-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Arne C. Reimers
+Contact email: <a class="reference external" href="mailto:arne&#46;c&#46;reimers&#37;&#52;&#48;gmail&#46;com">arne<span>&#46;</span>c<span>&#46;</span>reimers<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.sparserationals.</span></span><span class="sig-name descname"><span class="pre">Matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listRep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Sparse matrix of rational numbers (fractions)</p>
+<p>The matrix grows by demand.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listRep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.__init__" title="Link to this definition"></a></dt>
+<dd><p>“ Creates empty matrix.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.rows">
+<span class="sig-name descname"><span class="pre">rows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.rows" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.cols">
+<span class="sig-name descname"><span class="pre">cols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.cols" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.getCol">
+<span class="sig-name descname"><span class="pre">getCol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.getCol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.getCol" title="Link to this definition"></a></dt>
+<dd><p>Returns the column at index idx as a frozen set of key-value pairs.</p>
+<p>The returned dictionary does not contain any superfluous zeros.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.transpose">
+<span class="sig-name descname"><span class="pre">transpose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scalar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.transpose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.transpose" title="Link to this definition"></a></dt>
+<dd><p>Creates a transpose of the matrix.</p>
+<p>Optionally, the values can be multiplied by a scalar. This is for example used
+to compute the dual matroid.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.copy" title="Link to this definition"></a></dt>
+<dd><p>Copies this matrix.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset all elements in rows x __cols to zero.</p>
+<p>This is equivalent (but a bit faster) to self[rows, __cols] = 0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.coladd">
+<span class="sig-name descname"><span class="pre">coladd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.coladd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.coladd" title="Link to this definition"></a></dt>
+<dd><p>Computes self[:,col] += scalar * v.</p>
+<p>col can only be a single index</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.addMetabolicNetwork">
+<span class="sig-name descname"><span class="pre">addMetabolicNetwork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.addMetabolicNetwork"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.addMetabolicNetwork" title="Link to this definition"></a></dt>
+<dd><p>Adds the stoichiometric matrix of a metabolic network.</p>
+<p>This is the default method to load the stoichiometric matrix into ths matrix.
+Just create an empty matrix and call this function.</p>
+<p>A list of column names is returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.addListRep">
+<span class="sig-name descname"><span class="pre">addListRep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.addListRep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.addListRep" title="Link to this definition"></a></dt>
+<dd><p>Adds matrix in list representation (ordered by rows)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.toNumpy">
+<span class="sig-name descname"><span class="pre">toNumpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.toNumpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.toNumpy" title="Link to this definition"></a></dt>
+<dd><p>Returns floating point numpy representation.</p>
+<p>The numpy matrix is a full matrix!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.checkRows">
+<span class="sig-name descname"><span class="pre">checkRows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.checkRows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.checkRows" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.Matrix.isZero">
+<span class="sig-name descname"><span class="pre">isZero</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#Matrix.isZero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.Matrix.isZero" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.fluxmodules.sparserationals.revslice">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.fluxmodules.sparserationals.</span></span><span class="sig-name descname"><span class="pre">revslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/fluxmodules/sparserationals.html#revslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.fluxmodules.sparserationals.revslice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The enumerate module is not documented here due to a missing dependency
+(cbmpy.solver). See the source code in cbmpy/fluxmodules/enumerate.py.</p>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../installation.html" class="btn btn-neutral float-left" title="Installation Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="core.html" class="btn btn-neutral float-right" title="CBMPy Core Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

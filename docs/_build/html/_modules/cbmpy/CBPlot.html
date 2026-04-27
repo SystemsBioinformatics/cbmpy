@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cbmpy.CBPlot &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#matroid-module">Matroid Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#decomposition-module">Decomposition Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#sparse-rationals-module">Sparse Rationals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/solvers.html">Solver Implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#gui-frontends">GUI Frontends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#multi-processing">Multi-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#model-utilities">Model Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../cbmpy.html">cbmpy</a></li>
+      <li class="breadcrumb-item active">cbmpy.CBPlot</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cbmpy.CBPlot</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">CBMPy: CBPlot module</span>
+<span class="sd">====================</span>
+<span class="sd">PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)</span>
+<span class="sd">Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+<span class="sd">Author: Brett G. Olivier PhD</span>
+<span class="sd">Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues</span>
+<span class="sd">Last edit: $Author: bgoli $ ($Id: CBPlot.py 710 2020-04-27 14:22:34Z bgoli $)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># preparing for Python 3 port</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="c1"># from __future__ import unicode_literals</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">CBWrite</span><span class="p">,</span> <span class="n">CBTools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.CBConfig</span><span class="w"> </span><span class="kn">import</span> <span class="n">__CBCONFIG__</span> <span class="k">as</span> <span class="n">__CBCONFIG__</span>
+
+<span class="n">__DEBUG__</span> <span class="o">=</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">]</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION&#39;</span><span class="p">]</span>
+
+<span class="n">_HAVE_MATPLOTLIB_</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyplot</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No Matplotlib available&#39;</span><span class="p">)</span>
+    <span class="n">matplotlib</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pyplot</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_HAVE_MATPLOTLIB_</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="plotFluxVariability">
+<a class="viewcode-back" href="../../api/visualization.html#cbmpy.CBPlot.plotFluxVariability">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plotFluxVariability</span><span class="p">(</span>
+    <span class="n">fva_data</span><span class="p">,</span>
+    <span class="n">fva_names</span><span class="p">,</span>
+    <span class="n">fname</span><span class="p">,</span>
+    <span class="n">work_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ySlice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">minHeight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">maxHeight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">roundec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">autoclose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fluxval</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots and saves as an image the flux variability results as generated by</span>
+<span class="sd">    CBSolver.FluxVariabilityAnalysis.</span>
+
+<span class="sd">    - *fva_data* FluxVariabilityAnalysis() FVA OUTPUT_ARRAY</span>
+<span class="sd">    - *fva_names* FluxVariabilityAnalysis() FVA OUTPUT_NAMES</span>
+<span class="sd">    - *fname* filename_base for the CSV output</span>
+<span class="sd">    - *work_dir* [default=None] if set the output directory for the csv files</span>
+<span class="sd">    - *title* [default=None] the user defined title for the graph</span>
+<span class="sd">    - *ySlice* [default=None] this sets an absolute (fixed) limit on the Y-axis (+- ySlice)</span>
+<span class="sd">    - *minHeight* [default=None] the minimum length that defined a span</span>
+<span class="sd">    - *maxHeight* [default=None] the maximum length a span can obtain, bar will be limited to maxHeight and coloured yellow</span>
+<span class="sd">    - *roundec* [default=None] an integer indicating at which decimal to round off output. Default is no rounding.</span>
+<span class="sd">    - *autoclose* [default=True] autoclose plot after save</span>
+<span class="sd">    - *fluxval* [default=True] plot the flux value</span>
+<span class="sd">    - *type* [default=&#39;png&#39;] the output format, depends on matplotlib backend e.g. &#39;png&#39;, &#39;pdf&#39;, &#39;eps&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">_HAVE_MATPLOTLIB_</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Plotting requires Matplotlib&quot;</span>
+
+    <span class="n">l_cntr</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">c_width</span> <span class="o">=</span> <span class="mf">0.8</span>
+    <span class="n">g_bars</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">g_bars_lcorner</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fba_val_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vResults</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">PLOTLOG</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">outputNames</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">Ymagic</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">FIG</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fva_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">HASMIN</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">HASMAX</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">roundec</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fv_min</span> <span class="o">=</span> <span class="n">fva_data</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="n">fv_fba</span> <span class="o">=</span> <span class="n">fva_data</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">fv_max</span> <span class="o">=</span> <span class="n">fva_data</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fv_min</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">fva_data</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">roundec</span><span class="p">)</span>
+            <span class="n">fv_fba</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">fva_data</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">roundec</span><span class="p">)</span>
+            <span class="n">fv_max</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">fva_data</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">roundec</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fv_fba</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NaN</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fv_min</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NaN</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fv_min</span> <span class="o">&lt;</span> <span class="n">fv_fba</span><span class="p">:</span>
+                    <span class="n">HASMIN</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">fv_max</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NaN</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fv_max</span> <span class="o">&gt;</span> <span class="n">fv_fba</span><span class="p">:</span>
+                    <span class="n">HASMAX</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">b_height</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">b_height1</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">b_height2</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">if</span> <span class="n">HASMAX</span><span class="p">:</span>
+            <span class="n">b_height1</span> <span class="o">=</span> <span class="n">fv_max</span> <span class="o">-</span> <span class="n">fv_fba</span>
+        <span class="k">if</span> <span class="n">HASMIN</span><span class="p">:</span>
+            <span class="n">b_height2</span> <span class="o">=</span> <span class="n">fv_fba</span> <span class="o">-</span> <span class="n">fv_min</span>
+        <span class="n">b_height</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">b_height1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">b_height2</span><span class="p">)</span>
+
+        <span class="n">HCheckMin</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">HCheckMax</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">minHeight</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">HCheckMin</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">minHeight</span> <span class="o">!=</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">b_height</span> <span class="o">&gt;=</span> <span class="n">minHeight</span><span class="p">:</span>
+            <span class="n">HCheckMin</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">maxHeight</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">HCheckMax</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">maxHeight</span> <span class="o">!=</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">b_height</span> <span class="o">&lt;=</span> <span class="n">maxHeight</span><span class="p">:</span>
+            <span class="n">HCheckMax</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">b_height</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">HCheckMin</span> <span class="ow">and</span> <span class="n">HCheckMax</span><span class="p">:</span>
+            <span class="n">outputNames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fva_names</span><span class="p">[</span><span class="n">r</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">HASMIN</span><span class="p">:</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="n">fv_min</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="n">fv_fba</span>
+            <span class="n">Ymagic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bottom</span><span class="p">)</span>
+            <span class="n">Ymagic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bottom</span> <span class="o">+</span> <span class="n">b_height</span><span class="p">)</span>
+            <span class="c1"># print &#39;Bar = (%s,%s)&#39; % (bottom, bottom+b_height)</span>
+            <span class="n">g_bars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+                    <span class="n">left</span><span class="o">=</span><span class="n">l_cntr</span><span class="p">,</span>
+                    <span class="n">height</span><span class="o">=</span><span class="n">b_height</span><span class="p">,</span>
+                    <span class="n">width</span><span class="o">=</span><span class="n">c_width</span><span class="p">,</span>
+                    <span class="n">bottom</span><span class="o">=</span><span class="n">bottom</span><span class="p">,</span>
+                    <span class="n">log</span><span class="o">=</span><span class="n">PLOTLOG</span><span class="p">,</span>
+                    <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">fluxval</span><span class="p">:</span>
+                <span class="n">fba_val_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span>
+                        <span class="n">fv_fba</span><span class="p">,</span>
+                        <span class="n">g_bars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_x</span><span class="p">(),</span>
+                        <span class="n">g_bars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">g_bars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_width</span><span class="p">(),</span>
+                        <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span>
+                        <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span>
+                        <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">g_bars_lcorner</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l_cntr</span><span class="p">)</span>
+            <span class="n">l_cntr</span> <span class="o">+=</span> <span class="n">c_width</span>
+            <span class="n">vResults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">fva_names</span><span class="p">[</span><span class="n">r</span><span class="p">]:</span> <span class="n">fva_data</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()})</span>
+        <span class="k">elif</span> <span class="n">b_height</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">HCheckMin</span><span class="p">:</span>
+            <span class="n">outputNames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fva_names</span><span class="p">[</span><span class="n">r</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">HASMIN</span><span class="p">:</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="n">fv_min</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="n">fv_fba</span>
+            <span class="k">if</span> <span class="n">bottom</span> <span class="o">&lt;</span> <span class="n">fv_fba</span> <span class="o">-</span> <span class="n">maxHeight</span><span class="p">:</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="n">fv_fba</span> <span class="o">-</span> <span class="n">maxHeight</span>
+            <span class="k">if</span> <span class="n">bottom</span> <span class="o">+</span> <span class="n">b_height</span> <span class="o">&gt;</span> <span class="n">fv_fba</span> <span class="o">+</span> <span class="n">maxHeight</span><span class="p">:</span>
+                <span class="n">b_height</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fv_fba</span> <span class="o">-</span> <span class="n">bottom</span><span class="p">)</span> <span class="o">+</span> <span class="n">maxHeight</span>
+            <span class="n">Ymagic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bottom</span><span class="p">)</span>
+            <span class="n">Ymagic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bottom</span> <span class="o">+</span> <span class="n">b_height</span><span class="p">)</span>
+            <span class="c1"># print &#39;Bar = (%s,%s)&#39; % (bottom, bottom+b_height)</span>
+            <span class="n">g_bars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+                    <span class="n">left</span><span class="o">=</span><span class="n">l_cntr</span><span class="p">,</span>
+                    <span class="n">height</span><span class="o">=</span><span class="n">b_height</span><span class="p">,</span>
+                    <span class="n">width</span><span class="o">=</span><span class="n">c_width</span><span class="p">,</span>
+                    <span class="n">bottom</span><span class="o">=</span><span class="n">bottom</span><span class="p">,</span>
+                    <span class="n">log</span><span class="o">=</span><span class="n">PLOTLOG</span><span class="p">,</span>
+                    <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span>
+                    <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">fluxval</span><span class="p">:</span>
+                <span class="n">fba_val_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span>
+                        <span class="n">fv_fba</span><span class="p">,</span>
+                        <span class="n">g_bars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_x</span><span class="p">(),</span>
+                        <span class="n">g_bars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">g_bars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_width</span><span class="p">(),</span>
+                        <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span>
+                        <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span>
+                        <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">g_bars_lcorner</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l_cntr</span><span class="p">)</span>
+            <span class="n">l_cntr</span> <span class="o">+=</span> <span class="n">c_width</span>
+            <span class="n">vResults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">fva_names</span><span class="p">[</span><span class="n">r</span><span class="p">]:</span> <span class="n">fva_data</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()})</span>
+
+    <span class="k">if</span> <span class="n">__DEBUG__</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len fva_names&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fva_names</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">__DEBUG__</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len g_bars&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">g_bars</span><span class="p">))</span>
+    <span class="c1"># print &#39;fva_data.shape&#39;, fva_data.shape</span>
+    <span class="n">outputNames</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_LPAREN_e_RPAREN_&#39;</span><span class="p">,</span> <span class="s1">&#39;_e&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">outputNames</span><span class="p">]</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g_bars_lcorner</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">c_width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">),</span>
+        <span class="n">outputNames</span><span class="p">,</span>
+        <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-small&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> has </span><span class="si">%i</span><span class="s1"> varying fluxes&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">g_bars</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">title</span><span class="p">))</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Variability&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ymagic</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">yhi</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ymagic</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ymagic</span><span class="p">)</span>
+        <span class="n">ylow</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Ymagic</span><span class="p">)</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="mf">0.01</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="n">Ymagic</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">ySlice</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">yhi</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ySlice</span><span class="p">)</span>
+            <span class="n">ylow</span> <span class="o">=</span> <span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">ySlice</span><span class="p">)</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">ylow</span><span class="p">,</span> <span class="n">yhi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">__DEBUG__</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Plotting y </span><span class="si">%s</span><span class="s1"> --&gt; </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ylow</span><span class="p">,</span> <span class="n">yhi</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">work_dir</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">work_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span> <span class="o">+</span> <span class="s1">&#39;.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">)</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">autoclose</span><span class="p">:</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

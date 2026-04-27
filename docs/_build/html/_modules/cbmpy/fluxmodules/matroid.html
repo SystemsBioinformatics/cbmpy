@@ -1,0 +1,1255 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cbmpy.fluxmodules.matroid &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html#matroid-module">Matroid Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html#decomposition-module">Decomposition Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html#sparse-rationals-module">Sparse Rationals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/solvers.html">Solver Implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/visualization.html#gui-frontends">GUI Frontends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/visualization.html#multi-processing">Multi-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/visualization.html#model-utilities">Model Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../cbmpy.html">cbmpy</a></li>
+      <li class="breadcrumb-item active">cbmpy.fluxmodules.matroid</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cbmpy.fluxmodules.matroid</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">CBMPy: fluxmodules matroid module</span>
+<span class="sd">=====================</span>
+<span class="sd">PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+<span class="sd">Author: Arne C. Reimers</span>
+<span class="sd">Contact email: arne.c.reimers@gmail.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># preparing for Python 3 port</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="c1">#from __future__ import unicode_literals</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">ceil</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="c1">#import sympy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="c1">#from sympy.core.cache import clear_cache</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sparserationals</span><span class="w"> </span><span class="kn">import</span> <span class="n">Matrix</span>
+
+
+<div class="viewcode-block" id="Matroid">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Matroid</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A linear matroid.</span>
+
+<span class="sd">    It has the fields:</span>
+<span class="sd">    elems - lists the names of the elements</span>
+<span class="sd">    basis - lists the names of the basis elements</span>
+<span class="sd">    nbasis - lists the names of the non-basis elements (dual basis)</span>
+<span class="sd">    rep - reduced representation matrix,</span>
+<span class="sd">            rows correspond to basis-elements and</span>
+<span class="sd">            columns correspond to non-basis elements</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># def __init__(self, matrix, elems):</span>
+    <span class="c1">#    &quot;&quot;&quot;create matroid from matrix storing elements as columns&quot;&quot;&quot;</span>
+    <span class="c1">#    self.elems = __cols</span>
+    <span class="c1">#    self.matrix = matrix</span>
+    <span class="c1">#    self.buildRepresentation()</span>
+
+<div class="viewcode-block" id="Matroid.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">nbasis</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create matroid from given reduced representation matrix.</span>
+
+<span class="sd">        The names of the rows are given by basis. The names of the columns are given by</span>
+<span class="sd">        nbasis.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elems</span> <span class="o">=</span> <span class="n">basis</span> <span class="o">+</span> <span class="n">nbasis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">basis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span> <span class="o">=</span> <span class="n">nbasis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rep</span> <span class="o">=</span> <span class="n">rep</span></div>
+
+
+<div class="viewcode-block" id="Matroid.findModules">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.findModules">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">findModules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the separators (modules) of this matroid.</span>
+
+<span class="sd">        Each module is returned as a matroid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">usedBasis</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">usedNBasis</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">usedBasis</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dfs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                <span class="n">usedBasis</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;basis&#39;</span><span class="p">])</span>
+                <span class="n">usedNBasis</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;nbasis&#39;</span><span class="p">])</span>
+<span class="c1">#                 m = Matroid(self.rep.extract(c[&#39;basis&#39;], c[&#39;nbasis&#39;]),</span>
+<span class="c1">#                             [self.basis[i] for i in c[&#39;basis&#39;]],</span>
+<span class="c1">#                             [self.nbasis[i] for i in c[&#39;nbasis&#39;]]</span>
+<span class="c1">#                            )</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">Matroid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;basis&#39;</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="s1">&#39;nbasis&#39;</span><span class="p">]],</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">c</span><span class="p">[</span><span class="s1">&#39;basis&#39;</span><span class="p">]],</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">c</span><span class="p">[</span><span class="s1">&#39;nbasis&#39;</span><span class="p">]]</span>
+                            <span class="p">)</span>
+                <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="c1"># by construction each basis element is contained in one submatroid</span>
+        <span class="c1"># however, this need not be the case for the non-basis elements</span>
+
+        <span class="c1"># each non-basis element that we did not find is a loop</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">usedNBasis</span><span class="p">:</span>
+                <span class="c1">#m = Matroid(sympy.zeros(0,1), [], [r])</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">Matroid</span><span class="p">(</span><span class="n">Matrix</span><span class="p">(),</span> <span class="p">[],</span> <span class="p">[</span><span class="n">r</span><span class="p">])</span>
+                <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="c1"># clear_cache()</span>
+
+        <span class="k">return</span> <span class="n">modules</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__dfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs a dfs to find the connected component of basis elem start.&quot;&quot;&quot;</span>
+        <span class="n">basisFound</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">start</span><span class="p">])</span>
+        <span class="n">nbasisFound</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">todo</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">]</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">todo</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">todo</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+                <span class="c1"># if r is in the cycle and the cycle has not been added,</span>
+                <span class="c1"># then add all elements of the cycle to todo</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nbasisFound</span><span class="p">):</span>
+                    <span class="n">nbasisFound</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">basisFound</span><span class="p">):</span>
+                            <span class="n">basisFound</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                            <span class="n">todo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;basis&#39;</span><span class="p">:</span> <span class="n">basisFound</span><span class="p">,</span> <span class="s1">&#39;nbasis&#39;</span><span class="p">:</span> <span class="n">nbasisFound</span><span class="p">}</span>
+
+<div class="viewcode-block" id="Matroid.dual">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.dual">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dual</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the dual matroid.</span>
+
+<span class="sd">        By this operation the original coefficient matrix is lost for the dual.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># we also care about the signs, so multiply by -1</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Matroid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">m</span></div>
+
+
+<div class="viewcode-block" id="Matroid.copy">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.copy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copies this matroid.&quot;&quot;&quot;</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Matroid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;matrix&#39;</span><span class="p">):</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">m</span></div>
+
+
+<div class="viewcode-block" id="Matroid.contract">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.contract">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">contract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toContract</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes self / toContract.</span>
+
+<span class="sd">        The matroid with toContract contracted is returned. This instance is not</span>
+<span class="sd">        modified.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># put as many elements from toDelete into basis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">toContract</span><span class="p">)</span>
+        <span class="n">retain_nbasis</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">))</span>
+                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toContract</span><span class="p">]</span>
+        <span class="n">retain_basis</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toContract</span><span class="p">]</span>
+        <span class="n">basis</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">retain_basis</span><span class="p">]</span>
+        <span class="n">nbasis</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">retain_nbasis</span><span class="p">]</span>
+
+        <span class="n">submat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">retain_basis</span><span class="p">,</span> <span class="n">retain_nbasis</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Matroid</span><span class="p">(</span><span class="n">submat</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">nbasis</span><span class="p">)</span>
+        <span class="c1">#m = self.dual().delete(toContract).dual()</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;matrix&#39;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;TODO: do also the contraction on the matrix&#39;</span><span class="p">)</span>
+
+        <span class="c1"># clear_cache()</span>
+        <span class="k">return</span> <span class="n">m</span></div>
+
+
+<div class="viewcode-block" id="Matroid.exchange">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.exchange">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exchange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exchanges a basis element with a non-basis element.</span>
+
+<span class="sd">        requirement is that the fundamental circuit of the non-basis element uses the</span>
+<span class="sd">        basis element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">:</span>
+            <span class="n">be</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="k">assert</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">,</span> <span class="s1">&#39;one element must be a non-basis element&#39;</span>
+            <span class="n">nbe</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> <span class="s1">&#39;one element must be a basis element&#39;</span>
+            <span class="n">be</span> <span class="o">=</span> <span class="n">b</span>
+            <span class="k">assert</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">,</span> <span class="s1">&#39;a, b must be elements of the matroid&#39;</span>
+            <span class="n">nbe</span> <span class="o">=</span> <span class="n">a</span>
+
+        <span class="n">bidx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">be</span><span class="p">)</span>
+        <span class="n">nbidx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">nbe</span><span class="p">)</span>
+        <span class="n">nbidxcol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[:,</span> <span class="n">nbidx</span><span class="p">]</span>
+
+        <span class="c1"># We can simply switch be with nbe and only have to normalize the</span>
+        <span class="c1"># column. This is easy, so we do it last</span>
+        <span class="n">div</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">bidx</span><span class="p">,</span> <span class="n">nbidx</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">div</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;basis elem and non-basis elem do not share circuit&#39;</span>
+
+        <span class="c1"># There may be more columns that use the basis element</span>
+        <span class="c1"># since the basis element changed, we have to update</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">!=</span> <span class="n">nbidx</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">bidx</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="c1"># add self.rep[:,nbidx] to cancel</span>
+                <span class="c1"># self.rep[bidx,j]</span>
+                <span class="n">coef</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">bidx</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">div</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="o">.</span><span class="n">coladd</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">nbidxcol</span><span class="p">,</span> <span class="n">coef</span><span class="p">)</span>
+                <span class="c1">#self.rep[:,j] += self.rep[:,nbidx]*coef</span>
+                <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">bidx</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="c1"># remember that we changed the meaning of the row,</span>
+                <span class="c1"># so update the entry also</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">bidx</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">coef</span>
+
+        <span class="c1"># No do the switch with be and nbe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[:,</span> <span class="n">nbidx</span><span class="p">]</span> <span class="o">/=</span> <span class="n">div</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">bidx</span><span class="p">,</span> <span class="n">nbidx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">div</span>
+
+        <span class="c1"># and also update the column and row names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">bidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">nbe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">nbidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">be</span></div>
+
+
+<div class="viewcode-block" id="Matroid.delete">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.delete">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toDelete</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes self \ toDelete.</span>
+
+<span class="sd">        The matroid with toDelete deleted is returned. No elements of this instance are</span>
+<span class="sd">        deleted. However, the current basis can change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># put as many elements from toDelete into non-basis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corank</span><span class="p">(</span><span class="n">toDelete</span><span class="p">)</span>
+        <span class="n">retain_nbasis</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">))</span>
+                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toDelete</span><span class="p">]</span>
+        <span class="n">retain_basis</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toDelete</span><span class="p">]</span>
+        <span class="n">basis</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">retain_basis</span><span class="p">]</span>
+        <span class="n">nbasis</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">retain_nbasis</span><span class="p">]</span>
+
+        <span class="n">submat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">retain_basis</span><span class="p">,</span> <span class="n">retain_nbasis</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Matroid</span><span class="p">(</span><span class="n">submat</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">nbasis</span><span class="p">)</span>
+
+<span class="c1">#         #######################################################################</span>
+<span class="c1">#         ## old, borken code</span>
+<span class="c1">#         ######################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#         # deletion of non-basis elements is easy</span>
+<span class="c1">#         delete_nbasis = set([]) # columns to delete</span>
+<span class="c1">#         for i in range(len(self.nbasis)):</span>
+<span class="c1">#             if self.nbasis[i] in toDelete:</span>
+<span class="c1">#                 delete_nbasis.add(i)</span>
+<span class="c1">#</span>
+<span class="c1">#         # for deletion of basis elements, we first have to make them non-basis</span>
+<span class="c1">#         # elements unless they are coloops</span>
+<span class="c1">#         delete_basis = set([]) # for coloops</span>
+<span class="c1">#         basis_new = list(self.basis) # new basis</span>
+<span class="c1">#         for i in range(len(self.basis)):</span>
+<span class="c1">#             if self.basis[i] in toDelete:</span>
+<span class="c1">#                 switch_elem = -1</span>
+<span class="c1">#                 for j in range(len(self.nbasis)):</span>
+<span class="c1">#                     if (self.rep[i,j] != 0) and (j not in delete_nbasis):</span>
+<span class="c1">#                         switch_elem = j</span>
+<span class="c1">#                 if switch_elem == -1:</span>
+<span class="c1">#                     # i is a coloop and we can just delete it</span>
+<span class="c1">#                     delete_basis.add(i)</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     basis_new[i] = self.nbasis[switch_elem]</span>
+<span class="c1">#                     delete_nbasis.add(switch_elem)</span>
+<span class="c1">#                     switch_col = self.rep[:,switch_elem]</span>
+<span class="c1">#                     # now there may be more columns that use the basis element</span>
+<span class="c1">#                     # since the basis element changed, we have to update</span>
+<span class="c1">#                     # We do not use self.exchange(..) because we can save some</span>
+<span class="c1">#                     # work.</span>
+<span class="c1">#                     for j in range(len(self.nbasis)):</span>
+<span class="c1">#                         if (self.rep[i,j] != 0) and (j not in delete_nbasis):</span>
+<span class="c1">#                             # add self.rep[:,switch_elem] to cancel</span>
+<span class="c1">#                             # self.rep[i,j]</span>
+<span class="c1">#                             coef = -self.rep[i,j] / switch_col[i,0]</span>
+<span class="c1">#                             #coef = -self.rep[i,j] / self.rep[i,switch_elem]</span>
+<span class="c1">#                             self.rep.coladd(j, switch_col, coef)</span>
+<span class="c1">#                             #self.rep[:,j] += coef*self.rep[:,switch_elem]</span>
+<span class="c1">#                             assert self.rep[i,j] == 0</span>
+<span class="c1">#                             # remember that we changed the meaning of the row,</span>
+<span class="c1">#                             # so update the entry also</span>
+<span class="c1">#                             self.rep[i,j] = coef</span>
+<span class="c1">#</span>
+<span class="c1">#         retain_nbasis = []</span>
+<span class="c1">#         nbasis = []</span>
+<span class="c1">#         for i in range(len(self.nbasis)):</span>
+<span class="c1">#             if i not in delete_nbasis:</span>
+<span class="c1">#                 retain_nbasis.append(i)</span>
+<span class="c1">#                 nbasis.append(self.nbasis[i])</span>
+<span class="c1">#</span>
+<span class="c1">#         retain_basis = []</span>
+<span class="c1">#         basis = []</span>
+<span class="c1">#         for i in range(len(self.basis)):</span>
+<span class="c1">#             if i not in delete_basis:</span>
+<span class="c1">#                 retain_basis.append(i)</span>
+<span class="c1">#                 basis.append(basis_new[i])</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#         #submat = self.rep.extract(retain_basis, retain_nbasis)</span>
+<span class="c1">#         submat = self.rep[retain_basis, retain_nbasis]</span>
+<span class="c1">#         m = Matroid(submat, basis, nbasis)</span>
+
+        <span class="c1"># if we have the original matrix representation, also delete from that</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;matrix&#39;</span><span class="p">):</span>
+<span class="c1">#             m.matrix = self.matrix.extract(</span>
+<span class="c1">#                 range(self.matrix.rows),</span>
+<span class="c1">#                 [i for i in range(len(self.elems))</span>
+<span class="c1">#                     if self.elems[i] not in toDelete]</span>
+<span class="c1">#                                           )</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span>
+                <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">rows</span><span class="p">()),</span>
+                <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elems</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">elems</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toDelete</span><span class="p">]</span>
+            <span class="p">]</span>
+            <span class="c1"># here the order of elements for sure gets mixed up, so set anew</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">elems</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">elems</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toDelete</span><span class="p">]</span>
+
+        <span class="c1"># clear_cache()</span>
+        <span class="k">return</span> <span class="n">m</span></div>
+
+
+<div class="viewcode-block" id="Matroid.parallel">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.parallel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all groups of parallel elements.</span>
+
+<span class="sd">        The result is a set of frozen sets, each set listing the ids of the parallel</span>
+<span class="sd">        elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># basis elements are never parallel, unless there exists a</span>
+        <span class="c1"># non-basis element with a single non-zero entry for the basis element</span>
+        <span class="c1"># therefore, we just iterate through the non-basis elements</span>
+        <span class="n">par_groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+
+        <span class="n">found</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+
+        <span class="c1"># to speed up the calculation, compute hash-values of the columns</span>
+        <span class="n">hashes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="n">norm_factor</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">mul_factor</span> <span class="o">=</span> <span class="mi">73</span>
+            <span class="n">hashv</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">norm_factor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">norm_factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">v</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">*</span> <span class="n">norm_factor</span>
+                    <span class="n">hashv</span> <span class="o">+=</span> <span class="n">v</span><span class="o">.</span><span class="fm">__hash__</span><span class="p">()</span>
+                <span class="n">hashv</span> <span class="o">*=</span> <span class="n">mul_factor</span>
+            <span class="n">hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hashv</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="c1"># only check if we did not already found it to be parallel to some</span>
+            <span class="c1"># previous reaction</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">found</span><span class="p">:</span>
+                <span class="n">par_group</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="c1"># check if parallel to some basis element</span>
+                <span class="n">basis_idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">basis_val</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">num_basis</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">num_basis</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                        <span class="n">num_basis</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">if</span> <span class="n">basis_idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>  <span class="c1"># first non-zero entry</span>
+                            <span class="n">basis_idx</span> <span class="o">=</span> <span class="n">j</span>
+                            <span class="n">basis_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">num_basis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># its a loop and continue</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">num_basis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">par_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">basis_idx</span><span class="p">])</span>
+
+                <span class="k">assert</span> <span class="n">basis_val</span> <span class="o">!=</span> <span class="mi">0</span>
+                <span class="c1"># check if parallel to other non-basis elements</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">))[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]:</span>
+                    <span class="c1"># if two cols are the same, their hashes must be also</span>
+                    <span class="k">if</span> <span class="n">hashes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">hashes</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                        <span class="n">coef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">basis_idx</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">basis_val</span>
+                        <span class="c1"># check if coef != 0 not only for performance reasons</span>
+                        <span class="c1"># this also filters out loops</span>
+                        <span class="k">if</span> <span class="n">coef</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+                            <span class="n">diff</span><span class="o">.</span><span class="n">coladd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="o">-</span><span class="n">coef</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">diff</span><span class="o">.</span><span class="n">isZero</span><span class="p">():</span>
+                                <span class="n">par_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                                <span class="n">found</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+                <span class="c1"># add par_group if non-trivial</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">par_group</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">par_groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">frozenset</span><span class="p">(</span><span class="n">par_group</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">par_groups</span></div>
+
+
+<div class="viewcode-block" id="Matroid.coparallel">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.coparallel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coparallel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all groups of coparallel elements.</span>
+
+<span class="sd">        In metabolic network terminology the coparallel elements are the fully coupled</span>
+<span class="sd">        reactions.</span>
+
+<span class="sd">        The result is a set of frozensets, each set listing the ids of the coparallel</span>
+<span class="sd">        elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span><span class="p">()</span><span class="o">.</span><span class="n">parallel</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Matroid.isParallel">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.isParallel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isParallel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">parallel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parallel</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">par</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">par</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Matroid.isCoparallel">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.isCoparallel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isCoparallel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">coparallel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coparallel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coparallel</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">par</span> <span class="o">=</span> <span class="n">coparallel</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">par</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Matroid.fundamentalCircuit">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.fundamentalCircuit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fundamentalCircuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the fundamental circuit of an element.</span>
+
+<span class="sd">        If e is a non-basis element, the fundamental circuit, i.e. the support of the</span>
+<span class="sd">        column of e, is returned.</span>
+
+<span class="sd">        If e is a basis element, the cofundamental circuit, i.e. the support of the row</span>
+<span class="sd">        of e, is returned.</span>
+
+<span class="sd">        The returned fundamental circuit does not contain e itself</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fcircuit</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">:</span>
+            <span class="c1"># return cofundamental circuit (row)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">fcircuit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">,</span> <span class="s1">&#39;this works only for elements of the matroid&#39;</span>
+            <span class="c1"># return fundamental circuit (column)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">fcircuit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">fcircuit</span></div>
+
+
+<div class="viewcode-block" id="Matroid.fundamentalCircuitValues">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.fundamentalCircuitValues">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fundamentalCircuitValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the fundamental circuit of an element with the coefficients.</span>
+
+<span class="sd">        If e is a non-basis element, the fundamental circuit, i.e. the support of the</span>
+<span class="sd">        column of e, is returned.</span>
+
+<span class="sd">        If e is a basis element, the cofundamental circuit, i.e. the support of the row</span>
+<span class="sd">        of e, is returned.</span>
+
+<span class="sd">        The returned fundamental circuit does not contain e itself. If needed, it should</span>
+<span class="sd">        be added manually afterwards with a coefficient of 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fcircuit</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">:</span>
+            <span class="c1"># return cofundamental circuit (row)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">fcircuit</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">,</span> <span class="s1">&#39;this works only for elements of the matroid&#39;</span>
+            <span class="c1"># return fundamental circuit (column)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">fcircuit</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">idx</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">fcircuit</span></div>
+
+
+<div class="viewcode-block" id="Matroid.rank">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.rank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elems</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the rank of elems.</span>
+
+<span class="sd">        This method puts as many elements of elems into the basis. The number of</span>
+<span class="sd">        elements from elems in the final basis is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># try to make as many nbasis elements of elems basis-elements</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                <span class="c1"># make it a basis element</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">exchange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">break</span>
+
+        <span class="c1"># count basis elements in elems</span>
+        <span class="n">numBasis</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                <span class="n">numBasis</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">numBasis</span></div>
+
+
+<div class="viewcode-block" id="Matroid.corank">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.corank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">corank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elems</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the corank of elems.</span>
+
+<span class="sd">        This method puts as many elements of elems into the non-basis. The number of</span>
+<span class="sd">        elements from elems in the final non-basis is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># try to make as many nbasis elements of elems basis-elements</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                <span class="c1"># make it a nbasis element</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">exchange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">break</span>
+
+        <span class="c1"># count non-basis elements in elems</span>
+        <span class="n">numNBasis</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                <span class="n">numNBasis</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">numNBasis</span></div>
+
+
+<div class="viewcode-block" id="Matroid.isIndependent">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.isIndependent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isIndependent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elems</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the given set of elements is independent.</span>
+
+<span class="sd">        This does not modify this matroid, but may change its internal basis. If this</span>
+<span class="sd">        method returns true, the current basis contains all elements of elems</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># no independent set can have more elements than any basis</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># we check by making all elements of elems basis elements</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                <span class="c1"># make it a basis element</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">exchange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1"># all elements of elems are now basis elements</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Matroid.isCoIndependent">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.isCoIndependent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isCoIndependent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elems</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the given set of elements is coindependent.</span>
+
+<span class="sd">        This does not modify this matroid, but may change its internal basis. If this</span>
+<span class="sd">        method returns true, the current basis contains all no elements of elems</span>
+
+<span class="sd">        This is the same as isIndependent, only on the dual</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># no independent set can have more elements than any basis</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># we check by making all elements of elems non-basis elements</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                <span class="c1"># make it a basis element</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">exchange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1"># all elements of elems are now non-basis elements</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Matroid.connectivity">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.connectivity">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">separation</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate the connectivity function for the given separation.</span>
+
+<span class="sd">        separation is a set of elements encoding one side of the separation. The other</span>
+<span class="sd">        side is implied.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># for the computation we do the following:</span>
+        <span class="c1"># put as many elements as possible from separation into the basis</span>
+        <span class="c1"># this gives us the rank of separation.</span>
+        <span class="c1"># We do the same for the complement.</span>
+
+        <span class="c1"># make a copy, to reduce the number of pivots</span>
+        <span class="n">copy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">separation</span><span class="p">)</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">separation</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span>
+        <span class="c1"># clear_cache()</span>
+        <span class="k">return</span> <span class="n">r1</span> <span class="o">+</span> <span class="n">r2</span> <span class="o">-</span> <span class="n">r</span></div>
+
+
+<div class="viewcode-block" id="Matroid.getInterface">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.getInterface">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">separation</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute a list of circuits that define the interface of the given</span>
+<span class="sd">        separation.&quot;&quot;&quot;</span>
+
+        <span class="c1"># theoretically the following would be sufficient:</span>
+        <span class="c1"># self.rank(separation)</span>
+        <span class="c1"># but we do something more complicated...</span>
+
+        <span class="c1"># Before we start the computation, we observe that eventually it is good</span>
+        <span class="c1"># to select circuits that are as simple as possible, so that the</span>
+        <span class="c1"># selected interface vectors become as simple as possible.</span>
+        <span class="c1"># typically the biomass reactions induce very_ugly circuits, hence we</span>
+        <span class="c1"># do not want them to be in the basis, because then the fundamental</span>
+        <span class="c1"># circuits get ugly.</span>
+        <span class="c1"># HACK: We identify biomass reactions by their reaction NAME!!!</span>
+        <span class="c1"># TODO: get some cleaner solution for the future!</span>
+
+        <span class="c1"># find non-biomass reactions in the separation</span>
+        <span class="n">separation_non_bio</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">separation</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;bio&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># find biomass reactions in the separation</span>
+        <span class="n">separation_bio</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">separation</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;bio&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">separation_non_bio</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">separation_bio</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">separation</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">separation</span><span class="p">)</span>
+
+        <span class="c1"># try to turn as many non-bio nbasis elements into basis elements by</span>
+        <span class="c1"># exchanging with bio elements</span>
+        <span class="c1"># use the property that every fundamental circuit of nbasis separation</span>
+        <span class="c1"># elements only contains separation elements</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">separation</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;bio&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># make it a basis element</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;bio&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">in</span> <span class="n">separation</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">exchange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">break</span>
+
+<span class="c1">#        print(separation_bio)</span>
+<span class="c1">#        self.rank(separation_bio)</span>
+<span class="c1">#        print(self.basis)</span>
+<span class="c1">#        print(separation_non_bio)</span>
+<span class="c1">#        self.rank(separation_non_bio)</span>
+<span class="c1">#        print(self.basis)</span>
+        <span class="c1"># a maximal amount of separation elements are in the basis and of that</span>
+        <span class="c1"># as few as possible are biomass reactions</span>
+
+        <span class="c1"># Verify this!</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">separation</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fundamentalCircuit</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">separation</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">separation</span><span class="p">)</span>
+
+        <span class="c1"># find biomass reactions not in the separation</span>
+        <span class="n">coseparation_bio</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">separation</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;bio&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># ideally these reactions should not be in the basis, so try to</span>
+        <span class="c1"># put a maximal amout of them into the nbasis</span>
+<span class="c1">#        print(coseparation_bio)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corank</span><span class="p">(</span><span class="n">coseparation_bio</span><span class="p">)</span>
+<span class="c1">#        print(self.basis)</span>
+        <span class="c1"># still the property is satisfied that a maximal amount of separation</span>
+        <span class="c1"># elments are in the basis</span>
+
+        <span class="c1"># we now have the following properties:</span>
+        <span class="c1"># every fundamental circuit of an nbasis element in separation uses</span>
+        <span class="c1"># only basis elements in separation</span>
+        <span class="c1"># every cofundamental cocircuit of a basis element outside separation</span>
+        <span class="c1"># uses only non-basis elements outside separation</span>
+
+        <span class="c1"># Verify this!</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">separation</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fundamentalCircuit</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">separation</span>
+
+        <span class="c1"># we only have to deal with the fundamental circuits of nbasis elements</span>
+        <span class="c1"># outside of separation.</span>
+        <span class="c1"># They already define the interface, but the representation might be</span>
+        <span class="c1"># redundant</span>
+        <span class="c1"># Hence, we want to minimize it</span>
+
+        <span class="c1"># Since the basis elements outside of the separation are of no interest,</span>
+        <span class="c1"># we would simply contract them. However, this would make it more</span>
+        <span class="c1"># difficult to reconstruct the original circuits.</span>
+        <span class="c1"># There, we manually extract the reduced representation and take the</span>
+        <span class="c1"># submatrix with rows of elements in separation and columns not in</span>
+        <span class="c1"># separation</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">separation</span><span class="p">]</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">separation</span><span class="p">]</span>
+        <span class="n">colNames</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]</span>
+
+        <span class="n">submat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">]</span>
+        <span class="c1"># redundant circuits are linearly dependent on the existing circuits</span>
+        <span class="c1"># hence, we just need to find a basis of the reduced matrix</span>
+        <span class="c1"># this we do by simply building the matroid</span>
+        <span class="n">mred</span> <span class="o">=</span> <span class="n">fromMatrix</span><span class="p">(</span><span class="n">submat</span><span class="p">,</span> <span class="n">colNames</span><span class="p">)</span>
+
+        <span class="c1"># here we continue our hack about the biomass reactions.</span>
+        <span class="c1"># Theoretically, all bases of mred are equally good, but since we want</span>
+        <span class="c1"># to have simple circuits, we prefer to have no biomass reactions in</span>
+        <span class="c1"># the selected circuits and thus not in the basis of mred</span>
+<span class="c1">#        print(mred.basis)</span>
+        <span class="n">col_bio</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">colNames</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;bio&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">mred</span><span class="o">.</span><span class="n">corank</span><span class="p">(</span><span class="n">col_bio</span><span class="p">)</span>
+<span class="c1">#        print(mred.basis)</span>
+
+        <span class="n">interface</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">mred</span><span class="o">.</span><span class="n">basis</span><span class="p">:</span>
+            <span class="n">circuit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fundamentalCircuitValues</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">circuit</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># the circuit originally does not contain</span>
+            <span class="n">interface</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="p">(</span><span class="n">separation</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interface</span></div>
+
+
+<div class="viewcode-block" id="Matroid.similarityMatrix">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.Matroid.similarityMatrix">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">similarityMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stype</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes a similarity matrix on the elements.</span>
+
+<span class="sd">        For each pair of elements the similarity matrix has an entry that</span>
+<span class="sd">        gives the similarity.</span>
+
+<span class="sd">        stype gives what kind of similarity matrix should be computed.</span>
+<span class="sd">        Possibilities are:</span>
+<span class="sd">        direct - direct from the columns of the original coefficient matrix</span>
+<span class="sd">            (needs the original coefficient matrix and in the case of</span>
+<span class="sd">            contractions the result is not well defined)</span>
+<span class="sd">        __cols - normalized from the columns (rows are orthogonal)</span>
+<span class="sd">        rows - normalized from the rows (columns are orthogonal)</span>
+<span class="sd">        combined - takes max(__cols, rows)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">stype</span> <span class="o">==</span> <span class="s2">&quot;direct&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__directSimilarityMatrix</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">stype</span> <span class="o">==</span> <span class="s2">&quot;cols&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colSimilarityMatrix</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">stype</span> <span class="o">==</span> <span class="s2">&quot;rows&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rowSimilarityMatrix</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">stype</span> <span class="o">==</span> <span class="s2">&quot;combined&quot;</span><span class="p">:</span>
+            <span class="n">rowSim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rowSimilarityMatrix</span><span class="p">()</span>
+            <span class="n">colSim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colSimilarityMatrix</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">rowSim</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">colSim</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;unknown option&#39;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="kc">False</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__directSimilarityMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">toNumpy</span><span class="p">()</span>
+
+        <span class="n">elems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elems</span>
+
+        <span class="c1"># compute similarity matrix</span>
+        <span class="n">similarity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)))</span>
+        <span class="c1"># precompute norms</span>
+        <span class="n">norms</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+            <span class="n">norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+        <span class="n">printMod</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mf">1.0e9</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">printMod</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;building similarity matrix: </span><span class="si">%d</span><span class="s1"> of </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/=</span> <span class="n">norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">norms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">SimilarityMatrix</span><span class="p">(</span><span class="n">similarity</span><span class="p">,</span> <span class="n">elems</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__rowSimilarityMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="o">.</span><span class="n">toNumpy</span><span class="p">()</span>
+        <span class="c1">#mat = sympy.matrix2numpy(self.rep)</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">numpy</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)),</span> <span class="n">mat</span><span class="p">))</span>
+
+        <span class="n">elems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span>
+
+        <span class="n">printMod</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mf">1.0e9</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="c1"># GramSchmidt orthonornalization</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">printMod</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;normalizing matrix: </span><span class="si">%d</span><span class="s1"> of </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mf">1e-7</span>
+            <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">/=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+            <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-7</span>
+
+        <span class="c1"># compute similarity matrix</span>
+        <span class="n">similarity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)))</span>
+        <span class="c1"># precompute norms</span>
+        <span class="n">norms</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+            <span class="n">norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">printMod</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;building similarity matrix: </span><span class="si">%d</span><span class="s1"> of </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]))</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/=</span> <span class="n">norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">norms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">SimilarityMatrix</span><span class="p">(</span><span class="n">similarity</span><span class="p">,</span> <span class="n">elems</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__colSimilarityMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># we cannot just reuse __rowSimilarityMatrix, because that would</span>
+        <span class="c1"># give a different order of the elements</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="o">.</span><span class="n">toNumpy</span><span class="p">()</span>
+        <span class="c1">#mat = sympy.matrix2numpy(self.rep)</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">mat</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">))),</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">elems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbasis</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span>
+
+        <span class="n">printMod</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mf">1.0e9</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="c1"># GramSchmidt orthonornalization</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">printMod</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;normalizing matrix: </span><span class="si">%d</span><span class="s1"> of </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">mat</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]))</span>
+
+        <span class="c1"># compute similarity matrix</span>
+        <span class="n">similarity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)))</span>
+        <span class="c1"># precompute norms</span>
+        <span class="n">norms</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+            <span class="n">norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">printMod</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;building similarity matrix: </span><span class="si">%d</span><span class="s1"> of </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/=</span> <span class="n">norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">norms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">similarity</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">SimilarityMatrix</span><span class="p">(</span><span class="n">similarity</span><span class="p">,</span> <span class="n">elems</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fromMatrix">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.fromMatrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fromMatrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">cols</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Builds the reduced representation matrix.</span>
+
+<span class="sd">    Given a matrix of columns (self.matrix) it builds the reduced representation matrix</span>
+<span class="sd">    (self.rep) that has rows for each basis element and columns for each non-basis</span>
+<span class="sd">    element.</span>
+
+<span class="sd">    From this form the fundamental cycles can easily be read of and other operations</span>
+<span class="sd">    like deletion and contraction are easy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">cols</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">),</span> <span class="s1">&#39;for each column a name is needed&#39;</span>
+    <span class="n">inv_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># basis vectors in (transformed) triangular form</span>
+    <span class="n">row_perm</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># stores which index we use for each basis element</span>
+    <span class="c1"># inv_cycle is matrix to reconstruct basis vectors,</span>
+    <span class="c1"># used to compute cycles for non-basis elements</span>
+    <span class="c1">#inv_cycle = sympy.zeros(len(cols))</span>
+    <span class="n">inv_cycle</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">()</span>
+    <span class="n">basis</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># names of basis elements</span>
+    <span class="n">nbasis</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># names of non-basis elements</span>
+    <span class="n">repRawData</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># raw form of representation matrix</span>
+
+    <span class="n">time_build_inv_cycle_col</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">time_find_row</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">time_add_dependent</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">time_add_basis</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;creating matroid representation: &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="c1"># eliminate existing coordinates (in row_perm)</span>
+        <span class="n">stime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># residual</span>
+        <span class="c1"># in case its linearly independent, store the linear transformation</span>
+        <span class="c1">#inv_cycle_col = sympy.zeros(len(cols),c=1)</span>
+        <span class="n">inv_cycle_col</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">()</span>
+        <span class="n">inv_cycle_col</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">row_perm</span><span class="p">),</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">row_perm</span><span class="p">)):</span>
+            <span class="n">coef</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">row_perm</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">coef</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># update residual</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">coladd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inv_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="o">-</span><span class="n">coef</span><span class="p">)</span>
+                <span class="c1">#res -= inv_list[j]*coef</span>
+                <span class="n">inv_cycle_col</span><span class="o">.</span><span class="n">coladd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inv_cycle</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="o">-</span><span class="n">coef</span><span class="p">)</span>
+                <span class="c1">#inv_cycle_col -= inv_cycle[:,j]*coef</span>
+
+        <span class="n">time_build_inv_cycle_col</span> <span class="o">+=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">stime</span>
+        <span class="n">stime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1"># check if res contains non-zero entries and</span>
+        <span class="c1"># if yes, find entry with minimum no. of non-zeros in other __cols</span>
+
+        <span class="n">min_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">min_count</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">rows</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># print(row_perm)</span>
+                <span class="c1"># print(res)</span>
+                <span class="k">assert</span> <span class="n">j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">row_perm</span>
+                <span class="c1"># count no. non-zeros in other __cols</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">inv_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># update min_count and min_index</span>
+                <span class="k">if</span> <span class="n">min_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">min_count</span><span class="p">:</span>
+                    <span class="n">min_index</span> <span class="o">=</span> <span class="n">j</span>
+                    <span class="n">min_count</span> <span class="o">=</span> <span class="n">count</span>
+
+        <span class="n">time_find_row</span> <span class="o">+=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">stime</span>
+        <span class="n">stime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">min_index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># the column i is linearly dependent</span>
+            <span class="c1"># therefore, add fundamental circuit and add non-basis element</span>
+
+            <span class="c1"># reconstruct linear combination of original vectors (cycle)</span>
+            <span class="n">sub_inv</span> <span class="o">=</span> <span class="n">inv_cycle</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">basis</span><span class="p">),</span> <span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">basis</span><span class="p">)]</span>
+<span class="c1">#            v = sub_inv*c.extract(row_perm,[0])</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">sub_inv</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="n">row_perm</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+            <span class="c1"># new non-basis element</span>
+            <span class="n">nbasis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="c1"># corresponding cycle</span>
+            <span class="n">repRawData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">time_add_dependent</span> <span class="o">+=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">stime</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># the column i is linearly independent of other columns</span>
+            <span class="c1"># therefore, add to basis</span>
+            <span class="n">basis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="c1"># normalize such that the new basis-vector has entry 1 in row j</span>
+            <span class="c1"># we choose min_index as the 1-entry such that we minimize the</span>
+            <span class="c1"># number of transformations</span>
+            <span class="n">div</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">min_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">inv_cycle_col</span> <span class="o">/=</span> <span class="n">div</span>
+            <span class="c1"># store transformation</span>
+            <span class="n">inv_cycle</span><span class="o">.</span><span class="n">coladd</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inv_cycle_col</span><span class="p">)</span>
+            <span class="c1">#inv_cycle[:,len(basis)-1] = inv_cycle_col</span>
+            <span class="n">res</span> <span class="o">/=</span> <span class="n">div</span>
+
+            <span class="c1"># eliminate non-zero coefficients of existing basis-vectors</span>
+            <span class="c1"># in row min_index</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inv_list</span><span class="p">)):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">inv_list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">min_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># also update the transformation matrix</span>
+                    <span class="n">inv_cycle</span><span class="o">.</span><span class="n">coladd</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">inv_cycle_col</span><span class="p">,</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">min_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+                    <span class="c1">#inv_cycle[:,k] -= inv_cycle_col*x[min_index,0]</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">coladd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">min_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+                    <span class="c1">#inv_list[k] -= res*x[min_index,0]</span>
+
+            <span class="c1"># add basis-vector</span>
+            <span class="n">inv_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+            <span class="n">row_perm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">min_index</span><span class="p">)</span>
+            <span class="n">time_add_basis</span> <span class="o">+=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">stime</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>  <span class="c1"># to finish the line</span>
+
+<span class="c1">#    print(&quot;time build inv cycle col: %s&quot; % time_build_inv_cycle_col)</span>
+<span class="c1">#    print(&quot;time find row %s&quot; % time_find_row)</span>
+<span class="c1">#    print(&quot;time add dependent %s&quot; % time_add_dependent)</span>
+<span class="c1">#    print(&quot;time add basis %s&quot; % time_add_basis)</span>
+    <span class="c1"># finally, build representation matrix</span>
+    <span class="c1">#rep = sympy.zeros(len(basis), len(nbasis))</span>
+    <span class="n">rep</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">repRawData</span><span class="p">)):</span>
+        <span class="n">rep</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">repRawData</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># TODO: I think this can be greatly improved!</span>
+
+    <span class="n">m</span> <span class="o">=</span> <span class="n">Matroid</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">nbasis</span><span class="p">)</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">elems</span> <span class="o">=</span> <span class="n">cols</span>  <span class="c1"># just make sure that the order is correct</span>
+    <span class="c1"># clear_cache()</span>
+    <span class="k">return</span> <span class="n">m</span></div>
+
+
+
+<div class="viewcode-block" id="SimilarityMatrix">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.SimilarityMatrix">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SimilarityMatrix</span><span class="p">:</span>
+
+<div class="viewcode-block" id="SimilarityMatrix.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.SimilarityMatrix.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">elems</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds a similarity matrix out of a matrix and element names.</span>
+
+<span class="sd">        the matrix must be square and have as many rows/columns as elems has entries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elems</span> <span class="o">=</span> <span class="n">elems</span></div>
+
+
+<div class="viewcode-block" id="SimilarityMatrix.max">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.matroid.SimilarityMatrix.max">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simmatrix</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">simmatrix</span><span class="o">.</span><span class="n">elems</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">elems</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">simmatrix</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">SimilarityMatrix</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

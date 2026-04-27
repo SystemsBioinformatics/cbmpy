@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solver Implementations &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CBMPy: CBRead module" href="io.html" />
+    <link rel="prev" title="CBMPy Core Classes" href="core.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#matroid-module">Matroid Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#decomposition-module">Decomposition Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#sparse-rationals-module">Sparse Rationals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Solver Implementations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbsolver-module">CBMPy: CBSolver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbsolver2-module">CBMPy: CBSolver2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase"><code class="docutils literal notranslate"><span class="pre">LPBase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.obj"><code class="docutils literal notranslate"><span class="pre">LPBase.obj</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.id"><code class="docutils literal notranslate"><span class="pre">LPBase.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.name"><code class="docutils literal notranslate"><span class="pre">LPBase.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.objective"><code class="docutils literal notranslate"><span class="pre">LPBase.objective</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.objective_sense"><code class="docutils literal notranslate"><span class="pre">LPBase.objective_sense</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.linear_constraints"><code class="docutils literal notranslate"><span class="pre">LPBase.linear_constraints</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.addObjective"><code class="docutils literal notranslate"><span class="pre">LPBase.addObjective()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.setObjectiveSense"><code class="docutils literal notranslate"><span class="pre">LPBase.setObjectiveSense()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbmpy.CBSolverX.LPBase.addLinearConstraint"><code class="docutils literal notranslate"><span class="pre">LPBase.addLinearConstraint()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBSolverX.MILPBase"><code class="docutils literal notranslate"><span class="pre">MILPBase</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBSolverX.QPbase"><code class="docutils literal notranslate"><span class="pre">QPbase</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBSolverX.LPCPLEX"><code class="docutils literal notranslate"><span class="pre">LPCPLEX</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBSolverX.LPECYGLPKI"><code class="docutils literal notranslate"><span class="pre">LPECYGLPKI</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy-cbglpk-module">CBMPy: CBGLPK module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_constructLPfromFBA"><code class="docutils literal notranslate"><span class="pre">glpk_constructLPfromFBA()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_Solve"><code class="docutils literal notranslate"><span class="pre">glpk_Solve()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_getSolutionStatus"><code class="docutils literal notranslate"><span class="pre">glpk_getSolutionStatus()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_analyzeModel"><code class="docutils literal notranslate"><span class="pre">glpk_analyzeModel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_setSolutionStatusToModel"><code class="docutils literal notranslate"><span class="pre">glpk_setSolutionStatusToModel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_setFBAsolutionToModel"><code class="docutils literal notranslate"><span class="pre">glpk_setFBAsolutionToModel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_getOptimalSolution"><code class="docutils literal notranslate"><span class="pre">glpk_getOptimalSolution()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_getReducedCosts"><code class="docutils literal notranslate"><span class="pre">glpk_getReducedCosts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.getReducedCosts"><code class="docutils literal notranslate"><span class="pre">getReducedCosts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.setReducedCosts"><code class="docutils literal notranslate"><span class="pre">setReducedCosts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_FluxVariabilityAnalysis"><code class="docutils literal notranslate"><span class="pre">glpk_FluxVariabilityAnalysis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_func_GetCPXandPresolve"><code class="docutils literal notranslate"><span class="pre">glpk_func_GetCPXandPresolve()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_func_SetObjectiveFunctionAsConstraint"><code class="docutils literal notranslate"><span class="pre">glpk_func_SetObjectiveFunctionAsConstraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_setSingleConstraint"><code class="docutils literal notranslate"><span class="pre">glpk_setSingleConstraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBGLPK.glpk_setObjective"><code class="docutils literal notranslate"><span class="pre">glpk_setObjective()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#gui-frontends">GUI Frontends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#multi-processing">Multi-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#model-utilities">Model Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Solver Implementations</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/solvers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="solver-implementations">
+<h1>Solver Implementations<a class="headerlink" href="#solver-implementations" title="Link to this heading"></a></h1>
+<section id="cbmpy-cbsolver-module">
+<span id="module-cbmpy.CBSolver"></span><h2>CBMPy: CBSolver module<a class="headerlink" href="#cbmpy-cbsolver-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBSolver.py 710 2020-04-27 14:22:34Z bgoli $)</p>
+</section>
+<section id="cbmpy-cbsolver2-module">
+<span id="module-cbmpy.CBSolverX"></span><h2>CBMPy: CBSolver2 module<a class="headerlink" href="#cbmpy-cbsolver2-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBSolver.py 305 2024-04-23 15:18:31Z bgoli $)</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBSolverX.</span></span><span class="sig-name descname"><span class="pre">LPBase</span></span><a class="reference internal" href="../_modules/cbmpy/CBSolverX.html#LPBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBSolverX.LPBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The base of all LP’s.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.obj">
+<span class="sig-name descname"><span class="pre">obj</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.obj" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.objective">
+<span class="sig-name descname"><span class="pre">objective</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.objective" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.objective_sense">
+<span class="sig-name descname"><span class="pre">objective_sense</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.objective_sense" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.linear_constraints">
+<span class="sig-name descname"><span class="pre">linear_constraints</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.linear_constraints" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.addObjective">
+<span class="sig-name descname"><span class="pre">addObjective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBSolverX.html#LPBase.addObjective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.addObjective" title="Link to this definition"></a></dt>
+<dd><p>Add objective as a list of (coefficient, variable) tuples.</p>
+<ul class="simple">
+<li><p><em>arr</em> a list of one or more (coefficient, variable) tuples</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.setObjectiveSense">
+<span class="sig-name descname"><span class="pre">setObjectiveSense</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sense</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBSolverX.html#LPBase.setObjectiveSense"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.setObjectiveSense" title="Link to this definition"></a></dt>
+<dd><p>Set the objective sense.</p>
+<ul class="simple">
+<li><p><em>sense</em> is the string ‘MAX’ or ‘MIN’</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPBase.addLinearConstraint">
+<span class="sig-name descname"><span class="pre">addLinearConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sense</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBSolverX.html#LPBase.addLinearConstraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBSolverX.LPBase.addLinearConstraint" title="Link to this definition"></a></dt>
+<dd><p>Add linear constraint as a list of (coefficient, variable) tuples.</p>
+<ul class="simple">
+<li><p><em>cid</em> the constraint id</p></li>
+<li><p><em>arr</em> a list of (coefficient, variable) tuples</p></li>
+<li><p><em>sense</em> GE, LE, EQ (&gt;=, &lt;=, ==)</p></li>
+<li><p><em>rhs</em> the floating point value of the rhs</p></li>
+<li><p><em>overwrite</em> [default=False] if a cid already exists overwrite it</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.MILPBase">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBSolverX.</span></span><span class="sig-name descname"><span class="pre">MILPBase</span></span><a class="reference internal" href="../_modules/cbmpy/CBSolverX.html#MILPBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBSolverX.MILPBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The base of all MILP’s.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.QPbase">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBSolverX.</span></span><span class="sig-name descname"><span class="pre">QPbase</span></span><a class="reference internal" href="../_modules/cbmpy/CBSolverX.html#QPbase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBSolverX.QPbase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The base of all QP’s.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPCPLEX">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBSolverX.</span></span><span class="sig-name descname"><span class="pre">LPCPLEX</span></span><a class="reference internal" href="../_modules/cbmpy/CBSolverX.html#LPCPLEX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBSolverX.LPCPLEX" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbmpy.CBSolverX.LPBase" title="cbmpy.CBSolverX.LPBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">LPBase</span></code></a></p>
+<p>CPLEX LP implimentation.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBSolverX.LPECYGLPKI">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBSolverX.</span></span><span class="sig-name descname"><span class="pre">LPECYGLPKI</span></span><a class="reference internal" href="../_modules/cbmpy/CBSolverX.html#LPECYGLPKI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBSolverX.LPECYGLPKI" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbmpy.CBSolverX.LPBase" title="cbmpy.CBSolverX.LPBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">LPBase</span></code></a></p>
+<p>ECYGLPKI LP implimentation.</p>
+</dd></dl>
+
+<section id="cbmpy-cbglpk-module">
+<span id="module-cbmpy.CBGLPK"></span><h2>CBMPy: CBGLPK module<a class="headerlink" href="#cbmpy-cbglpk-module" title="Link to this heading"></a></h2>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBGLPK.py 713 2020-07-29 22:28:43Z bgoli $)</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_constructLPfromFBA">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_constructLPfromFBA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_constructLPfromFBA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_constructLPfromFBA" title="Link to this definition"></a></dt>
+<dd><p>Create a GLPK LP in memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fba</strong> – an FBA object</p></li>
+<li><p><strong>fname</strong> – optional filename if defined writes out the constructed lp</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_Solve">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_Solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_Solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_Solve" title="Link to this definition"></a></dt>
+<dd><p>Solve the LP and create a status attribute with the solution status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>method</strong> – [default=’s’] ‘s’ = simplex, ‘i’ = interior, ‘e’ = exact</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_getSolutionStatus">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_getSolutionStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_getSolutionStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_getSolutionStatus" title="Link to this definition"></a></dt>
+<dd><p>Returns one of:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>LPS_OPT</strong> – : solution is optimal;</p></li>
+<li><p><strong>LPS_FEAS</strong> – : solution is feasible;</p></li>
+<li><p><strong>LPS_INFEAS</strong> – : solution is infeasible;</p></li>
+<li><p><strong>LPS_NOFEAS</strong> – : problem has no feasible solution;</p></li>
+<li><p><strong>LPS_UNBND</strong> – : problem has unbounded solution;</p></li>
+<li><p><strong>LPS_UNDEF</strong> – : solution is undefined.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_analyzeModel">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_analyzeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpFname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_lp_obj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_reduced_costs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scaled'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_sensitivity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">del_intermediate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oldlpgen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_analyzeModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_analyzeModel" title="Link to this definition"></a></dt>
+<dd><p>Optimize a model and add the result of the optimization to the model object (e.g. <cite>reaction.value</cite>, <cite>objectiveFunction.value</cite>). The stoichiometric matrix is automatically generated. This is a common function available in all solver interfaces. By default returns the objective function value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – an instantiated PySCeSCBM model object</p></li>
+<li><p><strong>lpFname</strong> – [default=None] the name of the intermediate LP file saved when this has a string value.</p></li>
+<li><p><strong>return_lp_obj</strong> – [default=False] off by default when enabled it returns the PyGLPK LP object</p></li>
+<li><p><strong>with_reduced_costs</strong> – [default=’scaled’] calculate and add reduced cost information to mode this can be: ‘unscaled’ or ‘scaled’</p></li>
+<li><p><strong>with_sensitivity</strong> – [default=False] add solution sensitivity information (not yet implemented)</p></li>
+<li><p><strong>del_intermediate</strong> – [default=False] delete the intermediary files after updating model object, useful for server applications</p></li>
+<li><p><strong>build_n</strong> – [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)</p></li>
+<li><p><strong>quiet</strong> – [default=False] suppress glpk output</p></li>
+<li><p><strong>oldlpgen</strong> – [default=False] not used anymore</p></li>
+<li><p><strong>method</strong> – [default=’s’] select the GLPK solver method, see the GLPK documentation for details</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_setSolutionStatusToModel">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_setSolutionStatusToModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_setSolutionStatusToModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_setSolutionStatusToModel" title="Link to this definition"></a></dt>
+<dd><p>Sets the lp solutions status to the CBMPy model.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_setFBAsolutionToModel">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_setFBAsolutionToModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_reduced_costs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scaled'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_setFBAsolutionToModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_setFBAsolutionToModel" title="Link to this definition"></a></dt>
+<dd><p>Sets the FBA solution from a CPLEX solution to an FBA object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fba</strong> – and fba object</p></li>
+<li><p><strong>lp</strong> – a CPLEX LP object</p></li>
+<li><p><strong>with_reduced_costs</strong> – [default=’unscaled’] calculate and add reduced cost information to mode this can be: ‘unscaled’ or ‘scaled’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_getOptimalSolution">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_getOptimalSolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_getOptimalSolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_getOptimalSolution" title="Link to this definition"></a></dt>
+<dd><p>From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>c</strong> – a GLPK object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_getReducedCosts">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_getReducedCosts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_getReducedCosts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_getReducedCosts" title="Link to this definition"></a></dt>
+<dd><p>Extract ReducedCosts from LP and return as a dictionary ‘Rid’ : reduced cost.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c</strong> – a GLPK LP object</p></li>
+<li><p><strong>scaled</strong> – scale the reduced cost by the optimal flux value</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.getReducedCosts">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">getReducedCosts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#getReducedCosts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.getReducedCosts" title="Link to this definition"></a></dt>
+<dd><p>Get a dictionary of reduced costs for each reaction/flux.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.setReducedCosts">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">setReducedCosts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduced_costs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#setReducedCosts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.setReducedCosts" title="Link to this definition"></a></dt>
+<dd><p>For each reaction/flux, sets the attribute “reduced_cost” from a dictionary of reduced costs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fba</strong> – an fba object</p></li>
+<li><p><strong>reduced_costs</strong> – a dictionary of {reaction : value} pairs</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_FluxVariabilityAnalysis">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_FluxVariabilityAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_reactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_opt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objF2constr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs_sense</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lower'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optPercentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oldlpgen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markupmodel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_on_fail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roundoff_span</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_FluxVariabilityAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_FluxVariabilityAnalysis" title="Link to this definition"></a></dt>
+<dd><p>Perform a flux variability analysis on an fba model:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fba</strong> – an FBA model object</p></li>
+<li><p><strong>pre_opt</strong> – [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and <em>objF2constr</em> is True then the vid/value of the current active objective is used</p></li>
+<li><p><strong>tol</strong> – [default=None] do not floor/ceiling the objective function constraint, otherwise round of to <em>tol</em></p></li>
+<li><p><strong>rhs_sense</strong> – [default=’lower’] means objC &gt;= objVal the inequality to use for the objective constraint can also be <em>upper</em> or <em>equal</em></p></li>
+<li><p><strong>optPercentage</strong> – [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)</p></li>
+<li><p><strong>work_dir</strong> – [default=None] the FVA working directory for temporary files default = cwd+fva</p></li>
+<li><p><strong>debug</strong> – [default=False] if True write out all the intermediate FVA LP’s into work_dir</p></li>
+<li><p><strong>quiet</strong> – [default=False] if enabled supress CPLEX output</p></li>
+<li><p><strong>objF2constr</strong> – [default=True] add the model objective function as a constraint using rhs_sense etc. If</p></li>
+<li><p><strong>markupmodel</strong> – [default=True] add the values returned by the fva to the reaction.fva_min and reaction.fva_max</p></li>
+<li><p><strong>default_on_fail</strong> – [default=False] if <em>pre_opt</em> is enabled replace a failed minimum/maximum with the solution value</p></li>
+<li><p><strong>roundoff_span</strong> – [default=10] number of digits is round off (not individual min/max values)</p></li>
+<li><p><strong>method</strong> – [default=’s’] select the GLPK solver method, see the GLPK documentation for details</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>an array with columns Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus and a list containing the row names.</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_func_GetCPXandPresolve">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_func_GetCPXandPresolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fba</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_opt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objF2constr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oldlpgen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_reduced_costs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'unscaled'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_func_GetCPXandPresolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_func_GetCPXandPresolve" title="Link to this definition"></a></dt>
+<dd><p>This is a utility function that does a presolve for FVA, MSAF etc. Generates properly formatted empty objects if pre_opt == False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pre_opt</strong> – a boolean</p></li>
+<li><p><strong>fba</strong> – a CBModel object</p></li>
+<li><p><strong>objF2constr</strong> – add objective function as constraint</p></li>
+<li><p><strong>quiet</strong> – [default=False] supress cplex output</p></li>
+<li><p><strong>with_reduced_costs</strong> – [default=’unscaled’] can be ‘scaled’ or ‘unscaled’</p></li>
+<li><p><strong>method</strong> – [default=’s’] select the GLPK solver method, see the GLPK documentation for details</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_func_SetObjectiveFunctionAsConstraint">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_func_SetObjectiveFunctionAsConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs_sense</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optPercentage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_func_SetObjectiveFunctionAsConstraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_func_SetObjectiveFunctionAsConstraint" title="Link to this definition"></a></dt>
+<dd><p>Take the objective function and “optimum” value and add it as a constraint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpx</strong> – a cplex object</p></li>
+<li><p><strong>oval</strong> – the objective value</p></li>
+<li><p><strong>tol</strong> – [default=None] do not floor/ceiling the objective function constraint, otherwise round of to <em>tol</em></p></li>
+<li><p><strong>rhs_sense</strong> – [default=’lower’] means objC &gt;= objVal the inequality to use for the objective constraint can also be <em>upper</em> or <em>equal</em></p></li>
+<li><p><strong>optPercentage</strong> – [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_setSingleConstraint">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_setSingleConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sense</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'E'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_setSingleConstraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_setSingleConstraint" title="Link to this definition"></a></dt>
+<dd><p>Sets a new single constraint to a GLPK model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c</strong> – a GLPK instance</p></li>
+<li><p><strong>cid</strong> – the constraint id</p></li>
+<li><p><strong>expr</strong> – a list of (coefficient, name) pairs</p></li>
+<li><p><strong>sense</strong> – [default=’G’] LGE</p></li>
+<li><p><strong>rhs</strong> – [default=0.0] the right hand side</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cbmpy.CBGLPK.glpk_setObjective">
+<span class="sig-prename descclassname"><span class="pre">cbmpy.CBGLPK.</span></span><span class="sig-name descname"><span class="pre">glpk_setObjective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sense</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'maximize'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBGLPK.html#glpk_setObjective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBGLPK.glpk_setObjective" title="Link to this definition"></a></dt>
+<dd><p>Set a new objective function note that there is a major memory leak in <cite>c.variables.get_names()</cite> whch is used when reset=True. If this is a problem use cplx_setObjective2 which takes <em>names</em> as an input:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c</strong> – a GLPK LP object</p></li>
+<li><p><strong>oid</strong> – the r_id of the flux to be optimized</p></li>
+<li><p><strong>expr</strong> – a list of (coefficient, flux) pairs</p></li>
+<li><p><strong>sense</strong> – ‘maximize’/’minimize’</p></li>
+<li><p><strong>reset</strong> – [default=True] reset all objective function coefficients to zero</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Optional Solvers
+==—-</p>
+<p>CBMPy supports additional solvers that require optional dependencies.</p>
+<p><strong>CBCPLEX</strong> - IBM CPLEX solver wrapper. Requires the IBM CPLEX Optimization Studio package. Source: <code class="docutils literal notranslate"><span class="pre">cbmpy/CBCPLEX.py</span></code>.</p>
+<p><strong>CBGLPKOLD</strong> - Legacy GLPK wrapper. Requires an older version of the glpk package. Source: <code class="docutils literal notranslate"><span class="pre">cbmpy/CBGLPKOLD.py</span></code>.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="core.html" class="btn btn-neutral float-left" title="CBMPy Core Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="io.html" class="btn btn-neutral float-right" title="CBMPy: CBRead module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

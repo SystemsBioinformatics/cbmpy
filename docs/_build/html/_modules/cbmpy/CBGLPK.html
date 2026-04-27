@@ -1,0 +1,1650 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cbmpy.CBGLPK &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#matroid-module">Matroid Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#decomposition-module">Decomposition Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#sparse-rationals-module">Sparse Rationals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/solvers.html">Solver Implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#gui-frontends">GUI Frontends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#multi-processing">Multi-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#model-utilities">Model Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../cbmpy.html">cbmpy</a></li>
+      <li class="breadcrumb-item active">cbmpy.CBGLPK</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cbmpy.CBGLPK</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">CBMPy: CBGLPK module</span>
+<span class="sd">====================</span>
+<span class="sd">PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)</span>
+<span class="sd">Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+<span class="sd">Author: Brett G. Olivier PhD</span>
+<span class="sd">Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues</span>
+<span class="sd">Last edit: $Author: bgoli $ ($Id: CBGLPK.py 713 2020-07-29 22:28:43Z bgoli $)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># preparing for Python 3 port</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="c1"># from __future__ import unicode_literals</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">packaging</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">pkgver</span>
+
+<span class="n">HAVE_SYMPY</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span>
+
+    <span class="k">if</span> <span class="n">pkgver</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">pkgver</span><span class="o">.</span><span class="n">Version</span><span class="p">(</span><span class="s1">&#39;0.7.5&#39;</span><span class="p">):</span>
+        <span class="n">HAVE_SYMPY</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">sympy</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">WARNING: SymPy version 0.7.5 or newer is required for symbolic matrix support.&#39;</span>
+        <span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">HAVE_SYMPY</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">CBWrite</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.CBConfig</span><span class="w"> </span><span class="kn">import</span> <span class="n">__CBCONFIG__</span> <span class="k">as</span> <span class="n">__CBCONFIG__</span>
+
+<span class="n">__DEBUG__</span> <span class="o">=</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">]</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION&#39;</span><span class="p">]</span>
+<span class="n">__solver_version__</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
+
+<span class="n">HAVE_SWIGLPK</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">GLPK_SOLUTION_STATUS</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">swiglpk</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sw</span>
+
+    <span class="n">lp</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_create_prob</span><span class="p">()</span>
+    <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_prob_name</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">)</span>
+    <span class="n">sw</span><span class="o">.</span><span class="n">glp_delete_prob</span><span class="p">(</span><span class="n">lp</span><span class="p">)</span>
+    <span class="n">HAVE_SWIGLPK</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">__solver_version__</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">GLP_MAJOR_VERSION</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_MINOR_VERSION</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s1">&#39;CBGLPK based on swiglpk: not all methods implimented yet!&#39;</span><span class="p">,</span>
+        <span class="n">__solver_version__</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ImportError</span>
+
+
+<span class="c1"># Configuration options for GLPK</span>
+<span class="n">GLPK_S_CFG</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_smcp</span><span class="p">()</span>
+<span class="c1"># GLPK_S_CFG.meth = sw.GLP_PRIMAL</span>
+<span class="c1"># GLPK_S_CFG.meth = sw.GLP_DUAL</span>
+<span class="n">GLPK_S_CFG</span><span class="o">.</span><span class="n">meth</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_DUALP</span>
+<span class="n">GLPK_S_CFG</span><span class="o">.</span><span class="n">tol_bnd</span> <span class="o">=</span> <span class="mf">1.0e-7</span>
+<span class="n">GLPK_S_CFG</span><span class="o">.</span><span class="n">tol_dj</span> <span class="o">=</span> <span class="mf">1.0e-7</span>
+<span class="n">GLPK_S_CFG</span><span class="o">.</span><span class="n">tol_piv</span> <span class="o">=</span> <span class="mf">1.0e-10</span>
+<span class="n">GLPK_S_CFG</span><span class="o">.</span><span class="n">it_lim</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">GLPK_S_CFG</span><span class="o">.</span><span class="n">tm_lim</span> <span class="o">=</span> <span class="mi">600000</span>  <span class="c1">#  units unknown</span>
+
+<span class="c1"># Configuration options for GLPK</span>
+<span class="n">GLPK_I_CFG</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_iptcp</span><span class="p">()</span>
+<span class="c1"># GLPK_I_CFG.ord_alg = sw.GLP_ORD_NONE</span>
+<span class="c1"># GLPK_I_CFG.ord_alg = sw.GLP_ORD_QMD</span>
+<span class="n">GLPK_I_CFG</span><span class="o">.</span><span class="n">ord_alg</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_ORD_AMD</span>
+<span class="c1"># GLPK_I_CFG.ord_alg = sw.GLP_ORD_SYMAMD</span>
+<span class="n">GLPK_I_CFG</span><span class="o">.</span><span class="n">msg_lev</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_MSG_ALL</span>
+
+
+<span class="n">GLPK_STATUS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;LPS_UNDEF&#39;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;LPS_FEAS&#39;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;LPS_INFEAS&#39;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;LPS_NOFEAS&#39;</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;LPS_OPT&#39;</span><span class="p">,</span>
+    <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;LPS_UNBND&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">GLPK_STATUS2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;opt&#39;</span><span class="p">:</span> <span class="s1">&#39;LPS_OPT&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;undef&#39;</span><span class="p">:</span> <span class="s1">&#39;LPS_UNDEF&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;feas&#39;</span><span class="p">:</span> <span class="s1">&#39;LPS_FEAS&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;infeas&#39;</span><span class="p">:</span> <span class="s1">&#39;LPS_INFEAS&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;nofeas&#39;</span><span class="p">:</span> <span class="s1">&#39;LPS_NOFEAS&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;unbnd&#39;</span><span class="p">:</span> <span class="s1">&#39;LPS_UNBND&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="n">GLPK_SILENT_MODE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">GLPK_INFINITY</span> <span class="o">=</span> <span class="mf">1.0e9</span>
+
+
+<div class="viewcode-block" id="glpk_constructLPfromFBA">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_constructLPfromFBA">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_constructLPfromFBA</span><span class="p">(</span><span class="n">fba</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a GLPK LP in memory.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fba</span>
+<span class="sd">        an FBA object</span>
+<span class="sd">    fname</span>
+<span class="sd">        optional filename if defined writes out the constructed lp</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">CBGLPK based on swiglpk: not all methods implimented yet!&#39;</span><span class="p">)</span>
+
+    <span class="n">_Stime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># define model and add variables</span>
+    <span class="n">lp</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_create_prob</span><span class="p">()</span>
+    <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_prob_name</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">fba</span><span class="o">.</span><span class="n">getId</span><span class="p">())</span>
+    <span class="n">sw</span><span class="o">.</span><span class="n">glp_add_cols</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">col</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">HAVE_SYMPY</span> <span class="ow">and</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">__array_type__</span> <span class="o">==</span> <span class="n">sympy</span><span class="o">.</span><span class="n">MutableDenseMatrix</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;INFO: GLPK requires floating point, converting N&#39;</span><span class="p">)</span>
+        <span class="n">Nmat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="n">RHSmat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">RHS</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">CMmat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fba</span><span class="o">.</span><span class="n">CM</span><span class="o">.</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+            <span class="n">CMrhs</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fba</span><span class="o">.</span><span class="n">CM</span><span class="o">.</span><span class="n">RHS</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Nmat</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">array</span>
+        <span class="n">RHSmat</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">RHS</span>
+        <span class="k">if</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">CMmat</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span><span class="o">.</span><span class="n">array</span>
+            <span class="n">CMrhs</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span><span class="o">.</span><span class="n">RHS</span>
+
+    <span class="n">varMap</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">n_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">varMap</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">col</span><span class="p">[</span><span class="n">n_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">n_</span>
+        <span class="c1"># lp.cols[n_].name = fba.N.col[n_]</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_col_name</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">n_</span><span class="p">,</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">col</span><span class="p">[</span><span class="n">n_</span><span class="p">])</span>
+
+    <span class="c1"># print varMap</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># define objective</span>
+        <span class="n">osense</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">getActiveObjective</span><span class="p">()</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">osense</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;minimize&#39;</span><span class="p">,</span> <span class="s1">&#39;minimise&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">]:</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_obj_dir</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_MIN</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">osense</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;maximize&#39;</span><span class="p">,</span> <span class="s1">&#39;maximise&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">]:</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_obj_dir</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_MAX</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="s1"> - is not a valid objective operation&#39;</span> <span class="o">%</span> <span class="n">osense</span><span class="p">)</span>
+
+        <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_obj_name</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">fba</span><span class="o">.</span><span class="n">getActiveObjective</span><span class="p">()</span><span class="o">.</span><span class="n">getId</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">fo_</span> <span class="ow">in</span> <span class="n">fba</span><span class="o">.</span><span class="n">getActiveObjective</span><span class="p">()</span><span class="o">.</span><span class="n">flux_objectives</span><span class="p">:</span>
+            <span class="c1"># lp.obj[varMap[fo_.reaction]] = fo_.coefficient</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_obj_coef</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">varMap</span><span class="p">[</span><span class="n">fo_</span><span class="o">.</span><span class="n">reaction</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fo_</span><span class="o">.</span><span class="n">coefficient</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">WARNING(GLPK create LP): no objective function defined&#39;</span><span class="p">)</span>
+
+    <span class="c1"># create N constraints</span>
+    <span class="n">sw</span><span class="o">.</span><span class="n">glp_add_rows</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">Nmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># conMap = {}</span>
+    <span class="c1"># for n_ in range(Nmat.shape[0]):</span>
+    <span class="c1">##conMap[fba.N.row[n_]] = n_</span>
+    <span class="c1"># lp.rows[n_].name = fba.N.row[n_]</span>
+
+    <span class="n">tnew</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">r_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="c1"># name and coefficients</span>
+        <span class="n">newCon</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ind_arr</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">val_arr</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">newCon</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">c_</span><span class="p">,</span> <span class="n">Nmat</span><span class="p">[</span><span class="n">r_</span><span class="p">,</span> <span class="n">c_</span><span class="p">]))</span>
+            <span class="n">ind_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">c_</span><span class="p">)</span>
+            <span class="n">val_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Nmat</span><span class="p">[</span><span class="n">r_</span><span class="p">,</span> <span class="n">c_</span><span class="p">])</span>
+
+        <span class="c1"># lp.rows[r_].name = fba.N.row[r_]</span>
+        <span class="c1"># lp.rows[r_].matrix = newCon</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_row_name</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">row</span><span class="p">[</span><span class="n">r_</span><span class="p">])</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_mat_row</span><span class="p">(</span>
+            <span class="n">lp</span><span class="p">,</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span>
+            <span class="n">Nmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">as_intArray</span><span class="p">(</span><span class="n">ind_arr</span><span class="p">),</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">as_doubleArray</span><span class="p">(</span><span class="n">val_arr</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># sense and rhs</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">RHSmat</span><span class="p">[</span><span class="n">r_</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">operators</span><span class="p">[</span><span class="n">r_</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">]:</span>
+            <span class="c1"># lp.rows[r_].bounds = None, rhs</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_row_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_UP</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">operators</span><span class="p">[</span><span class="n">r_</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">]:</span>
+            <span class="c1"># lp.rows[r_].bounds = rhs, None</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_row_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_LO</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">operators</span><span class="p">[</span><span class="n">r_</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">]:</span>
+            <span class="c1"># lp.rows[r_].bounds = rhs</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_row_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_FX</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;INFO: invalid operator: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">operators</span><span class="p">[</span><span class="n">r_</span><span class="p">])</span>
+
+    <span class="c1"># add user defined constraints</span>
+    <span class="k">if</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span> <span class="o">!=</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">baseRows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lp</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">glp_add_rows</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">CMmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">r_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CMmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="c1"># name and coefficients</span>
+            <span class="c1"># newCon = []</span>
+            <span class="c1"># for c_ in range(CMmat.shape[1]):</span>
+            <span class="c1"># newCon.append((c_, CMmat[r_, c_]))</span>
+            <span class="n">newCon</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">ind_arr</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">val_arr</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">c_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CMmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">newCon</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">c_</span><span class="p">,</span> <span class="n">CMmat</span><span class="p">[</span><span class="n">r_</span><span class="p">,</span> <span class="n">c_</span><span class="p">]))</span>
+                <span class="n">ind_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">c_</span><span class="p">)</span>
+                <span class="n">val_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMmat</span><span class="p">[</span><span class="n">r_</span><span class="p">,</span> <span class="n">c_</span><span class="p">])</span>
+
+            <span class="c1"># lp.rows[baseRows + r_].name = fba.CM.row[r_]</span>
+            <span class="c1"># lp.rows[baseRows + r_].matrix = newCon</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_row_name</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">baseRows</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span> <span class="n">CMmat</span><span class="p">[</span><span class="n">r_</span><span class="p">])</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_mat_row</span><span class="p">(</span>
+                <span class="n">lp</span><span class="p">,</span>
+                <span class="mi">1</span> <span class="o">+</span> <span class="n">baseRows</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span>
+                <span class="n">CMmat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">sw</span><span class="o">.</span><span class="n">as_intArray</span><span class="p">(</span><span class="n">ind_arr</span><span class="p">),</span>
+                <span class="n">sw</span><span class="o">.</span><span class="n">as_doubleArray</span><span class="p">(</span><span class="n">val_arr</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="c1"># sense and rhs</span>
+            <span class="n">rhs</span> <span class="o">=</span> <span class="n">CMrhs</span><span class="p">[</span><span class="n">r_</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span><span class="o">.</span><span class="n">operators</span><span class="p">[</span><span class="n">r_</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">]:</span>
+                <span class="c1"># lp.rows[baseRows + r_].bounds = None, rhs</span>
+                <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_row_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">baseRows</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_UP</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span><span class="o">.</span><span class="n">operators</span><span class="p">[</span><span class="n">r_</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">]:</span>
+                <span class="c1"># lp.rows[baseRows + r_].bounds = rhs, None</span>
+                <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_row_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">baseRows</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_LO</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fba</span><span class="o">.</span><span class="n">CM</span><span class="o">.</span><span class="n">operators</span><span class="p">[</span><span class="n">r_</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">]:</span>
+                <span class="c1"># lp.rows[baseRows + r_].bounds = rhs</span>
+                <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_row_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">baseRows</span> <span class="o">+</span> <span class="n">r_</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_FX</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;INFO: invalid operator: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fba</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">operators</span><span class="p">[</span><span class="n">r_</span><span class="p">])</span>
+
+    <span class="c1"># add bounds</span>
+    <span class="k">for</span> <span class="n">r_b</span> <span class="ow">in</span> <span class="n">fba</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
+        <span class="n">lb</span> <span class="o">=</span> <span class="n">ub</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">lb</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">getReactionLowerBound</span><span class="p">(</span><span class="n">r_b</span><span class="o">.</span><span class="n">getId</span><span class="p">())</span>
+        <span class="n">ub</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">getReactionUpperBound</span><span class="p">(</span><span class="n">r_b</span><span class="o">.</span><span class="n">getId</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">lb</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Infinity&#39;</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">,</span> <span class="s1">&#39;Inf&#39;</span><span class="p">,</span> <span class="s1">&#39;infinity&#39;</span><span class="p">]:</span>
+            <span class="n">lb</span> <span class="o">=</span> <span class="n">GLPK_INFINITY</span>
+        <span class="k">elif</span> <span class="n">lb</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;-Infinity&#39;</span><span class="p">,</span> <span class="s1">&#39;-inf&#39;</span><span class="p">,</span> <span class="s1">&#39;-Inf&#39;</span><span class="p">,</span> <span class="s1">&#39;-infinity&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+            <span class="n">lb</span> <span class="o">=</span> <span class="o">-</span><span class="n">GLPK_INFINITY</span>
+        <span class="k">elif</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">lb</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">lb</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">lb</span> <span class="o">=</span> <span class="o">-</span><span class="n">GLPK_INFINITY</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lb</span> <span class="o">=</span> <span class="n">GLPK_INFINITY</span>
+        <span class="k">if</span> <span class="n">ub</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Infinity&#39;</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">,</span> <span class="s1">&#39;Inf&#39;</span><span class="p">,</span> <span class="s1">&#39;infinity&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+            <span class="n">ub</span> <span class="o">=</span> <span class="n">GLPK_INFINITY</span>
+        <span class="k">elif</span> <span class="n">ub</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;-Infinity&#39;</span><span class="p">,</span> <span class="s1">&#39;-inf&#39;</span><span class="p">,</span> <span class="s1">&#39;-Inf&#39;</span><span class="p">,</span> <span class="s1">&#39;-infinity&#39;</span><span class="p">]:</span>
+            <span class="n">ub</span> <span class="o">=</span> <span class="o">-</span><span class="n">GLPK_INFINITY</span>
+        <span class="k">elif</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">ub</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ub</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">ub</span> <span class="o">=</span> <span class="o">-</span><span class="n">GLPK_INFINITY</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ub</span> <span class="o">=</span> <span class="n">GLPK_INFINITY</span>
+
+        <span class="k">if</span> <span class="n">ub</span> <span class="o">!=</span> <span class="n">GLPK_INFINITY</span> <span class="ow">and</span> <span class="n">lb</span> <span class="o">!=</span> <span class="o">-</span><span class="n">GLPK_INFINITY</span> <span class="ow">and</span> <span class="n">ub</span> <span class="o">==</span> <span class="n">lb</span><span class="p">:</span>
+            <span class="c1"># lp.cols[varMap[r_b.getId()]].bounds = lb</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_col_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">varMap</span><span class="p">[</span><span class="n">r_b</span><span class="o">.</span><span class="n">getId</span><span class="p">()]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_FX</span><span class="p">,</span> <span class="n">lb</span><span class="p">,</span> <span class="n">lb</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">ub</span> <span class="o">!=</span> <span class="n">GLPK_INFINITY</span> <span class="ow">and</span> <span class="n">lb</span> <span class="o">!=</span> <span class="o">-</span><span class="n">GLPK_INFINITY</span><span class="p">:</span>
+            <span class="c1"># lp.cols[varMap[r_b.getId()]].bounds = lb, ub</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_col_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">varMap</span><span class="p">[</span><span class="n">r_b</span><span class="o">.</span><span class="n">getId</span><span class="p">()]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_DB</span><span class="p">,</span> <span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">ub</span> <span class="o">!=</span> <span class="n">GLPK_INFINITY</span><span class="p">:</span>
+            <span class="c1"># lp.cols[varMap[r_b.getId()]].bounds = None, ub</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_col_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">varMap</span><span class="p">[</span><span class="n">r_b</span><span class="o">.</span><span class="n">getId</span><span class="p">()]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_UP</span><span class="p">,</span> <span class="n">ub</span><span class="p">,</span> <span class="n">ub</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">lb</span> <span class="o">!=</span> <span class="o">-</span><span class="n">GLPK_INFINITY</span><span class="p">:</span>
+            <span class="c1"># lp.cols[varMap[r_b.getId()]].bounds = lb, None</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_col_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">varMap</span><span class="p">[</span><span class="n">r_b</span><span class="o">.</span><span class="n">getId</span><span class="p">()]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_LO</span><span class="p">,</span> <span class="n">lb</span><span class="p">,</span> <span class="n">lb</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># lp.cols[varMap[r_b.getId()]].bounds = None</span>
+            <span class="n">sw</span><span class="o">.</span><span class="n">glp_set_col_bnds</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">varMap</span><span class="p">[</span><span class="n">r_b</span><span class="o">.</span><span class="n">getId</span><span class="p">()]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sw</span><span class="o">.</span><span class="n">GLP_FR</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">gplk_constructLPfromFBA time: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">_Stime</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cpxlp</span><span class="o">=</span><span class="n">fname</span> <span class="o">+</span> <span class="s1">&#39;.lp&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lp</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_Solve">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_Solve">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_Solve</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve the LP and create a status attribute with the solution status.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    method</span>
+<span class="sd">        [default=&#39;s&#39;] &#39;s&#39; = simplex, &#39;i&#39; = interior, &#39;e&#39; = exact</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">global</span> <span class="n">GLPK_SOLUTION_STATUS</span>
+    <span class="n">solver_config</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_init_smcp</span><span class="p">(</span><span class="n">GLPK_S_CFG</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;i&#39;</span><span class="p">:</span>
+        <span class="c1"># TODO: add parameters</span>
+        <span class="n">solver_config</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_init_iptcp</span><span class="p">(</span><span class="n">GLPK_I_CFG</span><span class="p">)</span>
+        <span class="n">glpksol</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_interior</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">solver_config</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span>
+        <span class="c1"># TODO: add parameters</span>
+        <span class="c1"># this sets up a base with the fp solver and then performs the exact, faster ... apparently</span>
+        <span class="n">glpksol</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_simplex</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">solver_config</span><span class="p">)</span>
+        <span class="n">glpksol</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_exact</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">solver_config</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># TODO: add parameters</span>
+        <span class="n">glpksol</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_simplex</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">solver_config</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">glpksol</span><span class="p">)</span>
+
+    <span class="n">GLPK_SOLUTION_STATUS</span> <span class="o">=</span> <span class="n">glpk_getSolutionStatus</span><span class="p">(</span><span class="n">lp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">GLPK_SOLUTION_STATUS</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">GLPK_SOLUTION_STATUS</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="s1">&#39;LPS_UNDEF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LPS_FEAS&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LPS_INFEAS&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LPS_NOFEAS&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LPS_OPT&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LPS_UNBND&#39;</span><span class="p">,</span>
+    <span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">GLPK_SILENT_MODE</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Solution status returned as: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">GLPK_SOLUTION_STATUS</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Objective value = &quot;</span><span class="p">,</span> <span class="n">lp</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GLPK_SOLUTION_STATUS</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;INFO: No solution available (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">GLPK_SOLUTION_STATUS</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_getSolutionStatus">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_getSolutionStatus">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_getSolutionStatus</span><span class="p">(</span><span class="n">lp</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns one of:</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    LPS_OPT</span>
+<span class="sd">        : solution is optimal;</span>
+<span class="sd">    LPS_FEAS</span>
+<span class="sd">        : solution is feasible;</span>
+<span class="sd">    LPS_INFEAS</span>
+<span class="sd">        : solution is infeasible;</span>
+<span class="sd">    LPS_NOFEAS</span>
+<span class="sd">        : problem has no feasible solution;</span>
+<span class="sd">    LPS_UNBND</span>
+<span class="sd">        : problem has unbounded solution;</span>
+<span class="sd">    LPS_UNDEF</span>
+<span class="sd">        : solution is undefined.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">GLPK_STATUS</span><span class="p">[</span><span class="n">sw</span><span class="o">.</span><span class="n">glp_get_status</span><span class="p">(</span><span class="n">lp</span><span class="p">)]</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_analyzeModel">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_analyzeModel">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_analyzeModel</span><span class="p">(</span>
+    <span class="n">f</span><span class="p">,</span>
+    <span class="n">lpFname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">return_lp_obj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">with_reduced_costs</span><span class="o">=</span><span class="s1">&#39;scaled&#39;</span><span class="p">,</span>
+    <span class="n">with_sensitivity</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">del_intermediate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">build_n</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">oldlpgen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Optimize a model and add the result of the optimization to the model object (e.g. `reaction.value`, `objectiveFunction.value`). The stoichiometric matrix is automatically generated. This is a common function available in all solver interfaces. By default returns the objective function value.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f</span>
+<span class="sd">        an instantiated PySCeSCBM model object</span>
+<span class="sd">    lpFname</span>
+<span class="sd">        [default=None] the name of the intermediate LP file saved when this has a string value.</span>
+<span class="sd">    return_lp_obj</span>
+<span class="sd">        [default=False] off by default when enabled it returns the PyGLPK LP object</span>
+<span class="sd">    with_reduced_costs</span>
+<span class="sd">        [default=&#39;scaled&#39;] calculate and add reduced cost information to mode this can be: &#39;unscaled&#39; or &#39;scaled&#39;</span>
+<span class="sd">    with_sensitivity</span>
+<span class="sd">        [default=False] add solution sensitivity information (not yet implemented)</span>
+<span class="sd">    del_intermediate</span>
+<span class="sd">        [default=False] delete the intermediary files after updating model object, useful for server applications</span>
+<span class="sd">    build_n</span>
+<span class="sd">        [default=True] generate stoichiometry from the reaction network (reactions/reagents/species)</span>
+<span class="sd">    quiet</span>
+<span class="sd">        [default=False] suppress glpk output</span>
+<span class="sd">    oldlpgen</span>
+<span class="sd">        [default=False] not used anymore</span>
+<span class="sd">    method</span>
+<span class="sd">        [default=&#39;s&#39;] select the GLPK solver method, see the GLPK documentation for details</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">build_n</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">buildStoichMatrix</span><span class="p">()</span>
+
+    <span class="c1"># I&#39;ve moved the check gene activity function to the evaluation</span>
+    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">__check_gene_activity__</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">updateNetwork</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">__check_gene_activity__</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">fid</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">with_reduced_costs</span> <span class="o">==</span> <span class="s1">&#39;scaled&#39;</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">SCALED_REDUCED_COSTS</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">with_reduced_costs</span> <span class="o">==</span> <span class="s1">&#39;unscaled&#39;</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">SCALED_REDUCED_COSTS</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">SCALED_REDUCED_COSTS</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">lpFname</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">flp</span> <span class="o">=</span> <span class="n">glpk_constructLPfromFBA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">setId</span><span class="p">(</span><span class="s1">&#39;_glpktmp_tmp_&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">flp</span> <span class="o">=</span> <span class="n">glpk_constructLPfromFBA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="n">lpFname</span><span class="p">)</span>
+        <span class="n">fid</span> <span class="o">=</span> <span class="n">lpFname</span>
+
+    <span class="n">_Stime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">glpk_analyzeModel FBA --&gt; LP time: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">_Stime</span><span class="p">))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">setId</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+    <span class="n">glpk_Solve</span><span class="p">(</span><span class="n">flp</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="n">glpk_setFBAsolutionToModel</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">flp</span><span class="p">,</span> <span class="n">with_reduced_costs</span><span class="o">=</span><span class="n">with_reduced_costs</span><span class="p">)</span>
+    <span class="n">glpk_setSolutionStatusToModel</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">flp</span><span class="p">)</span>
+
+    <span class="n">objv</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">getActiveObjective</span><span class="p">()</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">analyzeModel objective value: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">objv</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">return_lp_obj</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">flp</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">flp</span>
+        <span class="k">return</span> <span class="n">objv</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_setSolutionStatusToModel">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_setSolutionStatusToModel">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_setSolutionStatusToModel</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">lp</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the lp solutions status to the CBMPy model.&quot;&quot;&quot;</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">SOLUTION_STATUS</span> <span class="o">=</span> <span class="n">glpk_getSolutionStatus</span><span class="p">(</span><span class="n">lp</span><span class="p">)</span>
+    <span class="c1"># TODO: need to synchronise all solvers to same integer system</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">SOLUTION_STATUS</span> <span class="o">==</span> <span class="s1">&#39;LPS_OPT&#39;</span><span class="p">:</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">SOLUTION_STATUS_INT</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">SOLUTION_STATUS_INT</span> <span class="o">=</span> <span class="mi">999</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_setFBAsolutionToModel">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_setFBAsolutionToModel">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_setFBAsolutionToModel</span><span class="p">(</span><span class="n">fba</span><span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">with_reduced_costs</span><span class="o">=</span><span class="s1">&#39;scaled&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets the FBA solution from a CPLEX solution to an FBA object.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fba</span>
+<span class="sd">        and fba object</span>
+<span class="sd">    lp</span>
+<span class="sd">        a CPLEX LP object</span>
+<span class="sd">    with_reduced_costs</span>
+<span class="sd">        [default=&#39;unscaled&#39;] calculate and add reduced cost information to mode this can be: &#39;unscaled&#39; or &#39;scaled&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sol</span><span class="p">,</span> <span class="n">objname</span><span class="p">,</span> <span class="n">objval</span> <span class="o">=</span> <span class="n">glpk_getOptimalSolution</span><span class="p">(</span><span class="n">lp</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">glpk_getSolutionStatus</span><span class="p">(</span><span class="n">lp</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;LPS_OPT&#39;</span><span class="p">:</span>
+        <span class="p">(</span>
+            <span class="n">fba</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">activeObjIdx</span><span class="p">]</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span>
+            <span class="n">fba</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">activeObjIdx</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">objval</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="p">(</span>
+            <span class="n">fba</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">activeObjIdx</span><span class="p">]</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span>
+            <span class="n">fba</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">activeObjIdx</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">fba</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
+        <span class="n">rid</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rid</span> <span class="ow">in</span> <span class="n">sol</span><span class="p">:</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">sol</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">scaled</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">with_reduced_costs</span> <span class="o">==</span> <span class="s1">&#39;scaled&#39;</span><span class="p">:</span>
+        <span class="n">scaled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">with_reduced_costs</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">with_reduced_costs</span> <span class="o">==</span> <span class="s1">&#39;unscaled&#39;</span><span class="p">:</span>
+        <span class="n">scaled</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">with_reduced_costs</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">with_reduced_costs</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">objval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">with_reduced_costs</span><span class="p">:</span>
+        <span class="n">RC</span> <span class="o">=</span> <span class="n">glpk_getReducedCosts</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="n">scaled</span><span class="p">)</span>
+        <span class="n">setReducedCosts</span><span class="p">(</span><span class="n">fba</span><span class="p">,</span> <span class="n">RC</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">setReducedCosts</span><span class="p">(</span><span class="n">fba</span><span class="p">,</span> <span class="p">{})</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_getOptimalSolution">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_getOptimalSolution">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_getOptimalSolution</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    From a GLPK model extract a tuple of solution, ObjFuncName and ObjFuncVal.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c</span>
+<span class="sd">        a GLPK object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s_val</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">s_name</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fba_sol</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">objf_name</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">objf_val</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">objf_name</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_get_obj_name</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">objf_val</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_get_obj_val</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">glp_get_num_cols</span><span class="p">(</span><span class="n">c</span><span class="p">)):</span>
+            <span class="n">fba_sol</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span><span class="n">sw</span><span class="o">.</span><span class="n">glp_get_col_name</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_get_col_prim</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span>
+            <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WARNING: No solution to get&#39;</span><span class="p">)</span>
+        <span class="n">s_val</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">s_name</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fba_sol</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">objf_val</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span> <span class="n">s_name</span><span class="p">,</span> <span class="n">s_val</span>
+    <span class="k">return</span> <span class="n">fba_sol</span><span class="p">,</span> <span class="n">objf_name</span><span class="p">,</span> <span class="n">objf_val</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_getReducedCosts">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_getReducedCosts">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_getReducedCosts</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract ReducedCosts from LP and return as a dictionary &#39;Rid&#39; : reduced cost.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c</span>
+<span class="sd">        a GLPK LP object</span>
+<span class="sd">    scaled</span>
+<span class="sd">        scale the reduced cost by the optimal flux value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s_name</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">r_costs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">s_val</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># for c_ in c.cols:</span>
+    <span class="c1"># s_name.append(c_.name)</span>
+    <span class="c1"># r_costs.append(c_.dual)</span>
+    <span class="c1"># s_val.append(c_.value)</span>
+    <span class="c1"># objf_val = c.obj.value</span>
+
+    <span class="k">for</span> <span class="n">c_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">glp_get_num_cols</span><span class="p">(</span><span class="n">c</span><span class="p">)):</span>
+        <span class="n">s_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">glp_get_col_name</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">c_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">r_costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">glp_get_col_dual</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">c_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">s_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">glp_get_col_prim</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">c_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">objf_val</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">glp_get_obj_val</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s_name</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">scaled</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">r_val</span> <span class="o">=</span> <span class="n">r_costs</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">*</span> <span class="n">s_val</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">/</span> <span class="n">objf_val</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">r_val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">r_val</span> <span class="o">=</span> <span class="n">r_costs</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">s_name</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span> <span class="n">r_val</span><span class="p">})</span>
+    <span class="k">del</span> <span class="n">s_name</span><span class="p">,</span> <span class="n">r_costs</span><span class="p">,</span> <span class="n">s_val</span>
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+
+<div class="viewcode-block" id="getReducedCosts">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.getReducedCosts">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">getReducedCosts</span><span class="p">(</span><span class="n">fba</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a dictionary of reduced costs for each reaction/flux.&quot;&quot;&quot;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">fba</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">r</span><span class="o">.</span><span class="n">getId</span><span class="p">():</span> <span class="n">r</span><span class="o">.</span><span class="n">reduced_cost</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+
+<div class="viewcode-block" id="setReducedCosts">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.setReducedCosts">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">setReducedCosts</span><span class="p">(</span><span class="n">fba</span><span class="p">,</span> <span class="n">reduced_costs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For each reaction/flux, sets the attribute &quot;reduced_cost&quot; from a dictionary of reduced costs.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fba</span>
+<span class="sd">        an fba object</span>
+<span class="sd">    reduced_costs</span>
+<span class="sd">        a dictionary of {reaction : value} pairs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">reduced_costs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">fba</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="ow">in</span> <span class="n">reduced_costs</span><span class="p">:</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">reduced_cost</span> <span class="o">=</span> <span class="n">reduced_costs</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">getId</span><span class="p">()]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">reduced_cost</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_FluxVariabilityAnalysis">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_FluxVariabilityAnalysis">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_FluxVariabilityAnalysis</span><span class="p">(</span>
+    <span class="n">fba</span><span class="p">,</span>
+    <span class="n">selected_reactions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">pre_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">objF2constr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">rhs_sense</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+    <span class="n">optPercentage</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+    <span class="n">work_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">oldlpgen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">markupmodel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">default_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">roundoff_span</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a flux variability analysis on an fba model:</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fba</span>
+<span class="sd">        an FBA model object</span>
+<span class="sd">    pre_opt</span>
+<span class="sd">        [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and *objF2constr* is True then the vid/value of the current active objective is used</span>
+<span class="sd">    tol</span>
+<span class="sd">        [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*</span>
+<span class="sd">    rhs_sense</span>
+<span class="sd">        [default=&#39;lower&#39;] means objC &gt;= objVal the inequality to use for the objective constraint can also be *upper* or *equal*</span>
+<span class="sd">    optPercentage</span>
+<span class="sd">        [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)</span>
+<span class="sd">    work_dir</span>
+<span class="sd">        [default=None] the FVA working directory for temporary files default = cwd+fva</span>
+<span class="sd">    debug</span>
+<span class="sd">        [default=False] if True write out all the intermediate FVA LP&#39;s into work_dir</span>
+<span class="sd">    quiet</span>
+<span class="sd">        [default=False] if enabled supress CPLEX output</span>
+<span class="sd">    objF2constr</span>
+<span class="sd">        [default=True] add the model objective function as a constraint using rhs_sense etc. If</span>
+<span class="sd">    markupmodel</span>
+<span class="sd">        [default=True] add the values returned by the fva to the reaction.fva_min and reaction.fva_max</span>
+<span class="sd">    default_on_fail</span>
+<span class="sd">        [default=False] if *pre_opt* is enabled replace a failed minimum/maximum with the solution value</span>
+<span class="sd">    roundoff_span</span>
+<span class="sd">        [default=10] number of digits is round off (not individual min/max values)</span>
+<span class="sd">    method</span>
+<span class="sd">        [default=&#39;s&#39;] select the GLPK solver method, see the GLPK documentation for details</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        an array with columns Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus and a list containing the row names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">work_dir</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">work_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">work_dir</span><span class="p">),</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">What did you think would happen now!&#39;</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">debug_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">work_dir</span><span class="p">,</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">debug_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">debug_dir</span><span class="p">)</span>
+    <span class="n">s2time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c1"># generate a presolution</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;GLPK is using solver option: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+    <span class="n">cpx</span> <span class="o">=</span> <span class="n">OPTIMAL_PRESOLUTION</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pre_sol</span> <span class="o">=</span> <span class="n">pre_oid</span> <span class="o">=</span> <span class="n">pre_oval</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">REDUCED_COSTS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="p">(</span>
+        <span class="n">cpx</span><span class="p">,</span>
+        <span class="n">pre_sol</span><span class="p">,</span>
+        <span class="n">pre_oid</span><span class="p">,</span>
+        <span class="n">pre_oval</span><span class="p">,</span>
+        <span class="n">OPTIMAL_PRESOLUTION</span><span class="p">,</span>
+        <span class="n">REDUCED_COSTS</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">glpk_func_GetCPXandPresolve</span><span class="p">(</span>
+        <span class="n">fba</span><span class="p">,</span> <span class="n">pre_opt</span><span class="p">,</span> <span class="n">objF2constr</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span> <span class="n">oldlpgen</span><span class="o">=</span><span class="n">oldlpgen</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
+    <span class="p">)</span>
+
+    <span class="c1"># if required add the objective function as a constraint</span>
+    <span class="k">if</span> <span class="n">objF2constr</span><span class="p">:</span>
+        <span class="n">glpk_func_SetObjectiveFunctionAsConstraint</span><span class="p">(</span>
+            <span class="n">cpx</span><span class="p">,</span> <span class="n">rhs_sense</span><span class="p">,</span> <span class="n">pre_oval</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">optPercentage</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">cpx</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cpxlp</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">debug_dir</span><span class="p">,</span> <span class="s1">&#39;FVA_base.lp&#39;</span><span class="p">))</span>
+
+    <span class="c1"># do the FVA</span>
+    <span class="n">NUM_FLX</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fba</span><span class="o">.</span><span class="n">reactions</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total number of reactions: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">NUM_FLX</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">selected_reactions</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rids</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">getReactionIds</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">selected_reactions</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rids</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="si">%s</span><span class="s2"> is not a valid reaction name&quot;</span> <span class="o">%</span> <span class="n">r</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">selected_reactions</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">getReactionIds</span><span class="p">()</span>
+    <span class="n">NUM_FLX</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_reactions</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of user selected variables: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">NUM_FLX</span><span class="p">))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">OUTPUT_ARRAY</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">NUM_FLX</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">OUTPUT_ARRAY</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">NUM_FLX</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">OUTPUT_NAMES</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fva_ridx_fails</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cntr</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tcnt</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># this is a memory hack --&gt; prevents solver going berserk</span>
+    <span class="n">mcntr</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">mcntr_cntrl</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">mps_filename</span> <span class="o">=</span> <span class="s1">&#39;_</span><span class="si">{}</span><span class="s1">_.mps&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">))</span>
+    <span class="n">cpx</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mps</span><span class="o">=</span><span class="n">mps_filename</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">Ridx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_FLX</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">selected_reactions</span><span class="p">[</span><span class="n">Ridx</span><span class="p">]</span>
+        <span class="n">OUTPUT_NAMES</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+        <span class="n">max_error_iter</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">GOMIN</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">gomin_cntr</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">GOMIN</span><span class="p">:</span>
+            <span class="n">MIN_STAT</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># MIN</span>
+            <span class="c1"># TODO: bgoli: see whether this also works with &#39;minimize&#39;</span>
+            <span class="n">glpk_setObjective</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="s1">&#39;min</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">R</span><span class="p">,</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="n">R</span><span class="p">)],</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">MIN_STAT</span> <span class="o">=</span> <span class="n">glpk_Solve</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">MIN_STAT</span> <span class="o">==</span> <span class="s1">&#39;LPS_OPT&#39;</span><span class="p">:</span>
+                <span class="n">MIN_STAT</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">MIN_STAT</span> <span class="o">==</span> <span class="s1">&#39;LPS_UNBND&#39;</span><span class="p">:</span>
+                <span class="n">MIN_STAT</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">elif</span> <span class="n">MIN_STAT</span> <span class="o">==</span> <span class="s1">&#39;LPS_NOFEAS&#39;</span><span class="p">:</span>
+                <span class="n">MIN_STAT</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">MIN_STAT</span> <span class="o">=</span> <span class="mi">4</span>
+
+            <span class="k">if</span> <span class="n">MIN_STAT</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># solved</span>
+                <span class="n">min_oval</span> <span class="o">=</span> <span class="n">cpx</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">elif</span> <span class="n">MIN_STAT</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># unbound</span>
+                <span class="n">min_oval</span> <span class="o">=</span> <span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">Inf</span>
+            <span class="k">elif</span> <span class="n">MIN_STAT</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="c1"># min_oval = pre_sol[R]</span>
+                <span class="n">min_oval</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NaN</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># other failure</span>
+                <span class="n">min_oval</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NaN</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="n">cpx</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cpxlp</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">debug_dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">min.lp&#39;</span> <span class="o">%</span> <span class="n">R</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">MIN_STAT</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mysterious GLPK MIN_STAT &gt; 3: if you see this please contact a developer (not an error).&#39;</span><span class="p">)</span>
+                <span class="c1">#if gomin_cntr == 0:</span>
+                    <span class="c1">#cpx.erase()</span>
+                    <span class="c1">#del cpx</span>
+                    <span class="c1">#time.sleep(0.1)</span>
+                    <span class="c1">#cpx = glpk.LPX(mps=mps_filename)</span>
+                    <span class="c1">#gomin_cntr += 1</span>
+                <span class="c1">#else:</span>
+                    <span class="c1">#GOMIN = False</span>
+                <span class="n">GOMIN</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">GOMIN</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">gomin_cntr</span> <span class="o">&gt;=</span> <span class="n">max_error_iter</span><span class="p">:</span>
+                <span class="n">GOMIN</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">GOMAX</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">gomax_cntr</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">GOMAX</span><span class="p">:</span>
+            <span class="n">MAX_STAT</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># MAX</span>
+            <span class="n">glpk_setObjective</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="s1">&#39;max</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">R</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sense</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="c1">##  cplx_setBounds(c, id, min=None, max=None) # think about this</span>
+            <span class="n">MAX_STAT</span> <span class="o">=</span> <span class="n">glpk_Solve</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">MAX_STAT</span> <span class="o">==</span> <span class="s1">&#39;LPS_OPT&#39;</span><span class="p">:</span>
+                <span class="n">MAX_STAT</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">MAX_STAT</span> <span class="o">==</span> <span class="s1">&#39;LPS_UNBND&#39;</span><span class="p">:</span>
+                <span class="n">MAX_STAT</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">elif</span> <span class="n">MAX_STAT</span> <span class="o">==</span> <span class="s1">&#39;LPS_NOFEAS&#39;</span><span class="p">:</span>
+                <span class="n">MAX_STAT</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">MAX_STAT</span> <span class="o">=</span> <span class="mi">4</span>
+
+            <span class="k">if</span> <span class="n">MAX_STAT</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># solved</span>
+                <span class="n">max_oval</span> <span class="o">=</span> <span class="n">cpx</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">elif</span> <span class="n">MAX_STAT</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># unbound</span>
+                <span class="n">max_oval</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">Inf</span>
+            <span class="k">elif</span> <span class="n">MAX_STAT</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># infeasable</span>
+                <span class="c1"># max_oval = pre_sol[R]</span>
+                <span class="n">max_oval</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NaN</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># other fail</span>
+                <span class="n">max_oval</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NaN</span>
+
+            <span class="k">if</span> <span class="n">MAX_STAT</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mysterious GLPK MAX_STAT &gt; 3: if you see this please contact a developer (not an error).&#39;</span><span class="p">)</span>
+                <span class="c1">#if gomax_cntr == 0:</span>
+                    <span class="c1">#cpx.erase()</span>
+                    <span class="c1">#del cpx</span>
+                    <span class="c1">#time.sleep(0.1)</span>
+                    <span class="c1">#cpx = glpk.LPX(mps=mps_filename)</span>
+                    <span class="c1">#gomax_cntr += 1</span>
+                <span class="c1">#else:</span>
+                    <span class="c1">#GOMAX = False</span>
+                <span class="n">GOMAX</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">GOMAX</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">gomax_cntr</span> <span class="o">&gt;=</span> <span class="n">max_error_iter</span><span class="p">:</span>
+                <span class="n">GOMAX</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># check for solver going berserk</span>
+        <span class="c1">#if MIN_STAT &gt; 1 and MAX_STAT &gt; 1:</span>
+            <span class="c1">#print(Ridx)</span>
+            <span class="c1">#time.sleep(1)</span>
+
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="n">cpx</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cpxlp</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">debug_dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">max.lp&#39;</span> <span class="o">%</span> <span class="n">R</span><span class="p">))</span>
+
+        <span class="c1"># enables using the default value as a solution if the solver fails</span>
+        <span class="k">if</span> <span class="n">pre_opt</span> <span class="ow">and</span> <span class="n">default_on_fail</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">MAX_STAT</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">MIN_STAT</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">max_oval</span> <span class="o">=</span> <span class="n">pre_sol</span><span class="p">[</span><span class="n">R</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">MIN_STAT</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">MAX_STAT</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">min_oval</span> <span class="o">=</span> <span class="n">pre_sol</span><span class="p">[</span><span class="n">R</span><span class="p">]</span>
+
+        <span class="n">OUTPUT_ARRAY</span><span class="p">[</span><span class="n">Ridx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_sol</span><span class="p">[</span><span class="n">R</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">R</span> <span class="ow">in</span> <span class="n">REDUCED_COSTS</span><span class="p">:</span>
+            <span class="n">OUTPUT_ARRAY</span><span class="p">[</span><span class="n">Ridx</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">REDUCED_COSTS</span><span class="p">[</span><span class="n">R</span><span class="p">]</span>
+        <span class="n">OUTPUT_ARRAY</span><span class="p">[</span><span class="n">Ridx</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_oval</span>
+        <span class="n">OUTPUT_ARRAY</span><span class="p">[</span><span class="n">Ridx</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_oval</span>
+        <span class="n">OUTPUT_ARRAY</span><span class="p">[</span><span class="n">Ridx</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">max_oval</span> <span class="o">-</span> <span class="n">min_oval</span><span class="p">),</span> <span class="n">roundoff_span</span><span class="p">)</span>
+        <span class="n">OUTPUT_ARRAY</span><span class="p">[</span><span class="n">Ridx</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">MIN_STAT</span>
+        <span class="n">OUTPUT_ARRAY</span><span class="p">[</span><span class="n">Ridx</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">MAX_STAT</span>
+        <span class="k">if</span> <span class="n">markupmodel</span><span class="p">:</span>
+            <span class="n">REAC</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">getReaction</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+            <span class="n">REAC</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">pre_sol</span><span class="p">[</span><span class="n">R</span><span class="p">])</span>
+            <span class="n">REAC</span><span class="o">.</span><span class="n">fva_min</span> <span class="o">=</span> <span class="n">min_oval</span>
+            <span class="n">REAC</span><span class="o">.</span><span class="n">fva_max</span> <span class="o">=</span> <span class="n">max_oval</span>
+            <span class="n">REAC</span><span class="o">.</span><span class="n">fva_status</span> <span class="o">=</span> <span class="p">(</span><span class="n">MIN_STAT</span><span class="p">,</span> <span class="n">MAX_STAT</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">R</span> <span class="ow">in</span> <span class="n">REDUCED_COSTS</span><span class="p">:</span>
+                <span class="n">REAC</span><span class="o">.</span><span class="n">reduced_costs</span> <span class="o">=</span> <span class="n">REDUCED_COSTS</span><span class="p">[</span><span class="n">R</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">MAX_STAT</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">fva_ridx_fails</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">R</span><span class="p">,</span> <span class="n">MAX_STAT</span><span class="p">))</span>
+                <span class="c1">#print(</span>
+                    <span class="c1">#&#39;Solver fail for reaction \&quot;{}\&quot; (MIN_STAT: {} MAX_STAT: {})&#39;.format(</span>
+                        <span class="c1">#R, MIN_STAT, MAX_STAT</span>
+                    <span class="c1">#)</span>
+            <span class="k">if</span> <span class="n">MIN_STAT</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">fva_ridx_fails</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">R</span><span class="p">,</span> <span class="n">MIN_STAT</span><span class="p">))</span>
+
+        <span class="n">cntr</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">cntr</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">tcnt</span> <span class="o">+=</span> <span class="n">cntr</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;FVA has processed </span><span class="si">{}</span><span class="s1"> of </span><span class="si">{}</span><span class="s1"> reactions&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tcnt</span><span class="p">,</span> <span class="n">NUM_FLX</span><span class="p">))</span>
+            <span class="n">cntr</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fva_ridx_fails</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimization failed for the following FVA operations. If this is a large list consider adjusting the FVA tolerances.&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">fva_ridx_fails</span><span class="p">)</span>
+
+
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">mps_filename</span><span class="p">)</span>
+
+    <span class="c1"># cpx.write(cpxlp=&#39;thefinaldebug.lp&#39;)</span>
+    <span class="k">del</span> <span class="n">cpx</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Singlecore FVA took: </span><span class="si">{}</span><span class="s1"> min (1 process)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">s2time</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Output array has columns:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s1">&#39;Reaction, Reduced Costs, Variability Min, Variability Max, abs(Max-Min), MinStatus, MaxStatus&#39;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">OUTPUT_ARRAY</span><span class="p">,</span> <span class="n">OUTPUT_NAMES</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_func_GetCPXandPresolve">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_func_GetCPXandPresolve">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_func_GetCPXandPresolve</span><span class="p">(</span>
+    <span class="n">fba</span><span class="p">,</span>
+    <span class="n">pre_opt</span><span class="p">,</span>
+    <span class="n">objF2constr</span><span class="p">,</span>
+    <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">oldlpgen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">with_reduced_costs</span><span class="o">=</span><span class="s1">&#39;unscaled&#39;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a utility function that does a presolve for FVA, MSAF etc. Generates properly formatted empty objects if pre_opt == False.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pre_opt</span>
+<span class="sd">        a boolean</span>
+<span class="sd">    fba</span>
+<span class="sd">        a CBModel object</span>
+<span class="sd">    objF2constr</span>
+<span class="sd">        add objective function as constraint</span>
+<span class="sd">    quiet</span>
+<span class="sd">        [default=False] supress cplex output</span>
+<span class="sd">    with_reduced_costs</span>
+<span class="sd">        [default=&#39;unscaled&#39;] can be &#39;scaled&#39; or &#39;unscaled&#39;</span>
+<span class="sd">    method</span>
+<span class="sd">        [default=&#39;s&#39;] select the GLPK solver method, see the GLPK documentation for details</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cpx</span> <span class="o">=</span> <span class="n">glpk_constructLPfromFBA</span><span class="p">(</span><span class="n">fba</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">OPTIMAL_PRESOLUTION</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pre_sol</span> <span class="o">=</span> <span class="n">pre_oid</span> <span class="o">=</span> <span class="n">pre_oval</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">REDUCED_COSTS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">pre_opt</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">glpk_Solve</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">glpk_getSolutionStatus</span><span class="p">(</span><span class="n">cpx</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;LPS_OPT&#39;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Valid Presolution&#39;</span><span class="p">)</span>
+            <span class="n">OPTIMAL_PRESOLUTION</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">pre_sol</span><span class="p">,</span> <span class="n">pre_oid</span><span class="p">,</span> <span class="n">pre_oval</span> <span class="o">=</span> <span class="n">glpk_getOptimalSolution</span><span class="p">(</span><span class="n">cpx</span><span class="p">)</span>
+            <span class="p">(</span>
+                <span class="n">fba</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">activeObjIdx</span><span class="p">]</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span>
+                <span class="n">fba</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">activeObjIdx</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">pre_sol</span><span class="p">,</span> <span class="n">pre_oval</span><span class="p">)</span>
+            <span class="n">scaled</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">with_reduced_costs</span> <span class="o">==</span> <span class="s1">&#39;scaled&#39;</span><span class="p">:</span>
+                <span class="n">REDUCED_COSTS</span> <span class="o">=</span> <span class="n">glpk_getReducedCosts</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">with_reduced_costs</span> <span class="o">==</span> <span class="s1">&#39;unscaled&#39;</span><span class="p">:</span>
+                <span class="n">REDUCED_COSTS</span> <span class="o">=</span> <span class="n">glpk_getReducedCosts</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Invalid Presolution, because </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">glpk_getSolutionStatus</span><span class="p">(</span><span class="n">cpx</span><span class="p">)))</span>
+            <span class="n">OPTIMAL_PRESOLUTION</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">pre_sol</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">fba</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
+                <span class="n">pre_sol</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">r</span><span class="o">.</span><span class="n">getId</span><span class="p">():</span> <span class="mf">0.0</span><span class="p">})</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">reduced_cost</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">pre_oval</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">pre_oid</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Presolve failed to optimize this model and cannot continue!&#39;</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pre_sol</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">fba</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
+            <span class="n">pre_sol</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">r</span><span class="o">.</span><span class="n">getId</span><span class="p">():</span> <span class="mf">0.0</span><span class="p">})</span>
+        <span class="k">if</span> <span class="n">objF2constr</span><span class="p">:</span>
+            <span class="n">pre_oval</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">activeObjIdx</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">pre_oid</span> <span class="o">=</span> <span class="n">fba</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">fba</span><span class="o">.</span><span class="n">activeObjIdx</span><span class="p">]</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pre_oval</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">pre_oid</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">fba</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">pre_sol</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">cpx</span><span class="p">,</span> <span class="n">pre_sol</span><span class="p">,</span> <span class="n">pre_oid</span><span class="p">,</span> <span class="n">pre_oval</span><span class="p">,</span> <span class="n">OPTIMAL_PRESOLUTION</span><span class="p">,</span> <span class="n">REDUCED_COSTS</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_func_SetObjectiveFunctionAsConstraint">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_func_SetObjectiveFunctionAsConstraint">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_func_SetObjectiveFunctionAsConstraint</span><span class="p">(</span>
+    <span class="n">cpx</span><span class="p">,</span> <span class="n">rhs_sense</span><span class="p">,</span> <span class="n">oval</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">optPercentage</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take the objective function and &quot;optimum&quot; value and add it as a constraint.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cpx</span>
+<span class="sd">        a cplex object</span>
+<span class="sd">    oval</span>
+<span class="sd">        the objective value</span>
+<span class="sd">    tol</span>
+<span class="sd">        [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*</span>
+<span class="sd">    rhs_sense</span>
+<span class="sd">        [default=&#39;lower&#39;] means objC &gt;= objVal the inequality to use for the objective constraint can also be *upper* or *equal*</span>
+<span class="sd">    optPercentage</span>
+<span class="sd">        [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># generate new constraint from old objective value (use non-zero coefficients)</span>
+    <span class="n">LCS</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">LCN</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">new_constraint</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">v_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cpx</span><span class="o">.</span><span class="n">cols</span><span class="p">)):</span>
+        <span class="n">LCN</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpx</span><span class="o">.</span><span class="n">cols</span><span class="p">[</span><span class="n">v_</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">LCS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="n">v_</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">LCS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">new_constraint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">LCS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">LCN</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">if</span> <span class="n">rhs_sense</span> <span class="o">==</span> <span class="s1">&#39;equal&#39;</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">cpx</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">maximize</span> <span class="ow">and</span> <span class="p">(</span><span class="n">rhs_sense</span> <span class="o">==</span> <span class="s1">&#39;upper&#39;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Warning: RHS sense error: </span><span class="se">\&quot;</span><span class="s1">upper</span><span class="se">\&quot;</span><span class="s1"> does not match </span><span class="se">\&quot;</span><span class="s1">maximize</span><span class="se">\&quot;</span><span class="s1"> changing to </span><span class="se">\&quot;</span><span class="s1">lower</span><span class="se">\&quot;</span><span class="s1">&#39;</span>
+        <span class="p">)</span>
+        <span class="n">rhs_sense</span> <span class="o">=</span> <span class="s1">&#39;lower&#39;</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">cpx</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">maximize</span> <span class="ow">and</span> <span class="p">(</span><span class="n">rhs_sense</span> <span class="o">==</span> <span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Warning: RHS sense error: </span><span class="se">\&quot;</span><span class="s1">lower</span><span class="se">\&quot;</span><span class="s1"> does not match </span><span class="se">\&quot;</span><span class="s1">minimize</span><span class="se">\&quot;</span><span class="s1"> changing to </span><span class="se">\&quot;</span><span class="s1">upper</span><span class="se">\&quot;</span><span class="s1">&#39;</span>
+        <span class="p">)</span>
+        <span class="n">rhs_sense</span> <span class="o">=</span> <span class="s1">&#39;upper&#39;</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">RHS sense ok.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># set objective constraint</span>
+    <span class="k">if</span> <span class="n">rhs_sense</span> <span class="o">==</span> <span class="s1">&#39;equal&#39;</span><span class="p">:</span>
+        <span class="n">cplx_setSingleConstraint</span><span class="p">(</span>
+            <span class="n">cpx</span><span class="p">,</span> <span class="s1">&#39;ObjCstr&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">new_constraint</span><span class="p">,</span> <span class="n">sense</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">rhs</span><span class="o">=</span><span class="n">oval</span>
+        <span class="p">)</span>
+        <span class="c1">##  cplx_setSingleConstraint(cpx, &#39;ObjCstr&#39;, expr=[(1, pre_oid)], sense=&#39;E&#39;, rhs=oval)</span>
+    <span class="k">elif</span> <span class="n">rhs_sense</span> <span class="o">==</span> <span class="s1">&#39;upper&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tol</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ub</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">oval</span> <span class="o">/</span> <span class="n">tol</span><span class="p">)</span> <span class="o">*</span> <span class="n">tol</span> <span class="o">*</span> <span class="n">optPercentage</span> <span class="o">/</span> <span class="mf">100.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ub</span> <span class="o">=</span> <span class="n">oval</span> <span class="o">*</span> <span class="p">(</span><span class="n">optPercentage</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span>
+        <span class="n">glpk_setSingleConstraint</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="s1">&#39;ObjCstr&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">new_constraint</span><span class="p">,</span> <span class="n">sense</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">rhs</span><span class="o">=</span><span class="n">ub</span><span class="p">)</span>
+        <span class="c1">##  cplx_setSingleConstraint(cpx, &#39;ObjCstr&#39;, expr=[(1, pre_oid)], sense=&#39;L&#39;, rhs=ub)</span>
+    <span class="k">elif</span> <span class="n">rhs_sense</span> <span class="o">==</span> <span class="s1">&#39;lower&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tol</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lb</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">oval</span> <span class="o">/</span> <span class="n">tol</span><span class="p">)</span> <span class="o">*</span> <span class="n">tol</span> <span class="o">*</span> <span class="n">optPercentage</span> <span class="o">/</span> <span class="mf">100.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lb</span> <span class="o">=</span> <span class="n">oval</span> <span class="o">*</span> <span class="p">(</span><span class="n">optPercentage</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span>
+        <span class="n">glpk_setSingleConstraint</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="s1">&#39;ObjCstr&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">new_constraint</span><span class="p">,</span> <span class="n">sense</span><span class="o">=</span><span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="n">rhs</span><span class="o">=</span><span class="n">lb</span><span class="p">)</span>
+        <span class="c1">##  cplx_setSingleConstraint(cpx, &#39;ObjCstr&#39;, expr=[(1, pre_oid)], sense=&#39;G&#39;, rhs=lb)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Invalid RHS sense: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rhs_sense</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="glpk_setSingleConstraint">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_setSingleConstraint">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_setSingleConstraint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">cid</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="p">[],</span> <span class="n">sense</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">rhs</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets a new single constraint to a GLPK model.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c</span>
+<span class="sd">        a GLPK instance</span>
+<span class="sd">    cid</span>
+<span class="sd">        the constraint id</span>
+<span class="sd">    expr</span>
+<span class="sd">        a list of (coefficient, name) pairs</span>
+<span class="sd">    sense</span>
+<span class="sd">        [default=&#39;G&#39;] LGE</span>
+<span class="sd">    rhs</span>
+<span class="sd">        [default=0.0] the right hand side</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">baseRows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ofnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">expr</span><span class="p">]</span>
+    <span class="n">ofval</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">expr</span><span class="p">]</span>
+
+    <span class="c1"># name and coefficients</span>
+    <span class="n">newCon</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">cidx_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cols</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">cols</span><span class="p">[</span><span class="n">cidx_</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">ofnames</span><span class="p">:</span>
+            <span class="n">newCon</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cidx_</span><span class="p">,</span> <span class="n">ofval</span><span class="p">[</span><span class="n">ofnames</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cols</span><span class="p">[</span><span class="n">cidx_</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">newCon</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">newCon</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cidx_</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="n">baseRows</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">cid</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="n">baseRows</span><span class="p">]</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">newCon</span>
+
+    <span class="c1"># sense and rhs</span>
+    <span class="k">if</span> <span class="n">sense</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">]:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="n">baseRows</span><span class="p">]</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rhs</span>
+    <span class="k">elif</span> <span class="n">sense</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">]:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="n">baseRows</span><span class="p">]</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="n">sense</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">]:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="n">baseRows</span><span class="p">]</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">rhs</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;INFO: invalid operator: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">sense</span><span class="p">)</span></div>
+
+    <span class="c1"># c.write(cpxlp=&#39;test.setc.lp&#39;)</span>
+
+
+<div class="viewcode-block" id="glpk_setObjective">
+<a class="viewcode-back" href="../../api/solvers.html#cbmpy.CBGLPK.glpk_setObjective">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glpk_setObjective</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">oid</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sense</span><span class="o">=</span><span class="s1">&#39;maximize&#39;</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set a new objective function note that there is a major memory leak in `c.variables.get_names()` whch is used when reset=True. If this is a problem use cplx_setObjective2 which takes *names* as an input:</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c</span>
+<span class="sd">        a GLPK LP object</span>
+<span class="sd">    oid</span>
+<span class="sd">        the r_id of the flux to be optimized</span>
+<span class="sd">    expr</span>
+<span class="sd">        a list of (coefficient, flux) pairs</span>
+<span class="sd">    sense</span>
+<span class="sd">        &#39;maximize&#39;/&#39;minimize&#39;</span>
+<span class="sd">    reset</span>
+<span class="sd">        [default=True] reset all objective function coefficients to zero</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sense</span> <span class="o">=</span> <span class="n">sense</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">sense</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
+        <span class="n">sense</span> <span class="o">=</span> <span class="s1">&#39;maximize&#39;</span>
+    <span class="k">if</span> <span class="n">sense</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+        <span class="n">sense</span> <span class="o">=</span> <span class="s1">&#39;minimize&#39;</span>
+    <span class="k">if</span> <span class="n">sense</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;maximise&#39;</span><span class="p">,</span> <span class="s1">&#39;minimise&#39;</span><span class="p">]:</span>
+        <span class="n">sense</span> <span class="o">=</span> <span class="n">sense</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;se&#39;</span><span class="p">,</span> <span class="s1">&#39;ze&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">sense</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;maximize&#39;</span><span class="p">,</span> <span class="s1">&#39;minimize&#39;</span><span class="p">],</span> <span class="p">(</span>
+        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">sense must be [&#39;maximize&#39;, &#39;minimize&#39;] not </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sense</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">expr</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ofnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">expr</span><span class="p">]</span>
+        <span class="n">ofval</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">expr</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">cidx_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cols</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">cols</span><span class="p">[</span><span class="n">cidx_</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">ofnames</span><span class="p">:</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="n">cidx_</span><span class="p">]</span> <span class="o">=</span> <span class="n">ofval</span><span class="p">[</span><span class="n">ofnames</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cols</span><span class="p">[</span><span class="n">cidx_</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+            <span class="k">elif</span> <span class="n">reset</span><span class="p">:</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="n">cidx_</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="n">cidx_</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="n">cidx_</span><span class="p">]</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">oid</span>
+
+    <span class="k">if</span> <span class="n">sense</span> <span class="o">==</span> <span class="s1">&#39;minimize&#39;</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">maximize</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">__DEBUG__</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Set minimizing&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">maximize</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">__DEBUG__</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Set maximizing&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># c.write(cpxlp=&#39;test_obja.lp&#39;)</span>
+
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">def cplx_getDualValues(c):</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Get the get the dual values of the solution</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c</span>
+<span class="sd">        a CPLEX LP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    d_names = c.linear_constraints.get_names()</span>
+<span class="sd">    d_values = c.solution.get_dual_values()</span>
+<span class="sd">    output = {}</span>
+<span class="sd">    for j in range(len(d_names)):</span>
+<span class="sd">        output.update({d_names[j]: d_values[j]})</span>
+<span class="sd">    return output</span>
+
+
+<span class="sd">def cplx_getSensitivities(c):</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Get the sensitivities of each constraint on the objective function with input</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c</span>
+<span class="sd">        a CPLEX LP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    SENSE_RHS = {}</span>
+<span class="sd">    SENSE_BND = {}</span>
+<span class="sd">    SENSE_OBJ = {}</span>
+<span class="sd">    c_names = c.linear_constraints.get_names()</span>
+<span class="sd">    rhs_val = c.linear_constraints.get_rhs()</span>
+<span class="sd">    j_names = c.variables.get_names()</span>
+
+<span class="sd">    rhs_sense = c.solution.sensitivity.rhs()</span>
+<span class="sd">    bnd_sense = c.solution.sensitivity.bounds()</span>
+<span class="sd">    obj_sense = c.solution.sensitivity.objective()</span>
+<span class="sd">    obj_coeff = c.objective.get_linear()</span>
+<span class="sd">    red_cost = c.solution.get_reduced_costs()</span>
+
+<span class="sd">    for r in range(c.variables.get_num()):</span>
+<span class="sd">        SENSE_BND.update(</span>
+<span class="sd">            {</span>
+<span class="sd">                j_names[r]: (</span>
+<span class="sd">                    bnd_sense[r][0],</span>
+<span class="sd">                    bnd_sense[r][1],</span>
+<span class="sd">                    bnd_sense[r][2],</span>
+<span class="sd">                    bnd_sense[r][3],</span>
+<span class="sd">                )</span>
+<span class="sd">            }</span>
+<span class="sd">        )</span>
+<span class="sd">        SENSE_OBJ.update(</span>
+<span class="sd">            {j_names[r]: (red_cost[r], obj_sense[r][0], obj_coeff[r], obj_sense[r][1])}</span>
+<span class="sd">        )</span>
+
+<span class="sd">    for s in range(c.linear_constraints.get_num()):</span>
+<span class="sd">        SENSE_RHS.update({c_names[s]: (rhs_sense[s][0], rhs_val[s], rhs_sense[s][1])})</span>
+
+<span class="sd">    return (SENSE_OBJ, SENSE_RHS, SENSE_BND)</span>
+
+
+<span class="sd">def glpk_MinimizeSumOfAbsFluxes(</span>
+<span class="sd">    fba,</span>
+<span class="sd">    selected_reactions=None,</span>
+<span class="sd">    pre_opt=True,</span>
+<span class="sd">    tol=None,</span>
+<span class="sd">    objF2constr=True,</span>
+<span class="sd">    rhs_sense=&#39;lower&#39;,</span>
+<span class="sd">    optPercentage=100.0,</span>
+<span class="sd">    work_dir=None,</span>
+<span class="sd">    quiet=False,</span>
+<span class="sd">    debug=False,</span>
+<span class="sd">    objective_coefficients={},</span>
+<span class="sd">    return_lp_obj=False,</span>
+<span class="sd">    oldlpgen=False,</span>
+<span class="sd">    with_reduced_costs=None,</span>
+<span class="sd">    method=&#39;s&#39;,</span>
+<span class="sd">):</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Minimize the sum of absolute fluxes sum(abs(J1) + abs(J2) + abs(J3) ... abs(Jn)) by adding two constraints per flux and a variable representing the absolute value: Min: Ci abs_Ji Ji - abs_Ji &lt;= 0 Ji + abs_Ji &gt;= 0 Such that: NJi = 0 Jopt = opt returns the value of the flux minimization objective function (not the model objective function which remains unchanged from) Arguments:</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fba</span>
+<span class="sd">        an FBA model object</span>
+<span class="sd">    pre_opt</span>
+<span class="sd">        [default=True] attempt to presolve the FBA and report its results in the ouput, if this is disabled and *objF2constr* is True then the vid/value of the current active objective is used</span>
+<span class="sd">    tol</span>
+<span class="sd">        [default=None] do not floor/ceiling the objective function constraint, otherwise round of to *tol*</span>
+<span class="sd">    rhs_sense</span>
+<span class="sd">        [default=&#39;lower&#39;] means objC &gt;= objVal the inequality to use for the objective constraint can also be *upper* or *equal*</span>
+<span class="sd">    optPercentage</span>
+<span class="sd">        [default=100.0] means the percentage optimal value to use for the RHS of the objective constraint: optimal_value*(optPercentage/100.0)</span>
+<span class="sd">    work_dir</span>
+<span class="sd">        [default=None] the MSAF working directory for temporary files default = cwd+fva</span>
+<span class="sd">    debug</span>
+<span class="sd">        [default=False] if True write out all the intermediate MSAF LP&#39;s into work_dir</span>
+<span class="sd">    quiet</span>
+<span class="sd">        [default=False] if enabled supress CPLEX output</span>
+<span class="sd">    objF2constr</span>
+<span class="sd">        [default=True] add the model objective function as a constraint using rhs_sense etc. If</span>
+<span class="sd">    objective_coefficients</span>
+<span class="sd">        [default={}] a dictionary of (reaction_id : float) pairs that provide the are introduced as objective coefficients to the absolute flux value. Note that the default value of the coefficient (non-specified) is +1.</span>
+<span class="sd">    return_lp_obj</span>
+<span class="sd">        [default=False] off by default when enabled it returns the CPLEX LP object</span>
+<span class="sd">    with_reduced_costs</span>
+<span class="sd">        [default=None] if not None should be &#39;scaled&#39; or &#39;unscaled&#39;</span>
+<span class="sd">    method</span>
+<span class="sd">        [default=&#39;s&#39;] select the GLPK solver method, see the GLPK documentation for details</span>
+<span class="sd">    fba</span>
+<span class="sd">        an update instance of a CBModel. Note that the FBA model objective function value is the original value set as a constraint</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<span class="sd">    if with_reduced_costs == &#39;scaled&#39;:</span>
+<span class="sd">        fba.SCALED_REDUCED_COSTS = True</span>
+<span class="sd">    elif with_reduced_costs == &#39;unscaled&#39;:</span>
+<span class="sd">        fba.SCALED_REDUCED_COSTS = False</span>
+<span class="sd">    elif fba.SCALED_REDUCED_COSTS == True:</span>
+<span class="sd">        with_reduced_costs = &#39;scaled&#39;</span>
+<span class="sd">    elif fba.SCALED_REDUCED_COSTS == False:</span>
+<span class="sd">        with_reduced_costs = &#39;unscaled&#39;</span>
+<span class="sd">    else:</span>
+<span class="sd">        with_reduced_costs = None</span>
+
+<span class="sd">    print(&#39;\nINFO: using \&quot;{}\&quot; reduced costs.\n&#39;.format(with_reduced_costs))</span>
+
+<span class="sd">    if work_dir == None:</span>
+<span class="sd">        work_dir = os.getcwd()</span>
+<span class="sd">    else:</span>
+<span class="sd">        assert os.path.exists(work_dir), &#39;\nWhat did you think would happen now!&#39;</span>
+<span class="sd">    if debug:</span>
+<span class="sd">        debug_dir = os.path.join(work_dir, &#39;DEBUG&#39;)</span>
+<span class="sd">        if not os.path.exists(debug_dir):</span>
+<span class="sd">            os.mkdir(debug_dir)</span>
+
+<span class="sd">    # generate a presolution</span>
+<span class="sd">    print(&#39;GLPK is using solver option: &quot;{}&quot;&#39;.format(method))</span>
+<span class="sd">    cpx = OPTIMAL_PRESOLUTION = None</span>
+<span class="sd">    pre_sol = pre_oid = pre_oval = None</span>
+<span class="sd">    REDUCED_COSTS = {}</span>
+<span class="sd">    (</span>
+<span class="sd">        cpx,</span>
+<span class="sd">        pre_sol,</span>
+<span class="sd">        pre_oid,</span>
+<span class="sd">        pre_oval,</span>
+<span class="sd">        OPTIMAL_PRESOLUTION,</span>
+<span class="sd">        REDUCED_COSTS,</span>
+<span class="sd">    ) = glpk_func_GetCPXandPresolve(</span>
+<span class="sd">        fba,</span>
+<span class="sd">        pre_opt,</span>
+<span class="sd">        objF2constr,</span>
+<span class="sd">        quiet=quiet,</span>
+<span class="sd">        oldlpgen=oldlpgen,</span>
+<span class="sd">        with_reduced_costs=with_reduced_costs,</span>
+<span class="sd">        method=method,</span>
+<span class="sd">    )</span>
+<span class="sd">    # if required add the objective function as a constraint</span>
+<span class="sd">    if objF2constr:</span>
+<span class="sd">        glpk_func_SetObjectiveFunctionAsConstraint(</span>
+<span class="sd">            cpx, rhs_sense, pre_oval, tol, optPercentage</span>
+<span class="sd">        )</span>
+
+<span class="sd">    STORED_OPT = None</span>
+<span class="sd">    if pre_opt:</span>
+<span class="sd">        STORED_OPT = pre_oval</span>
+<span class="sd">    else:</span>
+<span class="sd">        STORED_OPT = fba.getActiveObjective().getValue()</span>
+
+<span class="sd">    # minimize the absolute sum of fluxes</span>
+<span class="sd">    if selected_reactions != None:</span>
+<span class="sd">        rids = fba.getReactionIds()</span>
+<span class="sd">        for r in selected_reactions:</span>
+<span class="sd">            assert r in rids, &quot;\n%s is not a valid reaction name&quot; % r</span>
+<span class="sd">    else:</span>
+<span class="sd">        selected_reactions = fba.getReactionIds()</span>
+
+<span class="sd">    # this removes the objective function</span>
+<span class="sd">    ##  fba_obj_ids = fba.getActiveObjective().getFluxObjectiveReactions()</span>
+<span class="sd">    ##  print fba_obj_ids</span>
+<span class="sd">    ##  for R in fba_obj_ids:</span>
+<span class="sd">    ##  if R in selected_reactions:</span>
+<span class="sd">    ##  selected_reactions.pop(selected_reactions.index(R))</span>
+<span class="sd">    ##  del R, fba_obj_ids</span>
+<span class="sd">    NUM_FLX = len(selected_reactions)</span>
+<span class="sd">    print(&#39;Total number of reactions: {}&#39;.format(NUM_FLX))</span>
+<span class="sd">    abs_selected_reactions = [&#39;abs_%s&#39; % r for r in selected_reactions]</span>
+<span class="sd">    # absJ implicitly assumed to be absJ &gt;= 0</span>
+<span class="sd">    # C#cpx.variables.add(names=abs_selected_reactions)</span>
+<span class="sd">    basecols = len(cpx.cols)</span>
+<span class="sd">    cpx.cols.add(len(abs_selected_reactions))</span>
+<span class="sd">    for v_ in range(len(abs_selected_reactions)):</span>
+<span class="sd">        cpx.cols[basecols + v_].name = abs_selected_reactions[v_]</span>
+<span class="sd">        cpx.cols[basecols + v_].bounds = 0, None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">     J - abs_J &lt;= 0</span>
+<span class="sd">     J + abs_J &gt;= 0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    baserows = len(cpx.rows)</span>
+<span class="sd">    # tnew = time.time()</span>
+<span class="sd">    rowNames = tuple([c.name for c in cpx.rows])</span>
+<span class="sd">    colNames = tuple([c.name for c in cpx.cols])</span>
+<span class="sd">    cRange = range(baserows, baserows + (len(selected_reactions)))</span>
+<span class="sd">    rcntr = 0</span>
+<span class="sd">    cpx.rows.add(len(selected_reactions) * 2)</span>
+<span class="sd">    for r_ in cRange:</span>
+<span class="sd">        # name and coefficients</span>
+<span class="sd">        cpx.rows[r_].name = &#39;abs{}a&#39;.format(selected_reactions[rcntr])</span>
+<span class="sd">        cpx.rows[r_].matrix = [</span>
+<span class="sd">            (colNames.index(selected_reactions[rcntr]), 1),</span>
+<span class="sd">            (colNames.index(abs_selected_reactions[rcntr]), -1),</span>
+<span class="sd">        ]</span>
+<span class="sd">        cpx.rows[r_].bounds = None, 0</span>
+<span class="sd">        cpx.rows[r_ + len(selected_reactions)].name = &#39;abs{}b&#39;.format(</span>
+<span class="sd">            selected_reactions[rcntr]</span>
+<span class="sd">        )</span>
+<span class="sd">        cpx.rows[r_ + len(selected_reactions)].matrix = [</span>
+<span class="sd">            (colNames.index(selected_reactions[rcntr]), 1),</span>
+<span class="sd">            (colNames.index(abs_selected_reactions[rcntr]), 1),</span>
+<span class="sd">        ]</span>
+<span class="sd">        cpx.rows[r_ + len(selected_reactions)].bounds = 0, None</span>
+<span class="sd">        rcntr += 1</span>
+
+<span class="sd">    glpk_setObjective(</span>
+<span class="sd">        cpx, &#39;MAFS&#39;, [(1, j) for j in abs_selected_reactions], &#39;min&#39;, reset=True</span>
+<span class="sd">    )</span>
+
+<span class="sd">    if debug:</span>
+<span class="sd">        cpx.write(cpxlp=os.path.join(debug_dir, &#39;MSAF_base_(%s).lp&#39; % time.time()))</span>
+<span class="sd">        # cplx_writeLPtoLPTfile(cpx, , title=None, Dir=debug_dir)</span>
+<span class="sd">        ##  cplx_writeLPtoLPTfile(cpx, &#39;MSAF_base_%s&#39; % time.time() , title=None, Dir=debug_dir)</span>
+
+<span class="sd">    glpk_Solve(cpx, method=method)</span>
+<span class="sd">    glpk_setFBAsolutionToModel(fba, cpx, with_reduced_costs=with_reduced_costs)</span>
+<span class="sd">    glpk_setSolutionStatusToModel(fba, cpx)</span>
+
+<span class="sd">    # cpx.write(cpxlp=&#39;test.lp&#39;); return cpx</span>
+
+<span class="sd">    minSum = cpx.obj.value</span>
+<span class="sd">    fba.setAnnotation(&#39;min_flux_sum&#39;, minSum)</span>
+<span class="sd">    fba.getActiveObjective().setValue(STORED_OPT)</span>
+<span class="sd">    print(&#39;\nMinimizeSumOfAbsFluxes objective value: {}\n&#39;.format(minSum))</span>
+<span class="sd">    if quiet:</span>
+<span class="sd">        pass</span>
+<span class="sd">        # cplx_setOutputStreams(cpx, mode=&#39;default&#39;)</span>
+<span class="sd">    if not return_lp_obj:</span>
+<span class="sd">        return minSum</span>
+<span class="sd">    else:</span>
+<span class="sd">        return cpx</span>
+
+
+<span class="sd">def glpk_writeLPtoLPTfile(c, filename, title=None, Dir=None):</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Write out a GLPK model as an LP format file</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    if Dir != None:</span>
+<span class="sd">        filename = os.path.join(Dir, filename)</span>
+<span class="sd">    # if title != None:</span>
+<span class="sd">    # c.set_problem_name(title)</span>
+<span class="sd">    # c.write(filename+&#39;.lp&#39;, filetype=&#39;lp&#39;)</span>
+<span class="sd">    c.write(cpxlp=filename + &#39;.lp&#39;)</span>
+<span class="sd">    print(&#39;LP output as {}&#39;.format(filename + &#39;.lp&#39;))</span>
+<span class="sd">&#39;&#39;&#39;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

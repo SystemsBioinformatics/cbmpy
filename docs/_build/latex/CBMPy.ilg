@@ -1,0 +1,7 @@
+This is makeindex, version 2.17 [TeX Live 2023] (kpathsea + Thai support).
+Scanning style file ./python.ist.......done (7 attributes redefined, 0 ignored).
+Scanning input file CBMPy.idx.....done (1010 entries accepted, 0 rejected).
+Sorting entries............done (12126 comparisons).
+Generating output file CBMPy.ind.....done (1295 lines written, 0 warnings).
+Output written in CBMPy.ind.
+Transcript written in CBMPy.ilg.

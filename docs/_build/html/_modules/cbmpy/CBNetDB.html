@@ -1,0 +1,1050 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cbmpy.CBNetDB &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#matroid-module">Matroid Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#decomposition-module">Decomposition Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html#sparse-rationals-module">Sparse Rationals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/solvers.html">Solver Implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/networking.html#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#gui-frontends">GUI Frontends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#multi-processing">Multi-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/visualization.html#model-utilities">Model Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../cbmpy.html">cbmpy</a></li>
+      <li class="breadcrumb-item active">cbmpy.CBNetDB</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cbmpy.CBNetDB</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">CBMPy: CBNetDB module</span>
+<span class="sd">=====================</span>
+<span class="sd">PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)</span>
+<span class="sd">Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+<span class="sd">Author: Brett G. Olivier PhD</span>
+<span class="sd">Contact developers: https://github.com/SystemsBioinformatics/cbmpy/issues</span>
+<span class="sd">Last edit: $Author: bgoli $ ($Id: CBNetDB.py 710 2020-04-27 14:22:34Z bgoli $)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># preparing for Python 3 port</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="c1"># from __future__ import unicode_literals</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">webbrowser</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">urllib2</span><span class="w"> </span><span class="kn">import</span> <span class="n">quote</span> <span class="k">as</span> <span class="n">urlquote</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">urllib2</span><span class="w"> </span><span class="kn">import</span> <span class="n">unquote</span> <span class="k">as</span> <span class="n">urlunquote</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">quote</span> <span class="k">as</span> <span class="n">urlquote</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">unquote</span> <span class="k">as</span> <span class="n">urlunquote</span>
+
+<span class="n">HAVE_SQLITE2</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">HAVE_SQLITE3</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sqlite3</span>
+
+    <span class="n">HAVE_SQLITE3</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">HAVE_SQLITE3</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pysqlite2</span><span class="w"> </span><span class="kn">import</span> <span class="n">dbapi2</span> <span class="k">as</span> <span class="n">sqlite2</span>
+
+        <span class="n">HAVE_SQLITE2</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">HAVE_SQLITE2</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.CBConfig</span><span class="w"> </span><span class="kn">import</span> <span class="n">__CBCONFIG__</span> <span class="k">as</span> <span class="n">__CBCONFIG__</span>
+
+<span class="n">__DEBUG__</span> <span class="o">=</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">]</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">__CBCONFIG__</span><span class="p">[</span><span class="s1">&#39;VERSION&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="NetDBbase">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.NetDBbase">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NetDBbase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">text_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf8&#39;</span>
+
+<div class="viewcode-block" id="NetDBbase.URLEncode">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.NetDBbase.URLEncode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">URLEncode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;URL encodes a string.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">urlquote</span><span class="p">(</span><span class="n">txt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text_encoding</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="NetDBbase.URLDecode">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.NetDBbase.URLDecode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">URLDecode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decodes a URL encoded string.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">urlunquote</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DBTools">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DBTools</span><span class="p">(</span><span class="n">NetDBbase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tools to work with SQLite DB&#39;s (optimized, no SQL required).&quot;&quot;&quot;</span>
+
+    <span class="n">sqlite</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sqlite_version</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">db_conn</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">db_cursor</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">db_tables</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="DBTools.__init__">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">HAVE_SQLITE3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sqlite</span> <span class="o">=</span> <span class="n">sqlite3</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sqlite_version</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">elif</span> <span class="n">HAVE_SQLITE2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sqlite</span> <span class="o">=</span> <span class="n">sqlite2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sqlite_version</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">SQLite not installed&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_tables</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="DBTools.connectSQLiteDB">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.connectSQLiteDB">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connectSQLiteDB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">work_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Connect to a sqlite database.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        db_name</span>
+<span class="sd">            the name of the sqlite database</span>
+<span class="sd">        work_dir</span>
+<span class="sd">            the optional database path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># connect to DB</span>
+        <span class="k">if</span> <span class="n">work_dir</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqlite</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">work_dir</span><span class="p">,</span> <span class="n">db_name</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqlite</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DBTools.commitDB">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.commitDB">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">commitDB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Commits all curent changes to DB, returns a boolean.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="DBTools.createDBTable">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.createDBTable">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">createDBTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">sqlcols</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a database table if it does not exist:</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the table name</span>
+<span class="sd">        sqlcols</span>
+<span class="sd">            a list containing the SQL definitions of the table columns: &lt;id&gt; &lt;type&gt; for example `[&#39;gene TEXT PRIMARY KEY&#39;, &#39;aa_seq TEXT&#39;, &#39;nuc_seq TEXT&#39;, &#39;aa_len INT&#39;, &#39;nuc_len INT&#39;]`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">SQL</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE &quot;</span><span class="si">{}</span><span class="s1">&quot; (&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sqlcols</span><span class="p">:</span>
+            <span class="n">SQL</span> <span class="o">+=</span> <span class="s1">&#39; &quot;</span><span class="si">{}</span><span class="s1">&quot;,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">SQL</span> <span class="o">=</span> <span class="n">SQL</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">SQL</span> <span class="o">+=</span> <span class="s1">&#39; )&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">SQL</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">table</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Table </span><span class="si">{}</span><span class="s1"> exists&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">))</span>
+        <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqlite</span><span class="o">.</span><span class="n">OperationalError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Table </span><span class="si">{}</span><span class="s1"> does not exist, creating it&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">SQL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_tables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DBTools.insertData">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.insertData">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">insertData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Insert data into a table: &quot;INSERT INTO %s (?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?)&quot; % table, (?, ?, ?, ?, ?)) )</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the DB table name</span>
+<span class="sd">        data</span>
+<span class="sd">            a dictionary of {id:value} pairs</span>
+<span class="sd">        commit</span>
+<span class="sd">            whether to commit the data insertions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">colstr</span> <span class="o">=</span> <span class="s2">&quot;(&quot;</span>
+        <span class="n">valstr</span> <span class="o">=</span> <span class="s2">&quot;VALUES (&quot;</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># I want to use dictionaries but this just keeps things backwards compatible for a while</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">colstr</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">, &#39;</span> <span class="o">%</span> <span class="n">d</span>
+                <span class="n">valstr</span> <span class="o">+=</span> <span class="s1">&#39;?, &#39;</span>
+                <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">d</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">WARNING: data now uses a dictionary as input please update your code - see docstring for details</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">colstr</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">, &#39;</span> <span class="o">%</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">valstr</span> <span class="o">+=</span> <span class="s1">&#39;?, &#39;</span>
+                <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">colstr</span> <span class="o">=</span> <span class="n">colstr</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span>
+        <span class="n">valstr</span> <span class="o">=</span> <span class="n">valstr</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">colstr</span><span class="p">,</span> <span class="n">valstr</span><span class="p">)</span>
+        <span class="c1"># print sql</span>
+        <span class="c1"># time.sleep(1)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">commit</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="DBTools.updateData">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.updateData">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">updateData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">rid</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update already defined data.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the table name</span>
+<span class="sd">        col</span>
+<span class="sd">            the column name</span>
+<span class="sd">        rid</span>
+<span class="sd">            the row id to update</span>
+<span class="sd">        data</span>
+<span class="sd">            a dictionary of {id:value} pairs</span>
+<span class="sd">        commit</span>
+<span class="sd">            whether to commit the data updates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;UPDATE </span><span class="si">{}</span><span class="s1"> SET &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">=</span><span class="se">\&quot;</span><span class="si">{}</span><span class="se">\&quot;</span><span class="s1">, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">d</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\&quot;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">))</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="n">sql</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; WHERE </span><span class="si">{}</span><span class="s1">=</span><span class="se">\&quot;</span><span class="si">{}</span><span class="se">\&quot;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">rid</span><span class="p">)</span>
+
+        <span class="c1"># print(sql)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">commit</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="DBTools.checkEntryInColumn">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.checkEntryInColumn">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkEntryInColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">rid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if an entry exists in a table.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the table name</span>
+<span class="sd">        col</span>
+<span class="sd">            the column name</span>
+<span class="sd">        rid</span>
+<span class="sd">            the row to search for</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s2">&quot;SELECT count(*) FROM </span><span class="si">{}</span><span class="s2"> WHERE </span><span class="si">{}</span><span class="s2">=</span><span class="se">\&quot;</span><span class="si">{}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">rid</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># print(&#39;There is no component named {}&#39;.format(rid))</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># print(&#39;Component {} found in {} row(s)&#39;.format(rid, data))</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="DBTools.executeSQL">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.executeSQL">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">executeSQL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sql</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute a SQL command:</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sql</span>
+<span class="sd">            a string containing a SQL command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error executing command&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="DBTools.getColumns">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.getColumns">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getColumns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">cols</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetch the contents of one or more columns of data in a table.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the database table</span>
+<span class="sd">        cols</span>
+<span class="sd">            a list of one or more column id&#39;s</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;SELECT &quot;</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="n">sql</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">sql</span> <span class="o">+=</span> <span class="s1">&#39; FROM </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="n">dout</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">))]</span>
+        <span class="c1"># print(sql)</span>
+        <span class="c1"># print(dout)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">r_</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">c_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r_</span><span class="p">)):</span>
+                    <span class="n">dout</span><span class="p">[</span><span class="n">c_</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r_</span><span class="p">[</span><span class="n">c_</span><span class="p">]))</span>
+            <span class="k">del</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dout</span></div>
+
+
+<div class="viewcode-block" id="DBTools.getRow">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.getRow">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getRow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">rid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the table row(s) which correspond to rid in column. Returns the row(s) as a list, if the column is the primary key this is always a single entry.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the database table</span>
+<span class="sd">        col</span>
+<span class="sd">            the column id</span>
+<span class="sd">        rid</span>
+<span class="sd">            the row index id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM </span><span class="si">{}</span><span class="s2"> WHERE </span><span class="si">{}</span><span class="s2">=</span><span class="se">\&quot;</span><span class="si">{}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">rid</span><span class="p">)</span>
+        <span class="c1"># print(sql)</span>
+        <span class="n">dout</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s1">&#39;INFO: getRow is returning multiple rows for query id: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">rid</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">r_</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">dout</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">r_</span><span class="p">])</span>
+            <span class="k">del</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dout</span></div>
+
+
+<div class="viewcode-block" id="DBTools.getCell">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.getCell">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">rid</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the table cell which correspond to rid in column. Returns the value or None.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the database table</span>
+<span class="sd">        col</span>
+<span class="sd">            the column id</span>
+<span class="sd">        rid</span>
+<span class="sd">            the row index id</span>
+<span class="sd">        cell</span>
+<span class="sd">            the column of the cell you want tp extract</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;SELECT </span><span class="si">{}</span><span class="s2"> FROM </span><span class="si">{}</span><span class="s2"> WHERE </span><span class="si">{}</span><span class="s2">=</span><span class="se">\&quot;</span><span class="si">{}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">rid</span><span class="p">)</span>
+        <span class="c1"># print(sql)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="DBTools.getTable">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.getTable">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">colOut</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an entire database table.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the table name</span>
+<span class="sd">        colOut</span>
+<span class="sd">            optionally return a tuple of (data,ColNames)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;SELECT * FROM </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">table</span>
+        <span class="n">sql2</span> <span class="o">=</span> <span class="s2">&quot;PRAGMA table_info( </span><span class="si">%s</span><span class="s2"> )&quot;</span> <span class="o">%</span> <span class="n">table</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">colOut</span><span class="p">:</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql2</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">OperationalError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">colOut</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">col</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span></div>
+
+
+<div class="viewcode-block" id="DBTools.dumpTableToTxt">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.dumpTableToTxt">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dumpTableToTxt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a table as tab separated txt file.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the table to export</span>
+<span class="sd">        filename</span>
+<span class="sd">            the filename of the table dump</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">head</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTable</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">colOut</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">head</span><span class="p">)</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.CBTools</span><span class="w"> </span><span class="kn">import</span> <span class="n">exportLabelledLinkedList</span>
+
+        <span class="n">exportLabelledLinkedList</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DBTools.dumpTableToCSV">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.dumpTableToCSV">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dumpTableToCSV</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a table as tab separated txt file.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            the table to export</span>
+<span class="sd">        filename</span>
+<span class="sd">            the filename of the table dump</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">head</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTable</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">colOut</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">head</span><span class="p">)</span>
+
+        <span class="n">F</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">csvw</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="s1">&#39;excel&#39;</span><span class="p">)</span>
+        <span class="n">csvw</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">F</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">csvw</span></div>
+
+
+<div class="viewcode-block" id="DBTools.fetchAll">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.fetchAll">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fetchAll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sql</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Raw SQL query e.g. &#39;SELECT id FROM gene WHERE gene=\&quot;G\&quot;&#39;.&quot;&quot;&quot;</span>
+        <span class="c1"># print(sql)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span></div>
+
+
+<div class="viewcode-block" id="DBTools.closeDB">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.DBTools.closeDB">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">closeDB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the DB connection and reset the DBTools instance (can be</span>
+<span class="sd">        reconnected)&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_cursor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_tables</span> <span class="o">=</span> <span class="p">[]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="KeGGTools">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.KeGGTools">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeGGTools</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that holds useful methods for querying KeGG via a SUDS provided soap</span>
+<span class="sd">    client.&quot;&quot;&quot;</span>
+
+    <span class="n">Kclient</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="KeGGTools.__init__">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.KeGGTools.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">suds</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Kclient</span> <span class="o">=</span> <span class="n">suds</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KeGGTools.fetchSeqfromKeGG">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.KeGGTools.fetchSeqfromKeGG">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fetchSeqfromKeGG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k_gene</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a gene name try and retrieve the gene and amino acid sequence.&quot;&quot;&quot;</span>
+        <span class="n">g2</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Kclient</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">bget</span><span class="p">(</span><span class="s2">&quot;-f -n n </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">k_gene</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">g</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">*****</span><span class="se">\n</span><span class="s1">WARNING: potential naming error in gene: </span><span class="si">{}</span><span class="s1">!!</span><span class="se">\n</span><span class="s1">*****</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">k_gene</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">g2</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(N)&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Gene sequence get exception (</span><span class="si">{}</span><span class="s1">)!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k_gene</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Kclient</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">bget</span><span class="p">(</span><span class="s2">&quot;-f -n a </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">k_gene</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">*****</span><span class="se">\n</span><span class="s1">WARNING: potential naming error in gene: </span><span class="si">{}</span><span class="s1">!!</span><span class="se">\n</span><span class="s1">*****</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">k_gene</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(A)&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Protein sequence get exception (</span><span class="si">{}</span><span class="s1">)!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k_gene</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">g2</span><span class="p">,</span> <span class="n">p2</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="KeGGSequenceTools">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeGGSequenceTools</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Using the KeGG connector this class provides tools to construct an organims</span>
+<span class="sd">    specific sequence database.&quot;&quot;&quot;</span>
+
+    <span class="n">DB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">KEGG</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="KeGGSequenceTools.__init__">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">work_dir</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DB</span> <span class="o">=</span> <span class="n">DBTools</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DB</span><span class="o">.</span><span class="n">connectSQLiteDB</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">work_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">KEGG</span> <span class="o">=</span> <span class="n">KeGGTools</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KeGGSequenceTools.buildGeneDatabase">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools.buildGeneDatabase">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">buildGeneDatabase</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">tablename</span><span class="p">,</span> <span class="n">UPDATE_IF_EXISTS</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_length</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">):</span>
+        <span class="n">cntr</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">cntr2</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">ecg</span> <span class="ow">in</span> <span class="n">genes</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Processing gene </span><span class="si">{}</span><span class="s1"> of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cntr</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">)))</span>
+            <span class="n">entry_exists</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">testg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DB</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s1">&#39;SELECT * FROM </span><span class="si">%s</span><span class="s1"> WHERE gene=&quot;</span><span class="si">%s</span><span class="s1">&quot; &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tablename</span><span class="p">,</span> <span class="n">ecg</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">testg</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">entry_exists</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># if ecg in [&#39;eco:b1898&#39;,&#39;eco:b1899&#39;,&#39;eco:b3692&#39;,&#39;eco:b3111&#39;,&#39;eco:b4228&#39;,&#39;eco:b2978&#39;,\</span>
+            <span class="c1"># &#39;eco:b1416&#39;,&#39;eco:b3112&#39;,&#39;eco:b1417&#39;,&#39;eco:b3768&#39;,&#39;eco:b3767&#39;,&#39;eco:b4229&#39;]:</span>
+            <span class="c1"># raw_input(testg)</span>
+
+            <span class="n">tstart</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">entry_exists</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">adding gene </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                <span class="n">gene2</span><span class="p">,</span> <span class="n">prot2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">KEGG</span><span class="o">.</span><span class="n">fetchSeqfromKeGG</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">gene2</span> <span class="o">!=</span> <span class="s1">&#39;None&#39;</span> <span class="ow">and</span> <span class="n">prot2</span> <span class="o">!=</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">DB</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                        <span class="s2">&quot;INSERT INTO </span><span class="si">%s</span><span class="s2"> (gene, aa_seq, nuc_seq, aa_len, nuc_len) VALUES (?, ?, ?, ?, ?)&quot;</span>
+                        <span class="o">%</span> <span class="n">tablename</span><span class="p">,</span>
+                        <span class="p">(</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">prot2</span><span class="p">),</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">gene2</span><span class="p">),</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prot2</span><span class="p">)),</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gene2</span><span class="p">)),</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Gene </span><span class="si">{}</span><span class="s1"> cannot be found and is probably an incorrect annotation assigning length: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">ecg</span><span class="p">,</span> <span class="n">default_length</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">DB</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                        <span class="s2">&quot;INSERT INTO </span><span class="si">%s</span><span class="s2"> (gene, aa_seq, nuc_seq, aa_len, nuc_len) VALUES (?, ?, ?, ?, ?)&quot;</span>
+                        <span class="o">%</span> <span class="n">tablename</span><span class="p">,</span>
+                        <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">default_length</span><span class="p">,</span> <span class="n">default_length</span><span class="p">),</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">entry_exists</span> <span class="ow">and</span> <span class="n">UPDATE_IF_EXISTS</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">updating gene </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                <span class="n">gene2</span><span class="p">,</span> <span class="n">prot2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">KEGG</span><span class="o">.</span><span class="n">fetchSeqfromKeGG</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">DB</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                    <span class="s1">&#39;UPDATE </span><span class="si">%s</span><span class="s1"> SET aa_seq=&quot;</span><span class="si">%s</span><span class="s1">&quot;, nuc_seq=&quot;</span><span class="si">%s</span><span class="s1">&quot;, aa_len=&quot;</span><span class="si">%s</span><span class="s1">&quot;, nuc_len=&quot;</span><span class="si">%s</span><span class="s1">&quot; WHERE gene=&quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">tablename</span><span class="p">,</span> <span class="n">prot2</span><span class="p">,</span> <span class="n">gene2</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prot2</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gene2</span><span class="p">)),</span> <span class="n">ecg</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">skipping gene </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">tend</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; ... done (</span><span class="si">{}</span><span class="s1">).&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tend</span> <span class="o">-</span> <span class="n">tstart</span><span class="p">))</span>
+            <span class="c1">#  if cntr == 6:</span>
+            <span class="c1">#  break</span>
+            <span class="n">cntr</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">cntr2</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">cntr2</span> <span class="o">==</span> <span class="mi">21</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">DB</span><span class="o">.</span><span class="n">db_cursor</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cntr2</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="KeGGSequenceTools.getPeptideLengthsFromDB">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools.getPeptideLengthsFromDB">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getPeptideLengthsFromDB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">keg_prefix</span><span class="p">):</span>
+        <span class="n">gene_peplen</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">G</span> <span class="ow">in</span> <span class="n">genes</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+            <span class="c1">##  Glen = self.cursor.execute(&#39;SELECT aa_len FROM gene_data WHERE gene=&quot;%s&quot;&#39; % G).fetchall()[0][0]</span>
+            <span class="n">Glen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DB</span><span class="o">.</span><span class="n">fetchAll</span><span class="p">(</span><span class="s1">&#39;SELECT aa_len FROM gene_data WHERE gene=&quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">G</span><span class="p">)[</span>
+                <span class="mi">0</span>
+            <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Glen</span><span class="p">)</span>
+            <span class="n">gene_peplen</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">G</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">keg_prefix</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span> <span class="n">Glen</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">gene_peplen</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RESTClient">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RESTClient</span><span class="p">(</span><span class="n">NetDBbase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that provides the basis for application specific connectors to REST web</span>
+<span class="sd">    services.&quot;&quot;&quot;</span>
+
+    <span class="n">site_root</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">CONNECTED</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">USER_AGENT</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:13.0) Gecko/20100101 Firefox/13.0&#39;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="RESTClient.__init__">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">urllib2</span> <span class="o">=</span> <span class="n">urllib2</span></div>
+
+
+<div class="viewcode-block" id="RESTClient.Log">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient.Log">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add txt to logfile history.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        txt</span>
+<span class="sd">            a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> - </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">txt</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="RESTClient.GetLog">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient.GetLog">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">GetLog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the logged history.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div>
+
+
+<div class="viewcode-block" id="RESTClient.Connect">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient.Connect">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Establish HTTP connection to.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        root</span>
+<span class="sd">            the site root &quot;www.google.com&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">site_root</span> <span class="o">=</span> <span class="n">root</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">urllib2</span><span class="o">.</span><span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">site_root</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CONNECTED</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">site_root</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Connection to </span><span class="si">{}</span><span class="s1"> failed!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">site_root</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CONNECTED</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Log</span><span class="p">(</span><span class="s1">&#39;ERROR: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_root</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span></div>
+
+
+<div class="viewcode-block" id="RESTClient.Get">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient.Get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform an http GET using:</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query</span>
+<span class="sd">            e.g.</span>
+<span class="sd">        reply_mode</span>
+<span class="sd">            [default=&#39;&#39;] this is the reply mode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data1</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONNECTED</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+                <span class="n">HTMLhead</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">USER_AGENT</span><span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">HTMLhead</span><span class="p">)</span>
+                <span class="n">r1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">r1</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">r1</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+                <span class="n">data1</span> <span class="o">=</span> <span class="n">r1</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Log</span><span class="p">(</span><span class="s1">&#39;GET </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">query</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Failure to GET: </span><span class="si">{}{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">site_root</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Log</span><span class="p">(</span><span class="s1">&#39;ERROR: </span><span class="si">%s%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">site_root</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span>
+        <span class="k">return</span> <span class="n">data1</span></div>
+
+
+<div class="viewcode-block" id="RESTClient.Close">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.RESTClient.Close">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the currently active connection.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONNECTED</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CONNECTED</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> - connection closed&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_root</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">site_root</span> <span class="o">=</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MIRIAMTools">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.MIRIAMTools">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MIRIAMTools</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tools dealing with MIRIAM annotations.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MIRIAMTools.MiriamURN2IdentifiersURL">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.MIRIAMTools.MiriamURN2IdentifiersURL">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">MiriamURN2IdentifiersURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">urn</span><span class="p">):</span>
+        <span class="n">urn</span> <span class="o">=</span> <span class="n">urn</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;urn:miriam:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">urn</span> <span class="o">=</span> <span class="s1">&#39;http://identifiers.org/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">urn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">urn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">urn</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">urn</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SemanticSBML">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.SemanticSBML">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SemanticSBML</span><span class="p">(</span><span class="n">RESTClient</span><span class="p">,</span> <span class="n">MIRIAMTools</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;REST client for connecting to SemanticSBML services.&quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">item_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;&lt;item&gt;.+?&lt;/item&gt;&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SemanticSBML.__init__">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.SemanticSBML.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">RESTClient</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SemanticSBML.quickLookup">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.SemanticSBML.quickLookup">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">quickLookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Do a quick lookpup for txt using SemanticSBML (connectic if required) and return results. Returns a list of identifiers.org id&#39;s in descending priority (as return)</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        txt</span>
+<span class="sd">            the string to lookup</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONNECTED</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Connect</span><span class="p">(</span><span class="s2">&quot;www.semanticsbml.org&quot;</span><span class="p">)</span>
+
+        <span class="n">txt</span> <span class="o">=</span> <span class="n">txt</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="s2">&quot;/semanticSBML/annotate/search.xml?q=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">txt</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parseXMLtoText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="SemanticSBML.viewDataInWebrowser">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.SemanticSBML.viewDataInWebrowser">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">viewDataInWebrowser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxres</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempt to view #maxres results returned by SemanticSBML in the default browser.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        maxres</span>
+<span class="sd">            default maximum number of results to display.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cntr</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">u_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">cntr</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">webbrowser</span><span class="o">.</span><span class="n">open_new_tab</span><span class="p">(</span><span class="n">u_</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ERROR in url </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u_</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">cntr</span> <span class="o">&gt;=</span> <span class="n">maxres</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Maximum results reached, set </span><span class="se">\&quot;</span><span class="s1">maxres</span><span class="se">\&quot;</span><span class="s1"> to increase&#39;</span><span class="p">)</span>
+                <span class="k">break</span></div>
+
+
+<div class="viewcode-block" id="SemanticSBML.parseXMLtoText">
+<a class="viewcode-back" href="../../api/networking.html#cbmpy.CBNetDB.SemanticSBML.parseXMLtoText">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parseXMLtoText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the xml output by quickLookup() into a list of URL.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xml</span>
+<span class="sd">            XML returns from SemanticSBML</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&lt;item&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&lt;/item&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_re</span><span class="p">,</span> <span class="n">xml</span><span class="p">)</span>
+        <span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

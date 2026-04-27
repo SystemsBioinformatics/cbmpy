@@ -1,0 +1,1067 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cbmpy.fluxmodules.decomposition &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html#matroid-module">Matroid Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html#decomposition-module">Decomposition Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html#sparse-rationals-module">Sparse Rationals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/solvers.html">Solver Implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/networking.html#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/visualization.html#gui-frontends">GUI Frontends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/visualization.html#multi-processing">Multi-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/visualization.html#model-utilities">Model Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../cbmpy.html">cbmpy</a></li>
+      <li class="breadcrumb-item active">cbmpy.fluxmodules.decomposition</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cbmpy.fluxmodules.decomposition</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">CBMPy: fluxmodules decomposiiton module</span>
+<span class="sd">=====================</span>
+<span class="sd">PySCeS Constraint Based Modelling (http://cbmpy.sourceforge.net)</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+<span class="sd">Author: Arne C. Reimers</span>
+<span class="sd">Contact email: arne.c.reimers@gmail.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># preparing for Python 3 port</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="c1">#from __future__ import unicode_literals</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.matroid</span><span class="w"> </span><span class="kn">import</span> <span class="n">fromMatrix</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.random_color</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_new_color</span>
+
+
+<div class="viewcode-block" id="Edge">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Edge">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Edge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Every edge connects two vertices.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Edge.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Edge.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize edge connecting vertices a and b.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span></div>
+
+
+<div class="viewcode-block" id="Edge.getOther">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Edge.getOther">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getOther</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Give the other vertex then the specified one.</span>
+
+<span class="sd">        The specified vertex must be one of this edges vertices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">==</span> <span class="n">vertex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">==</span> <span class="n">vertex</span><span class="p">,</span> <span class="s1">&#39;vertex must be a vertex of this edge&#39;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AbstractVertex">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.AbstractVertex">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AbstractVertex</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A vertex in a graph.</span>
+
+<span class="sd">    It can be a leaf or an inner node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">maxId</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For giving unique ids for hashing.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AbstractVertex.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.AbstractVertex.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__id</span> <span class="o">=</span> <span class="n">AbstractVertex</span><span class="o">.</span><span class="n">maxId</span>
+        <span class="n">AbstractVertex</span><span class="o">.</span><span class="n">maxId</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="AbstractVertex.id">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.AbstractVertex.id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Two abstract vertices are only the same if they are identical.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span>
+
+<div class="viewcode-block" id="AbstractVertex.label">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.AbstractVertex.label">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;subclasses must override this&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractVertex.replaceAdjacent">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.AbstractVertex.replaceAdjacent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replaceAdjacent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Replace the adjacent node old by new.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;subclasses must override this&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="AbstractVertex.getAdjacent">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.AbstractVertex.getAdjacent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAdjacent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List adjacent nodes.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;subclasses must override this&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="AbstractVertex.getLeaves">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.AbstractVertex.getLeaves">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getLeaves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fromVertex</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enumerates all the leaves of this vertex that are reachable without using</span>
+<span class="sd">        fromVertex.</span>
+
+<span class="sd">        fromVertex must be a vertex adjacent to this vertex</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;subclasses must override this&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="kc">False</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Vertex">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Vertex</span><span class="p">(</span><span class="n">AbstractVertex</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents an inner vertex (i.e., not a leaf)</span>
+
+<span class="sd">    Every Vertex contains a map (edges) of adjacent edges resp. vertices.</span>
+<span class="sd">    Each Edge has a list of elements associated to it (the interface).</span>
+<span class="sd">    Each Vertex stores a matroid, whoose elements are contributed by the edges.</span>
+
+<span class="sd">    The map edges has the following form:</span>
+<span class="sd">    The keys are the incident vertices.</span>
+<span class="sd">    The values are the list of elements contributed by the edge</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Vertex.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AbstractVertex</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;N</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;N</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Vertex.label">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex.label">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Vertex.setUpRoot">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex.setUpRoot">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setUpRoot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matroid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set ups this vertex as the root node for the given matroid.</span>
+
+<span class="sd">        This means we add leaves for all the elements of the matroid to this vertex</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">Leaf</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span> <span class="o">=</span> <span class="n">matroid</span></div>
+
+
+<div class="viewcode-block" id="Vertex.splitOff">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex.splitOff">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">splitOff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adjacent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Splits of a list of adjacent vertices.</span>
+
+<span class="sd">        adjacent must be a list of vertices that are adjacent to this node. The ist</span>
+<span class="sd">        adjacent must contain more than one element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacent</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;splitting off would have no effect&#39;</span>
+
+        <span class="c1"># the next assert may be useful, but it can make things also much</span>
+        <span class="c1"># more complicated and it does not really hurt the branch decompositon</span>
+        <span class="c1">#assert len(adjacent) &lt;= len(self.edges) &lt;= 2</span>
+
+        <span class="c1"># collect elements to split off</span>
+        <span class="n">toSplit</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">adjacent</span><span class="p">:</span>
+            <span class="n">toSplit</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>
+        <span class="c1"># find a basis of self.matroid such that the only basis elements of</span>
+        <span class="c1"># toSplit are used by non-basis elements of toSplit</span>
+
+        <span class="c1"># in the following loop, we modify the set of non-basis elements,</span>
+        <span class="c1"># so first copy it to avoid concurrent modification errors</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">nbasis</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toSplit</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">fundamentalCircuit</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="n">intersection</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># put e into the basis</span>
+                    <span class="c1"># and one element of the intersection into nbasis</span>
+                    <span class="c1"># note that the new non-basis element is in toSplit, so we</span>
+                    <span class="c1"># don&#39;t have to do anything with it</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">exchange</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">intersection</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+
+        <span class="c1"># our matroid is now in the desired form:</span>
+        <span class="c1"># no fundamental circuit of a nbasis element outside toSplit uses basis</span>
+        <span class="c1"># elements of toSplit</span>
+        <span class="c1"># and no cofundamental circuit  of a basis element in toSplit uses nbasis</span>
+        <span class="c1"># elements outside of toSplit</span>
+
+        <span class="c1"># create new vertex</span>
+        <span class="n">vsplit</span> <span class="o">=</span> <span class="n">Vertex</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">adjacent</span><span class="p">:</span>
+            <span class="c1"># move edge from self to vsplit</span>
+            <span class="n">vsplit</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+            <span class="c1"># delete adjacency of a</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">replaceAdjacent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vsplit</span><span class="p">)</span>
+
+        <span class="c1"># the dual matroid is of the desired form for the complement of toSplit,</span>
+        <span class="c1"># which we will use to simplify the interface of vsplit</span>
+        <span class="n">vsplit</span><span class="o">.</span><span class="n">matroid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">dual</span><span class="p">()</span>
+
+        <span class="c1"># reduce representation of toSplit for self</span>
+        <span class="n">interface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__simplifyInterface</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">vsplit</span><span class="p">]</span> <span class="o">=</span> <span class="n">interface</span>  <span class="c1"># add vsplit as neighbour</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacent</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># reduce representation of the complement of toSplit for vsplit</span>
+            <span class="n">co_toSplit</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">vsplit</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span> <span class="o">-</span> <span class="n">toSplit</span>
+            <span class="n">cointerface</span> <span class="o">=</span> <span class="n">vsplit</span><span class="o">.</span><span class="n">__simplifyInterface</span><span class="p">(</span><span class="n">co_toSplit</span><span class="p">)</span>
+            <span class="n">vsplit</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">cointerface</span>  <span class="c1"># add self as neighbour to vsplit</span>
+            <span class="c1"># in the end we actually want to have the primal matroid stored</span>
+            <span class="n">vsplit</span><span class="o">.</span><span class="n">matroid</span> <span class="o">=</span> <span class="n">vsplit</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">dual</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># vsplit is a node with 3 vertices, we will probably not touch it</span>
+            <span class="c1"># again, so be lazy and do not calculate the cointerface</span>
+            <span class="n">vsplit</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+            <span class="n">vsplit</span><span class="o">.</span><span class="n">matroid</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># return the new vertex, maybe we want to do something with it</span>
+        <span class="k">return</span> <span class="n">vsplit</span></div>
+
+
+<div class="viewcode-block" id="Vertex.replaceAdjacent">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex.replaceAdjacent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replaceAdjacent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">old</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span> <span class="s1">&#39;old must be an adjacent vertex&#39;</span>
+        <span class="c1"># copy interface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">new</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">old</span><span class="p">]</span>
+        <span class="c1"># delete old edge</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">old</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__simplifyInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toSplit</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reduces the interface of the elements to split off.</span>
+
+<span class="sd">        For this method we assume:</span>
+<span class="sd">        No fundamental circuit of a non-basis element outside of toSplit must</span>
+<span class="sd">        contain a basis element inside toSplit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">__checkSplit</span><span class="p">(</span><span class="n">toSplit</span><span class="p">),</span> <span class="s1">&#39;basis has wrong form&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">contract</span><span class="p">(</span>
+            <span class="n">toSplit</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># this gives us an interface of the split</span>
+        <span class="n">interface</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">nbasis</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">toSplit</span><span class="p">:</span>
+                <span class="n">interface</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1"># however, we want to simplify this interface</span>
+        <span class="c1"># it should only have as many elements as the connectivity is</span>
+
+        <span class="c1"># take the reduced representation matrix of the non-basis elements in</span>
+        <span class="c1"># toSplit in self.matroid and interpret it as a direct representation</span>
+        <span class="c1"># matrix and find a basis</span>
+        <span class="n">toDelete</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">nbasis</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toSplit</span><span class="p">]</span>
+        <span class="c1"># we only delete non-basis elements, so delete does not mess with basis</span>
+        <span class="n">submat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">toDelete</span><span class="p">)</span>
+        <span class="n">mred</span> <span class="o">=</span> <span class="n">fromMatrix</span><span class="p">(</span><span class="n">submat</span><span class="o">.</span><span class="n">rep</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+        <span class="c1"># the basis elements of mred represent the interface</span>
+        <span class="c1"># so we delete all the other elements</span>
+        <span class="n">toDelete</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">interface</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mred</span><span class="o">.</span><span class="n">nbasis</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">toDelete</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mred</span><span class="o">.</span><span class="n">basis</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__checkSplit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toSplit</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">nbasis</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toSplit</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">fundamentalCircuit</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">c</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">toSplit</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="Vertex.getAdjacent">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex.getAdjacent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAdjacent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="Vertex.getLeaves">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex.getLeaves">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getLeaves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fromVertex</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enumerates all the leaves of this vertex that are reachable without using</span>
+<span class="sd">        fromVertex.</span>
+
+<span class="sd">        If fromVertex is not a vertex incident to this vertex, then all leaves are</span>
+<span class="sd">        enumerated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">leaves</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">fromVertex</span><span class="p">:</span>
+                <span class="n">leaves</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">getLeaves</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">leaves</span></div>
+
+
+<div class="viewcode-block" id="Vertex.isSimple">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Vertex.isSimple">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isSimple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="c1"># check if its parallel elements</span>
+        <span class="n">parallel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">parallel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parallel</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">par</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">par</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="n">par</span> <span class="o">==</span> <span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># check if its cpparallel elements</span>
+        <span class="n">coparallel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">coparallel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coparallel</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">copar</span> <span class="o">=</span> <span class="n">coparallel</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">copar</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="n">copar</span> <span class="o">==</span> <span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+</div>
+
+
+<div class="viewcode-block" id="Leaf">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Leaf">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Leaf</span><span class="p">(</span><span class="n">AbstractVertex</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Leaf.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Leaf.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">adjacent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates leaf representing an matroid element.</span>
+
+<span class="sd">        element is the matroid element to represent adjacent is the vertex to which this</span>
+<span class="sd">        leaf is added</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AbstractVertex</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elem</span> <span class="o">=</span> <span class="n">element</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adj</span> <span class="o">=</span> <span class="n">adjacent</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Leaf</span><span class="si">%s</span><span class="s2"> &lt;</span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">elem</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Leaf</span><span class="si">%s</span><span class="s2"> &lt;</span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">elem</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Leaf.label">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Leaf.label">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elem</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Leaf.replaceAdjacent">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Leaf.replaceAdjacent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replaceAdjacent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">adj</span> <span class="o">==</span> <span class="n">old</span><span class="p">,</span> <span class="s1">&#39;old must be single adjacent node of this leaf&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adj</span> <span class="o">=</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="Leaf.getAdjacent">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Leaf.getAdjacent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAdjacent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">adj</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Leaf.getLeaves">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Leaf.getLeaves">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getLeaves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fromVertex</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">adj</span> <span class="o">==</span> <span class="n">fromVertex</span><span class="p">,</span> <span class="s1">&#39;fromEdge must be from the leaf&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elem</span><span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Decomposition">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Decomposition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hierarchical branch decomposition.</span>
+
+<span class="sd">    Actually can also represent a partial branch decomposition as intermediate</span>
+<span class="sd">    results.</span>
+
+<span class="sd">    It has the following fields:</span>
+<span class="sd">    matroid - the matroid of this branch decomposition</span>
+<span class="sd">    root - a vertex of the graph representing the branch decomposition</span>
+
+<span class="sd">    TODO: more details</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Decomposition.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matroid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes as star branch decomposition.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span> <span class="o">=</span> <span class="n">matroid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Vertex</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">setUpRoot</span><span class="p">(</span><span class="n">matroid</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.listNonLeaves">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.listNonLeaves">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">listNonLeaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all non-leaf vertices.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeavesRec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.listNonLeavesRec">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.listNonLeavesRec">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">listNonLeavesRec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">Leaf</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">vertex</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vertex</span><span class="o">.</span><span class="n">getAdjacent</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">source</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listNonLeavesRec</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">vertex</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.getVertex">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.getVertex">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getVertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertexid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the vertex with the given id.</span>
+
+<span class="sd">        If no vertex with the given id exists, None is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="o">==</span> <span class="n">vertexid</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.splitZeroModules">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.splitZeroModules">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">splitZeroModules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Branch given vertex into 0 modules.</span>
+
+<span class="sd">        Requires that all adjacent vertices have at most 1-dimensional interface</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lookUpAdjacent</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">adjacent</span><span class="p">,</span> <span class="n">elems</span> <span class="ow">in</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                <span class="n">lookUpAdjacent</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjacent</span>
+
+        <span class="n">modules</span> <span class="o">=</span> <span class="n">vertex</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">findModules</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># otherwise, splitting helps not</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># don&#39;t do anything for loops or coloops</span>
+                    <span class="n">toSplit</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+                    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">elems</span><span class="p">:</span>
+                        <span class="n">toSplit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">lookUpAdjacent</span><span class="p">[</span><span class="n">e</span><span class="p">])</span>
+
+                    <span class="n">vertex</span><span class="o">.</span><span class="n">splitOff</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># for loops and coloops we have to fix the interface</span>
+                    <span class="n">e</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">elems</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">lookUpAdjacent</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+                    <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">vertex</span><span class="o">.</span><span class="n">matroid</span> <span class="o">=</span> <span class="n">vertex</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">delete</span><span class="p">([</span><span class="n">e</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.splitSimple">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.splitSimple">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">splitSimple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split all vertices into 0-modules and 1-modules.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">splitZeroModules</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">splitOneModules</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.splitOneModules">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.splitOneModules">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">splitOneModules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Branch given vertex into 1 modules.</span>
+
+<span class="sd">        TODO:we have to deal with grouped elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># first try to group parallel and coparallel elements</span>
+        <span class="n">didSomething</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">while</span> <span class="n">didSomething</span><span class="p">:</span>
+            <span class="n">didSomething</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># create lookup table for adjacent vertices</span>
+            <span class="c1"># the matroid changes, so we update it for each iteration</span>
+            <span class="n">lookUpAdjacent</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">adjacent</span><span class="p">,</span> <span class="n">elems</span> <span class="ow">in</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                    <span class="n">lookUpAdjacent</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjacent</span>
+
+            <span class="c1"># find parallel elements</span>
+            <span class="n">parallel</span> <span class="o">=</span> <span class="n">vertex</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">parallel</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> parallel: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">parallel</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">parallel</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;groups must be non-trivial&#39;</span>
+                <span class="c1"># we split vertices not elements, so get the vertices</span>
+                <span class="n">toSplit</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">lookUpAdjacent</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">v</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">toSplit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                    <span class="n">vertex</span><span class="o">.</span><span class="n">splitOff</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span>
+                    <span class="n">didSomething</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># update lookup table if we changed something</span>
+            <span class="k">if</span> <span class="n">didSomething</span><span class="p">:</span>
+                <span class="n">lookUpAdjacent</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">adjacent</span><span class="p">,</span> <span class="n">elems</span> <span class="ow">in</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                        <span class="n">lookUpAdjacent</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjacent</span>
+
+            <span class="c1"># find coparallel elements</span>
+            <span class="n">coparallel</span> <span class="o">=</span> <span class="n">vertex</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">coparallel</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> coparallel: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">coparallel</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">coparallel</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;groups must be non-trivial&#39;</span>
+                <span class="c1"># we split vertices not elements, so get the vertices</span>
+                <span class="n">toSplit</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">lookUpAdjacent</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">v</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">toSplit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                    <span class="n">vertex</span><span class="o">.</span><span class="n">splitOff</span><span class="p">(</span><span class="n">toSplit</span><span class="p">)</span>
+                    <span class="n">didSomething</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;TODO: more complicated 1-modules&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.makeSubcubic">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.makeSubcubic">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">makeSubcubic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split all nodes that have degree &gt;= 4 in an arbitrary manner.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Vertex</span><span class="p">)</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">getAdjacent</span><span class="p">())</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="c1"># split off two arbitrary nodes</span>
+                <span class="n">adj</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">getAdjacent</span><span class="p">()</span>
+                <span class="nb">aiter</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">splitOff</span><span class="p">([</span><span class="nb">aiter</span><span class="o">.</span><span class="n">next</span><span class="p">(),</span> <span class="nb">aiter</span><span class="o">.</span><span class="n">next</span><span class="p">()])</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.isParallelSeries">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.isParallelSeries">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isParallelSeries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if all nodes have only parallel or only coparallel elems.</span>
+
+<span class="sd">        This does not check if the matroid is parallel-series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+<span class="c1">#             ok = False</span>
+<span class="c1">#             # check if its parallel elements</span>
+<span class="c1">#             parallel = v.matroid.parallel()</span>
+<span class="c1">#             if len(parallel) == 1:</span>
+<span class="c1">#                 par = parallel.pop()</span>
+<span class="c1">#                 if len(par) == len(v.matroid.elems):</span>
+<span class="c1">#                     assert par == frozenset(v.matroid.elems)</span>
+<span class="c1">#                     ok = True</span>
+<span class="c1">#</span>
+<span class="c1">#             # check if its cpparallel elements</span>
+<span class="c1">#             coparallel = v.matroid.coparallel()</span>
+<span class="c1">#             if len(coparallel) == 1:</span>
+<span class="c1">#                 copar = coparallel.pop()</span>
+<span class="c1">#                 if len(copar) == len(v.matroid.elems):</span>
+<span class="c1">#                     assert copar == frozenset(v.matroid.elems)</span>
+<span class="c1">#                     ok = True</span>
+<span class="c1">#</span>
+<span class="c1">#             if not ok:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">isSimple</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># all nodes are either parallel or coparallel</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.verifyFullyBranched">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.verifyFullyBranched">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">verifyFullyBranched</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verifies that this branch decomposition is fully branched.</span>
+
+<span class="sd">        The branch decomposition is considered fully branched if all vertices</span>
+<span class="sd">        satisfy:</span>
+<span class="sd">        - is degree 3 or</span>
+<span class="sd">        - all elements are parallel</span>
+<span class="sd">        - all elements are coparallel</span>
+
+<span class="sd">        If successful, True is returned.</span>
+<span class="sd">        Otherwise, a NotFullyBranchedException is raised</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">ok</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">isSimple</span><span class="p">():</span>
+                    <span class="n">ok</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c1">#                 # check if its parallel elements</span>
+<span class="c1">#                 parallel = v.matroid.parallel()</span>
+<span class="c1">#                 if len(parallel) == 1:</span>
+<span class="c1">#                     par = parallel.pop()</span>
+<span class="c1">#                     if len(par) == len(v.matroid.elems):</span>
+<span class="c1">#                         assert par == frozenset(v.matroid.elems)</span>
+<span class="c1">#                         ok = True</span>
+<span class="c1">#</span>
+<span class="c1">#             if not ok:</span>
+<span class="c1">#                 # check if its cpparallel elements</span>
+<span class="c1">#                 coparallel = v.matroid.coparallel()</span>
+<span class="c1">#                 if len(coparallel) == 1:</span>
+<span class="c1">#                     copar = coparallel.pop()</span>
+<span class="c1">#                     if len(copar) == len(v.matroid.elems):</span>
+<span class="c1">#                         assert copar == frozenset(v.matroid.elems)</span>
+<span class="c1">#                         ok = True</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NotFullyBranchedException</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># all nodes are either parallel or coparallel</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.verifyEdgeWidth">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.verifyEdgeWidth">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">verifyEdgeWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verifies if the edge with really coincides with the interfaces.</span>
+
+<span class="sd">        In case of success, true is returned. Otherwise an EdgeWidthException is raised.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">sep</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">getLeaves</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+                <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">connectivity</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span> <span class="o">!=</span> <span class="n">conn</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">EdgeWidthException</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.getWidth">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.getWidth">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the width of this branch decomposition.&quot;&quot;&quot;</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">interface</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">width</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.poolmanMethod">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.poolmanMethod">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">poolmanMethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">similarity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decomposes the matroid using the method suggested by Poolman et al.</span>
+
+<span class="sd">        This method iteratively groups these elements together that are most similar.</span>
+<span class="sd">        Similarity by sets of nodes is done via the mean. For more details see</span>
+<span class="sd">        doi:10.1016/j.jtbi.2007.08.005</span>
+
+<span class="sd">        This method takes a similarity matrix as input, which allows it to also apply</span>
+<span class="sd">        the method to other similarity matrices then those suggested in the original</span>
+<span class="sd">        work. If no similarity matrix is given, then a row similarity matrix is used,</span>
+<span class="sd">        which corresponds to the matrix suggested by Poolman et al.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">similarity</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">similarity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">similarityMatrix</span><span class="p">(</span><span class="s2">&quot;rows&quot;</span><span class="p">)</span>
+
+        <span class="c1"># make a copy so that we don&#39;t make a mess with the input</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">similarity</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">):</span>
+            <span class="c1"># similarity matrix is directly for the vertex matroid</span>
+
+            <span class="c1"># merge columns representing vertices</span>
+            <span class="c1"># preallocate, so we don&#39;t get indexing problems</span>
+            <span class="n">vertexIndices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">similarity</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">elems</span> <span class="ow">in</span> <span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># typically len(elems) == 1</span>
+                <span class="n">sumrow</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">similarity</span><span class="o">.</span><span class="n">elems</span><span class="p">))</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">elems</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="n">sumrow</span> <span class="o">+=</span> <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+<span class="c1">#                    sumrow = numpy.maximum(sumrow, sim[i,:])</span>
+                    <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># does not overwrite important entries</span>
+                    <span class="n">sim</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># does not overwrite important entries</span>
+                    <span class="n">sumrow</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># make sure the value is negative</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+                    <span class="n">sumrow</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span>
+                    <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">sumrow</span>
+                    <span class="n">sim</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sumrow</span>
+                    <span class="n">vertexIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">similarity</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span>
+            <span class="c1"># similarity is of the whole-network matroid</span>
+
+            <span class="c1"># merge elements in adjacent nodes</span>
+            <span class="c1"># preallocate, so we don&#39;t get indexing problems</span>
+            <span class="n">vertexIndices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">similarity</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+            <span class="n">adj</span> <span class="o">=</span> <span class="n">vertex</span><span class="o">.</span><span class="n">getAdjacent</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">adj</span><span class="p">:</span>
+                <span class="n">tomerge</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">getLeaves</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
+                <span class="n">sumrow</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">similarity</span><span class="o">.</span><span class="n">elems</span><span class="p">))</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">tomerge</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">elems</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="n">sumrow</span> <span class="o">+=</span> <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+<span class="c1">#                    sumrow = numpy.maximum(sumrow, sim[i,:])</span>
+                    <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># does not overwrite important entries</span>
+                    <span class="n">sim</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># does not overwrite important entries</span>
+                    <span class="n">sumrow</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># make sure the value is negative</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tomerge</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+                    <span class="n">sumrow</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tomerge</span><span class="p">)</span>
+                    <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">sumrow</span>
+                    <span class="n">sim</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sumrow</span>
+                    <span class="n">vertexIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tomerge</span><span class="p">))</span>
+
+        <span class="c1"># now we can start with the actual algorithm</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">argmax</span><span class="p">(),</span> <span class="n">sim</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span>
+            <span class="k">assert</span> <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+            <span class="k">assert</span> <span class="n">vertexIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span>
+            <span class="k">assert</span> <span class="n">vertexIndices</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span>
+            <span class="p">(</span><span class="n">vi</span><span class="p">,</span> <span class="n">ni</span><span class="p">)</span> <span class="o">=</span> <span class="n">vertexIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="p">(</span><span class="n">vj</span><span class="p">,</span> <span class="n">nj</span><span class="p">)</span> <span class="o">=</span> <span class="n">vertexIndices</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="c1"># merge i and j, because they are most similar</span>
+            <span class="n">vsplit</span> <span class="o">=</span> <span class="n">vertex</span><span class="o">.</span><span class="n">splitOff</span><span class="p">([</span><span class="n">vi</span><span class="p">,</span> <span class="n">vj</span><span class="p">])</span>
+            <span class="c1"># create entry for vertex in similarity matrix</span>
+            <span class="n">newrow</span> <span class="o">=</span> <span class="p">(</span><span class="n">ni</span> <span class="o">*</span> <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">nj</span> <span class="o">*</span> <span class="n">sim</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:])</span> <span class="o">/</span> <span class="p">(</span><span class="n">ni</span> <span class="o">+</span> <span class="n">nj</span><span class="p">)</span>
+<span class="c1">#            newrow = numpy.maximum(sim[j,:], sim[i,:])</span>
+            <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">newrow</span>
+            <span class="n">sim</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">newrow</span>
+            <span class="n">sim</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">sim</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">vertexIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">vsplit</span><span class="p">,</span> <span class="n">ni</span> <span class="o">+</span> <span class="n">nj</span><span class="p">)</span>
+            <span class="n">vertexIndices</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.makeGraphViz">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.makeGraphViz">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">makeGraphViz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmod</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create graphviz string to draw this decomposition.&quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;graph G {</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">+=</span> <span class="n">v</span><span class="o">.</span><span class="n">label</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; -- &quot;</span> <span class="o">+</span> <span class="n">w</span><span class="o">.</span><span class="n">label</span><span class="p">()</span>
+                    <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot; [label = &quot;</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;]</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">found</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="c1"># color leaves according to subsystems</span>
+        <span class="k">if</span> <span class="n">cmod</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">subsystemColors</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># to store which subsystem gets which color</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">cmod</span><span class="o">.</span><span class="n">getReaction</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">hasAnnotation</span><span class="p">(</span><span class="s2">&quot;SUBSYSTEM&quot;</span><span class="p">)):</span>
+                    <span class="n">subsystem</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getAnnotation</span><span class="p">(</span><span class="s2">&quot;SUBSYSTEM&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">subsystemColors</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">subsystem</span><span class="p">):</span>
+                        <span class="c1"># create new color</span>
+                        <span class="n">c</span> <span class="o">=</span> <span class="n">generate_new_color</span><span class="p">(</span><span class="n">subsystemColors</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                        <span class="n">subsystemColors</span><span class="p">[</span><span class="n">subsystem</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">subsystemColors</span><span class="p">[</span><span class="n">subsystem</span><span class="p">]</span>
+                    <span class="n">out</span> <span class="o">+=</span> <span class="n">w</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; [color=</span><span class="se">\&quot;</span><span class="si">%f</span><span class="s2"> </span><span class="si">%f</span><span class="s2"> </span><span class="si">%f</span><span class="se">\&quot;</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">c</span>
+            <span class="c1"># make legend</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;subgraph cluster_legend {</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;label=</span><span class="se">\&quot;</span><span class="s2">Legend</span><span class="se">\&quot;</span><span class="s2">;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">colorcount</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">subsystem</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span> <span class="ow">in</span> <span class="n">subsystemColors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;subsystemcolor</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">colorcount</span>
+                <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot; [label = </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">subsystem</span>
+                <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;color = </span><span class="se">\&quot;</span><span class="si">%f</span><span class="s2"> </span><span class="si">%f</span><span class="s2"> </span><span class="si">%f</span><span class="se">\&quot;</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">color</span>
+                <span class="n">colorcount</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Decomposition.write">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.Decomposition.write">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes this decomposition to file.&quot;&quot;&quot;</span>
+        <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getWidth</span><span class="p">()</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">elems</span><span class="p">)</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matroid</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;vars </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">variables</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;rank </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rank</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;width </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">width</span><span class="p">)</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listNonLeaves</span><span class="p">():</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">label</span><span class="p">(),</span> <span class="n">w</span><span class="o">.</span><span class="n">label</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+            <span class="n">found</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="NotFullyBranchedException">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.NotFullyBranchedException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NotFullyBranchedException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Thrown if the branch decomposition is not fully branched.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NotFullyBranchedException.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.NotFullyBranchedException.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span> <span class="o">=</span> <span class="n">vertex</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not fully branched.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span></div>
+
+
+
+<div class="viewcode-block" id="EdgeWidthException">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.EdgeWidthException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EdgeWidthException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EdgeWidthException.__init__">
+<a class="viewcode-back" href="../../../api/modules.html#cbmpy.fluxmodules.decomposition.EdgeWidthException.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex1</span><span class="p">,</span> <span class="n">vertex2</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertex1</span> <span class="o">=</span> <span class="n">vertex1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertex2</span> <span class="o">=</span> <span class="n">vertex2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">conn</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;connectivity </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex1</span><span class="p">,</span> <span class="n">Vertex</span><span class="p">):</span>
+            <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex1</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex2</span><span class="p">]</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2"> has: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex2</span><span class="p">,</span> <span class="n">e1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex2</span><span class="p">,</span> <span class="n">Vertex</span><span class="p">):</span>
+            <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex1</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex2</span><span class="p">]</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2"> has: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex2</span><span class="p">,</span> <span class="n">e1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

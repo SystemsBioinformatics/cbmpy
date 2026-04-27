@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CBMPy: CBNetDB module &mdash; CBMPy 0.8.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=cf85e122"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Visualization" href="visualization.html" />
+    <link rel="prev" title="CBMPy: CBRead module" href="io.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CBMPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Flux Module Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#matroid-module">Matroid Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#decomposition-module">Decomposition Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#sparse-rationals-module">Sparse Rationals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">CBMPy Core Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solvers.html">Solver Implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">CBMPy: CBRead module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbreadtxt-module">CBMPy: CBReadtxt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getBounds"><code class="docutils literal notranslate"><span class="pre">getBounds()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getReactions"><code class="docutils literal notranslate"><span class="pre">getReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getReactions_old_format"><code class="docutils literal notranslate"><span class="pre">getReactions_old_format()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.parseReactions"><code class="docutils literal notranslate"><span class="pre">parseReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.addBoundsToReactions"><code class="docutils literal notranslate"><span class="pre">addBoundsToReactions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.dumpReactionsToTxt"><code class="docutils literal notranslate"><span class="pre">dumpReactionsToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.getSpecies"><code class="docutils literal notranslate"><span class="pre">getSpecies()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.dumpSpeciesToTxt"><code class="docutils literal notranslate"><span class="pre">dumpSpeciesToTxt()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.buildFBAobj"><code class="docutils literal notranslate"><span class="pre">buildFBAobj()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBReadtxt.readCSV"><code class="docutils literal notranslate"><span class="pre">readCSV()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbwrite-module">CBMPy: CBWrite module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy-cbxml-module">CBMPy: CBXML module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.SBML_NS"><code class="docutils literal notranslate"><span class="pre">SBML_NS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.MLStripper"><code class="docutils literal notranslate"><span class="pre">MLStripper</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_stripTags"><code class="docutils literal notranslate"><span class="pre">xml_stripTags()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.formatSbmlId"><code class="docutils literal notranslate"><span class="pre">formatSbmlId()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createSBML2FBADoc"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBADoc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_viewSBML2FBAXML"><code class="docutils literal notranslate"><span class="pre">xml_viewSBML2FBAXML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_addSBML2FBAFluxBound"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAFluxBound()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createListOfFluxObjectives"><code class="docutils literal notranslate"><span class="pre">xml_createListOfFluxObjectives()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_createSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_createSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_addSBML2FBAObjective"><code class="docutils literal notranslate"><span class="pre">xml_addSBML2FBAObjective()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.xml_getSBML2FBAannotation"><code class="docutils literal notranslate"><span class="pre">xml_getSBML2FBAannotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createModelL2"><code class="docutils literal notranslate"><span class="pre">sbml_createModelL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCompartmentsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCompartmentsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setCompartmentsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setParametersL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setParametersL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setAnnotationsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setAnnotationsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setDescription"><code class="docutils literal notranslate"><span class="pre">sbml_setDescription()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setNotes3"><code class="docutils literal notranslate"><span class="pre">sbml_setNotes3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getNotes"><code class="docutils literal notranslate"><span class="pre">sbml_getNotes()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setUnits"><code class="docutils literal notranslate"><span class="pre">sbml_setUnits()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeAnnotationsAsCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_writeAnnotationsAsCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setSpeciesL2"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setReactionsL2"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_exportSBML2FBAModel"><code class="docutils literal notranslate"><span class="pre">sbml_exportSBML2FBAModel()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeSBML2FBA"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML2FBA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.FBCconnect"><code class="docutils literal notranslate"><span class="pre">FBCconnect</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.CBMtoSBML3"><code class="docutils literal notranslate"><span class="pre">CBMtoSBML3</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_writeKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readKeyValueDataAnnotation"><code class="docutils literal notranslate"><span class="pre">sbml_readKeyValueDataAnnotation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_readFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setSpeciesL3"><code class="docutils literal notranslate"><span class="pre">sbml_setSpeciesL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setReactionsL3Fbc"><code class="docutils literal notranslate"><span class="pre">sbml_setReactionsL3Fbc()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setFBCv3KeyValuePairs"><code class="docutils literal notranslate"><span class="pre">sbml_setFBCv3KeyValuePairs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setGroupsL3"><code class="docutils literal notranslate"><span class="pre">sbml_setGroupsL3()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_writeCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGeneRefs"><code class="docutils literal notranslate"><span class="pre">sbml_getGeneRefs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv1"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv1()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getGPRasDictFBCv2"><code class="docutils literal notranslate"><span class="pre">sbml_getGPRasDictFBCv2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createAssociationFromAST"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromAST()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_createAssociationFromTreeV2"><code class="docutils literal notranslate"><span class="pre">sbml_createAssociationFromTreeV2()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_writeSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_writeSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setValidationOptions"><code class="docutils literal notranslate"><span class="pre">sbml_setValidationOptions()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readCOBRASBML"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRASBML()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_convertCOBRASBMLtoFBC"><code class="docutils literal notranslate"><span class="pre">sbml_convertCOBRASBMLtoFBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_convertSBML3FBCToCOBRA"><code class="docutils literal notranslate"><span class="pre">sbml_convertSBML3FBCToCOBRA()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_validateDocument"><code class="docutils literal notranslate"><span class="pre">sbml_validateDocument()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_fileValidate"><code class="docutils literal notranslate"><span class="pre">sbml_fileValidate()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_fileFindVersion"><code class="docutils literal notranslate"><span class="pre">sbml_fileFindVersion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.setCBSBOterm"><code class="docutils literal notranslate"><span class="pre">setCBSBOterm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.with_metaclass"><code class="docutils literal notranslate"><span class="pre">with_metaclass()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readSBML3FBC"><code class="docutils literal notranslate"><span class="pre">sbml_readSBML3FBC()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_readCOBRANote"><code class="docutils literal notranslate"><span class="pre">sbml_readCOBRANote()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_getCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_getCVterms()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html#cbmpy.CBXML.sbml_setCVterms"><code class="docutils literal notranslate"><span class="pre">sbml_setCVterms()</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CBMPy: CBNetDB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#cbmpy.CBNetDB.NetDBbase"><code class="docutils literal notranslate"><span class="pre">NetDBbase</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.NetDBbase.text_encoding"><code class="docutils literal notranslate"><span class="pre">NetDBbase.text_encoding</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.NetDBbase.URLEncode"><code class="docutils literal notranslate"><span class="pre">NetDBbase.URLEncode()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.NetDBbase.URLDecode"><code class="docutils literal notranslate"><span class="pre">NetDBbase.URLDecode()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools"><code class="docutils literal notranslate"><span class="pre">DBTools</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.db_conn"><code class="docutils literal notranslate"><span class="pre">DBTools.db_conn</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.db_cursor"><code class="docutils literal notranslate"><span class="pre">DBTools.db_cursor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.__init__"><code class="docutils literal notranslate"><span class="pre">DBTools.__init__()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.sqlite"><code class="docutils literal notranslate"><span class="pre">DBTools.sqlite</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.sqlite_version"><code class="docutils literal notranslate"><span class="pre">DBTools.sqlite_version</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.db_tables"><code class="docutils literal notranslate"><span class="pre">DBTools.db_tables</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.connectSQLiteDB"><code class="docutils literal notranslate"><span class="pre">DBTools.connectSQLiteDB()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.commitDB"><code class="docutils literal notranslate"><span class="pre">DBTools.commitDB()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.createDBTable"><code class="docutils literal notranslate"><span class="pre">DBTools.createDBTable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.insertData"><code class="docutils literal notranslate"><span class="pre">DBTools.insertData()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.updateData"><code class="docutils literal notranslate"><span class="pre">DBTools.updateData()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.checkEntryInColumn"><code class="docutils literal notranslate"><span class="pre">DBTools.checkEntryInColumn()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.executeSQL"><code class="docutils literal notranslate"><span class="pre">DBTools.executeSQL()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.getColumns"><code class="docutils literal notranslate"><span class="pre">DBTools.getColumns()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.getRow"><code class="docutils literal notranslate"><span class="pre">DBTools.getRow()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.getCell"><code class="docutils literal notranslate"><span class="pre">DBTools.getCell()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.getTable"><code class="docutils literal notranslate"><span class="pre">DBTools.getTable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.dumpTableToTxt"><code class="docutils literal notranslate"><span class="pre">DBTools.dumpTableToTxt()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.dumpTableToCSV"><code class="docutils literal notranslate"><span class="pre">DBTools.dumpTableToCSV()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.fetchAll"><code class="docutils literal notranslate"><span class="pre">DBTools.fetchAll()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.DBTools.closeDB"><code class="docutils literal notranslate"><span class="pre">DBTools.closeDB()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGTools"><code class="docutils literal notranslate"><span class="pre">KeGGTools</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGTools.__init__"><code class="docutils literal notranslate"><span class="pre">KeGGTools.__init__()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGTools.Kclient"><code class="docutils literal notranslate"><span class="pre">KeGGTools.Kclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGTools.fetchSeqfromKeGG"><code class="docutils literal notranslate"><span class="pre">KeGGTools.fetchSeqfromKeGG()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGSequenceTools"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGSequenceTools.__init__"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools.__init__()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGSequenceTools.DB"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools.DB</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGSequenceTools.KEGG"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools.KEGG</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGSequenceTools.buildGeneDatabase"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools.buildGeneDatabase()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.KeGGSequenceTools.getPeptideLengthsFromDB"><code class="docutils literal notranslate"><span class="pre">KeGGSequenceTools.getPeptideLengthsFromDB()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient"><code class="docutils literal notranslate"><span class="pre">RESTClient</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.site_root"><code class="docutils literal notranslate"><span class="pre">RESTClient.site_root</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.conn"><code class="docutils literal notranslate"><span class="pre">RESTClient.conn</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.history"><code class="docutils literal notranslate"><span class="pre">RESTClient.history</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.CONNECTED"><code class="docutils literal notranslate"><span class="pre">RESTClient.CONNECTED</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">RESTClient.USER_AGENT</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.__init__"><code class="docutils literal notranslate"><span class="pre">RESTClient.__init__()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.Log"><code class="docutils literal notranslate"><span class="pre">RESTClient.Log()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.GetLog"><code class="docutils literal notranslate"><span class="pre">RESTClient.GetLog()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.Connect"><code class="docutils literal notranslate"><span class="pre">RESTClient.Connect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.Get"><code class="docutils literal notranslate"><span class="pre">RESTClient.Get()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.RESTClient.Close"><code class="docutils literal notranslate"><span class="pre">RESTClient.Close()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#cbmpy.CBNetDB.MIRIAMTools"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.MIRIAMTools.MiriamURN2IdentifiersURL"><code class="docutils literal notranslate"><span class="pre">MIRIAMTools.MiriamURN2IdentifiersURL()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#cbmpy.CBNetDB.SemanticSBML"><code class="docutils literal notranslate"><span class="pre">SemanticSBML</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.SemanticSBML.data"><code class="docutils literal notranslate"><span class="pre">SemanticSBML.data</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.SemanticSBML.item_re"><code class="docutils literal notranslate"><span class="pre">SemanticSBML.item_re</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.SemanticSBML.__init__"><code class="docutils literal notranslate"><span class="pre">SemanticSBML.__init__()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.SemanticSBML.quickLookup"><code class="docutils literal notranslate"><span class="pre">SemanticSBML.quickLookup()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.SemanticSBML.viewDataInWebrowser"><code class="docutils literal notranslate"><span class="pre">SemanticSBML.viewDataInWebrowser()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cbmpy.CBNetDB.SemanticSBML.parseXMLtoText"><code class="docutils literal notranslate"><span class="pre">SemanticSBML.parseXMLtoText()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#gui-frontends">GUI Frontends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#multi-processing">Multi-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html#model-utilities">Model Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#unreleased">0.8.9 (unreleased)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id1">0.8.8 (2023)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id2">0.8.4 (2022)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html#id3">0.8.2 (2021)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CBMPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CBMPy: CBNetDB module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/networking.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p>Network Analysis
+—=-=–=-=—=—</p>
+<section id="cbmpy-cbnetdb-module">
+<span id="module-cbmpy.CBNetDB"></span><h1>CBMPy: CBNetDB module<a class="headerlink" href="#cbmpy-cbnetdb-module" title="Link to this heading"></a></h1>
+<p>PySCeS Constraint Based Modelling (<a class="reference external" href="http://cbmpy.sourceforge.net">http://cbmpy.sourceforge.net</a>)
+Copyright (C) 2009-2024 Brett G. Olivier, VU University Amsterdam, Amsterdam, The Netherlands</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;</p>
+<p>Author: Brett G. Olivier PhD
+Contact developers: <a class="reference external" href="https://github.com/SystemsBioinformatics/cbmpy/issues">https://github.com/SystemsBioinformatics/cbmpy/issues</a>
+Last edit: $Author: bgoli $ ($Id: CBNetDB.py 710 2020-04-27 14:22:34Z bgoli $)</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.NetDBbase">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBNetDB.</span></span><span class="sig-name descname"><span class="pre">NetDBbase</span></span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#NetDBbase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.NetDBbase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.NetDBbase.text_encoding">
+<span class="sig-name descname"><span class="pre">text_encoding</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'utf8'</span></span><a class="headerlink" href="#cbmpy.CBNetDB.NetDBbase.text_encoding" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.NetDBbase.URLEncode">
+<span class="sig-name descname"><span class="pre">URLEncode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#NetDBbase.URLEncode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.NetDBbase.URLEncode" title="Link to this definition"></a></dt>
+<dd><p>URL encodes a string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.NetDBbase.URLDecode">
+<span class="sig-name descname"><span class="pre">URLDecode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#NetDBbase.URLDecode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.NetDBbase.URLDecode" title="Link to this definition"></a></dt>
+<dd><p>Decodes a URL encoded string.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBNetDB.</span></span><span class="sig-name descname"><span class="pre">DBTools</span></span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbmpy.CBNetDB.NetDBbase" title="cbmpy.CBNetDB.NetDBbase"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></p>
+<p>Tools to work with SQLite DB’s (optimized, no SQL required).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.db_conn">
+<span class="sig-name descname"><span class="pre">db_conn</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.db_conn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.db_cursor">
+<span class="sig-name descname"><span class="pre">db_cursor</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.db_cursor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.sqlite">
+<span class="sig-name descname"><span class="pre">sqlite</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.sqlite" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.sqlite_version">
+<span class="sig-name descname"><span class="pre">sqlite_version</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.sqlite_version" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.db_tables">
+<span class="sig-name descname"><span class="pre">db_tables</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.db_tables" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.connectSQLiteDB">
+<span class="sig-name descname"><span class="pre">connectSQLiteDB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.connectSQLiteDB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.connectSQLiteDB" title="Link to this definition"></a></dt>
+<dd><p>Connect to a sqlite database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db_name</strong> – the name of the sqlite database</p></li>
+<li><p><strong>work_dir</strong> – the optional database path</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.commitDB">
+<span class="sig-name descname"><span class="pre">commitDB</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.commitDB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.commitDB" title="Link to this definition"></a></dt>
+<dd><p>Commits all curent changes to DB, returns a boolean.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.createDBTable">
+<span class="sig-name descname"><span class="pre">createDBTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sqlcols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.createDBTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.createDBTable" title="Link to this definition"></a></dt>
+<dd><p>Create a database table if it does not exist:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the table name</p></li>
+<li><p><strong>sqlcols</strong> – a list containing the SQL definitions of the table columns: &lt;id&gt; &lt;type&gt; for example <cite>[‘gene TEXT PRIMARY KEY’, ‘aa_seq TEXT’, ‘nuc_seq TEXT’, ‘aa_len INT’, ‘nuc_len INT’]</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.insertData">
+<span class="sig-name descname"><span class="pre">insertData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.insertData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.insertData" title="Link to this definition"></a></dt>
+<dd><p>Insert data into a table: “INSERT INTO %s (?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?)” % table, (?, ?, ?, ?, ?)) )</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the DB table name</p></li>
+<li><p><strong>data</strong> – a dictionary of {id:value} pairs</p></li>
+<li><p><strong>commit</strong> – whether to commit the data insertions</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.updateData">
+<span class="sig-name descname"><span class="pre">updateData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.updateData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.updateData" title="Link to this definition"></a></dt>
+<dd><p>Update already defined data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the table name</p></li>
+<li><p><strong>col</strong> – the column name</p></li>
+<li><p><strong>rid</strong> – the row id to update</p></li>
+<li><p><strong>data</strong> – a dictionary of {id:value} pairs</p></li>
+<li><p><strong>commit</strong> – whether to commit the data updates</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.checkEntryInColumn">
+<span class="sig-name descname"><span class="pre">checkEntryInColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.checkEntryInColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.checkEntryInColumn" title="Link to this definition"></a></dt>
+<dd><p>Check if an entry exists in a table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the table name</p></li>
+<li><p><strong>col</strong> – the column name</p></li>
+<li><p><strong>rid</strong> – the row to search for</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.executeSQL">
+<span class="sig-name descname"><span class="pre">executeSQL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.executeSQL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.executeSQL" title="Link to this definition"></a></dt>
+<dd><p>Execute a SQL command:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sql</strong> – a string containing a SQL command</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.getColumns">
+<span class="sig-name descname"><span class="pre">getColumns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.getColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.getColumns" title="Link to this definition"></a></dt>
+<dd><p>Fetch the contents of one or more columns of data in a table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the database table</p></li>
+<li><p><strong>cols</strong> – a list of one or more column id’s</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.getRow">
+<span class="sig-name descname"><span class="pre">getRow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.getRow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.getRow" title="Link to this definition"></a></dt>
+<dd><p>Get the table row(s) which correspond to rid in column. Returns the row(s) as a list, if the column is the primary key this is always a single entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the database table</p></li>
+<li><p><strong>col</strong> – the column id</p></li>
+<li><p><strong>rid</strong> – the row index id</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.getCell">
+<span class="sig-name descname"><span class="pre">getCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.getCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.getCell" title="Link to this definition"></a></dt>
+<dd><p>Get the table cell which correspond to rid in column. Returns the value or None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the database table</p></li>
+<li><p><strong>col</strong> – the column id</p></li>
+<li><p><strong>rid</strong> – the row index id</p></li>
+<li><p><strong>cell</strong> – the column of the cell you want tp extract</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.getTable">
+<span class="sig-name descname"><span class="pre">getTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colOut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.getTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.getTable" title="Link to this definition"></a></dt>
+<dd><p>Returns an entire database table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the table name</p></li>
+<li><p><strong>colOut</strong> – optionally return a tuple of (data,ColNames)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.dumpTableToTxt">
+<span class="sig-name descname"><span class="pre">dumpTableToTxt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.dumpTableToTxt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.dumpTableToTxt" title="Link to this definition"></a></dt>
+<dd><p>Save a table as tab separated txt file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the table to export</p></li>
+<li><p><strong>filename</strong> – the filename of the table dump</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.dumpTableToCSV">
+<span class="sig-name descname"><span class="pre">dumpTableToCSV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.dumpTableToCSV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.dumpTableToCSV" title="Link to this definition"></a></dt>
+<dd><p>Save a table as tab separated txt file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – the table to export</p></li>
+<li><p><strong>filename</strong> – the filename of the table dump</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.fetchAll">
+<span class="sig-name descname"><span class="pre">fetchAll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.fetchAll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.fetchAll" title="Link to this definition"></a></dt>
+<dd><p>Raw SQL query e.g. ‘SELECT id FROM gene WHERE gene=”G”’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.DBTools.closeDB">
+<span class="sig-name descname"><span class="pre">closeDB</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#DBTools.closeDB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.DBTools.closeDB" title="Link to this definition"></a></dt>
+<dd><p>Close the DB connection and reset the DBTools instance (can be
+reconnected)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGTools">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBNetDB.</span></span><span class="sig-name descname"><span class="pre">KeGGTools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#KeGGTools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.KeGGTools" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class that holds useful methods for querying KeGG via a SUDS provided soap
+client.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGTools.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#KeGGTools.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.KeGGTools.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGTools.Kclient">
+<span class="sig-name descname"><span class="pre">Kclient</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.KeGGTools.Kclient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGTools.fetchSeqfromKeGG">
+<span class="sig-name descname"><span class="pre">fetchSeqfromKeGG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k_gene</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#KeGGTools.fetchSeqfromKeGG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.KeGGTools.fetchSeqfromKeGG" title="Link to this definition"></a></dt>
+<dd><p>Given a gene name try and retrieve the gene and amino acid sequence.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGSequenceTools">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBNetDB.</span></span><span class="sig-name descname"><span class="pre">KeGGSequenceTools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#KeGGSequenceTools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.KeGGSequenceTools" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Using the KeGG connector this class provides tools to construct an organims
+specific sequence database.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGSequenceTools.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#KeGGSequenceTools.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.KeGGSequenceTools.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGSequenceTools.DB">
+<span class="sig-name descname"><span class="pre">DB</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.KeGGSequenceTools.DB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGSequenceTools.KEGG">
+<span class="sig-name descname"><span class="pre">KEGG</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.KeGGSequenceTools.KEGG" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGSequenceTools.buildGeneDatabase">
+<span class="sig-name descname"><span class="pre">buildGeneDatabase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tablename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UPDATE_IF_EXISTS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#KeGGSequenceTools.buildGeneDatabase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.KeGGSequenceTools.buildGeneDatabase" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.KeGGSequenceTools.getPeptideLengthsFromDB">
+<span class="sig-name descname"><span class="pre">getPeptideLengthsFromDB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keg_prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#KeGGSequenceTools.getPeptideLengthsFromDB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.KeGGSequenceTools.getPeptideLengthsFromDB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBNetDB.</span></span><span class="sig-name descname"><span class="pre">RESTClient</span></span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#RESTClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbmpy.CBNetDB.NetDBbase" title="cbmpy.CBNetDB.NetDBbase"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetDBbase</span></code></a></p>
+<p>Class that provides the basis for application specific connectors to REST web
+services.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.site_root">
+<span class="sig-name descname"><span class="pre">site_root</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.site_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.conn">
+<span class="sig-name descname"><span class="pre">conn</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.conn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.history">
+<span class="sig-name descname"><span class="pre">history</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></span><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.history" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.CONNECTED">
+<span class="sig-name descname"><span class="pre">CONNECTED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.CONNECTED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.USER_AGENT">
+<span class="sig-name descname"><span class="pre">USER_AGENT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Mozilla/5.0</span> <span class="pre">(X11;</span> <span class="pre">Ubuntu;</span> <span class="pre">Linux</span> <span class="pre">x86_64;</span> <span class="pre">rv:13.0)</span> <span class="pre">Gecko/20100101</span> <span class="pre">Firefox/13.0'</span></span><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.USER_AGENT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#RESTClient.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.Log">
+<span class="sig-name descname"><span class="pre">Log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#RESTClient.Log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.Log" title="Link to this definition"></a></dt>
+<dd><p>Add txt to logfile history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>txt</strong> – a string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.GetLog">
+<span class="sig-name descname"><span class="pre">GetLog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#RESTClient.GetLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.GetLog" title="Link to this definition"></a></dt>
+<dd><p>Return the logged history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.Connect">
+<span class="sig-name descname"><span class="pre">Connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#RESTClient.Connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.Connect" title="Link to this definition"></a></dt>
+<dd><p>Establish HTTP connection to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>root</strong> – the site root “www.google.com”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.Get">
+<span class="sig-name descname"><span class="pre">Get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#RESTClient.Get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.Get" title="Link to this definition"></a></dt>
+<dd><p>Perform an http GET using:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> – e.g.</p></li>
+<li><p><strong>reply_mode</strong> – [default=’’] this is the reply mode</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.RESTClient.Close">
+<span class="sig-name descname"><span class="pre">Close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#RESTClient.Close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.RESTClient.Close" title="Link to this definition"></a></dt>
+<dd><p>Close the currently active connection.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.MIRIAMTools">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBNetDB.</span></span><span class="sig-name descname"><span class="pre">MIRIAMTools</span></span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#MIRIAMTools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.MIRIAMTools" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Tools dealing with MIRIAM annotations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.MIRIAMTools.MiriamURN2IdentifiersURL">
+<span class="sig-name descname"><span class="pre">MiriamURN2IdentifiersURL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">urn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#MIRIAMTools.MiriamURN2IdentifiersURL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.MIRIAMTools.MiriamURN2IdentifiersURL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.SemanticSBML">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cbmpy.CBNetDB.</span></span><span class="sig-name descname"><span class="pre">SemanticSBML</span></span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#SemanticSBML"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.SemanticSBML" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbmpy.CBNetDB.RESTClient" title="cbmpy.CBNetDB.RESTClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">RESTClient</span></code></a>, <a class="reference internal" href="#cbmpy.CBNetDB.MIRIAMTools" title="cbmpy.CBNetDB.MIRIAMTools"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIRIAMTools</span></code></a></p>
+<p>REST client for connecting to SemanticSBML services.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.SemanticSBML.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#cbmpy.CBNetDB.SemanticSBML.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.SemanticSBML.item_re">
+<span class="sig-name descname"><span class="pre">item_re</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('&lt;item&gt;.+?&lt;/item&gt;')</span></span><a class="headerlink" href="#cbmpy.CBNetDB.SemanticSBML.item_re" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.SemanticSBML.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#SemanticSBML.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.SemanticSBML.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.SemanticSBML.quickLookup">
+<span class="sig-name descname"><span class="pre">quickLookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#SemanticSBML.quickLookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.SemanticSBML.quickLookup" title="Link to this definition"></a></dt>
+<dd><p>Do a quick lookpup for txt using SemanticSBML (connectic if required) and return results. Returns a list of identifiers.org id’s in descending priority (as return)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>txt</strong> – the string to lookup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.SemanticSBML.viewDataInWebrowser">
+<span class="sig-name descname"><span class="pre">viewDataInWebrowser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#SemanticSBML.viewDataInWebrowser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.SemanticSBML.viewDataInWebrowser" title="Link to this definition"></a></dt>
+<dd><p>Attempt to view #maxres results returned by SemanticSBML in the default browser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>maxres</strong> – default maximum number of results to display.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbmpy.CBNetDB.SemanticSBML.parseXMLtoText">
+<span class="sig-name descname"><span class="pre">parseXMLtoText</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cbmpy/CBNetDB.html#SemanticSBML.parseXMLtoText"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbmpy.CBNetDB.SemanticSBML.parseXMLtoText" title="Link to this definition"></a></dt>
+<dd><p>Parse the xml output by quickLookup() into a list of URL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xml</strong> – XML returns from SemanticSBML</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cbmpy.miriamids"></span>
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="io.html" class="btn btn-neutral float-left" title="CBMPy: CBRead module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="visualization.html" class="btn btn-neutral float-right" title="Visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Brett G. Olivier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

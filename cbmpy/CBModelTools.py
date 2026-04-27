@@ -11,7 +11,7 @@ the Free Software Foundation, either version 3 of the License, or
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A particular PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
@@ -29,7 +29,6 @@ from __future__ import absolute_import
 
 # from __future__ import unicode_literals
 
-
 from .CBConfig import __CBCONFIG__ as __CBCONFIG__
 
 __DEBUG__ = __CBCONFIG__['DEBUG']
@@ -40,7 +39,24 @@ import numpy
 from . import CBModel
 
 
-def addReversibilityBounds(reactions, bounds, infinity=numpy.inf):
+def addReversibilityBounds(reactions: dict, bounds: dict, infinity: float = numpy.inf) -> dict:
+    """
+    Add reversibility bounds to the bounds dictionary.
+
+    Parameters
+    ----------
+    reactions : dict
+        Dictionary of reactions.
+    bounds : dict
+        Dictionary of bounds.
+    infinity : float, optional
+        The value for infinity, by default numpy.inf.
+
+    Returns
+    -------
+    dict
+        The updated bounds dictionary.
+    """
     bounds = bounds.copy()
     for R in reactions:
         if not reactions[R]['id'] in bounds:
@@ -59,7 +75,22 @@ def addReversibilityBounds(reactions, bounds, infinity=numpy.inf):
     return bounds
 
 
-def addReversibilityBoundsIgnoreReversible(reactions, bounds):
+def addReversibilityBoundsIgnoreReversible(reactions: dict, bounds: dict) -> dict:
+    """
+    Add reversibility bounds to the bounds dictionary, ignoring reversible reactions.
+
+    Parameters
+    ----------
+    reactions : dict
+        Dictionary of reactions.
+    bounds : dict
+        Dictionary of bounds.
+
+    Returns
+    -------
+    dict
+        The updated bounds dictionary.
+    """
     bounds = bounds.copy()
     for R in reactions:
         if not reactions[R]['id'] in bounds:
@@ -74,7 +105,21 @@ def addReversibilityBoundsIgnoreReversible(reactions, bounds):
     return bounds
 
 
-def addSpecies(model, species):
+def addSpecies(model: object, species: dict) -> None:
+    """
+    Add species to the model.
+
+    Parameters
+    ----------
+    model : object
+        The model object.
+    species : dict
+        Dictionary of species information.
+
+    Returns
+    -------
+    None
+    """
     skeys = list(species)
     skeys.sort()
     for S in skeys:
@@ -97,7 +142,21 @@ def addSpecies(model, species):
         model.addSpecies(sObj)
 
 
-def addBounds(model, bounds):
+def addBounds(model: object, bounds: dict) -> None:
+    """
+    Add flux bounds to the model.
+
+    Parameters
+    ----------
+    model : object
+        The model object.
+    bounds : dict
+        Dictionary of bounds.
+
+    Returns
+    -------
+    None
+    """
     cntr = 0
     for B in bounds:
         if 'lower' in bounds[B]:
@@ -112,7 +171,21 @@ def addBounds(model, bounds):
             cntr += 1
 
 
-def addReactions(model, reactions):
+def addReactions(model: object, reactions: dict) -> None:
+    """
+    Add reactions to the model.
+
+    Parameters
+    ----------
+    model : object
+        The model object.
+    reactions : dict
+        Dictionary of reactions information.
+
+    Returns
+    else
+    None
+    """
     specId = model.getSpeciesIds()
     rkeys = list(reactions)
     rkeys.sort()
@@ -165,7 +238,21 @@ def addReactions(model, reactions):
         react.is_exchange = exchange
 
 
-def addObjectiveFunction(model, objective_function):
+def addObjectiveFunction(model: object, objective_function: dict) -> None:
+    """
+    Add objective function to the model.
+
+    Parameters
+    ----------
+    model : object
+        The model object.
+    objective_function : dict
+        Dictionary of objective function information.
+
+    Returns
+    -------
+    None
+    """
     for o in objective_function:
         objf = objective_function[o]
         id = objf['id']
@@ -180,8 +267,31 @@ def addObjectiveFunction(model, objective_function):
 
 
 def quickDefaultBuild(
-    model_name, Reactions, Species, Bounds, Objective_function, infinity=numpy.inf
-):
+    model_name: str, Reactions: dict, Species: dict, Bounds: dict, Objective_function: dict, infinity: float = numpy.inf
+) -> object:
+    """
+    Quickly build a model.
+
+    Parameters
+    ----------
+    model_name : str
+        Name of the model.
+    Reactions : dict
+        Dictionary of reactions.
+    Species : dict
+        Dictionary of species.
+    Bounds : dict
+        Dictionary of bounds.
+    Objective_function : dict
+        Dictionary of objective functions.
+    infinity : float, optional
+        The value for infinity, by default numpy.inf.
+
+    Returns
+    -------
+    object
+        The built model.
+    """
     fba = CBModel.Model(model_name)
     addSpecies(fba, Species)
     addReactions(fba, Reactions)
@@ -191,7 +301,21 @@ def quickDefaultBuild(
     return fba
 
 
-def printSolution(fba, wait=False):
+def printSolution(fba: object, wait: bool = False) -> None:
+    """
+    Print the solution to the console.
+
+    Parameters
+    ----------
+    fba : object
+        The model object containing the solution.
+    wait : bool, optional
+        Whether to wait for user input, by default False.
+
+    Returns
+    -------
+    None
+    """
     for R in fba.reactions:
         print(R.getId(), R.value, end=" ")
         if 'SUBSYSTEM' in R.annotation:
@@ -199,4 +323,4 @@ def printSolution(fba, wait=False):
         else:
             print(' ')
     if wait:
-        raw_input('Press <enter> to continue ...')
+        input('Press <enter> to continue ...')
